@@ -20,7 +20,6 @@ module "toolchain_namespace" {
     cluster = "${var.cluster}"
     "opa.lead.liatrio/ingress-whitelist" = "*.${var.product_name}-toolchain.${var.cluster}.${var.root_zone_name}"
     "opa.lead.liatrio/image-whitelist" = "${var.image_whitelist}"
-    "opa.lead.liatrio/elb-extra-security-groups" = "${data.aws_security_group.toolchain_elb.id}"
   }
 }
 
