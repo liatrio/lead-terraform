@@ -77,33 +77,6 @@ master:
                         command: "/bin/sh -c"
                         args: "cat"
                         ttyEnabled: true 
-                  - name: "lead-toolchain-openshift"
-                    label: "lead-toolchain-openshift"
-                    nodeUsageMode: NORMAL
-                    containers:
-                      - name: "openshift"
-                        image: "docker.artifactory.liatr.io/liatrio/builder-image-openshift:v0.1.5"
-                        alwaysPullImage: false
-                        workingDir: "/home/jenkins"
-                        command: "/bin/sh -c"
-                        args: "cat"
-                        ttyEnabled: true
-                    envVars:
-                      - envVar:
-                          key: "SKAFFOLD_DEFAULT_REPO"
-                          value: "docker.artifactory.liatr.io/liatrio"
-                    volumes:
-                      - hostPathVolume:
-                          hostPath: "/var/run/docker.sock"
-                          mountPath: "/var/run/docker.sock"
-                    slaveConnectTimeout: 100
-      anchore: |
-        unclassified:
-          anchore:
-            enginemode: "anchoreengine"
-            engineurl: "${anchore_url}"
-            engineuser: "${anchore_user}"
-            enginepass: "${anchore_pass}"
       shared-libraries: |
         unclassified:
           globalLibraries:
@@ -116,10 +89,8 @@ master:
                     git:
                       remote: "https://github.com/liatrio/pipeline-library"
   installPlugins:
-    - anchore-container-scanner:latest
     - ws-cleanup:latest
     - kubernetes-credentials-provider:latest
-    - openshift-pipeline:latest
     - slack:latest
     - pipeline-utility-steps:latest
     - http_request:latest

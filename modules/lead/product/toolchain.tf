@@ -10,9 +10,6 @@ data "template_file" "jenkins_values" {
     ingress_hostname = "jenkins.${var.namespace}.${var.cluster}.${var.root_zone_name}"
     namespace        = "${var.namespace}"
     logstash_url     = "http://lead-dashboard-logstash.${var.namespace}.svc.cluster.local:9000"
-    anchore_url      = "http://anchore-engine-anchore-engine-api.${var.namespace}.svc.cluster.local:8228/v1"
-    anchore_user     = "admin"
-    anchore_pass     = "${random_string.anchore_admin_password.result}"
     slack_team       = "liatrio"
   }
 }
