@@ -10,7 +10,6 @@ provider "helm" {
   service_account = "${module.staging_namespace.tiller_service_account}"
 
   kubernetes {
-    in_cluster = true
     load_config_file = false
   }
 }
