@@ -35,7 +35,7 @@ module "infrastructure" {
   source             = "../../modules/lead/infrastructure"
   cluster            = "${var.cluster}"
   namespace          = "${var.system_namespace}"
-  enable_opa         = "true"
+  enable_opa         = "false"
   opa_failure_policy = "${var.opa_failure_policy}"
 
   external_dns_chart_values = "${data.template_file.external_dns_values.rendered}"
