@@ -11,7 +11,7 @@ module "system_namespace" {
 }
 
 module "opa" {
-  count = "${ var.enable_opa ? 1 : 0 }"
+  enable_opa = "${var.enable_opa}"
   source    = "../../common/opa"
   namespace = "${var.namespace}"
   opa_failure_policy = "${var.opa_failure_policy}"
