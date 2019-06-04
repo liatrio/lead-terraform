@@ -10,6 +10,15 @@ module "system_namespace" {
   }
 }
 
+module "opa" {
+  enable_opa = "${var.enable_opa}"
+  source    = "../../common/opa"
+  namespace = "${var.namespace}"
+  opa_failure_policy = "${var.opa_failure_policy}"
+}
+
+
+
 
 resource "kubernetes_cluster_role" "tiller_cluster_role" {
   metadata {

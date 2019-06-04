@@ -1,12 +1,9 @@
 terragrunt = {
+  remote_state {
+    backend = "local"
+    config { path = "terraform.tfstate" }
+  }
 
-# Removed until s3 backend is scoped to AWS only.
-# TODO: Rescope env for more sets/providers
-#  include {
-#    path = "${find_in_parent_folders()}"
-#  }
-
-# Including stacks directly as workaround for ^
   terraform {
     source = "../..//stacks/environment-local"
     extra_arguments "shared_vars" {
@@ -15,7 +12,7 @@ terragrunt = {
           "${get_parent_tfvars_dir()}/../secrets/${path_relative_to_include()}.tfvars",
       ]
     }
-  }
-}
 
-root_zone_name = "localhost"
+  }
+
+}

@@ -2,11 +2,9 @@
 
 # Using Local State Only!
 
-#terraform {
-#  backend "s3" {}
-#}
-#
-#
+terraform {
+  backend "local" {}
+}
 
 data "template_file" "external_dns_values" {
   template = "${file("${path.module}/external-dns-values.tpl")}"
@@ -18,8 +16,7 @@ data "template_file" "external_dns_values" {
 
 # Use an existing named kubectl context specified as `cluster` in variables.tf or tfvars file (eg, minikube/d4d)
 provider "kubernetes" {
-  config_context_auth_info = "${var.cluster}"
-  config_context_cluster   = "${var.cluster}"
+  config_context = "${var.cluster}"
 }
 
 provider "helm" {
@@ -37,6 +34,7 @@ module "infrastructure" {
   source             = "../../modules/lead/infrastructure"
   cluster            = "${var.cluster}"
   namespace          = "${var.system_namespace}"
+  enable_opa         = "false"
   opa_failure_policy = "${var.opa_failure_policy}"
 
   external_dns_chart_values = "${data.template_file.external_dns_values.rendered}"
