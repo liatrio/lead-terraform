@@ -1,5 +1,6 @@
 provider "kubernetes" {
   alias = "staging"
+  load_config_file = false
 }
 
 provider "helm" {
@@ -9,6 +10,7 @@ provider "helm" {
   service_account = "${module.staging_namespace.tiller_service_account}"
 
   kubernetes {
+    load_config_file = false
   }
 }
 module "staging_namespace" {
