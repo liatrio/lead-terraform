@@ -22,9 +22,7 @@ data "aws_security_group" "staging_elb" {
     Cluster = "${var.cluster}"
     Type = "ingress-elb"
   }
-  providers = {
-    aws = "aws.staging"
-  }
+  provider = "aws.staging"
 }
 
 module "staging_namespace" {

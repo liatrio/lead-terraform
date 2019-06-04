@@ -22,9 +22,7 @@ data "aws_security_group" "toolchain_elb" {
     Cluster = "${var.cluster}"
     Type = "ingress-elb"
   }
-  providers = {
-    aws = "aws.toolchain"
-  }
+  provider = "aws.toolchain"
 }
 
 module "toolchain_namespace" {

@@ -22,9 +22,7 @@ data "aws_security_group" "production_elb" {
     Cluster = "${var.cluster}"
     Type = "ingress-elb"
   }
-  providers = {
-    aws = "aws.production"
-  }
+  provider = "aws.production"
 }
 
 module "production_namespace" {
