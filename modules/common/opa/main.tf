@@ -1,5 +1,4 @@
 data "template_file" "opa_values" {
-  count = "${ var.enable_opa ? 1 : 0 }"
   template = "${file("${path.module}/opa-values.tpl")}"
 
   vars = {
@@ -9,7 +8,6 @@ data "template_file" "opa_values" {
   }
 }
 resource "helm_release" "opa" {
-  count = "${ var.enable_opa ? 1 : 0 }"
   repository = "stable"
   name       = "opa"
   namespace  = "${var.namespace}"
@@ -22,7 +20,6 @@ resource "helm_release" "opa" {
 }
 
 resource "kubernetes_config_map" "opa-default-system-main" {
-  count = "${ var.enable_opa ? 1 : 0 }"
   metadata {
     name = "opa-default-system-main"
     namespace  = "${var.namespace}"
@@ -40,7 +37,6 @@ resource "kubernetes_config_map" "opa-default-system-main" {
 }
 
 resource "kubernetes_service_account" "opa_service_account" {
-  count = "${ var.enable_opa ? 1 : 0 }"
   metadata {
     name = "opa"
     namespace  = "${var.namespace}"
@@ -49,7 +45,6 @@ resource "kubernetes_service_account" "opa_service_account" {
 }
 
 resource "kubernetes_cluster_role" "opa_role" {
-  count = "${ var.enable_opa ? 1 : 0 }"
   metadata {
     name = "opa-manager"
   }
@@ -66,7 +61,6 @@ resource "kubernetes_cluster_role" "opa_role" {
 }
 
 resource "kubernetes_cluster_role_binding" "opa_role_binding" {
-  count = "${ var.enable_opa ? 1 : 0 }"
   metadata {
     name = "opa-binding"
   }
