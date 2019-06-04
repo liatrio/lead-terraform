@@ -1,5 +1,6 @@
 provider "kubernetes" {
   alias = "production"
+  load_config_file = false
 }
 
 provider "helm" {
@@ -9,6 +10,8 @@ provider "helm" {
   service_account = "${module.production_namespace.tiller_service_account}"
 
   kubernetes {
+    in_cluster = true
+    load_config_file = false
   }
 }
 
