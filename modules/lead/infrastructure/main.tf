@@ -15,10 +15,6 @@ module "opa" {
   source    = "../../common/opa"
   namespace = "${var.namespace}"
   opa_failure_policy = "${var.opa_failure_policy}"
-  annotations {
-    name = "${var.namespace}"
-    cluster = "${var.cluster}"
-  }
 }
 
 
