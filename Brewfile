@@ -1,0 +1,10 @@
+cask_args appdir: "/Applications"
+tap "homebrew/cask"
+brew "terraform"
+brew "terragrunt"
+brew "kubernetes-cli"
+brew "kubernetes-helm"
+brew "aws-iam-authenticator"
+brew "azure-cli"
+
+cask "aws-vault"

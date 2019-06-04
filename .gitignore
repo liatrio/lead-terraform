@@ -1,0 +1,6 @@
+.terragrunt-cache/
+.terraform/
+tf.plan
+terraform.tfstate
+secrets/
+.DS_Store
