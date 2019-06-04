@@ -10,6 +10,7 @@ provider "helm" {
   service_account = "${module.toolchain_namespace.tiller_service_account}"
 
   kubernetes {
+    in_cluster = true
     load_config_file = false
   }
 }
@@ -23,6 +24,11 @@ module "toolchain_namespace" {
     "opa.lead.liatrio/ingress-whitelist" = "*.${var.product_name}-toolchain.${var.cluster}.${var.root_zone_name}"
     "opa.lead.liatrio/image-whitelist" = "${var.image_whitelist}"
   }
+
+  providers {
+    helm = "helm.toolchain"
+    kubernetes = "kubernetes.toolchain"
+  }
 }
 
 module "product" {
@@ -30,4 +36,9 @@ module "product" {
   root_zone_name     = "${var.root_zone_name}"
   cluster            = "${var.cluster}"
   namespace          = "${var.product_name}-toolchain"
+
+  providers {
+    helm = "helm.toolchain"
+    kubernetes = "kubernetes.toolchain"
+  }
 }

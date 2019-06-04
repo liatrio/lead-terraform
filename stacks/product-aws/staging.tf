@@ -10,6 +10,7 @@ provider "helm" {
   service_account = "${module.staging_namespace.tiller_service_account}"
 
   kubernetes {
+    in_cluster = true
     load_config_file = false
   }
 }
@@ -21,5 +22,9 @@ module "staging_namespace" {
     cluster = "${var.cluster}"
     "opa.lead.liatrio/ingress-whitelist" = "*.${var.product_name}-staging.${var.cluster}.${var.root_zone_name}"
     "opa.lead.liatrio/image-whitelist" = "${var.image_whitelist}"
+  }
+  providers {
+    helm = "helm.staging"
+    kubernetes = "kubernetes.staging"
   }
 }
