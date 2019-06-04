@@ -16,8 +16,7 @@ data "template_file" "external_dns_values" {
 
 # Use an existing named kubectl context specified as `cluster` in variables.tf or tfvars file (eg, minikube/d4d)
 provider "kubernetes" {
-  config_context_auth_info = "${var.cluster}"
-  config_context_cluster   = "${var.cluster}"
+  config_context = "${var.cluster}"
 }
 
 provider "helm" {
