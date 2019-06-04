@@ -2,11 +2,9 @@
 
 # Using Local State Only!
 
-#terraform {
-#  backend "s3" {}
-#}
-#
-#
+terraform {
+  backend "local" {}
+}
 
 data "template_file" "external_dns_values" {
   template = "${file("${path.module}/external-dns-values.tpl")}"
@@ -37,6 +35,7 @@ module "infrastructure" {
   source             = "../../modules/lead/infrastructure"
   cluster            = "${var.cluster}"
   namespace          = "${var.system_namespace}"
+  enable_opa         = "false"
   opa_failure_policy = "${var.opa_failure_policy}"
 
   external_dns_chart_values = "${data.template_file.external_dns_values.rendered}"
