@@ -34,7 +34,7 @@ provider "helm" {
   alias           = "toolchain"
   namespace       = "${module.toolchain.namespace}"
   tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.14.0"
-  service_account = "${module.infrastructure.tiller_service_account}"
+  service_account = "${module.toolchain.tiller_service_account}"
 
   kubernetes {
     config_context = "${var.cluster}"
