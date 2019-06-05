@@ -1,28 +1,37 @@
 variable "root_zone_name" {}
+
 variable "cluster" {
-    default = "minikube"
+  default = "minikube"
 }
+
 variable "system_namespace" {
-    default = "lead-system"
+  default = "lead-system"
 }
+
 variable "toolchain_namespace" {
-    default = "toolchain"
+  default = "toolchain"
 }
+
 variable "key_name" {
   default = ""
 }
+
 variable "image_whitelist" {
-    default = ".*"
+  default = ".*"
 }
+
 variable "opa_failure_policy" {
-    default = "Fail"
+  default = "Fail"
 }
+
 variable "sdm_version" {
-    default = "0.2.7"
+  default = "0.2.7"
 }
+
 variable "dashboard_version" {
   default = "0.2.0-b55d1623b11"
 }
+
 #variable "bitbucket_token" {}
 #variable "jira_token" {}
 #variable "slack_webhook_url" {}
@@ -33,6 +42,6 @@ variable "dashboard_version" {
 
 locals {
   tags = {
-    "Cluster"  = "${var.cluster}"
+    "Cluster" = "${var.cluster}"
   }
 }
