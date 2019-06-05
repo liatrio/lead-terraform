@@ -21,7 +21,18 @@ provider "kubernetes" {
 
 provider "helm" {
   alias = "system"
-  namespace = "${var.system_namespace}"
+  namespace = "${module.infrastructure.namespace}"
+  tiller_image = "gcr.io/kubernetes-helm/tiller:v2.14.0"
+  service_account = "${module.infrastructure.tiller_service_account}"
+
+  kubernetes {
+    config_context = "${var.cluster}"
+  }
+}
+
+provider "helm" {
+  alias = "toolchain"
+  namespace = "${module.toolchain.namespace}"
   tiller_image = "gcr.io/kubernetes-helm/tiller:v2.14.0"
   service_account = "${module.infrastructure.tiller_service_account}"
 
@@ -41,5 +52,18 @@ module "infrastructure" {
 
   providers {
     helm = "helm.system"
+  }
+}
+
+module "toolchain" {
+  source             = "../../modules/lead/toolchain"
+  root_zone_name     = "${var.root_zone_name}"
+  cluster            = "${var.cluster}"
+  namespace          = "${var.toolchain_namespace}"
+  image_whitelist    = "${var.image_whitelist}"
+#  elb_security_group_id = "${aws_security_group.elb.id}"
+
+  providers {
+    helm = "helm.toolchain"
   }
 }
