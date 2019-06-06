@@ -1,13 +1,13 @@
 
-// resource "random_string" "artifactory_admin_password" {
-//   length  = 10
-//   special = false
-// }
-//
-// resource "random_string" "artifactory_db_password" {
-//   length  = 10
-//   special = false
-// }
+resource "random_string" "artifactory_admin_password" {
+  length  = 10
+  special = false
+}
+
+resource "random_string" "artifactory_db_password" {
+  length  = 10
+  special = false
+ }
 
 data "helm_repository" "jfrog" {
   name = "jfrog"
@@ -30,21 +30,18 @@ resource "helm_release" "artifactory" {
     value = "false"
   }
 
-  // set {
-  //   name  = "artifactory.license.secret"
-  //   value = "artifactory-license"
-  // }
-  // set {
-  //   name  = "artifactory.license.dataKey"
-  //   value = "art.lic"
-  // }
+  set_sensitive {
+    name  = "artifactory.license.licenseKey"
+    value = "${var.artifactory_license}"
+  }
 
-  // set_sensitive {
-  //    name  = "postgresql.postgresPassword"
-  //    value = "${random_string.artifactory_db_password.result}"
-  //  }
-  // set_sensitive {
-  //  name  = "artifactory.accessAdmin.password"
-  //  value = "${random_string.artifactory_admin_password.result}"
-  // }
+  set_sensitive {
+     name  = "postgresql.postgresPassword"
+     value = "${random_string.artifactory_db_password.result}"
+   }
+
+  set_sensitive {
+   name  = "artifactory.accessAdmin.password"
+   value = "${random_string.artifactory_admin_password.result}"
+  }
 }
