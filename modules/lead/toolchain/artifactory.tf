@@ -22,9 +22,6 @@ resource "helm_release" "artifactory" {
   version    = "7.14.3"
   timeout    = 1200
 
-  # Create the Kubernetes secret (assuming the local license file is 'art.lic')
-  #kubectl create secret generic artifactory-license --from-file=./art.lic
-
   set {
     name  = "nginx.enabled"
     value = "false"
