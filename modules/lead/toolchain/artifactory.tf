@@ -1,5 +1,4 @@
-#helm repo add jfrog https://charts.jfrog.io
-#postgresql.postgresPassword
+
 // resource "random_string" "artifactory_admin_password" {
 //   length  = 10
 //   special = false
@@ -26,6 +25,11 @@ resource "helm_release" "artifactory" {
   # Create the Kubernetes secret (assuming the local license file is 'art.lic')
   #kubectl create secret generic artifactory-license --from-file=./art.lic
 
+  set {
+    name  = "nginx.enabled"
+    value = "false"
+  }
+
   // set {
   //   name  = "artifactory.license.secret"
   //   value = "artifactory-license"
@@ -35,8 +39,12 @@ resource "helm_release" "artifactory" {
   //   value = "art.lic"
   // }
 
-//  set_sensitive {
+  // set_sensitive {
+  //    name  = "postgresql.postgresPassword"
+  //    value = "${random_string.artifactory_db_password.result}"
+  //  }
+  // set_sensitive {
   //  name  = "artifactory.accessAdmin.password"
-    //value = "${random_string.artifactory_admin_password.result}"
-  //}
+  //  value = "${random_string.artifactory_admin_password.result}"
+  // }
 }
