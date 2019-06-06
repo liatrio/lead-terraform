@@ -25,6 +25,7 @@ module "toolchain" {
   namespace          = "${var.toolchain_namespace}"
   image_whitelist    = "${var.image_whitelist}"
   elb_security_group_id = "${aws_security_group.elb.id}"
+  artifactory_license = "${var.artifactory_license}"
 
   providers {
     helm = "helm.toolchain"

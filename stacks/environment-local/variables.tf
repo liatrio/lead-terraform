@@ -32,6 +32,8 @@ variable "dashboard_version" {
   default = "0.2.0-b55d1623b11"
 }
 
+variable "artifactory_license" {}
+
 #variable "bitbucket_token" {}
 #variable "jira_token" {}
 #variable "slack_webhook_url" {}
