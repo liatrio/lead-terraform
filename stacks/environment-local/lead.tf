@@ -21,11 +21,11 @@ module "infrastructure" {
 }
 
 module "toolchain" {
-  source          = "../../modules/lead/toolchain"
-  root_zone_name  = "${var.root_zone_name}"
-  cluster         = "${var.cluster}"
-  namespace       = "${var.toolchain_namespace}"
-  image_whitelist = "${var.image_whitelist}"
+  source              = "../../modules/lead/toolchain"
+  root_zone_name      = "${var.root_zone_name}"
+  cluster             = "${var.cluster}"
+  namespace           = "${var.toolchain_namespace}"
+  image_whitelist     = "${var.image_whitelist}"
   artifactory_license = "${var.artifactory_license}"
 
   providers {

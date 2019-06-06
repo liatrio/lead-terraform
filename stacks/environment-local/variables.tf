@@ -33,6 +33,7 @@ variable "dashboard_version" {
 }
 
 variable "artifactory_license" {}
+
 #variable "bitbucket_token" {}
 #variable "jira_token" {}
 #variable "slack_webhook_url" {}
