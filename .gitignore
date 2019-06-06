@@ -2,5 +2,5 @@
 .terraform/
 tf.plan
 terraform.tfstate
-secrets/
+secrets
 .DS_Store
