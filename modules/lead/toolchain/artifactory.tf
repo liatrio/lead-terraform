@@ -1,18 +1,59 @@
 data "template_file" "artifactory_security_values" {
-  template = "${file("${path.module}/artifactory.security.import.xml")}"
+  template = "${file("${path.module}/artifactory.security.import.xml.tpl")}"
+  vars = {
+    jenkins_bcrypt_pass = "${format("bcrypt$%s", bcrypt(random_string.artifactory_jenkins_password.result))}"
+    admin_bcrypt_pass   = "${format("bcrypt$%s", bcrypt(random_string.artifactory_admin_password.result))}"
+  }
 }
 
 data "template_file" "artifactory_config_values" {
-  template = "${file("${path.module}/artifactory.config.import.xml")}"
-  // vars = {
-  //   namespace        = "${var.namespace}"
-  //   logstash_url     = "http://lead-dashboard-logstash.${var.namespace}.svc.cluster.local:9000"
-  // }
+  template = "${file("${path.module}/artifactory.config.import.xml.tpl")}"
+}
+
+resource "kubernetes_secret" "artifactory_admin" {
+  metadata {
+    name      = "artifactory-credential"
+    namespace = "${var.namespace}"
+  }
+  type = "Opaque"
+
+  data {
+    username = "admin"
+    password = "${random_string.artifactory_admin_password.result}"
+  }
+}
+
+resource "kubernetes_secret" "artifactory_jenkins" {
+  metadata {
+    name      = "jenkins-credential-artifactory"
+    namespace = "${var.namespace}"
+
+    labels {
+      "app.kubernetes.io/name"       = "jenkins"
+      "app.kubernetes.io/instance"   = "jenkins"
+      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/managed-by" = "Terraform"
+      "jenkins.io/credentials-type"  = "usernamePassword"
+    }
+
+    annotations {
+      "source-repo"                        = "https://github.com/liatrio/lead-toolchain"
+      "jenkins.io/credentials-description" = "Artifactory Credentials"
+    }
+  }
+
+  type = "Opaque"
+
+  data {
+    username = "jenkins"
+    password = "${random_string.artifactory_jenkins_password.result}"
+  }
 }
 
 resource "kubernetes_config_map" "artifactory_config" {
   metadata {
     name = "lead-bootstrap-artifactory-config"
+    namespace = "${var.namespace}"
   }
 
   data {
@@ -24,7 +65,10 @@ resource "kubernetes_config_map" "artifactory_config" {
   }
 }
 
-
+resource "random_string" "artifactory_jenkins_password" {
+  length  = 10
+  special = false
+}
 
 resource "random_string" "artifactory_admin_password" {
   length  = 10
@@ -50,8 +94,6 @@ resource "helm_release" "artifactory" {
   version    = "7.14.3"
   timeout    = 1200
 
-
-  #values = ["${data.template_file.artifactory_values.rendered}"]
   set {
     name  = "artifactory.configMapName"
     value = "lead-bootstrap-artifactory-config"
@@ -72,8 +114,8 @@ resource "helm_release" "artifactory" {
      value = "${random_string.artifactory_db_password.result}"
    }
 
-  set_sensitive {
-   name  = "artifactory.accessAdmin.password"
-   value = "${random_string.artifactory_admin_password.result}"
-  }
+  // set_sensitive {
+  //  name  = "artifactory.accessAdmin.password"
+  //  value = "${random_string.artifactory_admin_password.result}"
+  // }
 }

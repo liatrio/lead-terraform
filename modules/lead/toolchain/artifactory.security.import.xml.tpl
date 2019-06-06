@@ -56,7 +56,7 @@
     </user>
     <user>
       <username>admin</username>
-      <password>bcrypt$$2a$08$j0CnB4GX37QfZl1mgJUzdO2sRKPo4556Y1fMyprSyhp1om5jMCe6m</password>
+      <password>${admin_bcrypt_pass}</password>
       <admin>true</admin>
       <enabled>true</enabled>
       <updatableProfile>true</updatableProfile>
@@ -75,7 +75,7 @@
     </user>
     <user>
       <username>jenkins</username>
-      <password>bcrypt$$2a$08$zWYvR/kgLEPt6za8FWfGuODbR.HDwNJaEDUvFBICMn5jcL4Em1spW</password>
+      <password>${jenkins_bcrypt_pass}</password>
       <email>jenkins@liatr.io</email>
       <admin>false</admin>
       <enabled>true</enabled>
