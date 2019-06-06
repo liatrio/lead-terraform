@@ -12,7 +12,7 @@ data "template_file" "artifactory_config_values" {
 
 resource "kubernetes_secret" "artifactory_admin" {
   metadata {
-    name      = "artifactory-credential"
+    name      = "artifactory-admin-credential"
     namespace = "${var.namespace}"
   }
   type = "Opaque"
@@ -25,7 +25,7 @@ resource "kubernetes_secret" "artifactory_admin" {
 
 resource "kubernetes_secret" "artifactory_jenkins" {
   metadata {
-    name      = "jenkins-credential-artifactory"
+    name      = "jenkins-artifactory-credential"
     namespace = "${var.namespace}"
 
     labels {
