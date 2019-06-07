@@ -1,6 +1,7 @@
 data "template_file" "artifactory_security_values" {
   template = "${file("${path.module}/artifactory.security.import.xml.tpl")}"
   vars = {
+    # To prefix bcrypt strings with 'bcrypt$', we use format here due to escape issues in template.
     jenkins_bcrypt_pass = "${format("bcrypt$%s", bcrypt(random_string.artifactory_jenkins_password.result))}"
     admin_bcrypt_pass   = "${format("bcrypt$%s", bcrypt(random_string.artifactory_admin_password.result))}"
   }
