@@ -2,43 +2,7 @@
 <security version="v10">
   <users>
     <user>
-      <username>access-admin</username>
-      <password>bcrypt$$2a$08$5ggkROPsFj/TgJ18qcpkMeuj2rmuV983Mgy3MIxlAeUWoydGU9tsa</password>
-      <admin>false</admin>
-      <enabled>true</enabled>
-      <updatableProfile>false</updatableProfile>
-      <accountNonExpired>true</accountNonExpired>
-      <credentialsExpired>false</credentialsExpired>
-      <credentialsNonExpired>true</credentialsNonExpired>
-      <accountNonLocked>true</accountNonLocked>
-      <realm>internal</realm>
-      <transientUser>false</transientUser>
-      <groups/>
-      <userPropertyInfos/>
-      <lastLoginTimeMillis>0</lastLoginTimeMillis>
-      <lastAccessTimeMillis>0</lastAccessTimeMillis>
-      <locked>false</locked>
-    </user>
-    <user>
       <username>anonymous</username>
-      <admin>false</admin>
-      <enabled>true</enabled>
-      <updatableProfile>false</updatableProfile>
-      <accountNonExpired>true</accountNonExpired>
-      <credentialsExpired>false</credentialsExpired>
-      <credentialsNonExpired>true</credentialsNonExpired>
-      <accountNonLocked>true</accountNonLocked>
-      <realm>internal</realm>
-      <transientUser>false</transientUser>
-      <groups/>
-      <userPropertyInfos/>
-      <lastLoginTimeMillis>0</lastLoginTimeMillis>
-      <lastAccessTimeMillis>0</lastAccessTimeMillis>
-      <locked>false</locked>
-    </user>
-    <user>
-      <username>_internal</username>
-      <password>bcrypt$$2a$08$cFTqlKlW.cs7Z0BsA2lyAe.4hRt8Ew1Hhh5mmT7MMqv21hu68WuXu</password>
       <admin>false</admin>
       <enabled>true</enabled>
       <updatableProfile>false</updatableProfile>
