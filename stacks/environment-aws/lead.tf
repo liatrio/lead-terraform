@@ -50,11 +50,8 @@ module "sdm" {
   namespace          = "${module.toolchain.namespace}"
   system_namespace   = "${module.infrastructure.namespace}"
   sdm_version        = "${var.sdm_version}"
-  slack_clientid     = "${var.slack_clientid}"
-  slack_clientsecret = "${var.slack_clientsecret}"
-  slack_verification_token = "${var.slack_verification_token}"
-  slack_webhook_url        = "${var.slack_webhook_url}"
-  slack_access_token       = "${var.slack_access_token}"
+  slack_bot_token          = "${var.slack_bot_token}"
+  slack_client_signing_secret     = "${var.slack_client_signing_secret}"
 
   providers {
     "helm.system" = "helm.system"

@@ -38,11 +38,8 @@ variable "dashboard_version" {
 variable "artifactory_license" {}
 variable "bitbucket_token" {}
 variable "jira_token" {}
-variable "slack_webhook_url" {}
-variable "slack_access_token" {}
-variable "slack_clientid" {}
-variable "slack_clientsecret" {}
-variable "slack_verification_token" {}
+variable "slack_bot_token" {}
+variable "slack_client_signing_secret" {}
 
 locals {
   tags = {
