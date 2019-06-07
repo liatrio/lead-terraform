@@ -60,11 +60,8 @@ resource "kubernetes_secret" "operator_slack_config" {
 
   data {
     "slack_config" = <<EOF
-SLACK_WEBHOOK_URL=${var.slack_webhook_url}
-SLACK_ACCESS_TOKEN=${var.slack_access_token}
-SLACK_CLIENTID=${var.slack_clientid}
-SLACK_CLIENTSECRET=${var.slack_clientsecret}
-SLACK_VERIFICATION_TOKEN=${var.slack_verification_token}
+clientSigningSecret=${var.slack_client_signing_secret}
+botToken=${var.slack_bot_token}
 EOF
   }
 }
