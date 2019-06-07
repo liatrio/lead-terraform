@@ -33,7 +33,7 @@ variable "sdm_version" {
     default = "0.2.8"
 }
 variable "dashboard_version" {
-  default = "0.2.0-433bc791526"
+  default = "0.2.0-d1cec717d4a"
 }
 variable "artifactory_license" {}
 variable "bitbucket_token" {}
