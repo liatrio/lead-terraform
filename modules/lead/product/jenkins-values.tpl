@@ -16,7 +16,7 @@ master:
     configScripts:
       welcome-message: |
         jenkins:
-          systemMessage: Welcome to our CI\CD server.  This Jenkins is configured and managed 'as code' from https://github.com/liatrio/lead-toolchain.
+          systemMessage: Welcome to our CI\CD server.  This Jenkins is configured and managed 'as code' from https://github.com/liatrio/lead-terraform.
       logstash-url: |
         jenkins:
           globalNodeProperties:
@@ -97,6 +97,10 @@ master:
     - github-branch-source:2.5.3
     - workflow-aggregator:2.6
     - pipeline-model-definition:1.3.8
+    - workflow-api:2.34
+    - workflow-scm-step:2.8
+    - kubernetes:1.15.6
+    - job-dsl:1.74
 
   containerEnv:
     - name: elasticUrl
