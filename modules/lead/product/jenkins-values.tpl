@@ -11,8 +11,8 @@ master:
 
   JCasC:
     enabled: true
-    pluginVersion: 1.13
-    supportPluginVersion: 1.13
+    pluginVersion: 1.19
+    supportPluginVersion: 1.19
     configScripts:
       welcome-message: |
         jenkins:
@@ -89,13 +89,14 @@ master:
                     git:
                       remote: "https://github.com/liatrio/pipeline-library"
   installPlugins:
-    - ws-cleanup:latest
-    - kubernetes-credentials-provider:latest
-    - slack:latest
-    - pipeline-utility-steps:latest
-    - http_request:latest
-    - github-branch-source:latest
-    - workflow-aggregator:latest
+    - ws-cleanup:0.37
+    - kubernetes-credentials-provider:0.12.1
+    - slack:2.24
+    - pipeline-utility-steps:2.3.0
+    - http_request:1.8.22
+    - github-branch-source:2.5.3
+    - workflow-aggregator:2.6
+    - pipeline-model-definition:1.3.8
 
   containerEnv:
     - name: elasticUrl
