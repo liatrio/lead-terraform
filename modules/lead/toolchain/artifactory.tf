@@ -87,7 +87,7 @@ data "helm_repository" "jfrog" {
 
 resource "helm_release" "artifactory" {
   depends_on = ["kubernetes_config_map.artifactory_config"]
-  repository = "jfrog"
+  repository = "${data.helm_repository.jfrog.metadata.0.name}"
   name       = "artifactory"
   namespace  = "${module.toolchain_namespace.name}"
   chart      = "artifactory"
