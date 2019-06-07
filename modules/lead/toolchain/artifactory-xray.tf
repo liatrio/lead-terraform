@@ -24,6 +24,10 @@ resource "helm_release" "xray" {
   //   name  = "xray.license.licenseKey"
   //   value = "${var.artifactory_xray_license}"
   // }
+  set {
+    name  = "server.service.type"
+    value = "ClusterIP"
+  }
 
   set_sensitive {
      name  = "mongodb.mongodbPassword"
