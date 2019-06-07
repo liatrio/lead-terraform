@@ -99,6 +99,8 @@ master:
     - pipeline-model-definition:1.3.8
     - workflow-api:2.34
     - workflow-scm-step:2.8
+    - kubernetes:1.15.6
+    - job-dsl:1.74
 
   containerEnv:
     - name: elasticUrl
