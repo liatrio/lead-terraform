@@ -18,6 +18,7 @@ resource "helm_release" "jenkins" {
   name      = "jenkins"
   chart     = "stable/jenkins"
   namespace = "${var.namespace}"
+  timeout   = "300"
 
   set_sensitive {
     name  = "master.adminPassword"
