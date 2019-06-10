@@ -25,7 +25,7 @@ resource "kubernetes_role" "tiller_role" {
     verbs = ["*"]
   }
 }
-*/
+
 resource "kubernetes_role_binding" "tiller_role_binding" {
   metadata {
     name = "tiller-binding"
@@ -42,3 +42,4 @@ resource "kubernetes_role_binding" "tiller_role_binding" {
     namespace = "${kubernetes_namespace.ns.metadata.0.name}"
   }
 }
+*/
