@@ -13,7 +13,7 @@ resource "kubernetes_service_account" "tiller_service_account" {
   }
   automount_service_account_token = true
 }
-
+/*
 resource "kubernetes_role" "tiller_role" {
   metadata {
     name = "tiller-manager"
@@ -25,7 +25,7 @@ resource "kubernetes_role" "tiller_role" {
     verbs = ["*"]
   }
 }
-
+*/
 resource "kubernetes_role_binding" "tiller_role_binding" {
   metadata {
     name = "tiller-binding"
