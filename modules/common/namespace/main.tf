@@ -24,11 +24,11 @@ resource "kubernetes_role" "tiller_role" {
     resources = ["*"]
     verbs = ["*"]
   }
-#  rule {
-#    api_groups = ["policy", "rbac.authorization.k8s.io"]
-#    resources = [""]
-#    verbs = [""]
-#  }
+  rule {
+    api_groups = ["rbac.authorization.k8s.io"]
+    resources = ["roles", "rolebindings"]
+    verbs = ["create", "delete", "get"]
+  }
 }
 
 resource "kubernetes_role_binding" "tiller_role_binding" {
