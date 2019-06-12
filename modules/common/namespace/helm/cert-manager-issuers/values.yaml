@@ -1,0 +1,7 @@
+acme:
+  enabled: false
+  server: https://acme-v02.api.letsencrypt.org/directory
+  email: cloudservices@liatr.io
+  dnsProvider: {}
+selfSigned:
+  enabled: true

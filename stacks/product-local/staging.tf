@@ -6,7 +6,7 @@ provider "kubernetes" {
 provider "helm" {
   alias = "staging"
   namespace = "${module.staging_namespace.name}"
-  tiller_image = "gcr.io/kubernetes-helm/tiller:v2.14.0"
+  tiller_image = "gcr.io/kubernetes-helm/tiller:v2.14.1"
   service_account = "${module.staging_namespace.tiller_service_account}"
 
   kubernetes {

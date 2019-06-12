@@ -2,7 +2,7 @@ data "template_file" "external_dns_values" {
   template = "${file("${path.module}/external-dns-values.tpl")}"
 
   vars = {
-    ns_domain = "${module.eks.cluster_id}.${var.root_zone_name}"
+    domain_filter = "${module.eks.cluster_id}.${var.root_zone_name}"
   }
 }
 
@@ -27,17 +27,6 @@ module "toolchain" {
   image_whitelist    = "${var.image_whitelist}"
   elb_security_group_id = "${aws_security_group.elb.id}"
   artifactory_license = "${var.artifactory_license}"
-
-  providers {
-    helm = "helm.toolchain"
-  }
-}
-module "toolchain_ingress" {
-  source             = "../../modules/aws/ingress"
-  root_zone_name     = "${var.root_zone_name}"
-  cluster            = "${module.eks.cluster_id}"
-  namespace          = "${module.toolchain.namespace}"
-  elb_security_group_id = "${aws_security_group.elb.id}"
 
   providers {
     helm = "helm.toolchain"

@@ -7,6 +7,7 @@ module "system_namespace" {
   }
   labels {
     "openpolicyagent.org/webhook" = "ignore"
+    "certmanager.k8s.io/disable-validation" = "true"
   }
 }
 

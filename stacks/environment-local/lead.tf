@@ -27,6 +27,7 @@ module "toolchain" {
   namespace           = "${var.toolchain_namespace}"
   image_whitelist     = "${var.image_whitelist}"
   artifactory_license = "${var.artifactory_license}"
+  ingress_controller_type = "NodePort"
 
   providers {
     helm = "helm.toolchain"

@@ -6,3 +6,6 @@ variable "image_whitelist" {}
 variable "elb_security_group_id" {
     default = ""
 }
+variable "ingress_controller_type" {
+    default = "LoadBalancer"
+}
