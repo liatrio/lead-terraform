@@ -98,12 +98,12 @@ resource "kubernetes_role_binding" "jenkins_kubernetes_credentials" {
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "Role"
-    name      = "jenkins-kubernetes-credentials"
+    name      = "${kubernetes_role.jenkins_kubernetes_credentials.metadata.0.name}"
   }
 
   subject {
     kind      = "ServiceAccount"
-    name      = "jenkins"
+    name      = "${kubernetes_service_account.jenkins.metadata.0.name}"
     namespace = "${var.namespace}"
   }
 }
