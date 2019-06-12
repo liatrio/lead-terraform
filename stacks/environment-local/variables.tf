@@ -25,7 +25,7 @@ variable "opa_failure_policy" {
 }
 
 variable "sdm_version" {
-  default = "0.2.7"
+  default = "0.2.9"
 }
 
 variable "dashboard_version" {
@@ -33,14 +33,11 @@ variable "dashboard_version" {
 }
 
 variable "artifactory_license" {}
+variable "slack_bot_token" {}
+variable "slack_client_signing_secret" {}
 
 #variable "bitbucket_token" {}
 #variable "jira_token" {}
-#variable "slack_webhook_url" {}
-#variable "slack_access_token" {}
-#variable "slack_clientid" {}
-#variable "slack_clientsecret" {}
-#variable "slack_verification_token" {}
 
 locals {
   tags = {

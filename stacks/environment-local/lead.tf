@@ -32,3 +32,18 @@ module "toolchain" {
     helm = "helm.toolchain"
   }
 }
+module "sdm" {
+  source             = "../../modules/lead/sdm"
+  root_zone_name     = "${var.root_zone_name}"
+  cluster            = "${var.cluster}"
+  namespace          = "${module.toolchain.namespace}"
+  system_namespace   = "${module.infrastructure.namespace}"
+  sdm_version        = "${var.sdm_version}"
+  slack_bot_token    = "${var.slack_bot_token}"
+  slack_client_signing_secret     = "${var.slack_client_signing_secret}"
+
+  providers {
+    "helm.system" = "helm.toolchain"
+    "helm.toolchain" = "helm.toolchain"
+  }
+}
