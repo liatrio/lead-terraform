@@ -13,17 +13,22 @@ resource "kubernetes_service_account" "tiller_service_account" {
   }
   automount_service_account_token = true
 }
-/*
+
 resource "kubernetes_role" "tiller_role" {
   metadata {
     name = "tiller-manager"
     namespace = "${kubernetes_namespace.ns.metadata.0.name}"
   }
   rule {
-    api_groups = ["", "batch", "extensions", "apps", "policy", "stable.liatr.io", "rbac.authorization.k8s.io", "networking.k8s.io"]
+    api_groups = ["", "batch", "extensions", "apps","stable.liatr.io"]
     resources = ["*"]
     verbs = ["*"]
   }
+#  rule {
+#    api_groups = ["policy", "rbac.authorization.k8s.io"]
+#    resources = [""]
+#    verbs = [""]
+#  }
 }
 
 resource "kubernetes_role_binding" "tiller_role_binding" {
@@ -42,4 +47,3 @@ resource "kubernetes_role_binding" "tiller_role_binding" {
     namespace = "${kubernetes_namespace.ns.metadata.0.name}"
   }
 }
-*/
