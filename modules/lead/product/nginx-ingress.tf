@@ -8,11 +8,13 @@ data "template_file" "nginx_ingress_values" {
 }
 
 data "helm_repository" "stable" {
-    name = "stable"
-    url  = "https://kubernetes-charts.storage.googleapis.com"
+  provider  = "helm.toolchain"
+  name = "stable"
+  url  = "https://kubernetes-charts.storage.googleapis.com"
 }
 
 resource "helm_release" "nginx_ingress" {
+  provider  = "helm.toolchain"
   repository = "${data.helm_repository.stable.metadata.0.name}"
   chart      = "nginx-ingress"
   version    = "1.4.0"
@@ -24,6 +26,7 @@ resource "helm_release" "nginx_ingress" {
 }
 
 resource "kubernetes_service_account" "nginx_ingress_service_account" {
+  provider  = "kubernetes.toolchain"
   metadata {
     name = "nginx-ingress"
     namespace  = "${module.toolchain_namespace.name}"
@@ -32,6 +35,7 @@ resource "kubernetes_service_account" "nginx_ingress_service_account" {
 }
 
 resource "kubernetes_cluster_role" "nginx_ingress_role" {
+  provider  = "kubernetes.toolchain"
   metadata {
     name = "${module.toolchain_namespace.name}-nginx-ingress-manager"
   }
@@ -43,6 +47,7 @@ resource "kubernetes_cluster_role" "nginx_ingress_role" {
 }
 
 resource "kubernetes_cluster_role_binding" "nginx_ingress_role_binding" {
+  provider  = "kubernetes.toolchain"
   metadata {
     name = "${module.toolchain_namespace.name}-nginx-ingress-binding"
   }
@@ -59,6 +64,7 @@ resource "kubernetes_cluster_role_binding" "nginx_ingress_role_binding" {
 }
 
 resource "kubernetes_role" "nginx_ingress_role" {
+  provider  = "kubernetes.toolchain"
   metadata {
     name = "nginx-ingress-manager"
     namespace  = "${module.toolchain_namespace.name}"
@@ -112,6 +118,7 @@ resource "kubernetes_role" "nginx_ingress_role" {
 }
 
 resource "kubernetes_role_binding" "nginx_ingress_role_binding" {
+  provider  = "kubernetes.toolchain"
   metadata {
     name = "nginx-ingress-binding"
     namespace  = "${module.toolchain_namespace.name}"

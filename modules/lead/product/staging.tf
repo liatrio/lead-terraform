@@ -1,21 +1,7 @@
-provider "kubernetes" {
-  alias = "staging"
-  load_config_file = false
-}
-
-provider "helm" {
-  alias = "staging"
-  namespace = "${module.staging_namespace.name}"
-  tiller_image = "gcr.io/kubernetes-helm/tiller:v2.14.1"
-  service_account = "${module.staging_namespace.tiller_service_account}"
-
-  kubernetes {
-    load_config_file = false
-  }
-}
 module "staging_namespace" {
-  source     = "../../modules/common/namespace"
+  source     = "../../common/namespace"
   namespace  = "${var.product_name}-staging"
+  issuer_type = "${var.issuer_type}"
   annotations {
     name  = "${var.product_name}-staging"
     cluster = "${var.cluster}"
