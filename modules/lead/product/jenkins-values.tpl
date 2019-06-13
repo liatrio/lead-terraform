@@ -10,7 +10,7 @@ master:
       kubernetes.io/ingress.class: "nginx"
       kubernetes.io/tls-acme: "true"
       nginx.ingress.kubernetes.io/ssl-redirect: "true"
-      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
     tls:
     - hosts:
       - ${ingress_hostname}

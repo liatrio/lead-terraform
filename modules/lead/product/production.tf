@@ -1,21 +1,6 @@
-provider "kubernetes" {
-  alias = "production"
-  load_config_file = false
-}
-
-provider "helm" {
-  alias = "production"
-  namespace = "${module.production_namespace.name}"
-  tiller_image = "gcr.io/kubernetes-helm/tiller:v2.14.1"
-  service_account = "${module.production_namespace.tiller_service_account}"
-
-  kubernetes {
-    load_config_file = false
-  }
-}
 
 module "production_namespace" {
-  source     = "../../modules/common/namespace"
+  source     = "../../common/namespace"
   namespace  = "${var.product_name}-production"
   issuer_type = "${var.issuer_type}"
   annotations {

@@ -7,17 +7,35 @@ data "template_file" "jenkins_values" {
   template = "${file("${path.module}/jenkins-values.tpl")}"
 
   vars = {
-    ingress_hostname = "jenkins.${var.namespace}.${var.cluster}.${var.root_zone_name}"
-    namespace        = "${var.namespace}"
-    logstash_url     = "http://lead-dashboard-logstash.${var.namespace}.svc.cluster.local:9000"
+    ingress_hostname = "jenkins.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
+    namespace        = "${module.toolchain_namespace.name}"
+    logstash_url     = "http://lead-dashboard-logstash.${module.toolchain_namespace.name}.svc.cluster.local:9000"
     slack_team       = "liatrio"
   }
 }
 
+module "toolchain_namespace" {
+  source     = "../../common/namespace"
+  namespace  = "${var.product_name}-toolchain"
+  issuer_type = "${var.issuer_type}"
+  annotations {
+    name  = "${var.product_name}-toolchain"
+    cluster = "${var.cluster}"
+    "opa.lead.liatrio/ingress-whitelist" = "*.${var.product_name}-toolchain.${var.cluster}.${var.root_zone_name}"
+    "opa.lead.liatrio/image-whitelist" = "${var.image_whitelist}"
+  }
+
+  providers {
+    helm = "helm.toolchain"
+    kubernetes = "kubernetes.toolchain"
+  }
+}
+
 resource "helm_release" "jenkins" {
+  provider  = "helm.toolchain"
   name      = "jenkins"
   chart     = "stable/jenkins"
-  namespace = "${var.namespace}"
+  namespace = "${module.toolchain_namespace.name}"
   timeout   = "300"
 
   set_sensitive {
@@ -30,9 +48,10 @@ resource "helm_release" "jenkins" {
 
 // Create Jenkins service account
 resource "kubernetes_service_account" "jenkins" {
+  provider  = "kubernetes.toolchain"
   metadata {
     name      = "jenkins"
-    namespace = "${var.namespace}"
+    namespace = "${module.toolchain_namespace.name}"
 
     labels {
       "app.kubernetes.io/name"       = "jenkins"
@@ -52,9 +71,10 @@ resource "kubernetes_service_account" "jenkins" {
 
 // Add roll to allow Jenkins to read secrets
 resource "kubernetes_role" "jenkins_kubernetes_credentials" {
+  provider  = "kubernetes.toolchain"
   metadata {
     name      = "jenkins-kubernetes-credentials"
-    namespace = "${var.namespace}"
+    namespace = "${module.toolchain_namespace.name}"
 
     labels {
       "app.kubernetes.io/name"       = "jenkins"
@@ -78,9 +98,10 @@ resource "kubernetes_role" "jenkins_kubernetes_credentials" {
 
 // Bind Kubernetes secrets role to Jenkins service account
 resource "kubernetes_role_binding" "jenkins_kubernetes_credentials" {
+  provider  = "kubernetes.toolchain"
   metadata {
     name      = "jenkins-kubernetes-credentials"
-    namespace = "${var.namespace}"
+    namespace = "${module.toolchain_namespace.name}"
 
     labels {
       "app.kubernetes.io/name"       = "jenkins"
@@ -104,6 +125,6 @@ resource "kubernetes_role_binding" "jenkins_kubernetes_credentials" {
   subject {
     kind      = "ServiceAccount"
     name      = "${kubernetes_service_account.jenkins.metadata.0.name}"
-    namespace = "${var.namespace}"
+    namespace = "${module.toolchain_namespace.name}"
   }
 }
