@@ -16,8 +16,18 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
     name = "toolchain-tiller-manager"
   }
   rule {
+    api_groups = ["", "batch", "extensions", "apps","stable.liatr.io", "policy", "apiextensions.k8s.io"]
+    resources = ["*"]
+    verbs = ["*"]
+  }
+  rule {
     api_groups = ["rbac.authorization.k8s.io"]
-    resources = ["clusterroles", "clusterrolebindings", "roles", "rolebindings"]
+    resources = ["roles", "rolebindings", "clusterroles", "clusterrolebindings"]
+    verbs = ["get", "create", "watch", "delete", "list"]
+  }
+  rule {
+    api_groups = ["certmanager.k8s.io"]
+    resources = ["issuers"]
     verbs = ["get", "create", "watch", "delete", "list", "patch"]
   }
 }
