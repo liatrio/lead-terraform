@@ -36,6 +36,7 @@ module "product" {
   root_zone_name     = "${var.root_zone_name}"
   cluster            = "${var.cluster}"
   namespace          = "${var.product_name}-toolchain"
+  issuer_type        = "${var.issuer_type}"
 
   providers {
     helm = "helm.toolchain"

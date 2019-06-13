@@ -17,6 +17,7 @@ provider "helm" {
 module "production_namespace" {
   source     = "../../modules/common/namespace"
   namespace  = "${var.product_name}-production"
+  issuer_type = "${var.issuer_type}"
   annotations {
     name  = "${var.product_name}-production"
     cluster = "${var.cluster}"
