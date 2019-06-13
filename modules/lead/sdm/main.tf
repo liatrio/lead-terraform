@@ -23,7 +23,8 @@ data "template_file" "operator_toolchain_values" {
 
   vars = {
     image_tag = "v${var.sdm_version}"
-    ingress_domain = "${var.namespace}.${var.cluster}.${var.root_zone_name}"
+    namespace = "${var.namespace}"
+    cluster_domain = "${var.cluster}.${var.root_zone_name}"
   }
 }
 
