@@ -20,7 +20,7 @@ resource "kubernetes_role" "tiller_role" {
     namespace = "${kubernetes_namespace.ns.metadata.0.name}"
   }
   rule {
-    api_groups = ["", "batch", "extensions", "apps","stable.liatr.io", "policy"]
+    api_groups = ["", "batch", "extensions", "apps","stable.liatr.io", "policy", "apiextensions.k8s.io"]
     resources = ["*"]
     verbs = ["*"]
   }
