@@ -1,7 +1,7 @@
-data "helm_repository" "istio" {
-    name = "istio"
-    url  = "https://storage.googleapis.com/istio-release/releases/1.1.8/charts/"
-}
+# data "helm_repository" "istio" {
+#     name = "istio"
+#     url  = "https://storage.googleapis.com/istio-release/releases/1.1.8/charts/"
+# }
 
 
 # resource "helm_release" "istio_init" {

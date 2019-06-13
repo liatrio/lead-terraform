@@ -8,8 +8,9 @@ data "template_file" "nginx_ingress_values" {
 }
 
 data "helm_repository" "stable" {
-    name = "stable"
-    url  = "https://kubernetes-charts.storage.googleapis.com"
+  provider  = "helm.toolchain"
+  name = "stable"
+  url  = "https://kubernetes-charts.storage.googleapis.com"
 }
 
 resource "helm_release" "nginx_ingress" {
