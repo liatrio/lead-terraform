@@ -16,6 +16,7 @@ provider "helm" {
 module "staging_namespace" {
   source     = "../../modules/common/namespace"
   namespace  = "${var.product_name}-staging"
+  issuer_type = "selfSigned"
   annotations {
     name  = "${var.product_name}-staging"
     cluster = "${var.cluster}"

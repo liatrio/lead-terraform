@@ -17,6 +17,7 @@ provider "helm" {
 module "production_namespace" {
   source     = "../../modules/common/namespace"
   namespace  = "${var.product_name}-production"
+  issuer_type = "selfSigned"
   annotations {
     name  = "${var.product_name}-production"
     cluster = "${var.cluster}"
