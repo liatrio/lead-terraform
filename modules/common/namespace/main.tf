@@ -26,7 +26,7 @@ resource "kubernetes_role" "tiller_role" {
   }
   rule {
     api_groups = ["rbac.authorization.k8s.io"]
-    resources = ["roles", "rolebindings", "ClusterRoles", "ClusterRoleBindings"]
+    resources = ["roles", "rolebindings", "clusterroles", "clusterrolebindings"]
     verbs = ["get", "create", "watch", "delete", "list"]
   }
   rule {
