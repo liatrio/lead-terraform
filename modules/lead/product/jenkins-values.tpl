@@ -85,7 +85,23 @@ master:
                         workingDir: "/home/jenkins"
                         command: "/bin/sh -c"
                         args: "cat"
-                        ttyEnabled: true 
+                        ttyEnabled: true
+                  - name: "lead-toolchain-aws"
+                    label: "lead-toolchain-aws"
+                    nodeUsageMode: NORMAL
+                    containers:
+                      - name: "aws"
+                        image: "docker.artifactory.liatr.io/liatrio/builder-image-aws:v1.0.4-9-gb227222"
+                        alwaysPullImage: false
+                        workingDir: "/home/jenkins"
+                        command: "/bin/sh -c"
+                        args: "cat"
+                        ttyEnabled: true
+                    volumes:
+                      - hostPathVolume:
+                          hostPath: "/var/run/docker.sock"
+                          mountPath: "/var/run/docker.sock"
+                    slaveConnectTimeout: 100      
       shared-libraries: |
         unclassified:
           globalLibraries:
