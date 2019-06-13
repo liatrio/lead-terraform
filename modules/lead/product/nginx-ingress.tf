@@ -2,8 +2,7 @@ data "template_file" "nginx_ingress_values" {
   template = "${file("${path.module}/nginx-ingress-values.tpl")}"
 
   vars = {
-    cert_arn = "${aws_acm_certificate.cert.arn}"
-    elb_security_group = "${var.elb_security_group_id}"
+    ingress_controller_type = "${var.ingress_controller_type}"
     service_account = "${kubernetes_service_account.nginx_ingress_service_account.metadata.0.name}"
   }
 }
@@ -17,7 +16,7 @@ resource "helm_release" "nginx_ingress" {
   repository = "${data.helm_repository.stable.metadata.0.name}"
   chart      = "nginx-ingress"
   version    = "1.4.0"
-  namespace  = "${var.namespace}"
+  namespace  = "${module.toolchain_namespace.name}"
   name       = "nginx-ingress"
   timeout    = 600
 
@@ -27,14 +26,14 @@ resource "helm_release" "nginx_ingress" {
 resource "kubernetes_service_account" "nginx_ingress_service_account" {
   metadata {
     name = "nginx-ingress"
-    namespace  = "${var.namespace}"
+    namespace  = "${module.toolchain_namespace.name}"
   }
   automount_service_account_token = true
 }
 
 resource "kubernetes_cluster_role" "nginx_ingress_role" {
   metadata {
-    name = "${var.namespace}-nginx-ingress-manager"
+    name = "${module.toolchain_namespace.name}-nginx-ingress-manager"
   }
   rule {
     api_groups = [""]
@@ -45,7 +44,7 @@ resource "kubernetes_cluster_role" "nginx_ingress_role" {
 
 resource "kubernetes_cluster_role_binding" "nginx_ingress_role_binding" {
   metadata {
-    name = "${var.namespace}-nginx-ingress-binding"
+    name = "${module.toolchain_namespace.name}-nginx-ingress-binding"
   }
   role_ref {
     api_group = "rbac.authorization.k8s.io"
@@ -55,14 +54,14 @@ resource "kubernetes_cluster_role_binding" "nginx_ingress_role_binding" {
   subject {
     kind      = "ServiceAccount"
     name      = "${kubernetes_service_account.nginx_ingress_service_account.metadata.0.name}"
-    namespace  = "${var.namespace}"
+    namespace  = "${module.toolchain_namespace.name}"
   }
 }
 
 resource "kubernetes_role" "nginx_ingress_role" {
   metadata {
     name = "nginx-ingress-manager"
-    namespace  = "${var.namespace}"
+    namespace  = "${module.toolchain_namespace.name}"
   }
   rule {
     api_groups = [""]
@@ -115,7 +114,7 @@ resource "kubernetes_role" "nginx_ingress_role" {
 resource "kubernetes_role_binding" "nginx_ingress_role_binding" {
   metadata {
     name = "nginx-ingress-binding"
-    namespace  = "${var.namespace}"
+    namespace  = "${module.toolchain_namespace.name}"
   }
   role_ref {
     api_group = "rbac.authorization.k8s.io"
@@ -125,6 +124,6 @@ resource "kubernetes_role_binding" "nginx_ingress_role_binding" {
   subject {
     kind      = "ServiceAccount"
     name      = "${kubernetes_service_account.nginx_ingress_service_account.metadata.0.name}"
-    namespace  = "${var.namespace}"
+    namespace  = "${module.toolchain_namespace.name}"
   }
 }

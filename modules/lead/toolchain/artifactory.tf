@@ -64,6 +64,10 @@ resource "kubernetes_config_map" "artifactory_config" {
   data {
     security.import.xml = "${data.template_file.artifactory_security_values.rendered}"
   }
+
+  lifecycle {
+    ignore_changes = ["data.security.import.xml"]
+  }
 }
 
 resource "random_string" "artifactory_jenkins_password" {

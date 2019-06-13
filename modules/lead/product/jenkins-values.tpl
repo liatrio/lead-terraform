@@ -6,6 +6,15 @@ master:
   ingress:
     enabled: true
     hostName: ${ingress_hostname}
+    annotations:
+      kubernetes.io/ingress.class: "nginx"
+      kubernetes.io/tls-acme: "true"
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    tls:
+    - hosts:
+      - ${ingress_hostname}
+      secretName: jenkins-ingress-tls
   jenkinsUrlProtocol: https
   serviceType: ClusterIP
 

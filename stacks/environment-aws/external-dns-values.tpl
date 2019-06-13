@@ -2,4 +2,4 @@ provider: aws
 sources:
 - ingress
 domainFilters:
-- "${ns_domain}"
+- "${domain_filter}"

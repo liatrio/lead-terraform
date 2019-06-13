@@ -7,3 +7,4 @@ variable "labels" {
     type = "map"
     default = {}
 }
+variable "issuer_type" {}
