@@ -17,6 +17,7 @@ provider "helm" {
 module "toolchain_namespace" {
   source     = "../../modules/common/namespace"
   namespace  = "${var.product_name}-toolchain"
+  issuer_type = "${var.issuer_type}"
   annotations {
     name  = "${var.product_name}-toolchain"
     cluster = "${var.cluster}"
