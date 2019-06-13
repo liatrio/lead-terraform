@@ -6,7 +6,7 @@ provider "kubernetes" {
 provider "helm" {
   alias = "toolchain"
   namespace = "${module.toolchain_namespace.name}"
-  tiller_image = "gcr.io/kubernetes-helm/tiller:v2.14.0"
+  tiller_image = "gcr.io/kubernetes-helm/tiller:v2.14.1"
   service_account = "${module.toolchain_namespace.tiller_service_account}"
 
   kubernetes {
@@ -35,6 +35,8 @@ module "product" {
   root_zone_name     = "${var.root_zone_name}"
   cluster            = "${var.cluster}"
   namespace          = "${var.product_name}-toolchain"
+  issuer_type = "selfSigned"
+  ingress_controller_type = "NodePort"
 
   providers {
     helm = "helm.toolchain"

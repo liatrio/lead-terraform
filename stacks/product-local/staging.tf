@@ -6,7 +6,7 @@ provider "kubernetes" {
 provider "helm" {
   alias = "staging"
   namespace = "${module.staging_namespace.name}"
-  tiller_image = "gcr.io/kubernetes-helm/tiller:v2.14.0"
+  tiller_image = "gcr.io/kubernetes-helm/tiller:v2.14.1"
   service_account = "${module.staging_namespace.tiller_service_account}"
 
   kubernetes {
@@ -16,6 +16,7 @@ provider "helm" {
 module "staging_namespace" {
   source     = "../../modules/common/namespace"
   namespace  = "${var.product_name}-staging"
+  issuer_type = "selfSigned"
   annotations {
     name  = "${var.product_name}-staging"
     cluster = "${var.cluster}"
