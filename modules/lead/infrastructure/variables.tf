@@ -7,3 +7,4 @@ variable "acme_dns_providers" {
     type="list" 
     default=[]
 } 
+variable "issuer_type" {}

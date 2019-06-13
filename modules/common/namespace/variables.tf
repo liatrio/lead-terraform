@@ -7,4 +7,4 @@ variable "labels" {
     type = "map"
     default = {}
 }
-variable "issuer_type" { default = "selfSigned" }
+variable "issuer_type" {}

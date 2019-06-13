@@ -12,6 +12,7 @@ module "infrastructure" {
   namespace          = "${var.system_namespace}"
   opa_failure_policy = "${var.opa_failure_policy}"
   enable_opa         = "false"
+  issuer_type        = "acme"
 
   external_dns_chart_values = "${data.template_file.external_dns_values.rendered}"
 
@@ -27,6 +28,7 @@ module "toolchain" {
   image_whitelist    = "${var.image_whitelist}"
   elb_security_group_id = "${aws_security_group.elb.id}"
   artifactory_license = "${var.artifactory_license}"
+  issuer_type        = "acme"
 
   providers {
     helm = "helm.toolchain"

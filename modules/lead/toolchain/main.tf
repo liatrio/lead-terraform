@@ -1,6 +1,7 @@
 module "toolchain_namespace" {
   source     = "../../common/namespace"
   namespace  = "${var.namespace}"
+  issuer_type = "${var.issuer_type}"
   annotations {
     name = "${var.namespace}"
     cluster = "${var.cluster}"

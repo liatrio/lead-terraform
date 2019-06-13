@@ -12,6 +12,7 @@ module "infrastructure" {
   namespace          = "${var.system_namespace}"
   enable_opa         = "false"
   opa_failure_policy = "${var.opa_failure_policy}"
+  issuer_type        = "selfSigned"
 
   external_dns_chart_values = "${data.template_file.external_dns_values.rendered}"
 
@@ -27,6 +28,7 @@ module "toolchain" {
   namespace           = "${var.toolchain_namespace}"
   image_whitelist     = "${var.image_whitelist}"
   artifactory_license = "${var.artifactory_license}"
+  issuer_type         = "selfSigned"
   ingress_controller_type = "NodePort"
 
   providers {

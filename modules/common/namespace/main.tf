@@ -20,7 +20,7 @@ resource "kubernetes_role" "tiller_role" {
     namespace = "${kubernetes_namespace.ns.metadata.0.name}"
   }
   rule {
-    api_groups = ["", "batch", "extensions", "apps","stable.liatr.io"]
+    api_groups = ["", "batch", "extensions", "apps","stable.liatr.io", "policy"]
     resources = ["*"]
     verbs = ["*"]
   }
@@ -28,6 +28,11 @@ resource "kubernetes_role" "tiller_role" {
     api_groups = ["rbac.authorization.k8s.io"]
     resources = ["roles", "rolebindings"]
     verbs = ["get", "create", "watch", "delete", "list"]
+  }
+  rule {
+    api_groups = ["certmanager.k8s.io"]
+    resources = ["issuers"]
+    verbs = ["get", "create", "watch", "delete", "list", "patch"]
   }
 }
 

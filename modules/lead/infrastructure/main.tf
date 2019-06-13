@@ -1,6 +1,7 @@
 module "system_namespace" {
   source     = "../../common/namespace"
   namespace  = "${var.namespace}"
+  issuer_type = "${var.issuer_type}"
   annotations {
     name = "${var.namespace}"
     cluster = "${var.cluster}"
@@ -11,10 +12,53 @@ module "system_namespace" {
   }
 }
 
+resource "kubernetes_cluster_role" "tiller_role" {
+  metadata {
+    name = "lead-system-tiller-manager"
+  }
+  rule {
+    api_groups = ["rbac.authorization.k8s.io"]
+    resources = ["clusterroles", "clusterrolebindings", "rolebindings", "configmaps"]
+    verbs = ["*"]
+  }
+  rule {
+    api_groups = ["apiregistration.k8s.io"]
+    resources = ["apiservices"]
+    verbs = ["get", "create", "watch", "delete", "list", "patch"]
+  }
+  rule {
+    api_groups = ["certmanager.k8s.io"]
+    resources = ["certificates"]
+    verbs = ["get", "create", "watch", "delete", "list", "patch"]
+  }
+  rule {
+    api_groups = [""]
+    resources = ["configmaps"]
+    verbs = ["get", "create", "watch", "delete", "list", "patch"]
+  }
+}
+
+resource "kubernetes_cluster_role_binding" "tiller_role_binding" {
+  metadata {
+    name = "lead-system-tiller-binding"
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = "${kubernetes_cluster_role.tiller_role.metadata.0.name}"
+  }
+  subject {
+    kind      = "ServiceAccount"
+    name      = "tiller"
+    namespace = "${module.system_namespace.name}"
+  }
+}
+
+
 module "opa" {
   enable_opa = "${var.enable_opa}"
   source    = "../../common/opa"
-  namespace = "${var.namespace}"
+  namespace = "${module.system_namespace.name}"
   opa_failure_policy = "${var.opa_failure_policy}"
 }
 
