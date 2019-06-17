@@ -2,7 +2,7 @@
 resource "helm_release" "cert_manager_crds" {
   name    = "cert-manager-crds"
   namespace = "${module.system_namespace.name}"
-  chart   = "${path.module}/helm/cert-manager-crds"
+  chart   = "helm/cert-manager-crds"
   timeout = 600
   wait    = true
 }
