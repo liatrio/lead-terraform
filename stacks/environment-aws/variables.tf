@@ -30,7 +30,7 @@ variable "opa_failure_policy" {
     default = "Fail"
 }
 variable "sdm_version" {
-    default = "0.2.13"
+    default = "0.2.14"
 }
 variable "dashboard_version" {
   default = "0.2.0-eb0f89d7cf8"
