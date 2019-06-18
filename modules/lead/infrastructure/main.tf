@@ -80,7 +80,7 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
 
 resource "kubernetes_cluster_role_binding" "tiller_cluster_role_binding" {
   metadata {
-    name = "tiller-cluster-binding"
+    name = "lead-system-tiller-cluster-binding"
   }
   role_ref {
     api_group = "rbac.authorization.k8s.io"
