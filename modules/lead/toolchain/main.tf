@@ -33,6 +33,11 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
     verbs = ["*"]
   }
   rule {
+    api_groups = ["apiextensions.k8s.io"]
+    resources = ["customresourcedefinitions"]
+    verbs = ["*"]
+  }
+  rule {
     api_groups = ["rbac.authorization.k8s.io"]
     resources = ["roles", "rolebindings", "clusterroles", "clusterrolebindings"]
     verbs = ["get", "create", "watch", "delete", "list", "patch"]
