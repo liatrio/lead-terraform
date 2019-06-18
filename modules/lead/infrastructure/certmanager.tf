@@ -5,6 +5,10 @@ resource "helm_release" "cert_manager_crds" {
   chart   = ".${replace(path.module, path.root, "")}/helm/cert-manager-crds"
   timeout = 600
   wait    = true
+
+  depends_on = [
+    "kubernetes_cluster_role_binding.tiller_cluster_role_binding",
+  ]
 }
 
 # Give the CRD a chance to settle
