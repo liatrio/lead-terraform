@@ -13,3 +13,24 @@ module "staging_namespace" {
     kubernetes = "kubernetes.staging"
   }
 }
+
+module "staging_ingress" {
+  source = "../../common/nginx-ingress"
+  namespace  = "${module.staging_namespace.name}"
+  ingress_controller_type = "${var.ingress_controller_type}"
+
+  providers {
+    helm = "helm.staging"
+    kubernetes = "kubernetes.staging"
+  }
+}
+
+module "staging_issuer" {
+  source = "../../common/cert-issuer"
+  namespace  = "${module.staging_namespace.name}"
+  issuer_type = "${var.issuer_type}"
+
+  providers {
+    helm = "helm.staging"
+  }
+}

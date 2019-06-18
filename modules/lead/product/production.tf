@@ -14,3 +14,24 @@ module "production_namespace" {
     kubernetes = "kubernetes.production"
   }
 }
+
+module "production_ingress" {
+  source = "../../common/nginx-ingress"
+  namespace  = "${module.production_namespace.name}"
+  ingress_controller_type = "${var.ingress_controller_type}"
+
+  providers {
+    helm = "helm.production"
+    kubernetes = "kubernetes.production"
+  }
+}
+
+module "production_issuer" {
+  source = "../../common/cert-issuer"
+  namespace  = "${module.production_namespace.name}"
+  issuer_type = "${var.issuer_type}"
+
+  providers {
+    helm = "helm.production"
+  }
+}

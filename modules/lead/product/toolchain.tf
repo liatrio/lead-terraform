@@ -17,7 +17,6 @@ data "template_file" "jenkins_values" {
 module "toolchain_namespace" {
   source     = "../../common/namespace"
   namespace  = "${var.product_name}-toolchain"
-  issuer_type = "${var.issuer_type}"
   annotations {
     name  = "${var.product_name}-toolchain"
     cluster = "${var.cluster}"
@@ -28,6 +27,27 @@ module "toolchain_namespace" {
   providers {
     helm = "helm.toolchain"
     kubernetes = "kubernetes.toolchain"
+  }
+}
+
+module "toolchain_ingress" {
+  source = "../../common/nginx-ingress"
+  namespace  = "${module.toolchain_namespace.name}"
+  ingress_controller_type = "${var.ingress_controller_type}"
+
+  providers {
+    helm = "helm.toolchain"
+    kubernetes = "kubernetes.toolchain"
+  }
+}
+
+module "toolchain_issuer" {
+  source = "../../common/cert-issuer"
+  namespace  = "${module.toolchain_namespace.name}"
+  issuer_type = "${var.issuer_type}"
+
+  providers {
+    helm = "helm.toolchain"
   }
 }
 

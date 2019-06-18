@@ -7,7 +7,7 @@ data "template_file" "issuer_values" {
 }
 resource "helm_release" "cert_manager_issuers" {
   name    = "cert-manager-issuers"
-  namespace = "${kubernetes_namespace.ns.metadata.0.name}"
+  namespace = "${var.namespace}"
   chart   = ".${replace(path.module, path.root, "")}/helm/cert-manager-issuers"
   timeout = 600
   wait    = true

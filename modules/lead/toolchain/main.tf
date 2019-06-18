@@ -1,7 +1,6 @@
 module "toolchain_namespace" {
   source     = "../../common/namespace"
   namespace  = "${var.namespace}"
-  issuer_type = "${var.issuer_type}"
   annotations {
     name = "${var.namespace}"
     cluster = "${var.cluster}"
@@ -9,6 +8,18 @@ module "toolchain_namespace" {
     "opa.lead.liatrio/image-whitelist" = "${var.image_whitelist}"
     "opa.lead.liatrio/elb-extra-security-groups" = "${var.elb_security_group_id}"
   }
+}
+
+module "toolchain_ingress" {
+  source = "../../common/nginx-ingress"
+  namespace  = "${module.toolchain_namespace.name}"
+  ingress_controller_type = "${var.ingress_controller_type}"
+}
+
+module "toolchain_issuer" {
+  source = "../../common/cert-issuer"
+  namespace  = "${module.toolchain_namespace.name}"
+  issuer_type = "${var.issuer_type}"
 }
 
 resource "kubernetes_cluster_role" "tiller_cluster_role" {

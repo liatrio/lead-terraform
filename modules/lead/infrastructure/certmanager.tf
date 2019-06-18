@@ -34,7 +34,7 @@ resource "helm_release" "cert_manager" {
 
   depends_on = [
     "helm_release.cert_manager_crds",
-    "kubernetes_cluster_role_binding.tiller_role_binding",
+    "kubernetes_cluster_role_binding.tiller_cluster_role_binding",
   ]
 }
 
