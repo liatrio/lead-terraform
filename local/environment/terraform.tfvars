@@ -9,10 +9,12 @@ terragrunt = {
     extra_arguments "shared_vars" {
       commands = ["${get_terraform_commands_that_need_vars()}"]
       optional_var_files = [
-          "${get_parent_tfvars_dir()}/../secrets/${path_relative_to_include()}.tfvars",
+          "${get_tfvars_dir()}/../../secrets/docker-for-desktop.tfvars",
       ]
     }
 
   }
-
 }
+
+root_zone_name = "localhost"
+cluster = "docker-for-desktop"

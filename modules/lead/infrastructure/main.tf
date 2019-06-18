@@ -1,7 +1,6 @@
 module "system_namespace" {
   source     = "../../common/namespace"
   namespace  = "${var.namespace}"
-  issuer_type = "${var.issuer_type}"
   annotations {
     name = "${var.namespace}"
     cluster = "${var.cluster}"
@@ -11,10 +10,26 @@ module "system_namespace" {
     "certmanager.k8s.io/disable-validation" = "true"
   }
 }
+module "system_issuer" {
+  source = "../../common/cert-issuer"
+  namespace  = "${module.system_namespace.name}"
+  issuer_type = "${var.issuer_type}"
+  crd_waiter = "${null_resource.cert_manager_crd_delay.id}"
+}
 
-resource "kubernetes_cluster_role" "tiller_role" {
+resource "kubernetes_cluster_role" "tiller_cluster_role" {
   metadata {
-    name = "lead-system-tiller-manager"
+    name = "lead-system-tiller-cluster-manager"
+  }
+  rule {
+    api_groups = ["admissionregistration.k8s.io"]
+    resources = ["validatingwebhookconfigurations"]
+    verbs = ["*"]
+  }
+  rule {
+    api_groups = ["apiextensions.k8s.io"]
+    resources = ["customresourcedefinitions"]
+    verbs = ["*"]
   }
   rule {
     api_groups = ["rbac.authorization.k8s.io"]
@@ -38,49 +53,6 @@ resource "kubernetes_cluster_role" "tiller_role" {
   }
 }
 
-resource "kubernetes_cluster_role_binding" "tiller_role_binding" {
-  metadata {
-    name = "lead-system-tiller-binding"
-  }
-  role_ref {
-    api_group = "rbac.authorization.k8s.io"
-    kind      = "ClusterRole"
-    name      = "${kubernetes_cluster_role.tiller_role.metadata.0.name}"
-  }
-  subject {
-    kind      = "ServiceAccount"
-    name      = "tiller"
-    namespace = "${module.system_namespace.name}"
-  }
-}
-
-
-module "opa" {
-  enable_opa = "${var.enable_opa}"
-  source    = "../../common/opa"
-  namespace = "${module.system_namespace.name}"
-  opa_failure_policy = "${var.opa_failure_policy}"
-}
-
-
-
-
-resource "kubernetes_cluster_role" "tiller_cluster_role" {
-  metadata {
-    name = "tiller-cluster-manager"
-  }
-  rule {
-    api_groups = ["admissionregistration.k8s.io"]
-    resources = ["validatingwebhookconfigurations"]
-    verbs = ["*"]
-  }
-  rule {
-    api_groups = ["apiextensions.k8s.io"]
-    resources = ["customresourcedefinitions"]
-    verbs = ["*"]
-  }
-}
-
 resource "kubernetes_cluster_role_binding" "tiller_cluster_role_binding" {
   metadata {
     name = "tiller-cluster-binding"
@@ -95,4 +67,11 @@ resource "kubernetes_cluster_role_binding" "tiller_cluster_role_binding" {
     name      = "${module.system_namespace.tiller_service_account}"
     namespace = "${module.system_namespace.name}"
   }
+}
+
+module "opa" {
+  enable_opa = "${var.enable_opa}"
+  source    = "../../common/opa"
+  namespace = "${module.system_namespace.name}"
+  opa_failure_policy = "${var.opa_failure_policy}"
 }

@@ -1,7 +1,7 @@
 variable "root_zone_name" {}
 
 variable "cluster" {
-  default = "minikube"
+  default = "docker-for-desktop"
 }
 
 variable "system_namespace" {
@@ -25,11 +25,14 @@ variable "opa_failure_policy" {
 }
 
 variable "sdm_version" {
-  default = "0.2.13"
+  default = "0.2.16"
 }
 
 variable "dashboard_version" {
   default = "0.2.0-b55d1623b11"
+}
+variable "enable_xray" {
+  default = "true"
 }
 
 variable "artifactory_license" {}

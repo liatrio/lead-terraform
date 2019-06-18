@@ -29,6 +29,8 @@ module "toolchain" {
   elb_security_group_id = "${aws_security_group.elb.id}"
   artifactory_license = "${var.artifactory_license}"
   issuer_type        = "acme"
+  ingress_controller_type = "LoadBalancer"
+  crd_waiter         = "${module.infrastructure.crd_waiter}"
 
   providers {
     helm = "helm.toolchain"

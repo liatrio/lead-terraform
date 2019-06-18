@@ -3,6 +3,7 @@ COMMAND ?= "apply"
 validate:
 	@terraform init -backend=false stacks/environment-aws
 	@terraform validate -check-variables=false stacks/environment-aws
+	@terraform validate -check-variables=false stacks/environment-local
 	@terraform validate -check-variables=false stacks/product-aws
 
 %: environments/%

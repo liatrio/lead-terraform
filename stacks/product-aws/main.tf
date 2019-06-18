@@ -3,7 +3,8 @@ terraform {
 }
 provider "kubernetes" {
   alias = "toolchain"
-  load_config_file = false
+  load_config_file = "${var.load_config_file}"
+  config_context = "${var.config_context}"
 }
 
 provider "helm" {
@@ -13,12 +14,14 @@ provider "helm" {
   service_account = "${module.product.toolchain_service_account}"
 
   kubernetes {
-    load_config_file = false
+    load_config_file = "${var.load_config_file}"
+    config_context = "${var.config_context}"
   }
 }
 provider "kubernetes" {
   alias = "staging"
-  load_config_file = false
+  load_config_file = "${var.load_config_file}"
+  config_context = "${var.config_context}"
 }
 
 provider "helm" {
@@ -28,12 +31,14 @@ provider "helm" {
   service_account = "${module.product.staging_service_account}"
 
   kubernetes {
-    load_config_file = false
+    load_config_file = "${var.load_config_file}"
+    config_context = "${var.config_context}"
   }
 }
 provider "kubernetes" {
   alias = "production"
-  load_config_file = false
+  load_config_file = "${var.load_config_file}"
+  config_context = "${var.config_context}"
 }
 
 provider "helm" {
@@ -43,19 +48,19 @@ provider "helm" {
   service_account = "${module.product.production_service_account}"
 
   kubernetes {
-    load_config_file = false
+    load_config_file = "${var.load_config_file}"
+    config_context = "${var.config_context}"
   }
 }
 
 
 module "product" {
   source             = "../../modules/lead/product"
-  root_zone_name     = "${var.root_zone_name}"
-  cluster            = "${var.cluster}"
+  cluster_domain     = "${var.cluster_domain}"
   product_name       = "${var.product_name}"
-  issuer_type        = "acme"
+  issuer_type        = "${var.issuer_type}"
   image_whitelist    = "${var.image_whitelist}"
-  ingress_controller_type = "LoadBalancer"
+  ingress_controller_type = "${var.ingress_controller_type}"
 
   providers {
     "kubernetes.toolchain"  = "kubernetes.toolchain"

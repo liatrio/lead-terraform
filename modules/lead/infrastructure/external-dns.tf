@@ -24,6 +24,10 @@ resource "helm_release" "external_dns" {
     name  = "logLevel"
     value = "debug"
   }
+
+  depends_on = [
+    "kubernetes_cluster_role_binding.tiller_cluster_role_binding",
+  ]
 }
 
 resource "kubernetes_service_account" "external_dns_service_account" {

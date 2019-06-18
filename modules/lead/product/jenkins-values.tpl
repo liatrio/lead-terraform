@@ -44,7 +44,7 @@ master:
             - kubernetes:
                 name: "kubernetes"
                 serverUrl: "https://kubernetes.default"
-                namespace: "toolchain"
+                namespace: "${namespace}"
                 jenkinsUrl: "http://jenkins:8080"
                 jenkinsTunnel: "jenkins-agent:50000"
                 connectTimeout: 0
@@ -129,7 +129,7 @@ master:
 
   containerEnv:
     - name: elasticUrl
-      value: http://lead-dashboard-logstash.${namespace}.svc.cluster.local:9000
+      value: http://lead-dashboard-logstash.toolchain.svc.cluster.local:9000
 
   sidecars:
     configAutoReload:

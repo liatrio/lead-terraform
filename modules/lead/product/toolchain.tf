@@ -7,7 +7,7 @@ data "template_file" "jenkins_values" {
   template = "${file("${path.module}/jenkins-values.tpl")}"
 
   vars = {
-    ingress_hostname = "jenkins.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
+    ingress_hostname = "jenkins.${module.toolchain_namespace.name}.${var.cluster_domain}"
     namespace        = "${module.toolchain_namespace.name}"
     logstash_url     = "http://lead-dashboard-logstash.${module.toolchain_namespace.name}.svc.cluster.local:9000"
     slack_team       = "liatrio"
@@ -17,17 +17,37 @@ data "template_file" "jenkins_values" {
 module "toolchain_namespace" {
   source     = "../../common/namespace"
   namespace  = "${var.product_name}-toolchain"
-  issuer_type = "${var.issuer_type}"
   annotations {
     name  = "${var.product_name}-toolchain"
-    cluster = "${var.cluster}"
-    "opa.lead.liatrio/ingress-whitelist" = "*.${var.product_name}-toolchain.${var.cluster}.${var.root_zone_name}"
+    "opa.lead.liatrio/ingress-whitelist" = "*.${var.product_name}-toolchain.${var.cluster_domain}"
     "opa.lead.liatrio/image-whitelist" = "${var.image_whitelist}"
   }
 
   providers {
     helm = "helm.toolchain"
     kubernetes = "kubernetes.toolchain"
+  }
+}
+
+module "toolchain_ingress" {
+  source = "../../common/nginx-ingress"
+  namespace  = "${module.toolchain_namespace.name}"
+  ingress_controller_type = "${var.ingress_controller_type}"
+
+  providers {
+    helm = "helm.toolchain"
+    kubernetes = "kubernetes.toolchain"
+  }
+}
+
+module "toolchain_issuer" {
+  source = "../../common/cert-issuer"
+  namespace  = "${module.toolchain_namespace.name}"
+  issuer_type = "${var.issuer_type}"
+  crd_waiter  = ""
+
+  providers {
+    helm = "helm.toolchain"
   }
 }
 

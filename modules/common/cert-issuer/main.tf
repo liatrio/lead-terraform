@@ -3,11 +3,12 @@ data "template_file" "issuer_values" {
 
   vars = {
     issuer_type = "${var.issuer_type}"
+    crd_waiter = "${var.crd_waiter}"    # this enforces a dependency on the cert-manager CRDs
   }
 }
 resource "helm_release" "cert_manager_issuers" {
   name    = "cert-manager-issuers"
-  namespace = "${kubernetes_namespace.ns.metadata.0.name}"
+  namespace = "${var.namespace}"
   chart   = ".${replace(path.module, path.root, "")}/helm/cert-manager-issuers"
   timeout = 600
   wait    = true

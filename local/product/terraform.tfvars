@@ -1,6 +1,9 @@
-root_zone_name = "localhost"
-cluster = "docker-for-desktop"
 product_name = "local"
+issuer_type = "selfSigned"
+ingress_controller_type = "NodePort"
+load_config_file = true
+config_context = "docker-for-desktop"
+cluster_domain = "docker-for-desktop.localhost"
 
 terragrunt = {
   remote_state {
@@ -9,7 +12,7 @@ terragrunt = {
   }
 
   terraform {
-    source = "../..//stacks/product-local"
+    source = "../..//stacks/product-aws"
     extra_arguments "shared_vars" {
       commands = ["${get_terraform_commands_that_need_vars()}"]
       optional_var_files = [
