@@ -31,6 +31,9 @@ variable "sdm_version" {
 variable "dashboard_version" {
   default = "0.2.0-b55d1623b11"
 }
+variable "enable_xray" {
+  default = "true"
+}
 
 variable "artifactory_license" {}
 variable "slack_bot_token" {}

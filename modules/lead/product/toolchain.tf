@@ -45,6 +45,7 @@ module "toolchain_issuer" {
   source = "../../common/cert-issuer"
   namespace  = "${module.toolchain_namespace.name}"
   issuer_type = "${var.issuer_type}"
+  crd_waiter  = ""
 
   providers {
     helm = "helm.toolchain"

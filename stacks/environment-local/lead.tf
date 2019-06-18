@@ -28,8 +28,10 @@ module "toolchain" {
   namespace           = "${var.toolchain_namespace}"
   image_whitelist     = "${var.image_whitelist}"
   artifactory_license = "${var.artifactory_license}"
+  enable_xray         = "${var.enable_xray}"
   issuer_type         = "selfSigned"
   ingress_controller_type = "NodePort"
+  crd_waiter         = "${module.infrastructure.crd_waiter}"
 
   providers {
     helm = "helm.toolchain"

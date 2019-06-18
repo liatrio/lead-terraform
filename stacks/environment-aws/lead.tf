@@ -30,6 +30,7 @@ module "toolchain" {
   artifactory_license = "${var.artifactory_license}"
   issuer_type        = "acme"
   ingress_controller_type = "LoadBalancer"
+  crd_waiter         = "${module.infrastructure.crd_waiter}"
 
   providers {
     helm = "helm.toolchain"

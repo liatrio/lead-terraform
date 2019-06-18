@@ -7,6 +7,14 @@ resource "helm_release" "cert_manager_crds" {
   wait    = true
 }
 
+# Give the CRD a chance to settle
+resource "null_resource" "cert_manager_crd_delay" { 
+    provisioner "local-exec" { 
+        command = "sleep 15" 
+    } 
+    depends_on = ["helm_release.cert_manager_crds"] 
+}
+
 # Cert manager repo
 data "helm_repository" "cert_manager" {
   name = "jetstack"
@@ -34,6 +42,7 @@ resource "helm_release" "cert_manager" {
 
   depends_on = [
     "helm_release.cert_manager_crds",
+    "null_resource.cert_manager_crd_delay",
     "kubernetes_cluster_role_binding.tiller_cluster_role_binding",
   ]
 }

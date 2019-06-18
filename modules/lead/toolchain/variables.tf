@@ -12,3 +12,6 @@ variable "elb_security_group_id" {
 variable "ingress_controller_type" {
     default = "LoadBalancer"
 }
+
+variable "enable_xray" { default="true" }
+variable "crd_waiter" {}

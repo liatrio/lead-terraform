@@ -14,7 +14,7 @@ module "system_issuer" {
   source = "../../common/cert-issuer"
   namespace  = "${module.system_namespace.name}"
   issuer_type = "${var.issuer_type}"
-  crd_release = "${helm_release.cert_manager_crds.metadata.name}"
+  crd_waiter = "${null_resource.cert_manager_crd_delay.id}"
 }
 
 resource "kubernetes_cluster_role" "tiller_cluster_role" {

@@ -29,6 +29,7 @@ module "staging_issuer" {
   source = "../../common/cert-issuer"
   namespace  = "${module.staging_namespace.name}"
   issuer_type = "${var.issuer_type}"
+  crd_waiter  = ""
 
   providers {
     helm = "helm.staging"

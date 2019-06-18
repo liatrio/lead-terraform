@@ -30,6 +30,7 @@ module "production_issuer" {
   source = "../../common/cert-issuer"
   namespace  = "${module.production_namespace.name}"
   issuer_type = "${var.issuer_type}"
+  crd_waiter  = ""
 
   providers {
     helm = "helm.production"

@@ -20,6 +20,7 @@ module "toolchain_issuer" {
   source = "../../common/cert-issuer"
   namespace  = "${module.toolchain_namespace.name}"
   issuer_type = "${var.issuer_type}"
+  crd_waiter  = "${var.crd_waiter}"
 }
 
 resource "kubernetes_cluster_role" "tiller_cluster_role" {
