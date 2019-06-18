@@ -9,7 +9,7 @@ data "template_file" "jenkins_values" {
   vars = {
     ingress_hostname = "jenkins.${module.toolchain_namespace.name}.${var.cluster_domain}"
     namespace        = "${module.toolchain_namespace.name}"
-    logstash_url     = "http://lead-dashboard-logstash.${module.toolchain_namespace.name}.svc.cluster.local:9000"
+    logstash_url     = "http://lead-dashboard-logstash.toolchain.svc.cluster.local:9000"
     slack_team       = "liatrio"
   }
 }
