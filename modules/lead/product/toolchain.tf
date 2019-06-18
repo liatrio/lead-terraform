@@ -7,7 +7,7 @@ data "template_file" "jenkins_values" {
   template = "${file("${path.module}/jenkins-values.tpl")}"
 
   vars = {
-    ingress_hostname = "jenkins.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
+    ingress_hostname = "jenkins.${module.toolchain_namespace.name}.${var.cluster_domain}"
     namespace        = "${module.toolchain_namespace.name}"
     logstash_url     = "http://lead-dashboard-logstash.${module.toolchain_namespace.name}.svc.cluster.local:9000"
     slack_team       = "liatrio"
@@ -19,8 +19,7 @@ module "toolchain_namespace" {
   namespace  = "${var.product_name}-toolchain"
   annotations {
     name  = "${var.product_name}-toolchain"
-    cluster = "${var.cluster}"
-    "opa.lead.liatrio/ingress-whitelist" = "*.${var.product_name}-toolchain.${var.cluster}.${var.root_zone_name}"
+    "opa.lead.liatrio/ingress-whitelist" = "*.${var.product_name}-toolchain.${var.cluster_domain}"
     "opa.lead.liatrio/image-whitelist" = "${var.image_whitelist}"
   }
 

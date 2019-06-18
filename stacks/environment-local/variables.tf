@@ -1,7 +1,7 @@
 variable "root_zone_name" {}
 
 variable "cluster" {
-  default = "minikube"
+  default = "docker-for-desktop"
 }
 
 variable "system_namespace" {
