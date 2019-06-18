@@ -23,7 +23,7 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
   }
   rule {
     api_groups = ["admissionregistration.k8s.io"]
-    resources = ["validatingwebhookconfigurations"]
+    resources = ["validatingwebhookconfigurations","mutatingwebhookconfigurations"]
     verbs = ["*"]
   }
   rule {
@@ -39,17 +39,42 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
   rule {
     api_groups = ["apiregistration.k8s.io"]
     resources = ["apiservices"]
-    verbs = ["get", "create", "watch", "delete", "list", "patch"]
+    verbs = ["*"]
+  }
+  rule {
+    api_groups = ["authorization.k8s.io"]
+    resources = ["selfsubjectaccessreviews","selfsubjectrulesreviews"]
+    verbs = ["create"]
+  }
+  rule {
+    api_groups = ["admission.certmanager.k8s.io"]
+    resources = ["certificates","issuers","clusterissuers"]
+    verbs = ["get", "create", "delete", "list", "patch"]
   }
   rule {
     api_groups = ["certmanager.k8s.io"]
-    resources = ["certificates"]
-    verbs = ["get", "create", "watch", "delete", "list", "patch"]
+    resources = ["certificates","certificates/finalizers","issuers","clusterissuers","orders","orders/finalizers","challenges"]
+    verbs = ["*"]
+  }
+  rule {
+    api_groups = ["authentication.k8s.io"]
+    resources = ["tokenreviews"]
+    verbs = ["create"]
+  }
+  rule {
+    api_groups = ["authorization.k8s.io"]
+    resources = ["subjectaccessreviews"]
+    verbs = ["create"]
   }
   rule {
     api_groups = [""]
-    resources = ["configmaps"]
-    verbs = ["get", "create", "watch", "delete", "list", "patch"]
+    resources = ["configmaps","events","secrets","services","pods"]
+    verbs = ["*"]
+  }
+  rule {
+    api_groups = ["extensions"]
+    resources = ["ingresses"]
+    verbs = ["*"]
   }
 }
 

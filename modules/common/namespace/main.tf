@@ -30,6 +30,11 @@ resource "kubernetes_role" "tiller_role" {
     verbs = ["get", "create", "watch", "delete", "list", "patch"]
   }
   rule {
+    api_groups = ["networking.k8s.io"]
+    resources = ["networkpolicies"]
+    verbs = ["get", "create", "watch", "delete", "list", "patch"]
+  }
+  rule {
     api_groups = ["certmanager.k8s.io"]
     resources = ["issuers"]
     verbs = ["get", "create", "watch", "delete", "list", "patch"]
