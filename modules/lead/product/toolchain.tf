@@ -7,7 +7,9 @@ data "template_file" "jenkins_values" {
   template = "${file("${path.module}/jenkins-values.tpl")}"
 
   vars = {
+    product_name     = "${var.product_name}"
     ingress_hostname = "jenkins.${module.toolchain_namespace.name}.${var.cluster_domain}"
+    artifactory_url  = "artifactory.toolchain.${var.cluster_domain}/docker-registry/{var.product_name}"
     namespace        = "${module.toolchain_namespace.name}"
     logstash_url     = "http://lead-dashboard-logstash.toolchain.svc.cluster.local:9000"
     slack_team       = "liatrio"

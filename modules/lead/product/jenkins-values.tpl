@@ -59,7 +59,7 @@ master:
                     nodeUsageMode: NORMAL
                     containers:
                       - name: "skaffold"
-                        image: "docker.artifactory.liatr.io/liatrio/builder-image-skaffold:v1.0.4"
+                        image: "docker.artifactory.liatr.io/liatrio/builder-image-skaffold:v1.0.8"
                         alwaysPullImage: false
                         workingDir: "/home/jenkins"
                         command: "/bin/sh -c"
@@ -68,11 +68,14 @@ master:
                     envVars:
                       - envVar:
                           key: "SKAFFOLD_DEFAULT_REPO"
-                          value: "docker.artifactory.liatr.io/liatrio"
+                          value: "${artifactory_url}/${product_name}"
                     volumes:
                       - hostPathVolume:
                           hostPath: "/var/run/docker.sock"
                           mountPath: "/var/run/docker.sock"
+                      - secretVolume:
+                          mountPath: "/home/jenkins/.docker"
+                          secretName: "jenkins-artifactory-dockercfg"
                     slaveConnectTimeout: 100
                   - name: "lead-toolchain-skaffold-node"
                     inheritFrom: "lead-toolchain-skaffold"
@@ -91,7 +94,7 @@ master:
                     nodeUsageMode: NORMAL
                     containers:
                       - name: "aws"
-                        image: "docker.artifactory.liatr.io/liatrio/builder-image-aws:v1.0.4-9-gb227222"
+                        image: "docker.artifactory.liatr.io/liatrio/builder-image-aws:v1.0.8"
                         alwaysPullImage: false
                         workingDir: "/home/jenkins"
                         command: "/bin/sh -c"
