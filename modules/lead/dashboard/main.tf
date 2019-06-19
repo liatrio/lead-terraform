@@ -29,7 +29,5 @@ resource "kubernetes_secret" "auth_tokens" {
   }
 
   data {
-    JIRA_TOKEN      = "${var.jira_token}"
-    BITBUCKET_TOKEN = "${var.bitbucket_token}"
   }
 }
