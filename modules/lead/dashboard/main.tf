@@ -22,12 +22,3 @@ resource "helm_release" "lead-dashboard" {
   values = ["${data.template_file.dashboard_values.rendered}"]
 }
 
-resource "kubernetes_secret" "auth_tokens" {
-  metadata {
-    name      = "auth-tokens"
-    namespace = "${var.namespace}"
-  }
-
-  data {
-  }
-}

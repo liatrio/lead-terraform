@@ -38,8 +38,6 @@ variable "enable_xray" {
 variable "artifactory_license" {}
 variable "slack_bot_token" {}
 variable "slack_client_signing_secret" {}
-#variable "bitbucket_token" {}
-#variable "jira_token" {}
 
 locals {
   tags = {
