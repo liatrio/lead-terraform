@@ -2,6 +2,7 @@ data "kubernetes_secret" "jenkins_artifactory_credential" {
   provider  = "kubernetes.toolchain"
   metadata {
     name = "jenkins-artifactory-credential"
+    namespace = "toolchain"
   }
 }
 data "template_file" "dockercfg" {
