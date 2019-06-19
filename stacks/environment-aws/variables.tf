@@ -36,8 +36,6 @@ variable "dashboard_version" {
   default = "0.2.0-eb0f89d7cf8"
 }
 variable "artifactory_license" {}
-variable "bitbucket_token" {}
-variable "jira_token" {}
 variable "slack_bot_token" {}
 variable "slack_client_signing_secret" {}
 

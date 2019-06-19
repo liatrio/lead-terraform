@@ -57,8 +57,6 @@ module "dashboard" {
   cluster            = "${module.eks.cluster_id}"
   namespace          = "${module.toolchain.namespace}"
   dashboard_version  = "${var.dashboard_version}"
-  bitbucket_token    = "${var.bitbucket_token}"
-  jira_token         = "${var.jira_token}"
 
   providers {
     helm = "helm.toolchain"
