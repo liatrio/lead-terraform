@@ -38,6 +38,16 @@ master:
           slackNotifier:
             teamDomain: "${slack_team}"
             tokenCredentialId: jenkins-credential-slack
+      sonarqube-config: |
+        unclassified:
+          sonarglobalconfiguration:
+            buildWrapperEnabled: true
+            installations:
+              - name: sonarqube
+                serverUrl: http://sonarqube-sonarqube:9000/sq
+                additionalAnalysisProperties:
+                additionalProperties:
+                triggers:
       pod-templates: |
         jenkins:
           clouds:
@@ -101,7 +111,7 @@ master:
                       - hostPathVolume:
                           hostPath: "/var/run/docker.sock"
                           mountPath: "/var/run/docker.sock"
-                    slaveConnectTimeout: 100      
+                    slaveConnectTimeout: 100
       shared-libraries: |
         unclassified:
           globalLibraries:
@@ -126,6 +136,8 @@ master:
     - workflow-scm-step:2.8
     - kubernetes:1.15.6
     - job-dsl:1.74
+    - sonar-quality-gates:1.3.1
+    - sonar:2.8.1
 
   containerEnv:
     - name: elasticUrl
