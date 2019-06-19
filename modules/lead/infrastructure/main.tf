@@ -72,6 +72,16 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
     verbs = ["*"]
   }
   rule {
+    api_groups = [""]
+    resources = ["namespaces","nodes"]
+    verbs = ["get","list","watch"]
+  }
+  rule {
+    api_groups = [""]
+    resources = ["nodes/stats"]
+    verbs = ["get","create"]
+  }
+  rule {
     api_groups = ["extensions"]
     resources = ["ingresses"]
     verbs = ["*"]
