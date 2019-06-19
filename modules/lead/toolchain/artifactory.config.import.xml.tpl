@@ -90,6 +90,30 @@
             <enableFileListsIndexing>false</enableFileListsIndexing>
         </localRepository>
         <localRepository>
+            <key>docker-registry</key>
+            <type>docker</type>
+            <includesPattern>**/*</includesPattern>
+            <repoLayoutRef>simple-default</repoLayoutRef>
+            <dockerApiVersion>V2</dockerApiVersion>
+            <forceNugetAuthentication>false</forceNugetAuthentication>
+            <blackedOut>false</blackedOut>
+            <handleReleases>true</handleReleases>
+            <handleSnapshots>true</handleSnapshots>
+            <maxUniqueSnapshots>0</maxUniqueSnapshots>
+            <maxUniqueTags>0</maxUniqueTags>
+            <suppressPomConsistencyChecks>true</suppressPomConsistencyChecks>
+            <propertySets>
+                <propertySetRef>artifactory</propertySetRef>
+            </propertySets>
+            <archiveBrowsingEnabled>false</archiveBrowsingEnabled>
+            <snapshotVersionBehavior>unique</snapshotVersionBehavior>
+            <localRepoChecksumPolicyType>client-checksums</localRepoChecksumPolicyType>
+            <calculateYumMetadata>false</calculateYumMetadata>
+            <yumRootDepth>0</yumRootDepth>
+            <debianTrivialLayout>false</debianTrivialLayout>
+            <enableFileListsIndexing>false</enableFileListsIndexing>
+        </localRepository>
+        <localRepository>
             <key>generic-local</key>
             <type>generic</type>
             <includesPattern>**/*</includesPattern>
@@ -118,6 +142,26 @@
     <releaseBundlesRepositories/>
     <proxies/>
     <reverseProxies/>
+        <reverseProxy>
+            <key>nginx</key>
+            <webServerType>nginx</webServerType>
+            <artifactoryAppContext>artifactory</artifactoryAppContext>
+            <publicAppContext>artifactory</publicAppContext>
+            <serverName>${server_name}</serverName>
+            <serverNameExpression xsi:nil="true"/>
+            <sslCertificate xsi:nil="true"/>
+            <sslKey xsi:nil="true"/>
+            <dockerReverseProxyMethod>path</dockerReverseProxyMethod>
+            <useHttps>false</useHttps>
+            <useHttp>true</useHttp>
+            <sslPort>443</sslPort>
+            <httpPort>80</httpPort>
+            <reverseProxyRepositories/>
+            <artifactoryServerName>${server_name}</artifactoryServerName>
+            <upStreamName>artifactory</upStreamName>
+            <artifactoryPort>8081</artifactoryPort>
+        </reverseProxy>
+    </reverseProxies>
     <propertySets>
         <propertySet>
             <name>artifactory</name>

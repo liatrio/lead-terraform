@@ -9,6 +9,10 @@ data "template_file" "artifactory_security_values" {
 
 data "template_file" "artifactory_config_values" {
   template = "${file("${path.module}/artifactory.config.import.xml.tpl")}"
+
+  vars = {
+    server_name = "artifactory.${var.namespace}.${var.cluster}.${var.root_zone_name}"
+  }
 }
 
 resource "kubernetes_secret" "artifactory_admin" {
@@ -90,6 +94,15 @@ data "helm_repository" "jfrog" {
   url  = "https://charts.jfrog.io"
 }
 
+data "template_file" "artifactory_values" {
+  template = "${file("${path.module}/artifactory-values.tpl")}"
+
+  vars = {
+    ingress_hostname = "artifactory.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
+  }
+}
+
+
 resource "helm_release" "artifactory" {
   depends_on = ["kubernetes_config_map.artifactory_config"]
   repository = "${data.helm_repository.jfrog.metadata.0.name}"
@@ -119,8 +132,7 @@ resource "helm_release" "artifactory" {
      value = "${random_string.artifactory_db_password.result}"
    }
 
-  // set_sensitive {
-  //  name  = "artifactory.accessAdmin.password"
-  //  value = "${random_string.artifactory_admin_password.result}"
-  // }
+  values = ["${data.template_file.artifactory_values.rendered}"]
+
+  depends_on = ["${kubernetes_config_map.artifactory_config}"]
 }
