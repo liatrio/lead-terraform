@@ -1,8 +1,0 @@
-{
-  "auths": {
-    "https://artifactory.toolchain.lead.sandbox.liatr.io/docker-registry/flywheel": {
-      "email": "jenkins@liatr.io",
-      "auth": "amVua2luczpiV3dkejFzcUtDCg=="
-    }
-  }
-}
