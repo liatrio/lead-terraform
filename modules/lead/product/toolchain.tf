@@ -9,7 +9,7 @@ data "template_file" "jenkins_values" {
   vars = {
     product_name     = "${var.product_name}"
     ingress_hostname = "jenkins.${module.toolchain_namespace.name}.${var.cluster_domain}"
-    artifactory_url  = "artifactory.toolchain.${var.cluster_domain}/docker-registry/{var.product_name}"
+    artifactory_url  = "artifactory.toolchain.${var.cluster_domain}/docker-registry"
     namespace        = "${module.toolchain_namespace.name}"
     logstash_url     = "http://lead-dashboard-logstash.toolchain.svc.cluster.local:9000"
     slack_team       = "liatrio"
