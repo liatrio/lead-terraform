@@ -150,3 +150,61 @@ resource "kubernetes_role_binding" "jenkins_kubernetes_credentials" {
     namespace = "${module.toolchain_namespace.name}"
   }
 }
+
+resource "kubernetes_cluster_role" "jenkins_get_pods" {
+  provider  = "kubernetes.toolchain"
+  metadata {
+    name      = "jenkins-kubernetes-credentials"
+    namespace = "${module.toolchain_namespace.name}"
+
+    labels {
+      "app.kubernetes.io/name"       = "jenkins"
+      "app.kubernetes.io/instance"   = "jenkins"
+      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/managed-by" = "Terraform"
+    }
+
+    annotations {
+      description = "Permission required for Jenkins' to get pods"
+      source-repo = "https://github.com/liatrio/lead-toolchain"
+    }
+  }
+
+  rule {
+    api_groups = [""]
+    resources  = ["pods"]
+    verbs      = ["list"]
+  }
+}
+
+resource "kubernetes_cluster_role_binding" "jenkins_get_pods" {
+  provider  = "kubernetes.toolchain"
+  metadata {
+    name      = "jenkins-kubernetes-credentials"
+    namespace = "${module.toolchain_namespace.name}"
+
+    labels {
+      "app.kubernetes.io/name"       = "jenkins"
+      "app.kubernetes.io/instance"   = "jenkins"
+      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/managed-by" = "Terraform"
+    }
+
+    annotations {
+      description = "Permission required for Jenkins' to get pods"
+      source-repo = "https://github.com/liatrio/lead-toolchain"
+    }
+  }
+
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = "${kubernetes_cluster_role.jenkins_get_pods.metadata.0.name}"
+  }
+
+  subject {
+    kind      = "ServiceAccount"
+    name      = "${kubernetes_service_account.jenkins.metadata.0.name}"
+    namespace = "${module.toolchain_namespace.name}"
+  }
+}
