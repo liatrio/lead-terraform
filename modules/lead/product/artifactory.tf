@@ -6,7 +6,7 @@ data "kubernetes_secret" "jenkins_artifactory_credential" {
   }
 }
 data "template_file" "dockercfg" {
-  template = "${file("${path.module}/jenkins-values.tpl")}"
+  template = "${file("${path.module}/artifactory-dockercfg.tpl")}"
 
   vars = {
     url = "https://artifactory.toolchain.${var.cluster_domain}/docker-registry/{var.product_name}"
