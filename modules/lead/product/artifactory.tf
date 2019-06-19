@@ -11,7 +11,7 @@ data "template_file" "dockercfg" {
   vars = {
     url = "https://artifactory.toolchain.${var.cluster_domain}/docker-registry/{var.product_name}"
     email = "jenkins@liatr.io"
-    auth = "${base64encode("${data.kubernetes_secret.jenkins_artifactory_credential.data.username}:${data.kubernetes_secret.jenkins_artifactory_credential.data.passsword}")}"
+    auth = "${base64encode("${data.kubernetes_secret.jenkins_artifactory_credential.data.username}:${data.kubernetes_secret.jenkins_artifactory_credential.data.password}")}"
   }
 }
 
