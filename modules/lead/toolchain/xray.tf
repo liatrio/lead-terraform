@@ -11,7 +11,7 @@ resource "random_string" "artifactory_xray_db_password" {
 //   name = "jfrog"
 //   url  = "https://charts.jfrog.io"
 // }
-
+/*
 resource "helm_release" "xray" {
   count = "${ var.enable_xray ? 1 : 0 }"
   repository = "${data.helm_repository.jfrog.metadata.0.name}"
@@ -41,3 +41,4 @@ resource "helm_release" "xray" {
    }
 
 }
+*/
