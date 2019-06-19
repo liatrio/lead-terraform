@@ -141,7 +141,7 @@
     <distributionRepositories/>
     <releaseBundlesRepositories/>
     <proxies/>
-    <reverseProxies/>
+    <reverseProxies>
         <reverseProxy>
             <key>nginx</key>
             <webServerType>nginx</webServerType>
