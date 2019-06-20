@@ -33,3 +33,61 @@ module "staging_issuer" {
     helm = "helm.staging"
   }
 }
+
+resource "kubernetes_role" "staging_delete" {
+  provider  = "kubernetes.toolchain"
+  metadata {
+    name      = "staging-delete"
+    namespace = "${var.product_name}-toolchain"
+
+    labels {
+      "app.kubernetes.io/name"       = "jenkins"
+      "app.kubernetes.io/instance"   = "jenkins"
+      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/managed-by" = "Terraform"
+    }
+
+    annotations {
+      description = "Permission required for Jenkins' to get pods in staging namespace"
+      source-repo = "https://github.com/liatrio/lead-toolchain"
+    }
+  }
+
+  rule {
+    api_groups = [""]
+    resources  = ["services", "deployments"]
+    verbs      = ["delete"]
+  }
+}
+
+resource "kubernetes_role_binding" "staging_delete" {
+  provider  = "kubernetes.toolchain"
+  metadata {
+    name      = "staging-delete-resources"
+    namespace = "${var.product_name}-toolchain"
+
+    labels {
+      "app.kubernetes.io/name"       = "jenkins"
+      "app.kubernetes.io/instance"   = "jenkins"
+      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/managed-by" = "Terraform"
+    }
+
+    annotations {
+      description = "Permission required for Jenkins' to get pods in staging namespace"
+      source-repo = "https://github.com/liatrio/lead-toolchain"
+    }
+  }
+
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "Role"
+    name      = "${kubernetes_role.staging_delete.metadata.0.name}"
+  }
+
+  subject {
+    kind      = "ServiceAccount"
+    name      = "${kubernetes_service_account.jenkins.metadata.0.name}"
+    namespace = "${module.toolchain_namespace.name}"
+  }
+}
