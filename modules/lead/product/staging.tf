@@ -88,6 +88,6 @@ resource "kubernetes_role_binding" "staging_delete" {
   subject {
     kind      = "ServiceAccount"
     name      = "tiller"
-    namespace = "${module.toolchain_namespace.name}"
+    namespace = "jon-test-staging"
   }
 }
