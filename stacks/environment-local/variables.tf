@@ -12,10 +12,6 @@ variable "toolchain_namespace" {
   default = "toolchain"
 }
 
-variable "key_name" {
-  default = ""
-}
-
 variable "image_whitelist" {
   default = ".*"
 }
@@ -25,12 +21,9 @@ variable "opa_failure_policy" {
 }
 
 variable "sdm_version" {
-  default = "0.2.17"
+  default = "0.2.18"
 }
 
-variable "dashboard_version" {
-  default = "0.2.0-b55d1623b11"
-}
 variable "enable_xray" {
   default = "true"
 }

@@ -30,10 +30,10 @@ variable "opa_failure_policy" {
     default = "Fail"
 }
 variable "sdm_version" {
-    default = "0.2.17"
+    default = "0.2.18"
 }
 variable "dashboard_version" {
-  default = "0.2.0-eb0f89d7cf8"
+  default = "0.2.0-652798af475"
 }
 variable "artifactory_license" {}
 variable "slack_bot_token" {}
