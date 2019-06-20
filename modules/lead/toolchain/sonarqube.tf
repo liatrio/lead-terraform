@@ -32,17 +32,15 @@ resource "helm_release" "sonarqube" {
   }
 }
 
-resource "null_resource" "jenkins_user" {
+resource "null_resource" "jenkins_setup" {
   depends_on = ["helm_release.sonarqube"]
   # Changes to any instance of the cluster requires re-provisioning
-  triggers = {
-    sonarqube = "${helm_release.sonarqube.name}"
-  }
 
   provisioner "local-exec" {
     command = <<EOT
     kubectl -n "${module.toolchain_namespace.name}" port-forward service/sonarqube-sonarqube 9000 &
-    sleep 120
+    # wait awhile for sonarqube to start.
+    sleep 180
     curl -X POST -v \
     -u admin:admin \
     -d email="jenkins@${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}" \
@@ -76,5 +74,7 @@ resource "kubernetes_secret" "jenkins_sonar" {
   data {
     username = "jenkins"
     password = "${random_string.sonar_jenkins_password.result}"
+#    username = "admin"
+#    password = "admin"
   }
 }
