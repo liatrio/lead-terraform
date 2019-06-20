@@ -41,7 +41,7 @@ resource "kubernetes_role" "tiller_role" {
   }
   rule {
     api_groups = [""]
-    resouces = ["services", "deployments"]
+    resources = ["services", "deployments"]
     verbs = ["delete"]
   }
 }
