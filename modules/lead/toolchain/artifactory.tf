@@ -18,7 +18,7 @@ data "template_file" "artifactory_config_values" {
 resource "kubernetes_secret" "artifactory_admin" {
   metadata {
     name      = "artifactory-admin-credential"
-    namespace = "${var.namespace}"
+    namespace  = "${module.toolchain_namespace.name}"
   }
   type = "Opaque"
 
@@ -31,7 +31,7 @@ resource "kubernetes_secret" "artifactory_admin" {
 resource "kubernetes_secret" "artifactory_jenkins" {
   metadata {
     name      = "jenkins-artifactory-credential"
-    namespace = "${var.namespace}"
+    namespace  = "${module.toolchain_namespace.name}"
 
     labels {
       "app.kubernetes.io/name"       = "jenkins"
@@ -58,7 +58,7 @@ resource "kubernetes_secret" "artifactory_jenkins" {
 resource "kubernetes_config_map" "artifactory_config" {
   metadata {
     name = "lead-bootstrap-artifactory-config"
-    namespace = "${var.namespace}"
+    namespace  = "${module.toolchain_namespace.name}"
   }
 
   data {
