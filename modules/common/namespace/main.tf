@@ -39,6 +39,11 @@ resource "kubernetes_role" "tiller_role" {
     resources = ["issuers"]
     verbs = ["get", "create", "watch", "delete", "list", "patch"]
   }
+  rule {
+    api_groups = [""]
+    resouces = ["services", "deployments"]
+    verbs = ["delete"]
+  }
 }
 
 resource "kubernetes_role_binding" "tiller_role_binding" {
