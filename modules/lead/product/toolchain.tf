@@ -177,6 +177,11 @@ resource "kubernetes_role" "staging_get_pods" {
     resources  = ["pods"]
     verbs      = ["list"]
   }
+  rule {
+    api_groups = [""]
+    resources  = ["pods/portforward"]
+    verbs      = ["create"]
+  }
 }
 
 resource "kubernetes_role_binding" "staging_get_pods" {
@@ -234,6 +239,11 @@ resource "kubernetes_role" "production_get_pods" {
     api_groups = [""]
     resources  = ["pods"]
     verbs      = ["list"]
+  }
+  rule {
+    api_groups = [""]
+    resources  = ["pods/portforward"]
+    verbs      = ["create"]
   }
 }
 

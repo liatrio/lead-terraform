@@ -33,10 +33,8 @@ master:
                 env:
                 - key: "elasticUrl"
                   value: "${logstash_url}"
-                env:
                 - key: "stagingNamespace"
                   value: "${stagingNamespace}"
-                env:
                 - key: "productionNamespace"
                   value: "${productionNamespace}"
       slack-config: |
