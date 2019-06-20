@@ -87,7 +87,7 @@ resource "kubernetes_role_binding" "staging_delete" {
 
   subject {
     kind      = "ServiceAccount"
-    name      = "${kubernetes_service_account.jenkins.metadata.0.name}"
+    name      = "${kubernetes_service_account.tiller_service_account.metadata.0.name}"
     namespace = "${module.toolchain_namespace.name}"
   }
 }
