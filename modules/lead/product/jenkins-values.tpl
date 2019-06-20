@@ -33,6 +33,12 @@ master:
                 env:
                 - key: "elasticUrl"
                   value: "${logstash_url}"
+                env:
+                - key: "stagingNamespace"
+                  value: "${stagingNamespace}"
+                env:
+                - key: "productionNamespace"
+                  value: "${productionNamespace}"
       slack-config: |
         unclassified:
           slackNotifier:
@@ -77,6 +83,7 @@ master:
                           mountPath: "/home/jenkins/.docker"
                           secretName: "jenkins-artifactory-dockercfg"
                     slaveConnectTimeout: 100
+                    serviceAccount: "jenkins"
                   - name: "lead-toolchain-skaffold-node"
                     inheritFrom: "lead-toolchain-skaffold"
                     label: "lead-toolchain-skaffold-node"

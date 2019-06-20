@@ -13,6 +13,8 @@ data "template_file" "jenkins_values" {
     namespace        = "${module.toolchain_namespace.name}"
     logstash_url     = "http://lead-dashboard-logstash.toolchain.svc.cluster.local:9000"
     slack_team       = "liatrio"
+    stagingNamespace = "${var.product_name}-staging"
+    productionNamespace = "${var.product_name}-production"
   }
 }
 
@@ -151,10 +153,11 @@ resource "kubernetes_role_binding" "jenkins_kubernetes_credentials" {
   }
 }
 
-resource "kubernetes_cluster_role" "jenkins_get_pods" {
+resource "kubernetes_role" "staging_get_pods" {
   provider  = "kubernetes.toolchain"
   metadata {
-    name      = "jenkins-kubernetes-pods"
+    name      = "staging-pods"
+    namespace = "${var.product_name}-staging"
 
     labels {
       "app.kubernetes.io/name"       = "jenkins"
@@ -164,7 +167,7 @@ resource "kubernetes_cluster_role" "jenkins_get_pods" {
     }
 
     annotations {
-      description = "Permission required for Jenkins' to get pods"
+      description = "Permission required for Jenkins' to get pods in staging namespace"
       source-repo = "https://github.com/liatrio/lead-toolchain"
     }
   }
@@ -176,10 +179,11 @@ resource "kubernetes_cluster_role" "jenkins_get_pods" {
   }
 }
 
-resource "kubernetes_cluster_role_binding" "jenkins_get_pods" {
+resource "kubernetes_role_binding" "staging_get_pods" {
   provider  = "kubernetes.toolchain"
   metadata {
     name      = "jenkins-kubernetes-pods"
+    namespace = "${var.product_name}-staging"
 
     labels {
       "app.kubernetes.io/name"       = "jenkins"
@@ -189,15 +193,73 @@ resource "kubernetes_cluster_role_binding" "jenkins_get_pods" {
     }
 
     annotations {
-      description = "Permission required for Jenkins' to get pods"
+      description = "Permission required for Jenkins' to get pods in staging namespace"
       source-repo = "https://github.com/liatrio/lead-toolchain"
     }
   }
 
   role_ref {
     api_group = "rbac.authorization.k8s.io"
-    kind      = "ClusterRole"
-    name      = "${kubernetes_cluster_role.jenkins_get_pods.metadata.0.name}"
+    kind      = "Role"
+    name      = "${kubernetes_role.staging_get_pods.metadata.0.name}"
+  }
+
+  subject {
+    kind      = "ServiceAccount"
+    name      = "${kubernetes_service_account.jenkins.metadata.0.name}"
+    namespace = "${module.toolchain_namespace.name}"
+  }
+}
+
+resource "kubernetes_role" "production_get_pods" {
+  provider  = "kubernetes.toolchain"
+  metadata {
+    name      = "production-pods"
+    namespace = "${var.product_name}-production"
+
+    labels {
+      "app.kubernetes.io/name"       = "jenkins"
+      "app.kubernetes.io/instance"   = "jenkins"
+      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/managed-by" = "Terraform"
+    }
+
+    annotations {
+      description = "Permission required for Jenkins' to get pods in prod namespace"
+      source-repo = "https://github.com/liatrio/lead-toolchain"
+    }
+  }
+
+  rule {
+    api_groups = [""]
+    resources  = ["pods"]
+    verbs      = ["list"]
+  }
+}
+
+resource "kubernetes_role_binding" "production_get_pods" {
+  provider  = "kubernetes.toolchain"
+  metadata {
+    name      = "production-pods"
+    namespace = "${var.product_name}-production"
+
+    labels {
+      "app.kubernetes.io/name"       = "jenkins"
+      "app.kubernetes.io/instance"   = "jenkins"
+      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/managed-by" = "Terraform"
+    }
+
+    annotations {
+      description = "Permission required for Jenkins' to get pods in prod namespace"
+      source-repo = "https://github.com/liatrio/lead-toolchain"
+    }
+  }
+
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "Role"
+    name      = "${kubernetes_role.production_get_pods.metadata.0.name}"
   }
 
   subject {
