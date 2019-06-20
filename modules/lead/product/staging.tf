@@ -55,7 +55,12 @@ resource "kubernetes_role" "staging_delete" {
 
   rule {
     api_groups = [""]
-    resources  = ["services", "deployments"]
+    resources  = ["services"]
+    verbs      = ["delete"]
+  }
+  rule {
+    api_groups = ["extensions"]
+    resources  = ["deployments"]
     verbs      = ["delete"]
   }
 }
