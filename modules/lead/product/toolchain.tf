@@ -154,8 +154,7 @@ resource "kubernetes_role_binding" "jenkins_kubernetes_credentials" {
 resource "kubernetes_cluster_role" "jenkins_get_pods" {
   provider  = "kubernetes.toolchain"
   metadata {
-    name      = "jenkins-kubernetes-credentials"
-    namespace = "${module.toolchain_namespace.name}"
+    name      = "jenkins-kubernetes-pods"
 
     labels {
       "app.kubernetes.io/name"       = "jenkins"
@@ -180,8 +179,7 @@ resource "kubernetes_cluster_role" "jenkins_get_pods" {
 resource "kubernetes_cluster_role_binding" "jenkins_get_pods" {
   provider  = "kubernetes.toolchain"
   metadata {
-    name      = "jenkins-kubernetes-credentials"
-    namespace = "${module.toolchain_namespace.name}"
+    name      = "jenkins-kubernetes-pods"
 
     labels {
       "app.kubernetes.io/name"       = "jenkins"
