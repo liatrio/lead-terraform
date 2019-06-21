@@ -17,6 +17,7 @@ data "template_file" "jenkins_values" {
     productionNamespace = "${module.production_namespace.name}"
     stagingDomain = "${module.staging_namespace.name}.${var.cluster_domain}"
     productionDomain = "${module.production_namespace.name}.${var.cluster_domain}"
+    builder_images_version = "${var.builder_images_version}"
   }
 }
 
