@@ -14,9 +14,9 @@ data "template_file" "jenkins_values" {
     logstash_url     = "http://lead-dashboard-logstash.toolchain.svc.cluster.local:9000"
     slack_team       = "liatrio"
     stagingNamespace = "${module.staging_namespace.name}"
-    productionNamespace = "${var.production_namespace.name}"
+    productionNamespace = "${module.production_namespace.name}"
     stagingDomain = "${module.staging_namespace.name}.${var.cluster_domain}"
-    productionDomain = "${var.production_namespace.name}.${var.cluster_domain}"
+    productionDomain = "${module.production_namespace.name}.${var.cluster_domain}"
   }
 }
 
@@ -146,132 +146,6 @@ resource "kubernetes_role_binding" "jenkins_kubernetes_credentials" {
     api_group = "rbac.authorization.k8s.io"
     kind      = "Role"
     name      = "${kubernetes_role.jenkins_kubernetes_credentials.metadata.0.name}"
-  }
-
-  subject {
-    kind      = "ServiceAccount"
-    name      = "${kubernetes_service_account.jenkins.metadata.0.name}"
-    namespace = "${module.toolchain_namespace.name}"
-  }
-}
-
-resource "kubernetes_role" "staging_get_pods" {
-  provider  = "kubernetes.toolchain"
-  metadata {
-    name      = "staging-pods"
-    namespace = "${var.product_name}-staging"
-
-    labels {
-      "app.kubernetes.io/name"       = "jenkins"
-      "app.kubernetes.io/instance"   = "jenkins"
-      "app.kubernetes.io/component"  = "jenkins-master"
-      "app.kubernetes.io/managed-by" = "Terraform"
-    }
-
-    annotations {
-      description = "Permission required for Jenkins' to get pods in staging namespace"
-      source-repo = "https://github.com/liatrio/lead-toolchain"
-    }
-  }
-
-  rule {
-    api_groups = [""]
-    resources  = ["pods"]
-    verbs      = ["list"]
-  }
-  rule {
-    api_groups = [""]
-    resources  = ["pods/portforward"]
-    verbs      = ["create"]
-  }
-}
-
-resource "kubernetes_role_binding" "staging_get_pods" {
-  provider  = "kubernetes.toolchain"
-  metadata {
-    name      = "jenkins-kubernetes-pods"
-    namespace = "${var.product_name}-staging"
-
-    labels {
-      "app.kubernetes.io/name"       = "jenkins"
-      "app.kubernetes.io/instance"   = "jenkins"
-      "app.kubernetes.io/component"  = "jenkins-master"
-      "app.kubernetes.io/managed-by" = "Terraform"
-    }
-
-    annotations {
-      description = "Permission required for Jenkins' to get pods in staging namespace"
-      source-repo = "https://github.com/liatrio/lead-toolchain"
-    }
-  }
-
-  role_ref {
-    api_group = "rbac.authorization.k8s.io"
-    kind      = "Role"
-    name      = "${kubernetes_role.staging_get_pods.metadata.0.name}"
-  }
-
-  subject {
-    kind      = "ServiceAccount"
-    name      = "${kubernetes_service_account.jenkins.metadata.0.name}"
-    namespace = "${module.toolchain_namespace.name}"
-  }
-}
-
-resource "kubernetes_role" "production_get_pods" {
-  provider  = "kubernetes.toolchain"
-  metadata {
-    name      = "production-pods"
-    namespace = "${var.product_name}-production"
-
-    labels {
-      "app.kubernetes.io/name"       = "jenkins"
-      "app.kubernetes.io/instance"   = "jenkins"
-      "app.kubernetes.io/component"  = "jenkins-master"
-      "app.kubernetes.io/managed-by" = "Terraform"
-    }
-
-    annotations {
-      description = "Permission required for Jenkins' to get pods in prod namespace"
-      source-repo = "https://github.com/liatrio/lead-toolchain"
-    }
-  }
-
-  rule {
-    api_groups = [""]
-    resources  = ["pods"]
-    verbs      = ["list"]
-  }
-  rule {
-    api_groups = [""]
-    resources  = ["pods/portforward"]
-    verbs      = ["create"]
-  }
-}
-
-resource "kubernetes_role_binding" "production_get_pods" {
-  provider  = "kubernetes.toolchain"
-  metadata {
-    name      = "production-pods"
-    namespace = "${var.product_name}-production"
-
-    labels {
-      "app.kubernetes.io/name"       = "jenkins"
-      "app.kubernetes.io/instance"   = "jenkins"
-      "app.kubernetes.io/component"  = "jenkins-master"
-      "app.kubernetes.io/managed-by" = "Terraform"
-    }
-
-    annotations {
-      description = "Permission required for Jenkins' to get pods in prod namespace"
-      source-repo = "https://github.com/liatrio/lead-toolchain"
-    }
-  }
-
-  role_ref {
-    api_group = "rbac.authorization.k8s.io"
-    kind      = "Role"
-    name      = "${kubernetes_role.production_get_pods.metadata.0.name}"
   }
 
   subject {
