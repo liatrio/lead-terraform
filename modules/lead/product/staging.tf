@@ -33,3 +33,61 @@ module "staging_issuer" {
     helm = "helm.staging"
   }
 }
+
+resource "kubernetes_role" "jenkins_staging_role" {
+  provider  = "kubernetes.staging"
+  metadata {
+    name      = "jenkins-staging-role"
+    namespace  = "${module.staging_namespace.name}"
+
+    labels {
+      "app.kubernetes.io/name"       = "jenkins"
+      "app.kubernetes.io/instance"   = "jenkins"
+      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/managed-by" = "Terraform"
+    }
+
+    annotations {
+      description = "Permission required for Jenkins' to get pods in staging namespace"
+      source-repo = "https://github.com/liatrio/lead-terraform"
+    }
+  }
+
+  rule {
+    api_groups = ["","extensions"]
+    resources  = ["*"]
+    verbs      = ["*"]
+  }
+}
+
+resource "kubernetes_role_binding" "jenkins_staging_rolebinding" {
+  provider  = "kubernetes.staging"
+  metadata {
+    name      = "jenkins-staging-rolebinding"
+    namespace  = "${module.staging_namespace.name}"
+
+    labels {
+      "app.kubernetes.io/name"       = "jenkins"
+      "app.kubernetes.io/instance"   = "jenkins"
+      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/managed-by" = "Terraform"
+    }
+
+    annotations {
+      description = "Permission required for Jenkins' to get pods in staging namespace"
+      source-repo = "https://github.com/liatrio/lead-terraform"
+    }
+  }
+
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "Role"
+    name      = "${kubernetes_role.jenkins_staging_role.metadata.0.name}"
+  }
+
+  subject {
+    kind      = "ServiceAccount"
+    name      = "${kubernetes_service_account.jenkins.metadata.0.name}"
+    namespace = "${module.toolchain_namespace.name}"
+  }
+}

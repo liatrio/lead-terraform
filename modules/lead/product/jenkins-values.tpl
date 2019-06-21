@@ -33,6 +33,14 @@ master:
                 env:
                 - key: "elasticUrl"
                   value: "${logstash_url}"
+                - key: "stagingNamespace"
+                  value: "${stagingNamespace}"
+                - key: "productionNamespace"
+                  value: "${productionNamespace}"
+                - key: "stagingDomain"
+                  value: "${stagingDomain}"
+                - key: "productionDomain"
+                  value: "${productionDomain}"
       slack-config: |
         unclassified:
           slackNotifier:
@@ -59,7 +67,7 @@ master:
                     nodeUsageMode: NORMAL
                     containers:
                       - name: "skaffold"
-                        image: "docker.artifactory.liatr.io/liatrio/builder-image-skaffold:v1.0.8"
+                        image: "docker.artifactory.liatr.io/liatrio/builder-image-skaffold:${builder_images_version}"
                         alwaysPullImage: false
                         workingDir: "/home/jenkins"
                         command: "/bin/sh -c"
@@ -77,33 +85,42 @@ master:
                           mountPath: "/home/jenkins/.docker"
                           secretName: "jenkins-artifactory-dockercfg"
                     slaveConnectTimeout: 100
-                  - name: "lead-toolchain-skaffold-node"
-                    inheritFrom: "lead-toolchain-skaffold"
-                    label: "lead-toolchain-skaffold-node"
-                    nodeUsageMode: NORMAL
-                    containers:
-                      - name: "node"
-                        image: "node:10"
-                        alwaysPullImage: false
-                        workingDir: "/home/jenkins"
-                        command: "/bin/sh -c"
-                        args: "cat"
-                        ttyEnabled: true
+                    serviceAccount: "jenkins"
                   - name: "lead-toolchain-aws"
                     label: "lead-toolchain-aws"
                     nodeUsageMode: NORMAL
                     containers:
                       - name: "aws"
-                        image: "docker.artifactory.liatr.io/liatrio/builder-image-aws:v1.0.8"
+                        image: "docker.artifactory.liatr.io/liatrio/builder-image-aws:${builder_images_version}"
                         alwaysPullImage: false
                         workingDir: "/home/jenkins"
                         command: "/bin/sh -c"
                         args: "cat"
                         ttyEnabled: true
-                    volumes:
-                      - hostPathVolume:
-                          hostPath: "/var/run/docker.sock"
-                          mountPath: "/var/run/docker.sock"
+                    slaveConnectTimeout: 100      
+                  - name: "lead-toolchain-terraform"
+                    label: "lead-toolchain-terraform"
+                    nodeUsageMode: NORMAL
+                    containers:
+                      - name: "terraform"
+                        image: "docker.artifactory.liatr.io/liatrio/builder-image-terraform:${builder_images_version}"
+                        alwaysPullImage: false
+                        workingDir: "/home/jenkins"
+                        command: "/bin/sh -c"
+                        args: "cat"
+                        ttyEnabled: true
+                    slaveConnectTimeout: 100      
+                  - name: "lead-toolchain-maven"
+                    label: "lead-toolchain-maven"
+                    nodeUsageMode: NORMAL
+                    containers:
+                      - name: "maven"
+                        image: "docker.artifactory.liatr.io/liatrio/builder-image-maven:${builder_images_version}"
+                        alwaysPullImage: false
+                        workingDir: "/home/jenkins"
+                        command: "/bin/sh -c"
+                        args: "cat"
+                        ttyEnabled: true
                     slaveConnectTimeout: 100      
       shared-libraries: |
         unclassified:
@@ -129,6 +146,7 @@ master:
     - workflow-scm-step:2.8
     - kubernetes:1.15.6
     - job-dsl:1.74
+    - blueocean:1.4.1
 
   containerEnv:
     - name: elasticUrl

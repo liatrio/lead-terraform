@@ -21,7 +21,7 @@ variable "opa_failure_policy" {
 }
 
 variable "sdm_version" {
-  default = "0.2.18"
+  default = "0.2.19"
 }
 
 variable "enable_xray" {
