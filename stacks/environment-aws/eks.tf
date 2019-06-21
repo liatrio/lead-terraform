@@ -7,6 +7,7 @@ locals {
       instance_type        = "${var.instance_type}"
       subnets              = "${join(",", module.vpc.private_subnets)}"
       asg_desired_capacity = "${var.asg_desired_capacity}"
+      asg_max_size         = "${var.asg_desired_capacity}"
       bootstrap_extra_args = "--enable-docker-bridge 'true'"
       key_name             = "${var.key_name}"
     },
