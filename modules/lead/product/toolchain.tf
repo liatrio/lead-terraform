@@ -13,8 +13,10 @@ data "template_file" "jenkins_values" {
     namespace        = "${module.toolchain_namespace.name}"
     logstash_url     = "http://lead-dashboard-logstash.toolchain.svc.cluster.local:9000"
     slack_team       = "liatrio"
-    stagingNamespace = "${var.product_name}-staging"
-    productionNamespace = "${var.product_name}-production"
+    stagingNamespace = "${module.staging_namespace.name}"
+    productionNamespace = "${var.production_namespace.name}"
+    stagingDomain = "${module.staging_namespace.name}.${var.cluster_domain}"
+    productionDomain = "${var.production_namespace.name}.${var.cluster_domain}"
   }
 }
 

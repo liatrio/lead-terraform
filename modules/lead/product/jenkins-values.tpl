@@ -37,6 +37,10 @@ master:
                   value: "${stagingNamespace}"
                 - key: "productionNamespace"
                   value: "${productionNamespace}"
+                - key: "stagingDomain"
+                  value: ""
+                - key: "productionDomain"
+                  value: ""
       slack-config: |
         unclassified:
           slackNotifier:
@@ -63,7 +67,7 @@ master:
                     nodeUsageMode: NORMAL
                     containers:
                       - name: "skaffold"
-                        image: "docker.artifactory.liatr.io/liatrio/builder-image-skaffold:v1.0.8"
+                        image: "docker.artifactory.liatr.io/liatrio/builder-image-skaffold:v1.0.9"
                         alwaysPullImage: false
                         workingDir: "/home/jenkins"
                         command: "/bin/sh -c"
@@ -99,7 +103,7 @@ master:
                     nodeUsageMode: NORMAL
                     containers:
                       - name: "aws"
-                        image: "docker.artifactory.liatr.io/liatrio/builder-image-aws:v1.0.8"
+                        image: "docker.artifactory.liatr.io/liatrio/builder-image-aws:v1.0.9"
                         alwaysPullImage: false
                         workingDir: "/home/jenkins"
                         command: "/bin/sh -c"
