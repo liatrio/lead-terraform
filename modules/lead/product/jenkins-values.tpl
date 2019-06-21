@@ -146,6 +146,7 @@ master:
     - workflow-scm-step:2.8
     - kubernetes:1.15.6
     - job-dsl:1.74
+    - blueocean:1.4.1
 
   containerEnv:
     - name: elasticUrl
