@@ -55,7 +55,7 @@ resource "kubernetes_role" "jenkins_production_role" {
   }
 
   rule {
-    api_groups = [""]
+    api_groups = ["","extensions"]
     resources  = ["*"]
     verbs      = ["*"]
   }

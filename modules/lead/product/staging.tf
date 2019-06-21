@@ -54,7 +54,7 @@ resource "kubernetes_role" "jenkins_staging_role" {
   }
 
   rule {
-    api_groups = [""]
+    api_groups = ["","extensions"]
     resources  = ["*"]
     verbs      = ["*"]
   }
