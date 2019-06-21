@@ -36,7 +36,7 @@ resource "helm_release" "sonarqube" {
 resource "kubernetes_secret" "jenkins_sonar" {
   metadata {
     name      = "jenkins-sonarqube-credential"
-    namespace = "${var.namespace}"
+    namespace = "${module.toolchain_namespace.name}"
 
     labels {
       "app.kubernetes.io/name"       = "jenkins"
