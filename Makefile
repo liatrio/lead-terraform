@@ -40,6 +40,6 @@ ifneq ($(shell git status -s),)
 	@exit 1
 endif
 	$(eval NEW_VERSION := $(word 1,$(subst -, , $(TAG_VERSION))))
-	#git tag -a -m "releasing $(NEW_VERSION)" $(NEW_VERSION)
-	#git push origin $(NEW_VERSION)
+	git tag -a -m "releasing $(NEW_VERSION)" $(NEW_VERSION)
+	git push origin $(NEW_VERSION)
 
