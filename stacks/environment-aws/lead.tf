@@ -20,6 +20,30 @@ module "infrastructure" {
     helm = "helm.system"
   }
 }
+
+data "template_file" "cluster_autoscaler" {
+  template = "${file("${path.module}/cluster-autoscaler-values.tpl")}"
+
+  vars = {
+    cluster = "${var.cluster}"
+    region = "${var.region}"
+  }
+}
+resource "helm_release" "cluster_autoscaler" {
+  name    = "cluster-autoscaler"
+  namespace = "${module.infrastructure.namespace}"
+  repository = "stable"
+  chart   = "cluster-autoscaler"
+  timeout = 600
+  wait    = true
+
+  values = ["${data.template_file.cluster_autoscaler.rendered}"]
+
+  providers {
+    helm = "helm.system"
+  }
+}
+
 module "toolchain" {
   source             = "../../modules/lead/toolchain"
   root_zone_name     = "${var.root_zone_name}"
