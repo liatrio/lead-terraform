@@ -16,3 +16,9 @@ provider "kubernetes" {
 provider "helm" {
   alias = "production"
 }
+provider "kubernetes" {
+  alias = "istio"
+}
+provider "helm" {
+  alias = "istio"
+}
