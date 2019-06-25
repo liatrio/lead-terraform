@@ -52,7 +52,23 @@ provider "helm" {
     config_context = "${var.config_context}"
   }
 }
+provider "kubernetes" {
+  alias = "istio"
+  load_config_file = "${var.load_config_file}"
+  config_context = "${var.config_context}"
+}
 
+provider "helm" {
+  alias = "istio"
+  namespace = "${module.product.istio_namespace}"
+  tiller_image = "gcr.io/kubernetes-helm/tiller:v2.14.1"
+  service_account = "${module.product.istio_service_account}"
+
+  kubernetes {
+    load_config_file = "${var.load_config_file}"
+    config_context = "${var.config_context}"
+  }
+}
 
 module "product" {
   source             = "../../modules/lead/product"
@@ -69,5 +85,7 @@ module "product" {
     "helm.staging"          = "helm.staging"
     "kubernetes.production" = "kubernetes.production"
     "helm.production"       = "helm.production"
+    "kubernetes.istio"      = "kubernetes.istio"
+    "helm.istio"            = "helm.istio"
   }
 }

@@ -1,14 +1,14 @@
 module "istio_namespace" {
   source     = "../../common/namespace"
-  namespace  = "istio-system"
+  namespace  = "istio-namespace"
   annotations {
-    name  = "istio-system"
+    name  = "istio-namespace"
     "opa.lead.liatrio/ingress-whitelist" = "*.istio-system.${var.cluster_domain}"
     "opa.lead.liatrio/image-whitelist" = "${var.image_whitelist}"
   }
   providers {
-    helm = "helm.staging"
-    kubernetes = "kubernetes.staging"
+    helm = "helm.istio"
+    kubernetes = "kubernetes.istio"
   }
 }
 
