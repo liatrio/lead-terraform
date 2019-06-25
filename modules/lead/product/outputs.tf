@@ -16,3 +16,9 @@ output "production_namespace" {
 output "production_service_account" {
     value = "${module.production_namespace.tiller_service_account}"
 }
+output "istio_namespace" {
+  value = "${module.istio_namespace.name}"
+}
+output "istio_service_account" {
+    value = "${module.istio_namespace.tiller_service_account}"
+}
