@@ -1,4 +1,4 @@
-module "toolchain_namespace" {
+module "istio_namespace" {
   source     = "../../common/namespace"
   namespace  = "istio-namespace"
   annotations {
