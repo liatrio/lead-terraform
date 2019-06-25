@@ -1,4 +1,4 @@
-module "istio_namespace" {
+module "toolchain_namespace" {
   source     = "../../common/namespace"
   namespace  = "istio-namespace"
   annotations {
@@ -21,7 +21,7 @@ data "helm_repository" "istio" {
 resource "helm_release" "istio_init" {
   repository = "${data.helm_repository.istio.metadata.0.name}"
   chart      = "istio-init"
-  namespace  = "${module.istio_namespace.name}"
+  namespace  = "${module.toolchain_namespace.name}"
   name       = "istio-init"
   timeout    = 600
   wait       = true
@@ -30,7 +30,7 @@ resource "helm_release" "istio_init" {
 resource "helm_release" "istio" {
   repository = "${data.helm_repository.istio.metadata.0.name}"
   chart      = "istio"
-  namespace  = "${module.istio_namespace.name}"
+  namespace  = "${module.toolchain_namespace.name}"
   name       = "istio"
   timeout    = 600
   wait       = true
