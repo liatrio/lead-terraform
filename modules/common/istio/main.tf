@@ -23,6 +23,16 @@ resource "helm_release" "istio" {
     value = "${var.crd_waiter}"
   }
 
+  set {
+    name  = "gateways.istio-egressgateway.enabled"
+    value = "false"
+  }
+
+  set {
+    name  = "gateways.istio-ingressgateway.sds.enabled"
+    value = "true"
+  }
+
 }
 
 resource "kubernetes_cluster_role" "tiller_cluster_role" {

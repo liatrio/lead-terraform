@@ -26,4 +26,15 @@ module "istio_system" {
   providers {
     helm = "helm.system"
   }
+
+  set {
+    name  = "gateways.istio-egressgateway.enabled"
+    value = "false"
+  }
+
+  set {
+    name  = "gateways.istio-ingressgateway.sds.enabled"
+    value = "true"
+  }
+
 }
