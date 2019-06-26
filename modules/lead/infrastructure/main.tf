@@ -67,8 +67,13 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
     verbs = ["create"]
   }
   rule {
+    api_groups = ["policy"]
+    resources = ["poddisruptionbudgets"]
+    verbs = ["create","list","watch","update"]
+  }
+  rule {
     api_groups = [""]
-    resources = ["configmaps","events","secrets","services","pods"]
+    resources = ["configmaps","events","secrets","services","serviceaccounts","pods"]
     verbs = ["*"]
   }
   rule {
@@ -85,6 +90,98 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
     api_groups = ["extensions"]
     resources = ["ingresses"]
     verbs = ["*"]
+  }
+  rule {
+    api_groups = ["autoscaling"]
+    resources = ["horizontalpodautoscalers"]
+    verbs = ["*"]
+  }
+  rule {
+    api_groups = ["authentication.istio.io"]
+    resources = ["*"]
+    verbs = ["*"]
+  }
+  rule {
+    api_groups = ["config.istio.io"]
+    resources = ["*"]
+    verbs = ["*"]
+  }
+  rule {
+    api_groups = ["networking.istio.io"]
+    resources = ["*"]
+    verbs = ["*"]
+  }
+  rule {
+    api_groups = ["rbac.istio.io"]
+    resources = ["*"]
+    verbs = ["get","list","watch"]
+  }
+  rule {
+    api_groups = [""]
+    resources = ["endpoints"]
+    verbs = ["get","list","watch"]
+  }
+  rule {
+    api_groups = ["apps"]
+    resources = ["deployments"]
+    resource_names = ["istio-galley"]
+    verbs = ["*"]
+  }
+  rule {
+    api_groups = ["apps"]
+    resources = ["deployments"]
+    verbs = ["*"]
+  }
+  rule {
+    api_groups = ["extensions"]
+    resources = ["deployments"]
+    resource_names = ["istio-galley"]
+    verbs = ["*"]
+  }
+  rule {
+    api_groups = ["extensions"]
+    resources = ["deployments"]
+    verbs = ["get","list","watch"]
+  }
+  rule {
+    api_groups = ["extensions"]
+    resources = ["deployments/finalizers"]
+    resource_names = ["istio-galley"]
+    verbs = ["update"]
+  }
+  rule {
+    api_groups = [""]
+    resources = ["replicationcontrollers"]
+    verbs = ["get","list","watch"]
+  }
+  rule {
+    api_groups = ["apps"]
+    resources = ["replicasets"]
+    verbs = ["get","list","watch"]
+  }
+  rule {
+    api_groups = ["extensions"]
+    resources = ["replicasets"]
+    verbs = ["get","list","watch"]
+  }
+  rule {
+    api_groups = ["extensions"]
+    resources = ["ingresses/status"]
+    verbs = ["*"]
+  }
+  rule {
+    api_groups = [""]
+    resources = ["nodes/proxy"]
+    verbs = ["get","list","watch"]
+  }
+  rule {
+    api_groups = ["batch"]
+    resources = ["jobs"]
+    verbs = ["*"]
+  }
+  rule {
+    non_resource_urls = ["/metrics"]
+    verbs = ["get"]
   }
 }
 
