@@ -2,6 +2,10 @@
 module "production_namespace" {
   source     = "../../common/namespace"
   namespace  = "${var.product_name}-production"
+  labels {
+    "istio-injection" = "enabled"
+    "appmesh.k8s.aws/sidecarInjectorWebhook" = "enabled"
+  }
   annotations {
     name  = "${var.product_name}-production"
     "opa.lead.liatrio/ingress-whitelist" = "*.${var.product_name}-production.${var.cluster_domain}"

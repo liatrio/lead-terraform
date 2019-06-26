@@ -1,6 +1,10 @@
 module "staging_namespace" {
   source     = "../../common/namespace"
   namespace  = "${var.product_name}-staging"
+  labels {
+    "istio-injection" = "enabled"
+    "appmesh.k8s.aws/sidecarInjectorWebhook" = "enabled"
+  }
   annotations {
     name  = "${var.product_name}-staging"
     "opa.lead.liatrio/ingress-whitelist" = "*.${var.product_name}-staging.${var.cluster_domain}"
