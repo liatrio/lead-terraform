@@ -5,4 +5,4 @@ sources:
 domainFilters:
 - "${domain_filter}"
 extraArgs:
-  istio-ingress-gateway: istio-ingress/istio-ingressgateway
+  istio-ingress-gateway: istio-system/istio-ingressgateway
