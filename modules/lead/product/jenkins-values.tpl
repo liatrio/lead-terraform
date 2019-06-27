@@ -33,6 +33,8 @@ master:
                 env:
                 - key: "elasticUrl"
                   value: "${logstash_url}"
+                - key: "product"
+                  value: "${product_name}"
                 - key: "stagingNamespace"
                   value: "${stagingNamespace}"
                 - key: "productionNamespace"
@@ -97,7 +99,7 @@ master:
                         command: "/bin/sh -c"
                         args: "cat"
                         ttyEnabled: true
-                    slaveConnectTimeout: 100      
+                    slaveConnectTimeout: 100
                   - name: "lead-toolchain-terraform"
                     label: "lead-toolchain-terraform"
                     nodeUsageMode: NORMAL
@@ -109,7 +111,7 @@ master:
                         command: "/bin/sh -c"
                         args: "cat"
                         ttyEnabled: true
-                    slaveConnectTimeout: 100      
+                    slaveConnectTimeout: 100
                   - name: "lead-toolchain-maven"
                     label: "lead-toolchain-maven"
                     nodeUsageMode: NORMAL
@@ -121,7 +123,7 @@ master:
                         command: "/bin/sh -c"
                         args: "cat"
                         ttyEnabled: true
-                    slaveConnectTimeout: 100      
+                    slaveConnectTimeout: 100
       shared-libraries: |
         unclassified:
           globalLibraries:
@@ -133,6 +135,13 @@ master:
                   scm:
                     git:
                       remote: "https://github.com/liatrio/pipeline-library"
+            - defaultVersion: "master"
+              name: "LEAD"
+              retriever:
+                modernSCM:
+                  scm:
+                    git:
+                      remote: "https://github.com/liatrio/lead-shared-library.git"
   installPlugins:
     - ws-cleanup:0.37
     - kubernetes-credentials-provider:0.12.1
