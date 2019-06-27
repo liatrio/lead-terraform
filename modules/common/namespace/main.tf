@@ -39,6 +39,31 @@ resource "kubernetes_role" "tiller_role" {
     resources = ["issuers"]
     verbs = ["get", "create", "watch", "delete", "list", "patch"]
   }
+  rule {
+    api_groups = ["appmesh.k8s.aws"]
+    resources = ["meshes","meshes/status","virtualnodes","virtualnodes/status","virtualservices","virtualservices/status"]
+    verbs = ["*"]
+  }
+  rule {
+    api_groups = ["flagger.app"]
+    resources = ["canaries","canaries/status"]
+    verbs = ["*"]
+  }
+  rule {
+    api_groups = ["gateway.solo.io"]
+    resources = ["gateways","virtualservices"]
+    verbs = ["*"]
+  }
+  rule {
+    api_groups = ["gloo.solo.io"]
+    resources = ["proxies","settings","upstreamgroups","upstreams","virtualservices"]
+    verbs = ["*"]
+  }
+  rule {
+    api_groups = ["split.smi-spec.io"]
+    resources = ["trafficsplits"]
+    verbs = ["*"]
+  }
 }
 
 resource "kubernetes_role_binding" "tiller_role_binding" {
