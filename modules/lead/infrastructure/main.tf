@@ -69,7 +69,7 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
   rule {
     api_groups = ["policy"]
     resources = ["poddisruptionbudgets"]
-    verbs = ["create","list","watch","update"]
+    verbs = ["*"]
   }
   rule {
     api_groups = [""]
