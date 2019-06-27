@@ -33,6 +33,30 @@ resource "helm_release" "istio" {
     value = "true"
   }
 
+  set {
+    name  = "global.k8sIngress.enabled"
+    value = "true"
+  }
+
+  set {
+    name  = "global.k8sIngress.enableHttps"
+    value = "true"
+  }
+
+  set {
+    name  = "global.k8sIngress.gatewayName=ingressgateway"
+    value = "true"
+  }
+
+  set {
+    name  = "certmanager.enabled"
+    value = "true"
+  }
+  set {
+    name  = "certmanager.email"
+    value = "cloudservices@liatr.io"
+  }
+
 }
 
 resource "kubernetes_cluster_role" "tiller_cluster_role" {
