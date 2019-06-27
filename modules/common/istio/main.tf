@@ -17,6 +17,7 @@ resource "helm_release" "istio" {
   name       = "${var.namespace}"
   timeout    = 600
   wait       = true
+  force_update = true
 
   set {
     name = "crd_waiter"
