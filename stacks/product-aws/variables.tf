@@ -1,4 +1,7 @@
-variable "product_name" {} 
+variable "product_name" {}
+variable "toolchain_namespace" {
+    default = "toolchain"
+}
 variable "cluster_domain" {}
 variable "image_whitelist" {
     default = ".*"

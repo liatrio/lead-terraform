@@ -33,6 +33,8 @@ master:
                 env:
                 - key: "elasticUrl"
                   value: "${logstash_url}"
+                - key: "toolchainNamespace"
+                  value: "${toolchain_namespace}"
                 - key: "product"
                   value: "${product_name}"
                 - key: "stagingNamespace"
