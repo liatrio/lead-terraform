@@ -6,6 +6,24 @@ module "istio_namespace" {
   }
 }
 
+resource "kubernetes_secret" "kiali_dashboard_secret" {
+  metadata {
+    name      = "kiali"
+    namespace = "${var.namespace}"
+
+    labels {
+      "app" = "kiali"
+    }
+  }
+  type = "Opaque"
+
+  data {
+    "username" = "${var.kiali_username}"
+    "passphrase" = "${var.kiali_password}"
+  }
+}
+
+
 data "helm_repository" "istio" {
     name = "istio.io"
     url  = "https://storage.googleapis.com/istio-release/releases/1.2.0/charts/"
@@ -73,23 +91,6 @@ resource "helm_release" "istio" {
     value = "true"
   }
 
-}
-
-resource "kubernetes_secret" "kiali_dashboard_secret" {
-  metadata {
-    name      = "kiali-secret"
-    namespace = "${var.namespace}"
-
-    labels {
-      "app" = "kiali"
-    }
-  }
-  type = "Opaque"
-
-  data {
-    "username" = "${var.kiali_username}"
-    "passphrase" = "${var.kiali_password}"
-  }
 }
 
 resource "kubernetes_cluster_role" "tiller_cluster_role" {
