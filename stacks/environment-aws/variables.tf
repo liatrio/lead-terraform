@@ -38,6 +38,7 @@ variable "dashboard_version" {
 variable "artifactory_license" {}
 variable "slack_bot_token" {}
 variable "slack_client_signing_secret" {}
+variable "kiali_password" {}
 
 locals {
   tags = {

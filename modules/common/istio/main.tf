@@ -75,6 +75,23 @@ resource "helm_release" "istio" {
 
 }
 
+resource "kubernetes_secret" "kiali_dashboard_secret" {
+  metadata {
+    name      = "kiali-secret"
+    namespace = "${var.namespace}"
+
+    labels {
+      "app" = "kiali"
+    }
+  }
+  type = "Opaque"
+
+  data {
+    "username" = "${var.kiali_username}"
+    "passphrase" = "${var.kiali_password}"
+  }
+}
+
 resource "kubernetes_cluster_role" "tiller_cluster_role" {
   metadata {
     name = "${var.namespace}-tiller-manager"
