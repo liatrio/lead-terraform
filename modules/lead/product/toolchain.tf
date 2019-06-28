@@ -11,6 +11,7 @@ data "template_file" "jenkins_values" {
     ingress_hostname = "jenkins.${module.toolchain_namespace.name}.${var.cluster_domain}"
     artifactory_url  = "artifactory.toolchain.${var.cluster_domain}/docker-registry"
     namespace        = "${module.toolchain_namespace.name}"
+    toolchain_namespace = "${var.toolchain_namespace}"
     logstash_url     = "http://lead-dashboard-logstash.toolchain.svc.cluster.local:9000"
     slack_team       = "liatrio"
     stagingNamespace = "${module.staging_namespace.name}"
