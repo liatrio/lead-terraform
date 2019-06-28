@@ -40,6 +40,11 @@ resource "kubernetes_role" "tiller_role" {
     verbs = ["get", "create", "watch", "delete", "list", "patch"]
   }
   rule {
+    api_groups = ["autoscaling"]
+    resources = ["horizontalpodautoscalers"]
+    verbs = ["*"]
+  }
+  rule {
     api_groups = ["appmesh.k8s.aws"]
     resources = ["meshes","meshes/status","virtualnodes","virtualnodes/status","virtualservices","virtualservices/status"]
     verbs = ["*"]

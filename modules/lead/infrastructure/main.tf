@@ -78,6 +78,11 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
   }
   rule {
     api_groups = [""]
+    resources = ["configmaps","events","secrets","services","serviceaccounts","pods","pods/logs"]
+    verbs = ["*"]
+  }
+  rule {
+    api_groups = [""]
     resources = ["namespaces","nodes"]
     verbs = ["get","list","watch"]
   }
@@ -208,7 +213,51 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
     resources = ["trafficsplits"]
     verbs = ["*"]
   }
-
+  rule {
+    api_groups = ["apps"]
+    resources = ["statefulsets"]
+    verbs = ["*"]
+  }
+  rule {
+    api_groups = ["extensions"]
+    resources = ["statefulsets"]
+    verbs = ["*"]
+  }
+  rule {
+    api_groups = ["monitoring.kiali.io"]
+    resources = ["monitoringdashboards"]
+    verbs = ["get","list"]
+  }
+  rule {
+    api_groups = ["batch"],
+    resources = ["cronjobs"],
+    verbs = ["get","list","watch"]
+  }
+  rule {
+    api_groups = ["rbac.istio.io"],
+    resources = ["clusterrbacconfigs"],
+    verbs = ["create","delete","patch"]
+  }
+  rule {
+    api_groups = ["rbac.istio.io"],
+    resources = ["rbacconfigs"],
+    verbs = ["create","delete","patch"]
+  }
+  rule {
+    api_groups = ["rbac.istio.io"],
+    resources = ["servicerolebindings"],
+    verbs = ["create","delete","patch"]
+  }
+  rule {
+    api_groups = ["rbac.istio.io"],
+    resources = ["serviceroles"],
+    verbs = ["create","delete","patch"]
+  }
+  rule {
+    api_groups = [""]
+    resources = ["pods/log"]
+    verbs = ["get","list","watch"]
+  }
 }
 
 resource "kubernetes_cluster_role_binding" "tiller_cluster_role_binding" {

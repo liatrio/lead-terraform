@@ -56,6 +56,22 @@ resource "helm_release" "istio" {
     name  = "certmanager.email"
     value = "cloudservices@liatr.io"
   }
+  set {
+    name  = "grafana.enabled"
+    value = "true"
+  }
+  set {
+    name  = "kiali.enabled"
+    value = "true"
+  }
+  set {
+    name  = "tracing.enabled"
+    value = "true"
+  }
+  set {
+    name  = "tracing.ingress.enabled"
+    value = "true"
+  }
 
 }
 
