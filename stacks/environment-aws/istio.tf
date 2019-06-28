@@ -24,7 +24,6 @@ module "istio_system" {
   source             = "../../modules/common/istio"
   namespace          = "istio-system"
   crd_waiter         = "${null_resource.istio_init_delay.id}"
-  kiali_password     = "${var.kiali_password}"
   providers {
     helm = "helm.system"
   }
