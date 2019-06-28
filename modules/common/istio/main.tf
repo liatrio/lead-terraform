@@ -6,6 +6,11 @@ module "istio_namespace" {
   }
 }
 
+esource "random_string" "kiali_admin_password" {
+  length  = 10
+  special = false
+}
+
 resource "kubernetes_secret" "kiali_dashboard_secret" {
   metadata {
     name      = "kiali"
@@ -19,10 +24,9 @@ resource "kubernetes_secret" "kiali_dashboard_secret" {
 
   data {
     "username" = "${var.kiali_username}"
-    "passphrase" = "${var.kiali_password}"
+    "passphrase" = "${random_string.kiali_admin_password.result}"
   }
 }
-
 
 data "helm_repository" "istio" {
     name = "istio.io"
@@ -62,8 +66,8 @@ resource "helm_release" "istio" {
   }
 
   set {
-    name  = "global.k8sIngress.gatewayName=ingressgateway"
-    value = "true"
+    name  = "global.k8sIngress.gatewayName"
+    value = "istio-ingressgateway"
   }
 
   set {
