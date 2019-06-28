@@ -6,7 +6,7 @@ module "istio_namespace" {
   }
 }
 
-esource "random_string" "kiali_admin_password" {
+resource "random_string" "kiali_admin_password" {
   length  = 10
   special = false
 }
