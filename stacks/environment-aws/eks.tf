@@ -10,7 +10,8 @@ locals {
       asg_max_size         = "${var.asg_max_size}"
       bootstrap_extra_args = "--enable-docker-bridge 'true'"
       key_name             = "${var.key_name}"
-      autoscaling_enabled  = "true"
+      autoscaling_enabled  = true
+      protect_from_scale_in = true
     },
     {
       instance_type        = "${var.instance_type}"
@@ -20,7 +21,8 @@ locals {
       asg_max_size         = "${var.asg_max_size}"
       bootstrap_extra_args = "--enable-docker-bridge 'true'"
       key_name             = "${var.key_name}"
-      autoscaling_enabled  = "true"
+      autoscaling_enabled  = true
+      protect_from_scale_in = true
     },
     {
       instance_type        = "${var.instance_type}"
@@ -30,7 +32,8 @@ locals {
       asg_max_size         = "${var.asg_max_size}"
       bootstrap_extra_args = "--enable-docker-bridge 'true'"
       key_name             = "${var.key_name}"
-      autoscaling_enabled  = "true"
+      autoscaling_enabled  = true
+      protect_from_scale_in = true
     },
   ]
 
