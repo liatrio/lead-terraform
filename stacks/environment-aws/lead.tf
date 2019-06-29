@@ -29,19 +29,21 @@ data "template_file" "cluster_autoscaler" {
     region = "${var.region}"
   }
 }
+data "helm_repository" "stable" {
+    name = "stable"
+    url  = "https://kubernetes-charts.storage.googleapis.com"
+}
 resource "helm_release" "cluster_autoscaler" {
   name    = "cluster-autoscaler"
   namespace = "${module.infrastructure.namespace}"
-  repository = "stable"
+  repository = "${data.helm_repository.stable.metadata.0.name}"
   chart   = "cluster-autoscaler"
   timeout = 600
   wait    = true
 
   values = ["${data.template_file.cluster_autoscaler.rendered}"]
 
-  providers {
-    helm = "helm.system"
-  }
+  provider = "helm.system"
 }
 
 module "toolchain" {
