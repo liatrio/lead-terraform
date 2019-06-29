@@ -3,13 +3,37 @@ data "aws_caller_identity" "current" {}
 locals {
   worker_groups = [
     {
-      # This will launch an autoscaling group with only On-Demand instances
       instance_type        = "${var.instance_type}"
-      subnets              = "${join(",", module.vpc.private_subnets)}"
+      subnets              = "${module.vpc.private_subnets[0]}"
+      asg_min_size         = "${var.asg_min_size}"
       asg_desired_capacity = "${var.asg_desired_capacity}"
-      asg_max_size         = "${var.asg_desired_capacity}"
+      asg_max_size         = "${var.asg_max_size}"
       bootstrap_extra_args = "--enable-docker-bridge 'true'"
       key_name             = "${var.key_name}"
+      autoscaling_enabled  = true
+      protect_from_scale_in = true
+    },
+    {
+      instance_type        = "${var.instance_type}"
+      subnets              = "${module.vpc.private_subnets[1]}"
+      asg_min_size         = "${var.asg_min_size}"
+      asg_desired_capacity = "${var.asg_desired_capacity}"
+      asg_max_size         = "${var.asg_max_size}"
+      bootstrap_extra_args = "--enable-docker-bridge 'true'"
+      key_name             = "${var.key_name}"
+      autoscaling_enabled  = true
+      protect_from_scale_in = true
+    },
+    {
+      instance_type        = "${var.instance_type}"
+      subnets              = "${module.vpc.private_subnets[2]}"
+      asg_min_size         = "${var.asg_min_size}"
+      asg_desired_capacity = "${var.asg_desired_capacity}"
+      asg_max_size         = "${var.asg_max_size}"
+      bootstrap_extra_args = "--enable-docker-bridge 'true'"
+      key_name             = "${var.key_name}"
+      autoscaling_enabled  = true
+      protect_from_scale_in = true
     },
   ]
 
@@ -103,7 +127,7 @@ module "eks" {
   tags                                 = "${local.tags}"
   vpc_id                               = "${module.vpc.vpc_id}"
   worker_groups                        = "${local.worker_groups}"
-  worker_group_count                   = "1"
+  worker_group_count                   = "${length(local.worker_groups)}"
   worker_additional_security_group_ids = ["${aws_security_group.worker.id}"]
   map_roles                            = "${local.map_roles}"
   map_roles_count                      = "${length(local.map_roles)}"

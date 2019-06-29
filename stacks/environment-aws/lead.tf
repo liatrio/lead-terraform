@@ -20,6 +20,32 @@ module "infrastructure" {
     helm = "helm.system"
   }
 }
+
+data "template_file" "cluster_autoscaler" {
+  template = "${file("${path.module}/cluster-autoscaler-values.tpl")}"
+
+  vars = {
+    cluster = "${var.cluster}"
+    region = "${var.region}"
+  }
+}
+data "helm_repository" "stable" {
+    name = "stable"
+    url  = "https://kubernetes-charts.storage.googleapis.com"
+}
+resource "helm_release" "cluster_autoscaler" {
+  name    = "cluster-autoscaler"
+  namespace = "${module.infrastructure.namespace}"
+  repository = "${data.helm_repository.stable.metadata.0.name}"
+  chart   = "cluster-autoscaler"
+  timeout = 600
+  wait    = true
+
+  values = ["${data.template_file.cluster_autoscaler.rendered}"]
+
+  provider = "helm.system"
+}
+
 module "toolchain" {
   source             = "../../modules/lead/toolchain"
   root_zone_name     = "${var.root_zone_name}"

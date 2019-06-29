@@ -17,9 +17,15 @@ module "system_issuer" {
   crd_waiter = "${null_resource.cert_manager_crd_delay.id}"
 }
 
+
 resource "kubernetes_cluster_role" "tiller_cluster_role" {
   metadata {
     name = "lead-system-tiller-cluster-manager"
+  }
+  rule {
+    api_groups = ["storage.k8s.io"]
+    resources = ["storageclasses"]
+    verbs = ["watch","list","get"]
   }
   rule {
     api_groups = ["admissionregistration.k8s.io"]
@@ -78,13 +84,13 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
   }
   rule {
     api_groups = [""]
-    resources = ["configmaps","events","secrets","services","serviceaccounts","pods","pods/logs"]
+    resources = ["configmaps","events","secrets","services","serviceaccounts","pods","pods/logs","pods/eviction","pods/status"]
     verbs = ["*"]
   }
   rule {
     api_groups = [""]
     resources = ["namespaces","nodes","limitranges","persistentvolumeclaims","persistentvolumes","resourcequotas","ingresses"]
-    verbs = ["get","list","watch"]
+    verbs = ["get","list","watch","update"]
   }
   rule {
     api_groups = [""]
@@ -124,7 +130,7 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
   rule {
     api_groups = [""]
     resources = ["endpoints"]
-    verbs = ["get","list","watch"]
+    verbs = ["get","list","watch","create","update","patch"]
   }
   rule {
     api_groups = ["apps"]
