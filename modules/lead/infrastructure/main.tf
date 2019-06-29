@@ -52,6 +52,11 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
     verbs = ["get", "create", "delete", "list", "patch"]
   }
   rule {
+    api_groups = ["certificates.k8s.io"]
+    resources = ["certificatesigningrequests"]
+    verbs = ["list","watch"]
+  }
+  rule {
     api_groups = ["certmanager.k8s.io"]
     resources = ["certificates","certificates/finalizers","issuers","clusterissuers","orders","orders/finalizers","challenges"]
     verbs = ["*"]
@@ -73,17 +78,12 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
   }
   rule {
     api_groups = [""]
-    resources = ["configmaps","events","secrets","services","serviceaccounts","pods"]
-    verbs = ["*"]
-  }
-  rule {
-    api_groups = [""]
     resources = ["configmaps","events","secrets","services","serviceaccounts","pods","pods/logs"]
     verbs = ["*"]
   }
   rule {
     api_groups = [""]
-    resources = ["namespaces","nodes"]
+    resources = ["namespaces","nodes","limitranges","persistentvolumeclaims","persistentvolumes","resourcequotas","ingresses"]
     verbs = ["get","list","watch"]
   }
   rule {
@@ -166,7 +166,7 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
   }
   rule {
     api_groups = ["extensions"]
-    resources = ["replicasets"]
+    resources = ["replicasets","daemonsets"]
     verbs = ["get","list","watch"]
   }
   rule {
@@ -215,7 +215,7 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
   }
   rule {
     api_groups = ["apps"]
-    resources = ["statefulsets"]
+    resources = ["statefulsets", "daemonsets"]
     verbs = ["*"]
   }
   rule {
@@ -259,6 +259,7 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
     verbs = ["get","list","watch"]
   }
 }
+
 
 resource "kubernetes_cluster_role_binding" "tiller_cluster_role_binding" {
   metadata {

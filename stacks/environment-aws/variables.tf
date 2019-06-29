@@ -33,7 +33,7 @@ variable "sdm_version" {
     default = "0.2.19"
 }
 variable "dashboard_version" {
-  default = "0.2.0-652798af475"
+  default = "0.2.0-4346ee7d548"
 }
 variable "artifactory_license" {}
 variable "slack_bot_token" {}
