@@ -32,6 +32,10 @@ variable "artifactory_license" {}
 variable "slack_bot_token" {}
 variable "slack_client_signing_secret" {}
 
+variable "enable_istio" {
+  default = true
+}
+
 locals {
   tags = {
     "Cluster" = "${var.cluster}"
