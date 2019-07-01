@@ -4,6 +4,7 @@ data "helm_repository" "istio" {
 }
 
 resource "helm_release" "istio_init" {
+  count = "${var.enable_istio ? 1 : 0}"
   repository = "${data.helm_repository.istio.metadata.0.name}"
   chart      = "istio-init"
   namespace = "${module.infrastructure.namespace}"
@@ -13,16 +14,17 @@ resource "helm_release" "istio_init" {
   provider   = "helm.system"
 }
 # Give the CRD a chance to settle
-resource "null_resource" "istio_init_delay" { 
-    provisioner "local-exec" { 
-        command = "sleep 15" 
-    } 
-    depends_on = ["helm_release.istio_init"] 
+resource "null_resource" "istio_init_delay" {
+    provisioner "local-exec" {
+        command = "sleep 15"
+    }
+    depends_on = ["helm_release.istio_init"]
 }
 module "istio_system" {
   source             = "../../modules/common/istio"
   namespace          = "istio-system"
   crd_waiter         = "${null_resource.istio_init_delay.id}"
+  enable            = "${var.enable_istio}"
   providers {
     helm = "helm.system"
   }

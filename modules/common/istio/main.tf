@@ -33,6 +33,7 @@ data "helm_repository" "istio" {
     url  = "https://storage.googleapis.com/istio-release/releases/1.2.0/charts/"
 }
 resource "helm_release" "istio" {
+  count = "${var.enable ? 1 : 0}"
   repository = "${data.helm_repository.istio.metadata.0.name}"
   chart      = "istio"
   namespace = "${module.istio_namespace.name}"
