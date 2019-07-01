@@ -167,3 +167,5 @@ master:
     configAutoReload:
       enabled: true
       label: jenkins_config
+
+  healthProbesReadinessTimeout: 120
