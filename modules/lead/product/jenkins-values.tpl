@@ -30,9 +30,9 @@ master:
   healthProbeLivenessPeriodSeconds: 10
   healthProbeReadinessPeriodSeconds: 10
   healthProbeLivenessFailureThreshold: 5
-  healthProbeReadinessFailureThreshold: 3
-  healthProbeLivenessInitialDelay: 10000
-  healthProbeReadinessInitialDelay: 10000
+  healthProbeReadinessFailureThreshold: 10
+  healthProbeLivenessInitialDelay: 240
+  healthProbeReadinessInitialDelay: 120
 
   JCasC:
     enabled: true
