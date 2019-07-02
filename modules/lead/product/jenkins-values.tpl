@@ -17,20 +17,8 @@ master:
       secretName: jenkins-ingress-tls
   jenkinsUrlProtocol: https
   serviceType: ClusterIP
-  resources:
-    requests:
-      cpu: "1000m"
-      memory: "1024Mi"
-    limits:
-      cpu: "2000m"
-      memory: "4096Mi"
-  healthProbes: true
-  healthProbesLivenessTimeout: 5
-  healthProbesReadinessTimeout: 5
-  healthProbeLivenessPeriodSeconds: 10
-  healthProbeReadinessPeriodSeconds: 10
   healthProbeLivenessFailureThreshold: 5
-  healthProbeReadinessFailureThreshold: 10
+  healthProbeReadinessFailureThreshold: 12
   healthProbeLivenessInitialDelay: 240
   healthProbeReadinessInitialDelay: 120
 
