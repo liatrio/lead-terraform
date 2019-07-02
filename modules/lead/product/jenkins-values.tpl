@@ -17,6 +17,13 @@ master:
       secretName: jenkins-ingress-tls
   jenkinsUrlProtocol: https
   serviceType: ClusterIP
+  resources:
+    requests:
+      cpu: "1000m"
+      memory: "1024Mi"
+    limits:
+      cpu: "2000m"
+      memory: "4096Mi"
 
   JCasC:
     enabled: true
@@ -169,11 +176,3 @@ master:
       label: jenkins_config
 
   healthProbesReadinessTimeout: 500
-  master:
-    resources:
-      requests:
-        cpu: "1000m"
-        memory: "1024Mi"
-      limits:
-        cpu: "2000m"
-        memory: "4096Mi"
