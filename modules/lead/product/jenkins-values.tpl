@@ -17,6 +17,10 @@ master:
       secretName: jenkins-ingress-tls
   jenkinsUrlProtocol: https
   serviceType: ClusterIP
+  healthProbeLivenessFailureThreshold: 5
+  healthProbeReadinessFailureThreshold: 12
+  healthProbeLivenessInitialDelay: 240
+  healthProbeReadinessInitialDelay: 120
 
   JCasC:
     enabled: true
