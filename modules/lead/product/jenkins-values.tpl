@@ -24,7 +24,15 @@ master:
     limits:
       cpu: "2000m"
       memory: "4096Mi"
-  healthProbes: false
+  healthProbes: true
+  healthProbesLivenessTimeout: 5
+  healthProbesReadinessTimeout: 5
+  healthProbeLivenessPeriodSeconds: 10
+  healthProbeReadinessPeriodSeconds: 10
+  healthProbeLivenessFailureThreshold: 5
+  healthProbeReadinessFailureThreshold: 3
+  healthProbeLivenessInitialDelay: 10000
+  healthProbeReadinessInitialDelay: 10000
 
   JCasC:
     enabled: true
