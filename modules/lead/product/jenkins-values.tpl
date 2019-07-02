@@ -175,5 +175,6 @@ master:
       enabled: true
       label: jenkins_config
 
-  healthProbesReadinessTimeout: 2000
-  healthProbeReadinessPeriodSeconds: 60
+  healthProbesLivenessTimeout: 10000
+  healthProbesReadinessTimeout: 10000
+  healthProbeReadinessPeriodSeconds: 1000
