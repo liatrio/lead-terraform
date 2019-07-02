@@ -24,6 +24,7 @@ master:
     limits:
       cpu: "2000m"
       memory: "4096Mi"
+  healthProbes: false
 
   JCasC:
     enabled: true
@@ -174,7 +175,3 @@ master:
     configAutoReload:
       enabled: true
       label: jenkins_config
-
-  healthProbesLivenessTimeout: 10000
-  healthProbesReadinessTimeout: 10000
-  healthProbeReadinessPeriodSeconds: 1000
