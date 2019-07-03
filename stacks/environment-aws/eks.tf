@@ -48,6 +48,11 @@ locals {
       username = "developer"
       group    = "system:masters"
     },
+    {
+      role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${aws_iam_role.workspace_role.name}"
+      username = "user"
+      group    = "system:authenticated"
+    },
   ]
 }
 
@@ -149,21 +154,35 @@ resource "aws_iam_policy" "worker_policy" {
    {
      "Effect": "Allow",
      "Action": [
-       "route53:ChangeResourceRecordSets"
+       "sts:AssumeRole"
      ],
      "Resource": [
-       "arn:aws:route53:::hostedzone/*"
+       "${aws_iam_role.workspace_role.arn}"
      ]
    },
    {
      "Effect": "Allow",
      "Action": [
-       "route53:ListHostedZones",
+       "route53:ChangeResourceRecordSets",
        "route53:ListResourceRecordSets"
      ],
      "Resource": [
-       "*"
+       "arn:aws:route53:::hostedzone/${aws_route53_zone.cluster_zone.zone_id}"
      ]
+   },
+   {
+     "Effect": "Allow",
+     "Action": [
+       "route53:ListHostedZones"
+     ],
+     "Resource": ["*"]
+   },
+   {
+     "Effect": "Allow",
+     "Action": [
+       "cloud9:DescribeEnvironmentMemberships", "cloud9:DescribeEnvironments"
+     ],
+     "Resource": ["*"]
    }
  ]
 }
@@ -173,4 +192,63 @@ EOF
 resource "aws_iam_role_policy_attachment" "worker_ecr_role_attachment" {
   role       = "${module.eks.worker_iam_role_name}"
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryPowerUser"
+}
+
+resource "aws_iam_role" "workspace_role" {
+  name = "${var.cluster}_workspace_role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+  permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/Developer"
+}
+
+resource "aws_iam_role_policy_attachment" "workspace_role_attachment" {
+  role       = "${aws_iam_role.workspace_role.name}"
+  policy_arn = "arn:aws:iam::aws:policy/AWSCloud9User"
+}
+
+resource "aws_iam_role_policy" "workspace_role_policy" {
+  name = "workspace_access"
+  role = "${aws_iam_role.workspace_role.name}"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "eks:DescribeCluster"
+      ],
+      "Effect": "Allow",
+      "Resource": "${module.eks.cluster_arn}"
+    },
+    {
+      "Action": [
+        "ec2:DescribeInstances","ec2:DescribeVolumesModifications"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    },
+    {
+      "Action": [
+        "ec2:ModifyVolume"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    }
+  ]
+}
+EOF
 }
