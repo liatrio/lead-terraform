@@ -15,6 +15,8 @@ operators:
     env:
     - name: workspace_role
       value: ${workspace_role}
+    - name: AWS_REGION
+      value: ${region}
   jenkins: 
     image: docker.artifactory.liatr.io/liatrio/operator-jenkins:${image_tag}
   toolchain: 

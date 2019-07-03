@@ -26,6 +26,7 @@ data "template_file" "operator_toolchain_values" {
     namespace = "${var.namespace}"
     cluster_domain = "${var.cluster}.${var.root_zone_name}"
     workspace_role = "${var.workspace_role_name}"
+    region = "${var.region}"
   }
 }
 
