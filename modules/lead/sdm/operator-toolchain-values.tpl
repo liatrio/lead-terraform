@@ -12,6 +12,9 @@ operators:
       - hosts:
         - operator-slack.${namespace}.${cluster_domain}
         secretName: operator-slack-ingress-tls
+    env:
+    - name: workspace_role
+      value: ${workspace_role}
   jenkins: 
     image: docker.artifactory.liatr.io/liatrio/operator-jenkins:${image_tag}
   toolchain: 
