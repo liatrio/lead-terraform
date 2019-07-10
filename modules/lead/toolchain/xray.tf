@@ -1,10 +1,11 @@
 resource "random_string" "artifactory_xray_db_password" {
   length  = 10
   special = false
- }
- resource "random_string" "artifactory_xray_mongo_db_password" {
-   length  = 10
-   special = false
+}
+
+resource "random_string" "artifactory_xray_mongo_db_password" {
+  length  = 10
+  special = false
 }
 
 //  data "helm_repository" "jfrog" {
@@ -13,10 +14,10 @@ resource "random_string" "artifactory_xray_db_password" {
 // }
 
 resource "helm_release" "xray" {
-  count = "${ var.enable_xray ? 1 : 0 }"
-  repository = "${data.helm_repository.jfrog.metadata.0.name}"
+  count      = var.enable_xray ? 1 : 0
+  repository = data.helm_repository.jfrog.metadata[0].name
   name       = "xray"
-  namespace  = "${module.toolchain_namespace.name}"
+  namespace  = module.toolchain_namespace.name
   chart      = "xray"
   version    = "0.12.10"
   timeout    = 1200
@@ -31,13 +32,13 @@ resource "helm_release" "xray" {
   }
 
   set_sensitive {
-     name  = "mongodb.mongodbPassword"
-     value = "${random_string.artifactory_xray_mongo_db_password.result}"
-   }
+    name  = "mongodb.mongodbPassword"
+    value = random_string.artifactory_xray_mongo_db_password.result
+  }
 
   set_sensitive {
-     name  = "postgresql.postgresPassword"
-     value = "${random_string.artifactory_xray_db_password.result}"
-   }
-
+    name  = "postgresql.postgresPassword"
+    value = random_string.artifactory_xray_db_password.result
+  }
 }
+

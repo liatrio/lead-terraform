@@ -1,4 +1,5 @@
-variable "root_zone_name" {}
+variable "root_zone_name" {
+}
 
 variable "cluster" {
   default = "docker-for-desktop"
@@ -28,9 +29,14 @@ variable "enable_xray" {
   default = "true"
 }
 
-variable "artifactory_license" {}
-variable "slack_bot_token" {}
-variable "slack_client_signing_secret" {}
+variable "artifactory_license" {
+}
+
+variable "slack_bot_token" {
+}
+
+variable "slack_client_signing_secret" {
+}
 
 variable "enable_istio" {
   default = true
@@ -38,6 +44,7 @@ variable "enable_istio" {
 
 locals {
   tags = {
-    "Cluster" = "${var.cluster}"
+    "Cluster" = var.cluster
   }
 }
+

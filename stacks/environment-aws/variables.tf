@@ -1,52 +1,74 @@
-variable "root_zone_name" {} 
+variable "root_zone_name" {
+}
+
 variable "cluster" {
-    default = "lead"
+  default = "lead"
 }
+
 variable "system_namespace" {
-    default = "lead-system"
+  default = "lead-system"
 }
+
 variable "toolchain_namespace" {
-    default = "toolchain"
+  default = "toolchain"
 }
+
 variable "region" {
-    default = "us-east-1"
+  default = "us-east-1"
 }
+
 variable "key_name" {
   default = ""
 }
+
 variable "instance_type" {
-    default = "m5.large"
+  default = "m5.large"
 }
+
 variable "asg_min_size" {
-    default = "1"
+  default = "1"
 }
+
 variable "asg_desired_capacity" {
-    default = "1"
+  default = "1"
 }
+
 variable "asg_max_size" {
-    default = "5"
+  default = "5"
 }
+
 variable "worker_ami_name_filter" {
-    default = "v20190329"
+  default = "v20190329"
 }
+
 variable "image_whitelist" {
-    default = ".*"
+  default = ".*"
 }
+
 variable "opa_failure_policy" {
-    default = "Fail"
+  default = "Fail"
 }
+
 variable "sdm_version" {
-    default = "0.2.21"
+  default = "0.2.21"
 }
+
 variable "dashboard_version" {
   default = "0.2.0-4346ee7d548"
 }
-variable "artifactory_license" {}
-variable "slack_bot_token" {}
-variable "slack_client_signing_secret" {}
+
+variable "artifactory_license" {
+}
+
+variable "slack_bot_token" {
+}
+
+variable "slack_client_signing_secret" {
+}
 
 locals {
   tags = {
-    "Cluster"  = "${var.cluster}"
+    "Cluster" = var.cluster
   }
 }
+

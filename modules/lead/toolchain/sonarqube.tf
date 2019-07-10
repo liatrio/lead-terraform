@@ -1,16 +1,17 @@
 resource "random_string" "sonarqube_db_password" {
   length  = 10
   special = false
- }
+}
 
 resource "random_string" "sonar_jenkins_password" {
- length  = 10
- special = false
+  length  = 10
+  special = false
 }
+
 resource "helm_release" "sonarqube" {
   repository = "stable"
   name       = "sonarqube"
-  namespace  = "${module.toolchain_namespace.name}"
+  namespace  = module.toolchain_namespace.name
   chart      = "sonarqube"
   version    = "2.0.0"
   timeout    = 1200
@@ -22,23 +23,22 @@ resource "helm_release" "sonarqube" {
   }
 
   set {
-    name = "service.type"
+    name  = "service.type"
     value = "ClusterIP"
   }
 
   set_sensitive {
-     name  = "postgresql.postgresPassword"
-     value = "${random_string.sonarqube_db_password.result}"
+    name  = "postgresql.postgresPassword"
+    value = random_string.sonarqube_db_password.result
   }
 }
-
 
 resource "kubernetes_secret" "jenkins_sonar" {
   metadata {
     name      = "jenkins-sonarqube-credential"
-    namespace = "${module.toolchain_namespace.name}"
+    namespace = module.toolchain_namespace.name
 
-    labels {
+    labels = {
       "app.kubernetes.io/name"       = "jenkins"
       "app.kubernetes.io/instance"   = "jenkins"
       "app.kubernetes.io/component"  = "jenkins-master"
@@ -49,10 +49,11 @@ resource "kubernetes_secret" "jenkins_sonar" {
 
   type = "Opaque"
 
-  data {
-#    username = "jenkins"
-#    password = "${random_string.sonar_jenkins_password.result}"
+  data = {
+    #    username = "jenkins"
+    #    password = "${random_string.sonar_jenkins_password.result}"
     username = "admin"
     password = "admin"
   }
 }
+
