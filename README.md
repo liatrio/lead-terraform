@@ -13,8 +13,8 @@ brew bundle
 
 Terraform and Terragrunt need specific version
 
-- Terraform [0.11.14](https://releases.hashicorp.com/terraform/0.11.14/)
-- Terragrunt [0.18.3](https://github.com/gruntwork-io/terragrunt/releases/download/v0.18.3/terragrunt_darwin_amd64)
+- Terraform [0.12.3](https://releases.hashicorp.com/terraform/0.12.3/)
+- Terragrunt [0.19.8](https://github.com/gruntwork-io/terragrunt/releases/download/v0.19.8/terragrunt_darwin_amd64)
 
 
 ## Setup

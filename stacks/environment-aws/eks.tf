@@ -62,7 +62,7 @@ data "aws_availability_zones" "available" {
 
 module "vpc" {
   source             = "terraform-aws-modules/vpc/aws"
-  version            = "1.14.0"
+  version            = "2.7.0"
   name               = var.cluster
   cidr               = "10.0.0.0/16"
   azs                = [data.aws_availability_zones.available.names[0], data.aws_availability_zones.available.names[1], data.aws_availability_zones.available.names[2]]
@@ -132,22 +132,19 @@ resource "aws_security_group" "elb" {
 
 module "eks" {
   source                               = "terraform-aws-modules/eks/aws"
-  version                              = "4.0.2"
+  version                              = "5.0.0"
   cluster_version                      = "1.12"
   cluster_name                         = var.cluster
   subnets                              = [module.vpc.private_subnets]
   tags                                 = local.tags
   vpc_id                               = module.vpc.vpc_id
   worker_groups                        = local.worker_groups
-  worker_group_count                   = length(local.worker_groups)
   worker_additional_security_group_ids = [aws_security_group.worker.id]
   map_roles                            = local.map_roles
-  map_roles_count                      = length(local.map_roles)
   worker_ami_name_filter               = var.worker_ami_name_filter
   write_kubeconfig                     = false
   permissions_boundary                 = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/Developer"
   workers_additional_policies          = [aws_iam_policy.worker_policy.arn]
-  workers_additional_policies_count    = 1
 }
 
 resource "aws_iam_policy" "worker_policy" {
