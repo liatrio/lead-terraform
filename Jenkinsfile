@@ -5,7 +5,7 @@ pipeline {
     stages {
         stage('Validate Terraform') {
             steps {
-                container('terraform') {
+                container('terraform11') {
                     script {
                           sh "make validate"
                     }
