@@ -1,0 +1,19 @@
+data "template_file" "certificate_values" {
+  template = "${file("${path.module}/certificates.tpl")}"
+
+  vars = {
+    namespace = "${var.namespace}"
+    account = "${var.account}"
+  }
+}
+resource "helm_release" "certificates" {
+  count = "${var.enabled ? 1 : 0}"
+  name    = "certificates"
+  namespace = "${var.namespace}"
+  chart   = ".${replace(path.module, path.root, "")}/helm/certificates"
+  timeout = 600
+  wait    = true
+
+  values = ["${data.template_file.certificate_values.rendered}"]
+}
+

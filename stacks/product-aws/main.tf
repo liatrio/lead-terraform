@@ -60,6 +60,7 @@ module "product" {
   product_name       = "${var.product_name}"
   issuer_type        = "${var.issuer_type}"
   image_whitelist    = "${var.image_whitelist}"
+  account            = "sandbox"
   ingress_controller_type = "${var.ingress_controller_type}"
 
   providers {

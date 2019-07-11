@@ -13,6 +13,7 @@ data "helm_repository" "stable" {
 }
 
 resource "helm_release" "nginx_ingress" {
+  count = "${var.enabled ? 1 : 0}"
   repository = "${data.helm_repository.stable.metadata.0.name}"
   chart      = "nginx-ingress"
   version    = "1.4.0"
@@ -24,6 +25,7 @@ resource "helm_release" "nginx_ingress" {
 }
 
 resource "kubernetes_service_account" "nginx_ingress_service_account" {
+  count = "${var.enabled ? 1 : 0}"
   metadata {
     name = "nginx-ingress"
     namespace  = "${var.namespace}"
@@ -32,6 +34,7 @@ resource "kubernetes_service_account" "nginx_ingress_service_account" {
 }
 
 resource "kubernetes_cluster_role" "nginx_ingress_role" {
+  count = "${var.enabled ? 1 : 0}"
   metadata {
     name = "${var.namespace}-nginx-ingress-manager"
   }
@@ -43,6 +46,7 @@ resource "kubernetes_cluster_role" "nginx_ingress_role" {
 }
 
 resource "kubernetes_cluster_role_binding" "nginx_ingress_role_binding" {
+  count = "${var.enabled ? 1 : 0}"
   metadata {
     name = "${var.namespace}-nginx-ingress-binding"
   }
@@ -59,6 +63,7 @@ resource "kubernetes_cluster_role_binding" "nginx_ingress_role_binding" {
 }
 
 resource "kubernetes_role" "nginx_ingress_role" {
+  count = "${var.enabled ? 1 : 0}"
   metadata {
     name = "nginx-ingress-manager"
     namespace  = "${var.namespace}"
@@ -112,6 +117,7 @@ resource "kubernetes_role" "nginx_ingress_role" {
 }
 
 resource "kubernetes_role_binding" "nginx_ingress_role_binding" {
+  count = "${var.enabled ? 1 : 0}"
   metadata {
     name = "nginx-ingress-binding"
     namespace  = "${var.namespace}"
