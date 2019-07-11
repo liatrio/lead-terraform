@@ -19,7 +19,7 @@ module "production_namespace" {
 
 module "production_certificate" {
   source = "../../common/certificates"
-  namespace = "${var.module.production_namespace.name}"
+  namespace = "${module.production_namespace.name}"
   cluster_domain = "${var.cluster_domain}"
   enabled = "${var.istio_enabled}"
 

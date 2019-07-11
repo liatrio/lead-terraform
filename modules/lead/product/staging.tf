@@ -18,7 +18,7 @@ module "staging_namespace" {
 
 module "staging_certificate" {
   source = "../../common/certificates"
-  namespace = "${var.module.staging_namespace.name}"
+  namespace = "${module.staging_namespace.name}"
   cluster_domain = "${var.cluster_domain}"
   enabled = "${var.istio_enabled}"
 
