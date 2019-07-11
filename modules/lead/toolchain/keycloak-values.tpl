@@ -31,6 +31,14 @@ keycloak:
     # - name: DB_USE_CAST_FAIL
     #   value: false
 
+  ## Custom startup scripts to run before Keycloak starts up
+  startupScripts: 
+    startup.sh: |
+      #!/bin/sh
+      export PATH=$PATH:/opt/jboss/keycloak/bin/
+      echo "importing realm from export /realm/toolchain_realm.json..."
+      standalone.sh -Dkeycloak.migration.action=import -Dkeycloak.migration.provider=singleFile -Dkeycloak.migration.file=/realm/toolchain_realm.json -Dkeycloak.migration.strategy=IGNORE_EXISTING
+
   extraVolumes: |
     - name: realm-secret
       secret:
@@ -41,7 +49,10 @@ keycloak:
       mountPath: "/realm/"
       readOnly: true
 
-  extraArgs: -Dkeycloak.import=/realm/realm.json
+  ## This only works with manually created non-exported realms...
+  ## "When importing realm files that weren’t exported before, the option keycloak.import can be used"
+  ## https://www.keycloak.org/docs/latest/server_admin/index.html#_export_import
+  #extraArgs: -Dkeycloak.import=/realm/toolchain_realm.json
 
   ## Ingress configuration.
   ## ref: https://kubernetes.io/docs/user-guide/ingress/

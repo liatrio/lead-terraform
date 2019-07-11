@@ -43,7 +43,20 @@ resource "kubernetes_secret" "keycloak_realm" {
   type = "Opaque"
 
   data = {
-    "realm.json" = file("${path.module}/keycloak_realm.json")
+    # don't use periods in name because tf .12 currently breaks on referencing map key values
+    # with periods in `lifecycle.ignore_changes`
+    "toolchain_realm.json" = file("${path.module}/keycloak_realm.json")
+  }
+
+  lifecycle {
+    # once a realm has been imported, the only two options for future imports are
+    # IGNORE_EXISTING and OVERWRITE_EXISTING, and we don't want to ever overwrite a 
+    # realm since users would be lost, therefore don't apply any changes to the realm
+    # that might give the impression that the realm would be updated.
+    # we may want to look into using `kcadm.sh update realms` which will merge new
+    # attribute values with existing values, but `kcadm.sh` must be executed after startup
+    # and this helm chart doesn't expose a mechanism to run post-startup commands.
+    ignore_changes = [data]
   }
 }
 
