@@ -31,6 +31,18 @@ keycloak:
     # - name: DB_USE_CAST_FAIL
     #   value: false
 
+  extraVolumes: |
+    - name: realm-secret
+      secret:
+        secretName: ${realm_secret}
+
+  extraVolumeMounts: |
+    - name: realm-secret
+      mountPath: "/realm/"
+      readOnly: true
+
+  extraArgs: -Dkeycloak.import=/realm/realm.json
+
   ## Ingress configuration.
   ## ref: https://kubernetes.io/docs/user-guide/ingress/
   ingress:
@@ -76,3 +88,4 @@ postgresql:
     ## Enable PostgreSQL persistence using Persistent Volume Claims.
     ##
     enabled: true
+

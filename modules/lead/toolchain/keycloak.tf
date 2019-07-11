@@ -13,6 +13,7 @@ data "template_file" "keycloak_values" {
     admin_username   = kubernetes_secret.keycloak_admin.data.username
     admin_password   = random_string.keycloak_admin_password.result
     realm_name       = module.toolchain_namespace.name
+    realm_secret     = kubernetes_secret.keycloak_realm.metadata[0].name
   }
 }
 
@@ -31,6 +32,18 @@ resource "kubernetes_secret" "keycloak_admin" {
   data = {
     username = "keycloak"
     password = random_string.keycloak_admin_password.result
+  }
+}
+
+resource "kubernetes_secret" "keycloak_realm" {
+  metadata {
+    name      = "keycloak-realm"
+    namespace = module.toolchain_namespace.name
+  }
+  type = "Opaque"
+
+  data = {
+    "realm.json" = file("${path.module}/keycloak_realm.json")
   }
 }
 
