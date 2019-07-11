@@ -20,6 +20,7 @@ resource "kubernetes_secret" "kiali_dashboard_secret" {
       "app" = "kiali"
     }
   }
+
   type = "Opaque"
 
   data = {
@@ -76,22 +77,27 @@ resource "helm_release" "istio" {
     name  = "certmanager.enabled"
     value = "true"
   }
+
   set {
     name  = "certmanager.email"
     value = "cloudservices@liatr.io"
   }
+
   set {
     name  = "grafana.enabled"
     value = "true"
   }
+
   set {
     name  = "kiali.enabled"
     value = "true"
   }
+
   set {
     name  = "tracing.enabled"
     value = "true"
   }
+
   set {
     name  = "tracing.ingress.enabled"
     value = "true"
@@ -102,26 +108,31 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
   metadata {
     name = "${var.namespace}-tiller-manager"
   }
+
   rule {
     api_groups = ["", "batch", "extensions", "apps", "stable.liatr.io", "policy", "apiextensions.k8s.io"]
     resources  = ["*"]
     verbs      = ["*"]
   }
+
   rule {
     api_groups = ["apiextensions.k8s.io"]
     resources  = ["customresourcedefinitions"]
     verbs      = ["*"]
   }
+
   rule {
     api_groups = ["rbac.authorization.k8s.io"]
     resources  = ["roles", "rolebindings", "clusterroles", "clusterrolebindings"]
     verbs      = ["get", "create", "watch", "delete", "list", "patch"]
   }
+
   rule {
     api_groups = ["networking.k8s.io"]
     resources  = ["networkpolicies"]
     verbs      = ["get", "create", "watch", "delete", "list", "patch"]
   }
+
   rule {
     api_groups = ["certmanager.k8s.io"]
     resources  = ["issuers"]
@@ -133,11 +144,13 @@ resource "kubernetes_cluster_role_binding" "tiller_cluster_role_binding" {
   metadata {
     name = "${var.namespace}-tiller-binding"
   }
+
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "ClusterRole"
     name      = kubernetes_cluster_role.tiller_cluster_role.metadata[0].name
   }
+
   subject {
     kind      = "ServiceAccount"
     name      = "tiller"
@@ -145,3 +158,14 @@ resource "kubernetes_cluster_role_binding" "tiller_cluster_role_binding" {
   }
 }
 
+module "istio_cert_issuer" {
+  source                   = "../../common/cert-issuer"
+  namespace                = var.namespace
+  issuer_name              = var.cert_issuer_name
+  issuer_type              = var.cert_issuer_type
+  crd_waiter               = var.crd_waiter
+  provider_http_enabled    = "false"
+  provider_dns_enabled     = "true"
+  provider_dns_region      = var.region
+  provider_dns_hosted_zone = var.zone_id
+}
