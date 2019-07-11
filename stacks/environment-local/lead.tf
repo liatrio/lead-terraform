@@ -46,6 +46,7 @@ module "sdm" {
   sdm_version        = "${var.sdm_version}"
   slack_bot_token    = "${var.slack_bot_token}"
   slack_client_signing_secret     = "${var.slack_client_signing_secret}"
+  workspace_role_name = "local_workspace_role"
 
   providers {
     "helm.system" = "helm.toolchain"

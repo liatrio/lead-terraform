@@ -39,6 +39,11 @@ resource "kubernetes_role" "tiller_role" {
     resources = ["issuers"]
     verbs = ["get", "create", "watch", "delete", "list", "patch"]
   }
+  rule {
+    api_groups = ["networking.istio.io"]
+    resources = ["gateways", "virtualservices"]
+    verbs = ["get", "create", "watch", "delete", "list", "patch"]
+  }
   # rule {
   #   api_groups = ["autoscaling"]
   #   resources = ["horizontalpodautoscalers"]
