@@ -44,8 +44,8 @@ resource "helm_release" "cert_manager" {
     value = "Issuer"
   }
   set {
-    name  = "extraArgs"
-    value = ["--issuer-ambient-credentials"]
+    name  = "extraArgs[0]"
+    value = "--issuer-ambient-credentials"
   }
 
   depends_on = [

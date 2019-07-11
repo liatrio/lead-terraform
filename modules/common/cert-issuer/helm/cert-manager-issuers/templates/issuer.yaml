@@ -19,7 +19,7 @@ spec:
 {{- if .Values.acme.dnsProvider.enabled }}
     dns01:
       providers: 
-      - {{ .Values.acme.dnsProvider.name }}
+      - name: {{ .Values.acme.dnsProvider.name }}
 {{- if .Values.acme.dnsProvider.typeIsRoute53 }}
         route53:
           region: {{ .Values.acme.dnsProvider.region }}

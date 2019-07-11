@@ -16,7 +16,7 @@ data "template_file" "issuer_values" {
 }
 
 resource "helm_release" "cert_manager_issuers" {
-  name      = "cert-manager-issuers"
+  name      = "cert-manager-issuers-${var.namespace}"
   namespace = "${var.namespace}"
   chart     = ".${replace(path.module, path.root, "")}/helm/cert-manager-issuers"
   timeout   = 600

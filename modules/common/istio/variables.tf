@@ -11,6 +11,10 @@ variable "cert_issuer_type" {
   default = "acme"
 }
 
+variable "cert_issuer_name" {
+  default = "letsencrypt-dns"
+}
+
 variable "enable" {
   default = true
 }

@@ -7,7 +7,7 @@ variable "issuer_name" {
 }
 
 variable "provider_http_enabled" {
-  default = true
+  default = "true"
 }
 
 variable "provider_http_ingress_class" {
@@ -15,7 +15,7 @@ variable "provider_http_ingress_class" {
 }
 
 variable "provider_dns_enabled" {
-  default = false
+  default = "false"
 }
 
 variable "provider_dns_name" {

@@ -162,10 +162,11 @@ resource "kubernetes_cluster_role_binding" "tiller_cluster_role_binding" {
 module "istio_cert_issuer" {
   source                   = "../../common/cert-issuer"
   namespace                = "${var.namespace}"
+  issuer_name              = "${var.cert_issuer_name}"
   issuer_type              = "${var.cert_issuer_type}"
   crd_waiter               = "${var.crd_waiter}"
-  provider_http_enabled    = false
-  provider_dns_enabled     = true
+  provider_http_enabled    = "false"
+  provider_dns_enabled     = "true"
   provider_dns_region      = "${var.region}"
   provider_dns_hosted_zone = "${var.zone_id}"
 }
