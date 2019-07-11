@@ -43,6 +43,10 @@ resource "helm_release" "cert_manager" {
     name  = "ingressShim.defaultIssuerKind"
     value = "Issuer"
   }
+  set {
+    name  = "extraArgs[0]"
+    value = "--issuer-ambient-credentials"
+  }
 
   depends_on = [
     "helm_release.cert_manager_crds",
