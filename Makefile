@@ -12,12 +12,22 @@ VERSION ?= $(MAJOR_VERSION).$(MINOR_VERSION).$(shell echo $$(( $(PATCH_VERSION) 
 endif
 IS_SNAPSHOT = $(if $(findstring -, $(VERSION)),true,false)
 TAG_VERSION = v$(VERSION)
+### check terraform version, since args are different
+TF_VERSION := $(shell terraform --version | head -n1)
+IS_TF_11 = $(if $(findstring 0.11, $(TF_VERSION)),true,false)
+ifeq (true,$(IS_TF_11))
+TF_VALIDATE_ARGS = "-check-variables=false"
+else
+TF_VALIDATE_ARGS = ""
+endif
 
 validate:
 	@terraform init -backend=false stacks/environment-aws
-	@terraform validate -check-variables=false stacks/environment-aws
-	@terraform validate -check-variables=false stacks/environment-local
-	@terraform validate -check-variables=false stacks/product-aws
+	@terraform validate $(TF_VALIDATE_ARGS) stacks/environment-aws
+	@terraform init -backend=false stacks/environment-local
+	@terraform validate $(TF_VALIDATE_ARGS) stacks/environment-local
+	@terraform init -backend=false stacks/product-aws
+	@terraform validate $(TF_VALIDATE_ARGS) stacks/product-aws
 
 %: environments/%
 	cd $< && terragrunt $(COMMAND) 
