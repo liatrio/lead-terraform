@@ -74,13 +74,12 @@ resource "kubernetes_config_map" "artifactory_config" {
 
   lifecycle {
     # issues with using bcrypt generated passwords, which will always create a new value
-    # ? does changing this configmap even trigger a reload for artifactory? if not, what's the point of the lifecycle?
 
     # even with ignoring all or data, the apply still reads updated data and presents a prompt
     # to apply, even with "Plan: 0 to add, 1 to change, 0 to destroy."
     # similar to https://github.com/hashicorp/terraform/issues/21663
     #ignore_changes = all
-    #ignore_changes = [data]
+    ignore_changes = [data]
 
     # issues with ignoring this, mainly due to periods in the key name
     # https://github.com/hashicorp/terraform/issues/21857
