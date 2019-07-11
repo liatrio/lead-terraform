@@ -1,2 +1,2 @@
 namespace: istio-system
-account: sandbox
+cluster_domain: sandbox

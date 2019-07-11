@@ -1,2 +1,2 @@
 namespace: ${namespace}
-account: ${account}
+cluster_domain: ${cluster_domain}

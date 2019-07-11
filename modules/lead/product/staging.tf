@@ -19,7 +19,7 @@ module "staging_namespace" {
 module "staging_certificate" {
   source = "../../common/certificates"
   namespace = "${var.module.staging_namespace.name}"
-  account = "${var.account}"
+  cluster_domain = "${var.cluster_domain}"
   enabled = "${var.istio_enabled}"
 
   providers {
@@ -39,16 +39,6 @@ module "staging_ingress" {
     kubernetes = "kubernetes.staging"
   }
 }
-
-data "template_file" "jenkins_values" {
-  template = "${file("${path.module}/certificate.tpl")}"
-
-  vars = {
-    namespace = "${module.staging_namespace.name}"
-    account = "${}"
-  }
-}
-
 
 module "staging_issuer" {
   source = "../../common/cert-issuer"

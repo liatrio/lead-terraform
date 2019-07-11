@@ -7,14 +7,14 @@ spec:
   acme:
     config:
     - domains:
-      - {{ Values.namespace }}.lead.{{ Values.account }}.liatr.io
-      - *.{{ Values.namespace }}.lead.{{ Values.account }}.liatr.io
+      - {{ Values.cluster_domain }}
+      - *.{{ Values.cluster_domain }}
       dns01:
         provider: route53-liatrio
-    commonName: {{ Values.namespace }}.lead.{{ Values.account }}.liatr.io
+    commonName: {{ Values.cluster_domain }}
   dnsNames:
-  - {{ Values.namespace }}.lead.{{ Values.account }}.liatr.io
-  - *.{{ Values.namespace }}.lead.{{ Values.account }}.liatr.io
+  - {{ Values.cluster_domain }}
+  - *.{{ Values.cluster_domain }}
   issuerRef:
     kind: Issuer
     name: letsencrypt-dns

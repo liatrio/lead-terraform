@@ -9,7 +9,6 @@ variable "builder_images_version" {
   default = "v1.0.10"
 }
 variable "ingress_controller_type" {}
-variable "account" {}
 variable "istio_enabled" {
   default = true
 }

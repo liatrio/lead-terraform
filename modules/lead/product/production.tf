@@ -20,7 +20,7 @@ module "production_namespace" {
 module "production_certificate" {
   source = "../../common/certificates"
   namespace = "${var.module.production_namespace.name}"
-  account = "${var.account}"
+  cluster_domain = "${var.cluster_domain}"
   enabled = "${var.istio_enabled}"
 
   providers {
@@ -40,16 +40,6 @@ module "production_ingress" {
     kubernetes = "kubernetes.production"
   }
 }
-
-data "template_file" "jenkins_values" {
-  template = "${file("${path.module}/certificate.tpl")}"
-
-  vars = {
-    namespace = "${module.production_namespace.name}"
-    account = "${}"
-  }
-}
-
 
 module "production_issuer" {
   source = "../../common/cert-issuer"

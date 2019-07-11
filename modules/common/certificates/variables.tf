@@ -1,3 +1,3 @@
 variable "namespace" {}
-variable "account" {}
+variable "cluster_domain" {}
 variable "enabled" {}

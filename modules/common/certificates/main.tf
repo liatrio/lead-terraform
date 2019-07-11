@@ -3,7 +3,7 @@ data "template_file" "certificate_values" {
 
   vars = {
     namespace = "${var.namespace}"
-    account = "${var.account}"
+    cluster_domain = "${var.cluster_domain}"
   }
 }
 resource "helm_release" "certificates" {
