@@ -5,7 +5,7 @@ locals {
   worker_groups = [
     {
       instance_type         = var.instance_type
-      subnets               = module.vpc.private_subnets[0]
+      subnets               = [module.vpc.private_subnets[0]]
       asg_min_size          = var.asg_min_size
       asg_desired_capacity  = var.asg_desired_capacity
       asg_max_size          = var.asg_max_size
@@ -16,7 +16,7 @@ locals {
     },
     {
       instance_type         = var.instance_type
-      subnets               = module.vpc.private_subnets[1]
+      subnets               = [module.vpc.private_subnets[1]]
       asg_min_size          = var.asg_min_size
       asg_desired_capacity  = var.asg_desired_capacity
       asg_max_size          = var.asg_max_size
@@ -27,7 +27,7 @@ locals {
     },
     {
       instance_type         = var.instance_type
-      subnets               = module.vpc.private_subnets[2]
+      subnets               = [module.vpc.private_subnets[2]]
       asg_min_size          = var.asg_min_size
       asg_desired_capacity  = var.asg_desired_capacity
       asg_max_size          = var.asg_max_size
@@ -135,7 +135,7 @@ module "eks" {
   version                              = "5.0.0"
   cluster_version                      = "1.12"
   cluster_name                         = var.cluster
-  subnets                              = [module.vpc.private_subnets]
+  subnets                              = module.vpc.private_subnets
   tags                                 = local.tags
   vpc_id                               = module.vpc.vpc_id
   worker_groups                        = local.worker_groups
