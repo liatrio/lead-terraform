@@ -1,5 +1,5 @@
 data "template_file" "certificate_values" {
-  template = "${file("${path.module}/certificates-values.tpl")}"
+  template = "${file("${path.module}/certificate-values.tpl")}"
 
   vars = {
     namespace = "${var.namespace}"
