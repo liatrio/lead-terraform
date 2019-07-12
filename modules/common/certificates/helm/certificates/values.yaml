@@ -1,0 +1,2 @@
+namespace: istio-system
+cluster_domain: sandbox

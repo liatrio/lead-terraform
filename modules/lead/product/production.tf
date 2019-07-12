@@ -16,10 +16,23 @@ module "production_namespace" {
   }
 }
 
+module "production_certificate" {
+  source = "../../common/certificates"
+  namespace = "${module.production_namespace.name}"
+  cluster_domain = "${var.cluster_domain}"
+  enabled = "${var.istio_enabled}"
+
+  providers {
+    helm = "helm.production"
+    kubernetes = "kubernetes.production"
+  }
+}
+
 module "production_ingress" {
   source                  = "../../common/nginx-ingress"
   namespace               = module.production_namespace.name
   ingress_controller_type = var.ingress_controller_type
+  enabled                 = "${var.istio_enabled ? false : true}"
 
   providers = {
     helm       = helm.production
