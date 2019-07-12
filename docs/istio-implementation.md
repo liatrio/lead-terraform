@@ -1,6 +1,6 @@
 # Istio Implementation
 
-[Istio](https://istio.io) is installed on the cluster, and we are taking advantage of it's [traffic management](https://istio.io/docs/concepts/traffic-management) capabilities for routing requests to the monolith and to the various microservices as the monolith is broken apart.
+[Istio](https://istio.io) is installed on the cluster, and we are taking advantage of its [traffic management](https://istio.io/docs/concepts/traffic-management) capabilities for routing requests to the monolith and to the various microservices as the monolith is broken apart.
 
 ## Integration with cert-manager
 
