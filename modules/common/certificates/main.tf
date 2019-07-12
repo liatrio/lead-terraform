@@ -2,7 +2,7 @@ data "template_file" "certificate_values" {
   template = file("${path.module}/certificate-values.tpl")
 
   vars = {
-    cluster_domain = var.cluster_domain
+    domain = var.domain
   }
 }
 

@@ -4,7 +4,7 @@ variable "namespace" {
 variable "name" {
 }
 
-variable "cluster_domain" {
+variable "domain" {
 }
 
 variable "enabled" {

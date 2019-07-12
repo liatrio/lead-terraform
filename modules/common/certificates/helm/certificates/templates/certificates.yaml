@@ -6,14 +6,14 @@ spec:
   acme:
     config:
     - domains:
-      - {{ .Values.cluster_domain }}
-      - "*.{{ .Values.cluster_domain }}"
+      - {{ .Values.domain }}
+      - "*.{{ .Values.domain }}"
       dns01:
         provider: route53-liatrio
-    commonName: {{ .Values.cluster_domain }}
+    commonName: {{ .Values.domain }}
   dnsNames:
-  - {{ .Values.cluster_domain }}
-  - "*.{{ .Values.cluster_domain }}"
+  - {{ .Values.domain }}
+  - "*.{{ .Values.domain }}"
   issuerRef:
     kind: Issuer
     name: letsencrypt-dns

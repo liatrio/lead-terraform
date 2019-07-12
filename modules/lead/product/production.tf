@@ -20,7 +20,7 @@ module "production_certificate" {
   source = "../../common/certificates"
   namespace = "istio-system"
   name = module.production_namespace.name
-  cluster_domain = "${var.cluster_domain}"
+  domain = "${module.production_namespace.name}.${var.cluster_domain}"
   enabled = "${var.istio_enabled}"
 
   providers = {
