@@ -22,7 +22,7 @@ variable "opa_failure_policy" {
 }
 
 variable "sdm_version" {
-  default = "0.2.21"
+  default = "0.2.22"
 }
 
 variable "enable_xray" {
