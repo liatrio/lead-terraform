@@ -7,7 +7,7 @@ gateways:
 
 global:
   k8sIngress:
-    enabled: true
+    enabled: false
     enableHttps: true
     gatewayName: istio-ingressgateway
 
@@ -23,6 +23,7 @@ grafana:
       kubernetes.io/ingress.class: "nginx"
       kubernetes.io/tls-acme: "true"
       nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/rewrite-target: "/"
       certmanager.k8s.io/issuer: "letsencrypt-dns"
     tls:
     - hosts:
@@ -33,6 +34,12 @@ grafana:
 
 kiali:
   enabled: true
+  dashboard:
+    auth:
+      strategy: anonymous
+    viewOnlyMode: true
+    grafanaURL: https://${domain}/grafana
+    jaegerURL: https://${domain}/jaeger
   ingress:
     enabled: true
     annotations:

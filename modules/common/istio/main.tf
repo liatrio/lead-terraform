@@ -37,7 +37,7 @@ module "istio_ingress" {
 
 data "helm_repository" "istio" {
   name = "istio.io"
-  url  = "https://storage.googleapis.com/istio-release/releases/1.2.0/charts/"
+  url  = "https://storage.googleapis.com/istio-release/releases/1.2.2/charts/"
 }
 
 data "template_file" "istio_values" {
@@ -56,6 +56,7 @@ resource "helm_release" "istio" {
   name       = module.istio_namespace.name
   timeout    = 600
   wait       = true
+  version    = "1.2.2"
 
   set {
     name  = "crd_waiter"
