@@ -14,7 +14,7 @@ resource "random_string" "kiali_admin_password" {
 resource "kubernetes_secret" "kiali_dashboard_secret" {
   metadata {
     name      = "kiali"
-    namespace = var.namespace
+    namespace = module.istio_namespace.name
 
     labels = {
       "app" = "kiali"
@@ -39,7 +39,7 @@ resource "helm_release" "istio" {
   repository = data.helm_repository.istio.metadata[0].name
   chart      = "istio"
   namespace  = module.istio_namespace.name
-  name       = var.namespace
+  name       = module.istio_namespace.name
   timeout    = 600
   wait       = true
 
@@ -160,7 +160,7 @@ resource "kubernetes_cluster_role_binding" "tiller_cluster_role_binding" {
 
 module "istio_cert_issuer" {
   source                   = "../../common/cert-issuer"
-  namespace                = var.namespace
+  namespace                = module.istio_namespace.name
   issuer_name              = var.cert_issuer_name
   issuer_type              = var.cert_issuer_type
   crd_waiter               = var.crd_waiter

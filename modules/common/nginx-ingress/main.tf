@@ -1,4 +1,5 @@
 data "template_file" "nginx_ingress_values" {
+  count      = "${var.enabled ? 1 : 0}"
   template = file("${path.module}/nginx-ingress-values.tpl")
 
   vars = {
