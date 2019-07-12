@@ -1,1 +1,1 @@
-domain: ${cluster_domain}
+domain: ${domain}
