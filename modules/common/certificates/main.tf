@@ -11,7 +11,7 @@ resource "helm_release" "certificates" {
   count     = var.enabled ? 1 : 0
   name      = "certificates"
   namespace = var.namespace
-  chart     = "${path.module}/helm/cert-manager-issuers"
+  chart     = "${path.module}/helm/certificates"
   timeout   = 600
   wait      = true
 
