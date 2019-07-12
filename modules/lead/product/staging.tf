@@ -18,13 +18,14 @@ module "staging_namespace" {
 
 module "staging_certificate" {
   source = "../../common/certificates"
-  namespace = "${module.staging_namespace.name}"
-  cluster_domain = "${var.cluster_domain}"
+  namespace = "istio-system"
+  name = module.staging_namespace.name
+  domain = "${module.staging_namespace.name}.${var.cluster_domain}"
   enabled = "${var.istio_enabled}"
 
   providers = {
-    helm = "helm.staging"
-    kubernetes = "kubernetes.staging"
+    helm = "helm.system"
+    kubernetes = "kubernetes.system"
   }
 }
 

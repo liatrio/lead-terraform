@@ -176,7 +176,8 @@ resource "aws_iam_policy" "worker_policy" {
    {
      "Effect": "Allow",
      "Action": [
-       "route53:ListHostedZones"
+       "route53:ListHostedZones",
+       "route53:GetChange"
      ],
      "Resource": ["*"]
    },
