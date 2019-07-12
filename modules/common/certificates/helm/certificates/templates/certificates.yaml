@@ -9,7 +9,7 @@ spec:
       - {{ .Values.domain }}
       - "*.{{ .Values.domain }}"
       dns01:
-        provider: route53-liatrio
+        provider: liatrio-route53
     commonName: {{ .Values.domain }}
   dnsNames:
   - {{ .Values.domain }}
