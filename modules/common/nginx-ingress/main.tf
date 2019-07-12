@@ -22,7 +22,7 @@ resource "helm_release" "nginx_ingress" {
   name       = "nginx-ingress"
   timeout    = 600
 
-  values = [data.template_file.nginx_ingress_values.rendered]
+  values = [data.template_file.nginx_ingress_values[0].rendered]
 }
 
 resource "kubernetes_service_account" "nginx_ingress_service_account" {

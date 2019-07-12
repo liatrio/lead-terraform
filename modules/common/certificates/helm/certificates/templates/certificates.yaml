@@ -1,22 +1,21 @@
 apiVersion: certmanager.k8s.io/v1alpha1
 kind: Certificate
 metadata:
-  name: {{ Values.namespace }}-certificate
-  namespace: istio-system
+  name: {{ .Release.Name }}
 spec:
   acme:
     config:
     - domains:
-      - {{ Values.cluster_domain }}
-      - *.{{ Values.cluster_domain }}
+      - {{ .Values.domain }}
+      - "*.{{ .Values.domain }}"
       dns01:
-        provider: route53-liatrio
-    commonName: {{ Values.cluster_domain }}
+        provider: liatrio-route53
+    commonName: {{ .Values.domain }}
   dnsNames:
-  - {{ Values.cluster_domain }}
-  - *.{{ Values.cluster_domain }}
+  - {{ .Values.domain }}
+  - "*.{{ .Values.domain }}"
   issuerRef:
     kind: Issuer
     name: letsencrypt-dns
-  secretName: {{ Values.namespace }}-certificate
+  secretName: {{ .Release.Name }}-certificate
 

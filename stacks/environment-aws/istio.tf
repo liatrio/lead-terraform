@@ -26,7 +26,7 @@ module "istio_system" {
   namespace          = "istio-system"
   crd_waiter         = null_resource.istio_init_delay.id
   region             = var.region
-  zone_id            = data.aws_route53_zone.root_zone.zone_id
+  zone_id            = aws_route53_zone.cluster_zone.zone_id
   providers = {
     helm = "helm.system"
   }

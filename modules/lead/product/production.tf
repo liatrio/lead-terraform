@@ -18,13 +18,14 @@ module "production_namespace" {
 
 module "production_certificate" {
   source = "../../common/certificates"
-  namespace = "${module.production_namespace.name}"
-  cluster_domain = "${var.cluster_domain}"
+  namespace = "istio-system"
+  name = module.production_namespace.name
+  domain = "${module.production_namespace.name}.${var.cluster_domain}"
   enabled = "${var.istio_enabled}"
 
   providers = {
-    helm = "helm.production"
-    kubernetes = "kubernetes.production"
+    helm = "helm.system"
+    kubernetes = "kubernetes.system"
   }
 }
 
