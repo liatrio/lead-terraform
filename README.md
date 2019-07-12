@@ -3,6 +3,9 @@ This repository contains the Terraform automation to manage LEAD environments.
 
 <img src='docs/lead-architecture.png' width="100%">
 
+## Additional Documentation
+
+- [Istio Implementation](docs/istio-implementation.md)
 
 ## Tools
 Install required tools with [Homebrew](https://brew.sh/):
