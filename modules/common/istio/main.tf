@@ -1,9 +1,8 @@
 module "istio_namespace" {
   source    = "../namespace"
-  namespace = "${var.namespace}"
-
-  annotations {
-    name = "${var.namespace}"
+  namespace = var.namespace
+  annotations = {
+    name = var.namespace
   }
 }
 
@@ -15,18 +14,18 @@ resource "random_string" "kiali_admin_password" {
 resource "kubernetes_secret" "kiali_dashboard_secret" {
   metadata {
     name      = "kiali"
-    namespace = "${var.namespace}"
+    namespace = module.istio_namespace.name
 
-    labels {
+    labels = {
       "app" = "kiali"
     }
   }
 
   type = "Opaque"
 
-  data {
-    "username"   = "${var.kiali_username}"
-    "passphrase" = "${random_string.kiali_admin_password.result}"
+  data = {
+    "username"   = var.kiali_username
+    "passphrase" = random_string.kiali_admin_password.result
   }
 }
 
@@ -36,17 +35,17 @@ data "helm_repository" "istio" {
 }
 
 resource "helm_release" "istio" {
-  count      = "${var.enable ? 1 : 0}"
-  repository = "${data.helm_repository.istio.metadata.0.name}"
+  count      = var.enable ? 1 : 0
+  repository = data.helm_repository.istio.metadata[0].name
   chart      = "istio"
-  namespace  = "${module.istio_namespace.name}"
-  name       = "${var.namespace}"
+  namespace  = module.istio_namespace.name
+  name       = module.istio_namespace.name
   timeout    = 600
   wait       = true
 
   set {
     name  = "crd_waiter"
-    value = "${var.crd_waiter}"
+    value = var.crd_waiter
   }
 
   set {
@@ -149,24 +148,24 @@ resource "kubernetes_cluster_role_binding" "tiller_cluster_role_binding" {
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "ClusterRole"
-    name      = "${kubernetes_cluster_role.tiller_cluster_role.metadata.0.name}"
+    name      = kubernetes_cluster_role.tiller_cluster_role.metadata[0].name
   }
 
   subject {
     kind      = "ServiceAccount"
     name      = "tiller"
-    namespace = "${module.istio_namespace.name}"
+    namespace = module.istio_namespace.name
   }
 }
 
 module "istio_cert_issuer" {
   source                   = "../../common/cert-issuer"
-  namespace                = "${var.namespace}"
-  issuer_name              = "${var.cert_issuer_name}"
-  issuer_type              = "${var.cert_issuer_type}"
-  crd_waiter               = "${var.crd_waiter}"
+  namespace                = module.istio_namespace.name
+  issuer_name              = var.cert_issuer_name
+  issuer_type              = var.cert_issuer_type
+  crd_waiter               = var.crd_waiter
   provider_http_enabled    = "false"
   provider_dns_enabled     = "true"
-  provider_dns_region      = "${var.region}"
-  provider_dns_hosted_zone = "${var.zone_id}"
+  provider_dns_region      = var.region
+  provider_dns_hosted_zone = var.zone_id
 }

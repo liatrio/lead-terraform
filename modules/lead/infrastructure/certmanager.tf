@@ -1,22 +1,20 @@
 # Create CRDs for the cert manager
 resource "helm_release" "cert_manager_crds" {
-  name    = "cert-manager-crds"
-  namespace = "${module.system_namespace.name}"
-  chart   = ".${replace(path.module, path.root, "")}/helm/cert-manager-crds"
-  timeout = 600
-  wait    = true
+  name      = "cert-manager-crds"
+  namespace = module.system_namespace.name
+  chart     = "${path.module}/helm/cert-manager-crds"
+  timeout   = 600
+  wait      = true
 
-  depends_on = [
-    "kubernetes_cluster_role_binding.tiller_cluster_role_binding",
-  ]
+  depends_on = [kubernetes_cluster_role_binding.tiller_cluster_role_binding]
 }
 
 # Give the CRD a chance to settle
-resource "null_resource" "cert_manager_crd_delay" { 
-    provisioner "local-exec" { 
-        command = "sleep 15" 
-    } 
-    depends_on = ["helm_release.cert_manager_crds"] 
+resource "null_resource" "cert_manager_crd_delay" {
+  provisioner "local-exec" {
+    command = "sleep 15"
+  }
+  depends_on = [helm_release.cert_manager_crds]
 }
 
 # Cert manager repo
@@ -28,9 +26,9 @@ data "helm_repository" "cert_manager" {
 # Application gateway / ingress wiring components
 resource "helm_release" "cert_manager" {
   name       = "cert-manager"
-  namespace = "${module.system_namespace.name}"
+  namespace  = module.system_namespace.name
   chart      = "jetstack/cert-manager"
-  repository = "${data.helm_repository.cert_manager.name}"
+  repository = data.helm_repository.cert_manager.name
   timeout    = 90
   version    = "0.7.2"
   wait       = true
@@ -49,9 +47,9 @@ resource "helm_release" "cert_manager" {
   }
 
   depends_on = [
-    "helm_release.cert_manager_crds",
-    "null_resource.cert_manager_crd_delay",
-    "kubernetes_cluster_role_binding.tiller_cluster_role_binding",
+    helm_release.cert_manager_crds,
+    null_resource.cert_manager_crd_delay,
+    kubernetes_cluster_role_binding.tiller_cluster_role_binding,
   ]
 }
 

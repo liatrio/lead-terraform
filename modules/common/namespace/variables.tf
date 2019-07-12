@@ -1,9 +1,13 @@
-variable "namespace" { }
-variable "annotations" { 
-    type = "map"
-    default = {}
+variable "namespace" {
 }
-variable "labels" { 
-    type = "map"
-    default = {}
+
+variable "annotations" {
+  type    = map(string)
+  default = {}
 }
+
+variable "labels" {
+  type    = map(string)
+  default = {}
+}
+
