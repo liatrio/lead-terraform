@@ -22,7 +22,7 @@ module "production_certificate" {
   cluster_domain = "${var.cluster_domain}"
   enabled = "${var.istio_enabled}"
 
-  providers {
+  providers = {
     helm = "helm.production"
     kubernetes = "kubernetes.production"
   }

@@ -22,7 +22,7 @@ module "staging_certificate" {
   cluster_domain = "${var.cluster_domain}"
   enabled = "${var.istio_enabled}"
 
-  providers {
+  providers = {
     helm = "helm.staging"
     kubernetes = "kubernetes.staging"
   }
