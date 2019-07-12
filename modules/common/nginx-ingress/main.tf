@@ -3,7 +3,7 @@ data "template_file" "nginx_ingress_values" {
 
   vars = {
     ingress_controller_type = var.ingress_controller_type
-    service_account         = kubernetes_service_account.nginx_ingress_service_account.metadata[0].name
+    service_account         = kubernetes_service_account.nginx_ingress_service_account[0].metadata[0].name
   }
 }
 
@@ -53,11 +53,11 @@ resource "kubernetes_cluster_role_binding" "nginx_ingress_role_binding" {
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "ClusterRole"
-    name      = kubernetes_cluster_role.nginx_ingress_role.metadata[0].name
+    name      = kubernetes_cluster_role.nginx_ingress_role[0].metadata[0].name
   }
   subject {
     kind      = "ServiceAccount"
-    name      = kubernetes_service_account.nginx_ingress_service_account.metadata[0].name
+    name      = kubernetes_service_account.nginx_ingress_service_account[0].metadata[0].name
     namespace = var.namespace
   }
 }
@@ -125,11 +125,11 @@ resource "kubernetes_role_binding" "nginx_ingress_role_binding" {
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "Role"
-    name      = kubernetes_role.nginx_ingress_role.metadata[0].name
+    name      = kubernetes_role.nginx_ingress_role[0].metadata[0].name
   }
   subject {
     kind      = "ServiceAccount"
-    name      = kubernetes_service_account.nginx_ingress_service_account.metadata[0].name
+    name      = kubernetes_service_account.nginx_ingress_service_account[0].metadata[0].name
     namespace = var.namespace
   }
 }
