@@ -131,6 +131,11 @@ resource "helm_release" "artifactory" {
   }
 
   set {
+    name = "artifactory.persistence.size"
+    value = "100Gi"
+  }
+
+  set {
     name  = "nginx.enabled"
     value = "false"
   }

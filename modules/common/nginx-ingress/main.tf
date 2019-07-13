@@ -1,9 +1,10 @@
 data "template_file" "nginx_ingress_values" {
+  count      = "${var.enabled ? 1 : 0}"
   template = file("${path.module}/nginx-ingress-values.tpl")
 
   vars = {
     ingress_controller_type = var.ingress_controller_type
-    service_account         = kubernetes_service_account.nginx_ingress_service_account.metadata[0].name
+    service_account         = kubernetes_service_account.nginx_ingress_service_account[0].metadata[0].name
   }
 }
 
@@ -13,17 +14,19 @@ data "helm_repository" "stable" {
 }
 
 resource "helm_release" "nginx_ingress" {
-  repository = data.helm_repository.stable.metadata[0].name
+  count      = "${var.enabled ? 1 : 0}"
+  repository = data.helm_repository.stable.metadata.0.name
   chart      = "nginx-ingress"
   version    = "1.4.0"
   namespace  = var.namespace
   name       = "nginx-ingress"
   timeout    = 600
 
-  values = [data.template_file.nginx_ingress_values.rendered]
+  values = [data.template_file.nginx_ingress_values[0].rendered]
 }
 
 resource "kubernetes_service_account" "nginx_ingress_service_account" {
+  count = "${var.enabled ? 1 : 0}"
   metadata {
     name      = "nginx-ingress"
     namespace = var.namespace
@@ -32,6 +35,7 @@ resource "kubernetes_service_account" "nginx_ingress_service_account" {
 }
 
 resource "kubernetes_cluster_role" "nginx_ingress_role" {
+  count = "${var.enabled ? 1 : 0}"
   metadata {
     name = "${var.namespace}-nginx-ingress-manager"
   }
@@ -43,22 +47,24 @@ resource "kubernetes_cluster_role" "nginx_ingress_role" {
 }
 
 resource "kubernetes_cluster_role_binding" "nginx_ingress_role_binding" {
+  count = "${var.enabled ? 1 : 0}"
   metadata {
     name = "${var.namespace}-nginx-ingress-binding"
   }
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "ClusterRole"
-    name      = kubernetes_cluster_role.nginx_ingress_role.metadata[0].name
+    name      = kubernetes_cluster_role.nginx_ingress_role[0].metadata[0].name
   }
   subject {
     kind      = "ServiceAccount"
-    name      = kubernetes_service_account.nginx_ingress_service_account.metadata[0].name
+    name      = kubernetes_service_account.nginx_ingress_service_account[0].metadata[0].name
     namespace = var.namespace
   }
 }
 
 resource "kubernetes_role" "nginx_ingress_role" {
+  count = "${var.enabled ? 1 : 0}"
   metadata {
     name      = "nginx-ingress-manager"
     namespace = var.namespace
@@ -112,6 +118,7 @@ resource "kubernetes_role" "nginx_ingress_role" {
 }
 
 resource "kubernetes_role_binding" "nginx_ingress_role_binding" {
+  count = "${var.enabled ? 1 : 0}"
   metadata {
     name      = "nginx-ingress-binding"
     namespace = var.namespace
@@ -119,11 +126,11 @@ resource "kubernetes_role_binding" "nginx_ingress_role_binding" {
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "Role"
-    name      = kubernetes_role.nginx_ingress_role.metadata[0].name
+    name      = kubernetes_role.nginx_ingress_role[0].metadata[0].name
   }
   subject {
     kind      = "ServiceAccount"
-    name      = kubernetes_service_account.nginx_ingress_service_account.metadata[0].name
+    name      = kubernetes_service_account.nginx_ingress_service_account[0].metadata[0].name
     namespace = var.namespace
   }
 }

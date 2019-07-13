@@ -22,11 +22,14 @@ resource "null_resource" "istio_init_delay" {
 }
 
 module "istio_system" {
-  source     = "../../modules/common/istio"
-  namespace  = "istio-system"
-  crd_waiter = null_resource.istio_init_delay.id
+  source             = "../../modules/common/istio"
+  namespace          = "istio-system"
+  crd_waiter         = null_resource.istio_init_delay.id
+  region             = var.region
+  zone_id            = aws_route53_zone.cluster_zone.zone_id
+  domain             = "istio-system.${module.eks.cluster_id}.${var.root_zone_name}"
   providers = {
-    helm = helm.system
+    helm = "helm.system"
   }
 }
 
