@@ -12,9 +12,6 @@ global:
       ingress.kubernetes.io/proxy-body-size: "0"
       ingress.kubernetes.io/proxy-read-timeout: "600"
       ingress.kubernetes.io/proxy-send-timeout: "600"
-      nginx.ingress.kubernetes.io/configuration-snippet: |
-        rewrite ^/(v2)/token /artifactory/api/docker/null/v2/token;
-        rewrite ^/(v2)/([^\/]*)/(.*) /artifactory/api/docker/$2/$1/$3;
       nginx.ingress.kubernetes.io/proxy-body-size: "0"
     hosts:
     - ${ingress_hostname}
