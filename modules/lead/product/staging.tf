@@ -16,10 +16,24 @@ module "staging_namespace" {
   }
 }
 
+module "staging_certificate" {
+  source = "../../common/certificates"
+  namespace = "istio-system"
+  name = module.staging_namespace.name
+  domain = "${module.staging_namespace.name}.${var.cluster_domain}"
+  enabled = "${var.istio_enabled}"
+
+  providers = {
+    helm = "helm.system"
+    kubernetes = "kubernetes.system"
+  }
+}
+
 module "staging_ingress" {
   source                  = "../../common/nginx-ingress"
   namespace               = module.staging_namespace.name
   ingress_controller_type = var.ingress_controller_type
+  enabled                 = "${var.istio_enabled ? false : true}"
 
   providers = {
     helm       = helm.staging

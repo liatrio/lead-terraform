@@ -99,7 +99,7 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
   }
   rule {
     api_groups = ["extensions"]
-    resources  = ["ingresses"]
+    resources  = ["ingresses","deployments"]
     verbs      = ["*"]
   }
   rule {

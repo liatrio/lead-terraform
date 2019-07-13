@@ -1,0 +1,21 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: {{ .Release.Name }}
+spec:
+  acme:
+    config:
+    - domains:
+      - {{ .Values.domain }}
+      - "*.{{ .Values.domain }}"
+      dns01:
+        provider: liatrio-route53
+    commonName: {{ .Values.domain }}
+  dnsNames:
+  - {{ .Values.domain }}
+  - "*.{{ .Values.domain }}"
+  issuerRef:
+    kind: Issuer
+    name: letsencrypt-dns
+  secretName: {{ .Release.Name }}-certificate
+

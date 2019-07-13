@@ -57,6 +57,23 @@ provider "helm" {
   }
 }
 
+provider "kubernetes" {
+  alias            = "system"
+  load_config_file = var.load_config_file
+  config_context   = var.config_context
+}
+
+provider "helm" {
+  alias           = "system"
+  namespace       = "lead-system"
+  install_tiller  = false
+
+  kubernetes {
+    load_config_file = var.load_config_file
+    config_context   = var.config_context
+  }
+}
+
 module "product" {
   source                  = "../../modules/lead/product"
   cluster_domain          = var.cluster_domain
@@ -72,6 +89,8 @@ module "product" {
     helm.staging          = helm.staging
     kubernetes.production = kubernetes.production
     helm.production       = helm.production
+    kubernetes.system     = kubernetes.system
+    helm.system           = helm.system
   }
 }
 
