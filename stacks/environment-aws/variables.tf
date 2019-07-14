@@ -66,6 +66,10 @@ variable "slack_bot_token" {
 variable "slack_client_signing_secret" {
 }
 
+variable "from_email" {
+  default = "noreply@liatr.io"
+}
+
 locals {
   tags = {
     "Cluster" = var.cluster

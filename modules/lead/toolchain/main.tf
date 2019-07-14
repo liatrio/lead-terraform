@@ -1,3 +1,8 @@
+data "helm_repository" "codecentric" {
+  name = "codecentric"
+  url  = "https://codecentric.github.io/helm-charts"
+}
+
 module "toolchain_namespace" {
   source    = "../../common/namespace"
   namespace = var.namespace

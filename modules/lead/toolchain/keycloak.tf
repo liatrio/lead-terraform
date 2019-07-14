@@ -1,9 +1,4 @@
 
-data "helm_repository" "codecentric" {
-  name = "codecentric"
-  url  = "https://codecentric.github.io/helm-charts"
-}
-
 data "template_file" "keycloak_values" {
   template = file("${path.module}/keycloak-values.tpl")
 
@@ -14,6 +9,22 @@ data "template_file" "keycloak_values" {
     admin_password   = random_string.keycloak_admin_password.result
     realm_name       = module.toolchain_namespace.name
     realm_secret     = kubernetes_secret.keycloak_realm.metadata[0].name
+  }
+}
+
+data "template_file" "keycloak_realm" {
+  template = file("${path.module}/keycloak_realm.json")
+
+  vars = {
+    smtp_json = <<EOT
+{
+  "host": "mailhog",
+  "port": "1025",
+  "from": "keycloak@${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}",
+  "fromDisplayName": "Keycloak - ${module.toolchain_namespace.name}",
+  "auth": "false"
+}
+EOT
   }
 }
 
@@ -43,9 +54,7 @@ resource "kubernetes_secret" "keycloak_realm" {
   type = "Opaque"
 
   data = {
-    # don't use periods in name because tf .12 currently breaks on referencing map key values
-    # with periods in `lifecycle.ignore_changes`
-    "toolchain_realm.json" = file("${path.module}/keycloak_realm.json")
+    "toolchain_realm.json" = data.template_file.keycloak_realm.rendered
   }
 
   lifecycle {
@@ -61,6 +70,7 @@ resource "kubernetes_secret" "keycloak_realm" {
 }
 
 resource "helm_release" "keycloak" {
+  depends_on = [helm_release.mailhog]
   repository = data.helm_repository.codecentric.metadata[0].name
   name       = "keycloak"
   namespace  = module.toolchain_namespace.name
