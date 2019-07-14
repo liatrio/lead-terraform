@@ -32,3 +32,7 @@ variable "enable_xray" {
 variable "crd_waiter" {
 }
 
+variable "smtp_json" {
+  type    = map
+  default = {}
+}

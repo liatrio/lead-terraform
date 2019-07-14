@@ -19,6 +19,7 @@ variable "cert_issuer_name" {
 variable "enable" {
   default = true
 }
+
 variable "ingress_controller_type" {
   default = "LoadBalancer"
 }
