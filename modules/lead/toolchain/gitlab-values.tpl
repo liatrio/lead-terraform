@@ -48,10 +48,6 @@ global:
     enabled: true
     address: ${smtp_host}
     port: ${smtp_port}
-    user_name: ${smtp_username}
-    password:
-      secret: ${smtp_secret_name}
-      key: ${smtp_secret_key}
   email:
     from: ${smtp_from_email}
     display_name: ${smtp_from_name}
@@ -59,7 +55,33 @@ global:
     subject_suffix: " | ${smtp_from_name}"
   operator:
     enabled: true
-
+  omniauth:
+    enabled: true
+    autoSignInWithProvider: 'saml'
+    syncProfileFromProvider: ['saml']
+    syncProfileAttributes: ['email']
+    allowSingleSignOn: ['saml']
+    blockAutoCreatedUsers: true
+    autoLinkSamlUser: true
+    providers:
+      - { name: 'saml',
+          label: '${ingress_hostname} Keycloak',
+          groups_attribute: 'roles',
+          external_groups: ['${ingress_hostname}:external'],
+          args: {
+                  assertion_consumer_service_url: 'https://${ingress_hostname}/users/auth/saml/callback',
+                  idp_cert_fingerprint: '${keycloak_gitlab_saml_key_fingerprint}',
+                  idp_sso_target_url: 'https://keycloak.${toolchain_domain}/auth/realms/toolchain/protocol/saml/clients/gitlab.${toolchain_domain}',
+                  issuer: 'https://${ingress_hostname}',
+                  name_identifier_format: 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistant',
+                  attribute_statements: {
+                        first_name: ['first_name'],
+                        last_name: ['last_name'],
+                        name: ['username'],
+                        username: ['username'],
+                        email: ['email'] }
+                  } 
+                }
 
 certmanager:
   install: false

@@ -7,19 +7,18 @@ data "template_file" "gitlab_values" {
   template = file("${path.module}/gitlab-values.tpl")
 
   vars = {
+    toolchain_domain = "${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
     ingress_hostname = "gitlab.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
     gitlab_admin_password_secret = kubernetes_secret.gitlab_admin.metadata[0].name
     gitlab_admin_password_key = "password"
     gitlab_db_password_secret = kubernetes_secret.gitlab_db.metadata[0].name
     gitlab_db_password_key = "password"
-    smtp_host = ""
-    smtp_port = "587"
-    smtp_username = ""
-    smtp_secret_name = ""
-    smtp_secret_key = ""
-    smtp_from_email = ""
-    smtp_from_name = ""
-    smtp_replyto = ""
+    smtp_host = "mailhog"
+    smtp_port = "1025"
+    smtp_from_email = "noreply@gitlab.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
+    smtp_from_name = "Gitlab - ${module.toolchain_namespace.name}"
+    smtp_replyto = "noreply@gitlab.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
+    keycloak_gitlab_saml_key_fingerprint = tls_private_key.keycloak_gitlab_saml_key.public_key_fingerprint_md5
   }
 }
 

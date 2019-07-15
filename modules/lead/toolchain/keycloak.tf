@@ -16,6 +16,9 @@ data "template_file" "keycloak_realm" {
   template = file("${path.module}/keycloak_realm.json")
 
   vars = {
+    toolchain_domain = "${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
+    keycloak_gitlab_saml_cert = replace(replace(replace(tls_self_signed_cert.keycloak_gitlab_saml_cert.cert_pem, "-----BEGIN CERTIFICATE-----", ""), "-----END CERTIFICATE-----", ""), "\n", "")
+    keycloak_gitlab_saml_key = replace(replace(replace(tls_private_key.keycloak_gitlab_saml_key.private_key_pem, "-----BEGIN RSA PRIVATE KEY-----", ""), "-----END RSA PRIVATE KEY-----", ""), "\n", "")
     smtp_json = <<EOT
 {
   "host": "mailhog",
@@ -25,6 +28,30 @@ data "template_file" "keycloak_realm" {
   "auth": "false"
 }
 EOT
+  }
+}
+
+resource "tls_private_key" "keycloak_gitlab_saml_key" {
+  algorithm = "RSA"
+}
+
+resource "tls_self_signed_cert" "keycloak_gitlab_saml_cert" {
+  key_algorithm   = "${tls_private_key.keycloak_gitlab_saml_key.algorithm}"
+  private_key_pem = "${tls_private_key.keycloak_gitlab_saml_key.private_key_pem}"
+
+  # Certificate expires after ~10 years.
+  validity_period_hours = 100000
+
+  # Reasonable set of uses for a server SSL certificate.
+  allowed_uses = [
+      "key_encipherment",
+      "digital_signature",
+      "server_auth",
+  ]
+
+  subject {
+      common_name  = "keycloak-saml-gitlab.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
+      organization = "${var.cluster}.${var.root_zone_name}"
   }
 }
 
