@@ -82,6 +82,11 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
     resources  = ["trafficsplits"]
     verbs      = ["*"]
   }
+  rule {
+    api_groups = ["networking.istio.io"]
+    resources  = ["gateways","virtualservices"]
+    verbs      = ["list", "watch", "create", "patch", "get", "delete"]
+  }
 }
 
 resource "kubernetes_cluster_role_binding" "tiller_cluster_role_binding" {
