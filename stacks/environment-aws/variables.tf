@@ -53,6 +53,10 @@ variable "sdm_version" {
   default = "0.2.22"
 }
 
+variable "product_version" {
+  default = "master"
+}
+
 variable "dashboard_version" {
   default = "0.2.0-4346ee7d548"
 }

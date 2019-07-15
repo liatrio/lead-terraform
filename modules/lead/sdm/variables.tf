@@ -13,6 +13,9 @@ variable "system_namespace" {
 variable "sdm_version" {
 }
 
+variable "product_version" {
+}
+
 variable "slack_bot_token" {
 }
 

@@ -25,6 +25,10 @@ variable "sdm_version" {
   default = "0.2.22"
 }
 
+variable "product_version" {
+  default = "master"
+}
+
 variable "enable_xray" {
   default = "true"
 }
