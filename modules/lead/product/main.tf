@@ -22,7 +22,6 @@ provider "helm" {
   alias = "production"
 }
 
-
 provider "kubernetes" {
   alias = "system"
 }
@@ -30,4 +29,3 @@ provider "kubernetes" {
 provider "helm" {
   alias = "system"
 }
-
