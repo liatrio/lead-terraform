@@ -117,6 +117,7 @@ data "template_file" "artifactory_values" {
 }
 
 resource "helm_release" "artifactory" {
+  count      = var.enable_artifactory ? 1 : 0
   depends_on = [kubernetes_config_map.artifactory_config]
   repository = data.helm_repository.jfrog.metadata[0].name
   name       = "artifactory"

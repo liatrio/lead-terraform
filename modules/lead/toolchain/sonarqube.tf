@@ -9,6 +9,7 @@ resource "random_string" "sonar_jenkins_password" {
 }
 
 resource "helm_release" "sonarqube" {
+  count      = var.enable_sonarqube ? 1 : 0
   repository = "stable"
   name       = "sonarqube"
   namespace  = module.toolchain_namespace.name

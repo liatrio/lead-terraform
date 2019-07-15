@@ -16,9 +16,10 @@ module "toolchain_namespace" {
 }
 
 module "toolchain_ingress" {
-  source                  = "../../common/nginx-ingress"
-  namespace               = module.toolchain_namespace.name
-  ingress_controller_type = var.ingress_controller_type
+  source                          = "../../common/nginx-ingress"
+  namespace                       = module.toolchain_namespace.name
+  ingress_controller_type         = var.ingress_controller_type
+  ingress_external_traffic_policy = var.ingress_external_traffic_policy
 }
 
 module "toolchain_issuer" {

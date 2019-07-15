@@ -58,6 +58,7 @@ resource "kubernetes_secret" "gitlab_db" {
 }
 
 resource "helm_release" "gitlab" {
+  count      = var.enable_gitlab ? 1 : 0 
   repository = data.helm_repository.gitlab.metadata[0].name
   name       = "gitlab"
   namespace  = module.toolchain_namespace.name

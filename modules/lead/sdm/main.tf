@@ -12,6 +12,7 @@ data "helm_repository" "liatrio" {
 }
 
 resource "helm_release" "operator_toolchain_definition" {
+  count      = var.enable_operators ? 1 : 0
   repository = data.helm_repository.liatrio.metadata[0].name
   name       = "operator-toolchain-definition"
   chart      = "operator-toolchain-definition"
@@ -33,6 +34,7 @@ data "template_file" "operator_toolchain_values" {
 }
 
 resource "helm_release" "operator_toolchain" {
+  count      = var.enable_operators ? 1 : 0
   repository = data.helm_repository.liatrio.metadata[0].name
   name       = "operator-toolchain"
   chart      = "operator-toolchain"

@@ -17,6 +17,18 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  root_zone_name = "localhost"
-  cluster = "docker-for-desktop"
+  root_zone_name  = "localhost"
+  cluster         = "docker-for-desktop"
+
+  enable_artifactory = false
+  enable_gitlab      = false
+  enable_istio       = false
+  enable_keycloak    = true
+  enable_mailhog     = true
+  enable_operators   = false
+  enable_sonarqube   = false
+  enable_xray        = false
+
+  ingress_controller_type         = "LoadBalancer"
+  ingress_external_traffic_policy = "Local"
 }

@@ -9,6 +9,7 @@ data "template_file" "mailhog_values" {
 }
 
 resource "helm_release" "mailhog" {
+  count      = var.enable_mailhog ? 1 : 0
   repository = data.helm_repository.codecentric.metadata[0].name
   name       = "mailhog"
   namespace  = module.toolchain_namespace.name
