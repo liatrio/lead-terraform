@@ -1,8 +1,8 @@
 cluster_domain: ${cluster_domain}
+product_version: ${product_version}
 
 operators:
   slack: 
-    image: docker.artifactory.liatr.io/liatrio/operator-slack:${image_tag}
     ingress:
       hostName: operator-slack.${namespace}.${cluster_domain}
       annotations:
@@ -17,7 +17,3 @@ operators:
       value: ${workspace_role}
     - name: AWS_REGION
       value: ${region}
-  jenkins: 
-    image: docker.artifactory.liatr.io/liatrio/operator-jenkins:${image_tag}
-  toolchain: 
-    image: docker.artifactory.liatr.io/liatrio/operator-toolchain:${image_tag}

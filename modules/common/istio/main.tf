@@ -29,9 +29,23 @@ resource "kubernetes_secret" "kiali_dashboard_secret" {
   }
 }
 
+module "istio_ingress" {
+  source                  = "../nginx-ingress"
+  namespace               = module.istio_namespace.name
+  ingress_controller_type = var.ingress_controller_type
+}
+
 data "helm_repository" "istio" {
   name = "istio.io"
-  url  = "https://storage.googleapis.com/istio-release/releases/1.2.0/charts/"
+  url  = "https://storage.googleapis.com/istio-release/releases/1.2.2/charts/"
+}
+
+data "template_file" "istio_values" {
+  template = file("${path.module}/istio-values.tpl")
+
+  vars = {
+    domain = var.domain
+  }
 }
 
 resource "helm_release" "istio" {
@@ -42,66 +56,14 @@ resource "helm_release" "istio" {
   name       = module.istio_namespace.name
   timeout    = 600
   wait       = true
+  version    = "1.2.2"
 
   set {
     name  = "crd_waiter"
     value = var.crd_waiter
   }
 
-  set {
-    name  = "gateways.istio-egressgateway.enabled"
-    value = "false"
-  }
-
-  set {
-    name  = "gateways.istio-ingressgateway.sds.enabled"
-    value = "true"
-  }
-
-  set {
-    name  = "global.k8sIngress.enabled"
-    value = "true"
-  }
-
-  set {
-    name  = "global.k8sIngress.enableHttps"
-    value = "true"
-  }
-
-  set {
-    name  = "global.k8sIngress.gatewayName"
-    value = "istio-ingressgateway"
-  }
-
-  set {
-    name  = "certmanager.enabled"
-    value = "true"
-  }
-
-  set {
-    name  = "certmanager.email"
-    value = "cloudservices@liatr.io"
-  }
-
-  set {
-    name  = "grafana.enabled"
-    value = "true"
-  }
-
-  set {
-    name  = "kiali.enabled"
-    value = "true"
-  }
-
-  set {
-    name  = "tracing.enabled"
-    value = "true"
-  }
-
-  set {
-    name  = "tracing.ingress.enabled"
-    value = "true"
-  }
+  values = [data.template_file.istio_values.rendered]
 }
 
 resource "kubernetes_cluster_role" "tiller_cluster_role" {

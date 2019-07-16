@@ -1,6 +1,6 @@
 data "helm_repository" "istio" {
   name = "istio.io"
-  url  = "https://storage.googleapis.com/istio-release/releases/1.2.0/charts/"
+  url  = "https://storage.googleapis.com/istio-release/releases/1.2.2/charts/"
 }
 
 resource "helm_release" "istio_init" {
@@ -27,7 +27,10 @@ module "istio_system" {
   namespace  = "istio-system"
   crd_waiter = null_resource.istio_init_delay.id
   enable     = var.enable_istio
-  providers = {
+  region     = ""
+  zone_id    = ""
+  domain     = "istio-system.${var.cluster}.${var.root_zone_name}"
+  providers  = {
     helm = helm.system
   }
 }
