@@ -6,7 +6,7 @@ variable "toolchain_namespace" {
   default = "toolchain"
 }
 variable "builder_images_version" {
-  default = "v1.0.10"
+  default = "v1.0.13"
 }
 variable "ingress_controller_type" {}
 variable "istio_enabled" {
