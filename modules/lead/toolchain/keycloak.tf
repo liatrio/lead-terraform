@@ -36,36 +36,3 @@ resource "helm_release" "keycloak" {
 
   values = [data.template_file.keycloak_values.rendered]
 }
-
-
-# while using client credentials is preferred, it would require initial client creation using the 
-# old realm import method, so just use password based setup since that is known prior to keycloak 
-# resource creation
-provider "keycloak" {
-  client_id = "admin-cli"
-  username  = "keycloak"
-  password  = random_string.keycloak_admin_password.result
-  url       = "https://keycloak.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
-}
-
-resource "keycloak_realm" "realm" {
-  depends_on    = [helm_release.keycloak]
-  realm         = module.toolchain_namespace.name
-  enabled       = true
-  display_name  = title(module.toolchain_namespace.name)
-
-  registration_allowed            = true
-  registration_email_as_username  = true
-  reset_password_allowed          = true
-  remember_me                     = true
-  verify_email                    = true
-  login_with_email_allowed        = true
-  duplicate_emails_allowed        = false
-
-  smtp_server {
-    host              = "mailhog"
-    port              = "1025"
-    from              = "keycloak@${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
-    from_display_name = "Keycloak - ${title(module.toolchain_namespace.name)}"
-  }
-}
