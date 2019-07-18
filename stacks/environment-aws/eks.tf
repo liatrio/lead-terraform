@@ -2,6 +2,12 @@ data "aws_caller_identity" "current" {
 }
 
 locals {
+  ssm_init = <<EOF
+yum install -y amazon-ssm-agent
+systemctl start amazon-ssm-agent
+systemctl enable amazon-ssm-agent
+EOF
+
   worker_groups = [
     {
       instance_type         = var.instance_type
@@ -13,6 +19,7 @@ locals {
       key_name              = var.key_name
       autoscaling_enabled   = true
       protect_from_scale_in = true
+      pre_userdata          = local.ssm_init
     },
     {
       instance_type         = var.instance_type
@@ -24,6 +31,7 @@ locals {
       key_name              = var.key_name
       autoscaling_enabled   = true
       protect_from_scale_in = true
+      pre_userdata          = local.ssm_init
     },
     {
       instance_type         = var.instance_type
@@ -35,6 +43,7 @@ locals {
       key_name              = var.key_name
       autoscaling_enabled   = true
       protect_from_scale_in = true
+      pre_userdata          = local.ssm_init
     },
   ]
 
@@ -197,6 +206,10 @@ EOF
 resource "aws_iam_role_policy_attachment" "worker_ecr_role_attachment" {
   role = module.eks.worker_iam_role_name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryPowerUser"
+}
+resource "aws_iam_role_policy_attachment" "worker_ssm_role_attachment" {
+  role = module.eks.worker_iam_role_name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
 }
 
 resource "aws_iam_role" "workspace_role" {
