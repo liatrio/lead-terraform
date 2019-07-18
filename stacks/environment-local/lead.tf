@@ -38,14 +38,6 @@ module "toolchain" {
   }
 }
 
-module "keycloak_realm" {
-  source   = "../../modules/lead/keycloak-realm"
-  name     = module.toolchain.namespace
-  domain   = module.toolchain.keycloak_domain
-  username = module.toolchain.keycloak_admin_username
-  password = module.toolchain.keycloak_admin_password
-}
-
 module "sdm" {
   source                      = "../../modules/lead/sdm"
   root_zone_name              = var.root_zone_name
