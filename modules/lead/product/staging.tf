@@ -132,7 +132,7 @@ resource "kubernetes_role" "default-staging-role" {
   rule {
     api_groups = [""]
     resources  = ["pods", "jobs"]
-    verbs      = ["get"]
+    verbs      = ["get", "list"]
   }
 }
 
@@ -158,7 +158,7 @@ resource "kubernetes_role_binding" "default_staging_rolebinding" {
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "Role"
-    name      = "default"
+    name      = "default-staging-role"
   }
 
   subject {
