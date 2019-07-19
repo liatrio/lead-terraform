@@ -22,7 +22,7 @@ variable "opa_failure_policy" {
 }
 
 variable "sdm_version" {
-  default = "0.1.1-local"
+  default = "0.1.2"
 }
 
 variable "product_version" {
