@@ -110,3 +110,60 @@ resource "kubernetes_role_binding" "jenkins_staging_rolebinding" {
   }
 }
 
+resource "kubernetes_role" "default-staging-role" {
+  provider = kubernetes.staging
+  metadata {
+    name      = "default-staging-role"
+    namespace = module.staging_namespace.name
+
+    labels = {
+      "app.kubernetes.io/name"       = "default"
+      "app.kubernetes.io/instance"   = "default"
+      "app.kubernetes.io/component"  = "default-master"
+      "app.kubernetes.io/managed-by" = "Terraform"
+    }
+
+    annotations = {
+      description = "Permission required for default Service Account to get pods and jobs in staging namespace"
+      source-repo = "https://github.com/liatrio/lead-terraform"
+    }
+  }
+
+  rule {
+    api_groups = [""]
+    resources  = ["pods", "jobs"]
+    verbs      = ["get"]
+  }
+}
+
+resource "kubernetes_role_binding" "default_staging_rolebinding" {
+  provider = kubernetes.staging
+  metadata {
+    name      = "default-staging-rolebinding"
+    namespace = module.staging_namespace.name
+
+    labels = {
+      "app.kubernetes.io/name"       = "default"
+      "app.kubernetes.io/instance"   = "default"
+      "app.kubernetes.io/component"  = "default-master"
+      "app.kubernetes.io/managed-by" = "Terraform"
+    }
+
+    annotations = {
+      description = "Permission required for default Service account to get pods and jobs in staging namespace"
+      source-repo = "https://github.com/liatrio/lead-terraform"
+    }
+  }
+
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "Role"
+    name      = "default"
+  }
+
+  subject {
+    kind      = "ServiceAccount"
+    name      = "default"
+    namespace = module.toolchain_namespace.name
+  }
+}
