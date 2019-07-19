@@ -21,7 +21,7 @@ resource "helm_release" "operator_toolchain_definition" {
 
 
   provisioner "local-exec" {
-    command = "curl https://artifactory.liatr.io/artifactory/helm/operator-toolchain-definition-0.1.1.tgz -o operator-toolchain-definition-0.1.1.tgz && helm template operator_toolchain_definition-0.1.1.tgz > manifest.yaml && kubectl apply -f manifest.yaml"
+    command = "curl https://artifactory.liatr.io/artifactory/helm/operator-toolchain-definition-0.1.1.tgz -o operator-toolchain-definition-0.1.1.tgz && helm template operator-toolchain-definition-0.1.1.tgz > manifest.yaml && kubectl apply -f manifest.yaml"
   }
 }
 
