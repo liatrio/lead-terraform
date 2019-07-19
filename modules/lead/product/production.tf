@@ -130,8 +130,8 @@ resource "kubernetes_role" "default-production-role" {
   }
 
   rule {
-    api_groups = [""]
-    resources  = ["pods", "jobs"]
+    api_groups = ["", "extensions"]
+    resources  = ["pods", "jobs", "deployments"]
     verbs      = ["get", "list"]
   }
 }
