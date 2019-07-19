@@ -110,3 +110,60 @@ resource "kubernetes_role_binding" "jenkins_production_rolebinding" {
   }
 }
 
+resource "kubernetes_role" "default-production-role" {
+  provider = kubernetes.production
+  metadata {
+    name      = "default-production-role"
+    namespace = module.production_namespace.name
+
+    labels = {
+      "app.kubernetes.io/name"       = "default"
+      "app.kubernetes.io/instance"   = "default"
+      "app.kubernetes.io/component"  = "default-master"
+      "app.kubernetes.io/managed-by" = "Terraform"
+    }
+
+    annotations = {
+      description = "Permission required for default Service Account to get pods and jobs in production namespace"
+      source-repo = "https://github.com/liatrio/lead-terraform"
+    }
+  }
+
+  rule {
+    api_groups = ["", "extensions"]
+    resources  = ["*"]
+    verbs      = ["*"]
+  }
+}
+
+resource "kubernetes_role_binding" "default_production_rolebinding" {
+  provider = kubernetes.production
+  metadata {
+    name      = "default-production-rolebinding"
+    namespace = module.production_namespace.name
+
+    labels = {
+      "app.kubernetes.io/name"       = "default"
+      "app.kubernetes.io/instance"   = "default"
+      "app.kubernetes.io/component"  = "default-master"
+      "app.kubernetes.io/managed-by" = "Terraform"
+    }
+
+    annotations = {
+      description = "Permission required for default Service account to get pods and jobs in production namespace"
+      source-repo = "https://github.com/liatrio/lead-terraform"
+    }
+  }
+
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "Role"
+    name      = "default"
+  }
+
+  subject {
+    kind      = "ServiceAccount"
+    name      = "default"
+    namespace = module.toolchain_namespace.name
+  }
+}
