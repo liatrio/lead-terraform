@@ -17,7 +17,9 @@ resource "helm_release" "operator_toolchain_definition" {
   chart      = "operator-toolchain-definition"
   version    = var.sdm_version
   namespace  = var.system_namespace
-  provider   = helm.system
+  provisioner "local-exec" {
+    command = "helm template operator_toolchain_definition >> manifest.yaml && kubectl apply -f manifest.yaml"
+  }
 }
 
 data "template_file" "operator_toolchain_values" {
