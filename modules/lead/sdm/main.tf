@@ -17,8 +17,11 @@ resource "helm_release" "operator_toolchain_definition" {
   chart      = "operator-toolchain-definition"
   version    = var.sdm_version
   namespace  = var.system_namespace
+  provider   = helm.system
+
+
   provisioner "local-exec" {
-    command = "helm template operator_toolchain_definition >> manifest.yaml && kubectl apply -f manifest.yaml"
+    command = "curl https://artifactory.liatr.io/artifactory/helm/operator-toolchain-definition-0.1.1.tgz -o operator-toolchain-definition-0.1.1.tgz && helm template operator_toolchain_definition-0.1.1.tgz > manifest.yaml && kubectl apply -f manifest.yaml"
   }
 }
 
