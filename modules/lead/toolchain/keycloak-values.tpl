@@ -18,19 +18,19 @@ keycloak:
   extraEnv: |
     - name: PROXY_ADDRESS_FORWARDING
       value: "true"
+    # - name: KEYCLOAK_LOGLEVEL
+    #   value: DEBUG
+    # - name: WILDFLY_LOGLEVEL
+    #   value: DEBUG
+    # - name: CACHE_OWNERS
+    #   value: "2"
+    # - name: DB_QUERY_TIMEOUT
+    #   value: "60"
+    # - name: DB_VALIDATE_ON_MATCH
+    #   value: true
+    # - name: DB_USE_CAST_FAIL
+    #   value: false
 
-  extraVolumes: |
-    - name: realm-secret
-      secret:
-        secretName: ${realm_secret}
-
-  extraVolumeMounts: |
-    - name: realm-secret
-      mountPath: "/realm/"
-      readOnly: true
-
-  extraArgs: -Dkeycloak.migration.action=import -Dkeycloak.migration.provider=singleFile -Dkeycloak.migration.file=/realm/toolchain_realm.json -Dkeycloak.migration.strategy=IGNORE_EXISTING
-    
   ## Ingress configuration.
   ## ref: https://kubernetes.io/docs/user-guide/ingress/
   ingress:
@@ -76,4 +76,3 @@ postgresql:
     ## Enable PostgreSQL persistence using Persistent Volume Claims.
     ##
     enabled: true
-
