@@ -18,18 +18,6 @@ keycloak:
   extraEnv: |
     - name: PROXY_ADDRESS_FORWARDING
       value: "true"
-    # - name: KEYCLOAK_LOGLEVEL
-    #   value: DEBUG
-    # - name: WILDFLY_LOGLEVEL
-    #   value: DEBUG
-    # - name: CACHE_OWNERS
-    #   value: "2"
-    # - name: DB_QUERY_TIMEOUT
-    #   value: "60"
-    # - name: DB_VALIDATE_ON_MATCH
-    #   value: true
-    # - name: DB_USE_CAST_FAIL
-    #   value: false
 
   ## Ingress configuration.
   ## ref: https://kubernetes.io/docs/user-guide/ingress/

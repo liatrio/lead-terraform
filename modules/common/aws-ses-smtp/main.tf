@@ -1,3 +1,6 @@
+data "aws_caller_identity" "current" {
+}
+
 resource "random_pet" "ses_smtp" {
   keepers = {
     name = "${var.name}"
@@ -5,7 +8,8 @@ resource "random_pet" "ses_smtp" {
 }
 
 resource "aws_iam_user" "ses_smtp" {
-  name = "${var.name}-${random_pet.ses_smtp.id}"
+  name                  = "${var.name}-${random_pet.ses_smtp.id}"
+  permissions_boundary  = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/Developer"
 }
 
 resource "aws_iam_access_key" "ses_smtp" {

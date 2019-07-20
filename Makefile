@@ -54,3 +54,32 @@ endif
 	git tag -a -m "releasing $(NEW_VERSION)" $(NEW_VERSION)
 	git push origin $(NEW_VERSION)
 
+# Install the keycloak provider from the community repository
+plugins: build_keycloak_provider
+build_keycloak_provider:
+	mkdir -p ~/.terraform.d/plugins
+	wget https://github.com/mrparkers/terraform-provider-keycloak/archive/master.zip
+	unzip master.zip
+	cd ./terraform-provider-keycloak-master; GO111MODULE=on go mod download && make build
+	cp ./terraform-provider-keycloak-master/terraform-provider-keycloak ~/.terraform.d/plugins/
+	rm ./master.zip
+	rm -rf ./terraform-provider-keycloak-master/
+
+## WAITING ON NEW TF KEYCLOAK RELEASE
+# TF_KEYCLOAK_VERSION = "1.9.0"
+# plugins: install_keycloak_provider_darwin install_keycloak_provider_linux
+# install_keycloak_provider_linux:
+# 	mkdir -p ~/.terraform.d/plugins
+# 	wget https://github.com/mrparkers/terraform-provider-keycloak/releases/download/$(TF_KEYCLOAK_VERSION)/terraform-provider-keycloak_v$(TF_KEYCLOAK_VERSION)_linux_amd64.zip
+# 	unzip -d terraform-provider-keycloak_v$(TF_KEYCLOAK_VERSION) terraform-provider-keycloak*.zip -x "../LICENSE"
+# 	cp ./terraform-provider-keycloak_v$(TF_KEYCLOAK_VERSION)/terraform-provider-keycloak_v$(TF_KEYCLOAK_VERSION) ~/.terraform.d/plugins/
+# 	rm ./terraform-provider-keycloak_v$(TF_KEYCLOAK_VERSION)_linux_amd64.zip
+# 	rm -rf ./terraform-provider-keycloak_v$(TF_KEYCLOAK_VERSION)
+
+# install_keycloak_provider_darwin:
+# 	mkdir -p ~/.terraform.d/plugins
+# 	wget https://github.com/mrparkers/terraform-provider-keycloak/releases/download/$(TF_KEYCLOAK_VERSION)/terraform-provider-keycloak_v$(TF_KEYCLOAK_VERSION)_darwin_amd64.zip
+# 	unzip -d terraform-provider-keycloak_v$(TF_KEYCLOAK_VERSION) terraform-provider-keycloak*.zip -x "../LICENSE"
+# 	cp ./terraform-provider-keycloak_v$(TF_KEYCLOAK_VERSION)/terraform-provider-keycloak_v$(TF_KEYCLOAK_VERSION) ~/.terraform.d/plugins/
+# 	rm ./terraform-provider-keycloak_v$(TF_KEYCLOAK_VERSION)_darwin_amd64.zip
+# 	rm -rf ./terraform-provider-keycloak_v$(TF_KEYCLOAK_VERSION)

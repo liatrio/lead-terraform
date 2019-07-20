@@ -1,19 +1,9 @@
-
-data "helm_repository" "codecentric" {
-  name = "codecentric"
-  url  = "https://codecentric.github.io/helm-charts"
-}
-
 data "template_file" "keycloak_values" {
   template = file("${path.module}/keycloak-values.tpl")
 
   vars = {
     cluster_domain   = "${var.cluster}.${var.root_zone_name}"
     ingress_hostname = "keycloak.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
-    admin_username   = kubernetes_secret.keycloak_admin.data.username
-    admin_password   = random_string.keycloak_admin_password.result
-    realm_name       = module.toolchain_namespace.name
-
   }
 }
 
@@ -48,3 +38,36 @@ resource "helm_release" "keycloak" {
   values = [data.template_file.keycloak_values.rendered]
 }
 
+
+# while using client credentials is preferred, it would require initial client creation using the 
+# old realm import method, so just use password based setup since that is known prior to keycloak 
+# resource
+provider "keycloak" {
+  client_id     = "admin-cli"
+  username      = "keycloak"
+  password      = random_string.keycloak_admin_password.result
+  url           = "https://keycloak.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
+  initial_login = false
+}
+
+resource "keycloak_realm" "realm" {
+  depends_on    = [helm_release.keycloak]
+  realm         = module.toolchain_namespace.name
+  enabled       = true
+  display_name  = title(module.toolchain_namespace.name)
+
+  registration_allowed            = true
+  registration_email_as_username  = true
+  reset_password_allowed          = true
+  remember_me                     = true
+  verify_email                    = true
+  login_with_email_allowed        = true
+  duplicate_emails_allowed        = false
+
+  smtp_server {
+    host              = "mailhog"
+    port              = "1025"
+    from              = "keycloak@${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
+    from_display_name = "Keycloak - ${title(module.toolchain_namespace.name)}"
+  }
+}
