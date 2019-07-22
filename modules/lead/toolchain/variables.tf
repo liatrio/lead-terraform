@@ -56,6 +56,9 @@ variable "enable_xray" {
 variable "crd_waiter" {
 }
 
+variable "keycloak_admin_password" {
+}
+
 variable "smtp_json" {
   type    = map
   default = {}

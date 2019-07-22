@@ -9,6 +9,7 @@ data "template_file" "keycloak_values" {
 }
 
 resource "kubernetes_secret" "keycloak_admin" {
+  count = var.enable_keycloak ? 1 : 0
   metadata {
     name      = "keycloak-admin-credential"
     namespace = module.toolchain_namespace.name
@@ -17,7 +18,7 @@ resource "kubernetes_secret" "keycloak_admin" {
 
   data = {
     username = "keycloak"
-    password = random_string.keycloak_admin_password.result
+    password = var.keycloak_admin_password
   }
 }
 
@@ -41,13 +42,24 @@ resource "helm_release" "keycloak" {
 provider "keycloak" {
   client_id     = "admin-cli"
   username      = "keycloak"
-  password      = random_string.keycloak_admin_password.result
-  url           = "https://keycloak.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
+  password      = var.keycloak_admin_password
+  url           = "${local.protocol}://keycloak.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
   initial_login = false
 }
 
+# Give Keycloak API a chance to become responsive
+resource "null_resource" "keycloak_realm_delay" {
+  count      = var.enable_keycloak ? 1 : 0  
+  depends_on = [helm_release.keycloak]
+  
+  provisioner "local-exec" {
+    command = "sleep 15"
+  }
+}
+
 resource "keycloak_realm" "realm" {
-  depends_on    = [helm_release.keycloak]
+  count         = var.enable_keycloak ? 1 : 0
+  depends_on    = [helm_release.keycloak, null_resource.keycloak_realm_delay]
   realm         = module.toolchain_namespace.name
   enabled       = true
   display_name  = title(module.toolchain_namespace.name)

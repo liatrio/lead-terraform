@@ -38,6 +38,9 @@ variable "slack_bot_token" {
 variable "slack_client_signing_secret" {
 }
 
+variable "keycloak_admin_password" {
+}
+
 variable "from_email" {
   default = "noreply@liatr.io"
 }

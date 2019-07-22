@@ -13,9 +13,10 @@ output "keycloak_domain" {
 }
 
 output "keycloak_admin_username" {
-  value = kubernetes_secret.keycloak_admin.data.username
+  value = kubernetes_secret.keycloak_admin[0].data.username
 }
 
 output "keycloak_admin_password" {
-  value = random_string.keycloak_admin_password.result
+  sensitive = true
+  value = var.keycloak_admin_password
 }

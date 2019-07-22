@@ -62,6 +62,13 @@ module "toolchain" {
   image_whitelist         = var.image_whitelist
   elb_security_group_id   = aws_security_group.elb.id
   artifactory_license     = var.artifactory_license
+  keycloak_admin_password = sha1(var.keycloak_admin_password)
+  enable_artifactory      = var.enable_artifactory
+  enable_gitlab           = var.enable_gitlab
+  enable_keycloak         = var.enable_keycloak
+  enable_mailhog          = var.enable_mailhog
+  enable_sonarqube        = var.enable_sonarqube
+  enable_xray             = var.enable_xray    
   issuer_type             = "acme"
   ingress_controller_type = "LoadBalancer"
   crd_waiter              = module.infrastructure.crd_waiter

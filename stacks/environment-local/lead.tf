@@ -28,6 +28,7 @@ module "toolchain" {
   namespace                       = var.toolchain_namespace
   image_whitelist                 = var.image_whitelist
   artifactory_license             = var.artifactory_license
+  keycloak_admin_password         = sha1(var.keycloak_admin_password)
   enable_artifactory              = var.enable_artifactory
   enable_gitlab                   = var.enable_gitlab
   enable_keycloak                 = var.enable_keycloak
