@@ -16,6 +16,7 @@ data "template_file" "issuer_values" {
 }
 
 resource "helm_release" "cert_manager_issuers" {
+  count     = var.enabled ? 1 : 0
   name      = "cert-manager-issuers-${var.namespace}"
   namespace = var.namespace
   chart     = "${path.module}/helm/cert-manager-issuers"

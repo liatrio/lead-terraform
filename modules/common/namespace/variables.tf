@@ -11,3 +11,6 @@ variable "labels" {
   default = {}
 }
 
+variable "enabled" {
+  default = true
+}
