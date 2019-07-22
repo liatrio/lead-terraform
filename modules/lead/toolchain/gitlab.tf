@@ -152,3 +152,43 @@ resource "keycloak_saml_user_property_protocol_mapper" "gitlab_saml_user_propert
   saml_attribute_name_format = "Basic"
   friendly_name              = "Username"
 }
+
+###############################################################################
+# Gitlab<>Jenkins Integration https://docs.gitlab.com/ce/integration/jenkins.html
+# Old way of using webhooks is deprecated, but might be only option.  Still unclear.
+
+# psql provider
+  # ARGHHH! https://github.com/terraform-providers/terraform-provider-postgresql/issues/2#issuecomment-369341707
+  # Core issue: https://github.com/hashicorp/terraform/issues/4149
+
+# psql query to create/get PAT for root user, no way to do this with tf/api
+
+# provider "gitlab" {
+#   token = "${var.gitlab_token}" # root user PAT
+# }
+
+# resource "random_string" "gitlab_jenkins_password" {
+#   length  = 10
+#   special = false
+# }
+
+# resource "gitlab_user" "jenkins" {
+#   name             = "Jenkins"
+#   username         = "jenkins"
+#   password         = random_string.gitlab_jenkins_password.result
+#   email            = "gitlab@user.create"
+#   is_admin         = true
+#   projects_limit   = 4
+#   can_create_group = false
+#   is_external      = false
+# }
+# 
+
+# psql query to create/get PAT for jenkins user with scope 'api', no way to do this with tf/api
+
+# reference is https://<jenkins_url>/configuration-as-code/reference
+# set gitlab url and api token in jenkins global configuration `jenkins-values.tpl:JCasC
+
+# resource "gitlab_project" "??"
+
+# psql query to enable jenkins integration for project, no way to do this with tf/api
