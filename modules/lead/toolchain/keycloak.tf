@@ -2,14 +2,10 @@ data "template_file" "keycloak_values" {
   template = file("${path.module}/keycloak-values.tpl")
 
   vars = {
+    ssl_redirect     = var.root_zone_name == "localhost" ? false : true
     cluster_domain   = "${var.cluster}.${var.root_zone_name}"
     ingress_hostname = "keycloak.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
   }
-}
-
-resource "random_string" "keycloak_admin_password" {
-  length  = 10
-  special = false
 }
 
 resource "kubernetes_secret" "keycloak_admin" {

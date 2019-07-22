@@ -112,6 +112,7 @@ data "template_file" "artifactory_values" {
   template = file("${path.module}/artifactory-values.tpl")
 
   vars = {
+    ssl_redirect     = var.root_zone_name == "localhost" ? false : true
     ingress_hostname = "artifactory.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
   }
 }

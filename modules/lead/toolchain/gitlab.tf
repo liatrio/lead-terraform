@@ -7,7 +7,7 @@ data "template_file" "gitlab_values" {
   template = file("${path.module}/gitlab-values.tpl")
 
   vars = {
-    toolchain_domain = "${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
+    ssl_redirect     = var.root_zone_name == "localhost" ? false : true
     ingress_hostname = "gitlab.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
     gitlab_admin_password_secret = kubernetes_secret.gitlab_admin.metadata[0].name
     gitlab_admin_password_key = "password"
