@@ -21,6 +21,14 @@ master:
   healthProbeReadinessFailureThreshold: 12
   healthProbeLivenessInitialDelay: 240
   healthProbeReadinessInitialDelay: 120
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+
 
   JCasC:
     enabled: true
@@ -84,6 +92,10 @@ master:
                         command: "/bin/sh -c"
                         args: "cat"
                         ttyEnabled: true
+                        resourceRequestCpu: 128m
+                        resourceLimitCpu: 256m
+                        resourceRequestMemory: 128Mi
+                        resourceLimitMemory: 256Mi
                     envVars:
                       - envVar:
                           key: "SKAFFOLD_DEFAULT_REPO"
@@ -108,6 +120,10 @@ master:
                         command: "/bin/sh -c"
                         args: "cat"
                         ttyEnabled: true
+                        resourceRequestCpu: 128m
+                        resourceLimitCpu: 256m
+                        resourceRequestMemory: 128Mi
+                        resourceLimitMemory: 256Mi
                     slaveConnectTimeout: 100
                   - name: "lead-toolchain-terraform"
                     label: "lead-toolchain-terraform"
@@ -120,6 +136,10 @@ master:
                         command: "/bin/sh -c"
                         args: "cat"
                         ttyEnabled: true
+                        resourceRequestCpu: 128m
+                        resourceLimitCpu: 256m
+                        resourceRequestMemory: 128Mi
+                        resourceLimitMemory: 256Mi
                     slaveConnectTimeout: 100
                   - name: "lead-toolchain-maven"
                     label: "lead-toolchain-maven"
@@ -132,6 +152,10 @@ master:
                         command: "/bin/sh -c"
                         args: "cat"
                         ttyEnabled: true
+                        resourceRequestCpu: 128m
+                        resourceLimitCpu: 256m
+                        resourceRequestMemory: 128Mi
+                        resourceLimitMemory: 256Mi
                     slaveConnectTimeout: 100
       shared-libraries: |
         unclassified:
