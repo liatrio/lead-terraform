@@ -16,7 +16,7 @@ brew bundle
 
 Terraform and Terragrunt need specific version
 
-- Terraform [0.12.3](https://releases.hashicorp.com/terraform/0.12.3/)
+- Terraform [0.12.5](https://releases.hashicorp.com/terraform/0.12.5/)
 - Terragrunt [0.19.8](https://github.com/gruntwork-io/terragrunt/releases/download/v0.19.8/terragrunt_darwin_amd64)
 
 
@@ -32,6 +32,7 @@ Required Terraform variables: See [Slack Operator](https://github.com/liatrio/le
 To test an environment locally, run:
 
 ```
+make plugins
 cd local/environment
 terragrunt apply
 ```
