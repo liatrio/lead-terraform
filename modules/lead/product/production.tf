@@ -110,7 +110,7 @@ resource "kubernetes_role_binding" "jenkins_production_rolebinding" {
   }
 }
 
-resource "kubernetes_role" "default-production-role" {
+resource "kubernetes_role" "default_production_role" {
   provider = kubernetes.production
   metadata {
     name      = "default-production-role"
@@ -131,8 +131,18 @@ resource "kubernetes_role" "default-production-role" {
 
   rule {
     api_groups = [""]
-    resources  = ["pods", "jobs"]
-    verbs      = ["get"]
+    resources  = ["pods"]
+    verbs      = ["get", "list"]
+  }
+  rule {
+    api_groups = ["extensions"]
+    resources  = ["deployments"]
+    verbs      = ["get", "list"]
+  }
+  rule {
+    api_groups = ["batch"]
+    resources  = ["jobs"]
+    verbs      = ["get", "list"]
   }
 }
 
@@ -158,12 +168,12 @@ resource "kubernetes_role_binding" "default_production_rolebinding" {
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "Role"
-    name      = "default"
+    name      = kubernetes_role.default_production_role.metadata[0].name
   }
 
   subject {
     kind      = "ServiceAccount"
     name      = "default"
-    namespace = module.toolchain_namespace.name
+    namespace   = module.staging_namespace.name
   }
 }
