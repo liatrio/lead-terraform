@@ -164,6 +164,6 @@ resource "kubernetes_role_binding" "default_staging_rolebinding" {
   subject {
     kind      = "ServiceAccount"
     name      = "default"
-    namespace = module.toolchain_namespace.name
+    namespace   = module.staging_namespace.name
   }
 }
