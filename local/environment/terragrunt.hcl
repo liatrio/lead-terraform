@@ -20,15 +20,17 @@ inputs = {
   root_zone_name  = "localhost"
   cluster         = "docker-for-desktop"
 
-  enable_artifactory = false
-  enable_gitlab      = false
+  enable_artifactory = true
+  enable_gitlab      = true
   enable_istio       = false
   enable_keycloak    = true
   enable_mailhog     = true
-  enable_operators   = false
-  enable_sonarqube   = false
-  enable_xray        = false
+  enable_operators   = true
+  enable_sonarqube   = true
+  enable_xray        = true
 
+  # This will conflict with Istio since it's also configured as a LoadBalancer
+  # So ensure `enable_istio = false` before uncommenting this
   ingress_controller_type         = "LoadBalancer"
   ingress_external_traffic_policy = "Local"
 }
