@@ -31,6 +31,9 @@ grafana:
     limits:
       cpu: 500m
       memory: 200Mi
+  sidecar:
+    dashboards:
+      searchNamespace: ${namespace}
 logstash:
   logstashJavaOpts: "-Djava.security.egd=file:/dev/urandom"
   resources:
