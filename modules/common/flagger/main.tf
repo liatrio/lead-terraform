@@ -38,3 +38,5 @@ resource "helm_release" "flagger" {
     name  = "slack.url"
     value = var.slack_url
   }
+}
+
