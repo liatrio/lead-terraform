@@ -3,9 +3,6 @@ variable "crd_waiter" {}
 variable "region" {}
 variable "domain" {}
 variable "zone_id" {}
-variable "slack_url" {}
-variable "slack_user" {}
-variable "slack_channel" {}
 
 variable "kiali_username" {
   default = "admin"
