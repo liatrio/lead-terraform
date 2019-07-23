@@ -23,13 +23,16 @@ resource "null_resource" "istio_init_delay" {
 }
 
 module "istio_system" {
-  source     = "../../modules/common/istio"
-  namespace  = "istio-system"
-  crd_waiter = null_resource.istio_init_delay.id
-  enable     = var.enable_istio
-  region     = ""
-  zone_id    = ""
-  domain     = "istio-system.${var.cluster}.${var.root_zone_name}"
+  source        = "../../modules/common/istio"
+  namespace     = "istio-system"
+  crd_waiter    = null_resource.istio_init_delay.id
+  enable        = var.enable_istio
+  region        = ""
+  zone_id       = ""
+  domain        = "istio-system.${var.cluster}.${var.root_zone_name}"
+  slack_url     = var.slack_url
+  slack_channel = var.slack_channel
+  slack_user    = var.slack_user  
   providers  = {
     helm = helm.system
   }

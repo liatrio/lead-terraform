@@ -131,3 +131,12 @@ module "istio_cert_issuer" {
   provider_dns_region      = var.region
   provider_dns_hosted_zone = var.zone_id
 }
+
+module "istio_flagger" {
+  source        = "../../common/flagger"
+  enable        = var.enable
+  namespace     = module.istio_namespace.name
+  slack_url     = var.slack_url
+  slack_channel = var.slack_channel
+  slack_user    = var.slack_user
+}

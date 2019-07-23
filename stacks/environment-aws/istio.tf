@@ -28,8 +28,10 @@ module "istio_system" {
   region             = var.region
   zone_id            = aws_route53_zone.cluster_zone.zone_id
   domain             = "istio-system.${module.eks.cluster_id}.${var.root_zone_name}"
+  slack_url          = var.slack_url
+  slack_channel      = var.slack_channel
+  slack_user         = var.slack_user  
   providers = {
     helm = "helm.system"
   }
 }
-
