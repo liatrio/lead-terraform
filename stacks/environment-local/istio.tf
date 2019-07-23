@@ -30,9 +30,6 @@ module "istio_system" {
   region        = ""
   zone_id       = ""
   domain        = "istio-system.${var.cluster}.${var.root_zone_name}"
-  slack_url     = var.slack_url
-  slack_channel = var.slack_channel
-  slack_user    = var.slack_user  
   providers  = {
     helm = helm.system
   }

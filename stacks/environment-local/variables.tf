@@ -42,15 +42,6 @@ variable "slack_bot_token" {
 variable "slack_client_signing_secret" {
 }
 
-variable "slack_url" {
-}
-
-variable "slack_user" {
-}
-
-variable "slack_channel" {
-}
-
 variable "enable_istio" {
   default = true
 }

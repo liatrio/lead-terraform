@@ -136,7 +136,4 @@ module "istio_flagger" {
   source        = "../../common/flagger"
   enable        = var.enable
   namespace     = module.istio_namespace.name
-  slack_url     = var.slack_url
-  slack_channel = var.slack_channel
-  slack_user    = var.slack_user
 }

@@ -23,20 +23,5 @@ resource "helm_release" "flagger" {
     name  = "metricsServer"
     value = var.metrics_url
   }
-
-  set {
-    name  = "slack.user"
-    value = var.slack_user
-  }
-
-  set {
-    name  = "slack.channel"
-    value = var.slack_channel
-  }
-
-  set {
-    name  = "slack.url"
-    value = var.slack_url
-  }
 }
 

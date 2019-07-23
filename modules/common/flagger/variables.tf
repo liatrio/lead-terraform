@@ -1,10 +1,4 @@
 variable "namespace" {}
-variable "slack_url" {}
-variable "slack_channel" {}
-
-variable "slack_user" {
-  default = "flagger"
-}
 
 variable "provider" {
   default = "istio"
