@@ -110,7 +110,7 @@ resource "kubernetes_role_binding" "jenkins_staging_rolebinding" {
   }
 }
 
-resource "kubernetes_role" "default-staging-role" {
+resource "kubernetes_role" "default_staging_role" {
   provider = kubernetes.staging
   metadata {
     name      = "default-staging-role"
@@ -168,7 +168,7 @@ resource "kubernetes_role_binding" "default_staging_rolebinding" {
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "Role"
-    name      = "default-staging-role"
+    name      = kubernetes_role.default_staging_role.metadata[0].name
   }
 
   subject {

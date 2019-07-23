@@ -8,10 +8,13 @@ resource "random_string" "artifactory_xray_mongo_db_password" {
   special = false
 }
 
-//  data "helm_repository" "jfrog" {
-//   name = "jfrog"
-//   url  = "https://charts.jfrog.io"
-// }
+data "template_file" "xray_values" {
+  template = file("${path.module}/xray-values.tpl")
+
+  vars = {
+    ingress_hostname = "artifactory.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
+  }
+}
 
 resource "helm_release" "xray" {
   count      = var.enable_xray ? 1 : 0
@@ -40,5 +43,7 @@ resource "helm_release" "xray" {
     name  = "postgresql.postgresPassword"
     value = random_string.artifactory_xray_db_password.result
   }
-}
 
+  values = [data.template_file.xray_values.rendered]
+
+}
