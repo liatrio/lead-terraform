@@ -21,7 +21,8 @@ resource "helm_release" "operator_toolchain_definition" {
 
 
   provisioner "local-exec" {
-    command = "curl https://artifactory.liatr.io/artifactory/helm/operator-toolchain-definition-${var.sdm_version}.tgz -o operator-toolchain-definition-${var.sdm_version}.tgz && helm template operator-toolchain-definition-${var.sdm_version}.tgz > manifest.yaml && kubectl apply -f manifest.yaml"
+    command = "echo OUTPUT OF LS\n ls\n echo OUTPUT OF PWD\n pwd"
+    //command = "curl https://artifactory.liatr.io/artifactory/helm/operator-toolchain-definition-${var.sdm_version}.tgz -o operator-toolchain-definition-${var.sdm_version}.tgz && helm template operator-toolchain-definition-${var.sdm_version}.tgz > manifest.yaml && kubectl apply -f manifest.yaml"
   }
 }
 
