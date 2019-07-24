@@ -27,6 +27,7 @@ Required Terraform variables: See [Slack Operator](https://github.com/liatrio/le
 - **artifactory_license**:
 - **slack_bot_token**: Slack Bot User OAuth Token
 - **slack_client_signing_secret**: Slack App Credentials Signing Secret
+- **keycloak_admin_password**: Keycloak Admin Password
 
 ## Running locally
 To test an environment locally, run:

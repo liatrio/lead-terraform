@@ -39,6 +39,7 @@ variable "slack_client_signing_secret" {
 }
 
 variable "keycloak_admin_password" {
+  default = "keycloak"
 }
 
 variable "from_email" {
