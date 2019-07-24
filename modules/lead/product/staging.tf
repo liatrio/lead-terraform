@@ -132,17 +132,17 @@ resource "kubernetes_role" "default_staging_role" {
   rule {
     api_groups = [""]
     resources  = ["pods"]
-    verbs      = ["get", "list"]
+    verbs      = ["get", "list", "watch"]
   }
   rule {
     api_groups = ["extensions"]
     resources  = ["deployments"]
-    verbs      = ["get", "list"]
+    verbs      = ["get", "list", "watch"]
   }
   rule {
     api_groups = ["batch"]
     resources  = ["jobs"]
-    verbs      = ["get", "list"]
+    verbs      = ["get", "list", "watch"]
   }
 }
 
