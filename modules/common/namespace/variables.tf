@@ -28,5 +28,5 @@ variable "resource_limit_cpu" {
 
 variable "resource_limit_memory" {
   type = "string"
-  default = "256Mi"
+  default = "512Mi"
 }
