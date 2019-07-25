@@ -21,7 +21,7 @@ else
 TF_VALIDATE_ARGS = ""
 endif
 
-validate:
+validate: 
 	@terraform init -backend=false stacks/environment-aws
 	@terraform validate $(TF_VALIDATE_ARGS) stacks/environment-aws
 	@terraform init -backend=false stacks/environment-local
@@ -58,7 +58,7 @@ endif
 plugins: build_keycloak_provider
 build_keycloak_provider:
 	mkdir -p ~/.terraform.d/plugins
-	wget https://github.com/mrparkers/terraform-provider-keycloak/archive/master.zip
+	curl -LsO https://github.com/mrparkers/terraform-provider-keycloak/archive/master.zip
 	unzip master.zip
 	cd ./terraform-provider-keycloak-master; GO111MODULE=on go mod download && make build
 	cp ./terraform-provider-keycloak-master/terraform-provider-keycloak ~/.terraform.d/plugins/

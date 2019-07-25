@@ -50,6 +50,15 @@ keycloak:
     # The database vendor. Can be either "postgres", "mysql", "mariadb", or "h2"
     dbVendor: postgres
 
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 250m
+    limits:
+      memory: 768Mi
+      cpu: 1
+
+
 postgresql:
   ### PostgreSQL User to create.
   ##
@@ -66,3 +75,11 @@ postgresql:
     ## Enable PostgreSQL persistence using Persistent Volume Claims.
     ##
     enabled: true
+  
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 250m
+    limits:
+      memory: 512Mi
+      cpu: 500m
