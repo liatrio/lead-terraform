@@ -3,7 +3,7 @@ data "template_file" "mailhog_values" {
   template = file("${path.module}/mailhog-values.tpl")
 
   vars = {
-    ssl_redirect     = var.root_zone_name == "localhost" ? false : true
+    ingress_enabled  = var.root_zone_name == "localhost" ? true : false
     ingress_hostname = "mailhog.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
     smtp_json        = jsonencode(var.smtp_json)
   }
