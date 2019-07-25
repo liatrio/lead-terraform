@@ -1,6 +1,6 @@
 variable "namespace" {}
 
-variable "provider" {
+variable "mesh_provider" {
   default = "istio"
 }
 

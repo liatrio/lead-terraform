@@ -16,7 +16,7 @@ resource "helm_release" "flagger" {
 
   set {
     name  = "meshProvider"
-    value = var.provider
+    value = var.mesh_provider
   }
 
   set {
