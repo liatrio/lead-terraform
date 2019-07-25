@@ -98,7 +98,7 @@ gitlab:
         cpu: 100m
         memory: 600Mi
       limits:
-        cpu: 500
+        cpu: 500m
         memory: 1.5Gi
   gitlab-shell:
     enabled: false
