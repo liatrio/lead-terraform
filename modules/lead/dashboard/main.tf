@@ -3,6 +3,7 @@ data "template_file" "dashboard_values" {
 
   vars = {
     cluster_domain = "${var.namespace}.${var.cluster}.${var.root_zone_name}"
+    namespace = "${var.namespace}"
   }
 }
 
@@ -21,4 +22,3 @@ resource "helm_release" "lead-dashboard" {
 
   values = [data.template_file.dashboard_values.rendered]
 }
-
