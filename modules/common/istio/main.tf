@@ -135,5 +135,5 @@ module "istio_cert_issuer" {
 module "istio_flagger" {
   source        = "../../common/flagger"
   enable        = var.enable
-  namespace     = module.istio_namespace.name
+  namespace     = helm_release.istio[0].metadata[0].namespace
 }
