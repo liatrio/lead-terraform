@@ -1,5 +1,6 @@
 module "istio_namespace" {
   source    = "../namespace"
+  enabled   = var.enabled
   namespace = var.namespace
   annotations = {
     name = var.namespace
@@ -7,11 +8,14 @@ module "istio_namespace" {
 }
 
 resource "random_string" "kiali_admin_password" {
+  count   = var.enabled ? 1 : 0
   length  = 10
   special = false
 }
 
 resource "kubernetes_secret" "kiali_dashboard_secret" {
+  count = var.enabled ? 1 : 0
+
   metadata {
     name      = "kiali"
     namespace = module.istio_namespace.name
@@ -25,12 +29,13 @@ resource "kubernetes_secret" "kiali_dashboard_secret" {
 
   data = {
     "username"   = var.kiali_username
-    "passphrase" = random_string.kiali_admin_password.result
+    "passphrase" = random_string.kiali_admin_password[0].result
   }
 }
 
 module "istio_ingress" {
   source                  = "../nginx-ingress"
+  enabled                 = var.enabled
   namespace               = module.istio_namespace.name
   ingress_controller_type = var.ingress_controller_type
 }
@@ -49,7 +54,7 @@ data "template_file" "istio_values" {
 }
 
 resource "helm_release" "istio" {
-  count      = var.enable ? 1 : 0
+  count      = var.enabled ? 1 : 0
   repository = data.helm_repository.istio.metadata[0].name
   chart      = "istio"
   namespace  = module.istio_namespace.name
@@ -67,6 +72,8 @@ resource "helm_release" "istio" {
 }
 
 resource "kubernetes_cluster_role" "tiller_cluster_role" {
+  count = var.enabled ? 1 : 0
+
   metadata {
     name = "${var.namespace}-tiller-manager"
   }
@@ -103,6 +110,8 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
 }
 
 resource "kubernetes_cluster_role_binding" "tiller_cluster_role_binding" {
+  count = var.enabled ? 1 : 0
+
   metadata {
     name = "${var.namespace}-tiller-binding"
   }
@@ -110,7 +119,7 @@ resource "kubernetes_cluster_role_binding" "tiller_cluster_role_binding" {
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "ClusterRole"
-    name      = kubernetes_cluster_role.tiller_cluster_role.metadata[0].name
+    name      = kubernetes_cluster_role.tiller_cluster_role[0].metadata[0].name
   }
 
   subject {
@@ -122,6 +131,7 @@ resource "kubernetes_cluster_role_binding" "tiller_cluster_role_binding" {
 
 module "istio_cert_issuer" {
   source                   = "../../common/cert-issuer"
+  enabled                  = var.enabled
   namespace                = module.istio_namespace.name
   issuer_name              = var.cert_issuer_name
   issuer_type              = var.cert_issuer_type

@@ -4,6 +4,7 @@ data "helm_repository" "istio" {
 }
 
 resource "helm_release" "istio_init" {
+  count      = var.enable_istio ? 1 : 0  
   repository = data.helm_repository.istio.metadata[0].name
   chart      = "istio-init"
   namespace  = module.infrastructure.namespace
@@ -22,13 +23,14 @@ resource "null_resource" "istio_init_delay" {
 }
 
 module "istio_system" {
-  source     = "../../modules/common/istio"
-  namespace  = "istio-system"
-  crd_waiter = null_resource.istio_init_delay.id
-  region     = var.region
-  zone_id    = aws_route53_zone.cluster_zone.zone_id
-  domain     = "istio-system.${module.eks.cluster_id}.${var.root_zone_name}"
-  providers  = {
+  source             = "../../modules/common/istio"
+  enabled            = var.enable_istio
+  namespace          = "istio-system"
+  crd_waiter         = null_resource.istio_init_delay.id
+  region             = var.region
+  zone_id            = aws_route53_zone.cluster_zone.zone_id
+  domain             = "istio-system.${module.eks.cluster_id}.${var.root_zone_name}"
+  providers = {
     helm = "helm.system"
   }
 }

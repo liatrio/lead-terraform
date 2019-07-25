@@ -18,18 +18,6 @@ keycloak:
   extraEnv: |
     - name: PROXY_ADDRESS_FORWARDING
       value: "true"
-    # - name: KEYCLOAK_LOGLEVEL
-    #   value: DEBUG
-    # - name: WILDFLY_LOGLEVEL
-    #   value: DEBUG
-    # - name: CACHE_OWNERS
-    #   value: "2"
-    # - name: DB_QUERY_TIMEOUT
-    #   value: "60"
-    # - name: DB_VALIDATE_ON_MATCH
-    #   value: true
-    # - name: DB_USE_CAST_FAIL
-    #   value: false
 
   ## Ingress configuration.
   ## ref: https://kubernetes.io/docs/user-guide/ingress/
@@ -38,8 +26,10 @@ keycloak:
     annotations:
       kubernetes.io/ingress.class: "nginx"
       kubernetes.io/tls-acme: "true"
-      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/ssl-redirect: "${ssl_redirect}"
       nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+      nginx.ingress.kubernetes.io/configuration-snippet: |
+        more_set_headers "X-Forwarded-Proto: https";      
       ingress.kubernetes.io/proxy-body-size: "0"
       ingress.kubernetes.io/proxy-read-timeout: "600"
       ingress.kubernetes.io/proxy-send-timeout: "600"
@@ -60,6 +50,15 @@ keycloak:
     # The database vendor. Can be either "postgres", "mysql", "mariadb", or "h2"
     dbVendor: postgres
 
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 250m
+    limits:
+      memory: 768Mi
+      cpu: 1
+
+
 postgresql:
   ### PostgreSQL User to create.
   ##
@@ -76,3 +75,11 @@ postgresql:
     ## Enable PostgreSQL persistence using Persistent Volume Claims.
     ##
     enabled: true
+  
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 250m
+    limits:
+      memory: 512Mi
+      cpu: 500m

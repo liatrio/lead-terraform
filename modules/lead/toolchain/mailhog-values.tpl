@@ -1,13 +1,3 @@
-artifactory:
-  resources:
-    requests:
-      cpu: 50m
-      memory: 2.5Gi
-    limits:
-      cpu: 500m
-      memory: 3Gi
-nginx:
-  enabled: false
 ingress:
   enabled: true
   annotations:
@@ -20,13 +10,19 @@ ingress:
     ingress.kubernetes.io/proxy-body-size: "0"
     ingress.kubernetes.io/proxy-read-timeout: "600"
     ingress.kubernetes.io/proxy-send-timeout: "600"
-    nginx.ingress.kubernetes.io/configuration-snippet: |
-      rewrite ^/(v2)/token /artifactory/api/docker/null/v2/token;
-      rewrite ^/(v2)/([^\/]*)/(.*) /artifactory/api/docker/$2/$1/$3;
     nginx.ingress.kubernetes.io/proxy-body-size: "0"
   hosts:
-  - ${ingress_hostname}
+    - host: ${ingress_hostname}
+      paths:
+        - /
   tls:
-  - hosts:
-    - ${ingress_hostname}
-    secretName: artifactory-ingress-tls
+    - secretName: mailhog-ingress-tls    
+      hosts:
+        - ${ingress_hostname}
+
+  ## Allows the specification of additional environment variables
+  extraEnv: |
+    - name: MH_HOSTNAME
+      value: "${ingress_hostname}"
+    - name: MH_OUTGOING_SMTP
+      value: "${smtp_json}"

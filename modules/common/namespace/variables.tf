@@ -11,6 +11,10 @@ variable "labels" {
   default = {}
 }
 
+variable "enabled" {
+  default = true
+}
+
 variable "resource_request_cpu" {
   type = "string"
   default = "50m"
