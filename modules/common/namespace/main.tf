@@ -7,6 +7,26 @@ resource "kubernetes_namespace" "ns" {
   }
 }
 
+resource "kubernetes_limit_range" "resource-limits" {
+  metadata {
+    name = "namespace-resource-limits"
+    namespace = var.namespace
+  }
+  spec {
+    limit {
+      type = "Container"
+      default_request = {
+        cpu    = var.resource_request_cpu
+        memory = var.resource_request_memory
+      }
+      default = {
+        cpu    = var.resource_limit_cpu
+        memory = var.resource_limit_memory
+      }
+    }
+  }
+}
+
 resource "kubernetes_service_account" "tiller_service_account" {
   count = var.enabled ? 1 : 0
   metadata {
@@ -96,4 +116,3 @@ resource "kubernetes_role_binding" "tiller_role_binding" {
     namespace = kubernetes_namespace.ns[0].metadata[0].name
   }
 }
-
