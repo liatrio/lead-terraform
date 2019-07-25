@@ -4,5 +4,5 @@ server:
       cpu: 50m
       memory: 1Gi
     limits:
-      cpu: 500m
+      cpu: 200m
       memory: 2Gi
