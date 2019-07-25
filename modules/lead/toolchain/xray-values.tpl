@@ -38,3 +38,11 @@ server:
     limits:
       cpu: 100m
       memory: 256Mi
+rabbitmq-ha:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 200m
+      memory: 512Mi

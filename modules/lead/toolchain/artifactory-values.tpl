@@ -1,3 +1,11 @@
+artifactory:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 2.5Gi
+    limits:
+      cpu: 500m
+      memory: 3Gi
 nginx:
   enabled: false
 ingress:
