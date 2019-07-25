@@ -20,7 +20,7 @@ data "template_file" "gitlab_values" {
 }
 
 data "external" "keycloak_realm_certificate" {
-  depends_on = [helm_release.keycloak, helm_release.keycloak_realm]
+  depends_on = [helm_release.keycloak, keycloak_realm.realm]
   count      = var.enable_gitlab && var.enable_keycloak ? 1 : 0 
   program    = ["sh", "${path.module}/scripts/get_keycloak_realm_certificate.sh", "${local.protocol}://keycloak.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}/auth/realms/${module.toolchain_namespace.name}/protocol/saml/descriptor"]
 }
