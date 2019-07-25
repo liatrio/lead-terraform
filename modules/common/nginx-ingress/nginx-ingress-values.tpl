@@ -10,3 +10,4 @@ controller:
     enabled: true
   service:
     type: ${ingress_controller_type}
+    externalTrafficPolicy: ${ingress_external_traffic_policy}

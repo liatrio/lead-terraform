@@ -1,3 +1,12 @@
+locals {
+  protocol = var.root_zone_name == "localhost" ? "http" : "https"
+}
+
+data "helm_repository" "codecentric" {
+  name = "codecentric"
+  url  = "https://codecentric.github.io/helm-charts"
+}
+
 module "toolchain_namespace" {
   source    = "../../common/namespace"
   namespace = var.namespace
@@ -11,9 +20,10 @@ module "toolchain_namespace" {
 }
 
 module "toolchain_ingress" {
-  source                  = "../../common/nginx-ingress"
-  namespace               = module.toolchain_namespace.name
-  ingress_controller_type = var.ingress_controller_type
+  source                          = "../../common/nginx-ingress"
+  namespace                       = module.toolchain_namespace.name
+  ingress_controller_type         = var.ingress_controller_type
+  ingress_external_traffic_policy = var.ingress_external_traffic_policy
 }
 
 module "toolchain_issuer" {

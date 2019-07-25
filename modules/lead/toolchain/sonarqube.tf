@@ -13,6 +13,7 @@ data "template_file" "sonarqube_values" {
 }
 
 resource "helm_release" "sonarqube" {
+  count      = var.enable_sonarqube ? 1 : 0
   repository = "stable"
   name       = "sonarqube"
   namespace  = module.toolchain_namespace.name

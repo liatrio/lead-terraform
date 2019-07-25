@@ -16,7 +16,7 @@ variable "cert_issuer_name" {
   default = "letsencrypt-dns"
 }
 
-variable "enable" {
+variable "enabled" {
   default = true
 }
 

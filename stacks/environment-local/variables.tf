@@ -29,10 +29,6 @@ variable "product_version" {
   default = "master"
 }
 
-variable "enable_xray" {
-  default = "true"
-}
-
 variable "artifactory_license" {
 }
 
@@ -42,7 +38,51 @@ variable "slack_bot_token" {
 variable "slack_client_signing_secret" {
 }
 
+variable "keycloak_admin_password" {
+  default = "keycloak"
+}
+
+variable "from_email" {
+  default = "noreply@liatr.io"
+}
+
+variable "ingress_controller_type" {
+  default = "NodePort"
+}
+
+variable "ingress_external_traffic_policy" {
+  default = ""
+}
+
 variable "enable_istio" {
+  default = true
+}
+
+variable "enable_artifactory" {
+  default = true
+}
+
+variable "enable_gitlab" {
+  default = true
+}
+
+variable "enable_keycloak" {
+  default = true
+}
+
+variable "enable_mailhog" {
+  default = true
+}
+
+variable "enable_operators" {
+  default = true
+}
+
+variable "enable_sonarqube" {
+  default = true
+}
+
+variable "enable_xray" {
   default = true
 }
 

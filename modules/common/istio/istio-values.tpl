@@ -87,3 +87,12 @@ galley:
     limits:
       cpu: 200m
       memory: 256Mi
+pilot:
+  resources:
+    requests:
+      cpu: 500m
+      memory: 2048Mi
+    limits:
+      cpu: 1 
+      memory: 3072Mi
+

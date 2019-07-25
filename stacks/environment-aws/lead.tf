@@ -48,6 +48,12 @@ resource "helm_release" "cluster_autoscaler" {
   provider = helm.system
 }
 
+module "ses_smtp" {
+  source       = "../../modules/common/aws-ses-smtp"
+  name         = "ses-smtp-${module.toolchain.namespace}"
+  from_address = var.from_email
+}
+
 module "toolchain" {
   source                  = "../../modules/lead/toolchain"
   root_zone_name          = var.root_zone_name
@@ -56,9 +62,27 @@ module "toolchain" {
   image_whitelist         = var.image_whitelist
   elb_security_group_id   = aws_security_group.elb.id
   artifactory_license     = var.artifactory_license
+  keycloak_admin_password = var.keycloak_admin_password
+  enable_artifactory      = var.enable_artifactory
+  enable_gitlab           = var.enable_gitlab
+  enable_keycloak         = var.enable_keycloak
+  enable_mailhog          = var.enable_mailhog
+  enable_sonarqube        = var.enable_sonarqube
+  enable_xray             = var.enable_xray    
   issuer_type             = "acme"
   ingress_controller_type = "LoadBalancer"
   crd_waiter              = module.infrastructure.crd_waiter
+  
+  smtp_json = {
+    aws_ses = {
+      name     = "aws_ses"
+      host     = "email-smtp.${var.region}.amazonaws.com"
+      port     = "587"
+      email    = var.from_email
+      username = module.ses_smtp.smtp_username
+      password = module.ses_smtp.smtp_password
+    }
+  }
 
   providers = {
     helm = helm.toolchain
