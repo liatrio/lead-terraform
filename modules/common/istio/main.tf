@@ -141,3 +141,9 @@ module "istio_cert_issuer" {
   provider_dns_region      = var.region
   provider_dns_hosted_zone = var.zone_id
 }
+
+module "istio_flagger" {
+  source        = "../../common/flagger"
+  enable        = var.enabled
+  namespace     = helm_release.istio[0].metadata[0].namespace
+}

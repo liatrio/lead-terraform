@@ -83,9 +83,23 @@ gitlab:
   unicorn:
     minReplicas: 1
     maxReplicas: 1
+    resources:
+      requests:
+        cpu: 200m
+        memory: 1.4Gi
+      limits:
+        cpu: 800m
+        memory: 2Gi
   sidekiq:
     minReplicas: 1
     maxReplicas: 1
+    resources:
+      requests:
+        cpu: 100m
+        memory: 600Mi
+      limits:
+        cpu: 500m
+        memory: 1.5Gi
   gitlab-shell:
     enabled: false
   task-runner:

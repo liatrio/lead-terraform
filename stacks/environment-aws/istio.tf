@@ -34,4 +34,3 @@ module "istio_system" {
     helm = "helm.system"
   }
 }
-
