@@ -65,8 +65,6 @@ master:
           slackNotifier:
             teamDomain: "${slack_team}"
             tokenCredentialId: jenkins-credential-slack
-      gitlab-config: |
-        unclassified:
       pod-templates: |
         jenkins:
           clouds:
@@ -191,8 +189,6 @@ master:
     - kubernetes:1.15.6
     - job-dsl:1.74
     - blueocean:1.4.1
-    - git:3.10.1
-    - gitlab:1.5.12
 
   containerEnv:
     - name: elasticUrl
