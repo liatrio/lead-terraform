@@ -8,6 +8,7 @@ resource "kubernetes_namespace" "ns" {
 }
 
 resource "kubernetes_limit_range" "resource-limits" {
+  count = var.enabled ? 1 : 0
   metadata {
     name = "namespace-resource-limits"
     namespace = var.namespace
