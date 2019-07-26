@@ -82,7 +82,7 @@ module "vpc" {
   tags = merge(
     local.tags,
     {
-      "kubernetes.io/cluster/${var.cluster}" = "shared"
+      "k8s.io/cluster/${var.cluster}" = "shared"
     },
   )
 }
