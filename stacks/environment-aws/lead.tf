@@ -42,6 +42,7 @@ resource "helm_release" "cluster_autoscaler" {
   chart      = "cluster-autoscaler"
   timeout    = 600
   wait       = true
+  version    = "1.0.0"
 
   values = [data.template_file.cluster_autoscaler.rendered]
 
