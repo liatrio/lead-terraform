@@ -1,3 +1,11 @@
+artifactory:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 2.5Gi
+    limits:
+      cpu: 500m
+      memory: 3Gi
 nginx:
   enabled: false
 ingress:
@@ -5,8 +13,10 @@ ingress:
   annotations:
     kubernetes.io/ingress.class: "nginx"
     kubernetes.io/tls-acme: "true"
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "${ssl_redirect}"
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "X-Forwarded-Proto: https";      
     ingress.kubernetes.io/proxy-body-size: "0"
     ingress.kubernetes.io/proxy-read-timeout: "600"
     ingress.kubernetes.io/proxy-send-timeout: "600"

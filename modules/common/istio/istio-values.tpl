@@ -12,7 +12,7 @@ global:
     gatewayName: istio-ingressgateway
 
 certmanager:
-  enabled: false    
+  enabled: false
   email: cloudservices@liatr.io
 
 grafana:
@@ -69,3 +69,30 @@ tracing:
       secretName: istio-ingress-tls
     hosts:
     - ${domain}
+
+prometheus:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 1Gi
+    limits:
+      cpu: 200m
+      memory: 2Gi
+
+galley:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+pilot:
+  resources:
+    requests:
+      cpu: 500m
+      memory: 2048Mi
+    limits:
+      cpu: 1 
+      memory: 3072Mi
+

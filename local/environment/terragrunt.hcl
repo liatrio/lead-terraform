@@ -17,6 +17,20 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  root_zone_name = "localhost"
-  cluster = "docker-for-desktop"
+  root_zone_name  = "localhost"
+  cluster         = "docker-for-desktop"
+
+  enable_artifactory = true
+  enable_gitlab      = true
+  enable_istio       = false
+  enable_keycloak    = true
+  enable_mailhog     = true
+  enable_operators   = true
+  enable_sonarqube   = true
+  enable_xray        = true
+
+  # This will conflict with Istio since it's also configured as a LoadBalancer
+  # So ensure `enable_istio = false` before uncommenting this
+  ingress_controller_type         = "LoadBalancer"
+  ingress_external_traffic_policy = "Local"
 }

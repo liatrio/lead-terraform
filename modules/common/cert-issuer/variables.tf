@@ -33,3 +33,8 @@ variable "provider_dns_region" {
 variable "provider_dns_hosted_zone" {
   default = ""
 }
+
+variable "enabled" {
+  default = true
+}
+

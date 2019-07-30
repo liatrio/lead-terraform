@@ -112,11 +112,13 @@ data "template_file" "artifactory_values" {
   template = file("${path.module}/artifactory-values.tpl")
 
   vars = {
+    ssl_redirect     = var.root_zone_name == "localhost" ? false : true
     ingress_hostname = "artifactory.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
   }
 }
 
 resource "helm_release" "artifactory" {
+  count      = var.enable_artifactory ? 1 : 0
   depends_on = [kubernetes_config_map.artifactory_config]
   repository = data.helm_repository.jfrog.metadata[0].name
   name       = "artifactory"

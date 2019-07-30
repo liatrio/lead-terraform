@@ -1,3 +1,7 @@
+data "template_file" "prometheus_values" {
+  template = file("${path.module}/prometheus-values.tpl")
+}
+
 resource "helm_release" "prometheus" {
   name       = "prometheus"
   namespace  = module.system_namespace.name
@@ -8,5 +12,6 @@ resource "helm_release" "prometheus" {
   wait       = true
 
   depends_on = [kubernetes_cluster_role_binding.tiller_cluster_role_binding]
-}
 
+  values = [data.template_file.prometheus_values.rendered]
+}

@@ -4,6 +4,7 @@ data "helm_repository" "istio" {
 }
 
 resource "helm_release" "istio_init" {
+  count      = var.enable_istio ? 1 : 0  
   repository = data.helm_repository.istio.metadata[0].name
   chart      = "istio-init"
   namespace  = module.infrastructure.namespace
@@ -23,6 +24,7 @@ resource "null_resource" "istio_init_delay" {
 
 module "istio_system" {
   source             = "../../modules/common/istio"
+  enabled            = var.enable_istio
   namespace          = "istio-system"
   crd_waiter         = null_resource.istio_init_delay.id
   region             = var.region
@@ -32,4 +34,3 @@ module "istio_system" {
     helm = "helm.system"
   }
 }
-

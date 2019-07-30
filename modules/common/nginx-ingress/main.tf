@@ -3,8 +3,9 @@ data "template_file" "nginx_ingress_values" {
   template = file("${path.module}/nginx-ingress-values.tpl")
 
   vars = {
-    ingress_controller_type = var.ingress_controller_type
-    service_account         = kubernetes_service_account.nginx_ingress_service_account[0].metadata[0].name
+    ingress_controller_type         = var.ingress_controller_type
+    ingress_external_traffic_policy = var.ingress_external_traffic_policy
+    service_account                 = kubernetes_service_account.nginx_ingress_service_account[0].metadata[0].name
   }
 }
 

@@ -7,3 +7,16 @@ output "tiller_service_account" {
   value = module.toolchain_namespace.tiller_service_account
 }
 
+output "keycloak_domain" {
+  depends_on  = [helm_release.keycloak]
+  value       = "keycloak.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
+}
+
+output "keycloak_admin_username" {
+  value = kubernetes_secret.keycloak_admin[0].data.username
+}
+
+output "keycloak_admin_password" {
+  sensitive = true
+  value = var.keycloak_admin_password
+}

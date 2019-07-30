@@ -273,4 +273,3 @@ policy = <<EOF
 EOF
 
 }
-
