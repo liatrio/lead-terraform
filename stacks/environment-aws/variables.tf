@@ -50,7 +50,7 @@ variable "opa_failure_policy" {
 }
 
 variable "sdm_version" {
-  default = "0.4.0-24-gd13bfe5"
+  default = "0.4.0-38-gc65319f"
 }
 
 variable "product_version" {
