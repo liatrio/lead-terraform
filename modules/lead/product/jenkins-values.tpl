@@ -2,6 +2,9 @@ serviceAccount:
   create: false
   name: jenkins
 
+persistence:
+  enabled: false
+
 master:
   ingress:
     enabled: true
