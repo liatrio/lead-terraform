@@ -52,10 +52,10 @@ keycloak:
 
   resources:
     requests:
-      memory: 256Mi
+      memory: 600Mi
       cpu: 250m
     limits:
-      memory: 768Mi
+      memory: 800Mi
       cpu: 1
 
 

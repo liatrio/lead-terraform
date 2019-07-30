@@ -1,48 +1,48 @@
 postgresql:
   resources:
     requests:
-      cpu: 100m
-      memory: 128Mi
+      cpu: 20m
+      memory: 100Mi
     limits:
-      cpu: 200m
-      memory: 256Mi
+      cpu: 100m
+      memory: 125Mi
 analysis:
   resources:
     requests:
-      cpu: 25m
-      memory: 256Mi
+      cpu: 5m
+      memory: 150Mi
     limits:
-      cpu: 100m
-      memory: 512Mi
+      cpu: 20m
+      memory: 200Mi
 indexer:
   resources:
     requests:
-      cpu: 25m
-      memory: 256Mi
+      cpu: 5m
+      memory: 150Mi
     limits:
-      cpu: 100m
-      memory: 512Mi
+      cpu: 20m
+      memory: 200Mi
 persist:
   resources:
     requests:
-      cpu: 25m
-      memory: 256Mi
+      cpu: 5m
+      memory: 150Mi
     limits:
-      cpu: 100m
-      memory: 512Mi
+      cpu: 20m
+      memory: 200Mi
 server:
   resources:
     requests:
-      cpu: 25m
-      memory: 128Mi
+      cpu: 5m
+      memory: 150Mi
     limits:
-      cpu: 100m
-      memory: 256Mi
+      cpu: 20m
+      memory: 200Mi
 rabbitmq-ha:
   resources:
     requests:
-      cpu: 100m
-      memory: 256Mi
+      cpu: 70m
+      memory: 200Mi
     limits:
       cpu: 200m
-      memory: 512Mi
+      memory: 250Mi
