@@ -26,7 +26,7 @@ master:
   healthProbeReadinessInitialDelay: 120
   resources:
     requests:
-      cpu: 500m
+      cpu: 100m
       memory: 1Gi
     limits:
       cpu: 1000m

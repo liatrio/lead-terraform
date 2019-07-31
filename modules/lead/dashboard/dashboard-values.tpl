@@ -6,7 +6,7 @@ elasticsearch:
       cpu: 10m
       memory: 1.5Gi
     limits:
-      cpu: 50m
+      cpu: 100m
       memory: 3Gi
 
 grafana:
@@ -29,7 +29,7 @@ grafana:
       cpu: 10m
       memory: 100Mi
     limits:
-      cpu: 50m
+      cpu: 100m
       memory: 150Mi
   sidecar:
     dashboards:
@@ -39,16 +39,16 @@ logstash:
   resources:
     requests:
       cpu: 10m
-      memory: 1.25Gi
+      memory: 500Mi
     limits:
       cpu: 100m
-      memory: 2.5Gi
+      memory: 1.5Gi
 logstash-jenkins:
   logstashJavaOpts: "-Djava.security.egd=file:/dev/urandom"
   resources:
     requests:
       cpu: 10m
-      memory: 1.25Gi
+      memory: 500Gi
     limits:
       cpu: 100m
-      memory: 2.5Gi
+      memory: 1.5Gi
