@@ -10,6 +10,15 @@ global:
     enabled: false
     enableHttps: true
     gatewayName: istio-ingressgateway
+  proxy:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 500m
+        memory: 1024Mi
+
 
 certmanager:
   enabled: false
@@ -91,8 +100,16 @@ pilot:
   resources:
     requests:
       cpu: 500m
-      memory: 2048Mi
+      memory: 512Mi
     limits:
-      cpu: 1 
-      memory: 3072Mi
-
+      cpu: 1
+      memory: 1024Mi
+mixer:
+  telemetry:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 500m
+        memory: 1024Mi

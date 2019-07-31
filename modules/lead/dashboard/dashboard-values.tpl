@@ -4,7 +4,7 @@ elasticsearch:
   resources:
     requests:
       cpu: 50m
-      memory: 3Gi
+      memory: 2Gi
     limits:
       cpu: 500m
       memory: 3Gi
@@ -39,16 +39,16 @@ logstash:
   resources:
     requests:
       cpu: 200m
-      memory: 1.5Gi
+      memory: 512Mi
     limits:
       cpu: 400m
-      memory: 3Gi
+      memory: 1024Mi
 logstash-jenkins:
   logstashJavaOpts: "-Djava.security.egd=file:/dev/urandom"
   resources:
     requests:
       cpu: 200m
-      memory: 1.5Gi
+      memory: 512Mi
     limits:
       cpu: 400m
-      memory: 3Gi
+      memory: 1024Mi
