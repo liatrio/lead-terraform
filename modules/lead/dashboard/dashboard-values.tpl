@@ -41,7 +41,7 @@ logstash:
       cpu: 10m
       memory: 500Mi
     limits:
-      cpu: 100m
+      cpu: 400m
       memory: 1.5Gi
 logstash-jenkins:
   logstashJavaOpts: "-Djava.security.egd=file:/dev/urandom"
@@ -50,5 +50,5 @@ logstash-jenkins:
       cpu: 10m
       memory: 500Gi
     limits:
-      cpu: 100m
+      cpu: 400m
       memory: 1.5Gi

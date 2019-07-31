@@ -46,3 +46,11 @@ rabbitmq-ha:
     limits:
       cpu: 200m
       memory: 250Mi
+mongodb:
+  resources:
+    requests:
+      cpu: 20m
+      memory: 250Mi
+    limits:
+      cpu: 200m
+      memory: 300Mi
