@@ -1,4 +1,5 @@
 terraform {
+  backend "s3" {}
 }
 
 provider "kubernetes" {
