@@ -129,8 +129,8 @@ mixer:
   telemetry:
     resources:
       requests:
-        cpu: 100m
+        cpu: 10m
         memory: 128Mi
       limits:
-        cpu: 500m
+        cpu: 100m
         memory: 1024Mi
