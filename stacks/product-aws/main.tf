@@ -1,6 +1,4 @@
 terraform {
-  backend "local" {
-  }
 }
 
 provider "kubernetes" {
@@ -93,4 +91,3 @@ module "product" {
     helm.system           = helm.system
   }
 }
-
