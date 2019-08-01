@@ -97,9 +97,9 @@ galley:
 pilot:
   resources:
     requests:
-      cpu: 500m
-      memory: 2048Mi
+      cpu: 10m
+      memory: 64Mi
     limits:
-      cpu: 1 
-      memory: 3072Mi
+      cpu: 500m
+      memory: 512Mi
 
