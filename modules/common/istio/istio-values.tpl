@@ -10,6 +10,13 @@ global:
     enabled: false
     enableHttps: true
     gatewayName: istio-ingressgateway
+  defaultResources:
+    requests:
+      cpu: 10m
+      memory: 128Mi
+    limits:
+      cpu: 100m
+      memory: 256Mi
 
 certmanager:
   enabled: false
