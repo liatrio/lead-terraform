@@ -4,6 +4,13 @@ gateways:
   istio-ingressgateway:
     sds:
       enabled: true
+      resources:
+        requests:
+          cpu: 10m
+          memory: 128Mi
+        limits:
+          cpu: 100m
+          memory: 256Mi
 
 global:
   k8sIngress:
