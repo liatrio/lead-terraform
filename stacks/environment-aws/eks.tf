@@ -202,7 +202,7 @@ resource "aws_iam_policy" "worker_policy" {
    {
      "Effect": "Allow",
      "Action": ["s3:ListBucket"],
-     "Resource": ["arn:aws:s3:::${s3.name}}"]
+     "Resource": ["arn:aws:s3:::$//{s3.name}}"]
    },
    {
      "Effect": "Allow",
@@ -211,7 +211,7 @@ resource "aws_iam_policy" "worker_policy" {
        "s3:GetObject",
        "s3:DeleteObject"
      ],
-     "Resource": ["arn:aws:s3:::${s3.name}/*"]
+     "Resource": ["arn:aws:s3:::$//{s3.name}/*"]
    }
   */
  ]
