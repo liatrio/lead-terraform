@@ -1,8 +1,9 @@
+cluster: ${cluster}
 cluster_domain: ${cluster_domain}
 product_version: ${product_version}
 
 operators:
-  slack:   
+  slack:
     ingress:
       hostName: operator-slack.${namespace}.${cluster_domain}
       annotations:

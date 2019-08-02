@@ -26,6 +26,7 @@ data "template_file" "operator_toolchain_values" {
 
   vars = {
     image_tag      = "v${var.sdm_version}"
+    cluster        = var.cluster
     namespace      = var.namespace
     cluster_domain = "${var.cluster}.${var.root_zone_name}"
     product_version= var.product_version
@@ -74,4 +75,3 @@ EOF
 
   }
 }
-
