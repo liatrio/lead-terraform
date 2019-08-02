@@ -1,5 +1,5 @@
 terraform {
-  backend "artifactory" {}
+  backend "s3" {}
 }
 
 provider "kubernetes" {
