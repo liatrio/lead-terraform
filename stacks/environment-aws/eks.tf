@@ -217,6 +217,10 @@ resource "aws_iam_role_policy_attachment" "s3_access_role_attachment" {
   role = module.eks.worker_iam_role_name
   policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
 }
+resource "aws_iam_role_policy_attachment" "s3_access_role_attachment" {
+  role = module.eks.worker_iam_role_name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
+}
 
 resource "aws_iam_role" "workspace_role" {
   name = "${var.cluster}_workspace_role"
