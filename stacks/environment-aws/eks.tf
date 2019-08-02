@@ -196,7 +196,24 @@ resource "aws_iam_policy" "worker_policy" {
        "cloud9:DescribeEnvironmentMemberships", "cloud9:DescribeEnvironments"
      ],
      "Resource": ["*"]
+   },
+  // When uncommenting, make sure to replace s3.name with proper variable name
+  /*
+   {
+     "Effect": "Allow",
+     "Action": ["s3:ListBucket"],
+     "Resource": ["arn:aws:s3:::${s3.name}}"]
+   },
+   {
+     "Effect": "Allow",
+     "Action": [
+       "s3:PutObject",
+       "s3:GetObject",
+       "s3:DeleteObject"
+     ],
+     "Resource": ["arn:aws:s3:::${s3.name}/*"]
    }
+  */
  ]
 }
 EOF
@@ -211,39 +228,13 @@ resource "aws_iam_role_policy_attachment" "worker_ssm_role_attachment" {
   role = module.eks.worker_iam_role_name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
 }
+
+// TODO Remove once restricted permissions validated
 resource "aws_iam_role_policy_attachment" "s3_access_role_attachment" {
   role = module.eks.worker_iam_role_name
   policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
 }
 
-// Template for future restriction of S3 permissions.
-/*
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-      ],
-      "Resource": "*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": ["s3:ListBucket"],
-      "Resource": ["arn:aws:s3:::test"]
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "s3:PutObject",
-        "s3:GetObject",
-        "s3:DeleteObject"
-      ],
-      "Resource": ["arn:aws:s3:::test/*"]
-    }
-  ]
-}
-*/
 resource "aws_iam_role" "workspace_role" {
   name = "${var.cluster}_workspace_role"
 
