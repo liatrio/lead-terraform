@@ -124,7 +124,6 @@ pilot:
     limits:
       cpu: 500m
       memory: 512Mi
-
 mixer:
   telemetry:
     resources:

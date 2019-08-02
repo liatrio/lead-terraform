@@ -52,3 +52,4 @@ logstash-jenkins:
     limits:
       cpu: 400m
       memory: 1.5Gi
+
