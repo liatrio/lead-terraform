@@ -196,24 +196,7 @@ resource "aws_iam_policy" "worker_policy" {
        "cloud9:DescribeEnvironmentMemberships", "cloud9:DescribeEnvironments"
      ],
      "Resource": ["*"]
-   },
-  // When uncommenting, make sure to replace s3.name with proper variable name
-  /*
-   {
-     "Effect": "Allow",
-     "Action": ["s3:ListBucket"],
-     "Resource": ["arn:aws:s3:::$//{s3.name}}"]
-   },
-   {
-     "Effect": "Allow",
-     "Action": [
-       "s3:PutObject",
-       "s3:GetObject",
-       "s3:DeleteObject"
-     ],
-     "Resource": ["arn:aws:s3:::$//{s3.name}/*"]
    }
-  */
  ]
 }
 EOF
