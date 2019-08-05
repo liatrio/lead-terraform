@@ -1,3 +1,10 @@
+resources:
+  requests:
+    cpu: 5m
+    memory: 16Mi
+  limits:
+    cpu: 50m
+    memory: 128Mi
 ingress:
   enabled: ${ingress_enabled}
   annotations:
@@ -26,3 +33,4 @@ ingress:
       value: "${ingress_hostname}"
     - name: MH_OUTGOING_SMTP
       value: "${smtp_json}"
+
