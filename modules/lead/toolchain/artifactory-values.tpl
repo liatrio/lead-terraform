@@ -1,7 +1,7 @@
 artifactory:
   resources:
     requests:
-      cpu: 20m
+      cpu: 10m
       memory: 3Gi
     limits:
       cpu: 200m
