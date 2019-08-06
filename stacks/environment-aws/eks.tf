@@ -204,8 +204,8 @@ resource "aws_iam_policy" "worker_policy" {
    },
    {
      "Effect": "Allow",
-     "Action": ["dynamodb:*"]
-     "Resources": ["arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/lead-sdm-operators-${var.cluster}"]
+     "Action": ["dynamodb:*"],
+     "Resource": ["arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/lead-sdm-operators-${var.cluster}"]
    }
  ]
 }
