@@ -4,6 +4,20 @@ gateways:
   istio-ingressgateway:
     sds:
       enabled: true
+      resources:
+        requests:
+          cpu: 10m
+          memory: 128Mi
+        limits:
+          cpu: 100m
+          memory: 256Mi
+    resources:
+      requests:
+        cpu: 10m
+        memory: 128Mi
+      limits:
+        cpu: 100m
+        memory: 256Mi
 
 global:
   k8sIngress:
@@ -18,7 +32,13 @@ global:
       limits:
         cpu: 500m
         memory: 1024Mi
-
+  defaultResources:
+    requests:
+      cpu: 10m
+      memory: 128Mi
+    limits:
+      cpu: 100m
+      memory: 256Mi
 
 certmanager:
   enabled: false
@@ -99,17 +119,17 @@ galley:
 pilot:
   resources:
     requests:
+      cpu: 10m
+      memory: 64Mi
+    limits:
       cpu: 500m
       memory: 512Mi
-    limits:
-      cpu: 1
-      memory: 1024Mi
 mixer:
   telemetry:
     resources:
       requests:
-        cpu: 100m
+        cpu: 10m
         memory: 128Mi
       limits:
-        cpu: 500m
+        cpu: 100m
         memory: 1024Mi
