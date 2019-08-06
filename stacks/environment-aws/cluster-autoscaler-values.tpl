@@ -16,3 +16,4 @@ autoDiscovery:
 
 extraArgs:
   balance-similar-node-groups: true
+  scale-down-enabled: false
