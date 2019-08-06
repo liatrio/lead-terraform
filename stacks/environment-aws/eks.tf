@@ -200,12 +200,12 @@ resource "aws_iam_policy" "worker_policy" {
    {
      "Effect": "Allow",
      "Action": ["s3:*"],
-     "Resource": ["arn:aws:s3:::lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${cluster}"]
+     "Resource": ["arn:aws:s3:::lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${var.cluster}"]
    },
    {
      "Effect": "Allow",
      "Action": ["dynamodb:*"]
-     "Resources": ["arn:aws:dynamodb:${region}:${data.aws_caller_identity.current.account_id}:lead-sdm-operators-${cluster}"]
+     "Resources": ["arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/lead-sdm-operators-${var.cluster}"]
    }
  ]
 }
