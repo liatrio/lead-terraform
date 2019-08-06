@@ -20,6 +20,7 @@ EOF
       autoscaling_enabled   = true
       protect_from_scale_in = true
       pre_userdata          = local.ssm_init
+      kubelet_extra_args    = "--node-labels=kubernetes.io/lifecycle=normal --register-with-taints=${var.ondemand_toleration_key}=true:NoSchedule"
     },
     {
       instance_type         = var.instance_type
@@ -32,6 +33,7 @@ EOF
       autoscaling_enabled   = true
       protect_from_scale_in = true
       pre_userdata          = local.ssm_init
+      kubelet_extra_args    = "--node-labels=kubernetes.io/lifecycle=normal --register-with-taints=${var.ondemand_toleration_key}=true:NoSchedule"
     },
     {
       instance_type         = var.instance_type
@@ -44,7 +46,23 @@ EOF
       autoscaling_enabled   = true
       protect_from_scale_in = true
       pre_userdata          = local.ssm_init
-    },
+      kubelet_extra_args    = "--node-labels=kubernetes.io/lifecycle=normal --register-with-taints=${var.ondemand_toleration_key}=true:NoSchedule"
+    },   
+  ]
+
+  worker_groups_launch_template_mixed = [
+    {
+      override_instance_types = var.spot_instance_types
+      subnets                 = module.vpc.private_subnets
+      asg_min_size            = var.spot_asg_min_size
+      asg_desired_capacity    = var.spot_asg_desired_capacity
+      asg_max_size            = var.spot_asg_max_size
+      bootstrap_extra_args    = "--enable-docker-bridge 'true'"
+      key_name                = var.key_name
+      autoscaling_enabled     = true
+      pre_userdata            = local.ssm_init
+      kubelet_extra_args      = "--node-labels=kubernetes.io/lifecycle=spot"
+    }
   ]
 
   map_roles = [
@@ -67,6 +85,15 @@ EOF
 }
 
 data "aws_availability_zones" "available" {
+}
+
+data "template_file" "ondemand_toleration" {
+  template = <<EOF
+tolerations:
+- key: "${var.ondemand_toleration_key}"
+  operator: "Exists"
+  effect: "NoSchedule"
+EOF
 }
 
 module "vpc" {
@@ -148,6 +175,7 @@ module "eks" {
   tags                                 = local.tags
   vpc_id                               = module.vpc.vpc_id
   worker_groups                        = local.worker_groups
+  worker_groups_launch_template_mixed  = local.worker_groups_launch_template_mixed
   worker_additional_security_group_ids = [aws_security_group.worker.id]
   map_roles                            = local.map_roles
   worker_ami_name_filter               = var.worker_ami_name_filter

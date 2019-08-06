@@ -22,7 +22,7 @@ variable "key_name" {
 }
 
 variable "instance_type" {
-  default = "m5.large"
+  default = "t2.micro"
 }
 
 variable "asg_min_size" {
@@ -34,6 +34,27 @@ variable "asg_desired_capacity" {
 }
 
 variable "asg_max_size" {
+  default = "1"
+}
+
+variable "ondemand_toleration_key" {
+  default = "ScheduleOndemand"
+}
+
+variable "spot_instance_types" {
+  type    = list
+  default = ["m5.large", "c5.large", "m4.large", "c4.large", "t3.large", "r5.large"]
+}
+
+variable "spot_asg_min_size" {
+  default = "1"
+}
+
+variable "spot_asg_desired_capacity" {
+  default = "1"
+}
+
+variable "spot_asg_max_size" {
   default = "5"
 }
 

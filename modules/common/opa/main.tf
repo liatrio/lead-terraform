@@ -19,7 +19,7 @@ resource "helm_release" "opa" {
   timeout       = 900
   recreate_pods = true
 
-  values = [data.template_file.opa_values[0].rendered]
+  values = [data.template_file.opa_values[0].rendered, var.external_values]
 }
 
 resource "kubernetes_config_map" "opa-default-system-main" {

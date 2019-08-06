@@ -22,3 +22,6 @@ variable "acme_dns_providers" {
 variable "issuer_type" {
 }
 
+variable "ondemand_toleration_values" {
+  default = ""
+}

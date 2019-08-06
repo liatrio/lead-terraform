@@ -38,3 +38,6 @@ variable "enabled" {
   default = true
 }
 
+variable "external_values" {
+  default = ""
+}

@@ -14,7 +14,8 @@ module "infrastructure" {
   enable_opa         = "false"
   issuer_type        = "acme"
 
-  external_dns_chart_values = data.template_file.external_dns_values.rendered
+  ondemand_toleration_values = data.template_file.ondemand_toleration.rendered
+  external_dns_chart_values  = data.template_file.external_dns_values.rendered
 
   providers = {
     helm = helm.system
@@ -44,7 +45,7 @@ resource "helm_release" "cluster_autoscaler" {
   wait       = true
   version    = "3.1.0"
 
-  values = [data.template_file.cluster_autoscaler.rendered]
+  values = [data.template_file.cluster_autoscaler.rendered, data.template_file.ondemand_toleration.rendered]
 
   provider = helm.system
 }
