@@ -221,7 +221,8 @@ resource "aws_iam_policy" "worker_policy" {
                 "dynamodb:GetItem",
                 "dynamodb:DescribeTable",
                 "dynamodb:DeleteItem",
-                "dynamodb:CreateTable"
+                "dynamodb:CreateTable",
+                "dynamodb:TagResource"
      ],
      "Resource": ["arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/lead-sdm-operators-${var.cluster}"]
    }
@@ -229,6 +230,35 @@ resource "aws_iam_policy" "worker_policy" {
 }
 EOF
 
+}
+
+resource "aws_s3_bucket" "tfstates" {
+  bucket = "lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${var.cluster}.liatr.io"
+  acl    = "log-delivery-write"
+
+  logging {
+    target_bucket = "lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${var.cluster}.liatr.io"
+    target_prefix = "TFStateLogs/"
+  }
+
+  versioning {
+    enabled = true
+  }
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        kms_master_key_id = "aws/s3"
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
+
+  tags = {
+    Name        = "SDM Operator Terraform States"
+    ManagedBy   = "Terraform"
+    Cluster     = "${var.cluster}"
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "worker_ecr_role_attachment" {
