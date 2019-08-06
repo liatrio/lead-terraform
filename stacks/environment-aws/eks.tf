@@ -196,6 +196,16 @@ resource "aws_iam_policy" "worker_policy" {
        "cloud9:DescribeEnvironmentMemberships", "cloud9:DescribeEnvironments"
      ],
      "Resource": ["*"]
+   },
+   {
+     "Effect": "Allow",
+     "Action": ["s3:*"],
+     "Resource": ["arn:aws:s3:::lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${cluster}"]
+   },
+   {
+     "Effect": "Allow",
+     "Action": ["dynamodb:*"]
+     "Resources": ["arn:aws:dynamodb:${region}:${data.aws_caller_identity.current.account_id}:lead-sdm-operators-${cluster}"]
    }
  ]
 }
