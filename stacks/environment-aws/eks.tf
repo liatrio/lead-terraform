@@ -196,6 +196,34 @@ resource "aws_iam_policy" "worker_policy" {
        "cloud9:DescribeEnvironmentMemberships", "cloud9:DescribeEnvironments"
      ],
      "Resource": ["*"]
+   },
+   {
+     "Effect": "Allow",
+     "Action": [
+                "s3:ListBucket",
+                "s3:GetBucketVersioning",
+                "s3:CreateBucket"
+     ],
+     "Resource": ["arn:aws:s3:::lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${var.cluster}.liatr.io"]
+   },
+   {
+     "Effect": "Allow",
+     "Action": [
+                "s3:PutObject",
+                "s3:GetObject"
+     ],
+     "Resource": ["arn:aws:s3:::lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${var.cluster}.liatr.io/*"]
+   },
+   {
+     "Effect": "Allow",
+     "Action": [
+                "dynamodb:PutItem",
+                "dynamodb:GetItem",
+                "dynamodb:DescribeTable",
+                "dynamodb:DeleteItem",
+                "dynamodb:CreateTable"
+     ],
+     "Resource": ["arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/lead-sdm-operators-${var.cluster}"]
    }
  ]
 }
