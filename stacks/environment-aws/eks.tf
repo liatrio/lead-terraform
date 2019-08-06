@@ -199,7 +199,11 @@ resource "aws_iam_policy" "worker_policy" {
    },
    {
      "Effect": "Allow",
-     "Action": ["s3:*"],
+     "Action": [
+                "s3:ListBucket",
+                "s3:GetBucketVersioning",
+                "s3:CreateBucket"
+     ],
      "Resource": ["arn:aws:s3:::lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${var.cluster}.liatr.io"]
    },
    {
