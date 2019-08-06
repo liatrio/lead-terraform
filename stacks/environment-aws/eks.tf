@@ -209,6 +209,14 @@ resource "aws_iam_policy" "worker_policy" {
    {
      "Effect": "Allow",
      "Action": [
+                "s3:PutObject",
+                "s3:GetObject"
+     ],
+     "Resource": ["arn:aws:s3:::lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${var.cluster}.liatr.io/*"]
+   },
+   {
+     "Effect": "Allow",
+     "Action": [
                 "dynamodb:PutItem",
                 "dynamodb:GetItem",
                 "dynamodb:DescribeTable",
