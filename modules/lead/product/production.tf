@@ -42,6 +42,7 @@ module "production_ingress" {
 }
 
 module "production_issuer" {
+  enabled     = "${var.istio_enabled ? false : true}"
   source      = "../../common/cert-issuer"
   namespace   = module.production_namespace.name
   issuer_type = var.issuer_type
