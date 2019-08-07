@@ -3,10 +3,10 @@ elasticsearch:
     storageClassName: gp2
   resources:
     requests:
-      cpu: 50m
-      memory: 3Gi
+      cpu: 10m
+      memory: 1.5Gi
     limits:
-      cpu: 500m
+      cpu: 100m
       memory: 3Gi
 
 grafana:
@@ -26,11 +26,11 @@ grafana:
     namespaced: true
   resources:
     requests:
-      cpu: 50m
+      cpu: 10m
       memory: 100Mi
     limits:
-      cpu: 500m
-      memory: 200Mi
+      cpu: 100m
+      memory: 150Mi
   sidecar:
     dashboards:
       searchNamespace: ${namespace}
@@ -38,17 +38,18 @@ logstash:
   logstashJavaOpts: "-Djava.security.egd=file:/dev/urandom"
   resources:
     requests:
-      cpu: 200m
-      memory: 1.5Gi
+      cpu: 10m
+      memory: 500Mi
     limits:
       cpu: 400m
-      memory: 3Gi
+      memory: 1.5Gi
 logstash-jenkins:
   logstashJavaOpts: "-Djava.security.egd=file:/dev/urandom"
   resources:
     requests:
-      cpu: 200m
-      memory: 1.5Gi
+      cpu: 10m
+      memory: 500Gi
     limits:
       cpu: 400m
-      memory: 3Gi
+      memory: 1.5Gi
+

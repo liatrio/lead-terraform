@@ -16,6 +16,16 @@ module "staging_namespace" {
   }
 }
 
+resource "helm_release" "staging_product_init" {
+  name      = "product-init"
+  namespace = module.staging_namespace.name
+  chart     = "${path.module}/helm/product-init"
+  timeout   = 600
+  wait      = true
+
+  provider  = helm.staging
+}
+
 module "staging_certificate" {
   source = "../../common/certificates"
   namespace = "istio-system"
@@ -42,6 +52,7 @@ module "staging_ingress" {
 }
 
 module "staging_issuer" {
+  enabled     = "${var.istio_enabled ? false : true}"
   source      = "../../common/cert-issuer"
   namespace   = module.staging_namespace.name
   issuer_type = var.issuer_type

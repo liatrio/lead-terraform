@@ -2,6 +2,9 @@ serviceAccount:
   create: false
   name: jenkins
 
+persistence:
+  enabled: false
+
 master:
   ingress:
     enabled: true
@@ -23,7 +26,7 @@ master:
   healthProbeReadinessInitialDelay: 120
   resources:
     requests:
-      cpu: 500m
+      cpu: 100m
       memory: 1Gi
     limits:
       cpu: 1000m
@@ -65,8 +68,6 @@ master:
           slackNotifier:
             teamDomain: "${slack_team}"
             tokenCredentialId: jenkins-credential-slack
-      gitlab-config: |
-        unclassified:
       pod-templates: |
         jenkins:
           clouds:
@@ -186,13 +187,11 @@ master:
     - github-branch-source:2.5.3
     - workflow-aggregator:2.6
     - pipeline-model-definition:1.3.8
-    - workflow-api:2.34
-    - workflow-scm-step:2.8
+    - workflow-api:2.36
+    - workflow-scm-step:2.9
     - kubernetes:1.15.6
     - job-dsl:1.74
     - blueocean:1.4.1
-    - git:3.10.1
-    - gitlab:1.5.12
 
   containerEnv:
     - name: elasticUrl

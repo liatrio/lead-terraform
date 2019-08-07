@@ -85,21 +85,21 @@ gitlab:
     maxReplicas: 1
     resources:
       requests:
-        cpu: 200m
-        memory: 1.4Gi
+        cpu: 10m
+        memory: 1.2Gi
       limits:
-        cpu: 800m
+        cpu: 100m
         memory: 2Gi
   sidekiq:
     minReplicas: 1
     maxReplicas: 1
     resources:
       requests:
-        cpu: 100m
-        memory: 600Mi
+        cpu: 20m
+        memory: 700Mi
       limits:
-        cpu: 500m
-        memory: 1.5Gi
+        cpu: 200m
+        memory: 1.4Gi
   gitlab-shell:
     enabled: false
   task-runner:

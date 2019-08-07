@@ -52,11 +52,11 @@ keycloak:
 
   resources:
     requests:
-      memory: 256Mi
-      cpu: 250m
+      memory: 600Mi
+      cpu: 10m
     limits:
-      memory: 768Mi
-      cpu: 1
+      memory: 800Mi
+      cpu: 100m
 
 
 postgresql:
@@ -78,8 +78,8 @@ postgresql:
   
   resources:
     requests:
-      memory: 256Mi
-      cpu: 250m
+      memory: 64Mi
+      cpu: 10m
     limits:
-      memory: 512Mi
-      cpu: 500m
+      memory: 128Mi
+      cpu: 100m

@@ -7,5 +7,6 @@ brew "kubernetes-helm"
 brew "aws-iam-authenticator"
 brew "azure-cli"
 brew "dnsmasq"
+brew "go"
 
 cask "aws-vault"

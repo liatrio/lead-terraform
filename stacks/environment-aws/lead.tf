@@ -27,6 +27,7 @@ data "template_file" "cluster_autoscaler" {
   vars = {
     cluster = var.cluster
     region  = var.region
+    scale_down_enabled = var.enable_autoscaler_scale_down
   }
 }
 
@@ -42,6 +43,7 @@ resource "helm_release" "cluster_autoscaler" {
   chart      = "cluster-autoscaler"
   timeout    = 600
   wait       = true
+  version    = "3.1.0"
 
   values = [data.template_file.cluster_autoscaler.rendered]
 
@@ -68,11 +70,11 @@ module "toolchain" {
   enable_keycloak         = var.enable_keycloak
   enable_mailhog          = var.enable_mailhog
   enable_sonarqube        = var.enable_sonarqube
-  enable_xray             = var.enable_xray    
+  enable_xray             = var.enable_xray
   issuer_type             = "acme"
   ingress_controller_type = "LoadBalancer"
   crd_waiter              = module.infrastructure.crd_waiter
-  
+
   smtp_json = {
     aws_ses = {
       name     = "aws_ses"
@@ -118,4 +120,3 @@ module "dashboard" {
     helm = helm.toolchain
   }
 }
-
