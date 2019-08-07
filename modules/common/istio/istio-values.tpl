@@ -133,3 +133,11 @@ mixer:
       limits:
         cpu: 100m
         memory: 1024Mi
+security:
+  resources:
+    requests:
+      cpu: 20m
+      memory: 128Mi
+    limits:
+      cpu: 400m
+      memory: 256Mi
