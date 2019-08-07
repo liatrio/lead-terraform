@@ -27,6 +27,7 @@ data "template_file" "cluster_autoscaler" {
   vars = {
     cluster = var.cluster
     region  = var.region
+    scale_down_enabled = var.enable_autoscaler_scale_down
   }
 }
 
