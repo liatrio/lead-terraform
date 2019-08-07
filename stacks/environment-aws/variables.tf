@@ -109,6 +109,10 @@ variable "enable_xray" {
   default = true
 }
 
+variable "enable_autoscaler_scale_down" {
+  default = true
+}
+
 locals {
   tags = {
     "Cluster" = var.cluster
