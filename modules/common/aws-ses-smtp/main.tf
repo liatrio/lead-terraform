@@ -9,7 +9,7 @@ resource "random_pet" "ses_smtp" {
 
 resource "aws_iam_user" "ses_smtp" {
   name                  = "${var.name}-${random_pet.ses_smtp.id}"
-  permissions_boundary  = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/Developer"
+  permissions_boundary  = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/lead-workspace_role_boundary"
 }
 
 resource "aws_iam_access_key" "ses_smtp" {
@@ -35,7 +35,7 @@ resource "aws_iam_user_policy" "ses_smtp_send" {
         "StringLike":{
           "ses:FromDisplayName":"${var.from_name}",
           "ses:FromAddress":"${var.from_address}",
-          "ses:FeedbackAddress":"${var.reply_address}"          
+          "ses:FeedbackAddress":"${var.reply_address}"
         }
       }
     }
