@@ -6,6 +6,10 @@ variable "issuer_name" {
   default = "lead-namespace-issuer"
 }
 
+variable "issuer_server" {
+  default = "https://acme-v02.api.letsencrypt.org/directory"
+}
+
 variable "provider_http_enabled" {
   default = "true"
 }
@@ -37,4 +41,3 @@ variable "provider_dns_hosted_zone" {
 variable "enabled" {
   default = true
 }
-

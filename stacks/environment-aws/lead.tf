@@ -13,6 +13,7 @@ module "infrastructure" {
   opa_failure_policy = var.opa_failure_policy
   enable_opa         = "false"
   issuer_type        = "acme"
+  issuer_server      = var.cert_issuer_server
 
   external_dns_chart_values = data.template_file.external_dns_values.rendered
 
@@ -72,6 +73,7 @@ module "toolchain" {
   enable_sonarqube        = var.enable_sonarqube
   enable_xray             = var.enable_xray
   issuer_type             = "acme"
+  issuer_server           = var.cert_issuer_server
   ingress_controller_type = "LoadBalancer"
   crd_waiter              = module.infrastructure.crd_waiter
 

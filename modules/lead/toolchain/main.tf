@@ -27,10 +27,11 @@ module "toolchain_ingress" {
 }
 
 module "toolchain_issuer" {
-  source      = "../../common/cert-issuer"
-  namespace   = module.toolchain_namespace.name
-  issuer_type = var.issuer_type
-  crd_waiter  = var.crd_waiter
+  source        = "../../common/cert-issuer"
+  namespace     = module.toolchain_namespace.name
+  issuer_type   = var.issuer_type
+  issuer_server = var.issuer_server
+  crd_waiter    = var.crd_waiter
 }
 
 resource "kubernetes_cluster_role" "tiller_cluster_role" {
@@ -114,4 +115,3 @@ resource "kubernetes_cluster_role_binding" "tiller_cluster_role_binding" {
     namespace = module.toolchain_namespace.name
   }
 }
-
