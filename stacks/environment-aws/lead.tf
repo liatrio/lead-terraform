@@ -104,6 +104,8 @@ module "sdm" {
   slack_bot_token             = var.slack_bot_token
   slack_client_signing_secret = var.slack_client_signing_secret
   workspace_role_name         = aws_iam_role.workspace_role.name
+  cert_issuer_type            = var.cert_issuer_type
+  cert_issuer_server          = var.cert_issuer_server
 
   providers = {
     helm.system    = helm.system

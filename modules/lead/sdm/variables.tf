@@ -34,3 +34,10 @@ variable "region" {
   default = "us-east-1"
 }
 
+variable "cert_issuer_type" {
+  default = "acme"
+}
+
+variable "cert_issuer_server" {
+  default = "https://acme-v02.api.letsencrypt.org/directory"
+}

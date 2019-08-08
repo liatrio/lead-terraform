@@ -77,6 +77,10 @@ variable "from_email" {
   default = "noreply@liatr.io"
 }
 
+variable "cert_issuer_type" {
+  default = "acme"
+}
+
 variable "cert_issuer_server" {
   default = "https://acme-v02.api.letsencrypt.org/directory"
 }
