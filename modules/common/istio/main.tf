@@ -136,7 +136,7 @@ module "istio_cert_issuer" {
   issuer_name              = var.cert_issuer_name
   issuer_type              = var.cert_issuer_type
   crd_waiter               = var.crd_waiter
-  provider_http_enabled    = "false"
+  provider_http_enabled    = "true"
   provider_dns_enabled     = "true"
   provider_dns_region      = var.region
   provider_dns_hosted_zone = var.zone_id
