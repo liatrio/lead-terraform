@@ -1,7 +1,7 @@
 issuerName: ${issuer_name}
 acme:
   enabled: ${ issuer_type == "acme" }
-  server: https://acme-v02.api.letsencrypt.org/directory
+  server: ${ issuer_server }
   email: cloudservices@liatr.io
   httpProvider:
     enabled: ${provider_http_enabled}

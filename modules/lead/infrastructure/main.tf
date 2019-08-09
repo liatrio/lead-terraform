@@ -12,10 +12,11 @@ module "system_namespace" {
 }
 
 module "system_issuer" {
-  source      = "../../common/cert-issuer"
-  namespace   = module.system_namespace.name
-  issuer_type = var.issuer_type
-  crd_waiter  = null_resource.cert_manager_crd_delay.id
+  source        = "../../common/cert-issuer"
+  namespace     = module.system_namespace.name
+  issuer_type   = var.issuer_type
+  issuer_server = var.issuer_server
+  crd_waiter    = null_resource.cert_manager_crd_delay.id
 }
 
 resource "kubernetes_cluster_role" "tiller_cluster_role" {
@@ -288,4 +289,3 @@ module "opa" {
   namespace          = module.system_namespace.name
   opa_failure_policy = var.opa_failure_policy
 }
-

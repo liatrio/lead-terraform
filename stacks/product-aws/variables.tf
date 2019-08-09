@@ -16,6 +16,10 @@ variable "issuer_type" {
   default = "acme"
 }
 
+variable "issuer_server" {
+  default = "https://acme-v02.api.letsencrypt.org/directory"
+}
+
 variable "ingress_controller_type" {
   default = "LoadBalancer"
 }
@@ -27,4 +31,3 @@ variable "config_context" {
 variable "load_config_file" {
   default = false
 }
-
