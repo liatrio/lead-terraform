@@ -13,6 +13,7 @@ module "infrastructure" {
   enable_opa         = "false"
   opa_failure_policy = var.opa_failure_policy
   issuer_type        = "selfSigned"
+  uptime             = var.uptime
 
   external_dns_chart_values = data.template_file.external_dns_values.rendered
 

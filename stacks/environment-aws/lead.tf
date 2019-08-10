@@ -13,6 +13,7 @@ module "infrastructure" {
   opa_failure_policy = var.opa_failure_policy
   enable_opa         = "false"
   issuer_type        = "acme"
+  uptime             = var.uptime
 
   external_dns_chart_values = data.template_file.external_dns_values.rendered
 

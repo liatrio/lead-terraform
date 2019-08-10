@@ -22,3 +22,5 @@ variable "acme_dns_providers" {
 variable "issuer_type" {
 }
 
+variable "uptime" {
+}
