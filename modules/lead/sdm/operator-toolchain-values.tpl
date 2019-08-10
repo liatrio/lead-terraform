@@ -18,3 +18,9 @@ operators:
       value: ${workspace_role}
     - name: AWS_REGION
       value: ${region}
+  jenkins:
+    env:
+    - name: cert_issuer_type
+      value: ${cert_issuer_type}
+    - name: cert_issuer_server
+      value: ${cert_issuer_server}

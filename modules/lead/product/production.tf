@@ -16,6 +16,16 @@ module "production_namespace" {
   }
 }
 
+resource "helm_release" "production_product_init" {
+  name      = "product-init"
+  namespace = module.production_namespace.name
+  chart     = "${path.module}/helm/product-init"
+  timeout   = 600
+  wait      = true
+
+  provider  = helm.production
+}
+
 module "production_certificate" {
   source = "../../common/certificates"
   namespace = "istio-system"
@@ -46,6 +56,7 @@ module "production_issuer" {
   source      = "../../common/cert-issuer"
   namespace   = module.production_namespace.name
   issuer_type = var.issuer_type
+  issuer_server = var.issuer_server
   crd_waiter  = ""
 
   providers = {

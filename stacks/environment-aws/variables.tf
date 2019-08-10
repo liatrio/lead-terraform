@@ -77,6 +77,14 @@ variable "from_email" {
   default = "noreply@liatr.io"
 }
 
+variable "cert_issuer_type" {
+  default = "acme"
+}
+
+variable "cert_issuer_server" {
+  default = "https://acme-v02.api.letsencrypt.org/directory"
+}
+
 variable "enable_istio" {
   default = true
 }
@@ -106,6 +114,10 @@ variable "enable_sonarqube" {
 }
 
 variable "enable_xray" {
+  default = true
+}
+
+variable "enable_autoscaler_scale_down" {
   default = true
 }
 

@@ -13,6 +13,7 @@ module "infrastructure" {
   opa_failure_policy = var.opa_failure_policy
   enable_opa         = "false"
   issuer_type        = "acme"
+  issuer_server      = var.cert_issuer_server
   uptime             = var.uptime
 
   external_dns_chart_values = data.template_file.external_dns_values.rendered
@@ -28,6 +29,7 @@ data "template_file" "cluster_autoscaler" {
   vars = {
     cluster = var.cluster
     region  = var.region
+    scale_down_enabled = var.enable_autoscaler_scale_down
   }
 }
 
@@ -72,6 +74,7 @@ module "toolchain" {
   enable_sonarqube        = var.enable_sonarqube
   enable_xray             = var.enable_xray
   issuer_type             = "acme"
+  issuer_server           = var.cert_issuer_server
   ingress_controller_type = "LoadBalancer"
   crd_waiter              = module.infrastructure.crd_waiter
 
@@ -102,6 +105,8 @@ module "sdm" {
   slack_bot_token             = var.slack_bot_token
   slack_client_signing_secret = var.slack_client_signing_secret
   workspace_role_name         = aws_iam_role.workspace_role.name
+  cert_issuer_type            = var.cert_issuer_type
+  cert_issuer_server          = var.cert_issuer_server
 
   providers = {
     helm.system    = helm.system

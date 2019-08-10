@@ -152,7 +152,7 @@ module "eks" {
   map_roles                            = local.map_roles
   worker_ami_name_filter               = var.worker_ami_name_filter
   write_kubeconfig                     = false
-  permissions_boundary                 = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/Developer"
+  permissions_boundary                 = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${aws_iam_policy.workspace_role_boundary.name}"
   workers_additional_policies          = [aws_iam_policy.worker_policy.arn]
 }
 
@@ -212,7 +212,7 @@ resource "aws_iam_policy" "worker_policy" {
                 "s3:PutObject",
                 "s3:GetObject"
      ],
-     "Resource": ["arn:aws:s3:::lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${var.cluster}.liatr.io/*"]
+     "Resource": ["arn:aws:s3:::lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${var.cluster}.liatr.io"]
    },
    {
      "Effect": "Allow",
@@ -289,19 +289,79 @@ resource "aws_iam_role" "workspace_role" {
 EOF
 
 
-permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/Developer"
+  permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${aws_iam_policy.workspace_role_boundary.name}"
+}
+
+resource "aws_iam_policy" "workspace_role_boundary" {
+  name        = "${var.cluster}-workspace_role_boundary"
+  description = "Permission boundaries for workspace role"
+
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "NotAction": [
+                "iam:*",
+                "organizations:*",
+                "account:*"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Action": [
+                "iam:Get*",
+                "iam:List*",
+                "iam:CreateInstanceProfile",
+                "iam:DeleteInstanceProfile",
+                "iam:AddRoleToInstanceProfile",
+                "iam:RemoveRoleFromInstanceProfile",
+                "iam:CreatePolicy",
+                "iam:CreateServiceLinkedRole",
+                "iam:DeleteServiceLinkedRole",
+                "organizations:DescribeOrganization",
+                "account:ListRegions"
+            ],
+            "Effect": "Allow",
+            "Resource": "*"
+        },
+        {
+            "Action": [
+                "iam:CreateRole",
+                "iam:AttachRolePolicy",
+                "iam:PutRolePermissionsBoundary"
+            ],
+            "Effect": "Allow",
+            "Condition": {
+                "StringEquals": {
+                    "iam:PermissionsBoundary": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${var.cluster}-workspace_role_boundary}"
+                }
+            },
+            "Resource": "*"
+        },
+        {
+            "Action": [
+                "iam:PassRole"
+            ],
+            "Effect": "Allow",
+            "Resource": "*"
+        }
+    ]
+}
+EOF
 }
 
 resource "aws_iam_role_policy_attachment" "workspace_role_attachment" {
-role       = aws_iam_role.workspace_role.name
-policy_arn = "arn:aws:iam::aws:policy/AWSCloud9User"
+  role       = aws_iam_role.workspace_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AWSCloud9User"
 }
 
 resource "aws_iam_role_policy" "workspace_role_policy" {
-name = "workspace_access"
-role = aws_iam_role.workspace_role.name
+  name = "workspace_access"
+  role = aws_iam_role.workspace_role.name
 
-policy = <<EOF
+  policy = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -329,5 +389,4 @@ policy = <<EOF
   ]
 }
 EOF
-
 }
