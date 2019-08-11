@@ -9,6 +9,7 @@ data "template_file" "external_dns_values" {
 module "infrastructure" {
   source             = "../../modules/lead/infrastructure"
   cluster            = module.eks.cluster_id
+  root_zone_name     = var.root_zone_name
   namespace          = var.system_namespace
   opa_failure_policy = var.opa_failure_policy
   enable_opa         = "false"
