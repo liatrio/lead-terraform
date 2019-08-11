@@ -15,3 +15,6 @@ variable "ingress_controller_type" {}
 variable "istio_enabled" {
   default = true
 }
+variable "keycloak_enabled" {
+  default = true
+}

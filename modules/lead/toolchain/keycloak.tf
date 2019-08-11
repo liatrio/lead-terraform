@@ -79,3 +79,18 @@ resource "keycloak_realm" "realm" {
     from_display_name = "Keycloak - ${title(module.toolchain_namespace.name)}"
   }
 }
+
+resource "kubernetes_secret" "keycloak_toolchain_realm" {
+  count       = var.enable_keycloak ? 1 : 0
+  depends_on  = [keycloak_realm.realm]
+
+  metadata {
+    name      = "keycloak-toolchain-realm"
+    namespace = module.toolchain_namespace.name
+  }
+  type = "Opaque"
+
+  data = {
+    id = keycloak_realm.realm[0].id
+  }
+}

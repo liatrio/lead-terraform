@@ -12,13 +12,18 @@ master:
     annotations:
       kubernetes.io/ingress.class: "nginx"
       kubernetes.io/tls-acme: "true"
-      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/ssl-redirect: "${ssl_redirect}"
       nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+      nginx.ingress.kubernetes.io/configuration-snippet: |
+        more_set_headers "X-Forwarded-Proto: https";      
+      ingress.kubernetes.io/proxy-body-size: "0"
+      ingress.kubernetes.io/proxy-read-timeout: "600"
+      ingress.kubernetes.io/proxy-send-timeout: "600"
     tls:
     - hosts:
       - ${ingress_hostname}
       secretName: jenkins-ingress-tls
-  jenkinsUrlProtocol: https
+  jenkinsUrlProtocol: ${protocol}
   serviceType: ClusterIP
   healthProbeLivenessFailureThreshold: 5
   healthProbeReadinessFailureThreshold: 12
@@ -192,6 +197,7 @@ master:
     - kubernetes:1.15.6
     - job-dsl:1.74
     - blueocean:1.4.1
+    - keycloak:2.3.0
 
   containerEnv:
     - name: elasticUrl
