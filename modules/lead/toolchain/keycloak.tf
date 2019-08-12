@@ -79,3 +79,33 @@ resource "keycloak_realm" "realm" {
     from_display_name = "Keycloak - ${title(module.toolchain_namespace.name)}"
   }
 }
+
+resource "kubernetes_secret" "keycloak_toolchain_realm" {
+  count       = var.enable_keycloak ? 1 : 0
+  depends_on  = [keycloak_realm.realm]
+
+  metadata {
+    name      = "keycloak-toolchain-realm"
+    namespace = module.toolchain_namespace.name
+  }
+  type = "Opaque"
+
+  data = {
+    id = keycloak_realm.realm[0].id
+  }
+}
+
+resource "kubernetes_cluster_role_binding" "keycloak_cluster_role_binding" {
+  metadata {
+    name = "keycloak-admin-group-role-binding"
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = kubernetes_cluster_role.tiller_cluster_role.metadata[0].name
+  }
+  subject {
+    kind      = "Grouip"
+    name      = "/admin"
+  }
+}
