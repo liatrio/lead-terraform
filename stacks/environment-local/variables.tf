@@ -62,6 +62,10 @@ variable "enable_artifactory" {
   default = true
 }
 
+variable "enable_dashboard" {
+  default = true
+}
+
 variable "enable_gitlab" {
   default = true
 }

@@ -30,6 +30,7 @@ module "toolchain" {
   artifactory_license             = var.artifactory_license
   keycloak_admin_password         = var.keycloak_admin_password
   enable_artifactory              = var.enable_artifactory
+  enable_dashboard                = var.enable_dashboard
   enable_gitlab                   = var.enable_gitlab
   enable_keycloak                 = var.enable_keycloak
   enable_mailhog                  = var.enable_mailhog
