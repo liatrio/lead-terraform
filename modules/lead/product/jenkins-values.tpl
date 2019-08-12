@@ -49,6 +49,18 @@ master:
       security-config: |
         jenkins:
           authorizationStrategy: loggedInUsersCanDoAnything
+          securityRealm: ${security_realm}
+      keycloak-config: |
+        unclassified:
+          keycloakSecurityRealm:
+            keycloakJson: >
+              {
+                "realm": "toolchain",
+                "auth-server-url": "${keycloak_url}",
+                "ssl-required": "${keycloak_ssl}",
+                "resource": "${ingress_hostname}",
+                "public-client": true
+              }          
       logstash-url: |
         jenkins:
           globalNodeProperties:
@@ -184,6 +196,7 @@ master:
                     git:
                       remote: "https://github.com/liatrio/lead-shared-library.git"
   installPlugins:
+    - keycloak:2.3.0
     - ws-cleanup:0.37
     - kubernetes-credentials-provider:0.12.1
     - slack:2.24
@@ -197,7 +210,6 @@ master:
     - kubernetes:1.15.6
     - job-dsl:1.74
     - blueocean:1.4.1
-    - keycloak:2.3.0
 
   containerEnv:
     - name: elasticUrl

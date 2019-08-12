@@ -32,7 +32,10 @@ resource "keycloak_openid_client" "jenkins_openid_client" {
   name                    = "Jenkins - ${title(module.toolchain_namespace.name)}"
   access_type             = "PUBLIC"
   standard_flow_enabled   = true
-  valid_redirect_uris     = ["https://jenkins.${module.toolchain_namespace.name}.${var.cluster_domain}:32386/securityRealm/finishLogin"]
+  valid_redirect_uris     = [
+    "http://localhost:8080/securityRealm/finishLogin",  # for local environment port forwarding
+    "${local.protocol}://jenkins.${module.toolchain_namespace.name}.${var.cluster_domain}/securityRealm/finishLogin" # for dns routable or via ingress
+  ]
 }
 
 
@@ -46,28 +49,3 @@ resource "keycloak_openid_user_property_protocol_mapper" "jenkins_openid_user_pr
   claim_name                 = "email"
 }
   
-resource "kubernetes_config_map" "jenkins_keycloak_config" {
-  provider   = kubernetes.toolchain
-  depends_on = [helm_release.jenkins]
-  metadata {
-    name      = "jenkins-jenkins-config-security-config"
-    namespace = module.toolchain_namespace.name
-  }
-
-  data = {
-    "security-config.yaml" = <<EOF
-jenkins:
-  securityRealm: keycloak
-  authorizationStrategy: loggedInUsersCanDoAnything  
-keycloakSecurityRealm:
-  keycloakJson: >
-    {
-      "realm": "toolchain",
-      "auth-server-url": "https://keycloak.toolchain.${var.cluster_domain}/auth",
-      "ssl-required": "external",
-      "resource": "jenkins.${module.toolchain_namespace.name}.${var.cluster_domain}",
-      "public-client": true
-    }
-EOF
-  }
-}

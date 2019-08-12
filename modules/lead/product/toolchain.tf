@@ -7,6 +7,7 @@ data "template_file" "jenkins_values" {
   template = file("${path.module}/jenkins-values.tpl")
 
   vars = {
+    cluster_domain         = var.cluster_domain
     product_name           = var.product_name
     protocol               = local.protocol
     ssl_redirect           = local.protocol == "http" ? false : true
@@ -21,6 +22,14 @@ data "template_file" "jenkins_values" {
     stagingDomain          = "${module.staging_namespace.name}.${var.cluster_domain}"
     productionDomain       = "${module.production_namespace.name}.${var.cluster_domain}"
     builder_images_version = var.builder_images_version
+
+    # Keycloak specific vars
+    security_realm         = var.keycloak_enabled ? "keycloak" : "local"
+    keycloak_ssl           = local.protocol == "http" ? "none" : "external"
+    # keycloak_url must be accessible from both inside and outside the cluster.
+    # For local environment, you'll need to add this line to your hosts file...
+    # [YOUR_HOST_INTERNAL_IP_NOT_127.0.0.1]   keycloak.toolchain.docker-for-desktop.localhost
+    keycloak_url           = "${local.protocol}://keycloak.toolchain.${var.cluster_domain}/auth"
   }
 }
 
