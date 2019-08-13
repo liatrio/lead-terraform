@@ -12,7 +12,10 @@ resource "helm_release" "kube_downscaler" {
   timeout    = 900
   values     = [<<EOF
 image:
-  args: "--exclude-namespaces=kube-system,${var.namespace} --default-uptime=\"${var.uptime}\""
+  args: 
+  - --exclude-namespaces=kube-system,${var.namespace}
+  - --exclude-deployments=tiller-deploy  #so helm continues to work
+  - --default-uptime=${var.uptime}
 EOF
   ]
 }

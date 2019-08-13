@@ -87,7 +87,7 @@ variable "enable_xray" {
 }
 
 variable "uptime" {
-  default = "Mon-Fri 07:00-19:00 PST"
+  default = "Mon-Fri 07:00-19:00 America/Los_Angeles"
 }
 
 locals {
