@@ -12,9 +12,10 @@
       ingress.kubernetes.io/proxy-send-timeout: "600"
       nginx.ingress.kubernetes.io/proxy-body-size: "0"
     hosts:
-    - ${ingress_hostname}
+      - host: ${ingress_hostname}
+        paths:
+          - /
     tls:
     - hosts:
       - ${ingress_hostname}
       secretName: kube-resource-report-ingress-tls    
-    path: /
