@@ -17,8 +17,7 @@ EOF
       asg_max_size          = var.asg_max_size
       bootstrap_extra_args  = "--enable-docker-bridge 'true'"
       key_name              = var.key_name
-      autoscaling_enabled   = true
-      protect_from_scale_in = true
+      autoscaling_enabled   = false
       pre_userdata          = local.ssm_init
       kubelet_extra_args    = "--node-labels=kubernetes.io/lifecycle=normal --register-with-taints=${var.ondemand_toleration_key}=true:NoSchedule"
     },
@@ -30,8 +29,7 @@ EOF
       asg_max_size          = var.asg_max_size
       bootstrap_extra_args  = "--enable-docker-bridge 'true'"
       key_name              = var.key_name
-      autoscaling_enabled   = true
-      protect_from_scale_in = true
+      autoscaling_enabled   = false
       pre_userdata          = local.ssm_init
       kubelet_extra_args    = "--node-labels=kubernetes.io/lifecycle=normal --register-with-taints=${var.ondemand_toleration_key}=true:NoSchedule"
     },
@@ -43,8 +41,7 @@ EOF
       asg_max_size          = var.asg_max_size
       bootstrap_extra_args  = "--enable-docker-bridge 'true'"
       key_name              = var.key_name
-      autoscaling_enabled   = true
-      protect_from_scale_in = true
+      autoscaling_enabled   = false
       pre_userdata          = local.ssm_init
       kubelet_extra_args    = "--node-labels=kubernetes.io/lifecycle=normal --register-with-taints=${var.ondemand_toleration_key}=true:NoSchedule"
     },   
@@ -60,6 +57,7 @@ EOF
       bootstrap_extra_args    = "--enable-docker-bridge 'true'"
       key_name                = var.key_name
       autoscaling_enabled     = true
+      protect_from_scale_in   = true
       pre_userdata            = local.ssm_init
       kubelet_extra_args      = "--node-labels=kubernetes.io/lifecycle=spot"
     }

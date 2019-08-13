@@ -29,6 +29,12 @@ provider "helm" {
   tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.14.1"
   service_account = module.infrastructure.tiller_service_account
 
+  override = [
+    "spec.template.spec.tolerations[0].key=${var.ondemand_toleration_key}",
+    "spec.template.spec.tolerations[0].operator=Exists",
+    "spec.template.spec.tolerations[0].effect.NoSchedule"
+  ]
+  
   kubernetes {
     host                   = data.aws_eks_cluster.cluster.endpoint
     cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority[0].data)
@@ -42,6 +48,12 @@ provider "helm" {
   namespace       = module.toolchain.namespace
   tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.14.1"
   service_account = module.toolchain.tiller_service_account
+
+  override = [
+    "spec.template.spec.tolerations[0].key=${var.ondemand_toleration_key}",
+    "spec.template.spec.tolerations[0].operator=Exists",
+    "spec.template.spec.tolerations[0].effect.NoSchedule"
+  ]
 
   kubernetes {
     host                   = data.aws_eks_cluster.cluster.endpoint
