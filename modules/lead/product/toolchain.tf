@@ -30,6 +30,8 @@ module "toolchain_namespace" {
     "opa.lead.liatrio/ingress-whitelist" = "*.${var.product_name}-toolchain.${var.cluster_domain}"
     "opa.lead.liatrio/image-whitelist"   = var.image_whitelist
   }
+  resource_request_cpu = "100m"
+  resource_limit_cpu = "250m"
 
   providers = {
     helm       = helm.toolchain
@@ -52,6 +54,7 @@ module "toolchain_issuer" {
   source      = "../../common/cert-issuer"
   namespace   = module.toolchain_namespace.name
   issuer_type = var.issuer_type
+  issuer_server = var.issuer_server
   crd_waiter  = ""
 
   providers = {
@@ -156,4 +159,3 @@ resource "kubernetes_role_binding" "jenkins_kubernetes_credentials" {
     namespace = module.toolchain_namespace.name
   }
 }
-

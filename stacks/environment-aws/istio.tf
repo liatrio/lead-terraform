@@ -4,7 +4,7 @@ data "helm_repository" "istio" {
 }
 
 resource "helm_release" "istio_init" {
-  count      = var.enable_istio ? 1 : 0  
+  count      = var.enable_istio ? 1 : 0
   repository = data.helm_repository.istio.metadata[0].name
   chart      = "istio-init"
   namespace  = module.infrastructure.namespace
@@ -33,4 +33,5 @@ module "istio_system" {
   providers = {
     helm = "helm.system"
   }
+  cert_issuer_server = var.cert_issuer_server
 }

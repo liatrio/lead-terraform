@@ -96,6 +96,7 @@ module "product" {
   cluster_domain          = var.cluster_domain
   product_name            = var.product_name
   issuer_type             = var.issuer_type
+  issuer_server           = var.issuer_server
   image_whitelist         = var.image_whitelist
   ingress_controller_type = var.ingress_controller_type
 

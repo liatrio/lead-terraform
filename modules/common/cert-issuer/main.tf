@@ -3,6 +3,7 @@ data "template_file" "issuer_values" {
 
   vars = {
     issuer_name                 = var.issuer_name
+    issuer_server               = var.issuer_server
     provider_http_enabled       = var.provider_http_enabled
     provider_http_ingress_class = var.provider_http_ingress_class
     provider_dns_enabled        = var.provider_dns_enabled

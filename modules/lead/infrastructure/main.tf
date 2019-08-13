@@ -15,6 +15,7 @@ module "system_issuer" {
   source          = "../../common/cert-issuer"
   namespace       = module.system_namespace.name
   issuer_type     = var.issuer_type
+  issuer_server   = var.issuer_server
   crd_waiter      = null_resource.cert_manager_crd_delay.id
   external_values = var.ondemand_toleration_values
 }
@@ -290,4 +291,3 @@ module "opa" {
   opa_failure_policy = var.opa_failure_policy
   external_values    = var.ondemand_toleration_values
 }
-
