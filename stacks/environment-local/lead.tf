@@ -56,11 +56,11 @@ module "sdm" {
   product_version             = var.product_version
   slack_bot_token             = var.slack_bot_token
   slack_client_signing_secret = var.slack_client_signing_secret
-  workspace_role_name         = "local_workspace_role"  
+  workspace_role_name         = "local_workspace_role"
+  product_stack               = "product-local"  
 
   providers = {
     helm.system    = helm.toolchain
     helm.toolchain = helm.toolchain
   }
 }
-
