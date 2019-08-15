@@ -24,6 +24,8 @@ ingress:
       rewrite ^/(v2)/token /artifactory/api/docker/null/v2/token;
       rewrite ^/(v2)/([^\/]*)/(.*) /artifactory/api/docker/$2/$1/$3;
     nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
+    nginx.ingress.kubernetes.io/proxy-http-version: "1.1"
   hosts:
   - ${ingress_hostname}
   tls:

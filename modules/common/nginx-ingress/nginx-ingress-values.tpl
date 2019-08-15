@@ -4,6 +4,11 @@ serviceAccount:
   create: false
   name: ${service_account}
 controller:
+  replicaCount: 3
+  livenessProbe:
+    timeoutSeconds: 10
+  readinessProbe:
+    timeoutSeconds: 10
   publishService:
     enabled: true
   scope: 
