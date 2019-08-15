@@ -26,3 +26,5 @@ operators:
       value: ${cert_issuer_server}
     - name: PRODUCT_STACK
       value: ${product_stack}
+    - name: TF_DATA_ROOT
+      value: /tf_data/
