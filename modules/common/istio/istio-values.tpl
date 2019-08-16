@@ -2,6 +2,7 @@ gateways:
   istio-egressgateway:
     enabled: false
   istio-ingressgateway:
+    autoscaleMax: 10
     sds:
       enabled: true
       resources:
@@ -13,10 +14,10 @@ gateways:
           memory: 256Mi
     resources:
       requests:
-        cpu: 10m
+        cpu: 100m
         memory: 128Mi
       limits:
-        cpu: 100m
+        cpu: 500m
         memory: 256Mi
 
 global:
@@ -98,6 +99,14 @@ tracing:
       secretName: istio-ingress-tls
     hosts:
     - ${domain}
+  jaeger:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 1Gi
+      limits:
+        cpu: 500m
+        memory: 2Gi
 
 prometheus:
   resources:
