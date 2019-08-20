@@ -111,11 +111,11 @@ tracing:
 prometheus:
   resources:
     requests:
-      cpu: 50m
-      memory: 1Gi
-    limits:
       cpu: 200m
       memory: 2Gi
+    limits:
+      cpu: 1
+      memory: 5Gi
 
 galley:
   resources:
