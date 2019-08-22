@@ -20,9 +20,9 @@ operators:
       value: ${region}
   jenkins:
     env:
-    - name: cert_issuer_type
+    - name: CERT_ISSUER_TYPE
       value: ${cert_issuer_type}
-    - name: cert_issuer_server
+    - name: CERT_ISSUER_SERVER
       value: ${cert_issuer_server}
     - name: PRODUCT_STACK
       value: ${product_stack}
