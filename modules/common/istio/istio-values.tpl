@@ -116,8 +116,8 @@ prometheus:
       cpu: 200m
       memory: 2Gi
     limits:
-      cpu: 1
-      memory: 5Gi
+      cpu: 500m
+      memory: 4Gi
 
 galley:
   resources:
