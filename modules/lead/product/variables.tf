@@ -11,7 +11,7 @@ variable "toolchain_namespace" {
 variable "builder_images_version" {
   default = "v1.0.14"
 }
-variable "jenkins-image-version" {
+variable "jenkins_image_version" {
   default = "0.0.1"
 }
 variable "ingress_controller_type" {}
