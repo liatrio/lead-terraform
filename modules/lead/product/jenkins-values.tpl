@@ -6,7 +6,8 @@ persistence:
   enabled: false
 
 master:
-  image: "docker.artifactory.liatr.io/jenkins-image:${jenkins_image_version}"
+  image: "docker.artifactory.liatr.io/jenkins-image"
+  tag: ${jenkins_image_version}
   ingress:
     enabled: true
     hostName: ${ingress_hostname}
