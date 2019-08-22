@@ -5,7 +5,10 @@ artifactory:
       memory: 3Gi
     limits:
       cpu: 400m
-      memory: 3.5Gi
+      memory: 4Gi
+  javaOpts:
+    xms: 2g
+    xmx: 4g
 nginx:
   enabled: false
 ingress:
