@@ -4,7 +4,10 @@ serviceAccount:
   create: false
   name: ${service_account}
 controller:
-  replicaCount: 3
+  autoscaling:
+    enabled: true
+    targetCPUUtilizationPercentage: 75
+    targetMemoryUtilizationPercentage: 75
   livenessProbe:
     timeoutSeconds: 10
   readinessProbe:

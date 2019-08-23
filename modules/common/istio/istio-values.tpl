@@ -3,6 +3,8 @@ gateways:
     enabled: false
   istio-ingressgateway:
     autoscaleMax: 10
+    cpu:
+      targetAverageUtilization: 70
     sds:
       enabled: true
       resources:
@@ -14,11 +16,11 @@ gateways:
           memory: 256Mi
     resources:
       requests:
-        cpu: 100m
+        cpu: 200m
         memory: 128Mi
       limits:
-        cpu: 500m
-        memory: 256Mi
+        cpu: 300m
+        memory: 128Mi
 
 global:
   k8sIngress:
@@ -32,7 +34,7 @@ global:
         memory: 128Mi
       limits:
         cpu: 500m
-        memory: 1024Mi
+        memory: 200Mi
   defaultResources:
     requests:
       cpu: 10m
@@ -111,11 +113,11 @@ tracing:
 prometheus:
   resources:
     requests:
-      cpu: 50m
-      memory: 1Gi
-    limits:
       cpu: 200m
       memory: 2Gi
+    limits:
+      cpu: 500m
+      memory: 4Gi
 
 galley:
   resources:
@@ -126,6 +128,7 @@ galley:
       cpu: 200m
       memory: 256Mi
 pilot:
+  autoscaleMax: 10
   resources:
     requests:
       cpu: 10m
@@ -141,7 +144,7 @@ mixer:
         memory: 128Mi
       limits:
         cpu: 100m
-        memory: 1024Mi
+        memory: 256Mi
 security:
   resources:
     requests:
