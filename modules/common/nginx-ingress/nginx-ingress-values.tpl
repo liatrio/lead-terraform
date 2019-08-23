@@ -6,8 +6,8 @@ serviceAccount:
 controller:
   autoscaling:
     enabled: true
-    targetCPUUtilizationPercentage: 75
-    targetMemoryUtilizationPercentage: 75
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
   livenessProbe:
     timeoutSeconds: 10
   readinessProbe:
@@ -22,7 +22,7 @@ controller:
   resources:
     requests:
       cpu: 5m
-      memory: 128Mi
+      memory: 192Mi
     limits:
       cpu: 50m
       memory: 256Mi
