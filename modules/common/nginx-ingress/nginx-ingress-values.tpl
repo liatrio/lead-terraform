@@ -5,7 +5,7 @@ serviceAccount:
   name: ${service_account}
 controller:
   autoscaling:
-    enabled: true: 3
+    enabled: true
   livenessProbe:
     timeoutSeconds: 10
   readinessProbe:
