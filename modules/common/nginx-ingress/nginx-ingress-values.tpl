@@ -4,7 +4,8 @@ serviceAccount:
   create: false
   name: ${service_account}
 controller:
-  replicaCount: 3
+  autoscaling:
+    enabled: true: 3
   livenessProbe:
     timeoutSeconds: 10
   readinessProbe:
