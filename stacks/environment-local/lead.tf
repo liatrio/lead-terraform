@@ -8,7 +8,6 @@ data "template_file" "external_dns_values" {
 
 module "infrastructure" {
   source             = "../../modules/lead/infrastructure"
-  root_zone_name     = var.root_zone_name
   cluster            = var.cluster
   namespace          = var.system_namespace
   enable_opa         = "false"

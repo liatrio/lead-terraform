@@ -3,13 +3,13 @@ data "template_file" "kube_resource_report_values" {
 
   vars = {
     ssl_redirect     = var.root_zone_name == "localhost" ? false : true
-    ingress_hostname = "kube-resource-report.${module.system_namespace.name}.${var.cluster}.${var.root_zone_name}"
+    ingress_hostname = "kube-resource-report.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
   }
 }
 
 resource "helm_release" "kube_resource_report" {
   name       = "kube-resource-report"
-  namespace  = module.system_namespace.name
+  namespace  = module.toolchain_namespace.name
   repository = data.helm_repository.liatrio.name
   chart      = "kube-resource-report"
   version    = "0.2.2"
