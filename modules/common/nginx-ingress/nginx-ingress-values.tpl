@@ -4,6 +4,14 @@ serviceAccount:
   create: false
   name: ${service_account}
 controller:
+  autoscaling:
+    enabled: true
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+  livenessProbe:
+    timeoutSeconds: 10
+  readinessProbe:
+    timeoutSeconds: 10
   publishService:
     enabled: true
   scope: 
@@ -14,7 +22,7 @@ controller:
   resources:
     requests:
       cpu: 5m
-      memory: 128Mi
+      memory: 192Mi
     limits:
       cpu: 50m
       memory: 256Mi
