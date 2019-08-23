@@ -41,3 +41,7 @@ variable "cert_issuer_type" {
 variable "cert_issuer_server" {
   default = "https://acme-v02.api.letsencrypt.org/directory"
 }
+
+variable "product_stack" {
+  default = "product-local"
+}

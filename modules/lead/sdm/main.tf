@@ -34,6 +34,7 @@ data "template_file" "operator_toolchain_values" {
     region              = var.region
     cert_issuer_type    = var.cert_issuer_type
     cert_issuer_server  = var.cert_issuer_server
+    product_stack       = var.product_stack
   }
 }
 

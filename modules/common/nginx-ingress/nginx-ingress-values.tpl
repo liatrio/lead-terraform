@@ -4,6 +4,14 @@ serviceAccount:
   create: false
   name: ${service_account}
 controller:
+  autoscaling:
+    enabled: true
+    targetCPUUtilizationPercentage: 75
+    targetMemoryUtilizationPercentage: 75
+  livenessProbe:
+    timeoutSeconds: 10
+  readinessProbe:
+    timeoutSeconds: 10
   publishService:
     enabled: true
   scope: 
