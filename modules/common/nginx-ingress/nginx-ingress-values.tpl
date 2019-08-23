@@ -6,6 +6,8 @@ serviceAccount:
 controller:
   autoscaling:
     enabled: true
+    targetCPUUtilizationPercentage: 75
+    targetMemoryUtilizationPercentage: 75
   livenessProbe:
     timeoutSeconds: 10
   readinessProbe:
