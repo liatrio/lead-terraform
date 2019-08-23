@@ -128,7 +128,7 @@ galley:
       cpu: 200m
       memory: 256Mi
 pilot:
-  maxReplicas: 10
+  autoscaleMax: 10
   resources:
     requests:
       cpu: 10m
