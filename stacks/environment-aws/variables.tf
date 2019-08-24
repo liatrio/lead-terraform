@@ -122,7 +122,7 @@ variable "enable_autoscaler_scale_down" {
 }
 
 variable "uptime" {
-  default = "Mon-Fri 07:00-19:00 America/Los_Angeles"
+  default = "always"
 }
 
 locals {

@@ -14,7 +14,6 @@ resource "helm_release" "kube_downscaler" {
 image:
   args: 
   - --exclude-namespaces=kube-system,${var.namespace}
-  - --exclude-deployments=tiller-deploy  #so helm continues to work
   - --default-uptime=${var.uptime}
 EOF
   ]
