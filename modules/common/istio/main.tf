@@ -158,6 +158,7 @@ resource "kubernetes_horizontal_pod_autoscaler" "kiali_autoscaler" {
     max_replicas = 10
     target_cpu_utilization_percentage = 80
     scale_target_ref {
+      api_version = "apps/v1beta1"
       kind = "Deployment"
       name = "kiali"
     }
