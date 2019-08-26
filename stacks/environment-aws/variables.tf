@@ -121,6 +121,10 @@ variable "enable_autoscaler_scale_down" {
   default = true
 }
 
+variable "uptime" {
+  default = "always"
+}
+
 locals {
   tags = {
     "Cluster" = var.cluster
