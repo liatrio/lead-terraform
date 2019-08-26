@@ -11,6 +11,8 @@ resource "helm_release" "kube_downscaler" {
   version    = "0.1.0"
   timeout    = 900
   values     = [<<EOF
+rbac:
+  create: true
 image:
   args: 
   - --exclude-namespaces=kube-system,${var.namespace}
