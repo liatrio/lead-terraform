@@ -154,7 +154,8 @@ resource "kubernetes_horizontal_pod_autoscaler" "kiali_autoscaler" {
     name = "kiali_autoscaler"
   }
   spec {
-    max_replicas = 5
+    max_replicas = 10
+    target_cpu_utilization_percentage = 80
     scale_target_ref {
       kind = "Deployment"
       name = "kiali"
