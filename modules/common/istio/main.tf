@@ -151,7 +151,8 @@ module "istio_flagger" {
 
 resource "kubernetes_horizontal_pod_autoscaler" "kiali_autoscaler" {
   metadata {
-    name = "kiali_autoscaler"
+    name = "kiali"
+    namespace = module.istio_namespace.name
   }
   spec {
     max_replicas = 10
