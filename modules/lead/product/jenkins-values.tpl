@@ -25,8 +25,8 @@ master:
   serviceType: ClusterIP
   healthProbeLivenessFailureThreshold: 5
   healthProbeReadinessFailureThreshold: 12
-  healthProbeLivenessInitialDelay: 240
-  healthProbeReadinessInitialDelay: 120
+  healthProbeLivenessInitialDelay: 60 
+  healthProbeReadinessInitialDelay: 30
   resources:
     requests:
       cpu: 100m
