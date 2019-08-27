@@ -37,10 +37,6 @@ variable "asg_max_size" {
   default = "5"
 }
 
-variable "worker_ami_name_filter" {
-  default = "v20190329"
-}
-
 variable "image_whitelist" {
   default = ".*"
 }
