@@ -2,7 +2,7 @@ cluster: ${cluster}
 cluster_domain: ${cluster_domain}
 product_version: ${product_version}
 
-local: ${product_stack == "product-local" ? "true" : "false"}
+local: "${product_stack == "product-local" ? "true" : "false"}"
 
 operators:
   slack:
