@@ -6,6 +6,7 @@ persistence:
   enabled: false
 
 master:
+  installPlugins: false
   image: "docker.artifactory.liatr.io/jenkins-image"
   tag: ${jenkins_image_version}
   ingress:
