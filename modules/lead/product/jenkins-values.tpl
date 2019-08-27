@@ -7,7 +7,7 @@ persistence:
 
 master:
   installPlugins: false
-  image: "docker.artifactory.liatr.io/jenkins-image"
+  image: "docker.artifactory.liatr.io/liatrio/jenkins-image"
   tag: ${jenkins_image_version}
   ingress:
     enabled: true
