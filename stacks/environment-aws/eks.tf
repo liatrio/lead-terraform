@@ -141,8 +141,8 @@ resource "aws_security_group" "elb" {
 
 module "eks" {
   source                               = "terraform-aws-modules/eks/aws"
-  version                              = "5.0.0"
-  cluster_version                      = "1.12"
+  version                              = "5.1.0"
+  cluster_version                      = "1.13"
   cluster_name                         = var.cluster
   subnets                              = module.vpc.private_subnets
   tags                                 = local.tags
@@ -150,7 +150,6 @@ module "eks" {
   worker_groups                        = local.worker_groups
   worker_additional_security_group_ids = [aws_security_group.worker.id]
   map_roles                            = local.map_roles
-  worker_ami_name_filter               = var.worker_ami_name_filter
   write_kubeconfig                     = false
   permissions_boundary                 = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${aws_iam_policy.workspace_role_boundary.name}"
   workers_additional_policies          = [aws_iam_policy.worker_policy.arn]
