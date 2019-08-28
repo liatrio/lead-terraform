@@ -19,6 +19,7 @@ EOF
       key_name              = var.key_name
       autoscaling_enabled   = true
       protect_from_scale_in = true
+      enabled_metrics       = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]
       pre_userdata          = local.ssm_init
     },
     {
@@ -31,6 +32,7 @@ EOF
       key_name              = var.key_name
       autoscaling_enabled   = true
       protect_from_scale_in = true
+      enabled_metrics       = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]
       pre_userdata          = local.ssm_init
     },
     {
@@ -43,6 +45,7 @@ EOF
       key_name              = var.key_name
       autoscaling_enabled   = true
       protect_from_scale_in = true
+      enabled_metrics       = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]
       pre_userdata          = local.ssm_init
     },
   ]
