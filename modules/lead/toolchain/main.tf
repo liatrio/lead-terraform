@@ -35,7 +35,7 @@ module "toolchain_issuer" {
   source        = "../../common/cert-issuer"
   namespace     = module.toolchain_namespace.name
   issuer_type   = var.issuer_type
-  issuer_server = var.issuer_server
+  issuer_server = "https://acme-v02.api.letsencrypt.org/directory"
   crd_waiter    = var.crd_waiter
 }
 

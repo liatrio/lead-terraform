@@ -138,12 +138,15 @@ pilot:
       memory: 512Mi
 mixer:
   telemetry:
+    loadshedding: 
+      mode: logonly
+    autoscaleMax: 20
     resources:
       requests:
-        cpu: 10m
+        cpu: 64m
         memory: 128Mi
       limits:
-        cpu: 100m
+        cpu: 128m
         memory: 256Mi
 security:
   resources:

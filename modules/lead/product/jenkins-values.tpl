@@ -6,7 +6,8 @@ persistence:
   enabled: false
 
 master:
-  image: "docker.artifactory.liatr.io/jenkins-image"
+  installPlugins: false
+  image: "docker.artifactory.liatr.io/liatrio/jenkins-image"
   tag: ${jenkins_image_version}
   ingress:
     enabled: true
@@ -24,8 +25,8 @@ master:
   serviceType: ClusterIP
   healthProbeLivenessFailureThreshold: 5
   healthProbeReadinessFailureThreshold: 12
-  healthProbeLivenessInitialDelay: 240
-  healthProbeReadinessInitialDelay: 120
+  healthProbeLivenessInitialDelay: 60 
+  healthProbeReadinessInitialDelay: 30
   resources:
     requests:
       cpu: 100m
