@@ -16,6 +16,7 @@ module "infrastructure" {
   issuer_server      = var.cert_issuer_server
   uptime             = var.uptime
 
+  enable_spot_instances      = var.enable_spot_instances
   ondemand_toleration_values = data.template_file.ondemand_toleration.rendered
   external_dns_chart_values  = data.template_file.external_dns_values.rendered
 
