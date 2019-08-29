@@ -47,6 +47,10 @@ master:
       security-config: |
         jenkins:
           authorizationStrategy: loggedInUsersCanDoAnything
+      master-node: |
+        jenkins:
+          labelString: "master"
+          numExecutors: 1
       logstash-url: |
         jenkins:
           globalNodeProperties:
