@@ -58,10 +58,6 @@ variable "spot_asg_max_size" {
   default = "5"
 }
 
-variable "worker_ami_name_filter" {
-  default = "v20190329"
-}
-
 variable "image_whitelist" {
   default = ".*"
 }
@@ -140,6 +136,10 @@ variable "enable_xray" {
 
 variable "enable_autoscaler_scale_down" {
   default = true
+}
+
+variable "uptime" {
+  default = "always"
 }
 
 locals {

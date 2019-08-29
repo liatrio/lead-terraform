@@ -29,3 +29,6 @@ variable "issuer_server" {
 variable "ondemand_toleration_values" {
   default = ""
 }
+
+variable "uptime" {
+}

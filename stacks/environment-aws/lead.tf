@@ -14,6 +14,7 @@ module "infrastructure" {
   enable_opa         = "false"
   issuer_type        = "acme"
   issuer_server      = var.cert_issuer_server
+  uptime             = var.uptime
 
   ondemand_toleration_values = data.template_file.ondemand_toleration.rendered
   external_dns_chart_values  = data.template_file.external_dns_values.rendered
@@ -107,6 +108,7 @@ module "sdm" {
   workspace_role_name         = aws_iam_role.workspace_role.name
   cert_issuer_type            = var.cert_issuer_type
   cert_issuer_server          = var.cert_issuer_server
+  product_stack               = "product-aws"
 
   providers = {
     helm.system    = helm.system

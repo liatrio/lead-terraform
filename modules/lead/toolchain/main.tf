@@ -7,6 +7,11 @@ data "helm_repository" "codecentric" {
   url  = "https://codecentric.github.io/helm-charts"
 }
 
+data "helm_repository" "liatrio" {
+  name = "liatrio"
+  url  = "https://artifactory.liatr.io/artifactory/helm/"
+}
+
 module "toolchain_namespace" {
   source    = "../../common/namespace"
   namespace = var.namespace
@@ -30,7 +35,7 @@ module "toolchain_issuer" {
   source        = "../../common/cert-issuer"
   namespace     = module.toolchain_namespace.name
   issuer_type   = var.issuer_type
-  issuer_server = var.issuer_server
+  issuer_server = "https://acme-v02.api.letsencrypt.org/directory"
   crd_waiter    = var.crd_waiter
 }
 
@@ -39,7 +44,7 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
     name = "toolchain-tiller-manager"
   }
   rule {
-    api_groups = ["", "batch", "extensions", "apps", "stable.liatr.io", "policy", "apiextensions.k8s.io"]
+    api_groups = ["", "batch", "extensions", "apps", "stable.liatr.io", "policy", "apiextensions.k8s.io", "services/proxy"]
     resources  = ["*"]
     verbs      = ["*"]
   }
@@ -97,6 +102,11 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
     api_groups = ["networking.istio.io"]
     resources  = ["gateways","virtualservices"]
     verbs      = ["list", "watch", "create", "patch", "get", "delete"]
+  }
+  rule {
+    api_groups = ["metrics.k8s.io"]
+    resources  = ["nodes","pods"]
+    verbs      = ["get", "list", "watch"]
   }
 }
 

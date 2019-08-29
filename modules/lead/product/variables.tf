@@ -11,6 +11,9 @@ variable "toolchain_namespace" {
 variable "builder_images_version" {
   default = "v1.0.14"
 }
+variable "jenkins_image_version" {
+  default = "v1.0.14-3-g7bcbd65"
+}
 variable "ingress_controller_type" {}
 variable "istio_enabled" {
   default = true

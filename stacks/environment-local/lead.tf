@@ -13,6 +13,7 @@ module "infrastructure" {
   enable_opa         = "false"
   opa_failure_policy = var.opa_failure_policy
   issuer_type        = "selfSigned"
+  uptime             = var.uptime
 
   external_dns_chart_values = data.template_file.external_dns_values.rendered
 
@@ -56,11 +57,11 @@ module "sdm" {
   product_version             = var.product_version
   slack_bot_token             = var.slack_bot_token
   slack_client_signing_secret = var.slack_client_signing_secret
-  workspace_role_name         = "local_workspace_role"  
+  workspace_role_name         = "local_workspace_role"
+  product_stack               = "product-local"  
 
   providers = {
     helm.system    = helm.toolchain
     helm.toolchain = helm.toolchain
   }
 }
-

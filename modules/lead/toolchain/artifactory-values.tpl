@@ -2,10 +2,13 @@ artifactory:
   resources:
     requests:
       cpu: 75m
-      memory: 2.5Gi
+      memory: 3Gi
     limits:
       cpu: 400m
-      memory: 3.5Gi
+      memory: 4Gi
+  javaOpts:
+    xms: 2g
+    xmx: 4g
 nginx:
   enabled: false
 ingress:
@@ -24,6 +27,8 @@ ingress:
       rewrite ^/(v2)/token /artifactory/api/docker/null/v2/token;
       rewrite ^/(v2)/([^\/]*)/(.*) /artifactory/api/docker/$2/$1/$3;
     nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
+    nginx.ingress.kubernetes.io/proxy-http-version: "1.1"
   hosts:
   - ${ingress_hostname}
   tls:

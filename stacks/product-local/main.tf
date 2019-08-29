@@ -1,6 +1,5 @@
-
 terraform {
-  backend "s3" {}
+  backend "local" {}
 }
 
 provider "kubernetes" {
@@ -14,12 +13,6 @@ provider "helm" {
   namespace       = module.product.toolchain_namespace
   tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.14.1"
   service_account = module.product.toolchain_service_account
-
-  override = [
-    "spec.template.spec.tolerations[0].key=${var.ondemand_toleration_key}",
-    "spec.template.spec.tolerations[0].operator=Exists",
-    "spec.template.spec.tolerations[0].effect.NoSchedule"
-  ]
 
   kubernetes {
     load_config_file = var.load_config_file
@@ -39,12 +32,6 @@ provider "helm" {
   tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.14.1"
   service_account = module.product.staging_service_account
 
-  override = [
-    "spec.template.spec.tolerations[0].key=${var.ondemand_toleration_key}",
-    "spec.template.spec.tolerations[0].operator=Exists",
-    "spec.template.spec.tolerations[0].effect.NoSchedule"
-  ]
-
   kubernetes {
     load_config_file = var.load_config_file
     config_context   = var.config_context
@@ -62,12 +49,6 @@ provider "helm" {
   namespace       = module.product.production_namespace
   tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.14.1"
   service_account = module.product.production_service_account
-
-  override = [
-    "tolerations[0].key=ScheduleOndemand",
-    "tolerations[0].operator=Exists",
-    "tolerations[0].effect.NoSchedule"
-  ]
 
   kubernetes {
     load_config_file = var.load_config_file
