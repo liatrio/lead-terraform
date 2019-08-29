@@ -22,7 +22,7 @@ variable "key_name" {
 }
 
 variable "instance_type" {
-  default = "t2.micro"
+  default = var.enable_spot_instances ? "t2.micro" : "m5.large"
 }
 
 variable "asg_min_size" {
@@ -135,6 +135,10 @@ variable "enable_xray" {
 }
 
 variable "enable_autoscaler_scale_down" {
+  default = true
+}
+
+variable "enable_spot_instances" {
   default = true
 }
 

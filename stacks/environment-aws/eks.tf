@@ -17,10 +17,11 @@ EOF
       asg_max_size          = var.asg_max_size
       bootstrap_extra_args  = "--enable-docker-bridge 'true'"
       key_name              = var.key_name
-      autoscaling_enabled   = false
+      autoscaling_enabled   = true
+      protect_from_scale_in = true
       enabled_metrics       = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]
       pre_userdata          = local.ssm_init
-      kubelet_extra_args    = "--node-labels=kubernetes.io/lifecycle=normal --register-with-taints=${var.ondemand_toleration_key}=true:NoSchedule"
+      kubelet_extra_args    = var.enable_spot_instances ? "--node-labels=kubernetes.io/lifecycle=normal --register-with-taints=${var.ondemand_toleration_key}=true:NoSchedule" : ""
     },
     {
       instance_type         = var.instance_type
@@ -30,11 +31,11 @@ EOF
       asg_max_size          = var.asg_max_size
       bootstrap_extra_args  = "--enable-docker-bridge 'true'"
       key_name              = var.key_name
-      autoscaling_enabled   = false
+      autoscaling_enabled   = true
+      protect_from_scale_in = true
       enabled_metrics       = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]
       pre_userdata          = local.ssm_init
-      kubelet_extra_args    = "--node-labels=kubernetes.io/lifecycle=normal --register-with-taints=${var.ondemand_toleration_key}=true:NoSchedule"
-    },
+      kubelet_extra_args    = var.enable_spot_instances ? "--node-labels=kubernetes.io/lifecycle=normal --register-with-taints=${var.ondemand_toleration_key}=true:NoSchedule" : ""    },
     {
       instance_type         = var.instance_type
       subnets               = [module.vpc.private_subnets[2]]
@@ -43,10 +44,11 @@ EOF
       asg_max_size          = var.asg_max_size
       bootstrap_extra_args  = "--enable-docker-bridge 'true'"
       key_name              = var.key_name
-      autoscaling_enabled   = false
+      autoscaling_enabled   = true
+      protect_from_scale_in = true
       enabled_metrics       = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]
       pre_userdata          = local.ssm_init
-      kubelet_extra_args    = "--node-labels=kubernetes.io/lifecycle=normal --register-with-taints=${var.ondemand_toleration_key}=true:NoSchedule"
+      kubelet_extra_args    = var.enable_spot_instances ? "--node-labels=kubernetes.io/lifecycle=normal --register-with-taints=${var.ondemand_toleration_key}=true:NoSchedule" : ""
     },   
   ]
 
@@ -177,7 +179,7 @@ module "eks" {
   tags                                 = local.tags
   vpc_id                               = module.vpc.vpc_id
   worker_groups                        = local.worker_groups
-  worker_groups_launch_template_mixed  = local.worker_groups_launch_template_mixed
+  worker_groups_launch_template_mixed  = var.enable_spot_intances ? local.worker_groups_launch_template_mixed : []
   worker_additional_security_group_ids = [aws_security_group.worker.id]
   map_roles                            = local.map_roles
   write_kubeconfig                     = false
