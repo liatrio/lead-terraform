@@ -1,6 +1,5 @@
-
 terraform {
-  backend "s3" {}
+  backend "local" {}
 }
 
 provider "kubernetes" {

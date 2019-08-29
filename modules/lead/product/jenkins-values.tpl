@@ -6,29 +6,27 @@ persistence:
   enabled: false
 
 master:
+  installPlugins: false
+  image: "docker.artifactory.liatr.io/liatrio/jenkins-image"
+  tag: ${jenkins_image_version}
   ingress:
     enabled: true
     hostName: ${ingress_hostname}
     annotations:
       kubernetes.io/ingress.class: "nginx"
       kubernetes.io/tls-acme: "true"
-      nginx.ingress.kubernetes.io/ssl-redirect: "${ssl_redirect}"
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
       nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-      nginx.ingress.kubernetes.io/configuration-snippet: |
-        more_set_headers "X-Forwarded-Proto: https";      
-      ingress.kubernetes.io/proxy-body-size: "0"
-      ingress.kubernetes.io/proxy-read-timeout: "600"
-      ingress.kubernetes.io/proxy-send-timeout: "600"
     tls:
     - hosts:
       - ${ingress_hostname}
       secretName: jenkins-ingress-tls
-  jenkinsUrlProtocol: ${protocol}
+  jenkinsUrlProtocol: https
   serviceType: ClusterIP
   healthProbeLivenessFailureThreshold: 5
   healthProbeReadinessFailureThreshold: 12
-  healthProbeLivenessInitialDelay: 240
-  healthProbeReadinessInitialDelay: 120
+  healthProbeLivenessInitialDelay: 60 
+  healthProbeReadinessInitialDelay: 30
   resources:
     requests:
       cpu: 100m
@@ -49,22 +47,10 @@ master:
       security-config: |
         jenkins:
           authorizationStrategy: loggedInUsersCanDoAnything
-          securityRealm: ${security_realm}
       master-node: |
         jenkins:
           labelString: "master"
           numExecutors: 1
-      keycloak-config: |
-        unclassified:
-          keycloakSecurityRealm:
-            keycloakJson: >
-              {
-                "realm": "toolchain",
-                "auth-server-url": "${keycloak_url}",
-                "ssl-required": "${keycloak_ssl}",
-                "resource": "${ingress_hostname}",
-                "public-client": true
-              }          
       logstash-url: |
         jenkins:
           globalNodeProperties:
@@ -199,21 +185,6 @@ master:
                   scm:
                     git:
                       remote: "https://github.com/liatrio/lead-shared-library.git"
-  installPlugins:
-    - keycloak:2.3.0
-    - ws-cleanup:0.37
-    - kubernetes-credentials-provider:0.12.1
-    - slack:2.24
-    - pipeline-utility-steps:2.3.0
-    - http_request:1.8.22
-    - github-branch-source:2.5.3
-    - workflow-aggregator:2.6
-    - pipeline-model-definition:1.3.8
-    - workflow-api:2.36
-    - workflow-scm-step:2.9
-    - kubernetes:1.15.6
-    - job-dsl:1.74
-    - blueocean:1.4.1
 
   containerEnv:
     - name: elasticUrl
