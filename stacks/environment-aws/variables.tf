@@ -22,7 +22,7 @@ variable "key_name" {
 }
 
 variable "instance_type" {
-  default = var.enable_spot_instances ? "t2.micro" : "m5.large"
+  default = "m5.large"
 }
 
 variable "asg_min_size" {
@@ -139,7 +139,7 @@ variable "enable_autoscaler_scale_down" {
 }
 
 variable "enable_spot_instances" {
-  default = true
+  default = false
 }
 
 variable "uptime" {
