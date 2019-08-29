@@ -50,6 +50,10 @@ master:
         jenkins:
           authorizationStrategy: loggedInUsersCanDoAnything
           securityRealm: ${security_realm}
+      master-node: |
+        jenkins:
+          labelString: "master"
+          numExecutors: 1
       keycloak-config: |
         unclassified:
           keycloakSecurityRealm:
