@@ -115,7 +115,7 @@ master:
                           hostPath: "/var/run/docker.sock"
                           mountPath: "/var/run/docker.sock"
                       - secretVolume:
-                          mountPath: "/home/jenkins/agent/.docker"
+                          mountPath: "/root/.docker"
                           secretName: "jenkins-artifactory-dockercfg"
                     slaveConnectTimeout: 100
                     serviceAccount: "jenkins"
