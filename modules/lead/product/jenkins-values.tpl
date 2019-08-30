@@ -98,7 +98,7 @@ master:
                       - name: "skaffold"
                         image: "docker.artifactory.liatr.io/liatrio/builder-image-skaffold:${builder_images_version}"
                         alwaysPullImage: false
-                        workingDir: "/home/jenkins"
+                        workingDir: "/home/jenkins/agent"
                         command: "/bin/sh -c"
                         args: "cat"
                         ttyEnabled: true
@@ -126,7 +126,7 @@ master:
                       - name: "aws"
                         image: "docker.artifactory.liatr.io/liatrio/builder-image-aws:${builder_images_version}"
                         alwaysPullImage: false
-                        workingDir: "/home/jenkins"
+                        workingDir: "/home/jenkins/agent"
                         command: "/bin/sh -c"
                         args: "cat"
                         ttyEnabled: true
@@ -142,7 +142,7 @@ master:
                       - name: "terraform"
                         image: "docker.artifactory.liatr.io/liatrio/builder-image-terraform:${builder_images_version}"
                         alwaysPullImage: false
-                        workingDir: "/home/jenkins"
+                        workingDir: "/home/jenkins/agent"
                         command: "/bin/sh -c"
                         args: "cat"
                         ttyEnabled: true
@@ -158,7 +158,7 @@ master:
                       - name: "maven"
                         image: "docker.artifactory.liatr.io/liatrio/builder-image-maven:${builder_images_version}"
                         alwaysPullImage: false
-                        workingDir: "/home/jenkins"
+                        workingDir: "/home/jenkins/agent"
                         command: "/bin/sh -c"
                         args: "cat"
                         ttyEnabled: true
