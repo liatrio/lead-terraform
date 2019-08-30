@@ -16,6 +16,8 @@ provider "helm" {
   service_account = module.product.toolchain_service_account
 
   override = [
+    "spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].key=${var.ondemand_toleration_key}",
+    "spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].operator=Exists",
     "spec.template.spec.tolerations[0].key=${var.ondemand_toleration_key}",
     "spec.template.spec.tolerations[0].operator=Exists",
     "spec.template.spec.tolerations[0].effect.NoSchedule"
@@ -40,6 +42,8 @@ provider "helm" {
   service_account = module.product.staging_service_account
 
   override = [
+    "spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].key=${var.ondemand_toleration_key}",
+    "spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].operator=Exists",    
     "spec.template.spec.tolerations[0].key=${var.ondemand_toleration_key}",
     "spec.template.spec.tolerations[0].operator=Exists",
     "spec.template.spec.tolerations[0].effect.NoSchedule"
@@ -64,6 +68,8 @@ provider "helm" {
   service_account = module.product.production_service_account
 
   override = [
+    "spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].key=${var.ondemand_toleration_key}",
+    "spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].operator=Exists",
     "tolerations[0].key=ScheduleOndemand",
     "tolerations[0].operator=Exists",
     "tolerations[0].effect.NoSchedule"

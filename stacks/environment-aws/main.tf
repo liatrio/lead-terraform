@@ -30,6 +30,8 @@ provider "helm" {
   service_account = module.infrastructure.tiller_service_account
 
   override = [
+    "spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].key=${var.ondemand_toleration_key}",
+    "spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].operator=Exists",
     "spec.template.spec.tolerations[0].key=${var.ondemand_toleration_key}",
     "spec.template.spec.tolerations[0].operator=Exists",
     "spec.template.spec.tolerations[0].effect.NoSchedule"
@@ -50,6 +52,8 @@ provider "helm" {
   service_account = module.toolchain.tiller_service_account
 
   override = [
+    "spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].key=${var.ondemand_toleration_key}",
+    "spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].operator=Exists",
     "spec.template.spec.tolerations[0].key=${var.ondemand_toleration_key}",
     "spec.template.spec.tolerations[0].operator=Exists",
     "spec.template.spec.tolerations[0].effect.NoSchedule"
