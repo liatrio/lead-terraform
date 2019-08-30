@@ -17,6 +17,7 @@ image:
   args: 
   - --exclude-namespaces=kube-system,${var.namespace}
   - --default-uptime=${var.uptime}
+  - --include-resources=deployments,statefulsets
 EOF
   ]
 }
