@@ -105,10 +105,10 @@ tracing:
     resources:
       requests:
         cpu: 10m
-        memory: 600Mi
+        memory: 400Mi
       limits:
         cpu: 25m
-        memory: 400Mi
+        memory: 600Mi
 
 prometheus:
   resources:
