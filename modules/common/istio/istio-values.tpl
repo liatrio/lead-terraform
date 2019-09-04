@@ -104,11 +104,11 @@ tracing:
   jaeger:
     resources:
       requests:
-        cpu: 100m
-        memory: 1Gi
+        cpu: 10m
+        memory: 600Mi
       limits:
-        cpu: 500m
-        memory: 2Gi
+        cpu: 25m
+        memory: 400Mi
 
 prometheus:
   resources:
@@ -144,10 +144,10 @@ mixer:
     resources:
       requests:
         cpu: 64m
-        memory: 128Mi
+        memory: 64Mi
       limits:
         cpu: 128m
-        memory: 256Mi
+        memory: 128Mi
 security:
   resources:
     requests:
@@ -156,3 +156,12 @@ security:
     limits:
       cpu: 400m
       memory: 256Mi
+
+sidecarInjectorWebhook:
+  resources:
+    requests:
+      cpu: 15m
+      memory: 16Mi
+    limits:
+      cpu: 25m
+      memory: 64Mi
