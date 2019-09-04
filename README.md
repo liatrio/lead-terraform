@@ -8,10 +8,10 @@ This repository contains the Terraform automation to manage LEAD environments.
 - [Istio Implementation](docs/istio-implementation.md)
 
 ## Tools
-Install required tools with [Homebrew](https://brew.sh/):
+Install required tools with Homebrew [macOS](https://brew.sh/) or [Linux](https://docs.brew.sh/Homebrew-on-Linux):
 
-```
-brew bundle
+```SHELL
+brew bundle --verbose  # verosity to view installation process
 ```
 
 ## Setup
