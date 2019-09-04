@@ -7,14 +7,14 @@ controller:
   autoscaling:
     enabled: true
     targetCPUUtilizationPercentage: 80
-    targetMemoryUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 95
   livenessProbe:
     timeoutSeconds: 10
   readinessProbe:
     timeoutSeconds: 10
   publishService:
     enabled: true
-  scope: 
+  scope:
     enabled: true
   service:
     type: ${ingress_controller_type}
@@ -22,15 +22,15 @@ controller:
   resources:
     requests:
       cpu: 15m
-      memory: 128Mi
+      memory: 125Mi
     limits:
       cpu: 50m
-      memory: 200Mi
+      memory: 150Mi
 defaultBackend:
   resources:
     requests:
-      cpu: 5m
-      memory: 32Mi
+      cpu: 1m
+      memory: 4Mi
     limits:
-      cpu: 10m
-      memory: 64Mi
+      cpu: 1m
+      memory: 16Mi
