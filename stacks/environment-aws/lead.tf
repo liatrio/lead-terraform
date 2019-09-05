@@ -14,6 +14,7 @@ module "infrastructure" {
   enable_opa         = "false"
   issuer_type        = "acme"
   issuer_server      = var.cert_issuer_server
+  uptime             = var.uptime
 
   external_dns_chart_values = data.template_file.external_dns_values.rendered
 

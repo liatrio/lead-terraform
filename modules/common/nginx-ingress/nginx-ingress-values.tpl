@@ -4,7 +4,10 @@ serviceAccount:
   create: false
   name: ${service_account}
 controller:
-  replicaCount: 3
+  autoscaling:
+    enabled: true
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
   livenessProbe:
     timeoutSeconds: 10
   readinessProbe:
@@ -18,16 +21,16 @@ controller:
     externalTrafficPolicy: ${ingress_external_traffic_policy}
   resources:
     requests:
-      cpu: 5m
+      cpu: 15m
       memory: 128Mi
     limits:
       cpu: 50m
-      memory: 256Mi
+      memory: 200Mi
 defaultBackend:
   resources:
     requests:
       cpu: 5m
-      memory: 64Mi
+      memory: 32Mi
     limits:
-      cpu: 50m
-      memory: 128Mi
+      cpu: 10m
+      memory: 64Mi

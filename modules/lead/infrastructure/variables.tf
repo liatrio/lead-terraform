@@ -25,3 +25,6 @@ variable "issuer_type" {
 variable "issuer_server" {
   default = "https://acme-v02.api.letsencrypt.org/directory"
 }
+
+variable "uptime" {
+}

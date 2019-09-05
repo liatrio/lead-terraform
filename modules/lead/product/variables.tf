@@ -9,10 +9,10 @@ variable "toolchain_namespace" {
   default = "toolchain"
 }
 variable "builder_images_version" {
-  default = "v1.0.14"
+  default = "v1.0.14-5-ge26d014"
 }
 variable "jenkins_image_version" {
-  default = "0.0.1"
+  default = "v1.0.14-5-ge26d014"
 }
 variable "ingress_controller_type" {}
 variable "istio_enabled" {

@@ -86,6 +86,10 @@ variable "enable_xray" {
   default = true
 }
 
+variable "uptime" {
+  default = "always"
+}
+
 locals {
   tags = {
     "Cluster" = var.cluster

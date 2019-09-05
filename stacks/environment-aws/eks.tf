@@ -19,6 +19,7 @@ EOF
       key_name              = var.key_name
       autoscaling_enabled   = true
       protect_from_scale_in = true
+      enabled_metrics       = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]
       pre_userdata          = local.ssm_init
     },
     {
@@ -31,6 +32,7 @@ EOF
       key_name              = var.key_name
       autoscaling_enabled   = true
       protect_from_scale_in = true
+      enabled_metrics       = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]
       pre_userdata          = local.ssm_init
     },
     {
@@ -43,6 +45,7 @@ EOF
       key_name              = var.key_name
       autoscaling_enabled   = true
       protect_from_scale_in = true
+      enabled_metrics       = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]
       pre_userdata          = local.ssm_init
     },
   ]
@@ -141,8 +144,9 @@ resource "aws_security_group" "elb" {
 
 module "eks" {
   source                               = "terraform-aws-modules/eks/aws"
-  version                              = "5.0.0"
-  cluster_version                      = "1.12"
+  version                              = "5.1.0"
+  cluster_version                      = "1.13"
+  #cluster_enabled_log_types            = ["api","audit","authenticator","controllerManager","scheduler"]
   cluster_name                         = var.cluster
   subnets                              = module.vpc.private_subnets
   tags                                 = local.tags
@@ -150,7 +154,6 @@ module "eks" {
   worker_groups                        = local.worker_groups
   worker_additional_security_group_ids = [aws_security_group.worker.id]
   map_roles                            = local.map_roles
-  worker_ami_name_filter               = var.worker_ami_name_filter
   write_kubeconfig                     = false
   permissions_boundary                 = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${aws_iam_policy.workspace_role_boundary.name}"
   workers_additional_policies          = [aws_iam_policy.worker_policy.arn]
@@ -268,6 +271,10 @@ resource "aws_iam_role_policy_attachment" "worker_ecr_role_attachment" {
 resource "aws_iam_role_policy_attachment" "worker_ssm_role_attachment" {
   role = module.eks.worker_iam_role_name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
+}
+resource "aws_iam_role_policy_attachment" "worker_cw_role_attachment" {
+  role = module.eks.worker_iam_role_name
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
 }
 
 resource "aws_iam_role" "workspace_role" {

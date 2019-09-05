@@ -6,7 +6,8 @@ persistence:
   enabled: false
 
 master:
-  image: "docker.artifactory.liatr.io/jenkins-image"
+  installPlugins: false
+  image: "docker.artifactory.liatr.io/liatrio/jenkins-image"
   tag: ${jenkins_image_version}
   ingress:
     enabled: true
@@ -24,8 +25,8 @@ master:
   serviceType: ClusterIP
   healthProbeLivenessFailureThreshold: 5
   healthProbeReadinessFailureThreshold: 12
-  healthProbeLivenessInitialDelay: 240
-  healthProbeReadinessInitialDelay: 120
+  healthProbeLivenessInitialDelay: 60 
+  healthProbeReadinessInitialDelay: 30
   resources:
     requests:
       cpu: 100m
@@ -46,6 +47,10 @@ master:
       security-config: |
         jenkins:
           authorizationStrategy: loggedInUsersCanDoAnything
+      master-node: |
+        jenkins:
+          labelString: "master"
+          numExecutors: 1
       logstash-url: |
         jenkins:
           globalNodeProperties:
@@ -93,7 +98,7 @@ master:
                       - name: "skaffold"
                         image: "docker.artifactory.liatr.io/liatrio/builder-image-skaffold:${builder_images_version}"
                         alwaysPullImage: false
-                        workingDir: "/home/jenkins"
+                        workingDir: "/home/jenkins/agent"
                         command: "/bin/sh -c"
                         args: "cat"
                         ttyEnabled: true
@@ -111,7 +116,7 @@ master:
                           hostPath: "/var/run/docker.sock"
                           mountPath: "/var/run/docker.sock"
                       - secretVolume:
-                          mountPath: "/home/jenkins/.docker"
+                          mountPath: "/root/.docker"
                           secretName: "jenkins-artifactory-dockercfg"
                     slaveConnectTimeout: 100
                     serviceAccount: "jenkins"
@@ -122,7 +127,7 @@ master:
                       - name: "aws"
                         image: "docker.artifactory.liatr.io/liatrio/builder-image-aws:${builder_images_version}"
                         alwaysPullImage: false
-                        workingDir: "/home/jenkins"
+                        workingDir: "/home/jenkins/agent"
                         command: "/bin/sh -c"
                         args: "cat"
                         ttyEnabled: true
@@ -138,7 +143,7 @@ master:
                       - name: "terraform"
                         image: "docker.artifactory.liatr.io/liatrio/builder-image-terraform:${builder_images_version}"
                         alwaysPullImage: false
-                        workingDir: "/home/jenkins"
+                        workingDir: "/home/jenkins/agent"
                         command: "/bin/sh -c"
                         args: "cat"
                         ttyEnabled: true
@@ -154,7 +159,7 @@ master:
                       - name: "maven"
                         image: "docker.artifactory.liatr.io/liatrio/builder-image-maven:${builder_images_version}"
                         alwaysPullImage: false
-                        workingDir: "/home/jenkins"
+                        workingDir: "/home/jenkins/agent"
                         command: "/bin/sh -c"
                         args: "cat"
                         ttyEnabled: true
