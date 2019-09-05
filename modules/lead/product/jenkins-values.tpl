@@ -98,7 +98,7 @@ master:
                       - name: "skaffold"
                         image: "docker.artifactory.liatr.io/liatrio/builder-image-skaffold:${builder_images_version}"
                         alwaysPullImage: false
-                        workingDir: "/home/jenkins"
+                        workingDir: "/home/jenkins/agent"
                         command: "/bin/sh -c"
                         args: "cat"
                         ttyEnabled: true
@@ -106,6 +106,7 @@ master:
                         resourceLimitCpu: 256m
                         resourceRequestMemory: 128Mi
                         resourceLimitMemory: 256Mi
+                        idleMinutes: 60
                     envVars:
                       - envVar:
                           key: "SKAFFOLD_DEFAULT_REPO"
@@ -115,7 +116,7 @@ master:
                           hostPath: "/var/run/docker.sock"
                           mountPath: "/var/run/docker.sock"
                       - secretVolume:
-                          mountPath: "/home/jenkins/.docker"
+                          mountPath: "/root/.docker"
                           secretName: "jenkins-artifactory-dockercfg"
                     slaveConnectTimeout: 100
                     serviceAccount: "jenkins"
@@ -126,7 +127,7 @@ master:
                       - name: "aws"
                         image: "docker.artifactory.liatr.io/liatrio/builder-image-aws:${builder_images_version}"
                         alwaysPullImage: false
-                        workingDir: "/home/jenkins"
+                        workingDir: "/home/jenkins/agent"
                         command: "/bin/sh -c"
                         args: "cat"
                         ttyEnabled: true
@@ -142,7 +143,7 @@ master:
                       - name: "terraform"
                         image: "docker.artifactory.liatr.io/liatrio/builder-image-terraform:${builder_images_version}"
                         alwaysPullImage: false
-                        workingDir: "/home/jenkins"
+                        workingDir: "/home/jenkins/agent"
                         command: "/bin/sh -c"
                         args: "cat"
                         ttyEnabled: true
@@ -158,7 +159,7 @@ master:
                       - name: "maven"
                         image: "docker.artifactory.liatr.io/liatrio/builder-image-maven:${builder_images_version}"
                         alwaysPullImage: false
-                        workingDir: "/home/jenkins"
+                        workingDir: "/home/jenkins/agent"
                         command: "/bin/sh -c"
                         args: "cat"
                         ttyEnabled: true
