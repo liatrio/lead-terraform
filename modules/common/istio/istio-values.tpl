@@ -30,18 +30,18 @@ global:
   proxy:
     resources:
       requests:
-        cpu: 100m
-        memory: 128Mi
+        cpu: 10m
+        memory: 32Mi
       limits:
-        cpu: 500m
-        memory: 200Mi
+        cpu: 40m
+        memory: 64Mi
   defaultResources:
     requests:
       cpu: 10m
-      memory: 128Mi
+      memory: 32Mi
     limits:
       cpu: 100m
-      memory: 256Mi
+      memory: 64Mi
 
 certmanager:
   enabled: false
@@ -128,14 +128,23 @@ galley:
       cpu: 200m
       memory: 256Mi
 pilot:
-  autoscaleMax: 10
+  autoscaleMax: 20
   resources:
     requests:
-      cpu: 10m
-      memory: 64Mi
+      cpu: 20m
+      memory: 96Mi
     limits:
-      cpu: 500m
-      memory: 512Mi
+      cpu: 80m
+      memory: 192Mi
+  global:
+    proxy:
+      resource:
+        requests:
+          cpu: 5m
+          memory: 32Mi
+        limits:
+          cpu: 20m
+          memory: 64Mi
 mixer:
   telemetry:
     loadshedding: 
