@@ -4,6 +4,10 @@ data "helm_repository" "flagger" {
   url   = "https://flagger.app"
 }
 
+data "template_file" "flagger_values" {
+  template = file("${path.module}/flagger-values.tpl")
+}
+
 resource "helm_release" "flagger" {
   count      = var.enable ? 1 : 0
   repository = data.helm_repository.flagger[0].metadata[0].name
@@ -23,5 +27,7 @@ resource "helm_release" "flagger" {
     name  = "metricsServer"
     value = var.metrics_url
   }
+
+  values = [data.template_file.flagger_values.rendered]
 }
 
