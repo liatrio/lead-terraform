@@ -34,7 +34,7 @@ variable "asg_desired_capacity" {
 }
 
 variable "asg_max_size" {
-  default = "1"
+  default = "5"
 }
 
 variable "ondemand_toleration_key" {

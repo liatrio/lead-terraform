@@ -35,6 +35,13 @@ data "template_file" "cluster_autoscaler" {
   }
 }
 
+data "template_file" "ondemand_toleration" {
+  template = file("${path.module}/ondemand-toleration.tpl")
+  vars = {
+    ondemand_toleration_key = var.ondemand_toleration_key
+  }
+}
+
 data "helm_repository" "stable" {
   name = "stable"
   url  = "https://kubernetes-charts.storage.googleapis.com"

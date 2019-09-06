@@ -17,7 +17,6 @@ module "system_issuer" {
   issuer_type     = var.issuer_type
   issuer_server   = var.issuer_server
   crd_waiter      = null_resource.cert_manager_crd_delay.id
-  external_values = var.ondemand_toleration_values
 }
 
 resource "kubernetes_cluster_role" "tiller_cluster_role" {

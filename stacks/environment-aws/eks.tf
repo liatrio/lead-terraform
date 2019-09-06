@@ -119,21 +119,6 @@ EOF
 data "aws_availability_zones" "available" {
 }
 
-data "template_file" "ondemand_toleration" {
-  template = <<EOF
-affinity:
-  nodeAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: "${var.ondemand_toleration_key}"
-          operator: "Exists" 
-tolerations:
-- key: "${var.ondemand_toleration_key}"
-  operator: "Exists"
-  effect: "NoSchedule"
-EOF
-}
 
 module "vpc" {
   source             = "terraform-aws-modules/vpc/aws"

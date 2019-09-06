@@ -41,7 +41,3 @@ variable "provider_dns_hosted_zone" {
 variable "enabled" {
   default = true
 }
-
-variable "external_values" {
-  default = ""
-}
