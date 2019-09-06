@@ -7,9 +7,8 @@ resource "helm_release" "k8s_spot_termination_handler" {
   name       = "k8s-spot-termination-handler"
   timeout    = 600
 
-  values = [var.ondemand_toleration_values]  
-  set {
-    name = "nodeSelector"
-    value = "kubernetes.io/lifecycle: spot"
+  set_string {
+    name  = "nodeSelector.kubernetes\\.io/lifecycle"
+    value = "spot"
   }
 }
