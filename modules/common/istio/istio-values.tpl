@@ -63,6 +63,13 @@ grafana:
       secretName: istio-ingress-tls
     hosts:
     - ${domain}
+  resources:
+    requests:
+      cpu: 4m
+      memory: 32Mi
+    limits:
+      cpu: 32m
+      memory: 64Mi
 
 kiali:
   enabled: true
@@ -122,11 +129,11 @@ prometheus:
 galley:
   resources:
     requests:
-      cpu: 50m
-      memory: 128Mi
+      cpu: 32m
+      memory: 64Mi
     limits:
-      cpu: 200m
-      memory: 256Mi
+      cpu: 128m
+      memory: 128Mi
 pilot:
   autoscaleMax: 10
   resources:
@@ -164,4 +171,13 @@ sidecarInjectorWebhook:
       memory: 16Mi
     limits:
       cpu: 25m
+      memory: 64Mi
+
+security:
+  resources:
+    requests:
+      cpu: 2m
+      memory: 32Mi
+    limits:
+      cpu: 100m
       memory: 64Mi

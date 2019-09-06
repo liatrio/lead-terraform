@@ -22,10 +22,10 @@ controller:
   resources:
     requests:
       cpu: 15m
-      memory: 125Mi
+      memory: 140Mi
     limits:
       cpu: 50m
-      memory: 150Mi
+      memory: 160Mi
 defaultBackend:
   resources:
     requests:
