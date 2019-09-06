@@ -15,6 +15,7 @@ EOF
       asg_min_size          = var.asg_min_size
       asg_desired_capacity  = var.asg_desired_capacity
       asg_max_size          = var.asg_max_size
+      asg_recreate_on_change= true
       bootstrap_extra_args  = "--enable-docker-bridge 'true'"
       key_name              = var.key_name
       autoscaling_enabled   = true
@@ -29,19 +30,22 @@ EOF
       asg_min_size          = var.asg_min_size
       asg_desired_capacity  = var.asg_desired_capacity
       asg_max_size          = var.asg_max_size
+      asg_recreate_on_change= false
       bootstrap_extra_args  = "--enable-docker-bridge 'true'"
       key_name              = var.key_name
       autoscaling_enabled   = true
       protect_from_scale_in = true
       enabled_metrics       = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]
       pre_userdata          = local.ssm_init
-      kubelet_extra_args    = var.enable_spot_instances ? "--node-labels=kubernetes.io/lifecycle=normal --register-with-taints=${var.ondemand_toleration_key}=true:NoSchedule" : ""    },
+      kubelet_extra_args    = var.enable_spot_instances ? "--node-labels=kubernetes.io/lifecycle=normal --register-with-taints=${var.ondemand_toleration_key}=true:NoSchedule" : ""    
+    },
     {
       instance_type         = var.instance_type
       subnets               = [module.vpc.private_subnets[2]]
       asg_min_size          = var.asg_min_size
       asg_desired_capacity  = var.asg_desired_capacity
       asg_max_size          = var.asg_max_size
+      asg_recreate_on_change= false
       bootstrap_extra_args  = "--enable-docker-bridge 'true'"
       key_name              = var.key_name
       autoscaling_enabled   = true
@@ -54,11 +58,13 @@ EOF
 
   worker_groups_launch_template_mixed = [
     {
+      name                    = "spot0"
       override_instance_types = var.spot_instance_types
       subnets                 = [module.vpc.private_subnets[0]]
       asg_min_size            = var.spot_asg_min_size
       asg_desired_capacity    = var.spot_asg_desired_capacity
       asg_max_size            = var.spot_asg_max_size
+      asg_recreate_on_change  = true
       bootstrap_extra_args    = "--enable-docker-bridge 'true'"
       key_name                = var.key_name
       autoscaling_enabled     = true
@@ -68,11 +74,13 @@ EOF
       kubelet_extra_args      = "--node-labels=kubernetes.io/lifecycle=spot"
     },
     {
+      name                    = "spot1"
       override_instance_types = var.spot_instance_types
       subnets                 = [module.vpc.private_subnets[1]]
       asg_min_size            = var.spot_asg_min_size
       asg_desired_capacity    = var.spot_asg_desired_capacity
       asg_max_size            = var.spot_asg_max_size
+      asg_recreate_on_change  = true
       bootstrap_extra_args    = "--enable-docker-bridge 'true'"
       key_name                = var.key_name
       autoscaling_enabled     = true
@@ -82,11 +90,13 @@ EOF
       kubelet_extra_args      = "--node-labels=kubernetes.io/lifecycle=spot"
     },
     {
+      name                    = "spot2"
       override_instance_types = var.spot_instance_types
       subnets                 = [module.vpc.private_subnets[2]]
       asg_min_size            = var.spot_asg_min_size
       asg_desired_capacity    = var.spot_asg_desired_capacity
       asg_max_size            = var.spot_asg_max_size
+      asg_recreate_on_change  = true
       bootstrap_extra_args    = "--enable-docker-bridge 'true'"
       key_name                = var.key_name
       autoscaling_enabled     = true

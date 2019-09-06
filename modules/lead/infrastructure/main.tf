@@ -91,7 +91,7 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
   rule {
     api_groups = [""]
     resources  = ["namespaces", "nodes", "limitranges", "persistentvolumeclaims", "persistentvolumes", "resourcequotas", "ingresses"]
-    verbs      = ["get", "list", "watch", "update"]
+    verbs      = ["get", "list", "watch", "update", "patch"]
   }
   rule {
     api_groups = [""]
