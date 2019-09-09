@@ -37,6 +37,27 @@ variable "asg_max_size" {
   default = "5"
 }
 
+variable "ondemand_toleration_key" {
+  default = "ScheduleOndemand"
+}
+
+variable "spot_instance_types" {
+  type    = list
+  default = ["m5.large", "c5.large", "m4.large", "c4.large", "t3.large", "r5.large"]
+}
+
+variable "spot_asg_min_size" {
+  default = "1"
+}
+
+variable "spot_asg_desired_capacity" {
+  default = "1"
+}
+
+variable "spot_asg_max_size" {
+  default = "5"
+}
+
 variable "image_whitelist" {
   default = ".*"
 }
@@ -115,6 +136,10 @@ variable "enable_xray" {
 
 variable "enable_autoscaler_scale_down" {
   default = true
+}
+
+variable "enable_spot_instances" {
+  default = false
 }
 
 variable "uptime" {

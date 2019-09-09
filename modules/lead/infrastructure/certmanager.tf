@@ -46,6 +46,8 @@ resource "helm_release" "cert_manager" {
     value = "--issuer-ambient-credentials"
   }
 
+  values = [var.ondemand_toleration_values]
+
   depends_on = [
     helm_release.cert_manager_crds,
     null_resource.cert_manager_crd_delay,

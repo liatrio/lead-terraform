@@ -15,6 +15,14 @@ provider "helm" {
   tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.14.1"
   service_account = module.product.toolchain_service_account
 
+  override = [
+    "spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].key=kubernetes.io/lifecycle",
+    "spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].operator=NotIn",
+    "spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].values[0]=spot",
+    "spec.template.spec.tolerations[0].key=${var.ondemand_toleration_key}",
+    "spec.template.spec.tolerations[0].operator=Exists",
+  ]
+
   kubernetes {
     load_config_file = var.load_config_file
     config_context   = var.config_context
@@ -33,6 +41,14 @@ provider "helm" {
   tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.14.1"
   service_account = module.product.staging_service_account
 
+  override = [
+    "spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].key=kubernetes.io/lifecycle",
+    "spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].operator=NotIn",
+    "spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].values[0]=spot",
+    "spec.template.spec.tolerations[0].key=${var.ondemand_toleration_key}",
+    "spec.template.spec.tolerations[0].operator=Exists",
+  ]
+
   kubernetes {
     load_config_file = var.load_config_file
     config_context   = var.config_context
@@ -50,6 +66,14 @@ provider "helm" {
   namespace       = module.product.production_namespace
   tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.14.1"
   service_account = module.product.production_service_account
+
+  override = [
+    "spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].key=kubernetes.io/lifecycle",
+    "spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].operator=NotIn",
+    "spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].values[0]=spot",
+    "spec.template.spec.tolerations[0].key=${var.ondemand_toleration_key}",
+    "spec.template.spec.tolerations[0].operator=Exists",
+  ]
 
   kubernetes {
     load_config_file = var.load_config_file

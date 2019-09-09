@@ -31,3 +31,7 @@ variable "config_context" {
 variable "load_config_file" {
   default = false
 }
+
+variable "ondemand_toleration_key" {
+  default = "ScheduleOndemand"
+}

@@ -6,3 +6,5 @@ server:
     limits:
       cpu: 500m
       memory: 4Gi
+nodeExporter:
+  priorityClassName: system-node-critical
