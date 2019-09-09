@@ -7,4 +7,7 @@ server:
       cpu: 500m
       memory: 4Gi
 nodeExporter:
-  priorityClassName: system-node-critical
+  #priorityClassName: system-node-critical
+  tolerations:
+  - key: ScheduleOndemand
+    operator: "Exists"
