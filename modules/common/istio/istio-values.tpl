@@ -30,18 +30,18 @@ global:
   proxy:
     resources:
       requests:
-        cpu: 100m
-        memory: 128Mi
+        cpu: 10m
+        memory: 32Mi
       limits:
-        cpu: 500m
-        memory: 200Mi
+        cpu: 40m
+        memory: 64Mi
   defaultResources:
     requests:
       cpu: 10m
-      memory: 128Mi
+      memory: 32Mi
     limits:
       cpu: 100m
-      memory: 256Mi
+      memory: 64Mi
 
 certmanager:
   enabled: false
@@ -63,6 +63,13 @@ grafana:
       secretName: istio-ingress-tls
     hosts:
     - ${domain}
+  resources:
+    requests:
+      cpu: 4m
+      memory: 32Mi
+    limits:
+      cpu: 32m
+      memory: 64Mi
 
 kiali:
   enabled: true
@@ -104,11 +111,11 @@ tracing:
   jaeger:
     resources:
       requests:
-        cpu: 100m
-        memory: 1Gi
+        cpu: 10m
+        memory: 400Mi
       limits:
-        cpu: 500m
-        memory: 2Gi
+        cpu: 25m
+        memory: 600Mi
 
 prometheus:
   resources:
@@ -122,20 +129,29 @@ prometheus:
 galley:
   resources:
     requests:
-      cpu: 50m
-      memory: 128Mi
-    limits:
-      cpu: 200m
-      memory: 256Mi
-pilot:
-  autoscaleMax: 10
-  resources:
-    requests:
-      cpu: 10m
+      cpu: 32m
       memory: 64Mi
     limits:
-      cpu: 500m
-      memory: 512Mi
+      cpu: 128m
+      memory: 128Mi
+pilot:
+  autoscaleMax: 20
+  resources:
+    requests:
+      cpu: 20m
+      memory: 96Mi
+    limits:
+      cpu: 80m
+      memory: 192Mi
+  global:
+    proxy:
+      resource:
+        requests:
+          cpu: 5m
+          memory: 32Mi
+        limits:
+          cpu: 20m
+          memory: 64Mi
 mixer:
   telemetry:
     loadshedding: 
@@ -144,10 +160,10 @@ mixer:
     resources:
       requests:
         cpu: 64m
-        memory: 128Mi
+        memory: 64Mi
       limits:
         cpu: 128m
-        memory: 256Mi
+        memory: 128Mi
 security:
   resources:
     requests:
@@ -156,3 +172,21 @@ security:
     limits:
       cpu: 400m
       memory: 256Mi
+
+sidecarInjectorWebhook:
+  resources:
+    requests:
+      cpu: 15m
+      memory: 16Mi
+    limits:
+      cpu: 25m
+      memory: 64Mi
+
+security:
+  resources:
+    requests:
+      cpu: 2m
+      memory: 32Mi
+    limits:
+      cpu: 100m
+      memory: 64Mi
