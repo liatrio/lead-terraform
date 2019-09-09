@@ -17,6 +17,7 @@ resources:
   requests:
     cpu: 1m
     memory: 16Mi 
+priorityClassName: system-node-critical
 EOF
   ]
 }
