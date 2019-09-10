@@ -22,11 +22,19 @@ TF_VALIDATE_ARGS = ""
 endif
 
 validate: 
+	@export TF_LOG = DEBUG
+	@printenv
+	@echo 'First init'
 	@terraform init -backend=false stacks/environment-aws
+	@echo 'First validate'
 	@terraform validate $(TF_VALIDATE_ARGS) stacks/environment-aws
+	@echo 'second init'
 	@terraform init -backend=false stacks/environment-local
+	@echo 'second validate'
 	@terraform validate $(TF_VALIDATE_ARGS) stacks/environment-local
+	@echo 'third init'
 	@terraform init -backend=false stacks/product-aws
+	@echo 'third validate'
 	@terraform validate $(TF_VALIDATE_ARGS) stacks/product-aws
 
 %: environments/%
