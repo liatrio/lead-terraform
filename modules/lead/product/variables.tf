@@ -14,7 +14,7 @@ variable "builder_images_version" {
 variable "jenkins_image_version" {
   default = "v1.0.15-7-g2465aa8"
 }
-variabe "image_repo" {
+variable "image_repo" {
   default = "artifactory.toolchain.lead.prod.liatr.io/docker-registry/flywheel"
 }
 variable "ingress_controller_type" {}
