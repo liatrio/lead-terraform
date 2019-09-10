@@ -3,7 +3,7 @@ serviceAccount:
   name: jenkins
 
 persistence:
-  enabled: false
+  enabled: true
 
 master:
   installPlugins: false

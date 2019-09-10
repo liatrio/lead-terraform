@@ -10,7 +10,7 @@ resource "helm_release" "kube_downscaler" {
   chart      = "kube-downscaler"
   version    = "0.1.0"
   timeout    = 900
-  values     = [<<EOF
+  values     = [var.ondemand_toleration_values, <<EOF
 rbac:
   create: true
 image:

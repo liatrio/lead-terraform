@@ -47,7 +47,7 @@ variable "spot_instance_types" {
 }
 
 variable "spot_asg_min_size" {
-  default = "1"
+  default = "0"
 }
 
 variable "spot_asg_desired_capacity" {
