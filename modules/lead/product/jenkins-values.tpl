@@ -3,11 +3,11 @@ serviceAccount:
   name: jenkins
 
 persistence:
-  enabled: true
+  enabled: false
 
 master:
   installPlugins: false
-  image: "docker.artifactory.liatr.io/liatrio/jenkins-image"
+  image: "${image_repo}/jenkins-image"
   tag: ${jenkins_image_version}
   ingress:
     enabled: true
@@ -96,7 +96,7 @@ master:
                     nodeUsageMode: NORMAL
                     containers:
                       - name: "skaffold"
-                        image: "docker.artifactory.liatr.io/liatrio/builder-image-skaffold:${builder_images_version}"
+                        image: "${image_repo}/builder-image-skaffold:${builder_images_version}"
                         alwaysPullImage: false
                         workingDir: "/home/jenkins/agent"
                         command: "/bin/sh -c"
@@ -125,7 +125,7 @@ master:
                     nodeUsageMode: NORMAL
                     containers:
                       - name: "aws"
-                        image: "docker.artifactory.liatr.io/liatrio/builder-image-aws:${builder_images_version}"
+                        image: "${image_repo}/builder-image-aws:${builder_images_version}"
                         alwaysPullImage: false
                         workingDir: "/home/jenkins/agent"
                         command: "/bin/sh -c"
@@ -141,7 +141,7 @@ master:
                     nodeUsageMode: NORMAL
                     containers:
                       - name: "terraform"
-                        image: "docker.artifactory.liatr.io/liatrio/builder-image-terraform:${builder_images_version}"
+                        image: "${image_repo}/builder-image-terraform:${builder_images_version}"
                         alwaysPullImage: false
                         workingDir: "/home/jenkins/agent"
                         command: "/bin/sh -c"
@@ -157,7 +157,7 @@ master:
                     nodeUsageMode: NORMAL
                     containers:
                       - name: "maven"
-                        image: "docker.artifactory.liatr.io/liatrio/builder-image-maven:${builder_images_version}"
+                        image: "${image_repo}/builder-image-maven:${builder_images_version}"
                         alwaysPullImage: false
                         workingDir: "/home/jenkins/agent"
                         command: "/bin/sh -c"

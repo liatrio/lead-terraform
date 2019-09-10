@@ -7,6 +7,7 @@ data "template_file" "jenkins_values" {
   template = file("${path.module}/jenkins-values.tpl")
 
   vars = {
+    image_repo             = var.image_repo
     jenkins_image_version  = var.jenkins_image_version
     product_name           = var.product_name
     ingress_hostname       = "jenkins.${module.toolchain_namespace.name}.${var.cluster_domain}"
