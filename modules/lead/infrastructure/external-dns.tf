@@ -11,7 +11,7 @@ resource "helm_release" "external_dns" {
   name       = "external-dns"
   timeout    = 600
 
-  values = [var.external_dns_chart_values, var.ondemand_toleration_values]
+  values = [var.external_dns_chart_values]
   set {
     name  = "rbac.serviceAccountName"
     value = kubernetes_service_account.external_dns_service_account.metadata[0].name

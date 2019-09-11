@@ -21,12 +21,8 @@ variable "key_name" {
   default = ""
 }
 
-variable "instance_type" {
-  default = "m5.large"
-}
-
 variable "asg_min_size" {
-  default = "1"
+  default = "0"
 }
 
 variable "asg_desired_capacity" {
@@ -37,25 +33,29 @@ variable "asg_max_size" {
   default = "5"
 }
 
-variable "ondemand_toleration_key" {
-  default = "ScheduleOndemand"
-}
-
-variable "spot_instance_types" {
+variable "instance_types" {
   type    = list
   default = ["m5.large", "c5.large", "m4.large", "c4.large", "t3.large", "r5.large"]
 }
 
-variable "spot_asg_min_size" {
-  default = "0"
+variable "essential_taint_key" {
+  default = "EssentialOnly"
 }
 
-variable "spot_asg_desired_capacity" {
+variable "essential_asg_min_size" {
   default = "1"
 }
 
-variable "spot_asg_max_size" {
+variable "essential_asg_desired_capacity" {
+  default = "1"
+}
+
+variable "essential_asg_max_size" {
   default = "5"
+}
+
+variable "essential_instance_type" {
+  default = "t3.small"
 }
 
 variable "image_whitelist" {
@@ -138,12 +138,12 @@ variable "enable_autoscaler_scale_down" {
   default = true
 }
 
-variable "enable_spot_instances" {
-  default = false
+variable "on_demand_percentage" {
+  default = "0"
 }
 
 variable "uptime" {
-  default = "always"
+  default = "Mon-Fri 05:00-19:00 America/Los_Angeles"
 }
 
 locals {

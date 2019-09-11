@@ -16,7 +16,7 @@ resource "helm_release" "metrics" {
     value = "--kubelet-preferred-address-types=InternalIP"
   }
 
-  values = [var.ondemand_toleration_values]
+  values = [var.essential_toleration_values]
 
   depends_on = [kubernetes_cluster_role_binding.tiller_cluster_role_binding]
 }

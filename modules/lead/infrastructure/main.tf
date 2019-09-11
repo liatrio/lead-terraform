@@ -288,5 +288,5 @@ module "opa" {
   source             = "../../common/opa"
   namespace          = module.system_namespace.name
   opa_failure_policy = var.opa_failure_policy
-  external_values    = var.ondemand_toleration_values
+  external_values    = var.essential_toleration_values
 }

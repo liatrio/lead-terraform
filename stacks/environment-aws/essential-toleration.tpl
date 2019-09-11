@@ -6,7 +6,7 @@ affinity:
         - key: "kubernetes.io/lifecycle"
           operator: "NotIn" 
           values:
-          - spot
+          - preemptible
 tolerations:
-- key: "${ondemand_toleration_key}"
+- key: "${essential_taint_key}"
   operator: "Exists"

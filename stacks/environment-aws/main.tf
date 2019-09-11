@@ -32,8 +32,8 @@ provider "helm" {
   override = [
     "spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].key=kubernetes.io/lifecycle",
     "spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].operator=NotIn",
-    "spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].values[0]=spot",
-    "spec.template.spec.tolerations[0].key=${var.ondemand_toleration_key}",
+    "spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].values[0]=preemptible",
+    "spec.template.spec.tolerations[0].key=${var.essential_taint_key}",
     "spec.template.spec.tolerations[0].operator=Exists",
   ]
   
@@ -54,8 +54,8 @@ provider "helm" {
   override = [
     "spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].key=kubernetes.io/lifecycle",
     "spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].operator=NotIn",
-    "spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].values[0]=spot",
-    "spec.template.spec.tolerations[0].key=${var.ondemand_toleration_key}",
+    "spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].values[0]=preemptible",
+    "spec.template.spec.tolerations[0].key=${var.essential_taint_key}",
     "spec.template.spec.tolerations[0].operator=Exists",
   ]
 

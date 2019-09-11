@@ -10,11 +10,12 @@ EOF
 
   worker_groups = [
     {
-      instance_type         = var.instance_type
-      subnets               = [module.vpc.private_subnets[0]]
-      asg_min_size          = var.asg_min_size
-      asg_desired_capacity  = var.asg_desired_capacity
-      asg_max_size          = var.asg_max_size
+      name                  = "essential0"
+      instance_type         = var.essential_instance_type
+      subnets               = module.vpc.private_subnets
+      asg_min_size          = var.essential_asg_min_size
+      asg_desired_capacity  = var.essential_asg_desired_capacity
+      asg_max_size          = var.essential_asg_max_size
       asg_recreate_on_change= true
       bootstrap_extra_args  = "--enable-docker-bridge 'true'"
       key_name              = var.key_name
@@ -22,88 +23,64 @@ EOF
       protect_from_scale_in = true
       enabled_metrics       = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]
       pre_userdata          = local.ssm_init
-      kubelet_extra_args    = var.enable_spot_instances ? "--node-labels=kubernetes.io/lifecycle=normal --register-with-taints=${var.ondemand_toleration_key}=true:NoSchedule" : ""
-    },
-    {
-      instance_type         = var.instance_type
-      subnets               = [module.vpc.private_subnets[1]]
-      asg_min_size          = var.asg_min_size
-      asg_desired_capacity  = var.asg_desired_capacity
-      asg_max_size          = var.asg_max_size
-      asg_recreate_on_change= true
-      bootstrap_extra_args  = "--enable-docker-bridge 'true'"
-      key_name              = var.key_name
-      autoscaling_enabled   = true
-      protect_from_scale_in = true
-      enabled_metrics       = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]
-      pre_userdata          = local.ssm_init
-      kubelet_extra_args    = var.enable_spot_instances ? "--node-labels=kubernetes.io/lifecycle=normal --register-with-taints=${var.ondemand_toleration_key}=true:NoSchedule" : ""    
-    },
-    {
-      instance_type         = var.instance_type
-      subnets               = [module.vpc.private_subnets[2]]
-      asg_min_size          = var.asg_min_size
-      asg_desired_capacity  = var.asg_desired_capacity
-      asg_max_size          = var.asg_max_size
-      asg_recreate_on_change= true
-      bootstrap_extra_args  = "--enable-docker-bridge 'true'"
-      key_name              = var.key_name
-      autoscaling_enabled   = true
-      protect_from_scale_in = true
-      enabled_metrics       = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]
-      pre_userdata          = local.ssm_init
-      kubelet_extra_args    = var.enable_spot_instances ? "--node-labels=kubernetes.io/lifecycle=normal --register-with-taints=${var.ondemand_toleration_key}=true:NoSchedule" : ""
-    },   
+      kubelet_extra_args    = "--node-labels=kubernetes.io/lifecycle=essential --register-with-taints=${var.essential_taint_key}=true:NoSchedule"
+    }
   ]
 
   worker_groups_launch_template_mixed = [
     {
-      name                    = "spot0"
-      override_instance_types = var.spot_instance_types
+      name                    = "preemptible0"
+      override_instance_types = var.instance_types
       subnets                 = [module.vpc.private_subnets[0]]
-      asg_min_size            = var.spot_asg_min_size
-      asg_desired_capacity    = var.spot_asg_desired_capacity
-      asg_max_size            = var.spot_asg_max_size
+      asg_min_size            = var.asg_min_size
+      asg_desired_capacity    = var.asg_desired_capacity
+      asg_max_size            = var.asg_max_size
       asg_recreate_on_change  = true
       bootstrap_extra_args    = "--enable-docker-bridge 'true'"
       key_name                = var.key_name
       autoscaling_enabled     = true
       protect_from_scale_in   = true
-      enabled_metrics       = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]      
+      enabled_metrics         = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]      
       pre_userdata            = local.ssm_init
-      kubelet_extra_args      = "--node-labels=kubernetes.io/lifecycle=spot"
+      kubelet_extra_args      = "--node-labels=kubernetes.io/lifecycle=preemptible"
+      on_demand_base_capacity = 0
+      on_demand_percentage_above_base_capacity = var.on_demand_percentage
     },
     {
-      name                    = "spot1"
-      override_instance_types = var.spot_instance_types
+      name                    = "preemptible1"
+      override_instance_types = var.instance_types
       subnets                 = [module.vpc.private_subnets[1]]
-      asg_min_size            = var.spot_asg_min_size
-      asg_desired_capacity    = var.spot_asg_desired_capacity
-      asg_max_size            = var.spot_asg_max_size
+      asg_min_size            = var.asg_min_size
+      asg_desired_capacity    = var.asg_desired_capacity
+      asg_max_size            = var.asg_max_size
       asg_recreate_on_change  = true
       bootstrap_extra_args    = "--enable-docker-bridge 'true'"
       key_name                = var.key_name
       autoscaling_enabled     = true
       protect_from_scale_in   = true
-      enabled_metrics       = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]      
+      enabled_metrics         = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]      
       pre_userdata            = local.ssm_init
-      kubelet_extra_args      = "--node-labels=kubernetes.io/lifecycle=spot"
+      kubelet_extra_args      = "--node-labels=kubernetes.io/lifecycle=preemptible"
+      on_demand_base_capacity = 0
+      on_demand_percentage_above_base_capacity = var.on_demand_percentage
     },
     {
-      name                    = "spot2"
-      override_instance_types = var.spot_instance_types
+      name                    = "preemptible2"
+      override_instance_types = var.instance_types
       subnets                 = [module.vpc.private_subnets[2]]
-      asg_min_size            = var.spot_asg_min_size
-      asg_desired_capacity    = var.spot_asg_desired_capacity
-      asg_max_size            = var.spot_asg_max_size
+      asg_min_size            = var.asg_min_size
+      asg_desired_capacity    = var.asg_desired_capacity
+      asg_max_size            = var.asg_max_size
       asg_recreate_on_change  = true
       bootstrap_extra_args    = "--enable-docker-bridge 'true'"
       key_name                = var.key_name
       autoscaling_enabled     = true
       protect_from_scale_in   = true
-      enabled_metrics       = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]      
+      enabled_metrics         = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]      
       pre_userdata            = local.ssm_init
-      kubelet_extra_args      = "--node-labels=kubernetes.io/lifecycle=spot"
+      kubelet_extra_args      = "--node-labels=kubernetes.io/lifecycle=preemptible"
+      on_demand_base_capacity = 0
+      on_demand_percentage_above_base_capacity = var.on_demand_percentage
     },        
   ]
 
@@ -210,7 +187,7 @@ module "eks" {
   tags                                 = local.tags
   vpc_id                               = module.vpc.vpc_id
   worker_groups                        = local.worker_groups
-  worker_groups_launch_template_mixed  = var.enable_spot_instances ? local.worker_groups_launch_template_mixed : []
+  worker_groups_launch_template_mixed  = local.worker_groups_launch_template_mixed
   worker_additional_security_group_ids = [aws_security_group.worker.id]
   map_roles                            = local.map_roles
   write_kubeconfig                     = false

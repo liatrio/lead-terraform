@@ -16,8 +16,7 @@ module "infrastructure" {
   issuer_server      = var.cert_issuer_server
   uptime             = var.uptime
 
-  enable_spot_instances      = var.enable_spot_instances
-  ondemand_toleration_values = data.template_file.ondemand_toleration.rendered
+  essential_toleration_values = data.template_file.essential_toleration.rendered
   external_dns_chart_values  = data.template_file.external_dns_values.rendered
 
   providers = {
@@ -35,10 +34,10 @@ data "template_file" "cluster_autoscaler" {
   }
 }
 
-data "template_file" "ondemand_toleration" {
-  template = file("${path.module}/ondemand-toleration.tpl")
+data "template_file" "essential_toleration" {
+  template = file("${path.module}/essential-toleration.tpl")
   vars = {
-    ondemand_toleration_key = var.ondemand_toleration_key
+    essential_taint_key = var.essential_taint_key
   }
 }
 
@@ -56,7 +55,7 @@ resource "helm_release" "cluster_autoscaler" {
   wait       = true
   version    = "3.1.0"
 
-  values = [data.template_file.cluster_autoscaler.rendered, data.template_file.ondemand_toleration.rendered]
+  values = [data.template_file.cluster_autoscaler.rendered, data.template_file.essential_toleration.rendered]
 
   provider = helm.system
 }

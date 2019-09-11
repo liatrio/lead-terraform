@@ -1,4 +1,11 @@
+alertmanager:
+  enabled: false
+kubeStateMetrics:
+  deploymentAnnotations:
+    downscaler/exclude: "true"
 server:
+  deploymentAnnotations:
+    downscaler/exclude: "true"
   resources:
     requests:
       cpu: 200m
@@ -9,5 +16,5 @@ server:
 nodeExporter:
   #priorityClassName: system-node-critical
   tolerations:
-  - key: ScheduleOndemand
+  - key: EssentialOnly
     operator: "Exists"

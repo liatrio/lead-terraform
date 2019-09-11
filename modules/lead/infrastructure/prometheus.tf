@@ -11,7 +11,7 @@ resource "helm_release" "prometheus" {
   timeout    = 600
   wait       = true
 
-  values = [data.template_file.prometheus_values.rendered, var.ondemand_toleration_values]
+  values = [data.template_file.prometheus_values.rendered, var.essential_toleration_values]
 
   depends_on = [kubernetes_cluster_role_binding.tiller_cluster_role_binding]
 }
