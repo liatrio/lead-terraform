@@ -22,7 +22,7 @@ variable "key_name" {
 }
 
 variable "asg_min_size" {
-  default = "0"
+  default = "1"
 }
 
 variable "asg_desired_capacity" {
