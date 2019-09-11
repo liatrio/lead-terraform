@@ -1,7 +1,7 @@
 # Terragrunt will copy the Terraform configurations specified by the source parameter, along with any files in the
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 terraform {
-    source = "../..//stacks/product-aws"
+    source = "../..//stacks/product-local"
     extra_arguments "shared_vars" {
       commands = get_terraform_commands_that_need_vars()
       optional_var_files = [
