@@ -65,7 +65,7 @@ resource "kubernetes_role" "tiller_role" {
   }
   rule {
     api_groups = ["networking.istio.io"]
-    resources = ["gateways", "virtualservices"]
+    resources = ["*"]
     verbs = ["get", "create", "watch", "delete", "list", "patch"]
   }
   rule {
