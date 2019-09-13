@@ -100,7 +100,7 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
   }
   rule {
     api_groups = ["networking.istio.io"]
-    resources  = ["gateways","virtualservices"]
+    resources  = ["*"]
     verbs      = ["list", "watch", "create", "patch", "get", "delete"]
   }
   rule {
