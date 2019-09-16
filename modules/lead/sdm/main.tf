@@ -7,8 +7,8 @@ provider "helm" {
 }
 
 data "helm_repository" "liatrio" {
-  name = "liatrio"
-  url  = "https://artifactory.liatr.io/artifactory/helm/"
+  name = "lead.prod.liatr.io"
+  url  = "https://artifactory.toolchain.lead.prod.liatr.io/artifactory/helm/"
 }
 
 resource "helm_release" "operator_toolchain_definition" {
@@ -34,6 +34,7 @@ data "template_file" "operator_toolchain_values" {
     region              = var.region
     cert_issuer_type    = var.cert_issuer_type
     cert_issuer_server  = var.cert_issuer_server
+    product_stack       = var.product_stack
   }
 }
 

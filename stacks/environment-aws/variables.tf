@@ -21,10 +21,6 @@ variable "key_name" {
   default = ""
 }
 
-variable "instance_type" {
-  default = "m5.large"
-}
-
 variable "asg_min_size" {
   default = "1"
 }
@@ -37,8 +33,29 @@ variable "asg_max_size" {
   default = "5"
 }
 
-variable "worker_ami_name_filter" {
-  default = "v20190329"
+variable "instance_types" {
+  type    = list
+  default = ["m5.large", "c5.large", "m4.large", "c4.large", "t3.large", "r5.large"]
+}
+
+variable "essential_taint_key" {
+  default = "EssentialOnly"
+}
+
+variable "essential_asg_min_size" {
+  default = "1"
+}
+
+variable "essential_asg_desired_capacity" {
+  default = "1"
+}
+
+variable "essential_asg_max_size" {
+  default = "5"
+}
+
+variable "essential_instance_type" {
+  default = "t3.small"
 }
 
 variable "image_whitelist" {
@@ -119,6 +136,14 @@ variable "enable_xray" {
 
 variable "enable_autoscaler_scale_down" {
   default = true
+}
+
+variable "on_demand_percentage" {
+  default = "0"
+}
+
+variable "uptime" {
+  default = "Mon-Fri 05:00-19:00 America/Los_Angeles"
 }
 
 locals {

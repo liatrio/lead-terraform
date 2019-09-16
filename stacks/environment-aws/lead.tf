@@ -14,8 +14,10 @@ module "infrastructure" {
   enable_opa         = "false"
   issuer_type        = "acme"
   issuer_server      = var.cert_issuer_server
+  uptime             = var.uptime
 
-  external_dns_chart_values = data.template_file.external_dns_values.rendered
+  essential_toleration_values = data.template_file.essential_toleration.rendered
+  external_dns_chart_values  = data.template_file.external_dns_values.rendered
 
   providers = {
     helm = helm.system
@@ -29,6 +31,13 @@ data "template_file" "cluster_autoscaler" {
     cluster = var.cluster
     region  = var.region
     scale_down_enabled = var.enable_autoscaler_scale_down
+  }
+}
+
+data "template_file" "essential_toleration" {
+  template = file("${path.module}/essential-toleration.tpl")
+  vars = {
+    essential_taint_key = var.essential_taint_key
   }
 }
 
@@ -46,7 +55,7 @@ resource "helm_release" "cluster_autoscaler" {
   wait       = true
   version    = "3.1.0"
 
-  values = [data.template_file.cluster_autoscaler.rendered]
+  values = [data.template_file.cluster_autoscaler.rendered, data.template_file.essential_toleration.rendered]
 
   provider = helm.system
 }
@@ -106,6 +115,7 @@ module "sdm" {
   workspace_role_name         = aws_iam_role.workspace_role.name
   cert_issuer_type            = var.cert_issuer_type
   cert_issuer_server          = var.cert_issuer_server
+  product_stack               = "product-aws"
 
   providers = {
     helm.system    = helm.system

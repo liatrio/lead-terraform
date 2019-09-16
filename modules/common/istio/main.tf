@@ -148,3 +148,19 @@ module "istio_flagger" {
   enable        = var.enabled
   namespace     = helm_release.istio[0].metadata[0].namespace
 }
+
+resource "kubernetes_horizontal_pod_autoscaler" "kiali_autoscaler" {
+  metadata {
+    name = "kiali"
+    namespace = module.istio_namespace.name
+  }
+  spec {
+    max_replicas = 20
+    target_cpu_utilization_percentage = 80
+    scale_target_ref {
+      api_version = "apps/v1beta1"
+      kind = "Deployment"
+      name = "kiali"
+    }
+  }
+}

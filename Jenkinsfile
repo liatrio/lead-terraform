@@ -1,24 +1,26 @@
+library 'LEAD'
 pipeline {
     agent {
         label "lead-toolchain-terraform"
     }
     stages {
-        stage('Install Terraform Plugins') {
-            steps {
-                container('terraform') {
-                    script {
-                          sh "make plugins"
-                    }
-                }
-            }
-        }        
         stage('Validate Terraform') {
             steps {
+                notifyPipelineStart()
+                notifyStageStart()                                                                                                                                                                      
                 container('terraform') {
                     script {
                           sh "make validate"
                     }
                 }
+            }
+            post {
+              success {
+                notifyStageEnd()
+              }
+            failure {
+                notifyStageEnd([result: "fail"])
+              }
             }
         }
     }

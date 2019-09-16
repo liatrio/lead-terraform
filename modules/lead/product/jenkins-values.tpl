@@ -6,6 +6,9 @@ persistence:
   enabled: false
 
 master:
+  installPlugins: false
+  image: "${image_repo}/jenkins-image"
+  tag: ${jenkins_image_version}
   ingress:
     enabled: true
     hostName: ${ingress_hostname}
@@ -27,8 +30,8 @@ master:
   serviceType: ClusterIP
   healthProbeLivenessFailureThreshold: 5
   healthProbeReadinessFailureThreshold: 12
-  healthProbeLivenessInitialDelay: 240
-  healthProbeReadinessInitialDelay: 120
+  healthProbeLivenessInitialDelay: 60 
+  healthProbeReadinessInitialDelay: 30
   resources:
     requests:
       cpu: 100m
@@ -61,6 +64,10 @@ master:
                 "resource": "${ingress_hostname}",
                 "public-client": true
               }          
+      master-node: |
+        jenkins:
+          labelString: "master"
+          numExecutors: 1
       logstash-url: |
         jenkins:
           globalNodeProperties:
@@ -106,9 +113,9 @@ master:
                     nodeUsageMode: NORMAL
                     containers:
                       - name: "skaffold"
-                        image: "docker.artifactory.liatr.io/liatrio/builder-image-skaffold:${builder_images_version}"
+                        image: "${image_repo}/builder-image-skaffold:${builder_images_version}"
                         alwaysPullImage: false
-                        workingDir: "/home/jenkins"
+                        workingDir: "/home/jenkins/agent"
                         command: "/bin/sh -c"
                         args: "cat"
                         ttyEnabled: true
@@ -116,6 +123,7 @@ master:
                         resourceLimitCpu: 256m
                         resourceRequestMemory: 128Mi
                         resourceLimitMemory: 256Mi
+                    idleMinutes: 60
                     envVars:
                       - envVar:
                           key: "SKAFFOLD_DEFAULT_REPO"
@@ -125,7 +133,7 @@ master:
                           hostPath: "/var/run/docker.sock"
                           mountPath: "/var/run/docker.sock"
                       - secretVolume:
-                          mountPath: "/home/jenkins/.docker"
+                          mountPath: "/root/.docker"
                           secretName: "jenkins-artifactory-dockercfg"
                     slaveConnectTimeout: 100
                     serviceAccount: "jenkins"
@@ -134,9 +142,9 @@ master:
                     nodeUsageMode: NORMAL
                     containers:
                       - name: "aws"
-                        image: "docker.artifactory.liatr.io/liatrio/builder-image-aws:${builder_images_version}"
+                        image: "${image_repo}/builder-image-aws:${builder_images_version}"
                         alwaysPullImage: false
-                        workingDir: "/home/jenkins"
+                        workingDir: "/home/jenkins/agent"
                         command: "/bin/sh -c"
                         args: "cat"
                         ttyEnabled: true
@@ -150,9 +158,9 @@ master:
                     nodeUsageMode: NORMAL
                     containers:
                       - name: "terraform"
-                        image: "docker.artifactory.liatr.io/liatrio/builder-image-terraform:${builder_images_version}"
+                        image: "${image_repo}/builder-image-terraform:${builder_images_version}"
                         alwaysPullImage: false
-                        workingDir: "/home/jenkins"
+                        workingDir: "/home/jenkins/agent"
                         command: "/bin/sh -c"
                         args: "cat"
                         ttyEnabled: true
@@ -166,9 +174,9 @@ master:
                     nodeUsageMode: NORMAL
                     containers:
                       - name: "maven"
-                        image: "docker.artifactory.liatr.io/liatrio/builder-image-maven:${builder_images_version}"
+                        image: "${image_repo}/builder-image-maven:${builder_images_version}"
                         alwaysPullImage: false
-                        workingDir: "/home/jenkins"
+                        workingDir: "/home/jenkins/agent"
                         command: "/bin/sh -c"
                         args: "cat"
                         ttyEnabled: true
@@ -195,21 +203,6 @@ master:
                   scm:
                     git:
                       remote: "https://github.com/liatrio/lead-shared-library.git"
-  installPlugins:
-    - keycloak:2.3.0
-    - ws-cleanup:0.37
-    - kubernetes-credentials-provider:0.12.1
-    - slack:2.24
-    - pipeline-utility-steps:2.3.0
-    - http_request:1.8.22
-    - github-branch-source:2.5.3
-    - workflow-aggregator:2.6
-    - pipeline-model-definition:1.3.8
-    - workflow-api:2.36
-    - workflow-scm-step:2.9
-    - kubernetes:1.15.6
-    - job-dsl:1.74
-    - blueocean:1.4.1
 
   containerEnv:
     - name: elasticUrl

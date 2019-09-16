@@ -8,6 +8,8 @@ data "template_file" "jenkins_values" {
 
   vars = {
     cluster_domain         = var.cluster_domain
+    image_repo             = var.image_repo
+    jenkins_image_version  = var.jenkins_image_version
     product_name           = var.product_name
     protocol               = local.protocol
     ssl_redirect           = local.protocol == "http" ? false : true
@@ -79,6 +81,7 @@ resource "helm_release" "jenkins" {
   chart     = "stable/jenkins"
   namespace = module.toolchain_namespace.name
   timeout   = "600"
+  version   = "1.6.0"
 
   set_sensitive {
     name  = "master.adminPassword"

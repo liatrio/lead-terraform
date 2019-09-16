@@ -15,6 +15,8 @@ resource "helm_release" "kube-janitor" {
 
   depends_on = [kubernetes_cluster_role_binding.tiller_cluster_role_binding]
 
+  values     = [var.essential_toleration_values]
+
   set {
     name  = "kubejanitor.expiration"
     value = 15

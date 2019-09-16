@@ -12,11 +12,11 @@ module "system_namespace" {
 }
 
 module "system_issuer" {
-  source        = "../../common/cert-issuer"
-  namespace     = module.system_namespace.name
-  issuer_type   = var.issuer_type
-  issuer_server = var.issuer_server
-  crd_waiter    = null_resource.cert_manager_crd_delay.id
+  source          = "../../common/cert-issuer"
+  namespace       = module.system_namespace.name
+  issuer_type     = var.issuer_type
+  issuer_server   = var.issuer_server
+  crd_waiter      = null_resource.cert_manager_crd_delay.id
 }
 
 resource "kubernetes_cluster_role" "tiller_cluster_role" {
@@ -91,7 +91,7 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
   rule {
     api_groups = [""]
     resources  = ["namespaces", "nodes", "limitranges", "persistentvolumeclaims", "persistentvolumes", "resourcequotas", "ingresses"]
-    verbs      = ["get", "list", "watch", "update"]
+    verbs      = ["get", "list", "watch", "update", "patch", "create"]
   }
   rule {
     api_groups = [""]
@@ -100,7 +100,7 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
   }
   rule {
     api_groups = ["extensions"]
-    resources  = ["ingresses","deployments"]
+    resources  = ["ingresses","deployments","daemonsets"]
     verbs      = ["*"]
   }
   rule {
@@ -288,4 +288,5 @@ module "opa" {
   source             = "../../common/opa"
   namespace          = module.system_namespace.name
   opa_failure_policy = var.opa_failure_policy
+  external_values    = var.essential_toleration_values
 }
