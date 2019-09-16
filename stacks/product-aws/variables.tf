@@ -35,3 +35,11 @@ variable "load_config_file" {
 variable "essential_taint_key" {
   default = "EssentialOnly"
 }
+
+variable "istio_enabled" {
+  default = true
+}
+
+variable "keycloak_enabled" {
+  default = false
+}

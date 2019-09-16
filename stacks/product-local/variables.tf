@@ -31,3 +31,11 @@ variable "config_context" {
 variable "load_config_file" {
   default = false
 }
+
+variable "istio_enabled" {
+  default = true
+}
+
+variable "keycloak_enabled" {
+  default = false
+}
