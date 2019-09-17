@@ -73,10 +73,16 @@ resource "keycloak_realm" "realm" {
   duplicate_emails_allowed        = false
 
   smtp_server {
-    host              = "mailhog"
-    port              = "1025"
-    from              = "keycloak@${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
-    from_display_name = "Keycloak - ${title(module.toolchain_namespace.name)}"
+    host     = var.smtp_host
+    port     = var.smtp_port
+    starttls = true
+    ssl      = false
+    from     = var.smtp_from_email
+    from_display_name = "Keycloak - ${var.root_zone_name} ${title(var.cluster)} ${title(var.namespace)}"
+    auth {
+      username = var.smtp_username
+      password = var.smtp_password
+    }
   }
 }
 

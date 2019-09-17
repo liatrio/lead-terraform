@@ -63,7 +63,17 @@ variable "crd_waiter" {
 variable "keycloak_admin_password" {
 }
 
-variable "smtp_json" {
-  type    = map
-  default = {}
+variable "smtp_host" {
+}
+
+variable "smtp_port" {
+}
+
+variable "smtp_username" {
+}
+
+variable "smtp_password" {
+}
+
+variable "smtp_from_email" {
 }

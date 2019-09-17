@@ -60,10 +60,21 @@ resource "helm_release" "cluster_autoscaler" {
   provider = helm.system
 }
 
-module "ses_smtp" {
-  source       = "../../modules/common/aws-ses-smtp"
-  name         = "ses-smtp-${module.toolchain.namespace}"
-  from_address = var.from_email
+
+data "aws_ssm_parameter" "slack_client_signing_secret" {
+  name = "/${var.cluster}/slack_client_signing_secret"
+}
+
+data "aws_ssm_parameter" "slack_bot_token" {
+  name = "/${var.cluster}/slack_bot_token"
+}
+
+data "aws_ssm_parameter" "artifactory_license" {
+  name = "/${var.cluster}/artifactory_license"
+}
+
+data "aws_ssm_parameter" "keycloak_admin_password" {
+  name = "/${var.cluster}/keycloak_admin_password"
 }
 
 module "toolchain" {
@@ -73,8 +84,8 @@ module "toolchain" {
   namespace               = var.toolchain_namespace
   image_whitelist         = var.image_whitelist
   elb_security_group_id   = aws_security_group.elb.id
-  artifactory_license     = var.artifactory_license
-  keycloak_admin_password = var.keycloak_admin_password
+  artifactory_license     = data.aws_ssm_parameter.artifactory_license.value
+  keycloak_admin_password = data.aws_ssm_parameter.keycloak_admin_password.value
   enable_artifactory      = var.enable_artifactory
   enable_gitlab           = var.enable_gitlab
   enable_keycloak         = var.enable_keycloak
@@ -86,16 +97,11 @@ module "toolchain" {
   ingress_controller_type = "LoadBalancer"
   crd_waiter              = module.infrastructure.crd_waiter
 
-  smtp_json = {
-    aws_ses = {
-      name     = "aws_ses"
-      host     = "email-smtp.${var.region}.amazonaws.com"
-      port     = "587"
-      email    = var.from_email
-      username = module.ses_smtp.smtp_username
-      password = module.ses_smtp.smtp_password
-    }
-  }
+  smtp_host  = "email-smtp.${var.region}.amazonaws.com"
+  smtp_port     = "587"
+  smtp_username = module.ses_smtp.smtp_username
+  smtp_password = module.ses_smtp.smtp_password
+  smtp_from_email = "noreply@${aws_ses_domain_identity.cluster_domain.domain}"
 
   providers = {
     helm = helm.toolchain
@@ -110,8 +116,8 @@ module "sdm" {
   system_namespace            = module.infrastructure.namespace
   sdm_version                 = var.sdm_version
   product_version             = var.product_version
-  slack_bot_token             = var.slack_bot_token
-  slack_client_signing_secret = var.slack_client_signing_secret
+  slack_bot_token             = data.aws_ssm_parameter.slack_bot_token.value
+  slack_client_signing_secret = data.aws_ssm_parameter.slack_client_signing_secret.value
   workspace_role_name         = aws_iam_role.workspace_role.name
   cert_issuer_type            = var.cert_issuer_type
   cert_issuer_server          = var.cert_issuer_server

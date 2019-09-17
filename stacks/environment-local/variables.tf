@@ -42,10 +42,6 @@ variable "keycloak_admin_password" {
   default = "keycloak"
 }
 
-variable "from_email" {
-  default = "noreply@liatr.io"
-}
-
 variable "ingress_controller_type" {
   default = "NodePort"
 }

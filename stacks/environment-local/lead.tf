@@ -41,6 +41,11 @@ module "toolchain" {
   ingress_external_traffic_policy = var.ingress_external_traffic_policy
   crd_waiter                      = module.infrastructure.crd_waiter
 
+  smtp_host  = "mailhog"
+  smtp_port     = "1025"
+  smtp_username = ""
+  smtp_password = ""
+
   providers = {
     helm = helm.toolchain
   }

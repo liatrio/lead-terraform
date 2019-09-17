@@ -31,6 +31,4 @@ ingress:
   extraEnv: |
     - name: MH_HOSTNAME
       value: "${ingress_hostname}"
-    - name: MH_OUTGOING_SMTP
-      value: "${smtp_json}"
 
