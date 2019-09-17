@@ -65,6 +65,12 @@ module "sdm" {
   workspace_role_name         = "local_workspace_role"
   product_stack               = "product-local"  
 
+  product_vars = {
+    issuer_type            = var.cert_issuer_type
+    issuer_server          = var.cert_issuer_server
+    enable_keycloak        = var.enable_keycloak
+  }
+
   providers = {
     helm.system    = helm.toolchain
     helm.toolchain = helm.toolchain

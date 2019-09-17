@@ -119,9 +119,13 @@ module "sdm" {
   slack_bot_token             = data.aws_ssm_parameter.slack_bot_token.value
   slack_client_signing_secret = data.aws_ssm_parameter.slack_client_signing_secret.value
   workspace_role_name         = aws_iam_role.workspace_role.name
-  cert_issuer_type            = var.cert_issuer_type
-  cert_issuer_server          = var.cert_issuer_server
   product_stack               = "product-aws"
+
+  product_vars = {
+    issuer_type            = var.cert_issuer_type
+    issuer_server          = var.cert_issuer_server
+    enable_keycloak        = var.enable_keycloak
+  }
 
   providers = {
     helm.system    = helm.system
