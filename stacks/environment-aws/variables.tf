@@ -78,10 +78,6 @@ variable "dashboard_version" {
   default = "0.2.0-8ed15c3a7e1"
 }
 
-variable "from_email" {
-  default = "noreply@liatr.io"
-}
-
 variable "cert_issuer_type" {
   default = "acme"
 }
