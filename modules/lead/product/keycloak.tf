@@ -26,7 +26,7 @@ provider "keycloak" {
 }
 
 resource "keycloak_openid_client" "jenkins_openid_client" {
-  count                   = var.keycloak_enabled ? 1 : 0
+  count                   = var.enable_keycloak? 1 : 0
   realm_id                = data.kubernetes_secret.keycloak_toolchain_realm.data.id
   client_id               = "jenkins.${module.toolchain_namespace.name}.${var.cluster_domain}"
   name                    = "Jenkins - ${title(module.toolchain_namespace.name)}"
@@ -40,7 +40,7 @@ resource "keycloak_openid_client" "jenkins_openid_client" {
 
 
 resource "keycloak_openid_user_property_protocol_mapper" "jenkins_openid_user_property_mapper_email" {
-  count                      = var.keycloak_enabled ? 1 : 0
+  count                      = var.enable_keycloak? 1 : 0
   realm_id                   = data.kubernetes_secret.keycloak_toolchain_realm.data.id
   client_id                  = keycloak_openid_client.jenkins_openid_client[0].id
   name                       = "email"

@@ -18,9 +18,9 @@ variable "image_repo" {
   default = "artifactory.toolchain.lead.prod.liatr.io/docker-registry/flywheel"
 }
 variable "ingress_controller_type" {}
-variable "istio_enabled" {
+variable "enable_istio" {
   default = true
 }
-variable "keycloak_enabled" {
+variable "enable_keycloak" {
   default = true
 }

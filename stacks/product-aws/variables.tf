@@ -36,10 +36,10 @@ variable "essential_taint_key" {
   default = "EssentialOnly"
 }
 
-variable "istio_enabled" {
+variable "enable_istio" {
   default = true
 }
 
-variable "keycloak_enabled" {
+variable "enable_keycloak" {
   default = false
 }
