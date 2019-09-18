@@ -64,7 +64,7 @@ resource "keycloak_realm" "realm" {
   display_name  = title(module.toolchain_namespace.name)
 
   registration_allowed            = false
-  registration_email_as_username  = true
+  registration_email_as_username  = false
   reset_password_allowed          = true
   remember_me                     = true
   verify_email                    = true
