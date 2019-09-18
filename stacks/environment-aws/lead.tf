@@ -24,6 +24,26 @@ module "infrastructure" {
   }
 }
 
+resource "aws_iam_role" "terraform_pod_template_role" {
+  name = "${var.cluster}_terraform_pod_template_role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+
+}
+
 data "template_file" "cluster_autoscaler" {
   template = file("${path.module}/cluster-autoscaler-values.tpl")
 
@@ -122,12 +142,13 @@ module "sdm" {
   product_stack               = "product-aws"
 
   product_vars = {
-    issuer_type            = var.cert_issuer_type
-    issuer_server          = var.cert_issuer_server
-    enable_keycloak        = var.enable_keycloak
-    builder_images_version = var.builder_images_version
-    jenkins_image_version  = var.jenkins_image_version
-    image_repo             = var.image_repo
+    issuer_type                 = var.cert_issuer_type
+    issuer_server               = var.cert_issuer_server
+    enable_keycloak             = var.enable_keycloak
+    builder_images_version      = var.builder_images_version
+    jenkins_image_version       = var.jenkins_image_version
+    image_repo                  = var.image_repo
+    terraform_pod_template_iam  = aws_iam_role.terraform_pod_template_role.arn
   }
 
   providers = {

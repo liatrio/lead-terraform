@@ -27,7 +27,7 @@ EOF
     }
   ]
 
-  worker_groups_launch_template_mixed = [
+  worker_groups_launch_template = [
     {
       name                    = "preemptible0"
       override_instance_types = var.instance_types
@@ -81,24 +81,24 @@ EOF
       kubelet_extra_args      = "--node-labels=kubernetes.io/lifecycle=preemptible"
       on_demand_base_capacity = 0
       on_demand_percentage_above_base_capacity = var.on_demand_percentage
-    },        
+    },
   ]
 
   map_roles = [
     {
       role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/Administrator"
       username = "administrator"
-      group    = "system:masters"
+      groups   = ["system:masters"]
     },
     {
       role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/Developer"
       username = "developer"
-      group    = "system:masters"
+      groups   = ["system:masters"]
     },
     {
       role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${aws_iam_role.workspace_role.name}"
       username = "user"
-      group    = "system:authenticated"
+      groups   = ["system:authenticated"]
     },
   ]
 }
@@ -179,20 +179,30 @@ resource "aws_security_group" "elb" {
 
 module "eks" {
   source                               = "terraform-aws-modules/eks/aws"
-  version                              = "5.1.0"
-  cluster_version                      = "1.13"
+  version                              = "6.0.0"
+  cluster_version                      = "1.14"
   #cluster_enabled_log_types            = ["api","audit","authenticator","controllerManager","scheduler"]
   cluster_name                         = var.cluster
   subnets                              = module.vpc.private_subnets
   tags                                 = local.tags
   vpc_id                               = module.vpc.vpc_id
   worker_groups                        = local.worker_groups
-  worker_groups_launch_template_mixed  = local.worker_groups_launch_template_mixed
+  worker_groups_launch_template        = local.worker_groups_launch_template
   worker_additional_security_group_ids = [aws_security_group.worker.id]
   map_roles                            = local.map_roles
   write_kubeconfig                     = false
   permissions_boundary                 = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${aws_iam_policy.workspace_role_boundary.name}"
   workers_additional_policies          = [aws_iam_policy.worker_policy.arn]
+}
+
+resource "aws_iam_openid_connect_provider" "default" {
+  url = module.eks.cluster_oidc_issuer_url
+
+  client_id_list = [
+    "sts.amazonaws.com",
+  ]
+
+  thumbprint_list = []
 }
 
 resource "aws_iam_policy" "worker_policy" {

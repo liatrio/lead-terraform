@@ -19,6 +19,7 @@ include {
 inputs = {
   root_zone_name  = "localhost"
   cluster         = "docker-for-desktop"
+  sdm_version     = "0.4.0-183-g16e7623"
 
   enable_artifactory = true
   enable_gitlab      = true
@@ -33,4 +34,7 @@ inputs = {
   # So ensure `enable_istio = false` before uncommenting this
   ingress_controller_type         = "LoadBalancer"
   ingress_external_traffic_policy = "Local"
+
+  cert_issuer_type   = "selfSigned"
+  cert_issuer_server = ""
 }

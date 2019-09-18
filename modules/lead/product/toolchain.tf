@@ -92,6 +92,27 @@ resource "helm_release" "jenkins" {
   values = [data.template_file.jenkins_values.rendered]
 }
 
+resource "kubernetes_service_account" "terraform_iam" {
+  provider = kubernetes.toolchain
+  metadata {
+    name      = "terraform-iam"
+    namespace = module.toolchain_namespace.name
+
+    labels = {
+      "app.kubernetes.io/name"       = "terraform_iam"
+      "app.kubernetes.io/instance"   = "terraform_iam"
+      "app.kubernetes.io/component"  = "iam_permissions"
+      "app.kubernetes.io/managed-by" = "Terraform"
+    }
+
+    annotations = {
+      "eks.amazonaws.com/role-arn" = var.terraform_pod_template_iam
+    }
+  }
+
+  automount_service_account_token = true
+}
+
 // Create Jenkins service account
 resource "kubernetes_service_account" "jenkins" {
   provider = kubernetes.toolchain
