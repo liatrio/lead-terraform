@@ -148,7 +148,7 @@ module "sdm" {
     builder_images_version      = var.builder_images_version
     jenkins_image_version       = var.jenkins_image_version
     image_repo                  = var.image_repo
-    terraform_pod_template_iam  = "eks.amazonaws.com/role-arn: arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${aws_iam_role.terraform_pod_template_role.name}"
+    terraform_pod_template_iam  = aws_iam_role.terraform_pod_template_role.arn
   }
 
   providers = {
