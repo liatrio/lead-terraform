@@ -31,7 +31,7 @@ module "staging_certificate" {
   namespace = "istio-system"
   name = module.staging_namespace.name
   domain = "${module.staging_namespace.name}.${var.cluster_domain}"
-  enabled = "${var.istio_enabled}"
+  enabled = "${var.enable_istio}"
 
   providers = {
     helm = "helm.system"
@@ -43,7 +43,7 @@ module "staging_ingress" {
   source                  = "../../common/nginx-ingress"
   namespace               = module.staging_namespace.name
   ingress_controller_type = var.ingress_controller_type
-  enabled                 = "${var.istio_enabled ? false : true}"
+  enabled                 = "${var.enable_istio ? false : true}"
 
   providers = {
     helm       = helm.staging
@@ -52,7 +52,7 @@ module "staging_ingress" {
 }
 
 module "staging_issuer" {
-  enabled     = "${var.istio_enabled ? false : true}"
+  enabled     = "${var.enable_istio ? false : true}"
   source      = "../../common/cert-issuer"
   namespace   = module.staging_namespace.name
   issuer_type = var.issuer_type

@@ -41,6 +41,11 @@ module "toolchain" {
   ingress_external_traffic_policy = var.ingress_external_traffic_policy
   crd_waiter                      = module.infrastructure.crd_waiter
 
+  smtp_host  = "mailhog"
+  smtp_port     = "1025"
+  smtp_username = ""
+  smtp_password = ""
+
   providers = {
     helm = helm.toolchain
   }
@@ -59,6 +64,15 @@ module "sdm" {
   slack_client_signing_secret = var.slack_client_signing_secret
   workspace_role_name         = "local_workspace_role"
   product_stack               = "product-local"  
+
+  product_vars = {
+    issuer_type            = var.cert_issuer_type
+    issuer_server          = var.cert_issuer_server
+    enable_keycloak        = var.enable_keycloak
+    builder_images_version = var.builder_images_version
+    jenkins_image_version  = var.jenkins_image_version
+    image_repo             = var.image_repo
+  }
 
   providers = {
     helm.system    = helm.toolchain

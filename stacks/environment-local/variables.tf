@@ -42,10 +42,6 @@ variable "keycloak_admin_password" {
   default = "keycloak"
 }
 
-variable "from_email" {
-  default = "noreply@liatr.io"
-}
-
 variable "ingress_controller_type" {
   default = "NodePort"
 }
@@ -89,6 +85,17 @@ variable "enable_xray" {
 variable "uptime" {
   default = "always"
 }
+
+variable "builder_images_version" {
+  default = "v1.0.15-7-g2465aa8"
+}
+variable "jenkins_image_version" {
+  default = "v1.0.15-7-g2465aa8"
+}
+variable "image_repo" {
+  default = "artifactory.toolchain.lead.prod.liatr.io/docker-registry/flywheel"
+}
+
 
 locals {
   tags = {

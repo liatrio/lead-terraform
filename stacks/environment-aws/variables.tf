@@ -78,22 +78,6 @@ variable "dashboard_version" {
   default = "0.2.0-8ed15c3a7e1"
 }
 
-variable "artifactory_license" {
-}
-
-variable "slack_bot_token" {
-}
-
-variable "slack_client_signing_secret" {
-}
-
-variable "keycloak_admin_password" {
-}
-
-variable "from_email" {
-  default = "noreply@liatr.io"
-}
-
 variable "cert_issuer_type" {
   default = "acme"
 }
@@ -119,7 +103,7 @@ variable "enable_keycloak" {
 }
 
 variable "enable_mailhog" {
-  default = true
+  default = false
 }
 
 variable "enable_operators" {
@@ -145,6 +129,17 @@ variable "on_demand_percentage" {
 variable "uptime" {
   default = "Mon-Fri 05:00-19:00 America/Los_Angeles"
 }
+
+variable "builder_images_version" {
+  default = "v1.0.15-7-g2465aa8"
+}
+variable "jenkins_image_version" {
+  default = "v1.0.15-7-g2465aa8"
+}
+variable "image_repo" {
+  default = "artifactory.toolchain.lead.prod.liatr.io/docker-registry/flywheel"
+}
+
 
 locals {
   tags = {

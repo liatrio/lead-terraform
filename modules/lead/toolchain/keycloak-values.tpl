@@ -53,10 +53,10 @@ keycloak:
   resources:
     requests:
       memory: 600Mi
-      cpu: 10m
+      cpu: 50m
     limits:
       memory: 800Mi
-      cpu: 100m
+      cpu: 1 
 
 
 postgresql:

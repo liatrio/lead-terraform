@@ -5,7 +5,6 @@ data "template_file" "mailhog_values" {
   vars = {
     ingress_enabled  = var.root_zone_name == "localhost" ? true : false
     ingress_hostname = "mailhog.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
-    smtp_json        = jsonencode(var.smtp_json)
   }
 }
 
