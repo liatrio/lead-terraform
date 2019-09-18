@@ -125,6 +125,9 @@ module "sdm" {
     issuer_type            = var.cert_issuer_type
     issuer_server          = var.cert_issuer_server
     enable_keycloak        = var.enable_keycloak
+    builder_images_version = var.builder_images_version
+    jenkins_image_version  = var.jenkins_image_version
+    image_repo             = var.image_repo
   }
 
   providers = {
