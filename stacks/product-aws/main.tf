@@ -106,6 +106,11 @@ module "product" {
   issuer_server           = var.issuer_server
   image_whitelist         = var.image_whitelist
   ingress_controller_type = var.ingress_controller_type
+  enable_keycloak         = var.enable_keycloak
+  enable_istio            = var.enable_istio
+  builder_images_version  = var.builder_images_version
+  jenkins_image_version   = var.jenkins_image_version
+  image_repo              = var.image_repo
 
   providers = {
     kubernetes.toolchain  = kubernetes.toolchain

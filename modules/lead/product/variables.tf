@@ -9,16 +9,16 @@ variable "toolchain_namespace" {
   default = "toolchain"
 }
 variable "builder_images_version" {
-  default = "v1.0.15-7-g2465aa8"
 }
 variable "jenkins_image_version" {
-  default = "v1.0.15-7-g2465aa8"
 }
 variable "image_repo" {
-  default = "artifactory.toolchain.lead.prod.liatr.io/docker-registry/flywheel"
 }
 variable "ingress_controller_type" {}
-variable "istio_enabled" {
+variable "enable_istio" {
+  default = true
+}
+variable "enable_keycloak" {
   default = true
 }
 variable "cluster" {

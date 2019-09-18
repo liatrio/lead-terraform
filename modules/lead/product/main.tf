@@ -1,3 +1,7 @@
+locals {
+  protocol = var.cluster_domain == "docker-for-desktop.localhost" ? "http" : "https"
+}
+
 provider "kubernetes" {
   alias = "toolchain"
 }

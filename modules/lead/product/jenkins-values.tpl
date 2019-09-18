@@ -15,13 +15,18 @@ master:
     annotations:
       kubernetes.io/ingress.class: "nginx"
       kubernetes.io/tls-acme: "true"
-      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/ssl-redirect: "${ssl_redirect}"
       nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+      nginx.ingress.kubernetes.io/configuration-snippet: |
+        more_set_headers "X-Forwarded-Proto: https";      
+      ingress.kubernetes.io/proxy-body-size: "0"
+      ingress.kubernetes.io/proxy-read-timeout: "600"
+      ingress.kubernetes.io/proxy-send-timeout: "600"
     tls:
     - hosts:
       - ${ingress_hostname}
       secretName: jenkins-ingress-tls
-  jenkinsUrlProtocol: https
+  jenkinsUrlProtocol: ${protocol}
   serviceType: ClusterIP
   healthProbeLivenessFailureThreshold: 5
   healthProbeReadinessFailureThreshold: 12
@@ -46,7 +51,21 @@ master:
           systemMessage: Welcome to our CI\CD server.  This Jenkins is configured and managed 'as code' from https://github.com/liatrio/lead-terraform.
       security-config: |
         jenkins:
-          authorizationStrategy: loggedInUsersCanDoAnything
+          authorizationStrategy: 
+            loggedInUsersCanDoAnything:
+              allowAnonymousRead: "${allow_anonymous_read}"
+          ${security_realm}
+      keycloak-config: |
+        unclassified:
+          keycloakSecurityRealm:
+            keycloakJson: >
+              {
+                "realm": "toolchain",
+                "auth-server-url": "${keycloak_url}",
+                "ssl-required": "${keycloak_ssl}",
+                "resource": "${ingress_hostname}",
+                "public-client": true
+              }          
       master-node: |
         jenkins:
           labelString: "master"

@@ -32,9 +32,8 @@ data "template_file" "operator_toolchain_values" {
     product_version     = var.product_version
     workspace_role      = var.workspace_role_name
     region              = var.region
-    cert_issuer_type    = var.cert_issuer_type
-    cert_issuer_server  = var.cert_issuer_server
     product_stack       = var.product_stack
+    product_vars        = jsonencode(var.product_vars)
   }
 }
 

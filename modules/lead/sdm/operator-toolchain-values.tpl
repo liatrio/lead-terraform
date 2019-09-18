@@ -1,8 +1,8 @@
 cluster: ${cluster}
 cluster_domain: ${cluster_domain}
 product_version: ${product_version}
-
-local: ${product_stack == "product-local" ? "true" : "false"}
+product_stack: ${product_stack}
+product_vars: ${product_vars}
 
 operators:
   slack:
@@ -20,13 +20,3 @@ operators:
       value: ${workspace_role}
     - name: AWS_REGION
       value: ${region}
-  jenkins:
-    env:
-    - name: CERT_ISSUER_TYPE
-      value: ${cert_issuer_type}
-    - name: CERT_ISSUER_SERVER
-      value: ${cert_issuer_server}
-    - name: PRODUCT_STACK
-      value: ${product_stack}
-    - name: TF_DATA_ROOT
-      value: /tf_data/

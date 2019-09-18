@@ -31,3 +31,18 @@ variable "config_context" {
 variable "load_config_file" {
   default = false
 }
+
+variable "enable_istio" {
+  default = true
+}
+
+variable "enable_keycloak" {
+  default = false
+}
+variable "builder_images_version" {
+}
+variable "jenkins_image_version" {
+}
+variable "image_repo" {
+}
+
