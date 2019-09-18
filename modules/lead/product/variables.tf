@@ -21,3 +21,6 @@ variable "ingress_controller_type" {}
 variable "istio_enabled" {
   default = true
 }
+variable "cluster" {
+  default = "lead"
+}
