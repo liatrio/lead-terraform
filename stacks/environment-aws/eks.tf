@@ -27,7 +27,7 @@ EOF
     }
   ]
 
-  worker_groups_launch_template_mixed = [
+  worker_groups_launch_template = [
     {
       name                    = "preemptible0"
       override_instance_types = var.instance_types
@@ -187,7 +187,7 @@ module "eks" {
   tags                                 = local.tags
   vpc_id                               = module.vpc.vpc_id
   worker_groups                        = local.worker_groups
-  worker_groups_launch_template_mixed  = local.worker_groups_launch_template
+  worker_groups_launch_template        = local.worker_groups_launch_template
   worker_additional_security_group_ids = [aws_security_group.worker.id]
   map_roles                            = local.map_roles
   write_kubeconfig                     = false
