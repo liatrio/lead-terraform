@@ -24,9 +24,6 @@ module "infrastructure" {
   }
 }
 
-data "aws_caller_identity" "current" {
-}
-
 resource "aws_iam_role" "terraform_pod_template_role" {
   name = "${var.cluster}_terraform_pod_template_role"
 
