@@ -145,12 +145,13 @@ module "sdm" {
   product_stack               = "product-aws"
 
   product_vars = {
-    issuer_type            = var.cert_issuer_type
-    issuer_server          = var.cert_issuer_server
-    enable_keycloak        = var.enable_keycloak
-    builder_images_version = var.builder_images_version
-    jenkins_image_version  = var.jenkins_image_version
-    image_repo             = var.image_repo
+    issuer_type                 = var.cert_issuer_type
+    issuer_server               = var.cert_issuer_server
+    enable_keycloak             = var.enable_keycloak
+    builder_images_version      = var.builder_images_version
+    jenkins_image_version       = var.jenkins_image_version
+    image_repo                  = var.image_repo
+    terraform_pod_template_iam  = "eks.amazonaws.com/role-arn: arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${aws_iam_role.terraform_pod_template_role.name}"
   }
 
   providers = {

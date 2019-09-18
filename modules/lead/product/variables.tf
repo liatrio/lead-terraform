@@ -21,6 +21,6 @@ variable "enable_istio" {
 variable "enable_keycloak" {
   default = true
 }
-variable "cluster" {
-  default = "lead"
+variable "terraform_pod_template_iam" {
+  default = "None"
 }

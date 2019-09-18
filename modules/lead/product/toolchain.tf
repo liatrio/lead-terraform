@@ -106,7 +106,7 @@ resource "kubernetes_service_account" "terraform_iam" {
     }
 
     annotations = {
-      "eks.amazonaws.com/role-arn" = 
+      "eks.amazonaws.com/role-arn" = var.terraform_pod_template_iam
     }
   }
 
