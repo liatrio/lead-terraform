@@ -27,7 +27,7 @@ data "template_file" "jenkins_values" {
     allow_anonymous_read   = var.enable_keycloak ? "false" : "true"
 
     # Keycloak specific vars
-    security_realm         = var.enable_keycloak ? "keycloak" : "local"
+    security_realm         = var.enable_keycloak ? "securityRealm: keycloak" : ""
     keycloak_ssl           = local.protocol == "http" ? "none" : "external"
     # keycloak_url must be accessible from both inside and outside the cluster.
     # For local environment, you'll need to add this line to your hosts file...

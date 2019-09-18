@@ -54,7 +54,7 @@ master:
           authorizationStrategy: 
             loggedInUsersCanDoAnything:
               allowAnonymousRead: "${allow_anonymous_read}"
-          securityRealm: ${security_realm}
+          ${security_realm}
       keycloak-config: |
         unclassified:
           keycloakSecurityRealm:
