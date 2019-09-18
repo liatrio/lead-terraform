@@ -88,17 +88,17 @@ EOF
     {
       role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/Administrator"
       username = "administrator"
-      group    = "system:masters"
+      groups   = ["system:masters"]
     },
     {
       role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/Developer"
       username = "developer"
-      group    = "system:masters"
+      groups   = ["system:masters"]
     },
     {
       role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${aws_iam_role.workspace_role.name}"
       username = "user"
-      group    = "system:authenticated"
+      groups   = ["system:authenticated"]
     },
   ]
 }
@@ -179,7 +179,7 @@ resource "aws_security_group" "elb" {
 
 module "eks" {
   source                               = "terraform-aws-modules/eks/aws"
-  version                              = "5.1.0" # TODO: Update to 6.0.0 on release.
+  version                              = "6.0.0"
   cluster_version                      = "1.14"
   #cluster_enabled_log_types            = ["api","audit","authenticator","controllerManager","scheduler"]
   cluster_name                         = var.cluster
@@ -187,7 +187,7 @@ module "eks" {
   tags                                 = local.tags
   vpc_id                               = module.vpc.vpc_id
   worker_groups                        = local.worker_groups
-  worker_groups_launch_template_mixed  = local.worker_groups_launch_template_mixed # TODO: Breaking change in 6.0.0 https://github.com/terraform-aws-modules/terraform-aws-eks/pull/468
+  worker_groups_launch_template_mixed  = local.worker_groups_launch_template
   worker_additional_security_group_ids = [aws_security_group.worker.id]
   map_roles                            = local.map_roles
   write_kubeconfig                     = false
@@ -195,16 +195,15 @@ module "eks" {
   workers_additional_policies          = [aws_iam_policy.worker_policy.arn]
 }
 
-# TODO: Enable with module eks upgrade to 6.0.0
-# resource "aws_iam_openid_connect_provider" "default" {
-#  url = module.eks.cluster_oidc_issuer_url
-#
-#  client_id_list = [
-#    "sts.amazonaws.com",
-#  ]
-#
-#  thumbprint_list = []
-#}
+resource "aws_iam_openid_connect_provider" "default" {
+  url = module.eks.cluster_oidc_issuer_url
+
+  client_id_list = [
+    "sts.amazonaws.com",
+  ]
+
+  thumbprint_list = []
+}
 
 resource "aws_iam_policy" "worker_policy" {
   name = "${var.cluster}-worker-policy"
