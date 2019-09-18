@@ -9,7 +9,6 @@ data "template_file" "keycloak_values" {
 }
 
 resource "kubernetes_secret" "keycloak_admin" {
-  count = var.enable_keycloak ? 1 : 0
   metadata {
     name      = "keycloak-admin-credential"
     namespace = module.toolchain_namespace.name
@@ -64,7 +63,7 @@ resource "keycloak_realm" "realm" {
   enabled       = true
   display_name  = title(module.toolchain_namespace.name)
 
-  registration_allowed            = true
+  registration_allowed            = false
   registration_email_as_username  = true
   reset_password_allowed          = true
   remember_me                     = true
@@ -98,5 +97,19 @@ resource "kubernetes_secret" "keycloak_toolchain_realm" {
 
   data = {
     id = keycloak_realm.realm[0].id
+  }
+}
+
+resource "kubernetes_secret" "keycloak_toolchain_realm_disabled" {
+  count       = var.enable_keycloak ? 0 : 1 
+
+  metadata {
+    name      = "keycloak-toolchain-realm"
+    namespace = module.toolchain_namespace.name
+  }
+  type = "Opaque"
+
+  data = {
+    id = ""
   }
 }

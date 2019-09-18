@@ -22,7 +22,7 @@ provider "keycloak" {
   username      = data.kubernetes_secret.keycloak_admin_credential.data.username
   password      = data.kubernetes_secret.keycloak_admin_credential.data.password
   url           = "${local.protocol}://keycloak.toolchain.${var.cluster_domain}"
-  initial_login = true
+  initial_login = false
 }
 
 resource "keycloak_openid_client" "jenkins_openid_client" {
