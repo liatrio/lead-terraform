@@ -51,7 +51,9 @@ master:
           systemMessage: Welcome to our CI\CD server.  This Jenkins is configured and managed 'as code' from https://github.com/liatrio/lead-terraform.
       security-config: |
         jenkins:
-          authorizationStrategy: loggedInUsersCanDoAnything
+          authorizationStrategy: 
+            loggedInUsersCanDoAnything:
+              allowAnonymousRead: "${allow_anonymous_read}"
           securityRealm: ${security_realm}
       keycloak-config: |
         unclassified:

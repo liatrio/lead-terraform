@@ -24,6 +24,7 @@ data "template_file" "jenkins_values" {
     stagingDomain          = "${module.staging_namespace.name}.${var.cluster_domain}"
     productionDomain       = "${module.production_namespace.name}.${var.cluster_domain}"
     builder_images_version = var.builder_images_version
+    allow_anonymous_read   = var.enable_keycloak ? "false" : "true"
 
     # Keycloak specific vars
     security_realm         = var.enable_keycloak ? "keycloak" : "local"
