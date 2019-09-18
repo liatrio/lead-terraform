@@ -86,17 +86,17 @@ EOF
 
   map_roles = [
     {
-      role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/Administrator"
+      rolearn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/Administrator"
       username = "administrator"
       groups   = ["system:masters"]
     },
     {
-      role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/Developer"
+      rolearn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/Developer"
       username = "developer"
       groups   = ["system:masters"]
     },
     {
-      role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${aws_iam_role.workspace_role.name}"
+      rolearn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${aws_iam_role.workspace_role.name}"
       username = "user"
       groups   = ["system:authenticated"]
     },
