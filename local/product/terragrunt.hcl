@@ -23,4 +23,7 @@ inputs = {
   load_config_file = true
   config_context = "docker-for-desktop"
   cluster_domain = "docker-for-desktop.localhost"
+  builder_images_version = "v1.0.15-9-g28caba1"
+  jenkins_image_version = "v1.0.15-9-g28caba1"
+  image_repo = "artifactory.toolchain.lead.prod.liatr.io/docker-registry/flywheel"
 }

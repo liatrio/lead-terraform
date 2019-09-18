@@ -95,7 +95,7 @@ resource "helm_release" "jenkins" {
 resource "kubernetes_service_account" "terraform_iam" {
   provider = kubernetes.toolchain
   metadata {
-    name      = "terraform_iam"
+    name      = "terraform-iam"
     namespace = module.toolchain_namespace.name
 
     labels = {

@@ -96,6 +96,13 @@ variable "image_repo" {
   default = "artifactory.toolchain.lead.prod.liatr.io/docker-registry/flywheel"
 }
 
+variable "cert_issuer_type" {
+  default = "acme"
+}
+
+variable "cert_issuer_server" {
+  default = "https://acme-v02.api.letsencrypt.org/directory"
+}
 
 locals {
   tags = {

@@ -45,6 +45,7 @@ module "toolchain" {
   smtp_port     = "1025"
   smtp_username = ""
   smtp_password = ""
+  smtp_from_email = "noreply@liatr.io"
 
   providers = {
     helm = helm.toolchain
@@ -63,7 +64,7 @@ module "sdm" {
   slack_bot_token             = var.slack_bot_token
   slack_client_signing_secret = var.slack_client_signing_secret
   workspace_role_name         = "local_workspace_role"
-  product_stack               = "product-local"  
+  product_stack               = "product-local"
 
   product_vars = {
     issuer_type            = var.cert_issuer_type
