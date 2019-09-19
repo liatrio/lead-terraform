@@ -1,5 +1,5 @@
 rbac:
-  create: true
+  serviceAccountName: ${serviceAccountName}
 
 sslCertPath: /etc/ssl/certs/ca-bundle.crt
 
