@@ -6,7 +6,7 @@ data "helm_repository" "stable" {
 resource "helm_release" "external_dns" {
   repository = data.helm_repository.stable.metadata[0].name
   chart      = "external-dns"
-  version    = "1.7.3"
+  version    = "2.6.3"
   namespace  = module.system_namespace.name
   name       = "external-dns"
   timeout    = 600
@@ -32,6 +32,7 @@ resource "kubernetes_service_account" "external_dns_service_account" {
   metadata {
     name      = "external-dns"
     namespace = module.system_namespace.name
+    annotations = var.external_dns_service_account_annotations
   }
   automount_service_account_token = true
 }
