@@ -19,7 +19,7 @@ module "infrastructure" {
   essential_toleration_values = data.template_file.essential_toleration.rendered
   external_dns_chart_values  = data.template_file.external_dns_values.rendered
   external_dns_service_account_annotations = {
-      eks.amazonaws.com/role-arn = aws_iam_role.external_dns_service_account.arn
+      "eks.amazonaws.com/role-arn" = aws_iam_role.external_dns_service_account.arn
   }
   providers = {
     helm = helm.system

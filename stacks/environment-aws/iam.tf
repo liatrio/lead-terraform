@@ -5,8 +5,9 @@ resource "aws_iam_openid_connect_provider" "default" {
     "sts.amazonaws.com",
   ]
 
-  thumbprint_list = []
+  thumbprint_list = ["9E99A48A9960B14926BB7F3B02E22DA2B0AB7280"]
 }
+
 resource "aws_iam_role" "terraform_pod_template_role" {
   name = "${var.cluster}_terraform_pod_template_role"
 
@@ -17,7 +18,7 @@ resource "aws_iam_role" "terraform_pod_template_role" {
     {
       "Effect": "Allow",
       "Principal": {
-        "Federated": aws_iam_openid_connect_provider.default.arn
+        "Federated": "${aws_iam_openid_connect_provider.default.arn}"
       },
       "Action": "sts:AssumeRoleWithWebIdentity",
       "Condition": {
@@ -29,6 +30,7 @@ resource "aws_iam_role" "terraform_pod_template_role" {
   ]
 }
 EOF
+}
 
 resource "aws_iam_role" "external_dns_service_account" {
   name = "${var.cluster}_external_dns_service_account"
@@ -40,7 +42,7 @@ resource "aws_iam_role" "external_dns_service_account" {
     {
       "Effect": "Allow",
       "Principal": {
-        "Federated": aws_iam_openid_connect_provider.default.arn
+        "Federated": "${aws_iam_openid_connect_provider.default.arn}"
       },
       "Action": "sts:AssumeRoleWithWebIdentity",
       "Condition": {
@@ -150,10 +152,6 @@ resource "aws_iam_role_policy_attachment" "worker_ecr_role_attachment" {
 resource "aws_iam_role_policy_attachment" "worker_ssm_role_attachment" {
   role = module.eks.worker_iam_role_name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
-}
-resource "aws_iam_role_policy_attachment" "worker_cw_role_attachment" {
-  role = module.eks.worker_iam_role_name
-  policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
 }
 
 resource "aws_iam_role" "workspace_role" {
