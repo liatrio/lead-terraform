@@ -143,7 +143,7 @@ resource "aws_iam_role_policy" "cluster_autoscaler" {
             "Condition": {
                 "StringEquals": {
                     "autoscaling:ResourceTag/k8s.io/cluster-autoscaler/enabled": "true",
-                    "autoscaling:ResourceTag/kubernetes.io/cluster/lead": "owned"
+                    "autoscaling:ResourceTag/kubernetes.io/cluster/${var.cluster}": "owned"
                 }
             }
         }
