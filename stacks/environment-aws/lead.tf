@@ -18,31 +18,14 @@ module "infrastructure" {
 
   essential_toleration_values = data.template_file.essential_toleration.rendered
   external_dns_chart_values  = data.template_file.external_dns_values.rendered
-
+  external_dns_service_account_annotations = {
+      "eks.amazonaws.com/role-arn" = aws_iam_role.external_dns_service_account.arn
+  }
   providers = {
     helm = helm.system
   }
 }
 
-resource "aws_iam_role" "terraform_pod_template_role" {
-  name = "${var.cluster}_terraform_pod_template_role"
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Federated": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/${replace(aws_iam_openid_connect_provider.default.url, "https://", "")}"
-      },
-      "Action": "sts:AssumeRoleWithWebIdentity"
-    }
-  ]
-}
-EOF
-
-}
 
 data "template_file" "cluster_autoscaler" {
   template = file("${path.module}/cluster-autoscaler-values.tpl")
