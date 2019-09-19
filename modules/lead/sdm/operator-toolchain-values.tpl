@@ -15,6 +15,7 @@ operators:
       - hosts:
         - operator-slack.${namespace}.${cluster_domain}
         secretName: operator-slack-ingress-tls
+    serviceAccountAnnotations: ${slack_service_account_annotations}
     env:
     - name: workspace_role
       value: ${workspace_role}

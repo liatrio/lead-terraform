@@ -124,6 +124,10 @@ module "sdm" {
   workspace_role_name         = aws_iam_role.workspace_role.name
   product_stack               = "product-aws"
 
+  operator_slack_service_account_annotation = {
+    "eks.amazonaws.com/role-arn" = aws_iam_role.operator_slack_service_account.arn
+  }
+
   product_vars = {
     issuer_type                 = var.cert_issuer_type
     issuer_server               = var.cert_issuer_server

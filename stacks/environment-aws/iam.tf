@@ -87,6 +87,59 @@ resource "aws_iam_role_policy" "external_dns" {
 EOF
 }
 
+resource "aws_iam_role" "operator_slack_service_account" {
+  name = "${var.cluster}_operator_slack_service_account"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "${aws_iam_openid_connect_provider.default.arn}"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "${replace(aws_iam_openid_connect_provider.default.url, "https://", "")}:sub": "system:serviceaccount:${var.toolchain_namespace}:operator-slack"
+        }
+      }
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy" "operator-slack" {
+  name = "${var.cluster}-operator-slack"
+  role = aws_iam_role.operator_slack_service_account.name
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "sts:AssumeRole"
+      ],
+      "Resource": [
+        "${aws_iam_role.workspace_role.arn}"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "cloud9:DescribeEnvironmentMemberships", "cloud9:DescribeEnvironments"
+      ],
+      "Resource": ["*"]
+    }
+  ]
+}
+EOF
+}
+
 resource "aws_iam_policy" "worker_policy" {
   name = "${var.cluster}-worker-policy"
 
@@ -94,22 +147,6 @@ resource "aws_iam_policy" "worker_policy" {
 {
  "Version": "2012-10-17",
  "Statement": [
-   {
-     "Effect": "Allow",
-     "Action": [
-       "sts:AssumeRole"
-     ],
-     "Resource": [
-       "${aws_iam_role.workspace_role.arn}"
-     ]
-   },
-   {
-     "Effect": "Allow",
-     "Action": [
-       "cloud9:DescribeEnvironmentMemberships", "cloud9:DescribeEnvironments"
-     ],
-     "Resource": ["*"]
-   },
    {
      "Effect": "Allow",
      "Action": [
