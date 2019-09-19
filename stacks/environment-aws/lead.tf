@@ -34,6 +34,7 @@ data "template_file" "cluster_autoscaler" {
     cluster = var.cluster
     region  = var.region
     scale_down_enabled = var.enable_autoscaler_scale_down
+    iam_arn = aws_iam_role.cluster_autoscaler_service_account.arn
   }
 }
 

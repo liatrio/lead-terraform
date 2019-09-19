@@ -111,6 +111,30 @@ resource "aws_iam_role" "operator_slack_service_account" {
 EOF
 }
 
+resource "aws_iam_role" "cluster_autoscaler_service_account" {
+  name = "${var.cluster}_cluster_autoscaler_service_account"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "${aws_iam_openid_connect_provider.default.arn}"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "${replace(aws_iam_openid_connect_provider.default.url, "https://", "")}:sub": "system:serviceaccount:${var.system_namespace}:cluster-autoscaler-aws-cluster-autoscaler"
+        }
+      }
+    }
+  ]
+}
+EOF
+}
+
 resource "aws_iam_role_policy" "operator-slack" {
   name = "${var.cluster}-operator-slack"
   role = aws_iam_role.operator_slack_service_account.name
@@ -136,6 +160,47 @@ resource "aws_iam_role_policy" "operator-slack" {
       "Resource": ["*"]
     }
   ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy" "cluster_autoscaler" {
+  name = "${var.cluster}-cluster-autoscaler"
+  role = aws_iam_role.cluster_autoscaler_service_account.name
+
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "eksWorkerAutoscalingAll",
+            "Effect": "Allow",
+            "Action": [
+                "ec2:DescribeLaunchTemplateVersions",
+                "autoscaling:DescribeTags",
+                "autoscaling:DescribeLaunchConfigurations",
+                "autoscaling:DescribeAutoScalingInstances",
+                "autoscaling:DescribeAutoScalingGroups"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "eksWorkerAutoscalingOwn",
+            "Effect": "Allow",
+            "Action": [
+                "autoscaling:UpdateAutoScalingGroup",
+                "autoscaling:TerminateInstanceInAutoScalingGroup",
+                "autoscaling:SetDesiredCapacity"
+            ],
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "autoscaling:ResourceTag/k8s.io/cluster-autoscaler/enabled": "true",
+                    "autoscaling:ResourceTag/kubernetes.io/cluster/${var.cluster}": "owned"
+                }
+            }
+        }
+    ]
 }
 EOF
 }
