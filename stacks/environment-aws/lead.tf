@@ -36,7 +36,7 @@ resource "aws_iam_role" "terraform_pod_template_role" {
       "Principal": {
         "Federated": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/${replace(aws_iam_openid_connect_provider.default.url, "https://", "")}"
       },
-      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Action": "sts:AssumeRoleWithWebIdentity"
     }
   ]
 }
