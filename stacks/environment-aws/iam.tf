@@ -112,7 +112,7 @@ EOF
 }
 
 resource "aws_iam_role_policy" "cluster_autoscaler" {
-  name = "${var.cluster}-cluster_autoscaler"
+  name = "${var.cluster}-cluster-autoscaler"
   role = aws_iam_role.cluster_autoscaler_service_account.name
 
   policy = <<EOF

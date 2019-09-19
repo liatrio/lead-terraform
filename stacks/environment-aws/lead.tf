@@ -34,7 +34,7 @@ data "template_file" "cluster_autoscaler" {
     cluster = var.cluster
     region  = var.region
     scale_down_enabled = var.enable_autoscaler_scale_down
-    serviceAccountName = kubernetes_service_account.cluster_autoscaler_service_account.name
+    iam_arn = aws_iam_role.cluster_autoscaler_service_account.arn
   }
 }
 
@@ -48,17 +48,6 @@ data "template_file" "essential_toleration" {
 data "helm_repository" "stable" {
   name = "stable"
   url  = "https://kubernetes-charts.storage.googleapis.com"
-}
-
-resource "kubernetes_service_account" "cluster_autoscaler_service_account" {
-  metadata {
-    name      = "cluster-autoscaler-aws-cluster-autoscaler"
-    namespace = module.infrastructure.namespace
-    annotations = {
-      "eks.amazonaws.com/role-arn" = aws_iam_role.cluster_autoscaler_service_account.arn
-    }
-  }
-  automount_service_account_token = true
 }
 
 resource "helm_release" "cluster_autoscaler" {
