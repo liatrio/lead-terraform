@@ -8,6 +8,54 @@ resource "aws_iam_openid_connect_provider" "default" {
   thumbprint_list = ["9E99A48A9960B14926BB7F3B02E22DA2B0AB7280"]
 }
 
+### Worker Node Permissions
+
+resource "aws_iam_role" "worker_node_role" {
+  name = "${var.cluster}_worker_node_role"
+  assume_role_policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": "sts:AssumeRole",
+            "Principal": {
+               "Service": "ec2.amazonaws.com"
+            },
+            "Effect": "Allow",
+            "Sid": ""
+        }
+    ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "worker_ssm_role_attachment" {
+  role = aws_iam_role.worker_node_role
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
+resource "aws_iam_role_policy_attachment" "worker_eks_role_attachment" {
+  role = aws_iam_role.worker_node_role
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
+}
+
+resource "aws_iam_role_policy_attachment" "worker_ecr_role_attachment" {
+  role = aws_iam_role.worker_node_role
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+}
+
+resource "aws_iam_role_policy_attachment" "worker_eks_cni_role_attachment" {
+  role = aws_iam_role.worker_node_role
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+}
+
+resource "aws_iam_instance_profile" "worker_node_profile" {
+  name = "eks_worker_profile"
+  role = "${aws_iam_role.worker_node_role.name}"
+}
+
+### End Worker Node Permissions
+
 resource "aws_iam_role" "terraform_pod_template_role" {
   name = "${var.cluster}_terraform_pod_template_role"
 
@@ -245,15 +293,6 @@ resource "aws_iam_policy" "worker_policy" {
 }
 EOF
 
-}
-
-resource "aws_iam_role_policy_attachment" "worker_ecr_role_attachment" {
-  role = module.eks.worker_iam_role_name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryPowerUser"
-}
-resource "aws_iam_role_policy_attachment" "worker_ssm_role_attachment" {
-  role = module.eks.worker_iam_role_name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
 }
 
 resource "aws_iam_role" "workspace_role" {
