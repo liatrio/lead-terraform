@@ -125,8 +125,11 @@ module "sdm" {
   workspace_role_name         = aws_iam_role.workspace_role.name
   product_stack               = "product-aws"
 
-  operator_slack_service_account_annotation = {
+  operator_slack_service_account_annotations = {
     "eks.amazonaws.com/role-arn" = aws_iam_role.operator_slack_service_account.arn
+  }
+  operator_jenkins_service_account_annotations = {
+    "eks.amazonaws.com/role-arn" = aws_iam_role.operator_jenkins_service_account.arn
   }
 
   product_vars = {
