@@ -24,6 +24,7 @@ EOF
       enabled_metrics       = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]
       pre_userdata          = local.ssm_init
       kubelet_extra_args    = "--node-labels=kubernetes.io/lifecycle=essential --register-with-taints=${var.essential_taint_key}=true:NoSchedule"
+      iam_instance_profile_name = aws_iam_instance_profile.worker_node_profile.name
     }
   ]
 
@@ -45,6 +46,7 @@ EOF
       kubelet_extra_args      = "--node-labels=kubernetes.io/lifecycle=preemptible"
       on_demand_base_capacity = 0
       on_demand_percentage_above_base_capacity = var.on_demand_percentage
+      iam_instance_profile_name = aws_iam_instance_profile.worker_node_profile.name
     },
     {
       name                    = "preemptible1"
@@ -63,6 +65,7 @@ EOF
       kubelet_extra_args      = "--node-labels=kubernetes.io/lifecycle=preemptible"
       on_demand_base_capacity = 0
       on_demand_percentage_above_base_capacity = var.on_demand_percentage
+      iam_instance_profile_name = aws_iam_instance_profile.worker_node_profile.name
     },
     {
       name                    = "preemptible2"
@@ -81,6 +84,7 @@ EOF
       kubelet_extra_args      = "--node-labels=kubernetes.io/lifecycle=preemptible"
       on_demand_base_capacity = 0
       on_demand_percentage_above_base_capacity = var.on_demand_percentage
+      iam_instance_profile_name = aws_iam_instance_profile.worker_node_profile.name
     },
   ]
 
@@ -192,6 +196,7 @@ module "eks" {
   map_roles                            = local.map_roles
   write_kubeconfig                     = false
   permissions_boundary                 = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${aws_iam_policy.workspace_role_boundary.name}"
+  manage_worker_iam_resources          = false
 }
 
 resource "aws_s3_bucket" "tfstates" {
