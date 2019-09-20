@@ -5,7 +5,7 @@ resource "aws_iam_openid_connect_provider" "default" {
     "sts.amazonaws.com",
   ]
 
-  thumbprint_list = ["9E99A48A9960B14926BB7F3B02E22DA2B0AB7280"]
+  thumbprint_list = ["9e99a48a9960b14926bb7f3b02e22da2b0ab7280"]
 }
 
 ### Worker Node Permissions
@@ -29,28 +29,37 @@ resource "aws_iam_role" "worker_node_role" {
 EOF
 }
 
+### DELETE ME once we have terragrunt using IAM role attachment
+resource "aws_iam_role_policy_attachment" "worker_operator_jenkins" {
+  role = module.eks.worker_iam_role_name
+  policy_arn = aws_iam_policy.operator_jenkins.arn
+}
+resource "aws_iam_role_policy_attachment" "worker_ssm" {
+  role = module.eks.worker_iam_role_name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
 resource "aws_iam_role_policy_attachment" "worker_ssm_role_attachment" {
-  role = aws_iam_role.worker_node_role
+  role = aws_iam_role.worker_node_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
 resource "aws_iam_role_policy_attachment" "worker_eks_role_attachment" {
-  role = aws_iam_role.worker_node_role
+  role = aws_iam_role.worker_node_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
 }
 
 resource "aws_iam_role_policy_attachment" "worker_ecr_role_attachment" {
-  role = aws_iam_role.worker_node_role
+  role = aws_iam_role.worker_node_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
 }
 
 resource "aws_iam_role_policy_attachment" "worker_eks_cni_role_attachment" {
-  role = aws_iam_role.worker_node_role
+  role = aws_iam_role.worker_node_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
 }
 
 resource "aws_iam_instance_profile" "worker_node_profile" {
-  name = "eks_worker_profile"
   role = "${aws_iam_role.worker_node_role.name}"
 }
 
@@ -212,9 +221,8 @@ resource "aws_iam_role" "cluster_autoscaler_service_account" {
 EOF
 }
 
-resource "aws_iam_role_policy" "cluster_autoscaler" {
+resource "aws_iam_policy" "cluster_autoscaler" {
   name = "${var.cluster}-cluster-autoscaler"
-  role = aws_iam_role.cluster_autoscaler_service_account.name
 
   policy = <<EOF
 {
@@ -253,6 +261,11 @@ resource "aws_iam_role_policy" "cluster_autoscaler" {
 EOF
 }
 
+resource "aws_iam_role_policy_attachment" "cluster_autoscaler" {
+  role = aws_iam_role.cluster_autoscaler_service_account.name
+  policy_arn = aws_iam_policy.cluster_autoscaler.arn
+}
+
 resource "aws_iam_role" "operator_jenkins_service_account" {
   name = "${var.cluster}_operator_jenkins_service_account"
 
@@ -277,9 +290,8 @@ resource "aws_iam_role" "operator_jenkins_service_account" {
 EOF
 }
 
-resource "aws_iam_role_policy" "operator_jenkins" {
+resource "aws_iam_policy" "operator_jenkins" {
   name = "${var.cluster}-operator-jenkins"
-  role = aws_iam_role.operator_jenkins_service_account.name
 
   policy = <<EOF
 {
@@ -317,6 +329,11 @@ resource "aws_iam_role_policy" "operator_jenkins" {
  ]
 }
 EOF
+}
+
+resource "aws_iam_role_policy_attachment" "operator_jenkins" {
+  role = aws_iam_role.operator_jenkins_service_account.name
+  policy_arn = aws_iam_policy.operator_jenkins.arn
 }
 
 resource "aws_iam_role" "workspace_role" {
