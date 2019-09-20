@@ -192,7 +192,6 @@ module "eks" {
   map_roles                            = local.map_roles
   write_kubeconfig                     = false
   permissions_boundary                 = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${aws_iam_policy.workspace_role_boundary.name}"
-  workers_additional_policies          = [aws_iam_policy.worker_policy.arn]
 }
 
 resource "aws_s3_bucket" "tfstates" {
