@@ -21,3 +21,5 @@ operators:
       value: ${workspace_role}
     - name: AWS_REGION
       value: ${region}
+  jenkins:
+    serviceAccountAnnotations: ${jenkins_service_account_annotations}

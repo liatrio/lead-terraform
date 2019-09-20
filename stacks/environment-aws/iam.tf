@@ -159,30 +159,6 @@ resource "aws_iam_role" "operator_slack_service_account" {
 EOF
 }
 
-resource "aws_iam_role" "cluster_autoscaler_service_account" {
-  name = "${var.cluster}_cluster_autoscaler_service_account"
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Federated": "${aws_iam_openid_connect_provider.default.arn}"
-      },
-      "Action": "sts:AssumeRoleWithWebIdentity",
-      "Condition": {
-        "StringEquals": {
-          "${replace(aws_iam_openid_connect_provider.default.url, "https://", "")}:sub": "system:serviceaccount:${var.system_namespace}:cluster-autoscaler-aws-cluster-autoscaler"
-        }
-      }
-    }
-  ]
-}
-EOF
-}
-
 resource "aws_iam_role_policy" "operator-slack" {
   name = "${var.cluster}-operator-slack"
   role = aws_iam_role.operator_slack_service_account.name
@@ -206,6 +182,30 @@ resource "aws_iam_role_policy" "operator-slack" {
         "cloud9:DescribeEnvironmentMemberships", "cloud9:DescribeEnvironments"
       ],
       "Resource": ["*"]
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role" "cluster_autoscaler_service_account" {
+  name = "${var.cluster}_cluster_autoscaler_service_account"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "${aws_iam_openid_connect_provider.default.arn}"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "${replace(aws_iam_openid_connect_provider.default.url, "https://", "")}:sub": "system:serviceaccount:${var.system_namespace}:cluster-autoscaler-aws-cluster-autoscaler"
+        }
+      }
     }
   ]
 }
@@ -253,8 +253,33 @@ resource "aws_iam_role_policy" "cluster_autoscaler" {
 EOF
 }
 
-resource "aws_iam_policy" "worker_policy" {
-  name = "${var.cluster}-worker-policy"
+resource "aws_iam_role" "operator_jenkins_service_account" {
+  name = "${var.cluster}_operator_jenkins_service_account"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "${aws_iam_openid_connect_provider.default.arn}"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "${replace(aws_iam_openid_connect_provider.default.url, "https://", "")}:sub": "system:serviceaccount:${var.system_namespace}:operator_jenkins"
+        }
+      }
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy" "operator_jenkins" {
+  name = "${var.cluster}-operator-jenkins"
+  role = aws_iam_role.operator_jenkins_service_account.name
 
   policy = <<EOF
 {
@@ -292,7 +317,6 @@ resource "aws_iam_policy" "worker_policy" {
  ]
 }
 EOF
-
 }
 
 resource "aws_iam_role" "workspace_role" {
