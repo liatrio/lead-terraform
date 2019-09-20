@@ -188,6 +188,22 @@ master:
                         resourceRequestMemory: 128Mi
                         resourceLimitMemory: 256Mi
                     slaveConnectTimeout: 100
+                  - name: "lead-toolchain-gitops"
+                    label: "lead-toolchain-gitops"
+                    nodeUsageMode: NORMAL
+                    containers:
+                      - name: "gitops"
+                        image: "${image_repo}/builder-image-gitops:${builder_images_version}"
+                        alwaysPullImage: false
+                        workingDir: "/home/jenkins/agent"
+                        command: "/bin/sh -c"
+                        args: "cat"
+                        ttyEnabled: true
+                        resourceRequestCpu: 128m
+                        resourceLimitCpu: 256m
+                        resourceRequestMemory: 128Mi
+                        resourceLimitMemory: 256Mi
+                    slaveConnectTimeout: 100
       shared-libraries: |
         unclassified:
           globalLibraries:
