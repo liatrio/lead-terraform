@@ -42,3 +42,8 @@ variable "product_vars" {
   type = "map"
   default = {}
 }
+
+variable "operator_slack_service_account_annotations" {
+  type = "map"
+  default = {}
+}
