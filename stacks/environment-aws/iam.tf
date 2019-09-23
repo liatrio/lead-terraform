@@ -312,7 +312,7 @@ resource "aws_iam_policy" "operator_jenkins" {
                 "s3:PutObject",
                 "s3:GetObject"
      ],
-     "Resource": ["arn:aws:s3:::lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${var.cluster}.liatr.io"]
+     "Resource": ["arn:aws:s3:::lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${var.cluster}.liatr.io/*"]
    },
    {
      "Effect": "Allow",
