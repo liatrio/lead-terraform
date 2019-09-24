@@ -204,6 +204,15 @@ master:
                         resourceRequestMemory: 128Mi
                         resourceLimitMemory: 256Mi
                     slaveConnectTimeout: 100
+                    envVars:
+                    - secretEnvVar:
+                        key: "GITOPS_GIT_USERNAME"
+                        secretKey: "username"
+                        secretName: "jenkins-credential-github"
+                    - secretEnvVar:
+                        key: "GITOPS_GIT_PASSWORD"
+                        secretKey: "password"
+                        secretName: "jenkins-credential-github"
       shared-libraries: |
         unclassified:
           globalLibraries:
