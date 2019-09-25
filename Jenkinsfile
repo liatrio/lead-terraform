@@ -51,5 +51,5 @@ pipeline {
   }
 }
 def version() {
-  return sh(script: 'git describe --tags', returnStdout: true).trim();
+  return sh(script: 'git describe --abbrev=0 --tags', returnStdout: true).trim();
 }
