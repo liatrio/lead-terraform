@@ -24,9 +24,6 @@ pipeline {
       }
     }
     stage('Gitops') {
-      when {
-        branch 'ENG-1184'
-      }
       agent {
         label "lead-toolchain-gitops"
       }
