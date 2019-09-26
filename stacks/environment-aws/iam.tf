@@ -65,30 +65,6 @@ resource "aws_iam_instance_profile" "worker_node_profile" {
 
 ### End Worker Node Permissions
 
-resource "aws_iam_role" "terraform_pod_template_role" {
-  name = "${var.cluster}_terraform_pod_template_role"
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Federated": "${aws_iam_openid_connect_provider.default.arn}"
-      },
-      "Action": "sts:AssumeRoleWithWebIdentity",
-      "Condition": {
-        "StringLike": {
-          "${replace(aws_iam_openid_connect_provider.default.url, "https://", "")}:sub": "system:serviceaccount:*-toolchain:terraform-iam"
-        }
-      }
-    }
-  ]
-}
-EOF
-}
-
 resource "aws_iam_role" "external_dns_service_account" {
   name = "${var.cluster}_external_dns_service_account"
 
