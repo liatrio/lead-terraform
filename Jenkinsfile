@@ -28,7 +28,7 @@ pipeline {
         label "lead-toolchain-gitops"
       }
       when {
-        branch = master
+        branch 'master'
       }
       environment {
         GITOPS_GIT_URL = "https://github.com/liatrio/lead-environments.git"
