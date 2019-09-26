@@ -1,10 +1,10 @@
 artifactory:
   resources:
     requests:
-      cpu: 75m
-      memory: 3Gi
-    limits:
       cpu: 400m
+      memory: 2Gi
+    limits:
+      cpu: 1 
       memory: 4Gi
   javaOpts:
     xms: 2g

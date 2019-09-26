@@ -8,11 +8,26 @@ resource "random_string" "artifactory_xray_mongo_db_password" {
   special = false
 }
 
+resource "random_string" "artifactory_xray_mongo_db_root_password" {
+  length  = 10
+  special = false
+}
+
+resource "random_string" "artifactory_xray_rabbitmq_password" {
+  length  = 10
+  special = false
+}
+
+resource "random_string" "artifactory_xray_master_key" {
+  length  = 32 
+  special = false
+}
+
 data "template_file" "xray_values" {
   template = file("${path.module}/xray-values.tpl")
 
   vars = {
-    ingress_hostname = "artifactory.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
+    ingress_hostname = "xray.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
   }
 }
 
@@ -22,16 +37,17 @@ resource "helm_release" "xray" {
   name       = "xray"
   namespace  = module.toolchain_namespace.name
   chart      = "xray"
-  version    = "0.12.10"
+  version    = "1.1.0"
   timeout    = 1200
 
   // set_sensitive {
   //   name  = "xray.license.licenseKey"
   //   value = "${var.artifactory_xray_license}"
   // }
-  set {
-    name  = "server.service.type"
-    value = "ClusterIP"
+
+  set_sensitive {
+    name  = "common.masterKey"
+    value = random_string.artifactory_xray_master_key.result
   }
 
   set_sensitive {
@@ -40,8 +56,18 @@ resource "helm_release" "xray" {
   }
 
   set_sensitive {
+    name  = "mongodb.mongodbRootPassword"
+    value = random_string.artifactory_xray_mongo_db_root_password.result
+  }
+
+  set_sensitive {
     name  = "postgresql.postgresPassword"
     value = random_string.artifactory_xray_db_password.result
+  }
+
+  set_sensitive {
+    name  = "rabbitmq.rabbitmqPassword"
+    value = random_string.artifactory_xray_rabbitmq_password.result
   }
 
   values = [data.template_file.xray_values.rendered]

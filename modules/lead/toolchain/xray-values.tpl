@@ -1,3 +1,13 @@
+ingress:
+  enabled: true
+  hosts:
+  - ${ingress_hostname}
+  annotations:
+    kubernetes.io/tls-acme: "true"
+  tls:
+  - secretName: xray-ingress-tls    
+    hosts:
+    - ${ingress_hostname}
 postgresql:
   resources:
     requests:
@@ -31,6 +41,8 @@ persist:
       cpu: 20m
       memory: 200Mi
 server:
+  service:
+    type: ClusterIP
   resources:
     requests:
       cpu: 5m
