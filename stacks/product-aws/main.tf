@@ -111,7 +111,6 @@ module "product" {
   builder_images_version  = var.builder_images_version
   jenkins_image_version   = var.jenkins_image_version
   image_repo              = var.image_repo
-  terraform_pod_template_iam = var.terraform_pod_template_iam
 
   providers = {
     kubernetes.toolchain  = kubernetes.toolchain

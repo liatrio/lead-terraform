@@ -50,7 +50,3 @@ variable "jenkins_image_version" {
 }
 variable "image_repo" {
 }
-
-variable "terraform_pod_template_iam" {
-  default = "None"
-}
