@@ -142,6 +142,10 @@ master:
                   - name: "lead-toolchain-aws"
                     label: "lead-toolchain-aws"
                     nodeUsageMode: NORMAL
+                    yaml: |-
+                      spec:
+                        securityContext:
+                          fsGroup: 1000
                     containers:
                       - name: "aws"
                         image: "${image_repo}/builder-image-aws:${builder_images_version}"
@@ -158,7 +162,6 @@ master:
                   - name: "lead-toolchain-terraform"
                     label: "lead-toolchain-terraform"
                     nodeUsageMode: NORMAL
-                    serviceAccount: "terraform-iam"
                     containers:
                       - name: "terraform"
                         image: "${image_repo}/builder-image-terraform:${builder_images_version}"
