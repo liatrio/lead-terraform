@@ -18,9 +18,8 @@ resource "random_string" "artifactory_xray_rabbitmq_password" {
   special = false
 }
 
-resource "random_string" "artifactory_xray_master_key" {
-  length  = 32 
-  special = false
+resource "random_id" "artifactory_xray_master_key" {
+  byte_length  = 32 
 }
 
 data "template_file" "xray_values" {
@@ -47,7 +46,7 @@ resource "helm_release" "xray" {
 
   set_sensitive {
     name  = "common.masterKey"
-    value = random_string.artifactory_xray_master_key.result
+    value = random_id.artifactory_xray_master_key.hex
   }
 
   set_sensitive {
