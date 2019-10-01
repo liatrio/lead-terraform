@@ -1,3 +1,6 @@
+provider "helm" {
+}
+
 module "system_namespace" {
   source    = "../../common/namespace"
   namespace = var.namespace

@@ -9,7 +9,7 @@ rbac:
   create: true
 image:
   args: 
-  - --exclude-namespaces=kube-system
+  - --exclude-namespaces=${join(",",var.downscaler_exclude_namespaces)}
   - --exclude-deployments=kube-downscaler,metrics-server,cluster-autoscaler-aws-cluster-autoscaler
   - --default-uptime=${var.uptime}
   - --include-resources=deployments,statefulsets

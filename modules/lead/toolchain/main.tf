@@ -2,6 +2,9 @@ locals {
   protocol = var.root_zone_name == "localhost" ? "http" : "https"
 }
 
+provider "helm" {
+}
+
 data "helm_repository" "codecentric" {
   name = "codecentric"
   url  = "https://codecentric.github.io/helm-charts"
