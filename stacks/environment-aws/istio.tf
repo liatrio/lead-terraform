@@ -1,6 +1,7 @@
 data "helm_repository" "istio" {
   name = "istio.io"
   url  = "https://storage.googleapis.com/istio-release/releases/1.2.2/charts/"
+  provider   = helm.system
 }
 
 resource "helm_release" "istio_init" {

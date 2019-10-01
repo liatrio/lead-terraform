@@ -15,7 +15,7 @@ module "infrastructure" {
   issuer_type        = "acme"
   issuer_server      = var.cert_issuer_server
   uptime             = var.uptime
-
+  downscaler_exclude_namespaces = var.downscaler_exclude_namespaces
   essential_toleration_values = data.template_file.essential_toleration.rendered
   external_dns_chart_values  = data.template_file.external_dns_values.rendered
   external_dns_service_account_annotations = {
@@ -48,6 +48,7 @@ data "template_file" "essential_toleration" {
 data "helm_repository" "stable" {
   name = "stable"
   url  = "https://kubernetes-charts.storage.googleapis.com"
+  provider   = helm.system
 }
 
 resource "helm_release" "cluster_autoscaler" {

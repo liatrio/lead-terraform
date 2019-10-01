@@ -158,7 +158,6 @@ master:
                   - name: "lead-toolchain-terraform"
                     label: "lead-toolchain-terraform"
                     nodeUsageMode: NORMAL
-                    serviceAccount: "terraform-iam"
                     containers:
                       - name: "terraform"
                         image: "${image_repo}/builder-image-terraform:${builder_images_version}"

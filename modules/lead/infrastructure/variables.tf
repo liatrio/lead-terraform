@@ -37,3 +37,8 @@ variable "external_dns_service_account_annotations" {
   type = "map"
   default = {}
 }
+
+variable "downscaler_exclude_namespaces" {
+  type = list(string)
+  default = ["kube-system"]
+}

@@ -129,7 +129,10 @@ variable "on_demand_percentage" {
 variable "uptime" {
   default = "Mon-Fri 05:00-19:00 America/Los_Angeles"
 }
-
+variable "downscaler_exclude_namespaces" {
+  type = list(string)
+  default = ["kube-system"]
+}
 variable "builder_images_version" {
   default = "v1.0.15-7-g2465aa8"
 }
