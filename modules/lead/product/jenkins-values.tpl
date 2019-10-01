@@ -171,9 +171,10 @@ master:
                         args: "cat"
                         ttyEnabled: true
                         resourceRequestCpu: 128m
-                        resourceLimitCpu: 256m
+                        resourceLimitCpu: 512m
                         resourceRequestMemory: 128Mi
-                        resourceLimitMemory: 256Mi
+                        resourceLimitMemory: 1024Mi
+                    idleMinutes: 60
                     slaveConnectTimeout: 100
                   - name: "lead-toolchain-maven"
                     label: "lead-toolchain-maven"
