@@ -162,6 +162,10 @@ master:
                   - name: "lead-toolchain-terraform"
                     label: "lead-toolchain-terraform"
                     nodeUsageMode: NORMAL
+                    yaml: |-
+                      spec:
+                        securityContext:
+                          fsGroup: 1000
                     containers:
                       - name: "terraform"
                         image: "${image_repo}/builder-image-terraform:${builder_images_version}"
@@ -172,9 +176,8 @@ master:
                         ttyEnabled: true
                         resourceRequestCpu: 128m
                         resourceLimitCpu: 512m
-                        resourceRequestMemory: 128Mi
-                        resourceLimitMemory: 1024Mi
-                    idleMinutes: 60
+                        resourceRequestMemory: 256Mi
+                        resourceLimitMemory: 1536Mi
                     slaveConnectTimeout: 100
                   - name: "lead-toolchain-maven"
                     label: "lead-toolchain-maven"
