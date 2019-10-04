@@ -1,24 +1,32 @@
-# Kube Janitor repo
-data "helm_repository" "kube-janitor" {
-  name = "themagicalkarp"
-  url  = "https://themagicalkarp.github.io/charts"
-}
-
-resource "helm_release" "kube-janitor" {
+resource "helm_release" "grafeas" {
   name       = "grafeas-server"
   namespace  = module.system_namespace.name
-  repository = data.helm_repository.kube-janitor.name
-  chart      = ""
+  repository = "."
+  chart      = "grafeas-chart"
   version    = "0.1.0"
   timeout    = 600
   wait       = true
 
   depends_on = [SSL_CERTIFICATE_SECRET]
 
-  values     = [var.essential_toleration_values]
+  set {
+    name = "certificates.secretnam"
+    value = SECRETNAME
+  }
 
   set {
-    secretname  = "kubejanitor.expiration"
-    value = 15
+    name  = "container.port"
+    value = 443 
   }
+ 
+  set {
+    name  = "certificates.enabled"
+    value = "true"
+  }
+ 
+  set {
+    name  = "service.port"
+    value = 443 
+  }
+
 }
