@@ -128,3 +128,12 @@ resource "kubernetes_cluster_role_binding" "tiller_cluster_role_binding" {
     namespace = module.toolchain_namespace.name
   }
 }
+
+module "ca-issuer" {
+  source = "../../common/ca-issuer"
+  
+  name      = "grafeas"
+  namespace = "${var.namespace}"
+  common_name = "${var.root_zone_name}"
+  cert-manager-crd = module.infrastructure.crd_waiter
+}
