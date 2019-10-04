@@ -13,6 +13,7 @@ data "template_file" "issuer_values" {
     provider_dns_hosted_zone    = var.provider_dns_hosted_zone
     issuer_type                 = var.issuer_type
     crd_waiter                  = var.crd_waiter # this enforces a dependency on the cert-manager CRDs
+    ca_secret                   = var.ca_secret
   }
 }
 
