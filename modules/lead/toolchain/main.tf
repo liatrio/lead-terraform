@@ -133,7 +133,7 @@ module "ca-issuer" {
   source = "../../common/ca-issuer"
   
   name      = "grafeas"
-  namespace = "${var.namespace}"
-  common_name = "${var.root_zone_name}"
-  cert-manager-crd = module.infrastructure.crd_waiter
+  namespace = var.namespace
+  common_name = var.root_zone_name
+  cert-manager-crd = var.crd_waiter
 }
