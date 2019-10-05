@@ -129,6 +129,7 @@ resource "kubernetes_cluster_role_binding" "tiller_cluster_role_binding" {
   }
 }
 
+// TODO move this into the terraform to create grafeas server
 module "ca-issuer" {
   source = "../../common/ca-issuer"
   
@@ -136,4 +137,15 @@ module "ca-issuer" {
   namespace = var.namespace
   common_name = var.root_zone_name
   cert-manager-crd = var.crd_waiter
+}
+
+module "certificate" {
+  source = "../../common/certificates"
+
+  enabled = true
+  name = "grafeas-server"
+  namespace = var.namespace
+  domain = var.root_zone_name
+  acme_enabled = false
+  issuer_name = module.ca-issuer.name
 }
