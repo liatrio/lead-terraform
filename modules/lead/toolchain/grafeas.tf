@@ -10,23 +10,8 @@ resource "helm_release" "grafeas" {
   depends_on = [SSL_CERTIFICATE_SECRET]
 
   set {
-    name = "certificates.secretnam"
+    name = "certificates.secretname"
     value = SECRETNAME
-  }
-
-  set {
-    name  = "container.port"
-    value = 443 
-  }
- 
-  set {
-    name  = "certificates.enabled"
-    value = "true"
-  }
- 
-  set {
-    name  = "service.port"
-    value = 443 
   }
 
 }

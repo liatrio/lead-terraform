@@ -19,15 +19,15 @@ storageType: "memstore"
 
 service:
   type: ClusterIP
-  port: 8080
+  port: 443
 
 container:
-  port: 8080
+  port: 443
 
 # Certificates for mutual authentication
 certificates:
   secretname: cert-secret
-  enabled: false
+  enabled: true
   name: grafeas-ssl-certs
   ca: |-
       -----BEGIN CERTIFICATE-----
