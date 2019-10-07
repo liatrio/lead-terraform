@@ -6,3 +6,4 @@ secrets
 .DS_Store
 .idea
 **/vendor
+terraform.tfstate.backup
