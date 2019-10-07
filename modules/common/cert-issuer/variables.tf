@@ -41,3 +41,7 @@ variable "provider_dns_hosted_zone" {
 variable "enabled" {
   default = true
 }
+
+variable "ca_secret" {
+  default = "ca-certificate"
+}

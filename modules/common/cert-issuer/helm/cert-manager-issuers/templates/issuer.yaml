@@ -27,3 +27,7 @@ spec:
 {{- end}}
 {{- end}}
 {{- end}}
+{{- if .Values.ca.enabled }}
+  ca:
+    secretName: {{ .Values.ca.secret}}
+{{- end}}

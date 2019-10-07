@@ -3,5 +3,8 @@ acme:
   server: https://acme-v02.api.letsencrypt.org/directory
   email: cloudservices@liatr.io
   dnsProvider: {}
+ca:
+  enable: false
+  secret: ca-certificate
 selfSigned:
   enabled: true

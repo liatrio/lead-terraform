@@ -13,12 +13,13 @@ data "template_file" "issuer_values" {
     provider_dns_hosted_zone    = var.provider_dns_hosted_zone
     issuer_type                 = var.issuer_type
     crd_waiter                  = var.crd_waiter # this enforces a dependency on the cert-manager CRDs
+    ca_secret                   = var.ca_secret
   }
 }
 
 resource "helm_release" "cert_manager_issuers" {
   count     = var.enabled ? 1 : 0
-  name      = "cert-manager-issuers-${var.namespace}"
+  name      = "cert-manager-issuer-${var.issuer_name}-${var.namespace}"
   namespace = var.namespace
   chart     = "${path.module}/helm/cert-manager-issuers"
   timeout   = 600
