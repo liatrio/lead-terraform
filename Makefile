@@ -21,6 +21,10 @@ else
 TF_VALIDATE_ARGS = ""
 endif
 
+ifndef GOPATH
+export GOPATH = ${PWD}/../../../go
+endif
+
 validate: 
 	@terraform init -backend=false stacks/environment-aws
 	@terraform validate $(TF_VALIDATE_ARGS) stacks/environment-aws
@@ -54,9 +58,15 @@ endif
 	git tag -a -m "releasing $(NEW_VERSION)" $(NEW_VERSION)
 	git push origin $(NEW_VERSION)
 
+test:
+	@echo "$(shell pwd)"
+	@echo ${PWD}
+	cd tests && dep ensure && go test -v -timeout 90m .
+
+build_keycloak_provider:
 TF_KEYCLOAK_VERSION = 1.10.0
 TF_KEYCLOAK_PLATFORM = $(shell go env GOOS)_$(shell go env GOARCH)
-plugins: 
+plugins:
 	mkdir -p ~/.terraform.d/plugins
 	curl -LsO https://github.com/mrparkers/terraform-provider-keycloak/releases/download/$(TF_KEYCLOAK_VERSION)/terraform-provider-keycloak_v$(TF_KEYCLOAK_VERSION)_$(TF_KEYCLOAK_PLATFORM).zip
 	unzip -d terraform-provider-keycloak_v$(TF_KEYCLOAK_VERSION) terraform-provider-keycloak*.zip -x "../LICENSE"
