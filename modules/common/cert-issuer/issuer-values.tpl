@@ -12,5 +12,8 @@ acme:
     typeIsRoute53: ${ provider_dns_type == "route53" }
     region: ${provider_dns_region}
     hostedZoneID: ${provider_dns_hosted_zone}
+ca:
+  enabled: ${issuer_type == "ca"}
+  secret: ${ca_secret}
 selfSigned:
   enabled: ${ issuer_type == "selfSigned" }

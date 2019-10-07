@@ -3,6 +3,7 @@ kind: Certificate
 metadata:
   name: {{ .Release.Name }}
 spec:
+  {{- if .Values.acme.enabled }}
   acme:
     config:
     - domains:
@@ -11,11 +12,12 @@ spec:
       dns01:
         provider: liatrio-route53
     commonName: {{ .Values.domain }}
+  {{- end  }}
   dnsNames:
   - {{ .Values.domain }}
   - "*.{{ .Values.domain }}"
   issuerRef:
     kind: Issuer
-    name: letsencrypt-dns
+    name: {{ .Values.issuer_name }} 
   secretName: {{ .Release.Name }}-certificate
 
