@@ -15,7 +15,7 @@ import (
 func TestTerraformForNamespace(t *testing.T) {
 	t.Parallel()
 
-	expectedNamespace := "howdynamespace"
+	expectedNamespace := "terratest-test-namespace"
 	expectedTillerServiceAccountName := "tiller"
 
 	terraformOptions := &terraform.Options{
