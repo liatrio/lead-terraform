@@ -5,4 +5,4 @@ terraform.tfstate
 secrets
 .DS_Store
 .idea
-
+tests/

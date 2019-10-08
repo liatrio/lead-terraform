@@ -20,4 +20,27 @@ spec:
     kind: Issuer
     name: {{ .Values.issuer_name }} 
   secretName: {{ .Release.Name }}-certificate
-
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{.Release.Name}}"
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  template:
+    metadata:
+      name: "{{.Release.Name}}"
+      labels:
+        helm.sh/chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+    spec:
+      restartPolicy: OnFailure 
+      containers:
+      - name: post-install-job
+        image: bitnami/kubectl:1.15
+        command: ["/bin/bash", "-c"]
+        args: ["kubectl get secret $(SECRETNAME)"] 
+        env:
+        - name: SECRETNAME
+          value: {{ .Release.Name }}-certificate
