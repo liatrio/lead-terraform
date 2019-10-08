@@ -33,4 +33,4 @@ resource "helm_release" "grafeas" {
     name = "certificates.secretname"
     value = "${module.certificate.cert_name}-certificate"
   }
-
+}
