@@ -12,8 +12,8 @@ data:
 {{- if eq .Values.certificates.enabled true }}
         # PKI configuration
         cafile: /certificates/ca.crt
-        keyfile: /certificates/server.key
-        certfile: /certificates/server.crt
+        keyfile: /certificates/tls.key
+        certfile: /certificates/tls.crt
 {{- end }}
         cors_allowed_origins:
         # - "http://example.net"
