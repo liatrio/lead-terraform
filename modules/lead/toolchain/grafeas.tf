@@ -21,7 +21,7 @@ module "certificate" {
 resource "helm_release" "grafeas" {
   name       = "grafeas-server"
   namespace  = var.namespace
-  repository = "."
+  repository = "./grafeas-chart/"
   chart      = "grafeas-chart"
   version    = "0.1.0"
   timeout    = 600
