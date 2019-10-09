@@ -11,7 +11,7 @@ module "certificate" {
   source = "../../common/certificates"
 
   enabled = true
-  name = "grafeas-server"
+  name = "grafeas-cert"
   namespace = var.namespace
   domain = var.root_zone_name
   acme_enabled = false
@@ -21,8 +21,7 @@ module "certificate" {
 resource "helm_release" "grafeas" {
   name       = "grafeas-server"
   namespace  = var.namespace
-  repository = "./grafeas-chart/"
-  chart      = "grafeas-chart"
+  chart      = "${path.module}/grafeas-chart"
   version    = "0.1.0"
   timeout    = 600
   wait       = true
