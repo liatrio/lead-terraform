@@ -1,0 +1,10 @@
+apiVersion: kritis.grafeas.io/v1beta1
+kind: KritisConfig
+metadata:
+  name: kritis-config
+spec:
+  metadataBackend: grafeas
+  cronInterval: 1h
+  serverAddr: :443
+  grafeas:
+    addr: grafeas-server:443
