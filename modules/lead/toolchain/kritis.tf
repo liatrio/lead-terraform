@@ -22,5 +22,10 @@ resource "helm_release" "kritis" {
     name = "certificates.name"
     value = "${module.certificate.cert_name}-certificate"
   }
+
+  set {
+    name = "tlsSecretName" 
+    value = "${module.certificate.cert_name}-certificate"
+  }
 }
 
