@@ -20,3 +20,5 @@ variable "issuer_name" {
   default = "letsencrypt-dns"
 }
 
+variable "altname" {
+}

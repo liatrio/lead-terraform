@@ -16,6 +16,9 @@ spec:
   dnsNames:
   - {{ .Values.domain }}
   - "*.{{ .Values.domain }}"
+  {{- if .Values.altname }}
+  - {{ .Values.altname }}
+  {{- end  }}
   issuerRef:
     kind: Issuer
     name: {{ .Values.issuer_name }} 
