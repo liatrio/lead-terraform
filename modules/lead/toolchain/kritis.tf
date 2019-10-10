@@ -31,5 +31,6 @@ resource "helm_release" "kritis" {
   set {
     name = "serviceNamespace"
     value = var.namespace
+  }
 }
 
