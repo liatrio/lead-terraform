@@ -27,5 +27,9 @@ resource "helm_release" "kritis" {
     name = "tlsSecretName" 
     value = "${module.certificate.cert_name}-certificate"
   }
+
+  set {
+    name = "serviceNamespace"
+    value = var.namespace
 }
 
