@@ -1,4 +1,4 @@
-module "certificate" {
+module "kritis_certificate" {
   source = "../../common/certificates"
 
   enabled = true
@@ -21,7 +21,7 @@ resource "helm_release" "kritis-crd" {
 
 data "kubernetes_secret" "kritis" {
   metadata {
-    name = "${module.certficiate.cert_name}-certificate"
+    name = "${module.kritis_certficiate.cert_name}-certificate"
   }
 }
 
@@ -33,7 +33,7 @@ resource "helm_release" "kritis" {
   timeout    = 600
   wait       = true
 
-  depends_on = [module.certificate.cert_status, helm_release.kritis-crd]
+  depends_on = [module.kritis_certificate.cert_status, helm_release.kritis-crd]
 
   set {
     name = "caBundle"
@@ -42,12 +42,12 @@ resource "helm_release" "kritis" {
 
   set {
     name = "certificates.name"
-    value = "${module.certificate.cert_name}-certificate"
+    value = "${module.kritis_certificate.cert_name}-certificate"
   }
 
   set {
     name = "tlsSecretName" 
-    value = "${module.certificate.cert_name}-certificate"
+    value = "${module.kritis_certificate.cert_name}-certificate"
   }
 
   set {
