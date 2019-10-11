@@ -1,0 +1,27 @@
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: kritis-validation-hook
+  labels:
+    kritis.grafeas.io/install: ""
+webhooks:
+  - name: kritis-validation-hook.grafeas.io
+    rules:
+      - apiGroups:
+          - ""
+        apiVersions:
+          - v1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - pods
+    failurePolicy: Fail
+    namespaceSelector:
+      matchExpressions:
+      - {key: kritis-validation, operator: NotIn, values: [disabled]}
+    clientConfig:
+      caBundle: {{ .Values.caBundle }}
+      service:
+        name: kritis-validaiton-hook
+        namespace: {{ .Values.serviceNamespace }}

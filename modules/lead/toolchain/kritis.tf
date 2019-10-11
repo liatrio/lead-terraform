@@ -1,3 +1,14 @@
+module "certificate" {
+  source = "../../common/certificates"
+
+  enabled = true
+  name = "kritis-cert"
+  namespace = var.namespace
+  domain = var.root_zone_name
+  acme_enabled = false
+  issuer_name = module.ca-issuer.name
+}
+
 resource "helm_release" "kritis-crd" {
   name       = "kritis-crd"
   namespace  = var.namespace
@@ -8,6 +19,12 @@ resource "helm_release" "kritis-crd" {
 
 }
 
+data "kubernetes_secret" "kritis" {
+  metadata {
+    name = "${module.certficiate.cert_name}-certificate"
+  }
+}
+
 resource "helm_release" "kritis" {
   name       = "kritis-server"
   namespace  = var.namespace
@@ -16,7 +33,12 @@ resource "helm_release" "kritis" {
   timeout    = 600
   wait       = true
 
-  depends_on = [module.certificate.cert_status]
+  depends_on = [module.certificate.cert_status, helm_release.kritis-crd]
+
+  set {
+    name = "caBundle"
+    value = lookup(data.kubernetes_secret.kritis.data, "tls.crt")
+  }
 
   set {
     name = "certificates.name"
