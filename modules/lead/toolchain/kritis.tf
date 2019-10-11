@@ -20,8 +20,10 @@ resource "helm_release" "kritis-crd" {
 }
 
 data "kubernetes_secret" "kritis" {
+  depends_on = [module.kritis_certificate.cert_status]
   metadata {
     name = "${module.kritis_certificate.cert_name}-certificate"
+    namespace = var.namespace
   }
 }
 
