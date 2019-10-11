@@ -21,4 +21,8 @@ variable "issuer_name" {
 }
 
 variable "altname" {
+  default = ""
+}
+
+variable "certificate_crd" {
 }
