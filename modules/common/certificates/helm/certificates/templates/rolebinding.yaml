@@ -1,7 +1,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: "grafeas-validator-binding"
+  name: {{ .Release.Name }}
   namespace: {{ .Values.namespace }}  
   labels:
     app.kubernetes.io/managed-by: helm
