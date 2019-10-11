@@ -21,8 +21,8 @@ spec:
     spec:
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: {{ .Values.image }}
+          imagePullPolicy: {{ .Values.pullPolicy }}
           command: ["/grafeas-server"]
           args: ["--config=/etc/config/config.yaml"]
           ports:

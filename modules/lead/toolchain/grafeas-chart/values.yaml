@@ -1,10 +1,7 @@
 replicaCount: 1
 
-image:
-  repository: us.gcr.io/grafeas
-  name: grafeas-server
-  tag: v0.1.1
-  pullPolicy: IfNotPresent
+image: "artifactory.toolchain.lead.prod.liatr.io/docker-registry/liatrio/grafeas:0.0.1"
+pullPolicy: IfNotPresent
 
 nameOverride: "grafeas-server"
 fullnameOverride: "grafeas-server"
