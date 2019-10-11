@@ -7,6 +7,7 @@ module "kritis_certificate" {
   domain = var.root_zone_name
   acme_enabled = false
   issuer_name = module.ca-issuer.name
+  certificate_crd = var.crd_waiter
 }
 
 resource "helm_release" "kritis-crd" {
@@ -16,7 +17,6 @@ resource "helm_release" "kritis-crd" {
   version    = "0.1.0"
   timeout    = 600
   wait       = true
-
 }
 
 data "kubernetes_secret" "kritis" {
