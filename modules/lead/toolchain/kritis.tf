@@ -21,7 +21,7 @@ resource "helm_release" "kritis-crd" {
 
 data "kubernetes_secret" "kritis" {
   metadata {
-    name = "${module.kritis_certficiate.cert_name}-certificate"
+    name = "${module.kritis_certificate.cert_name}-certificate"
   }
 }
 
