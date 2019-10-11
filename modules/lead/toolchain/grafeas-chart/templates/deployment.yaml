@@ -43,14 +43,20 @@ spec:
           resources:
 {{- toYaml .Values.resources | nindent 12 }}
           livenessProbe:
-             tcpSocket:
-               port: grafeas
+            exec:
+              command:
+              - /bin/sh
+              - -c
+              - /home/check.sh
              initialDelaySeconds: {{ .Values.livenessprobe.initialDelaySeconds }}
              periodSeconds: {{ .Values.livenessprobe.periodSeconds }}
              failureThreshold: {{ .Values.livenessprobe.failureThreshold }}
           readinessProbe:
-             tcpSocket:
-               port: grafeas
+            exec:
+              command:
+              - /bin/sh
+              - -c
+              - /home/check.sh
              initialDelaySeconds: {{ .Values.readinessprobe.initialDelaySeconds }}
              periodSeconds: {{ .Values.readinessprobe.periodSeconds }}
              failureThreshold: {{ .Values.readinessprobe.failureThreshold }}
