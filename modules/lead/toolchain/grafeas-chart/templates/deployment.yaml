@@ -48,18 +48,18 @@ spec:
               - /bin/sh
               - -c
               - /home/check.sh
-             initialDelaySeconds: {{ .Values.livenessprobe.initialDelaySeconds }}
-             periodSeconds: {{ .Values.livenessprobe.periodSeconds }}
-             failureThreshold: {{ .Values.livenessprobe.failureThreshold }}
+            initialDelaySeconds: {{ .Values.livenessprobe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessprobe.periodSeconds }}
+            failureThreshold: {{ .Values.livenessprobe.failureThreshold }}
           readinessProbe:
             exec:
               command:
               - /bin/sh
               - -c
               - /home/check.sh
-             initialDelaySeconds: {{ .Values.readinessprobe.initialDelaySeconds }}
-             periodSeconds: {{ .Values.readinessprobe.periodSeconds }}
-             failureThreshold: {{ .Values.readinessprobe.failureThreshold }}
+            initialDelaySeconds: {{ .Values.readinessprobe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessprobe.periodSeconds }}
+            failureThreshold: {{ .Values.readinessprobe.failureThreshold }}
       volumes:
         - name: config-volume
           configMap:
