@@ -23,5 +23,5 @@ webhooks:
     clientConfig:
       caBundle: {{ .Values.caBundle }}
       service:
-        name: kritis-validaiton-hook
+        name: kritis-validation-hook
         namespace: {{ .Values.serviceNamespace }}
