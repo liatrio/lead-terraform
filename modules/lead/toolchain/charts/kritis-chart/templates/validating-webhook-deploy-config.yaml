@@ -12,11 +12,11 @@ webhooks:
         apiVersions:
         - "*" # TODO(aaron-prindle) minimize this capture group
         operations:
-          - CREATE
+        - CREATE
           # - UPDATE # TODO(aaron-prindle) add back update when allowlist and helm do not collide
         resources:
-          - deployments
-          - replicasets
+        - deployments
+        - replicasets
     failurePolicy: Fail
     namespaceSelector:
       matchExpressions:
