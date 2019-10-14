@@ -32,7 +32,7 @@ resource "helm_release" "grafeas" {
   namespace  = var.namespace
   chart      = "grafeas-server"
   version    = var.grafeas_version
-  timeout    = 600
+  timeout    = 300 
   wait       = true
 
   depends_on = [module.certificate.cert_status]
