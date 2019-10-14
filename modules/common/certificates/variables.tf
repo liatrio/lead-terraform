@@ -22,3 +22,7 @@ variable "issuer_name" {
 
 variable "certificate_crd" {
 }
+
+variable "wait_for_cert" {
+  default = "false"
+}
