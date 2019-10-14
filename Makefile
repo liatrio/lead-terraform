@@ -61,7 +61,7 @@ endif
 test:
 	@echo "$(shell pwd)"
 	@echo ${PWD}
-	cd tests && dep ensure && go test -v -timeout 90m .
+	cd tests && dep -v ensure && go test -v -timeout 90m .
 
 build_keycloak_provider:
 TF_KEYCLOAK_VERSION = 1.10.0
