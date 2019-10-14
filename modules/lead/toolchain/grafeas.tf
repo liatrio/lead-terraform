@@ -30,7 +30,7 @@ resource "helm_release" "grafeas" {
   name       = "grafeas-server"
   repository = data.helm_repository.liatrio-flywheel.metadata[0].name
   namespace  = var.namespace
-  chart      = "grafeas-server-${var.grafeas_version}"
+  chart      = "grafeas-server"
   version    = var.grafeas_version
   timeout    = 600
   wait       = true
