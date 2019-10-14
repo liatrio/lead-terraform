@@ -1,4 +1,4 @@
-data "helm_repository" "liatrio" {
+data "helm_repository" "liatrio-flywheel" {
   name = "lead.prod.liatr.io"
   url  = "https://artifactory.toolchain.lead.prod.liatr.io/artifactory/helm/"
 }
@@ -28,7 +28,7 @@ module "certificate" {
 
 resource "helm_release" "grafeas" {
   name       = "grafeas-server"
-  repository = data.helm_repository.liatrio.metadata[0].name
+  repository = data.helm_repository.liatrio-flywheel.metadata[0].name
   namespace  = var.namespace
   chart      = "grafeas-server-${var.grafeas_version}"
   version    = "0.1.1"
