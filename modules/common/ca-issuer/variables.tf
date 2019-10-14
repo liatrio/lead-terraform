@@ -26,6 +26,6 @@ variable "cert_validity_period_hours" {
 }
 
 variable "cert_early_renewal_hours" {
-  description = "Time before expiration in hours to renew certificate (default ~2 months)"
+  description = "Time before expiration to renew certificate in hours (default ~2 months)"
   default     = 1440
 }
