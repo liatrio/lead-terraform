@@ -21,6 +21,7 @@ spec:
     name: {{ .Values.issuer_name }} 
   secretName: {{ .Release.Name }}-certificate
 ---
+{{- if .Values.waitForCert }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -45,3 +46,4 @@ spec:
         env:
         - name: SECRETNAME
           value: {{ .Release.Name }}-certificate
+{{- end  }}

@@ -17,6 +17,7 @@ module "certificate" {
   acme_enabled = false
   issuer_name = module.ca-issuer.name
   certificate_crd = var.crd_waiter
+  wait_for_cert = true
 
 }
 
