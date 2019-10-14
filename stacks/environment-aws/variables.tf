@@ -139,6 +139,9 @@ variable "builder_images_version" {
 variable "jenkins_image_version" {
   default = "v1.0.15-7-g2465aa8"
 }
+variable "grafeas_version" {
+  default = "v0.1.1-4-ge024b96"
+}
 variable "image_repo" {
   default = "artifactory.toolchain.lead.prod.liatr.io/docker-registry/flywheel"
 }

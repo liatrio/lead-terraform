@@ -20,6 +20,10 @@ variable "issuer_name" {
   default = "letsencrypt-dns"
 }
 
+variable "altname" {
+  default = ""
+}
+
 variable "certificate_crd" {
 }
 

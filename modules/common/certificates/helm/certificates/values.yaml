@@ -3,4 +3,5 @@ acme:
   enabled: true
 issuer_name: letsencrypt-dns
 namespace: toolchain
+altname: ""
 waitForCert: false
