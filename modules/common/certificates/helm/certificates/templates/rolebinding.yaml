@@ -8,8 +8,8 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: secret-validator
+  name: {{ .Release.Name }}
 subjects:
 - kind: ServiceAccount
-  name: secret-validator
+  name: {{ .Release.Name }}
   namespace: {{ .Values.namespace }} 

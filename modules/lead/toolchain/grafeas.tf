@@ -23,6 +23,7 @@ module "certificate" {
   issuer_name = module.ca-issuer.name
   certificate_crd = var.crd_waiter
   altname = "localhost"
+  wait_for_cert = true
 
 }
 

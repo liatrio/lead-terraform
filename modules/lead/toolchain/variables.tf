@@ -34,7 +34,6 @@ variable "ingress_external_traffic_policy" {
 }
 
 variable "grafeas_version" {
-  default = "v0.1.1-4-ge024b96"
 }
 
 variable "enable_artifactory" {

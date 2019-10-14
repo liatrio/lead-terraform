@@ -101,6 +101,7 @@ module "toolchain" {
   issuer_server           = var.cert_issuer_server
   ingress_controller_type = "LoadBalancer"
   crd_waiter              = module.infrastructure.crd_waiter
+  grafeas_version         = var.grafeas_version
 
   smtp_host  = "email-smtp.${var.region}.amazonaws.com"
   smtp_port     = "587"
