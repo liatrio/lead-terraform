@@ -3,6 +3,10 @@ kind: Role
 metadata:
   namespace: {{ .Values.namespace }}
   name: {{ .Release.Name }}
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight" "0"
+    "helm.sh/hook-delete-policy": hook-succeeded
 rules:
 - apiGroups: [""] 
   resources: ["secrets"]
