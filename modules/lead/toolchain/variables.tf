@@ -33,6 +33,10 @@ variable "ingress_external_traffic_policy" {
   default = ""
 }
 
+variable "grafeas_version" {
+  default = "v0.1.1-3-gd6affa8"
+}
+
 variable "enable_artifactory" {
   default = true
 }

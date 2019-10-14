@@ -1,3 +1,8 @@
+data "helm_repository" "liatrio" {
+  name = "lead.prod.liatr.io"
+  url  = "https://artifactory.toolchain.lead.prod.liatr.io/artifactory/helm/"
+}
+
 module "ca-issuer" {
   source = "../../common/ca-issuer"
 
@@ -23,9 +28,10 @@ module "certificate" {
 
 resource "helm_release" "grafeas" {
   name       = "grafeas-server"
+  repository = data.helm_repository.liatrio.metadata[0].name
   namespace  = var.namespace
-  chart      = "${path.module}/grafeas-chart"
-  version    = "0.1.0"
+  chart      = "grafeas-server-${var.grafeas_version}"
+  version    = "0.1.1"
   timeout    = 600
   wait       = true
 
@@ -34,5 +40,10 @@ resource "helm_release" "grafeas" {
   set {
     name = "certificates.secretname"
     value = "${module.certificate.cert_name}-certificate"
+  }
+
+  set {
+    name = "grafeas_version"
+    value = var.grafeas_version
   }
 }
