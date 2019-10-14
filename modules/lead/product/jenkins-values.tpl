@@ -105,7 +105,7 @@ master:
                 jenkinsTunnel: "jenkins-agent:50000"
                 connectTimeout: 0
                 readTimeout: 0
-                containerCapStr: 5
+                containerCapStr: 15
                 podRetention: never
                 maxRequestsPerHostStr: 32
                 waitForPodSec: 600
