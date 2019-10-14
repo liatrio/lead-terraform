@@ -17,5 +17,15 @@ variable "common_name" {
 
 variable "organization_name" {
   description = "Organization name of CA certificate"
-  default = "Liatrio"
+  default     = "Liatrio"
+}
+
+variable "cert_validity_period_hours" {
+  description = "Max lifetime for the CA certificate to be valid in hours (default ~3 months)"
+  default     = 2160
+}
+
+variable "cert_early_renewal_hours" {
+  description = "Time before expiration to renew certificate in hours (default ~2 months)"
+  default     = 1440
 }
