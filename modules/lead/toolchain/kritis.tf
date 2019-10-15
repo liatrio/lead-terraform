@@ -27,6 +27,10 @@ data "kubernetes_secret" "kritis" {
   }
 }
 
+output "caBundle" {
+  value = lookup(data.kubernetes_secret.kritis.data, "tls.crt")
+}
+
 resource "helm_release" "kritis" {
   name       = "kritis-server"
   namespace  = var.namespace
