@@ -16,7 +16,8 @@ webhooks:
     matchExpressions:
     - key: kritis-validation
       operator: NotIn 
-      values: ["disabled"]
+      values:
+      - disabled
   clientConfig:
     caBundle: "{{ .Values.caBundle }}"
     service:

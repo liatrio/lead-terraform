@@ -7,16 +7,17 @@ metadata:
 webhooks:
 - name: kritis-validation-hook-deployments.grafeas.io
   rules:
-  - apiGroups: ["*"] # TODO(aaron-prindle) minimize this capture group
-    apiVersions: ["*"] # TODO(aaron-prindle) minimize this capture group
+  - apiGroups: ["*"]
+    apiVersions: ["*"]
     operations: ["CREATE"]
     resources: ["deployments", "replicasets"]
   failurePolicy: Fail
   namespaceSelector:
     matchExpressions:
-    - key: kritis-validation 
+    - key: kritis-validation
       operator: NotIn
-      values: ["disabled"]
+      values:
+      - disabled
   clientConfig:
     caBundle: "{{ .Values.caBundle }}"
     service:
