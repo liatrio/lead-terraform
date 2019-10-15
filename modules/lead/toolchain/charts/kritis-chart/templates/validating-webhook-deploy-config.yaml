@@ -18,7 +18,7 @@ webhooks:
       operator: NotIn
       values: ["disabled"]
   clientConfig:
-    caBundle: "tester"
+    caBundle: "{{ .Values.caBundle }}"
     service:
       name: "kritis-validation-hook"
       namespace: "{{ .Values.serviceNamespace }}"
