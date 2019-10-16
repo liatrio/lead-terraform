@@ -4,7 +4,7 @@ module "kritis_certificate" {
   enabled = true
   name = "kritis-cert"
   namespace = var.namespace
-  domain = "kritis-validation-hook"
+  domain = "kritis-validation-hook.toolchain.svc"
   acme_enabled = false
   issuer_name = module.ca-issuer.name
   certificate_crd = var.crd_waiter
