@@ -5,7 +5,7 @@ metadata:
   labels:
     kritis.grafeas.io/install: ""
 webhooks:
-- name: kritis-validation-hook-deployments
+- name: kritis-validation-hook-deployments.toolchain.svc
   rules:
   - apiGroups: ["*"]
     apiVersions: ["*"]
