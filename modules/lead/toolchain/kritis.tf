@@ -28,7 +28,7 @@ data "kubernetes_secret" "kritis" {
 }
 
 output "caBundle" {
-  value = "${lookup(data.kubernetes_secret.kritis.data, "tls.crt")}"
+  value = "${base64encode(lookup(data.kubernetes_secret.kritis.data, "tls.crt"))}"
 }
 
 resource "helm_release" "kritis" {
@@ -43,7 +43,7 @@ resource "helm_release" "kritis" {
 
   set {
     name = "caBundle"
-    value = "${lookup(data.kubernetes_secret.kritis.data, "tls.crt")}"
+    value = "${base64encode(lookup(data.kubernetes_secret.kritis.data, "tls.crt"))}"
   }
 
   set {
