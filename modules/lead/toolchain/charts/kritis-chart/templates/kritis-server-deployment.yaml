@@ -10,6 +10,8 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
     {{ .Values.kritisInstallLabel }}: ""
+  annotations:
+    downscaler/exclude: "true"
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
