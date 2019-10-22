@@ -40,6 +40,8 @@ module "toolchain" {
   ingress_controller_type         = var.ingress_controller_type
   ingress_external_traffic_policy = var.ingress_external_traffic_policy
   crd_waiter                      = module.infrastructure.crd_waiter
+  grafeas_version         = var.grafeas_version
+
 
   smtp_host  = "mailhog"
   smtp_port     = "1025"
