@@ -36,6 +36,7 @@ module "toolchain" {
   enable_mailhog                  = var.enable_mailhog
   enable_sonarqube                = var.enable_sonarqube
   enable_xray                     = var.enable_xray
+  enable_grafeas                  = var.enable_grafeas
   issuer_type                     = "selfSigned"
   ingress_controller_type         = var.ingress_controller_type
   ingress_external_traffic_policy = var.ingress_external_traffic_policy

@@ -97,6 +97,7 @@ module "toolchain" {
   enable_mailhog          = var.enable_mailhog
   enable_sonarqube        = var.enable_sonarqube
   enable_xray             = var.enable_xray
+  enable_grafeas          = var.enable_grafeas
   issuer_type             = "acme"
   issuer_server           = var.cert_issuer_server
   ingress_controller_type = "LoadBalancer"

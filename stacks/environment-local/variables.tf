@@ -82,6 +82,10 @@ variable "enable_xray" {
   default = true
 }
 
+variable "enable_grafeas" {
+  default = true
+}
+
 variable "uptime" {
   default = "always"
 }

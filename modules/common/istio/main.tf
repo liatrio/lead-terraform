@@ -150,6 +150,7 @@ module "istio_flagger" {
 }
 
 resource "kubernetes_horizontal_pod_autoscaler" "kiali_autoscaler" {
+  count = var.enabled ? 1 : 0
   metadata {
     name = "kiali"
     namespace = module.istio_namespace.name
