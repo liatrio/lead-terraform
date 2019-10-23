@@ -60,6 +60,10 @@ variable "enable_xray" {
   default = true
 }
 
+variable "enable_grafeas" {
+  default = true
+}
+
 variable "crd_waiter" {
 }
 

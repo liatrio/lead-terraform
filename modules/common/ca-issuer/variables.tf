@@ -29,3 +29,7 @@ variable "cert_early_renewal_hours" {
   description = "Time before expiration to renew certificate in hours (default ~2 months)"
   default     = 1440
 }
+
+variable "enabled" {
+  default = true
+}

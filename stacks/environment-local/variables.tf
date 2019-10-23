@@ -82,6 +82,10 @@ variable "enable_xray" {
   default = true
 }
 
+variable "enable_grafeas" {
+  default = true
+}
+
 variable "uptime" {
   default = "always"
 }
@@ -110,3 +114,6 @@ locals {
   }
 }
 
+variable "grafeas_version" {
+  default = "v0.1.1-4-ge024b96"
+}

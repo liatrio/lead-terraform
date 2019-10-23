@@ -52,3 +52,7 @@ variable "operator_jenkins_service_account_annotations" {
   type = "map"
   default = {}
 }
+
+variable "nginx_ingress_waiter" {
+  default = ""
+}

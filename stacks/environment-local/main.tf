@@ -15,7 +15,7 @@ provider "kubernetes" {
 provider "helm" {
   alias           = "system"
   namespace       = module.infrastructure.namespace
-  tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.14.1"
+  tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.15.0"
   service_account = module.infrastructure.tiller_service_account
 
   kubernetes {
@@ -26,7 +26,7 @@ provider "helm" {
 provider "helm" {
   alias           = "toolchain"
   namespace       = module.toolchain.namespace
-  tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.14.1"
+  tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.15.0"
   service_account = module.toolchain.tiller_service_account
 
   kubernetes {

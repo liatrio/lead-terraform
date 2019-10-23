@@ -146,10 +146,11 @@ module "istio_cert_issuer" {
 module "istio_flagger" {
   source        = "../../common/flagger"
   enable        = var.enabled
-  namespace     = helm_release.istio[0].metadata[0].namespace
+  namespace     = var.enabled ? helm_release.istio[0].metadata[0].namespace : ""
 }
 
 resource "kubernetes_horizontal_pod_autoscaler" "kiali_autoscaler" {
+  count = var.enabled ? 1 : 0
   metadata {
     name = "kiali"
     namespace = module.istio_namespace.name

@@ -118,6 +118,10 @@ variable "enable_xray" {
   default = true
 }
 
+variable "enable_grafeas" {
+  default = true
+}
+
 variable "enable_autoscaler_scale_down" {
   default = true
 }

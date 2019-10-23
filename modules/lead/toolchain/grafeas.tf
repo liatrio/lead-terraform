@@ -6,6 +6,7 @@ data "helm_repository" "liatrio-flywheel" {
 module "ca-issuer" {
   source = "../../common/ca-issuer"
 
+  enabled   = var.enable_grafeas
   name      = "grafeas"
   namespace = var.namespace
   common_name = var.root_zone_name
@@ -15,7 +16,7 @@ module "ca-issuer" {
 module "certificate" {
   source = "../../common/certificates"
 
-  enabled = true
+  enabled   = var.enable_grafeas
   name = "grafeas-cert"
   namespace = var.namespace
   domain = "grafeas-server"
@@ -29,6 +30,7 @@ module "certificate" {
 
 resource "helm_release" "grafeas" {
   name       = "grafeas-server"
+  count      = var.enable_grafeas ? 1 : 0
   repository = data.helm_repository.liatrio-flywheel.metadata[0].name
   namespace  = var.namespace
   chart      = "grafeas-server"

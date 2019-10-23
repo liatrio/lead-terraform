@@ -1,11 +1,13 @@
 resource "tls_private_key" "ca" {
+  count = var.enabled ? 1 : 0
   algorithm = "RSA"
   rsa_bits  = 2048
 }
 
 resource "tls_self_signed_cert" "ca" {
-  key_algorithm   = "${tls_private_key.ca.algorithm}"
-  private_key_pem = "${tls_private_key.ca.private_key_pem}"
+  count = var.enabled ? 1 : 0
+  key_algorithm   = "${tls_private_key.ca[count.index].algorithm}"
+  private_key_pem = "${tls_private_key.ca[count.index].private_key_pem}"
 
   is_ca_certificate = true
 
@@ -26,6 +28,7 @@ resource "tls_self_signed_cert" "ca" {
 }
 
 resource "kubernetes_secret" "ca" {
+  count = var.enabled ? 1 : 0
   metadata {
     name      = "ca-issuer-${var.name}"
     namespace = "${var.namespace}"
@@ -38,13 +41,14 @@ resource "kubernetes_secret" "ca" {
   type = "tls"
 
   data = {
-    "tls.crt" = "${tls_self_signed_cert.ca.cert_pem}"
-    "tls.key" = "${tls_private_key.ca.private_key_pem}"
+    "tls.crt" = "${tls_self_signed_cert.ca[count.index].cert_pem}"
+    "tls.key" = "${tls_private_key.ca[count.index].private_key_pem}"
   }
 }
 
 module "cert-issuer" {
   source = "../cert-issuer"
+  enabled = var.enabled
 
   namespace   = "${var.namespace}"
   issuer_name = "ca-issuer-${var.name}"

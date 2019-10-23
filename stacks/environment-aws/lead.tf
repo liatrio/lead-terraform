@@ -97,6 +97,7 @@ module "toolchain" {
   enable_mailhog          = var.enable_mailhog
   enable_sonarqube        = var.enable_sonarqube
   enable_xray             = var.enable_xray
+  enable_grafeas          = var.enable_grafeas
   issuer_type             = "acme"
   issuer_server           = var.cert_issuer_server
   ingress_controller_type = "LoadBalancer"
@@ -126,6 +127,7 @@ module "sdm" {
   slack_client_signing_secret = data.aws_ssm_parameter.slack_client_signing_secret.value
   workspace_role_name         = aws_iam_role.workspace_role.name
   product_stack               = "product-aws"
+  nginx_ingress_waiter        = module.toolchain.nginx_ingress_waiter
 
   operator_slack_service_account_annotations = {
     "eks.amazonaws.com/role-arn" = aws_iam_role.operator_slack_service_account.arn
