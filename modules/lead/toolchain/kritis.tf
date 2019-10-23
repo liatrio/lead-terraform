@@ -22,6 +22,7 @@ resource "helm_release" "kritis-crd" {
 }
 
 data "kubernetes_secret" "kritis" {
+  count      = var.enable_grafeas ? 1 : 0
   depends_on = [module.kritis_certificate.cert_status]
   metadata {
     name = "${module.kritis_certificate.cert_name}-certificate"
@@ -30,7 +31,7 @@ data "kubernetes_secret" "kritis" {
 }
 
 output "caBundle" {
-  value = "${base64encode(lookup(data.kubernetes_secret.kritis.data, "tls.crt"))}"
+  value = var.enable_grafeas ? "${base64encode(lookup(data.kubernetes_secret.kritis[0].data, "tls.crt"))}" : ""
 }
 
 resource "helm_release" "kritis" {
@@ -46,7 +47,7 @@ resource "helm_release" "kritis" {
 
   set {
     name = "caBundle"
-    value = "${base64encode(lookup(data.kubernetes_secret.kritis.data, "tls.crt"))}"
+    value = "${base64encode(lookup(data.kubernetes_secret.kritis[count.index].data, "tls.crt"))}"
   }
 
   set {
