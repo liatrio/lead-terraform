@@ -187,6 +187,6 @@ resource "kubernetes_role_binding" "default_production_rolebinding" {
   subject {
     kind      = "ServiceAccount"
     name      = "default"
-    namespace   = module.staging_namespace.name
+    namespace   = module.production_namespace.name
   }
 }
