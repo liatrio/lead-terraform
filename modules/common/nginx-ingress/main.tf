@@ -18,7 +18,7 @@ resource "helm_release" "nginx_ingress" {
   count      = "${var.enabled ? 1 : 0}"
   repository = data.helm_repository.stable.metadata.0.name
   chart      = "nginx-ingress"
-  version    = "1.4.0"
+  version    = "1.24.3"
   namespace  = var.namespace
   name       = "nginx-ingress"
   timeout    = 600
@@ -84,6 +84,17 @@ resource "kubernetes_role" "nginx_ingress_role" {
     api_groups = [""]
     resources  = ["services"]
     verbs      = ["get", "list", "watch", "update"]
+  }
+  
+  rule {
+    api_groups = ["networking.k8s.io"]
+    resources  = ["ingresses"]
+    verbs      = ["get", "list", "watch"]
+  }
+  rule {
+    api_groups = ["networking.k8s.io"]
+    resources  = ["ingresses/status"]
+    verbs      = ["update"]
   }
   rule {
     api_groups = ["extensions"]
