@@ -11,9 +11,9 @@ metadata:
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded,hook-failed"
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: {{ .Release.Name }}
+  kind: ClusterRole
+  name: lead-system-certificate-watch
 subjects:
 - kind: ServiceAccount
-  name: {{ .Release.Name }}
+  name: default
   namespace: {{ .Values.namespace }} 

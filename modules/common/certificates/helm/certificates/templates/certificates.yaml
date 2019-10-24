@@ -41,12 +41,11 @@ spec:
         helm.sh/chart: "{{.Chart.Name}}-{{.Chart.Version}}"
     spec:
       restartPolicy: OnFailure 
-      serviceAccountName: {{ .Release.Name }}
       containers:
       - name: post-install-job
         image: bitnami/kubectl:1.15
         command: ["/bin/bash", "-c"]
-        args: ["kubectl get secret $(SECRETNAME)"] 
+        args: ["until kubectl get certificate -n toolchain gndn -o jsonpath="{.status.conditions[0].status}" | grep -q 'True' != 0 ; then exit 0; else exit 1; fi"] 
         env:
         - name: SECRETNAME
           value: {{ .Release.Name }}-certificate

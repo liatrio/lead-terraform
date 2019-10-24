@@ -53,3 +53,18 @@ resource "helm_release" "cert_manager" {
   ]
 }
 
+resource "kubernetes_cluster_role" "certificate-read" {
+  metadata {
+    name = "certificate-read"
+  }
+
+  rule {
+    api_groups = ["certmanager.k8s.io"]
+    resources = ["certificates"]
+    verbs = ["get", "watch", "list"]
+  }
+
+  depends_on = [
+    helm_release.cert_manager_crds,
+  ]
+}
