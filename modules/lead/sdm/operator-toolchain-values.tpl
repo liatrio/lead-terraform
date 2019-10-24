@@ -1,6 +1,6 @@
 cluster: ${cluster}
 cluster_domain: ${cluster_domain}
-product_version: ${product_version}
+product_version: "${product_version}"
 product_stack: ${product_stack}
 product_vars: ${product_vars}
 
