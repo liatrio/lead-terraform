@@ -5,3 +5,4 @@ issuer_name: letsencrypt-dns
 namespace: toolchain
 altname: ""
 waitForCert: false
+certWatcherServiceAccount: cert-watcher

@@ -97,3 +97,30 @@ resource "kubernetes_role_binding" "tiller_role_binding" {
     namespace = kubernetes_namespace.ns[0].metadata[0].name
   }
 }
+
+resource "kubernetes_service_account" "certificate_watcher_service_account" {
+  count = var.enabled ? 1 : 0
+  metadata {
+    name = "certificate-watcher"
+    namespace = kubernetes_namespace.ns[0].metadata[0].name
+  }
+  automount_service_account_token = true
+}
+
+resource "kubernetes_role_binding" "certificate_watcher_role_binding" {
+  count = var.enabled ? 1 : 0
+  metadata {
+    name      = "certificate-watcher-binding"
+    namespace = kubernetes_namespace.ns[0].metadata[0].name
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = "certificate-read"
+  }
+  subject {
+    kind      = "ServiceAccount"
+    name      = kubernetes_service_account.certificate_watcher_service_account.metadata.name
+    namespace = kubernetes_service_account.certificate_watcher_service_account.metadata.namespace
+  }
+}

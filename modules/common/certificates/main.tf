@@ -7,6 +7,7 @@ data "template_file" "certificate_values" {
     issuer_name = var.issuer_name
     altname = var.altname
     wait_for_cert = var.wait_for_cert
+    cert_watcher_service_account = var.cert_watcher_service_account
   }
 }
 

@@ -40,7 +40,8 @@ spec:
       labels:
         helm.sh/chart: "{{.Chart.Name}}-{{.Chart.Version}}"
     spec:
-      restartPolicy: OnFailure 
+      restartPolicy: OnFailure
+      serviceAccountName: {{ .Values.certWatcherServiceAccount }}
       containers:
       - name: post-install-job
         image: bitnami/kubectl:1.15
