@@ -30,6 +30,3 @@ variable "certificate_crd" {
 variable "wait_for_cert" {
   default = "false"
 }
-
-variable "cert_watcher_service_account" {
-}

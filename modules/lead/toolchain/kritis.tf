@@ -9,7 +9,6 @@ module "kritis_certificate" {
   issuer_name = module.ca-issuer.name
   certificate_crd = var.crd_waiter
   wait_for_cert = true
-  cert_watcher_service_account = module.toolchain_namespace.certificate_watcher_service_account
 }
 
 resource "helm_release" "kritis-crd" {
