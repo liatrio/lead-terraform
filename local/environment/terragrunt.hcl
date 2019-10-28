@@ -22,14 +22,14 @@ inputs = {
   sdm_version     = "0.4.0-183-g16e7623"
 
   enable_artifactory = true
-  enable_gitlab      = true
+  enable_gitlab      = false
   enable_istio       = false
   enable_grafeas     = false
-  enable_keycloak    = true
+  enable_keycloak    = false
   enable_mailhog     = true
   enable_operators   = true
   enable_sonarqube   = true
-  enable_xray        = true
+  enable_xray        = false
 
   # This will conflict with Istio since it's also configured as a LoadBalancer
   # So ensure `enable_istio = false` before uncommenting this
