@@ -44,6 +44,7 @@ provider "keycloak" {
   password      = var.keycloak_admin_password
   url           = "${local.protocol}://keycloak.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
   initial_login = false
+  client_timeout = 15
 }
 
 # Give Keycloak API a chance to become responsive
