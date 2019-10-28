@@ -107,6 +107,23 @@ resource "kubernetes_service_account" "certificate_watcher_service_account" {
   automount_service_account_token = true
 }
 
+resource "kubernetes_role" "certificate_read" {
+  metadata {
+    name = "certificate-read"
+    namespace = kubernetes_namespace.ns[0].metadata[0].name
+  }
+
+  rule {
+    api_groups = ["certmanager.k8s.io"]
+    resources = ["certificates"]
+    verbs = ["get", "watch", "list"]
+  }
+
+  depends_on = [
+    helm_release.cert_manager_crds,
+  ]
+}
+
 resource "kubernetes_role_binding" "certificate_watcher_role_binding" {
   count = var.enabled ? 1 : 0
   metadata {
@@ -115,8 +132,8 @@ resource "kubernetes_role_binding" "certificate_watcher_role_binding" {
   }
   role_ref {
     api_group = "rbac.authorization.k8s.io"
-    kind      = "ClusterRole"
-    name      = "certificate-read"
+    kind      = "Role"
+    name      = kubernetes_role.certificate_read.metadata[0].name
   }
   subject {
     kind      = "ServiceAccount"
@@ -124,3 +141,5 @@ resource "kubernetes_role_binding" "certificate_watcher_role_binding" {
     namespace = kubernetes_service_account.certificate_watcher_service_account.metadata.namespace
   }
 }
+
+
