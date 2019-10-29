@@ -44,6 +44,7 @@ provider "keycloak" {
   password      = var.keycloak_admin_password
   url           = "${local.protocol}://keycloak.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
   initial_login = false
+  client_timeout = 15
 }
 
 # Give Keycloak API a chance to become responsive
@@ -78,9 +79,14 @@ resource "keycloak_realm" "realm" {
     ssl      = false
     from     = var.smtp_from_email
     from_display_name = "Keycloak - ${var.root_zone_name} ${title(var.cluster)} ${title(var.namespace)}"
-    auth {
-      username = var.smtp_username
-      password = var.smtp_password
+
+    dynamic "auth" {
+      for_each = var.smtp_username == "" || var.smtp_password == "" ? [] : [1]
+
+      content {
+        username = var.smtp_username
+        password = var.smtp_password
+      }
     }
   }
 }
