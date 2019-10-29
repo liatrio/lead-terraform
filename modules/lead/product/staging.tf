@@ -33,7 +33,6 @@ module "staging_certificate" {
   domain = "${module.staging_namespace.name}.${var.cluster_domain}"
   enabled = "${var.enable_istio}"
   certificate_crd = "set"
-  cert_watcher_service_account = module.staging_namespace.certificate_watcher_service_account
 
   providers = {
     helm = "helm.system"
