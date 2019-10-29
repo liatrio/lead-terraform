@@ -52,4 +52,3 @@ resource "helm_release" "cert_manager" {
     kubernetes_cluster_role_binding.tiller_cluster_role_binding,
   ]
 }
-

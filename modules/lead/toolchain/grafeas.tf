@@ -25,7 +25,6 @@ module "certificate" {
   certificate_crd = var.crd_waiter
   altname = "localhost"
   wait_for_cert = true
-
 }
 
 resource "helm_release" "grafeas" {
