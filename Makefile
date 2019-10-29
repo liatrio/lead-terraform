@@ -54,7 +54,7 @@ endif
 	git tag -a -m "releasing $(NEW_VERSION)" $(NEW_VERSION)
 	git push origin $(NEW_VERSION)
 
-TF_KEYCLOAK_VERSION = 1.10.0
+TF_KEYCLOAK_VERSION = 1.11.1
 TF_KEYCLOAK_PLATFORM = $(shell go env GOOS)_$(shell go env GOARCH)
 plugins: 
 	mkdir -p ~/.terraform.d/plugins
