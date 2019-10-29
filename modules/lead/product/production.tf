@@ -33,7 +33,6 @@ module "production_certificate" {
   domain = "${module.production_namespace.name}.${var.cluster_domain}"
   enabled = "${var.enable_istio}"
   certificate_crd = "set"
-  cert_watcher_service_account = module.production_namespace.certificate_watcher_service_account
 
   providers = {
     helm = "helm.system"
