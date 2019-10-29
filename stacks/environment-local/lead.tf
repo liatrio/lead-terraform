@@ -71,12 +71,13 @@ module "sdm" {
   nginx_ingress_waiter        = module.toolchain.nginx_ingress_waiter
 
   product_vars = {
-    issuer_type            = var.cert_issuer_type
-    issuer_server          = var.cert_issuer_server
-    enable_keycloak        = var.enable_keycloak
-    builder_images_version = var.builder_images_version
-    jenkins_image_version  = var.jenkins_image_version
-    image_repo             = var.image_repo
+    issuer_type             = var.cert_issuer_type
+    issuer_server           = var.cert_issuer_server
+    enable_keycloak         = var.enable_keycloak
+    builder_images_version  = var.builder_images_version
+    jenkins_image_version   = var.jenkins_image_version
+    image_repo              = var.image_repo
+    ingress_controller_type = var.ingress_controller_type
   }
 
   providers = {
