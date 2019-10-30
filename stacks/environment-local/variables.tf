@@ -101,11 +101,11 @@ variable "image_repo" {
 }
 
 variable "cert_issuer_type" {
-  default = "acme"
+  default = "selfSigned"
 }
 
 variable "cert_issuer_server" {
-  default = "https://acme-v02.api.letsencrypt.org/directory"
+  default = ""
 }
 
 locals {
