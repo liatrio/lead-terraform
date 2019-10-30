@@ -19,8 +19,9 @@ data "kubernetes_secret" "keycloak_toolchain_realm" {
 
 provider "keycloak" {
   client_id     = "admin-cli"
-  username      = data.kubernetes_secret.keycloak_admin_credential.data.username
-  password      = data.kubernetes_secret.keycloak_admin_credential.data.password
+  // trick provider into not caring if username/password don't exist
+  username      = var.enable_keycloak ? data.kubernetes_secret.keycloak_admin_credential.data.username : "username"
+  password      = var.enable_keycloak ? data.kubernetes_secret.keycloak_admin_credential.data.password : "password"
   url           = "${local.protocol}://keycloak.toolchain.${var.cluster_domain}"
   initial_login = false
 }
