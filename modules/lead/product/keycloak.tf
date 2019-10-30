@@ -38,7 +38,6 @@ resource "keycloak_openid_client" "jenkins_openid_client" {
   ]
 }
 
-
 resource "keycloak_openid_user_property_protocol_mapper" "jenkins_openid_user_property_mapper_email" {
   count                      = var.enable_keycloak? 1 : 0
   realm_id                   = data.kubernetes_secret.keycloak_toolchain_realm.data.id
