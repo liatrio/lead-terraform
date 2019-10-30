@@ -13,15 +13,15 @@ variable "image_whitelist" {
 }
 
 variable "issuer_type" {
-  default = "acme"
+  default = "selfSigned"
 }
 
 variable "issuer_server" {
-  default = "https://acme-v02.api.letsencrypt.org/directory"
+  default = ""
 }
 
 variable "ingress_controller_type" {
-  default = "LoadBalancer"
+  default = "NodePort"
 }
 
 variable "config_context" {
