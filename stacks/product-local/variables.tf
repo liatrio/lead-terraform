@@ -36,7 +36,7 @@ variable "enable_istio" {
   default = true
 }
 
-variable "keycloak_enabled" {
+variable "enable_keycloak" {
   default = false
 }
 variable "builder_images_version" {
