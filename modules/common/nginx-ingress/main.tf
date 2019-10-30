@@ -1,5 +1,5 @@
 data "template_file" "nginx_ingress_values" {
-  count      = "${var.enabled ? 1 : 0}"
+  count    = "${var.enabled ? 1 : 0}"
   template = file("${path.module}/nginx-ingress-values.tpl")
 
   vars = {
@@ -24,6 +24,14 @@ resource "helm_release" "nginx_ingress" {
   timeout    = 600
 
   values = [data.template_file.nginx_ingress_values[0].rendered]
+
+  depends_on = [
+    kubernetes_service_account.nginx_ingress_service_account,
+    kubernetes_role.nginx_ingress_role,
+    kubernetes_cluster_role.nginx_ingress_role,
+    kubernetes_role_binding.nginx_ingress_role_binding,
+    kubernetes_cluster_role_binding.nginx_ingress_role_binding
+  ]
 }
 
 resource "kubernetes_service_account" "nginx_ingress_service_account" {
@@ -85,7 +93,7 @@ resource "kubernetes_role" "nginx_ingress_role" {
     resources  = ["services"]
     verbs      = ["get", "list", "watch", "update"]
   }
-  
+
   rule {
     api_groups = ["networking.k8s.io"]
     resources  = ["ingresses"]
