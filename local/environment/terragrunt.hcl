@@ -28,17 +28,14 @@ inputs = {
   enable_gitlab      = false
   enable_istio       = false
   enable_grafeas     = false
-  enable_keycloak    = true
-  enable_mailhog     = true
+  enable_keycloak    = false
+  enable_mailhog     = false
   enable_operators   = true
   enable_sonarqube   = false
   enable_xray        = false
 
   # This will conflict with Istio since it's also configured as a LoadBalancer
   # So ensure `enable_istio = false` before uncommenting this
-  ingress_controller_type         = "LoadBalancer"
-  ingress_external_traffic_policy = "Local"
-
-  cert_issuer_type   = "selfSigned"
-  cert_issuer_server = ""
+  # ingress_controller_type         = "LoadBalancer"
+  # ingress_external_traffic_policy = "Local"
 }

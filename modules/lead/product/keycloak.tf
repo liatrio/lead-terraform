@@ -19,8 +19,9 @@ data "kubernetes_secret" "keycloak_toolchain_realm" {
 
 provider "keycloak" {
   client_id     = "admin-cli"
-  username      = data.kubernetes_secret.keycloak_admin_credential.data.username
-  password      = data.kubernetes_secret.keycloak_admin_credential.data.password
+  // trick provider into not caring if username/password don't exist
+  username      = var.enable_keycloak ? data.kubernetes_secret.keycloak_admin_credential.data.username : "username"
+  password      = var.enable_keycloak ? data.kubernetes_secret.keycloak_admin_credential.data.password : "password"
   url           = "${local.protocol}://keycloak.toolchain.${var.cluster_domain}"
   initial_login = false
 }
@@ -37,7 +38,6 @@ resource "keycloak_openid_client" "jenkins_openid_client" {
     "${local.protocol}://jenkins.${module.toolchain_namespace.name}.${var.cluster_domain}/securityRealm/finishLogin" # for dns routable or via ingress
   ]
 }
-
 
 resource "keycloak_openid_user_property_protocol_mapper" "jenkins_openid_user_property_mapper_email" {
   count                      = var.enable_keycloak? 1 : 0

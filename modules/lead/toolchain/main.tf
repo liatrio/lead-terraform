@@ -63,8 +63,8 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
   }
   rule {
     api_groups = ["networking.k8s.io"]
-    resources  = ["networkpolicies"]
-    verbs      = ["get", "create", "watch", "delete", "list", "patch"]
+    resources  = ["ingresses", "ingresses/status", "networkpolicies"]
+    verbs      = ["get", "create", "update", "watch", "delete", "list", "patch"]
   }
   rule {
     api_groups = ["certmanager.k8s.io"]
