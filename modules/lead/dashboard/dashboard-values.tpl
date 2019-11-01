@@ -3,12 +3,19 @@ elasticsearch:
     storageClassName: gp2
   resources:
     requests:
-      cpu: 10m
-      memory: 1.5Gi
-    limits:
       cpu: 100m
-      memory: 3Gi
-
+      memory: 2Gi
+    limits:
+      cpu: 500m
+      memory: 3.5Gi
+kibana:
+  resources:
+    requests:
+      cpu: 20m
+      memory: 400Mi
+    limits:
+      cpu: 200m
+      memory: 600Mi
 grafana:
   ingress:
     annotations:
@@ -34,15 +41,22 @@ grafana:
   sidecar:
     dashboards:
       searchNamespace: ${namespace}
+    resources:
+      requests:
+        cpu: 10m
+        memory: 100Mi
+      limits:
+        cpu: 100m
+        memory: 150Mi
 logstash:
   logstashJavaOpts: "-Djava.security.egd=file:/dev/urandom"
   resources:
     requests:
       cpu: 10m
-      memory: 500Mi
+      memory: 600Mi
     limits:
       cpu: 400m
-      memory: 1.5Gi
+      memory: 1.1Gi
 logstash-jenkins:
   logstashJavaOpts: "-Djava.security.egd=file:/dev/urandom"
   resources:
