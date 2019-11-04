@@ -28,7 +28,7 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
   }
   rule {
     api_groups = ["storage.k8s.io"]
-    resources  = ["storageclasses"]
+    resources  = ["storageclasses", "csinodes"]
     verbs      = ["watch", "list", "get"]
   }
   rule {
