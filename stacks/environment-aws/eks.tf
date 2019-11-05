@@ -104,7 +104,7 @@ resource "aws_security_group" "elb" {
 
 module "eks" {
   source                               = "terraform-aws-modules/eks/aws"
-  version                              = "6.0.0"
+  version                              = "7.0.0"
   cluster_version                      = "1.14"
   #cluster_enabled_log_types            = ["api","audit","authenticator","controllerManager","scheduler"]
   cluster_name                         = var.cluster
@@ -116,6 +116,13 @@ module "eks" {
   write_kubeconfig                     = false
   permissions_boundary                 = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${aws_iam_policy.workspace_role_boundary.name}"
   manage_worker_iam_resources          = true
+  manage_worker_autoscaling_policy     = true
+  attach_worker_autoscaling_policy     = false
+
+  workers_additional_policies = [
+    "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+  ]
+
   worker_groups = [
     {
       name                  = "essential0"
@@ -132,7 +139,6 @@ module "eks" {
       enabled_metrics       = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]
       pre_userdata          = local.ssm_init
       kubelet_extra_args    = "--node-labels=kubernetes.io/lifecycle=essential --register-with-taints=${var.essential_taint_key}=true:NoSchedule"
-      iam_instance_profile_name = aws_iam_instance_profile.worker_node_profile.name
     }
   ]
 
