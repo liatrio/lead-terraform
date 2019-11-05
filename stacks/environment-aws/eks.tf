@@ -118,6 +118,11 @@ module "eks" {
   manage_worker_iam_resources          = true
   manage_worker_autoscaling_policy     = true
   attach_worker_autoscaling_policy     = false
+
+  workers_additional_policies = [
+    "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+  ]
+
   worker_groups = [
     {
       name                  = "essential0"
@@ -134,7 +139,6 @@ module "eks" {
       enabled_metrics       = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]
       pre_userdata          = local.ssm_init
       kubelet_extra_args    = "--node-labels=kubernetes.io/lifecycle=essential --register-with-taints=${var.essential_taint_key}=true:NoSchedule"
-      iam_instance_profile_name = aws_iam_instance_profile.worker_node_profile.name
     }
   ]
 
