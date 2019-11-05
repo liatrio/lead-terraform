@@ -8,11 +8,59 @@ resource "aws_iam_openid_connect_provider" "default" {
   thumbprint_list = ["9e99a48a9960b14926bb7f3b02e22da2b0ab7280"]
 }
 
-### DELETE ME once we have terragrunt using IAM role attachment
-resource "aws_iam_role_policy_attachment" "worker_operator_jenkins" {
-  role = module.eks.worker_iam_role_name
-  policy_arn = aws_iam_policy.operator_jenkins.arn
+### Worker Node Permissions
+
+resource "aws_iam_role" "worker_node_role" {
+  name = "${var.cluster}_worker_node_role"
+  assume_role_policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": "sts:AssumeRole",
+            "Principal": {
+               "Service": "ec2.amazonaws.com"
+            },
+            "Effect": "Allow",
+            "Sid": ""
+        }
+    ]
 }
+EOF
+}
+
+
+resource "aws_iam_role_policy_attachment" "worker_ssm" {
+  role = module.eks.worker_iam_role_name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
+resource "aws_iam_role_policy_attachment" "worker_ssm_role_attachment" {
+  role = aws_iam_role.worker_node_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
+resource "aws_iam_role_policy_attachment" "worker_eks_role_attachment" {
+  role = aws_iam_role.worker_node_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
+}
+
+resource "aws_iam_role_policy_attachment" "worker_ecr_role_attachment" {
+  role = aws_iam_role.worker_node_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+}
+
+resource "aws_iam_role_policy_attachment" "worker_eks_cni_role_attachment" {
+  role = aws_iam_role.worker_node_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+}
+
+resource "aws_iam_instance_profile" "worker_node_profile" {
+  role = "${aws_iam_role.worker_node_role.name}"
+}
+
+### End Worker Node Permissions
+>>>>>>> Removing now that role attachment should be working.
 
 resource "aws_iam_role" "external_dns_service_account" {
   name = "${var.cluster}_external_dns_service_account"
