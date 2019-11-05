@@ -104,7 +104,7 @@ resource "aws_security_group" "elb" {
 
 module "eks" {
   source                               = "terraform-aws-modules/eks/aws"
-  version                              = "6.0.0"
+  version                              = "6.0.2"
   cluster_version                      = "1.14"
   #cluster_enabled_log_types            = ["api","audit","authenticator","controllerManager","scheduler"]
   cluster_name                         = var.cluster
@@ -116,6 +116,8 @@ module "eks" {
   write_kubeconfig                     = false
   permissions_boundary                 = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${aws_iam_policy.workspace_role_boundary.name}"
   manage_worker_iam_resources          = true
+  manage_worker_autoscaling_policy     = true
+  attach_worker_autoscaling_policy     = false
   worker_groups = [
     {
       name                  = "essential0"

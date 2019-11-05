@@ -197,49 +197,9 @@ resource "aws_iam_role" "cluster_autoscaler_service_account" {
 EOF
 }
 
-resource "aws_iam_policy" "cluster_autoscaler" {
-  name = "${var.cluster}-cluster-autoscaler"
-
-  policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "eksWorkerAutoscalingAll",
-            "Effect": "Allow",
-            "Action": [
-                "ec2:DescribeLaunchTemplateVersions",
-                "autoscaling:DescribeTags",
-                "autoscaling:DescribeLaunchConfigurations",
-                "autoscaling:DescribeAutoScalingInstances",
-                "autoscaling:DescribeAutoScalingGroups"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Sid": "eksWorkerAutoscalingOwn",
-            "Effect": "Allow",
-            "Action": [
-                "autoscaling:UpdateAutoScalingGroup",
-                "autoscaling:TerminateInstanceInAutoScalingGroup",
-                "autoscaling:SetDesiredCapacity"
-            ],
-            "Resource": "*",
-            "Condition": {
-                "StringEquals": {
-                    "autoscaling:ResourceTag/k8s.io/cluster-autoscaler/enabled": "true",
-                    "autoscaling:ResourceTag/kubernetes.io/cluster/${var.cluster}": "owned"
-                }
-            }
-        }
-    ]
-}
-EOF
-}
-
 resource "aws_iam_role_policy_attachment" "cluster_autoscaler" {
   role = aws_iam_role.cluster_autoscaler_service_account.name
-  policy_arn = aws_iam_policy.cluster_autoscaler.arn
+  policy_arn = module.eks.worker_autoscaling_policy_arn
 }
 
 resource "aws_iam_role" "operator_jenkins_service_account" {
