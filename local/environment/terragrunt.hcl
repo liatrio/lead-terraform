@@ -21,7 +21,7 @@ inputs = {
   cluster         = "docker-for-desktop"
   sdm_version     = "0.4.0-212-g6a776a7"
 
-  builder_images_version = "v1.0.16-3-g541d352"
+  builder_images_version = "v1.0.16-7-g7c121bb"
   jenkins_image_version = "v1.0.16-3-g541d352"
 
   enable_artifactory = true

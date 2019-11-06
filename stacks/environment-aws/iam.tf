@@ -8,12 +8,6 @@ resource "aws_iam_openid_connect_provider" "default" {
   thumbprint_list = ["9e99a48a9960b14926bb7f3b02e22da2b0ab7280"]
 }
 
-### DELETE ME once we have terragrunt using IAM role attachment
-resource "aws_iam_role_policy_attachment" "worker_operator_jenkins" {
-  role = module.eks.worker_iam_role_name
-  policy_arn = aws_iam_policy.operator_jenkins.arn
-}
-
 resource "aws_iam_role" "external_dns_service_account" {
   name = "${var.cluster}_external_dns_service_account"
 
