@@ -103,9 +103,6 @@ module "toolchain" {
   ingress_controller_type = "LoadBalancer"
   crd_waiter              = module.infrastructure.crd_waiter
   grafeas_version         = var.grafeas_version
-  operator_jenkins_service_account_annotations = {
-      "eks.amazonaws.com/role-arn" = aws_iam_role.operator_jenkins_service_account.arn
-  }
 
   smtp_host  = "email-smtp.${var.region}.amazonaws.com"
   smtp_port     = "587"
