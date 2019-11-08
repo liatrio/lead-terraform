@@ -160,7 +160,7 @@ resource "aws_iam_role" "operator_jenkins_service_account" {
       "Action": "sts:AssumeRoleWithWebIdentity",
       "Condition": {
         "StringEquals": {
-          "${replace(aws_iam_openid_connect_provider.default.url, "https://", "")}:sub": "system:serviceaccount:${var.system_namespace}:operator_jenkins"
+          "${replace(aws_iam_openid_connect_provider.default.url, "https://", "")}:sub": "system:serviceaccount:${module.toolchain.namespace}:operator-jenkins"
         }
       }
     }

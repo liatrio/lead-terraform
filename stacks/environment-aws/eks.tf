@@ -120,7 +120,11 @@ module "eks" {
   attach_worker_autoscaling_policy     = false
 
   workers_additional_policies = [
-    "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+    "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
+
+    // TODO: remove the following policy from the worker node role once terraform is bumped 
+    //       to version that includes fix for: https://github.com/hashicorp/terraform/issues/22992
+    aws_iam_policy.operator_jenkins.arn 
   ]
 
   worker_groups = [
