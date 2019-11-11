@@ -192,8 +192,8 @@ master:
                         ttyEnabled: true
                         resourceRequestCpu: 128m
                         resourceLimitCpu: 256m
-                        resourceRequestMemory: 128Mi
-                        resourceLimitMemory: 256Mi
+                        resourceRequestMemory: 256Mi 
+                        resourceLimitMemory: 1024Mi 
                     slaveConnectTimeout: 100
                     volumes:
                       - secretVolume:
