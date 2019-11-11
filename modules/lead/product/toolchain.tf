@@ -184,3 +184,61 @@ resource "kubernetes_role_binding" "jenkins_kubernetes_credentials" {
     namespace = module.toolchain_namespace.name
   }
 }
+
+resource "kubernetes_cluster_role" "jenkins_kubernetes_credentials" {
+  provider = kubernetes.toolchain
+  metadata {
+    name      = "${module.toolchain_namespace.name}-jenkins-kubernetes-credentials"
+
+    labels = {
+      "app.kubernetes.io/name"       = "jenkins"
+      "app.kubernetes.io/instance"   = "jenkins"
+      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/managed-by" = "Terraform"
+    }
+
+    annotations = {
+      description = "Permission required for Jenkins' Kubernetes Credentials plugin to manage builds"
+      source-repo = "https://github.com/liatrio/lead-toolchain"
+    }
+  }
+
+  rule {
+    api_groups = ["apiextensions.k8s.io"]
+    resources  = ["customresourcedefinitions"]
+    verbs      = ["create", "get", "list"]
+  }
+}
+
+resource "kubernetes_cluster_role_binding" "jenkins_kubernetes_credentials" {
+  provider = kubernetes.toolchain
+  metadata {
+    name      = "${module.toolchain_namespace.name}-jenkins-kubernetes-credentials"
+    namespace = module.toolchain_namespace.name
+
+    labels = {
+      "app.kubernetes.io/name"       = "jenkins"
+      "app.kubernetes.io/instance"   = "jenkins"
+      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/managed-by" = "Terraform"
+    }
+
+    annotations = {
+      description = "Permission required for Jenkins' Kubernetes Credentials plugin to read secrets"
+      source-repo = "https://github.com/liatrio/lead-toolchain"
+    }
+  }
+
+  cluster_role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "Role"
+    name      = kubernetes_cluster_role.jenkins_kubernetes_credentials.metadata[0].name
+    namespace = module.toolchain_namespace.name
+  }
+
+  subject {
+    kind      = "ServiceAccount"
+    name      = kubernetes_service_account.jenkins.metadata[0].name
+    namespace = module.toolchain_namespace.name
+  }
+}
