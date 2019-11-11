@@ -228,9 +228,9 @@ resource "kubernetes_cluster_role_binding" "jenkins_kubernetes_credentials" {
     }
   }
 
-  cluster_role_ref {
+  role_ref {
     api_group = "rbac.authorization.k8s.io"
-    kind      = "Role"
+    kind      = "ClusterRole"
     name      = kubernetes_cluster_role.jenkins_kubernetes_credentials.metadata[0].name
   }
 
