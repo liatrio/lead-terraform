@@ -199,6 +199,9 @@ master:
                       - secretVolume:
                           mountPath: "/root/.m2"
                           secretName: "jenkins-artifactory-maven-settings"
+                      - emptyDirVolume:
+                          mountPath: "/root/.m2/repository"
+                          memory: false
                   - name: "lead-toolchain-gitops"
                     label: "lead-toolchain-gitops"
                     nodeUsageMode: NORMAL
