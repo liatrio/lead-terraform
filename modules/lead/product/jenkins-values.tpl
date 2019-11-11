@@ -197,8 +197,8 @@ master:
                     slaveConnectTimeout: 100
                     volumes:
                       - secretVolume:
-                          mountPath: "/root/.docker"
-                          secretName: "jenkins-artifactory-dockercfg"
+                          mountPath: "/root/.m2"
+                          secretName: "jenkins-artifactory-maven-settings"
                   - name: "lead-toolchain-gitops"
                     label: "lead-toolchain-gitops"
                     nodeUsageMode: NORMAL
