@@ -140,6 +140,16 @@ resource "kubernetes_role" "jenkins_kubernetes_credentials" {
     resources  = ["secrets"]
     verbs      = ["get", "watch", "list"]
   }
+  rule {
+    api_groups = ["stable.liatr.io"]
+    resources  = ["builds"]
+    verbs      = ["create", "update", "patch", "get", "watch", "list"]
+  }
+  rule {
+    api_groups = [""]
+    resources  = ["events"]
+    verbs      = ["create", "get", "watch", "list"]
+  }
 }
 
 // Bind Kubernetes secrets role to Jenkins service account
