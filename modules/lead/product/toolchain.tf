@@ -214,7 +214,6 @@ resource "kubernetes_cluster_role_binding" "jenkins_kubernetes_credentials" {
   provider = kubernetes.toolchain
   metadata {
     name      = "${module.toolchain_namespace.name}-jenkins-kubernetes-credentials"
-    namespace = module.toolchain_namespace.name
 
     labels = {
       "app.kubernetes.io/name"       = "jenkins"
@@ -233,7 +232,6 @@ resource "kubernetes_cluster_role_binding" "jenkins_kubernetes_credentials" {
     api_group = "rbac.authorization.k8s.io"
     kind      = "Role"
     name      = kubernetes_cluster_role.jenkins_kubernetes_credentials.metadata[0].name
-    namespace = module.toolchain_namespace.name
   }
 
   subject {
