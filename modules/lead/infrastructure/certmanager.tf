@@ -30,7 +30,7 @@ resource "helm_release" "cert_manager" {
   chart      = "jetstack/cert-manager"
   repository = data.helm_repository.cert_manager.name
   timeout    = 90
-  version    = "0.7.2"
+  version    = "v0.11.0"
   wait       = true
 
   set {
@@ -40,6 +40,10 @@ resource "helm_release" "cert_manager" {
   set {
     name  = "ingressShim.defaultIssuerKind"
     value = "Issuer"
+  }
+  set {
+    name  = "global.leaderElection.namespace"
+    value = module.system_namespace.name
   }
   set {
     name  = "extraArgs[0]"
