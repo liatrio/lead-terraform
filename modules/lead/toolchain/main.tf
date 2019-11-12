@@ -71,7 +71,7 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
     verbs      = ["get", "create", "update", "watch", "delete", "list", "patch"]
   }
   rule {
-    api_groups = ["certmanager.k8s.io"]
+    api_groups = ["cert-manager.io"]
     resources  = ["issuers", "certificates"]
     verbs      = ["get", "create", "watch", "delete", "list", "patch"]
   }

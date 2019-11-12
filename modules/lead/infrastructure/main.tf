@@ -10,7 +10,6 @@ module "system_namespace" {
   }
   labels = {
     "openpolicyagent.org/webhook"           = "ignore"
-    "certmanager.k8s.io/disable-validation" = "true"
   }
 }
 
@@ -60,8 +59,8 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
     verbs      = ["create"]
   }
   rule {
-    api_groups = ["admission.certmanager.k8s.io"]
-    resources  = ["certificates", "issuers", "clusterissuers"]
+    api_groups = ["admission.cert-manager.io"]
+    resources  = ["certificates", "issuers", "clusterissuers", "certificaterequests"]
     verbs      = ["get", "create", "delete", "list", "patch"]
   }
   rule {
@@ -70,8 +69,13 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
     verbs      = ["list", "watch"]
   }
   rule {
-    api_groups = ["certmanager.k8s.io"]
-    resources  = ["certificates", "certificates/finalizers", "issuers", "clusterissuers", "orders", "orders/finalizers", "challenges"]
+    api_groups = ["cert-manager.io"]
+    resources  = ["certificates", "certificates/finalizers", "issuers", "clusterissuers", "certificaterequests"]
+    verbs      = ["*"]
+  }
+  rule {
+    api_groups = ["acme.cert-manager.io"]
+    resources  = ["orders", "orders/finalizers", "challenges"]
     verbs      = ["*"]
   }
   rule {
