@@ -16,15 +16,14 @@ module "ca-issuer" {
 module "certificate" {
   source = "../../common/certificates"
 
-  enabled   = var.enable_grafeas
-  name = "grafeas-cert"
-  namespace = var.namespace
-  domain = "grafeas-server"
-  acme_enabled = false
-  issuer_name = module.ca-issuer.name
+  enabled         = var.enable_grafeas
+  name            = "grafeas-cert"
+  namespace       = var.namespace
+  domain          = "grafeas-server"
+  issuer_name     = module.ca-issuer.name
   certificate_crd = var.crd_waiter
-  altname = "localhost"
-  wait_for_cert = true
+  altname         = "localhost"
+  wait_for_cert   = true
 }
 
 resource "helm_release" "grafeas" {

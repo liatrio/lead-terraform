@@ -31,7 +31,7 @@ module "staging_certificate" {
   namespace = "istio-system"
   name = module.staging_namespace.name
   domain = "${module.staging_namespace.name}.${var.cluster_domain}"
-  enabled = "${var.enable_istio}"
+  enabled = var.enable_istio
   certificate_crd = "set"
 
   providers = {
@@ -44,7 +44,7 @@ module "staging_ingress" {
   source                  = "../../common/nginx-ingress"
   namespace               = module.staging_namespace.name
   ingress_controller_type = var.ingress_controller_type
-  enabled                 = "${var.enable_istio ? false : true}"
+  enabled                 = var.enable_istio ? false : true
 
   providers = {
     helm       = helm.staging

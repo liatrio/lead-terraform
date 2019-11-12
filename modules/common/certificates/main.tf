@@ -3,7 +3,6 @@ data "template_file" "certificate_values" {
 
   vars = {
     domain = var.domain
-    acme_enabled = var.acme_enabled
     issuer_name = var.issuer_name
     altname = var.altname
     wait_for_cert = var.wait_for_cert

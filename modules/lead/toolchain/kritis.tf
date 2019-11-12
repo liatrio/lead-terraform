@@ -1,14 +1,13 @@
 module "kritis_certificate" {
   source = "../../common/certificates"
 
-  enabled = var.enable_grafeas
-  name = "kritis-cert"
-  namespace = var.namespace
-  domain = "kritis-validation-hook.${var.namespace}.svc"
-  acme_enabled = false
-  issuer_name = module.ca-issuer.name
+  enabled         = var.enable_grafeas
+  name            = "kritis-cert"
+  namespace       = var.namespace
+  domain          = "kritis-validation-hook.${var.namespace}.svc"
+  issuer_name     = module.ca-issuer.name
   certificate_crd = var.crd_waiter
-  wait_for_cert = true
+  wait_for_cert   = true
 }
 
 resource "helm_release" "kritis-crd" {
