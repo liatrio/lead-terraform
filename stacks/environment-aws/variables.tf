@@ -51,7 +51,7 @@ variable "essential_asg_desired_capacity" {
 }
 
 variable "essential_asg_max_size" {
-  default = "5"
+  default = "10"
 }
 
 variable "essential_instance_type" {
