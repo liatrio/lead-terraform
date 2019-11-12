@@ -8,6 +8,58 @@ resource "aws_iam_openid_connect_provider" "default" {
   thumbprint_list = ["9e99a48a9960b14926bb7f3b02e22da2b0ab7280"]
 }
 
+resource "aws_iam_role" "cert_manager_service_account" {
+  name = "${var.cluster}_cert_manager_service_account"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "${aws_iam_openid_connect_provider.default.arn}"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "${replace(aws_iam_openid_connect_provider.default.url, "https://", "")}:sub": "system:serviceaccount:${var.system_namespace}:cert-manager"
+        }
+      }
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy" "cert_manager" {
+  name = "${var.cluster}-cert-manager"
+  role = aws_iam_role.cert_manager_service_account.name
+
+  policy = <<EOF
+{
+ "Version": "2012-10-17",
+ "Statement": [
+    {
+        "Effect": "Allow",
+        "Action": "route53:GetChange",
+        "Resource": "arn:aws:route53:::change/*"
+    },
+    {
+        "Effect": "Allow",
+        "Action": "route53:ChangeResourceRecordSets",
+        "Resource": "arn:aws:route53:::hostedzone/*"
+    },
+    {
+        "Effect": "Allow",
+        "Action": "route53:ListHostedZonesByName",
+        "Resource": "*"
+    }
+ ]
+}
+EOF
+}
+
 resource "aws_iam_role" "external_dns_service_account" {
   name = "${var.cluster}_external_dns_service_account"
 

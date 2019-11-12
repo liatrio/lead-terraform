@@ -16,6 +16,7 @@ module "infrastructure" {
   issuer_server      = var.cert_issuer_server
   uptime             = var.uptime
   downscaler_exclude_namespaces = var.downscaler_exclude_namespaces
+  cert_manager_service_account_role_arn = aws_iam_role.cert_manager_service_account.arn
   essential_toleration_values = data.template_file.essential_toleration.rendered
   external_dns_chart_values  = data.template_file.external_dns_values.rendered
   external_dns_service_account_annotations = {

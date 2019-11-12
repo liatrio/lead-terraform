@@ -49,6 +49,14 @@ resource "helm_release" "cert_manager" {
     name  = "extraArgs[0]"
     value = "--issuer-ambient-credentials"
   }
+  set {
+    name  = "serviceAccount.name"
+    value = "cert-manager"
+  }
+  set {
+    name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+    value = var.cert_manager_service_account_role_arn
+  }
 
   depends_on = [
     helm_release.cert_manager_crds,
