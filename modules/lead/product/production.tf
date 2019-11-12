@@ -53,12 +53,12 @@ module "production_ingress" {
 }
 
 module "production_issuer" {
-  enabled     = "${var.enable_istio ? false : true}"
-  source      = "../../common/cert-issuer"
-  namespace   = module.production_namespace.name
-  issuer_type = var.issuer_type
+  enabled       = var.enable_istio ? false : true
+  source        = "../../common/cert-issuer"
+  namespace     = module.production_namespace.name
+  issuer_type   = var.issuer_type
   issuer_server = var.issuer_server
-  crd_waiter  = ""
+  crd_waiter    = ""
 
   providers = {
     helm = helm.production

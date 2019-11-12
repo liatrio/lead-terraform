@@ -1,10 +1,19 @@
+issuerName: lead-namespace-issuer
 acme:
-  enabled: false
+  enabled: true
   server: https://acme-v02.api.letsencrypt.org/directory
   email: cloudservices@liatr.io
-  dnsProvider: {}
+  httpProvider:
+    ingressClass: nginx
+  dnsProvider:
+    type: route53
+    route53:
+      region: us-east-1
+      hostedZoneID: foo
+      role: bar
+  solver: dns
 ca:
-  enable: false
+  enabled: false
   secret: ca-certificate
 selfSigned:
-  enabled: true
+  enabled: false

@@ -40,6 +40,10 @@ module "toolchain_issuer" {
   issuer_type   = var.issuer_type
   issuer_server = "https://acme-v02.api.letsencrypt.org/directory"
   crd_waiter    = var.crd_waiter
+
+  // variables below are only relevant if var.issuer_type == "acme"
+  acme_solver                 = "http"
+  provider_http_ingress_class = "nginx"
 }
 
 resource "kubernetes_cluster_role" "tiller_cluster_role" {

@@ -4,14 +4,14 @@ acme:
   server: ${ issuer_server }
   email: cloudservices@liatr.io
   httpProvider:
-    enabled: ${provider_http_enabled}
     ingressClass: ${provider_http_ingress_class}
   dnsProvider:
-    enabled: ${provider_dns_enabled}
-    name: ${provider_dns_name}
-    typeIsRoute53: ${ provider_dns_type == "route53" }
-    region: ${provider_dns_region}
-    hostedZoneID: ${provider_dns_hosted_zone}
+    type: ${provider_dns_type}
+    route53:
+      region: ${route53_dns_region}
+      hostedZoneID: ${route53_dns_hosted_zone}
+      role: ${route53_dns_role}
+  solver: ${acme_solver}
 ca:
   enabled: ${issuer_type == "ca"}
   secret: ${ca_secret}
