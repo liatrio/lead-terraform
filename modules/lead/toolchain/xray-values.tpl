@@ -4,6 +4,7 @@ ingress:
   - ${ingress_hostname}
   annotations:
     kubernetes.io/tls-acme: "true"
+    acme.cert-manager.io/http01-edit-in-place: "true"
   tls:
   - secretName: xray-ingress-tls    
     hosts:
