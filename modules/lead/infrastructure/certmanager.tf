@@ -30,9 +30,9 @@ resource "kubernetes_cluster_role" "cert_manager_leaderelection" {
     name = "cert-manager-leaderelection"
   }
   rule {
-    api_groups = ["v1"]
-    resources  = ["pods"]
-    verbs      = ["get"]
+    api_groups = ["metrics.k8s.io"]
+    resources  = ["nodes","pods"]
+    verbs      = ["get", "list", "watch"]
   }
 }
 
