@@ -125,7 +125,6 @@ master:
                         resourceLimitCpu: 256m
                         resourceRequestMemory: 128Mi
                         resourceLimitMemory: 256Mi
-                    idleMinutes: 60
                     envVars:
                       - envVar:
                           key: "SKAFFOLD_DEFAULT_REPO"
