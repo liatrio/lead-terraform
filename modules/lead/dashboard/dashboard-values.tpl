@@ -21,6 +21,7 @@ grafana:
     annotations:
       kubernetes.io/ingress.class: "nginx"
       kubernetes.io/tls-acme: "true"
+      acme.cert-manager.io/http01-edit-in-place: "true"
       nginx.ingress.kubernetes.io/ssl-redirect: "true"
     tls:
     - hosts:

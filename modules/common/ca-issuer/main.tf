@@ -47,12 +47,12 @@ resource "kubernetes_secret" "ca" {
 }
 
 module "cert-issuer" {
-  source = "../cert-issuer"
+  source  = "../cert-issuer"
   enabled = var.enabled
 
-  namespace   = "${var.namespace}"
+  namespace   = var.namespace
   issuer_name = "ca-issuer-${var.name}"
   issuer_type = "ca"
   ca_secret   = "ca-issuer-${var.name}"
-  crd_waiter  = "${var.cert-manager-crd}"
+  crd_waiter  = var.cert-manager-crd
 }

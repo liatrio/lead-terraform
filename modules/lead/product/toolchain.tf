@@ -65,11 +65,15 @@ module "toolchain_ingress" {
 }
 
 module "toolchain_issuer" {
-  source      = "../../common/cert-issuer"
-  namespace   = module.toolchain_namespace.name
-  issuer_type = var.issuer_type
+  source        = "../../common/cert-issuer"
+  namespace     = module.toolchain_namespace.name
+  issuer_type   = var.issuer_type
   issuer_server = var.issuer_server
-  crd_waiter  = ""
+  crd_waiter    = ""
+
+  // variables below are only relevant if var.issuer_type == "acme"
+  acme_solver                 = "http"
+  provider_http_ingress_class = "nginx"
 
   providers = {
     helm = helm.toolchain
@@ -115,7 +119,7 @@ resource "kubernetes_service_account" "jenkins" {
   automount_service_account_token = true
 }
 
-// Add roll to allow Jenkins to read secrets
+// Add role to allow Jenkins to read secrets
 resource "kubernetes_role" "jenkins_kubernetes_credentials" {
   provider = kubernetes.toolchain
   metadata {

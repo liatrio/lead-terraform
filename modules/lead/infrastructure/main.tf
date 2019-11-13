@@ -1,5 +1,6 @@
-provider "helm" {
-}
+provider "helm" {}
+
+provider "kubernetes" {}
 
 module "system_namespace" {
   source    = "../../common/namespace"
@@ -10,16 +11,18 @@ module "system_namespace" {
   }
   labels = {
     "openpolicyagent.org/webhook"           = "ignore"
-    "certmanager.k8s.io/disable-validation" = "true"
   }
 }
 
 module "system_issuer" {
-  source          = "../../common/cert-issuer"
-  namespace       = module.system_namespace.name
-  issuer_type     = var.issuer_type
-  issuer_server   = var.issuer_server
-  crd_waiter      = null_resource.cert_manager_crd_delay.id
+  source                      = "../../common/cert-issuer"
+  namespace                   = module.system_namespace.name
+  issuer_type                 = var.issuer_type
+  issuer_server               = var.issuer_server
+  crd_waiter                  = null_resource.cert_manager_crd_delay.id
+
+  acme_solver                 = "http"
+  provider_http_ingress_class = "nginx"
 }
 
 resource "kubernetes_cluster_role" "tiller_cluster_role" {
@@ -57,8 +60,8 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
     verbs      = ["create"]
   }
   rule {
-    api_groups = ["admission.certmanager.k8s.io"]
-    resources  = ["certificates", "issuers", "clusterissuers"]
+    api_groups = ["admission.cert-manager.io"]
+    resources  = ["certificates", "issuers", "clusterissuers", "certificaterequests"]
     verbs      = ["get", "create", "delete", "list", "patch"]
   }
   rule {
@@ -67,8 +70,13 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
     verbs      = ["list", "watch"]
   }
   rule {
-    api_groups = ["certmanager.k8s.io"]
-    resources  = ["certificates", "certificates/finalizers", "issuers", "clusterissuers", "orders", "orders/finalizers", "challenges"]
+    api_groups = ["cert-manager.io"]
+    resources  = ["certificates", "certificates/finalizers", "issuers", "clusterissuers", "certificaterequests", "certificates/status", "certificaterequests/status" , "issuers/status", "clusterissuers/status"]
+    verbs      = ["*"]
+  }
+  rule {
+    api_groups = ["acme.cert-manager.io"]
+    resources  = ["orders", "orders/finalizers", "challenges", "challenges/finalizers", "challenges/status", "orders/status"]
     verbs      = ["*"]
   }
   rule {
@@ -103,7 +111,7 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
   }
   rule {
     api_groups = ["extensions"]
-    resources  = ["ingresses","deployments","daemonsets"]
+    resources  = ["ingresses","deployments","daemonsets","ingresses/finalizers"]
     verbs      = ["*"]
   }
   rule {

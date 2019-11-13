@@ -1,4 +1,4 @@
-apiVersion: certmanager.k8s.io/v1alpha1
+apiVersion: cert-manager.io/v1alpha2
 kind: Issuer
 metadata:
   name: {{ .Values.issuerName }}
@@ -12,18 +12,19 @@ spec:
     email: {{ .Values.acme.email }}
     privateKeySecretRef:
       name: lead-issuer-key
-{{- if .Values.acme.httpProvider.enabled }}
-    http01: 
-      ingressClass: {{ .Values.acme.httpProvider.ingressClass }}
-{{- end}}
-{{- if .Values.acme.dnsProvider.enabled }}
-    dns01:
-      providers: 
-      - name: {{ .Values.acme.dnsProvider.name }}
-{{- if .Values.acme.dnsProvider.typeIsRoute53 }}
-        route53:
-          region: {{ .Values.acme.dnsProvider.region }}
-          hostedZoneID: {{ .Values.acme.dnsProvider.hostedZoneID }}
+    solvers:
+      - selector: {}
+{{- if eq .Values.acme.solver "http" }}
+        http01:
+          ingress:
+            class: {{ .Values.acme.httpProvider.ingressClass }}
+{{- else if eq .Values.acme.solver "dns" }}
+        dns01:
+{{- if eq .Values.acme.dnsProvider.type "route53" }}
+          route53:
+            region: {{ .Values.acme.dnsProvider.route53.region }}
+            hostedZoneID: {{ .Values.acme.dnsProvider.route53.hostedZoneID }}
+            role: {{ .Values.acme.dnsProvider.route53.role }}
 {{- end}}
 {{- end}}
 {{- end}}

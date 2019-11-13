@@ -31,7 +31,7 @@ module "production_certificate" {
   namespace = "istio-system"
   name = module.production_namespace.name
   domain = "${module.production_namespace.name}.${var.cluster_domain}"
-  enabled = "${var.enable_istio}"
+  enabled = var.enable_istio
   certificate_crd = "set"
 
   providers = {
@@ -44,7 +44,7 @@ module "production_ingress" {
   source                  = "../../common/nginx-ingress"
   namespace               = module.production_namespace.name
   ingress_controller_type = var.ingress_controller_type
-  enabled                 = "${var.enable_istio ? false : true}"
+  enabled                 = var.enable_istio ? false : true
 
   providers = {
     helm       = helm.production
@@ -53,12 +53,12 @@ module "production_ingress" {
 }
 
 module "production_issuer" {
-  enabled     = "${var.enable_istio ? false : true}"
-  source      = "../../common/cert-issuer"
-  namespace   = module.production_namespace.name
-  issuer_type = var.issuer_type
+  enabled       = var.enable_istio ? false : true
+  source        = "../../common/cert-issuer"
+  namespace     = module.production_namespace.name
+  issuer_type   = var.issuer_type
   issuer_server = var.issuer_server
-  crd_waiter  = ""
+  crd_waiter    = ""
 
   providers = {
     helm = helm.production

@@ -54,9 +54,10 @@ grafana:
     annotations:
       kubernetes.io/ingress.class: "nginx"
       kubernetes.io/tls-acme: "true"
+      acme.cert-manager.io/http01-edit-in-place: "true"
       nginx.ingress.kubernetes.io/ssl-redirect: "true"
       nginx.ingress.kubernetes.io/rewrite-target: "/"
-      certmanager.k8s.io/issuer: "letsencrypt-dns"
+      cert-manager.io/issuer: "letsencrypt-dns"
     tls:
     - hosts:
       - ${domain}
@@ -84,8 +85,9 @@ kiali:
     annotations:
       kubernetes.io/ingress.class: "nginx"
       kubernetes.io/tls-acme: "true"
+      acme.cert-manager.io/http01-edit-in-place: "true"
       nginx.ingress.kubernetes.io/ssl-redirect: "true"
-      certmanager.k8s.io/issuer: "letsencrypt-dns"
+      cert-manager.io/issuer: "letsencrypt-dns"
     tls:
     - hosts:
       - ${domain}
@@ -100,8 +102,9 @@ tracing:
     annotations:
       kubernetes.io/ingress.class: "nginx"
       kubernetes.io/tls-acme: "true"
+      acme.cert-manager.io/http01-edit-in-place: "true"
       nginx.ingress.kubernetes.io/ssl-redirect: "true"
-      certmanager.k8s.io/issuer: "letsencrypt-dns"
+      cert-manager.io/issuer: "letsencrypt-dns"
     tls:
     - hosts:
       - ${domain}

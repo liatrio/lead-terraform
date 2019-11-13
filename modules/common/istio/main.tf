@@ -103,7 +103,7 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
   }
 
   rule {
-    api_groups = ["certmanager.k8s.io"]
+    api_groups = ["cert-manager.io"]
     resources  = ["issuers"]
     verbs      = ["get", "create", "watch", "delete", "list", "patch"]
   }
@@ -130,17 +130,18 @@ resource "kubernetes_cluster_role_binding" "tiller_cluster_role_binding" {
 }
 
 module "istio_cert_issuer" {
-  source                   = "../../common/cert-issuer"
+  source                   = "../cert-issuer"
   enabled                  = var.enabled
   namespace                = module.istio_namespace.name
   issuer_name              = var.cert_issuer_name
   issuer_type              = var.cert_issuer_type
   issuer_server            = var.cert_issuer_server
   crd_waiter               = var.crd_waiter
-  provider_http_enabled    = "true"
-  provider_dns_enabled     = "true"
-  provider_dns_region      = var.region
-  provider_dns_hosted_zone = var.zone_id
+
+  acme_solver              = "dns"
+  provider_dns_type        = "route53"
+  route53_dns_region       = var.region
+  route53_dns_hosted_zone  = var.zone_id
 }
 
 module "istio_flagger" {
