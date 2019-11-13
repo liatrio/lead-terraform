@@ -70,12 +70,12 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
   }
   rule {
     api_groups = ["cert-manager.io"]
-    resources  = ["certificates", "certificates/finalizers", "issuers", "clusterissuers", "certificaterequests"]
+    resources  = ["certificates", "certificates/finalizers", "issuers", "clusterissuers", "certificaterequests", "certificates/status", "certificaterequests/status" , "issuers/status", "clusterissuers/status"]
     verbs      = ["*"]
   }
   rule {
     api_groups = ["acme.cert-manager.io"]
-    resources  = ["orders", "orders/finalizers", "challenges"]
+    resources  = ["orders", "orders/finalizers", "challenges", "challenges/finalizers", "challenges/status", "orders/status"]
     verbs      = ["*"]
   }
   rule {
@@ -110,7 +110,7 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
   }
   rule {
     api_groups = ["extensions"]
-    resources  = ["ingresses","deployments","daemonsets"]
+    resources  = ["ingresses","deployments","daemonsets","ingresses/finalizers"]
     verbs      = ["*"]
   }
   rule {
