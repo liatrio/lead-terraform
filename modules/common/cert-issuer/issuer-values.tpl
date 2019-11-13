@@ -10,7 +10,6 @@ acme:
     route53:
       region: ${route53_dns_region}
       hostedZoneID: ${route53_dns_hosted_zone}
-      role: ${route53_dns_role}
   solver: ${acme_solver}
 ca:
   enabled: ${issuer_type == "ca"}

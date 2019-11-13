@@ -142,7 +142,6 @@ module "istio_cert_issuer" {
   provider_dns_type        = "route53"
   route53_dns_region       = var.region
   route53_dns_hosted_zone  = var.zone_id
-  route53_dns_role         = "foo" // TODO
 }
 
 module "istio_flagger" {

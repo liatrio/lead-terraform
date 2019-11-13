@@ -9,7 +9,6 @@ data "template_file" "issuer_values" {
     provider_dns_type           = var.provider_dns_type
     route53_dns_region          = var.route53_dns_region
     route53_dns_hosted_zone     = var.route53_dns_hosted_zone
-    route53_dns_role            = var.route53_dns_role
     issuer_type                 = var.issuer_type
     crd_waiter                  = var.crd_waiter # this enforces a dependency on the cert-manager CRDs
     ca_secret                   = var.ca_secret

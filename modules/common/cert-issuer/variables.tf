@@ -30,10 +30,6 @@ variable "route53_dns_hosted_zone" {
   default = ""
 }
 
-variable "route53_dns_role" {
-  default = ""
-}
-
 variable "enabled" {
   default = true
 }

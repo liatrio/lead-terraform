@@ -10,7 +10,6 @@ acme:
     route53:
       region: us-east-1
       hostedZoneID: foo
-      role: bar
   solver: dns
 ca:
   enabled: false
