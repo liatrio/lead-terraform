@@ -24,6 +24,7 @@ module "infrastructure" {
   }
   providers = {
     helm = helm.system
+    kubernetes = kubernetes
   }
 }
 

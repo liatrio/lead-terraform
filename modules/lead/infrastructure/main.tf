@@ -1,5 +1,6 @@
-provider "helm" {
-}
+provider "helm" {}
+
+provider "kubernetes" {}
 
 module "system_namespace" {
   source    = "../../common/namespace"
