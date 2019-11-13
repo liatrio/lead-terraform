@@ -42,7 +42,7 @@ resource "helm_release" "cert_manager" {
   namespace  = module.system_namespace.name
   chart      = "jetstack/cert-manager"
   repository = data.helm_repository.cert_manager.name
-  timeout    = 90
+  timeout    = 120
   version    = "v0.11.0"
   wait       = true
 
@@ -65,6 +65,14 @@ resource "helm_release" "cert_manager" {
   set {
     name  = "serviceAccount.name"
     value = "cert-manager"
+  }
+  set {
+    name  = "securityContext.enabled"
+    value = true
+  }
+  set {
+    name  = "securityContext.fsGroup"
+    value = 1001
   }
   set {
     name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
