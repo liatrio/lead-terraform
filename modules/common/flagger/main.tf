@@ -16,7 +16,7 @@ resource "helm_release" "flagger" {
   name       = "flagger"
   timeout    = 600
   wait       = true
-  version    = "0.17.0"
+  version    = "0.20.4"
 
   set {
     name  = "meshProvider"
