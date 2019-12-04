@@ -50,6 +50,7 @@ data "template_file" "istio_values" {
 
   vars = {
     domain = var.domain
+    pilotTraceSampling = var.pilot_trace_sampling
   }
 }
 
