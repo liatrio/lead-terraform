@@ -38,7 +38,7 @@ variable "uptime" {
 }
 
 variable "external_dns_service_account_annotations" {
-  type = "map"
+  type = map
   default = {}
 }
 
