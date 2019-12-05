@@ -1,7 +1,7 @@
 data "helm_repository" "istio" {
-  name = "istio.io"
-  url  = "https://storage.googleapis.com/istio-release/releases/1.2.2/charts/"
-  provider   = helm.system
+  name     = "istio.io"
+  url      = "https://storage.googleapis.com/istio-release/releases/1.2.2/charts/"
+  provider = helm.system
 }
 
 resource "helm_release" "istio_init" {
@@ -24,15 +24,15 @@ resource "null_resource" "istio_init_delay" {
 }
 
 module "istio_system" {
-  source             = "../../modules/common/istio"
-  enabled            = var.enable_istio
-  namespace          = "istio-system"
-  crd_waiter         = null_resource.istio_init_delay.id
-  region             = var.region
-  zone_id            = aws_route53_zone.cluster_zone.zone_id
-  domain             = "istio-system.${module.eks.cluster_id}.${var.root_zone_name}"
+  source     = "../../modules/common/istio"
+  enabled    = var.enable_istio
+  namespace  = "istio-system"
+  crd_waiter = null_resource.istio_init_delay.id
+  region     = var.region
+  zone_id    = aws_route53_zone.cluster_zone.zone_id
+  domain     = "istio-system.${module.eks.cluster_id}.${var.root_zone_name}"
   providers = {
-    helm = "helm.system"
+    helm = helm.system
   }
   cert_issuer_server = var.cert_issuer_server
 }
