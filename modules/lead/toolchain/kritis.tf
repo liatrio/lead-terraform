@@ -11,56 +11,56 @@ module "kritis_certificate" {
 }
 
 resource "helm_release" "kritis-crd" {
-  count      = var.enable_grafeas ? 1 : 0
-  name       = "kritis-crd"
-  namespace  = var.namespace
-  chart      = "${path.module}/charts/kritis-crd"
-  version    = "0.1.0"
-  timeout    = 600
-  wait       = true
+  count     = var.enable_grafeas ? 1 : 0
+  name      = "kritis-crd"
+  namespace = var.namespace
+  chart     = "${path.module}/charts/kritis-crd"
+  version   = "0.1.0"
+  timeout   = 600
+  wait      = true
 }
 
 data "kubernetes_secret" "kritis" {
   count      = var.enable_grafeas ? 1 : 0
   depends_on = [module.kritis_certificate.cert_status]
   metadata {
-    name = "${module.kritis_certificate.cert_name}-certificate"
+    name      = "${module.kritis_certificate.cert_name}-certificate"
     namespace = var.namespace
   }
 }
 
 output "caBundle" {
-  value = var.enable_grafeas ? "${base64encode(lookup(data.kubernetes_secret.kritis[0].data, "tls.crt"))}" : ""
+  value = var.enable_grafeas ? base64encode(lookup(data.kubernetes_secret.kritis[0].data, "tls.crt")) : ""
 }
 
 resource "helm_release" "kritis" {
-  count      = var.enable_grafeas ? 1 : 0
-  name       = "kritis-server"
-  namespace  = var.namespace
-  chart      = "${path.module}/charts/kritis-chart"
-  version    = "0.1.1"
-  timeout    = 600
-  wait       = true
+  count     = var.enable_grafeas ? 1 : 0
+  name      = "kritis-server"
+  namespace = var.namespace
+  chart     = "${path.module}/charts/kritis-chart"
+  version   = "0.1.1"
+  timeout   = 600
+  wait      = true
 
   depends_on = [module.kritis_certificate.cert_status, helm_release.kritis-crd]
 
   set {
-    name = "caBundle"
-    value = "${base64encode(lookup(data.kubernetes_secret.kritis[count.index].data, "tls.crt"))}"
+    name  = "caBundle"
+    value = base64encode(lookup(data.kubernetes_secret.kritis[count.index].data, "tls.crt"))
   }
 
   set {
-    name = "certificates.name"
+    name  = "certificates.name"
     value = "${module.kritis_certificate.cert_name}-certificate"
   }
 
   set {
-    name = "tlsSecretName" 
+    name  = "tlsSecretName"
     value = "${module.kritis_certificate.cert_name}-certificate"
   }
 
   set {
-    name = "serviceNamespace"
+    name  = "serviceNamespace"
     value = var.namespace
   }
 }

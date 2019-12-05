@@ -16,21 +16,21 @@ variable "enabled" {
 }
 
 variable "resource_request_cpu" {
-  type = "string"
+  type    = string
   default = "10m"
 }
 
 variable "resource_request_memory" {
-  type = "string"
+  type    = string
   default = "64Mi"
 }
 
 variable "resource_limit_cpu" {
-  type = "string"
+  type    = string
   default = "100m"
 }
 
 variable "resource_limit_memory" {
-  type = "string"
+  type    = string
   default = "512Mi"
 }
