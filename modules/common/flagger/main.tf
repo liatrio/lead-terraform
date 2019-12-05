@@ -1,6 +1,6 @@
-# Create CRDs for the flagger
+# Create CRDs for flagger
 resource "helm_release" "flagger_crds" {
-  count = var.enable ? 1 : 0
+  count     = var.enable ? 1 : 0
   name      = "flagger-crds"
   namespace = var.namespace
   chart     = "${path.module}/helm/flagger-crds"
