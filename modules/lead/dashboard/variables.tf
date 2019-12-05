@@ -1,3 +1,10 @@
+variable "enabled" {
+  default = true
+}
+variable "local" {
+  default = false
+}
+
 variable "root_zone_name" {
 }
 

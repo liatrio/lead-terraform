@@ -22,7 +22,9 @@ variable "opa_failure_policy" {
 }
 
 variable "sdm_version" {
-  default = "0.4.0-160-gd3913d2"
+}
+
+variable "dashboard_version" {
 }
 
 variable "product_version" {
@@ -84,6 +86,10 @@ variable "enable_xray" {
 
 variable "enable_grafeas" {
   default = true
+}
+
+variable "enable_dashboard" {
+  default = false
 }
 
 variable "uptime" {
