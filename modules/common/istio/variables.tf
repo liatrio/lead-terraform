@@ -27,3 +27,7 @@ variable "enabled" {
 variable "ingress_controller_type" {
   default = "LoadBalancer"
 }
+
+variable "pilot_trace_sampling" {
+  default = 10.0
+}

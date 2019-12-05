@@ -49,7 +49,8 @@ data "template_file" "istio_values" {
   template = file("${path.module}/istio-values.tpl")
 
   vars = {
-    domain             = var.domain
+    domain = var.domain
+    pilotTraceSampling = var.pilot_trace_sampling
   }
 }
 
