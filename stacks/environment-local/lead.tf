@@ -41,13 +41,13 @@ module "toolchain" {
   ingress_controller_type         = var.ingress_controller_type
   ingress_external_traffic_policy = var.ingress_external_traffic_policy
   crd_waiter                      = module.infrastructure.crd_waiter
-  grafeas_version         = var.grafeas_version
+  grafeas_version                 = var.grafeas_version
 
 
-  smtp_host  = "mailhog"
-  smtp_port     = "1025"
-  smtp_username = ""
-  smtp_password = ""
+  smtp_host       = "mailhog"
+  smtp_port       = "1025"
+  smtp_username   = ""
+  smtp_password   = ""
   smtp_from_email = "noreply@liatr.io"
 
   providers = {
@@ -83,5 +83,19 @@ module "sdm" {
   providers = {
     helm.system    = helm.toolchain
     helm.toolchain = helm.toolchain
+  }
+}
+
+module "dashboard" {
+  source            = "../../modules/lead/dashboard"
+  root_zone_name    = var.root_zone_name
+  cluster           = var.cluster
+  namespace         = module.toolchain.namespace
+  dashboard_version = var.dashboard_version
+  enabled           = var.enable_dashboard
+  local             = true
+
+  providers = {
+    helm = helm.toolchain
   }
 }
