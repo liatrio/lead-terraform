@@ -1,4 +1,5 @@
 elasticsearch:
+%{ if local == "false" }
   volumeClaimTemplate:
     storageClassName: gp2
   resources:
@@ -8,6 +9,30 @@ elasticsearch:
     limits:
       cpu: 500m
       memory: 3.5Gi
+%{ else }
+  # Permit co-located instances for solitary minikube virtual machines.
+  antiAffinity: "soft"
+
+  # Shrink default JVM heap.
+  esJavaOpts: "-Xmx128m -Xms128m"
+
+  # Allocate smaller chunks of memory per pod.
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "512M"
+    limits:
+      cpu: "1000m"
+      memory: "512M"
+
+  # Request smaller persistent volumes.
+  volumeClaimTemplate:
+    accessModes: [ "ReadWriteOnce" ]
+    storageClassName: "hostpath"
+    resources:
+      requests:
+        storage: 100M
+%{ endif }
 kibana:
   resources:
     requests:

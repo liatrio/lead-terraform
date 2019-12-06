@@ -3,7 +3,8 @@ data "template_file" "dashboard_values" {
 
   vars = {
     cluster_domain = "${var.namespace}.${var.cluster}.${var.root_zone_name}"
-    namespace = "${var.namespace}"
+    namespace      = var.namespace
+    local          = var.local
   }
 }
 
@@ -13,6 +14,7 @@ data "helm_repository" "liatrio" {
 }
 
 resource "helm_release" "lead-dashboard" {
+  count      = var.enabled ? 1 : 0
   repository = data.helm_repository.liatrio.metadata[0].name
   name       = "lead-dashboard"
   namespace  = var.namespace
