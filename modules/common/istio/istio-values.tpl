@@ -51,6 +51,9 @@ grafana:
   enabled: true
   ingress:
     enabled: true
+    image:
+      repository: grafana/grafana
+      tag: 6.5.1-ubuntu
     annotations:
       kubernetes.io/ingress.class: "nginx"
       kubernetes.io/tls-acme: "true"
@@ -66,11 +69,11 @@ grafana:
     - ${domain}
   resources:
     requests:
-      cpu: 4m
-      memory: 32Mi
-    limits:
-      cpu: 32m
+      cpu: 16m
       memory: 64Mi
+    limits:
+      cpu: 64m
+      memory: 128Mi
 
 kiali:
   enabled: true
