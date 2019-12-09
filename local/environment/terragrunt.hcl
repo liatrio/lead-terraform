@@ -19,12 +19,8 @@ include {
 inputs = {
   root_zone_name  = "localhost"
   cluster         = "docker-for-desktop"
-  sdm_version     = "0.4.0-212-g6a776a7"
 
-  builder_images_version = "v1.0.16-7-g7c121bb"
-  jenkins_image_version = "v1.0.16-3-g541d352"
-
-  enable_artifactory = true
+  enable_artifactory = false
   enable_gitlab      = false
   enable_istio       = false
   enable_grafeas     = false
@@ -33,6 +29,7 @@ inputs = {
   enable_operators   = true
   enable_sonarqube   = false
   enable_xray        = false
+  enable_dashboard   = false
 
   # This will conflict with Istio since it's also configured as a LoadBalancer
   # So ensure `enable_istio = false` before uncommenting this
