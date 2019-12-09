@@ -26,6 +26,15 @@ Required Terraform variables: See [Slack Operator](https://github.com/liatrio/le
 ## Running locally
 To test an environment locally, run:
 
+Set dependency versions in `local/environment.local.auto.tfvars`. 
+```
+sdm_version             = "v0.0.1-1-a1b2c3d4"
+builder_images_version  = "v0.0.1-1-a1b2c3d4"
+jenkins_image_version   = "v0.0.1-1-a1b2c3d4"
+dashboard_version       = "v0.0.1-1-a1b2c3d4"
+```
+Check the [lead-environments](https://github.com/liatrio/lead-environments) repo for up to date versions.
+
 ```
 make plugins
 cd local/environment
