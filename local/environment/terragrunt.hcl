@@ -19,7 +19,7 @@ include {
 inputs = {
   root_zone_name  = "localhost"
   cluster         = "docker-for-desktop"
-  sdm_version     = "0.4.0-212-g6a776a7"
+  sdm_version     = "0.4.3-88-g6df7edf"
 
   builder_images_version = "v1.0.16-7-g7c121bb"
   jenkins_image_version = "v1.0.16-3-g541d352"

@@ -4,7 +4,7 @@ data "template_file" "prometheus_values" {
 
 resource "helm_release" "prometheus_operator" {
   name       = "prometheus-operator"
-  namespace  = module.system_namespace.name
+  namespace  = module.toolchain_namespace.name
   repository = data.helm_repository.stable.metadata[0].name
   chart      = "prometheus-operator"
   version    = "8.3.3"
