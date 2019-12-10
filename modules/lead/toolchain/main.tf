@@ -15,6 +15,11 @@ data "helm_repository" "liatrio" {
   url  = "https://artifactory.liatr.io/artifactory/helm/"
 }
 
+data "helm_repository" "stable" {
+  name = "stable"
+  url  = "https://kubernetes-charts.storage.googleapis.com"
+}
+
 module "toolchain_namespace" {
   source    = "../../common/namespace"
   namespace = var.namespace
