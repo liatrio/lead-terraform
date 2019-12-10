@@ -2,6 +2,7 @@
 .terraform/
 tf.plan
 terraform.tfstate
+local*.tfvars
 secrets
 .DS_Store
 .idea
