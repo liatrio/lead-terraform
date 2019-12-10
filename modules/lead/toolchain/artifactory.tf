@@ -134,7 +134,7 @@ resource "helm_release" "artifactory" {
 
   set {
     name = "artifactory.persistence.size"
-    value = "100Gi"
+    value = "200Gi"
   }
 
   set {
