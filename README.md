@@ -33,7 +33,7 @@ builder_images_version  = "v0.0.1-1-a1b2c3d4"
 jenkins_image_version   = "v0.0.1-1-a1b2c3d4"
 dashboard_version       = "v0.0.1-1-a1b2c3d4"
 ```
-Check the [lead-environments](https://github.com/liatrio/lead-environments) repo for up to date versions.
+You can find up to date versions in the lead-environments repo by looking at what is deployed to [production](https://github.com/liatrio/lead-environments/blob/master/aws/liatrio-prod/terragrunt.hcl) or [sandbox](https://github.com/liatrio/lead-environments/blob/master/aws/liatrio-sandbox/terragrunt.hcl) environments.
 
 ```
 make plugins
