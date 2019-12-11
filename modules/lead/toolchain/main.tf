@@ -145,6 +145,10 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
     resources  = ["alertmanagers", "alertmanagers/finalizers", "podmonitors", "prometheuses", "prometheuses/finalizers", "prometheusrules", "servicemonitors"]
     verbs      = ["*"]
   }
+  rule {
+    non_resource_urls = ["/metrics"]
+    verbs             = ["get"]
+  }
 }
 
 resource "kubernetes_cluster_role_binding" "tiller_cluster_role_binding" {
