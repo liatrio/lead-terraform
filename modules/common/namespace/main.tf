@@ -78,6 +78,11 @@ resource "kubernetes_role" "tiller_role" {
     resources = ["canaries","canaries/status"]
     verbs = ["*"]
   }
+  rule {
+    api_groups = [""]
+    resources = ["secrets"]
+    verbs = ["get", "create"]
+  }
 }
 
 resource "kubernetes_role_binding" "tiller_role_binding" {
