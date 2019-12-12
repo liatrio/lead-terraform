@@ -18,3 +18,31 @@ nodeExporter:
   tolerations:
   - key: EssentialOnly
     operator: "Exists"
+prometheusOperator:
+  resources:
+    limits:
+      cpu: 200m
+      memory: 200Mi
+    requests:
+      cpu: 100m
+      memory: 100Mi
+  configReloaderCpu: 100m
+  configReloaderMemory: 25Mi
+prometheus:
+  prometheusSpec:
+    resources:
+      limits:
+        cpu: 500m
+        memory: 2Gi
+      requests:
+        cpu: 1
+        memory: 4Gi
+
+#    storageSpec:
+#      volumeClaimTemplate:
+#        spec:
+#          storageClassName: gluster
+#          accessModes: ["ReadWriteOnce"]
+#          resources:
+#            requests:
+#              storage: 50Gi
