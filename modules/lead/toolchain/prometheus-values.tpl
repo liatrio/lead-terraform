@@ -37,12 +37,3 @@ prometheus:
       requests:
         cpu: 1
         memory: 4Gi
-
-#    storageSpec:
-#      volumeClaimTemplate:
-#        spec:
-#          storageClassName: gluster
-#          accessModes: ["ReadWriteOnce"]
-#          resources:
-#            requests:
-#              storage: 50Gi
