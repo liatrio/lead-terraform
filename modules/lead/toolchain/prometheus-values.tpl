@@ -63,7 +63,7 @@ alertmanager:
     - name: 'slack'
       slack_configs:
       - api_url: ${prometheus_slack_webhook_url}
-        channel: ${prometheus_slack_room}
+        channel: ${prometheus_slack_channel}
         send_resolved: true
         title: '[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] Monitoring Event Notification'
         text: |-
@@ -78,7 +78,7 @@ alertmanager:
     - name: 'slack-receiver' # Not in use but if we want to configure additional templates we can
       slack_configs:
       - api_url: ${prometheus_slack_webhook_url}
-        channel: ${prometheus_slack_room}
+        channel: ${prometheus_slack_channel}
         icon_url: https://avatars3.githubusercontent.com/u/3380462
         send_resolved: true
         title: '{{ template "custom_title" . }}'
