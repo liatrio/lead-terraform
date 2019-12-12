@@ -35,7 +35,7 @@ resource "helm_release" "prometheus_operator" {
 module "prometheus_grafana_istio_ingress" {
   source       = "../../common/istio-ingress"
   namespace    = module.toolchain_namespace.name
-  name         = "grafana"
+  host_name    = "grafana"
   domain       = "${module.toolchain_namespace.name}.${var.cluster_domain}"
   enabled      = var.enable_istio
   service_name = "prometheus-operator-grafana"

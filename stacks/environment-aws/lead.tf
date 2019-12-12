@@ -123,8 +123,9 @@ module "toolchain" {
   smtp_from_email = "noreply@${aws_ses_domain_identity.cluster_domain.domain}"
 
   providers = {
-    helm       = helm.toolchain
-    kubernetes = kubernetes
+    helm        = helm.toolchain
+    helm.system = helm.system
+    kubernetes  = kubernetes
   }
 }
 

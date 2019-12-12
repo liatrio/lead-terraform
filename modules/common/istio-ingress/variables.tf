@@ -1,7 +1,7 @@
 variable "namespace" {
 }
 
-variable "name" {
+variable "host_name" {
 }
 
 variable "domain" {

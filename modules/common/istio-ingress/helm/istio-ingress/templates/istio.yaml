@@ -9,7 +9,7 @@ spec:
     istio: ingressgateway
   servers:
   - hosts:
-    - {{ .Release.Name }}.{{ .Values.domain }}
+    - {{ .Values.hostName }}.{{ .Values.domain }}
     port:
       name: http
       number: 80
@@ -17,7 +17,7 @@ spec:
     tls:
       httpsRedirect: true
   - hosts:
-    - {{ .Release.Name }}.{{ .Values.domain }}
+    - {{ .Values.hostName }}.{{ .Values.domain }}
     port:
       name: https-default
       number: 443
@@ -36,7 +36,7 @@ metadata:
     helm.sh/chart: "{{.Chart.Name}}-{{.Chart.Version}}"
 spec:
   hosts:
-  - {{ .Release.Name }}.{{ .Values.domain }}
+  - {{ .Values.hostName }}.{{ .Values.domain }}
   gateways:
   - "{{ .Release.Name }}-gateway"
   http:

@@ -5,6 +5,10 @@ locals {
 provider "helm" {
 }
 
+provider "helm" {
+  alias = "system"
+}
+
 provider "kubernetes" {
 }
 
@@ -44,7 +48,7 @@ module "toolchain_certificate" {
   certificate_crd = "set"
 
   providers = {
-    helm       = helm
+    helm       = helm.system
     kubernetes = kubernetes
   }
 }
