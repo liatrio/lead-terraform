@@ -8,24 +8,15 @@ alertmanager:
       group_interval: 5m
       repeat_interval: 12h
       receiver: 'slack'
-      routes:
-      - match:
-          alertname: Watchdog
-        receiver: 'null'
-    # This inhibt rule is a hack from: https://stackoverflow.com/questions/54806336/how-to-silence-prometheus-alertmanager-using-config-files/54814033#54814033
-    inhibit_rules:
-      - target_match_re:
-           alertname: '.+Overcommit'
-        source_match:
-           alertname: 'Watchdog'
-        equal: ['prometheus']
+    templates:                                                                                                                                                                                                                                                                
+    - /etc/alertmanager/config/template*.tmpl 
     receivers:
     - name: 'null'
     - name: 'slack'
       slack_configs:
-      - api_url: ${prometheus_slack_webhook_url} # <--- REPLACE THIS WITH YOUR SLACK WEBHOOK
+      - api_url: ${prometheus_slack_webhook_url}
+        channel: ${prometheus_slack_room}
         send_resolved: true
-        channel: ${prometheus_slack_room} # <--- REPLACE THIS WITH YOUR SLACK CHANNEL
         title: '[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] Monitoring Event Notification'
         text: |-
           {{ range .Alerts }}
@@ -36,28 +27,29 @@ alertmanager:
             {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
             {{ end }}
           {{ end }}
-    # - name: 'slack-channel'
-    #   slack_configs:
-    #   - api_url: 'https://hooks.slack.com/services/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'
-    #     channel: '#robert-bot-dev'
-    #     icon_url: https://avatars3.githubusercontent.com/u/3380462
-    #     send_resolved: true
-    #     title: '{{ template "custom_title" . }}'
-    #     text: '{{ template "custom_slack_message" . }}'
-    #     templates: |-
-    #       {{ define "__single_message_title" }}{{ range .Alerts.Firing }}{{ .Labels.alertname }} @ {{ .Annotations.identifier }}{{ end }}{{ range .Alerts.Resolved }}{{ .Labels.alertname }} @ {{ .Annotations.identifier }}{{ end }}{{ end }}
-    #       {{ define "custom_title" }}[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ if or (and (eq (len .Alerts.Firing) 1) (eq (len .Alerts.Resolved) 0)) (and (eq (len .Alerts.Firing) 0) (eq (len .Alerts.Resolved) 1)) }}{{ template "__single_message_title" . }}{{ end }}{{ end }}
-    #       {{ define "custom_slack_message" }}
-    #       {{ if or (and (eq (len .Alerts.Firing) 1) (eq (len .Alerts.Resolved) 0)) (and (eq (len .Alerts.Firing) 0) (eq (len .Alerts.Resolved) 1)) }}
-    #       {{ range .Alerts.Firing }}{{ .Annotations.description }}{{ end }}{{ range .Alerts.Resolved }}{{ .Annotations.description }}{{ end }}
-    #       {{ else }}
-    #       {{ if gt (len .Alerts.Firing) 0 }}
-    #       *Alerts Firing:*
-    #       {{ range .Alerts.Firing }}- {{ .Annotations.identifier }}: {{ .Annotations.description }}
-    #       {{ end }}{{ end }}
-    #       {{ if gt (len .Alerts.Resolved) 0 }}
-    #       *Alerts Resolved:*
-    #       {{ range .Alerts.Resolved }}- {{ .Annotations.identifier }}: {{ .Annotations.description }}
-    #       {{ end }}{{ end }}
-    #       {{ end }}
-    #       {{ end }}
+    - name: 'slack-receiver' # Not in use but if we want to configure additional templates we can
+      slack_configs:
+      - api_url: ${prometheus_slack_webhook_url}
+        channel: ${prometheus_slack_room}
+        icon_url: https://avatars3.githubusercontent.com/u/3380462
+        send_resolved: true
+        title: '{{ template "custom_title" . }}'
+        text: '{{ template "custom_slack_message" . }}'
+  templateFiles:                                                                                                                                                                                                                                                              
+    template_1.tmpl: |-                                                                                                                                                                                                                                                       
+      {{ define "__single_message_title" }}{{ range .Alerts.Firing }}{{ .Labels.alertname }} @ {{ .Annotations.identifier }}{{ end }}{{ range .Alerts.Resolved }}{{ .Labels.alertname }} @ {{ .Annotations.identifier }}{{ end }}{{ end }}
+      {{ define "custom_title" }}[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ if or (and (eq (len .Alerts.Firing) 1) (eq (len .Alerts.Resolved) 0)) (and (eq (len .Alerts.Firing) 0) (eq (len .Alerts.Resolved) 1)) }}{{ template "__single_message_title" . }}{{ end }}{{ end }}
+      {{ define "custom_slack_message" }}
+      {{ if or (and (eq (len .Alerts.Firing) 1) (eq (len .Alerts.Resolved) 0)) (and (eq (len .Alerts.Firing) 0) (eq (len .Alerts.Resolved) 1)) }}
+      {{ range .Alerts.Firing }}{{ .Annotations.description }}{{ end }}{{ range .Alerts.Resolved }}{{ .Annotations.description }}{{ end }}
+      {{ else }}
+      {{ if gt (len .Alerts.Firing) 0 }}
+      *Alerts Firing:*
+      {{ range .Alerts.Firing }}- {{ .Annotations.identifier }}: {{ .Annotations.description }}
+      {{ end }}{{ end }}
+      {{ if gt (len .Alerts.Resolved) 0 }}
+      *Alerts Resolved:*
+      {{ range .Alerts.Resolved }}- {{ .Annotations.identifier }}: {{ .Annotations.description }}
+      {{ end }}{{ end }}
+      {{ end }}
+      {{ end }}
