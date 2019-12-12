@@ -1,4 +1,52 @@
+grafana:
+  grafana.ini:
+    auth.anonymous:
+      enabled: true
+      org_name: Main Org.
+      org_role: Viewer
+  image:
+    repository: grafana/grafana
+    tag: 6.5.1-ubuntu
+    pullPolicy: IfNotPresent
+kubeStateMetrics:
+  deploymentAnnotations:
+    downscaler/exclude: "true"
+server:
+  deploymentAnnotations:
+    downscaler/exclude: "true"
+  resources:
+    requests:
+      cpu: 200m
+      memory: 2Gi
+    limits:
+      cpu: 500m
+      memory: 4Gi
+nodeExporter:
+  #priorityClassName: system-node-critical
+  tolerations:
+  - key: EssentialOnly
+    operator: "Exists"
+prometheusOperator:
+  resources:
+    limits:
+      cpu: 200m
+      memory: 200Mi
+    requests:
+      cpu: 100m
+      memory: 100Mi
+  configReloaderCpu: 100m
+  configReloaderMemory: 25Mi
+prometheus:
+  prometheusSpec:
+    resources:
+      requests:
+        cpu: 200m
+        memory: 2Gi
+      limits:
+        cpu: 500m
+        memory: 4Gi
 alertmanager:
+  enabled: true
   config:
     global:
       resolve_timeout: 5m
