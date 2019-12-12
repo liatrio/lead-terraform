@@ -93,11 +93,13 @@ module "toolchain" {
   source                  = "../../modules/lead/toolchain"
   root_zone_name          = var.root_zone_name
   cluster                 = module.eks.cluster_id
+  cluster_domain          = "${var.cluster}.${var.root_zone_name}"
   namespace               = var.toolchain_namespace
   image_whitelist         = var.image_whitelist
   elb_security_group_id   = aws_security_group.elb.id
   artifactory_license     = data.aws_ssm_parameter.artifactory_license.value
   keycloak_admin_password = data.aws_ssm_parameter.keycloak_admin_password.value
+  enable_istio            = var.enable_istio
   enable_artifactory      = var.enable_artifactory
   enable_gitlab           = var.enable_gitlab
   enable_keycloak         = var.enable_keycloak
@@ -121,7 +123,8 @@ module "toolchain" {
   smtp_from_email = "noreply@${aws_ses_domain_identity.cluster_domain.domain}"
 
   providers = {
-    helm = helm.toolchain
+    helm       = helm.toolchain
+    kubernetes = kubernetes
   }
 }
 

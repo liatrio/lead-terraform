@@ -26,10 +26,12 @@ module "toolchain" {
   source                          = "../../modules/lead/toolchain"
   root_zone_name                  = var.root_zone_name
   cluster                         = var.cluster
+  cluster_domain                  = "${var.cluster}.${var.root_zone_name}"
   namespace                       = var.toolchain_namespace
   image_whitelist                 = var.image_whitelist
   artifactory_license             = var.artifactory_license
   keycloak_admin_password         = var.keycloak_admin_password
+  enable_istio                    = var.enable_istio
   enable_artifactory              = var.enable_artifactory
   enable_gitlab                   = var.enable_gitlab
   enable_keycloak                 = var.enable_keycloak
@@ -46,7 +48,6 @@ module "toolchain" {
   prometheus_slack_room           = var.prometheus_slack_room
 
 
-
   smtp_host       = "mailhog"
   smtp_port       = "1025"
   smtp_username   = ""
@@ -54,7 +55,8 @@ module "toolchain" {
   smtp_from_email = "noreply@liatr.io"
 
   providers = {
-    helm = helm.toolchain
+    helm       = helm.toolchain
+    kubernetes = kubernetes
   }
 }
 

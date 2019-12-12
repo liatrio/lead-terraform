@@ -69,7 +69,7 @@ resource "kubernetes_config_map" "artifactory_config" {
 
   data = {
     "artifactory.config.import.xml" = data.template_file.artifactory_config_values.rendered
-    "security.import.xml" = data.template_file.artifactory_security_values.rendered
+    "security.import.xml"           = data.template_file.artifactory_security_values.rendered
   }
 
   lifecycle {
@@ -133,7 +133,7 @@ resource "helm_release" "artifactory" {
   }
 
   set {
-    name = "artifactory.persistence.size"
+    name  = "artifactory.persistence.size"
     value = "200Gi"
   }
 

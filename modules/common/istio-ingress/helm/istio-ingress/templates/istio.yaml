@@ -1,0 +1,47 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: "{{ .Release.Name }}-gateway"
+  labels:
+    helm.sh/chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - hosts:
+    - {{ .Release.Name }}.{{ .Values.domain }}
+    port:
+      name: http
+      number: 80
+      protocol: HTTP
+    tls:
+      httpsRedirect: true
+  - hosts:
+    - {{ .Release.Name }}.{{ .Values.domain }}
+    port:
+      name: https-default
+      number: 443
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      serverCertificate: "sds"
+      privateKey: "sds"
+      credentialName: "{{ .Release.Namespace }}-certificate"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: "{{ .Release.Name }}"
+  labels:
+    helm.sh/chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+spec:
+  hosts:
+  - {{ .Release.Name }}.{{ .Values.domain }}
+  gateways:
+  - "{{ .Release.Name }}-gateway"
+  http:
+  - route:
+    - destination:
+        host: {{ .Values.serviceName }}
+        port:
+          number: {{ .Values.servicePort }}
