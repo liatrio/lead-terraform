@@ -84,3 +84,11 @@ variable "smtp_password" {
 
 variable "smtp_from_email" {
 }
+
+variable "prometheus_slack_webhook_url" {
+}
+
+variable "prometheus_slack_room" {
+}
+
+

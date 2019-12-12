@@ -1,5 +1,10 @@
 data "template_file" "prometheus_values" {
   template = file("${path.module}/prometheus-values.tpl")
+  
+  vars = {
+    prometheus_slack_webhook_url = var.prometheus_slack_webhook_url
+    prometheus_slack_room = var.prometheus_slack_room
+  }
 }
 
 resource "helm_release" "prometheus_operator" {

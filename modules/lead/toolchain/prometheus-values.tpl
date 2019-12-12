@@ -23,23 +23,23 @@ alertmanager:
     - name: 'null'
     - name: 'slack'
       slack_configs:
-      - api_url: 'https://hooks.slack.com/services/ABCDEF123ABC345ABC345345' # <--- REPLACE THIS WITH YOUR SLACK WEBHOOK
+      - api_url: ${prometheus_slack_webhook_url} # <--- REPLACE THIS WITH YOUR SLACK WEBHOOK
         send_resolved: true
-        channel: '#slack-channel-name' # <--- REPLACE THIS WITH YOUR SLACK CHANNEL
+        channel: ${prometheus_slack_room} # <--- REPLACE THIS WITH YOUR SLACK CHANNEL
         title: '[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] Monitoring Event Notification'
         text: |-
           {{ range .Alerts }}
             *Alert:* {{ .Labels.alertname }} - `{{ .Labels.severity }}`
             *Description:* {{ .Annotations.message }}
-            *Prometheus Graph:* <{{ .GeneratorURL }}|:chart_with_upwards_trend:>
+            *Prometheus:* <{{ .GeneratorURL }}|:chart_with_upwards_trend:>
             *Details:*
             {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
             {{ end }}
           {{ end }}
     # - name: 'slack-channel'
     #   slack_configs:
-    #   - api_url: ''
-    #     channel: ''
+    #   - api_url: 'https://hooks.slack.com/services/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'
+    #     channel: '#robert-bot-dev'
     #     icon_url: https://avatars3.githubusercontent.com/u/3380462
     #     send_resolved: true
     #     title: '{{ template "custom_title" . }}'
