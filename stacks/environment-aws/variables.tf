@@ -55,7 +55,7 @@ variable "essential_asg_max_size" {
 }
 
 variable "essential_instance_type" {
-  default = "t3.small"
+  default = "t3.medium"
 }
 
 variable "image_whitelist" {
