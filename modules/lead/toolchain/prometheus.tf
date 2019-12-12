@@ -1,5 +1,10 @@
 data "template_file" "prometheus_values" {
   template = file("${path.module}/prometheus-values.tpl")
+  
+  vars = {
+    prometheus_slack_webhook_url = var.prometheus_slack_webhook_url
+    prometheus_slack_room = var.prometheus_slack_room
+  }
 }
 
 resource "random_password" "password" {
@@ -23,7 +28,7 @@ resource "helm_release" "prometheus_operator" {
     value = random_password.password.result
   }
 
-  #values = [data.template_file.prometheus_values.rendered, var.essential_toleration_values]
+  values = [data.template_file.prometheus_values.rendered]
 
   depends_on = [kubernetes_cluster_role_binding.tiller_cluster_role_binding]
 }

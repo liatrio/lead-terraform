@@ -42,6 +42,9 @@ module "toolchain" {
   ingress_external_traffic_policy = var.ingress_external_traffic_policy
   crd_waiter                      = module.infrastructure.crd_waiter
   grafeas_version                 = var.grafeas_version
+  prometheus_slack_webhook_url    = var.prometheus_slack_webhook_url
+  prometheus_slack_room           = var.prometheus_slack_room
+
 
 
   smtp_host       = "mailhog"

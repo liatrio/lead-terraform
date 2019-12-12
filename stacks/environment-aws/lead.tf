@@ -84,6 +84,11 @@ data "aws_ssm_parameter" "keycloak_admin_password" {
   name = "/${var.cluster}/keycloak_admin_password"
 }
 
+data "aws_ssm_parameter" "prometheus_slack_webhook_url" {
+  name = "/${var.cluster}/prometheus_slack_webhook_url"
+}
+
+
 module "toolchain" {
   source                  = "../../modules/lead/toolchain"
   root_zone_name          = var.root_zone_name
@@ -105,7 +110,10 @@ module "toolchain" {
   ingress_controller_type = "LoadBalancer"
   crd_waiter              = module.infrastructure.crd_waiter
   grafeas_version         = var.grafeas_version
-
+  
+  prometheus_slack_webhook_url    = data.aws_ssm_parameter.prometheus_slack_webhook_url
+  prometheus_slack_room           = var.prometheus_slack_room
+  
   smtp_host       = "email-smtp.${var.region}.amazonaws.com"
   smtp_port       = "587"
   smtp_username   = module.ses_smtp.smtp_username

@@ -121,3 +121,9 @@ locals {
 variable "grafeas_version" {
   default = "v0.1.1-4-ge024b96"
 }
+
+variable "prometheus_slack_room" {
+}
+
+variable "prometheus_slack_webhook_url" {
+}
