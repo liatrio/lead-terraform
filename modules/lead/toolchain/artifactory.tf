@@ -153,5 +153,15 @@ resource "helm_release" "artifactory" {
   }
 
   values = [data.template_file.artifactory_values.rendered]
+
+  # We would like to ignore changes on artifactory.persistence.size, but currently there's
+  # a limitation in Terraform because set members are not individually addressible
+  # (see https://github.com/hashicorp/terraform/issues/22504), so we're just ignoring
+  # all changes for Artifactory. Alternative is to do the configuration of the PVC
+  # separately and point the chart to the existing PVC.
+  lifecycle {
+    ignore_changes = all
+  }
+
 }
 
