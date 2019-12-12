@@ -8,6 +8,7 @@ grafana:
     repository: grafana/grafana
     tag: 6.5.1-ubuntu
     pullPolicy: IfNotPresent
+/*
 kubeStateMetrics:
   deploymentAnnotations:
     downscaler/exclude: "true"
@@ -45,6 +46,7 @@ prometheus:
       limits:
         cpu: 500m
         memory: 4Gi
+*/
 alertmanager:
   enabled: true
   config:
