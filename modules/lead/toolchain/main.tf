@@ -120,6 +120,35 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
     resources  = ["nodes","pods"]
     verbs      = ["get", "list", "watch"]
   }
+  rule {
+    api_groups = ["admissionregistration.k8s.io"]
+    resources  = ["validatingwebhookconfigurations", "mutatingwebhookconfigurations"]
+    verbs      = ["get", "update", "create"]
+  }
+  rule {
+    api_groups = ["extensions"]
+    resources  = ["podsecuritypolicies"]
+    verbs      = ["use"]
+  }
+  rule {
+    api_groups = ["certificates.k8s.io"]
+    resources  = ["certificatesigningrequests"]
+    verbs      = ["list", "watch"]
+  }
+  rule {
+    api_groups = ["storage.k8s.io"]
+    resources  = ["storageclasses"]
+    verbs      = ["list", "watch"]
+  }
+  rule {
+    api_groups = ["monitoring.coreos.com"]
+    resources  = ["alertmanagers", "alertmanagers/finalizers", "podmonitors", "prometheuses", "prometheuses/finalizers", "prometheusrules", "servicemonitors"]
+    verbs      = ["*"]
+  }
+  rule {
+    non_resource_urls = ["/metrics"]
+    verbs             = ["get"]
+  }
 }
 
 resource "kubernetes_cluster_role_binding" "tiller_cluster_role_binding" {
