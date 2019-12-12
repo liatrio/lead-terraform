@@ -1,3 +1,14 @@
+grafana:
+  grafana.ini:
+    auth.anonymous:
+      enabled: true
+      org_name: Main Org.
+      org_role: Viewer
+  image:
+    repository: grafana/grafana
+    tag: 6.5.1-ubuntu
+    pullPolicy: IfNotPresent
+
 alertmanager:
   enabled: false
 kubeStateMetrics:
