@@ -31,9 +31,9 @@ prometheusOperator:
 prometheus:
   prometheusSpec:
     resources:
+      requests:
+        cpu: 200m
+        memory: 2Gi
       limits:
         cpu: 500m
-        memory: 2Gi
-      requests:
-        cpu: 1
         memory: 4Gi
