@@ -37,6 +37,8 @@ prometheusOperator:
       memory: 100Mi
   configReloaderCpu: 100m
   configReloaderMemory: 25Mi
+  admissionWebhooks:
+    enabled: false
 prometheus:
   prometheusSpec:
     resources:
