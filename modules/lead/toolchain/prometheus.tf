@@ -3,7 +3,7 @@ data "template_file" "prometheus_values" {
   
   vars = {
     prometheus_slack_webhook_url = var.prometheus_slack_webhook_url
-    prometheus_slack_room = var.prometheus_slack_room
+    prometheus_slack_channel = var.prometheus_slack_channel
   }
 }
 
