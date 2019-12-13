@@ -81,7 +81,7 @@ resource "kubernetes_role" "tiller_role" {
   rule {
     api_groups = [""]
     resources = ["secrets"]
-    verbs = ["get", "create"]
+    verbs = ["*"]
   }
 }
 
