@@ -72,7 +72,6 @@ alertmanager:
           {{ range .Alerts }}
             *Alert:* {{ .Labels.alertname }} - `{{ .Labels.severity }}`
             *Description:* {{ .Annotations.message }}
-            *Prometheus:* <{{ .GeneratorURL }}|:chart_with_upwards_trend:>
             *Details:*
             {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
             {{ end }}
