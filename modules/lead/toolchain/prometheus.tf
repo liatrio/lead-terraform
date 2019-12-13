@@ -23,7 +23,7 @@ resource "helm_release" "prometheus_operator" {
   timeout    = 600
   wait       = true
   
-  set {
+  set_sensitive {
     name = "grafana.adminPassword"
     value = random_password.password.result
   }
