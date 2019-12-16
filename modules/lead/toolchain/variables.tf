@@ -36,6 +36,10 @@ variable "ingress_external_traffic_policy" {
 variable "grafeas_version" {
 }
 
+variable "enable_istio" {
+  default = true
+}
+
 variable "enable_artifactory" {
   default = true
 }
@@ -91,4 +95,5 @@ variable "prometheus_slack_webhook_url" {
 variable "prometheus_slack_channel" {
 }
 
-
+variable "cluster_domain" {
+}

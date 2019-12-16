@@ -8,11 +8,10 @@ data "template_file" "prometheus_values" {
 }
 
 resource "random_password" "password" {
-  length = 16
-  special = true
+  length           = 16
+  special          = true
   override_special = "_%@"
 }
-
 
 resource "helm_release" "prometheus_operator" {
   name       = "prometheus-operator"
@@ -31,4 +30,19 @@ resource "helm_release" "prometheus_operator" {
   values = [data.template_file.prometheus_values.rendered]
 
   depends_on = [kubernetes_cluster_role_binding.tiller_cluster_role_binding]
+}
+
+module "prometheus_grafana_istio_ingress" {
+  source       = "../../common/istio-ingress"
+  namespace    = module.toolchain_namespace.name
+  host_name    = "grafana"
+  domain       = "${module.toolchain_namespace.name}.${var.cluster_domain}"
+  enabled      = var.enable_istio
+  service_name = "prometheus-operator-grafana"
+  service_port = "80"
+
+  providers = {
+    helm       = helm
+    kubernetes = kubernetes
+  }
 }
