@@ -28,6 +28,33 @@ resource "random_string" "harbor_registry_secret" {
   special = false
 }
 
+resource "helm_release" "harbor_certificates" {
+  chart = "${path.module}/charts/harbor-certificates"
+  name = "harbor-certificates"
+  namespace = module.toolchain_namespace.name
+  wait = true
+
+  set {
+    name = "harbor.hostname"
+    value = "harbor.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
+  }
+
+  set {
+    name = "notary.hostname"
+    value = "notary.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
+  }
+
+  set {
+    name = "harbor.secret"
+    value = "harbor-tls"
+  }
+
+  set {
+    name = "notary.secret"
+    value = "notary-tls"
+  }
+}
+
 data "helm_repository" "harbor" {
   name = "harbor"
   url = "https://helm.goharbor.io"
@@ -89,4 +116,8 @@ resource "helm_release" "harbor" {
     name = "database.internal.password"
     value = random_string.harbor_db_password.result
   }
+
+  depends_on = [
+    helm_release.harbor_certificates
+  ]
 }

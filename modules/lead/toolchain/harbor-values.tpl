@@ -2,7 +2,8 @@ expose:
   type: ingress
   tls:
     enabled: true
-    secretName: harbor-ingress-tls
+    secretName: harbor-tls
+    notarySecretName: notary-tls
   ingress:
     hosts:
       core: ${harbor_ingress_hostname}
@@ -10,10 +11,7 @@ expose:
     controller: default
     annotations:
       kubernetes.io/ingress.class: "nginx"
-      kubernetes.io/tls-acme: "true"
-      acme.cert-manager.io/http01-edit-in-place: "true"
       nginx.ingress.kubernetes.io/ssl-redirect: "${ssl_redirect}"
-      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
       nginx.ingress.kubernetes.io/proxy-body-size: "0"
 
 externalURL: https://${harbor_ingress_hostname}

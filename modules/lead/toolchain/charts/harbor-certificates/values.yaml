@@ -1,0 +1,7 @@
+harbor:
+  hostname:
+  secret: harbor-tls
+
+notary:
+  hostname:
+  secret: notary-tls
