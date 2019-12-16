@@ -39,6 +39,8 @@ prometheusOperator:
   configReloaderMemory: 25Mi
   admissionWebhooks:
     enabled: false
+  tlsProxy:
+    enabled: false
 prometheus:
   prometheusSpec:
     resources:
