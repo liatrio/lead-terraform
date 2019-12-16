@@ -3,7 +3,7 @@ data "template_file" "prometheus_values" {
   
   vars = {
     prometheus_slack_webhook_url = var.prometheus_slack_webhook_url
-    prometheus_slack_room = var.prometheus_slack_room
+    prometheus_slack_channel = var.prometheus_slack_channel
   }
 }
 
@@ -21,9 +21,9 @@ resource "helm_release" "prometheus_operator" {
   version    = "8.3.3"
   timeout    = 600
   wait       = true
-
-  set {
-    name  = "grafana.adminPassword"
+  
+  set_sensitive {
+    name = "grafana.adminPassword"
     value = random_password.password.result
   }
 

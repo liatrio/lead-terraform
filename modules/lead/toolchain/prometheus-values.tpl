@@ -8,6 +8,7 @@ grafana:
     repository: grafana/grafana
     tag: 6.5.1-ubuntu
     pullPolicy: IfNotPresent
+
 kubeStateMetrics:
   deploymentAnnotations:
     downscaler/exclude: "true"
@@ -36,6 +37,8 @@ prometheusOperator:
       memory: 100Mi
   configReloaderCpu: 100m
   configReloaderMemory: 25Mi
+  admissionWebhooks:
+    enabled: false
 prometheus:
   prometheusSpec:
     resources:
@@ -45,6 +48,7 @@ prometheus:
       limits:
         cpu: 500m
         memory: 4Gi
+
 alertmanager:
   enabled: true
   config:
@@ -63,14 +67,13 @@ alertmanager:
     - name: 'slack'
       slack_configs:
       - api_url: ${prometheus_slack_webhook_url}
-        channel: ${prometheus_slack_room}
+        channel: ${prometheus_slack_channel}
         send_resolved: true
         title: '[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] Monitoring Event Notification'
         text: |-
           {{ range .Alerts }}
             *Alert:* {{ .Labels.alertname }} - `{{ .Labels.severity }}`
             *Description:* {{ .Annotations.message }}
-            *Prometheus:* <{{ .GeneratorURL }}|:chart_with_upwards_trend:>
             *Details:*
             {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
             {{ end }}
@@ -78,7 +81,7 @@ alertmanager:
     - name: 'slack-receiver' # Not in use but if we want to configure additional templates we can
       slack_configs:
       - api_url: ${prometheus_slack_webhook_url}
-        channel: ${prometheus_slack_room}
+        channel: ${prometheus_slack_channel}
         icon_url: https://avatars3.githubusercontent.com/u/3380462
         send_resolved: true
         title: '{{ template "custom_title" . }}'

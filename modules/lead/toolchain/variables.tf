@@ -92,7 +92,7 @@ variable "smtp_from_email" {
 variable "prometheus_slack_webhook_url" {
 }
 
-variable "prometheus_slack_room" {
+variable "prometheus_slack_channel" {
 }
 
 variable "cluster_domain" {
