@@ -68,6 +68,10 @@ variable "enable_grafeas" {
   default = true
 }
 
+variable "enable_harbor" {
+  default = true
+}
+
 variable "crd_waiter" {
 }
 
