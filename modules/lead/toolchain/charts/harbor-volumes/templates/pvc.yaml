@@ -1,15 +1,15 @@
-{{- range .Values.components }}
+{{- range $name, $component := .Values.components }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: harbor-{{ .name }}
+  name: harbor-{{ $name }}
   namespace: toolchain
   finalizers:
     - kubernetes.io/pvc-protection
   labels:
     app: harbor
-    component: {{ .name }}
+    component: {{ $name }}
     managed-by: Terraform
   annotations:
     helm.sh/resource-policy: keep
@@ -18,7 +18,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: {{ .size }}
+      storage: {{ $component.size }}
   storageClassName: gp2
   volumeMode: Filesystem
 {{ end }}

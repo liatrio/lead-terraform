@@ -1,3 +1,8 @@
+locals {
+  harbor_hostname = "harbor.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
+  notary_hostname = "notary.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
+}
+
 resource "random_string" "harbor_admin_password" {
   length  = 10
   special = false
@@ -29,13 +34,25 @@ resource "random_string" "harbor_registry_secret" {
 }
 
 resource "helm_release" "harbor_volumes" {
+  count = var.enable_harbor ? 1 : 0
   chart = "${path.module}/charts/harbor-volumes"
   name = "harbor-volumes"
   namespace = module.toolchain_namespace.name
   wait = true
+
+  set {
+    name = "components.registry.size"
+    value = var.harbor_registry_disk_size
+  }
+
+  set {
+    name = "components.chartmuseum.size"
+    value = var.harbor_chartmuseum_disk_size
+  }
 }
 
 resource "helm_release" "harbor_certificates" {
+  count = var.enable_harbor ? 1 : 0
   chart = "${path.module}/charts/harbor-certificates"
   name = "harbor-certificates"
   namespace = module.toolchain_namespace.name
@@ -43,12 +60,12 @@ resource "helm_release" "harbor_certificates" {
 
   set {
     name = "harbor.hostname"
-    value = "harbor.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
+    value = local.harbor_hostname
   }
 
   set {
     name = "notary.hostname"
-    value = "notary.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
+    value = local.notary_hostname
   }
 
   set {
@@ -71,10 +88,10 @@ data "template_file" "harbor_values" {
   template = file("${path.module}/harbor-values.tpl")
 
   vars = {
-    harbor_ingress_hostname = "harbor.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
-    notary_ingress_hostname = "notary.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
+    harbor_ingress_hostname = local.harbor_hostname
+    notary_ingress_hostname = local.notary_hostname
 
-    ssl_redirect = true
+    ssl_redirect = var.root_zone_name == "localhost" ? false : true
 
     jobservice_pvc_size = "10Gi"
     database_pvc_size = "10Gi"

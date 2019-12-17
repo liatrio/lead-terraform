@@ -101,3 +101,11 @@ variable "prometheus_slack_channel" {
 
 variable "cluster_domain" {
 }
+
+variable "harbor_registry_disk_size" {
+  default = "200Gi"
+}
+
+variable "harbor_chartmuseum_disk_size" {
+  default = "100Gi"
+}
