@@ -26,8 +26,8 @@ persistence:
       existingClaim: harbor-registry
       accessMode: ReadWriteOnce
     chartmuseum:
+      existingClaim: harbor-chartmuseum
       accessMode: ReadWriteOnce
-      size: ${chartmuseum_pvc_size}
     jobservice:
       accessMode: ReadWriteOnce
       size: ${jobservice_pvc_size}

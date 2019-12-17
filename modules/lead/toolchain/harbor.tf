@@ -33,11 +33,6 @@ resource "helm_release" "harbor_volumes" {
   name = "harbor-volumes"
   namespace = module.toolchain_namespace.name
   wait = true
-
-  set {
-    name = "registrySize"
-    value = "200Gi"
-  }
 }
 
 resource "helm_release" "harbor_certificates" {
@@ -81,8 +76,6 @@ data "template_file" "harbor_values" {
 
     ssl_redirect = true
 
-    registry_pvc_size = "200Gi"
-    chartmuseum_pvc_size = "100Gi"
     jobservice_pvc_size = "10Gi"
     database_pvc_size = "10Gi"
     redis_pvc_size = "10Gi"

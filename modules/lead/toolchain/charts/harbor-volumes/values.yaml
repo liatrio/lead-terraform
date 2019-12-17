@@ -1,1 +1,11 @@
-registrySize: 200Gi
+components:
+  - name: registry
+    size: 200Gi
+    mountPath: "/storage"
+    initCommands:
+      - "mkdir -p /storage/docker && chown -R 10000:10000 /storage"
+  - name: chartmuseum
+    size: 100Gi
+    mountPath: "/chart_storage"
+    initCommands:
+      - "chown -R 10000:10000 /chart_storage"

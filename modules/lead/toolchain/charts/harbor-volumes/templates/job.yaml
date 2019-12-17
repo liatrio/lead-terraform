@@ -1,0 +1,29 @@
+{{- range .Values.components }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: harbor-{{ .name }}-init
+  labels:
+    managed-by: Terraform
+spec:
+  template:
+    metadata:
+      name: harbor-{{ .name }}-init
+      labels:
+        helm.sh/chart: "{{ $.Chart.Name }}-{{ $.Chart.Version }}"
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: harbor-{{ .name }}-init
+          image: alpine:3.10
+          command: ["/bin/sh", "-c"]
+          args: {{ .initCommands }}
+          volumeMounts:
+            - mountPath: {{ .mountPath }}
+              name: harbor-{{ .name }}
+      volumes:
+        - name: harbor-{{ .name }}
+          persistentVolumeClaim:
+            claimName: harbor-{{ .name }}
+{{ end }}
