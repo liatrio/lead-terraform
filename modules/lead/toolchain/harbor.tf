@@ -28,6 +28,18 @@ resource "random_string" "harbor_registry_secret" {
   special = false
 }
 
+resource "helm_release" "harbor_volumes" {
+  chart = "${path.module}/charts/harbor-volumes"
+  name = "harbor-volumes"
+  namespace = module.toolchain_namespace.name
+  wait = true
+
+  set {
+    name = "registrySize"
+    value = "200Gi"
+  }
+}
+
 resource "helm_release" "harbor_certificates" {
   chart = "${path.module}/charts/harbor-certificates"
   name = "harbor-certificates"
@@ -118,6 +130,7 @@ resource "helm_release" "harbor" {
   }
 
   depends_on = [
-    helm_release.harbor_certificates
+    helm_release.harbor_certificates,
+    helm_release.harbor_volumes
   ]
 }

@@ -23,9 +23,8 @@ persistence:
   resourcePolicy: "keep"
   persistentVolumeClaim:
     registry:
-      subPath: ""
+      existingClaim: harbor-registry
       accessMode: ReadWriteOnce
-      size: ${registry_pvc_size}
     chartmuseum:
       accessMode: ReadWriteOnce
       size: ${chartmuseum_pvc_size}
