@@ -57,11 +57,32 @@ alertmanager:
     global:
       resolve_timeout: 5m
     route:
-      group_by: ['job']
+      group_by: ['namespace', 'pod']
       group_wait: 30s
       group_interval: 5m
       repeat_interval: 12h
-      receiver: 'slack'
+      routes:
+      - match:
+          alertname: Watchdog
+        receiver: "null"
+      - match:
+          alertname: KubeControllerManagerDown
+        receiver: "null"
+      - match:
+          alertname: KubeSchedulerDown
+        receiver: "null"
+      - match:
+          namespace: ""
+        receiver: slack
+      - match:
+          namespace: toolchain
+        receiver: slack
+      - match:
+          namespace: lead-system
+        receiver: slack
+      - match:
+          namespace: istio-system
+        receiver: slack
     templates:                                                                                                                                                                                                                                                                
     - /etc/alertmanager/config/template*.tmpl 
     receivers:
