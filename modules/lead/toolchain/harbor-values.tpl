@@ -157,7 +157,7 @@ clair:
         memory: 512Mi
         cpu: 200m
       limits:
-        memory: 1536Mi
+        memory: 2048Mi
         cpu: 2
   adapter:
     image:
