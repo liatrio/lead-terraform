@@ -53,6 +53,14 @@ prometheus:
 
 alertmanager:
   enabled: true
+  alertmanagerSpec:
+    storage:
+      volumeClaimTemplate:
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 5Gi
   config:
     global:
       resolve_timeout: 5m
@@ -86,15 +94,6 @@ alertmanager:
       - match:
           namespace: istio-system
         receiver: slack
-  alertmanagerSpec:
-    storage:
-      volumeClaimTemplate:
-        spec:
-          accessModes: ["ReadWriteOnce"]
-          resources:
-            requests:
-              storage: 5Gi
-    
     templates:                                                                                                                                                                                                                                                                
     - /etc/alertmanager/config/template*.tmpl 
     receivers:
