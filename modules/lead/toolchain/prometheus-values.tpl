@@ -86,6 +86,17 @@ alertmanager:
       - match:
           namespace: istio-system
         receiver: slack
+  alertmanagerSpec:
+    storage:
+      volumeclaimTemplate:
+        spec:
+          storageClassName: standard
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 1Gi
+        selector: {}
+
     templates:                                                                                                                                                                                                                                                                
     - /etc/alertmanager/config/template*.tmpl 
     receivers:
