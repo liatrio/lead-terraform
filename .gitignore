@@ -4,7 +4,13 @@ tf.plan
 terraform.tfstate
 local/*local*.tfvars
 local*.tfvars
-secrets
 .DS_Store
 .idea
 tests/
+
+# Ignore all secrets files, keep directory placeholder
+secrets/*
+!secrets/.gitkeep
+
+# Homerbew package lock
+Brewfile.lock.json
