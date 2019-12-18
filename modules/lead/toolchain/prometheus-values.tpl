@@ -72,6 +72,9 @@ alertmanager:
           alertname: KubeSchedulerDown
         receiver: "null"
       - match:
+          alertname: KubeletTooManyPods
+        receiver: "null"
+      - match:
           namespace: ""
         receiver: slack
       - match:
