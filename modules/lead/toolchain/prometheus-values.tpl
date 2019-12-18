@@ -95,7 +95,6 @@ alertmanager:
           resources:
             requests:
               storage: 1Gi
-        selector: {}
 
     templates:                                                                                                                                                                                                                                                                
     - /etc/alertmanager/config/template*.tmpl 
