@@ -88,12 +88,13 @@ alertmanager:
         receiver: slack
   alertmanagerSpec:
     storage:
-      volumeclaimTemplate:
+      volumeClaimTemplate:
         spec:
           accessModes: ["ReadWriteOnce"]
           resources:
             requests:
-              storage: 10Gi
+              storage: 5Gi
+    
     templates:                                                                                                                                                                                                                                                                
     - /etc/alertmanager/config/template*.tmpl 
     receivers:
