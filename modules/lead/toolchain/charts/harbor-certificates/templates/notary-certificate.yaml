@@ -1,0 +1,16 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  annotations:
+    cert-manager.io/issue-temporary-certificate: "true"
+  labels:
+    app: notary
+  name: notary-certificate
+spec:
+  dnsNames:
+    - {{ .Values.notary.hostname }}
+  issuerRef:
+    group: cert-manager.io
+    kind: Issuer
+    name: lead-namespace-issuer
+  secretName: {{ .Values.notary.secret }}

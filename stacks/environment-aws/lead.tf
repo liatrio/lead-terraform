@@ -107,15 +107,19 @@ module "toolchain" {
   enable_sonarqube        = var.enable_sonarqube
   enable_xray             = var.enable_xray
   enable_grafeas          = var.enable_grafeas
+  enable_harbor           = var.enable_harbor
   issuer_type             = "acme"
   issuer_server           = var.cert_issuer_server
   ingress_controller_type = "LoadBalancer"
   crd_waiter              = module.infrastructure.crd_waiter
   grafeas_version         = var.grafeas_version
-  
+
+  harbor_registry_disk_size = "200Gi"
+  harbor_chartmuseum_disk_size = "100Gi"
+
   prometheus_slack_webhook_url    = data.aws_ssm_parameter.prometheus_slack_webhook_url.value
   prometheus_slack_channel        = var.prometheus_slack_channel
-  
+
   smtp_host       = "email-smtp.${var.region}.amazonaws.com"
   smtp_port       = "587"
   smtp_username   = module.ses_smtp.smtp_username
