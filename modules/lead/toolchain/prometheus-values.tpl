@@ -87,16 +87,13 @@ alertmanager:
           namespace: istio-system
         receiver: slack
   alertmanagerSpec:
-    storageSpec:
+    storage:
       volumeclaimTemplate:
         spec:
-          selector:
-            matchLabels:
-              app: k8s-prometheus
+          accessModes: ["ReadWriteOnce"]
           resources:
             requests:
               storage: 1Gi
-
     templates:                                                                                                                                                                                                                                                                
     - /etc/alertmanager/config/template*.tmpl 
     receivers:
