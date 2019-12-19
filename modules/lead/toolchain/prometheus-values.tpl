@@ -60,7 +60,7 @@ alertmanager:
           accessModes: ["ReadWriteOnce"]
           resources:
             requests:
-              storage: 5Gi
+              storage: 1Gi
   config:
     global:
       resolve_timeout: 5m
