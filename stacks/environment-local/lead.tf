@@ -39,6 +39,7 @@ module "toolchain" {
   enable_sonarqube                = var.enable_sonarqube
   enable_xray                     = var.enable_xray
   enable_grafeas                  = var.enable_grafeas
+  enable_harbor                   = var.enable_harbor
   issuer_type                     = "selfSigned"
   ingress_controller_type         = var.ingress_controller_type
   ingress_external_traffic_policy = var.ingress_external_traffic_policy
@@ -46,6 +47,9 @@ module "toolchain" {
   grafeas_version                 = var.grafeas_version
   prometheus_slack_webhook_url    = var.prometheus_slack_webhook_url
   prometheus_slack_channel        = var.prometheus_slack_channel
+
+  harbor_registry_disk_size    = "200Gi"
+  harbor_chartmuseum_disk_size = "100Gi"
 
 
   smtp_host       = "mailhog"
