@@ -42,7 +42,10 @@ persistence:
     filesystem:
       rootdirectory: /storage
 
-logLevel: debug
+updateStrategy:
+  type: RollingUpdate
+
+logLevel: info
 
 portal:
   image:
@@ -145,17 +148,29 @@ chartmuseum:
 
 clair:
   enabled: true
-  image:
-    repository: goharbor/clair-photon
-    tag: v2.1.1-v1.10.0
+  clair:
+    image:
+      repository: goharbor/clair-photon
+      tag: v2.1.1-v1.10.0
+    resources:
+      requests:
+        memory: 512Mi
+        cpu: 200m
+      limits:
+        memory: 2048Mi
+        cpu: 2
+  adapter:
+    image:
+      repository: goharbor/clair-adapter-photon
+      tag: dev
+    resources:
+      requests:
+        memory: 64Mi
+        cpu: 50m
   replicas: 1
   # The interval of clair updaters, the unit is hour, set to 0 to
   # disable the updaters
   updatersInterval: 12
-  resources:
-    requests:
-      memory: 256Mi
-      cpu: 100m
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -203,7 +218,9 @@ database:
     image:
       repository: goharbor/harbor-db
       tag: v1.10.0
-    # The initial superuser password for internal database
+    initContainerImage:
+      repository: busybox
+      tag: latest
     resources:
       requests:
         memory: 256Mi

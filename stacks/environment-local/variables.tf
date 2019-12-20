@@ -92,6 +92,10 @@ variable "enable_dashboard" {
   default = false
 }
 
+variable "enable_harbor" {
+  default = true
+}
+
 variable "uptime" {
   default = "always"
 }
