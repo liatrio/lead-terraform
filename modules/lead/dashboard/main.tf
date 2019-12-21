@@ -24,3 +24,5 @@ resource "helm_release" "lead-dashboard" {
 
   values = [data.template_file.dashboard_values.rendered]
 }
+
+### setup keycloak client in here
