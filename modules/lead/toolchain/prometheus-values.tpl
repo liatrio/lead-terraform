@@ -83,6 +83,9 @@ alertmanager:
           alertname: KubeletTooManyPods
         receiver: "null"
       - match:
+          alertname: KubeVersionMismatch
+        receiver: "null"
+      - match:
           namespace: ""
         receiver: slack
       - match:
