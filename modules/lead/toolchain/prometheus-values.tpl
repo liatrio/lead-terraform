@@ -43,6 +43,13 @@ prometheusOperator:
     enabled: false
 prometheus:
   prometheusSpec:
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 1Gi
     resources:
       requests:
         cpu: 200m
