@@ -137,6 +137,9 @@ master:
                       - secretVolume:
                           mountPath: "/root/.docker"
                           secretName: "jenkins-artifactory-dockercfg"
+                      - secretVolume:
+                          mountPath: "/root/.docker"
+                          secretName: "jenkins-harbor-cfg"
                     slaveConnectTimeout: 100
                     serviceAccount: "jenkins"
                   - name: "lead-toolchain-aws"
