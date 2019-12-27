@@ -14,7 +14,7 @@ data "template_file" "jenkins_values" {
     protocol               = local.protocol
     ssl_redirect           = local.protocol == "http" ? false : true
     ingress_hostname       = "jenkins.${module.toolchain_namespace.name}.${var.cluster_domain}"
-    artifactory_url        = "artifactory.toolchain.${var.cluster_domain}/docker-registry"
+    artifactory_url        = "harbor.toolchain.${var.cluster_domain}/docker-registry"
     namespace              = module.toolchain_namespace.name
     toolchain_namespace    = var.toolchain_namespace
     logstash_url           = "http://lead-dashboard-logstash.toolchain.svc.cluster.local:9000"
