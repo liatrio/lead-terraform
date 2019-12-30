@@ -38,8 +38,8 @@ module "vpc" {
   name               = var.cluster
   cidr               = "10.0.0.0/16"
   azs                = [data.aws_availability_zones.available.names[0], data.aws_availability_zones.available.names[1], data.aws_availability_zones.available.names[2]]
-  private_subnets    = ["10.0.0.0/18", "10.0.64.0/18", "10.0.128.0/18"]
-  public_subnets     = ["10.0.192.0/24", "10.0.193.0/24", "10.0.194.0/24"]
+  private_subnets    = ["10.0.64.0/18", "10.0.128.0/18", "10.0.192.0/18"]
+  public_subnets     = ["10.0.32.0/24", "10.0.33.0/24", "10.0.34.0/24"]
   enable_nat_gateway = true
   single_nat_gateway = true
   tags = merge(
