@@ -37,9 +37,20 @@ module "vpc" {
   version            = "2.7.0"
   name               = var.cluster
   cidr               = "10.0.0.0/16"
-  azs                = [data.aws_availability_zones.available.names[0], data.aws_availability_zones.available.names[1], data.aws_availability_zones.available.names[2]]
-  private_subnets    = ["10.0.64.0/18", "10.0.128.0/18", "10.0.192.0/18"]
-  public_subnets     = ["10.0.32.0/24", "10.0.33.0/24", "10.0.34.0/24"]
+  azs                = [data.aws_availability_zones.available.names[0],
+                        data.aws_availability_zones.available.names[1],
+                        data.aws_availability_zones.available.names[2],
+                        data.aws_availability_zones.available.names[0],
+                        data.aws_availability_zones.available.names[1],
+                        data.aws_availability_zones.available.names[2]]
+  // First 3 subnets are for EKS control plane, second 3 subnets are for nodes
+  private_subnets    = ["10.0.1.0/24",
+                        "10.0.2.0/24",
+                        "10.0.3.0/24",
+                        "10.0.64.0/18",
+                        "10.0.128.0/18",
+                        "10.0.192.0/18"]
+  public_subnets     = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
   enable_nat_gateway = true
   single_nat_gateway = true
   tags = merge(
@@ -108,7 +119,7 @@ module "eks" {
   cluster_version                      = "1.14"
   #cluster_enabled_log_types            = ["api","audit","authenticator","controllerManager","scheduler"]
   cluster_name                         = var.cluster
-  subnets                              = module.vpc.private_subnets
+  subnets                              = [module.vpc.private_subnets[0],module.vpc.private_subnets[1],module.vpc.private_subnets[2]]
   tags                                 = local.tags
   vpc_id                               = module.vpc.vpc_id
   worker_additional_security_group_ids = [aws_security_group.worker.id]
@@ -131,7 +142,7 @@ module "eks" {
     {
       name                  = "essential0"
       instance_type         = var.essential_instance_type
-      subnets               = module.vpc.private_subnets
+      subnets               = [module.vpc.private_subnets[3],module.vpc.private_subnets[4],module.vpc.private_subnets[5]]
       asg_min_size          = var.essential_asg_min_size
       asg_desired_capacity  = var.essential_asg_desired_capacity
       asg_max_size          = var.essential_asg_max_size
@@ -150,7 +161,7 @@ module "eks" {
     {
       name                    = "preemptible0"
       override_instance_types = var.instance_types
-      subnets                 = [module.vpc.private_subnets[0]]
+      subnets                 = [module.vpc.private_subnets[3]]
       asg_min_size            = var.asg_min_size
       asg_desired_capacity    = var.asg_desired_capacity
       asg_max_size            = var.asg_max_size
@@ -168,7 +179,7 @@ module "eks" {
     {
       name                    = "preemptible1"
       override_instance_types = var.instance_types
-      subnets                 = [module.vpc.private_subnets[1]]
+      subnets                 = [module.vpc.private_subnets[4]]
       asg_min_size            = var.asg_min_size
       asg_desired_capacity    = var.asg_desired_capacity
       asg_max_size            = var.asg_max_size
@@ -186,7 +197,7 @@ module "eks" {
     {
       name                    = "preemptible2"
       override_instance_types = var.instance_types
-      subnets                 = [module.vpc.private_subnets[2]]
+      subnets                 = [module.vpc.private_subnets[5]]
       asg_min_size            = var.asg_min_size
       asg_desired_capacity    = var.asg_desired_capacity
       asg_max_size            = var.asg_max_size
