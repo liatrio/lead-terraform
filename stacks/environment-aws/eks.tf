@@ -36,10 +36,10 @@ module "vpc" {
   source             = "terraform-aws-modules/vpc/aws"
   version            = "2.7.0"
   name               = var.cluster
-  cidr               = "10.0.0.0/8"
+  cidr               = "10.0.0.0/16"
   azs                = [data.aws_availability_zones.available.names[0], data.aws_availability_zones.available.names[1], data.aws_availability_zones.available.names[2]]
-  private_subnets    = ["10.1.0.0/16", "10.2.0.0/16", "10.3.0.0/16"]
-  public_subnets     = ["10.4.0.0/16", "10.5.0.0/16", "10.6.0.0/16"]
+  private_subnets    = ["10.0.0.0/18", "10.0.64.0/18", "10.0.128.0/18"]
+  public_subnets     = ["10.0.192.0/24", "10.0.193.0/24", "10.0.194.0/24"]
   enable_nat_gateway = true
   single_nat_gateway = true
   tags = merge(
@@ -60,7 +60,7 @@ resource "aws_security_group" "worker" {
     protocol  = "tcp"
 
     cidr_blocks = [
-      "10.0.0.0/8",
+      "10.0.0.0/16",
     ]
   }
   ingress {
