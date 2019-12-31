@@ -115,6 +115,7 @@ module "toolchain" {
   ingress_controller_type = "LoadBalancer"
   crd_waiter              = module.infrastructure.crd_waiter
   grafeas_version         = var.grafeas_version
+  k8s_storage_class       = var.k8s_storage_class
 
   harbor_registry_disk_size = "200Gi"
   harbor_chartmuseum_disk_size = "100Gi"
@@ -177,6 +178,7 @@ module "dashboard" {
   cluster           = module.eks.cluster_id
   namespace         = module.toolchain.namespace
   dashboard_version = var.dashboard_version
+  k8s_storage_class = var.k8s_storage_class
   enabled           = var.enable_dashboard
 
   providers = {
