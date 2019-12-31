@@ -26,6 +26,13 @@ spec:
             hostedZoneID: {{ .Values.acme.dnsProvider.route53.hostedZoneID }}
             role: {{ .Values.acme.dnsProvider.route53.role }}
 {{- end}}
+{{- if eq .Values.acme.dnsProvider.type "gcp" }}
+          clouddns:
+            project: {{ .Values.acme.dnsProvider.gcp.project }}
+            serviceAccountSecretRef:
+              name: {{ .Values.acme.dnsProvider.gcp.serviceAccountSecretName }}
+              key: {{ .Values.acme.dnsProvider.gcp.serviceAccountSecretKey }}
+{{- end}}
 {{- end}}
 {{- end}}
 {{- if .Values.ca.enabled }}

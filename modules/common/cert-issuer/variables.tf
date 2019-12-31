@@ -34,6 +34,18 @@ variable "route53_dns_hosted_zone" {
   default = ""
 }
 
+variable "gcp_dns_project" {
+  default = ""
+}
+
+variable "gcp_dns_service_account_secret_name" {
+  default = ""
+}
+
+variable "gcp_dns_service_account_secret_key" {
+  default = ""
+}
+
 variable "enabled" {
   default = true
 }

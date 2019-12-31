@@ -10,6 +10,10 @@ acme:
     route53:
       region: ${route53_dns_region}
       hostedZoneID: ${route53_dns_hosted_zone}
+    gcp:
+      project: ${gcp_dns_project}
+	  serviceAccountSecretName: ${gcp_dns_service_account_secret_name}
+	  serviceAccountSecretKey: ${gcp_dns_service_account_secret_key}
   solver: ${acme_solver}
 ca:
   enabled: ${issuer_type == "ca"}
