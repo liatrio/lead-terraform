@@ -27,8 +27,6 @@ module "istio_system" {
   enabled    = var.enable_istio
   namespace  = "istio-system"
   crd_waiter = null_resource.istio_init_delay.id
-  region     = ""
-  zone_id    = ""
   domain     = "istio-system.${var.cluster}.${var.root_zone_name}"
   providers = {
     helm = helm.system
