@@ -227,6 +227,26 @@ master:
                         key: "GITOPS_GIT_PASSWORD"
                         secretKey: "password"
                         secretName: "jenkins-credential-github"
+                  - name: "lead-toolchain-goreleaser"
+                    label: "lead-toolchain-goreleaser"
+                    nodeUsageMode: NORMAL
+                    containers:
+                      - name: "goreleaser"
+                        image: "goreleaser/goreleaser:v0.123"
+                        alwaysPullImage: false
+                        workingDir: "/home/jenkins/agent"
+                        command: "/bin/sh -c"
+                        args: "cat"
+                        ttyEnabled: true
+                        resourceRequestCpu: 128m
+                        resourceLimitCpu: 256m
+                        resourceRequestMemory: 128Mi
+                        resourceLimitMemory: 256Mi
+                    envVars:
+                    - secretEnvVar:
+                        key: "GITHUB_TOKEN"
+                        secretKey: "password"
+                        secretName: "jenkins-credential-github"
       shared-libraries: |
         unclassified:
           globalLibraries:
