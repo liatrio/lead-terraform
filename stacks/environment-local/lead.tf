@@ -7,13 +7,15 @@ data "template_file" "external_dns_values" {
 }
 
 module "infrastructure" {
-  source             = "../../modules/lead/infrastructure"
-  cluster            = var.cluster
-  namespace          = var.system_namespace
-  enable_opa         = "false"
-  opa_failure_policy = var.opa_failure_policy
-  issuer_type        = "selfSigned"
-  uptime             = var.uptime
+  source                              = "../../modules/lead/infrastructure"
+  cluster                             = var.cluster
+  namespace                           = var.system_namespace
+  enable_opa                          = "false"
+  enable_downscaler                   = false
+  enable_k8s_spot_termination_handler = false
+  opa_failure_policy                  = var.opa_failure_policy
+  issuer_type                         = "selfSigned"
+  uptime                              = var.uptime
 
   external_dns_chart_values = data.template_file.external_dns_values.rendered
 
@@ -45,6 +47,7 @@ module "toolchain" {
   ingress_external_traffic_policy = var.ingress_external_traffic_policy
   crd_waiter                      = module.infrastructure.crd_waiter
   grafeas_version                 = var.grafeas_version
+  k8s_storage_class =             var.k8s_storage_class
   prometheus_slack_webhook_url    = var.prometheus_slack_webhook_url
   prometheus_slack_channel        = var.prometheus_slack_channel
 
@@ -101,6 +104,7 @@ module "dashboard" {
   cluster           = var.cluster
   namespace         = module.toolchain.namespace
   dashboard_version = var.dashboard_version
+  k8s_storage_class = var.k8s_storage_class
   enabled           = var.enable_dashboard
   local             = true
 

@@ -1,7 +1,7 @@
 elasticsearch:
 %{ if local == "false" }
   volumeClaimTemplate:
-    storageClassName: gp2
+    storageClassName: ${k8s_storage_class}
   resources:
     requests:
       cpu: 100m

@@ -109,3 +109,5 @@ variable "harbor_registry_disk_size" {
 variable "harbor_chartmuseum_disk_size" {
   default = "100Gi"
 }
+
+variable "k8s_storage_class" {}

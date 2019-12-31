@@ -19,6 +19,6 @@ spec:
   resources:
     requests:
       storage: {{ $component.size }}
-  storageClassName: gp2
+  storageClassName: $.Values.storageClassName
   volumeMode: Filesystem
 {{ end }}
