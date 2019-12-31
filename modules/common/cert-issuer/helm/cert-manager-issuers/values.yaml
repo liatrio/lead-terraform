@@ -10,6 +10,10 @@ acme:
     route53:
       region: us-east-1
       hostedZoneID: foo
+    gcp:
+      project:
+      serviceAccountSecretName:
+      serviceAccountSecretKey:
   solver: dns
 ca:
   enabled: false
