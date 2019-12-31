@@ -5,6 +5,13 @@ locals {
 provider "helm" {
 }
 
+provider "helm" {
+  alias = "system"
+}
+
+provider "kubernetes" {
+}
+
 data "helm_repository" "codecentric" {
   name = "codecentric"
   url  = "https://codecentric.github.io/helm-charts"
@@ -13,6 +20,11 @@ data "helm_repository" "codecentric" {
 data "helm_repository" "liatrio" {
   name = "liatrio"
   url  = "https://artifactory.liatr.io/artifactory/helm/"
+}
+
+data "helm_repository" "stable" {
+  name = "stable"
+  url  = "https://kubernetes-charts.storage.googleapis.com"
 }
 
 module "toolchain_namespace" {
@@ -24,6 +36,20 @@ module "toolchain_namespace" {
     "opa.lead.liatrio/ingress-whitelist"         = "*.${var.namespace}.${var.cluster}.${var.root_zone_name}"
     "opa.lead.liatrio/image-whitelist"           = var.image_whitelist
     "opa.lead.liatrio/elb-extra-security-groups" = var.elb_security_group_id
+  }
+}
+
+module "toolchain_certificate" {
+  source          = "../../common/certificates"
+  namespace       = "istio-system"
+  name            = module.toolchain_namespace.name
+  domain          = "${module.toolchain_namespace.name}.${var.cluster_domain}"
+  enabled         = var.enable_istio
+  certificate_crd = "set"
+
+  providers = {
+    helm       = helm.system
+    kubernetes = kubernetes
   }
 }
 
@@ -71,7 +97,7 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
     verbs      = ["get", "create", "update", "watch", "delete", "list", "patch"]
   }
   rule {
-    api_groups = ["cert-manager.io","certmanager.k8s.io"]
+    api_groups = ["cert-manager.io", "certmanager.k8s.io"]
     resources  = ["issuers", "certificates"]
     verbs      = ["get", "create", "watch", "delete", "list", "patch"]
   }
@@ -112,8 +138,37 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
   }
   rule {
     api_groups = ["metrics.k8s.io"]
-    resources  = ["nodes","pods"]
+    resources  = ["nodes", "pods"]
     verbs      = ["get", "list", "watch"]
+  }
+  rule {
+    api_groups = ["admissionregistration.k8s.io"]
+    resources  = ["validatingwebhookconfigurations", "mutatingwebhookconfigurations"]
+    verbs      = ["get", "update", "create"]
+  }
+  rule {
+    api_groups = ["extensions"]
+    resources  = ["podsecuritypolicies"]
+    verbs      = ["use"]
+  }
+  rule {
+    api_groups = ["certificates.k8s.io"]
+    resources  = ["certificatesigningrequests"]
+    verbs      = ["list", "watch"]
+  }
+  rule {
+    api_groups = ["storage.k8s.io"]
+    resources  = ["storageclasses"]
+    verbs      = ["list", "watch"]
+  }
+  rule {
+    api_groups = ["monitoring.coreos.com"]
+    resources  = ["alertmanagers", "alertmanagers/finalizers", "podmonitors", "prometheuses", "prometheuses/finalizers", "prometheusrules", "servicemonitors"]
+    verbs      = ["*"]
+  }
+  rule {
+    non_resource_urls = ["/metrics"]
+    verbs             = ["get"]
   }
 }
 

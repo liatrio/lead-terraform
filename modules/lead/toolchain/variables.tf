@@ -36,6 +36,10 @@ variable "ingress_external_traffic_policy" {
 variable "grafeas_version" {
 }
 
+variable "enable_istio" {
+  default = true
+}
+
 variable "enable_artifactory" {
   default = true
 }
@@ -64,6 +68,10 @@ variable "enable_grafeas" {
   default = true
 }
 
+variable "enable_harbor" {
+  default = true
+}
+
 variable "crd_waiter" {
 }
 
@@ -83,4 +91,21 @@ variable "smtp_password" {
 }
 
 variable "smtp_from_email" {
+}
+
+variable "prometheus_slack_webhook_url" {
+}
+
+variable "prometheus_slack_channel" {
+}
+
+variable "cluster_domain" {
+}
+
+variable "harbor_registry_disk_size" {
+  default = "200Gi"
+}
+
+variable "harbor_chartmuseum_disk_size" {
+  default = "100Gi"
 }

@@ -22,7 +22,9 @@ variable "opa_failure_policy" {
 }
 
 variable "sdm_version" {
-  default = "0.4.0-160-gd3913d2"
+}
+
+variable "dashboard_version" {
 }
 
 variable "product_version" {
@@ -86,15 +88,21 @@ variable "enable_grafeas" {
   default = true
 }
 
+variable "enable_dashboard" {
+  default = false
+}
+
+variable "enable_harbor" {
+  default = true
+}
+
 variable "uptime" {
   default = "always"
 }
 
 variable "builder_images_version" {
-  default = "v1.0.15-7-g2465aa8"
 }
 variable "jenkins_image_version" {
-  default = "v1.0.15-7-g2465aa8"
 }
 variable "image_repo" {
   default = "artifactory.toolchain.lead.prod.liatr.io/docker-registry/flywheel"
@@ -116,4 +124,10 @@ locals {
 
 variable "grafeas_version" {
   default = "v0.1.1-4-ge024b96"
+}
+
+variable "prometheus_slack_channel" {
+}
+
+variable "prometheus_slack_webhook_url" {
 }

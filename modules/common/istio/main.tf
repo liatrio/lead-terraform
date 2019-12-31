@@ -50,6 +50,7 @@ data "template_file" "istio_values" {
 
   vars = {
     domain = var.domain
+    pilotTraceSampling = var.pilot_trace_sampling
   }
 }
 
@@ -130,39 +131,39 @@ resource "kubernetes_cluster_role_binding" "tiller_cluster_role_binding" {
 }
 
 module "istio_cert_issuer" {
-  source                   = "../cert-issuer"
-  enabled                  = var.enabled
-  namespace                = module.istio_namespace.name
-  issuer_name              = var.cert_issuer_name
-  issuer_type              = var.cert_issuer_type
-  issuer_server            = var.cert_issuer_server
-  crd_waiter               = var.crd_waiter
+  source        = "../cert-issuer"
+  enabled       = var.enabled
+  namespace     = module.istio_namespace.name
+  issuer_name   = var.cert_issuer_name
+  issuer_type   = var.cert_issuer_type
+  issuer_server = var.cert_issuer_server
+  crd_waiter    = var.crd_waiter
 
-  acme_solver              = "dns"
-  provider_dns_type        = "route53"
-  route53_dns_region       = var.region
-  route53_dns_hosted_zone  = var.zone_id
+  acme_solver             = "dns"
+  provider_dns_type       = "route53"
+  route53_dns_region      = var.region
+  route53_dns_hosted_zone = var.zone_id
 }
 
 module "istio_flagger" {
-  source        = "../../common/flagger"
-  enable        = var.enabled
-  namespace     = var.enabled ? helm_release.istio[0].metadata[0].namespace : ""
+  source    = "../../common/flagger"
+  enable    = var.enabled
+  namespace = var.enabled ? helm_release.istio[0].metadata[0].namespace : ""
 }
 
 resource "kubernetes_horizontal_pod_autoscaler" "kiali_autoscaler" {
   count = var.enabled ? 1 : 0
   metadata {
-    name = "kiali"
+    name      = "kiali"
     namespace = module.istio_namespace.name
   }
   spec {
-    max_replicas = 20
+    max_replicas                      = 20
     target_cpu_utilization_percentage = 80
     scale_target_ref {
       api_version = "apps/v1beta1"
-      kind = "Deployment"
-      name = "kiali"
+      kind        = "Deployment"
+      name        = "kiali"
     }
   }
 }

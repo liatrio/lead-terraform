@@ -36,7 +36,7 @@ provider "helm" {
     "spec.template.spec.tolerations[0].key=${var.essential_taint_key}",
     "spec.template.spec.tolerations[0].operator=Exists",
   ]
-  
+
   kubernetes {
     host                   = data.aws_eks_cluster.cluster.endpoint
     cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority[0].data)

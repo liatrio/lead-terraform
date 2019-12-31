@@ -1,0 +1,34 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: harbor-config
+  labels:
+    managed-by: Terraform
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: alpine
+          image: alpine:3.10
+          command: ["sh"]
+          args: ["/scripts/config.sh"]
+          volumeMounts:
+            - mountPath: /scripts
+              name: scripts
+          env:
+            - name: HARBOR_USERNAME
+              value: {{ .Values.harbor.username }}
+            - name: HARBOR_PASSWORD
+              value: {{ .Values.harbor.password }}
+            - name: HARBOR_HOSTNAME
+              value: {{ .Values.harbor.hostname }}
+            - name: KEYCLOAK_HOSTNAME
+              value: {{ .Values.keycloak.hostname }}
+            - name: KEYCLOAK_CLIENT_SECRET
+              value: {{ .Values.keycloak.secret }}
+      volumes:
+        - name: scripts
+          configMap:
+            name: harbor-config-scripts
+            defaultMode: 0744

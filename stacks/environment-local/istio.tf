@@ -30,7 +30,7 @@ module "istio_system" {
   region     = ""
   zone_id    = ""
   domain     = "istio-system.${var.cluster}.${var.root_zone_name}"
-  providers  = {
+  providers = {
     helm = helm.system
   }
 }

@@ -55,7 +55,7 @@ variable "essential_asg_max_size" {
 }
 
 variable "essential_instance_type" {
-  default = "t3.small"
+  default = "t3.medium"
 }
 
 variable "image_whitelist" {
@@ -122,6 +122,14 @@ variable "enable_grafeas" {
   default = true
 }
 
+variable "enable_harbor" {
+  default = true
+}
+
+variable "enable_dashboard" {
+  default = true
+}
+
 variable "enable_autoscaler_scale_down" {
   default = true
 }
@@ -134,7 +142,7 @@ variable "uptime" {
   default = "Mon-Fri 05:00-19:00 America/Los_Angeles"
 }
 variable "downscaler_exclude_namespaces" {
-  type = list(string)
+  type    = list(string)
   default = ["kube-system"]
 }
 variable "builder_images_version" {
@@ -150,6 +158,8 @@ variable "image_repo" {
   default = "artifactory.toolchain.lead.prod.liatr.io/docker-registry/flywheel"
 }
 
+variable "prometheus_slack_channel" {
+}
 
 locals {
   tags = {

@@ -11,6 +11,14 @@ variable "enable_opa" {
   default = "true"
 }
 
+variable "enable_downscaler" {
+  default = "true"
+}
+
+variable "enable_k8s_spot_termination_handler" {
+  default = "true"
+}
+
 variable "opa_failure_policy" {
 }
 
@@ -38,7 +46,7 @@ variable "uptime" {
 }
 
 variable "external_dns_service_account_annotations" {
-  type = "map"
+  type = map
   default = {}
 }
 

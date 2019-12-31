@@ -39,17 +39,17 @@ variable "product_stack" {
 }
 
 variable "product_vars" {
-  type = "map"
+  type    = map
   default = {}
 }
 
 variable "operator_slack_service_account_annotations" {
-  type = "map"
+  type    = map
   default = {}
 }
 
 variable "operator_jenkins_service_account_annotations" {
-  type = "map"
+  type    = map
   default = {}
 }
 
