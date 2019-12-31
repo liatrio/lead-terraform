@@ -2,7 +2,7 @@ issuerName: ${issuer_name}
 acme:
   enabled: ${ issuer_type == "acme" }
   server: ${ issuer_server }
-  email: cloudservices@liatr.io
+  email: ${ issuer_email }
   httpProvider:
     ingressClass: ${provider_http_ingress_class}
   dnsProvider:
