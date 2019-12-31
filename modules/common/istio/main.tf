@@ -143,7 +143,7 @@ resource "kubernetes_secret" "gcp_dns_service_account_key" {
   }
 
   data = {
-    local.gcp_service_account_secret_key = var.gcp_dns_service_account_json
+    (local.gcp_service_account_secret_key) = var.gcp_dns_service_account_json
   }
 }
 
@@ -163,7 +163,7 @@ module "istio_cert_issuer" {
   route53_dns_hosted_zone = var.route53_zone_id
 
   gcp_dns_project = var.gcp_dns_project
-  gcp_dns_service_account_secret_name = var.cert_issuer_dns_provider == "gcp" ? kubernetes_secret.gcp_dns_service_account_key[0].metadata.name : ""
+  gcp_dns_service_account_secret_name = var.cert_issuer_dns_provider == "gcp" ? kubernetes_secret.gcp_dns_service_account_key[0].metadata[0].name : ""
   gcp_dns_service_account_secret_key = local.gcp_service_account_secret_key
 }
 
