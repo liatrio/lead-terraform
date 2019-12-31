@@ -14,6 +14,8 @@ gateways:
         limits:
           cpu: 100m
           memory: 256Mi
+      token:
+        aud: istio-ca
     resources:
       requests:
         cpu: 200m
@@ -35,6 +37,7 @@ global:
       limits:
         cpu: 40m
         memory: 64Mi
+    protocolDetectionTimeout: 100ms 
   defaultResources:
     requests:
       cpu: 10m
