@@ -47,6 +47,7 @@ module "toolchain" {
   ingress_external_traffic_policy = var.ingress_external_traffic_policy
   crd_waiter                      = module.infrastructure.crd_waiter
   grafeas_version                 = var.grafeas_version
+  k8s_storage_class =             var.k8s_storage_class
   prometheus_slack_webhook_url    = var.prometheus_slack_webhook_url
   prometheus_slack_channel        = var.prometheus_slack_channel
 
@@ -103,6 +104,7 @@ module "dashboard" {
   cluster           = var.cluster
   namespace         = module.toolchain.namespace
   dashboard_version = var.dashboard_version
+  k8s_storage_class = var.k8s_storage_class
   enabled           = var.enable_dashboard
   local             = true
 
