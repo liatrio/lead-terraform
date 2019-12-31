@@ -12,6 +12,8 @@ module "infrastructure" {
   namespace                             = var.system_namespace
   opa_failure_policy                    = var.opa_failure_policy
   enable_opa                            = "false"
+  enable_downscaler                     = true
+  enable_k8s_spot_termination_handler   = true
   issuer_type                           = "acme"
   issuer_server                         = var.cert_issuer_server
   uptime                                = var.uptime
