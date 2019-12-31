@@ -2,9 +2,10 @@ data "template_file" "dashboard_values" {
   template = file("${path.module}/dashboard-values.tpl")
 
   vars = {
-    cluster_domain = "${var.namespace}.${var.cluster}.${var.root_zone_name}"
-    namespace      = var.namespace
-    local          = var.local
+    cluster_domain     = "${var.namespace}.${var.cluster}.${var.root_zone_name}"
+    namespace          = var.namespace
+    local              = var.local
+    k8s_storage_class  = var.k8s_storage_class
   }
 }
 
