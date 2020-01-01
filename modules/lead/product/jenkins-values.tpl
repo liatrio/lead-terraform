@@ -232,7 +232,7 @@ master:
                     nodeUsageMode: NORMAL
                     containers:
                       - name: "goreleaser"
-                        image: "goreleaser/goreleaser:v0.123"
+                        image: "${image_repo}/builder-image-goreleaser:${builder_images_version}"
                         alwaysPullImage: false
                         workingDir: "/home/jenkins/agent"
                         command: "/bin/sh -c"
