@@ -29,8 +29,9 @@ module "istio_system" {
   enabled    = var.enable_istio
   namespace  = "istio-system"
   crd_waiter = null_resource.istio_init_delay.id
-  region     = var.region
-  zone_id    = aws_route53_zone.cluster_zone.zone_id
+  cert_issuer_dns_provider = "route53"
+  route53_region     = var.region
+  route53_zone_id    = aws_route53_zone.cluster_zone.zone_id
   domain     = "istio-system.${module.eks.cluster_id}.${var.root_zone_name}"
   providers = {
     helm = helm.system

@@ -1,3 +1,7 @@
+locals {
+  gcp_service_account_secret_key = "credentials.json"
+}
+
 module "istio_namespace" {
   source    = "../namespace"
   enabled   = var.enabled
@@ -130,6 +134,19 @@ resource "kubernetes_cluster_role_binding" "tiller_cluster_role_binding" {
   }
 }
 
+resource "kubernetes_secret" "gcp_dns_service_account_key" {
+  count = var.cert_issuer_dns_provider == "gcp" ? 1 : 0
+
+  metadata {
+    name = "gcp-dns-service-account-key"
+    namespace = module.istio_namespace.name
+  }
+
+  data = {
+    (local.gcp_service_account_secret_key) = var.gcp_dns_service_account_json
+  }
+}
+
 module "istio_cert_issuer" {
   source        = "../cert-issuer"
   enabled       = var.enabled
@@ -140,9 +157,14 @@ module "istio_cert_issuer" {
   crd_waiter    = var.crd_waiter
 
   acme_solver             = "dns"
-  provider_dns_type       = "route53"
-  route53_dns_region      = var.region
-  route53_dns_hosted_zone = var.zone_id
+  provider_dns_type       = var.cert_issuer_dns_provider
+
+  route53_dns_region      = var.route53_region
+  route53_dns_hosted_zone = var.route53_zone_id
+
+  gcp_dns_project = var.gcp_dns_project
+  gcp_dns_service_account_secret_name = var.cert_issuer_dns_provider == "gcp" ? kubernetes_secret.gcp_dns_service_account_key[0].metadata[0].name : ""
+  gcp_dns_service_account_secret_key = local.gcp_service_account_secret_key
 }
 
 module "istio_flagger" {
