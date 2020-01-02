@@ -85,9 +85,6 @@ core:
   affinity: {}
   ## Additional deployment annotations
   podAnnotations: {}
-limits:
-  memory: 256Mi
-  cpu: 50m
 jobservice:
   image:
     repository: goharbor/harbor-jobservice
@@ -172,7 +169,7 @@ clair:
         cpu: 200m
       limits:
         memory: 2048Mi
-        cpu: 400m
+        cpu: 600m
   adapter:
     image:
       repository: goharbor/clair-adapter-photon
