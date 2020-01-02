@@ -8,6 +8,11 @@ grafana:
     repository: grafana/grafana
     tag: 6.5.1-ubuntu
     pullPolicy: IfNotPresent
+  resources:
+    limits:
+      cpu: 300m
+    requests:
+      cpu: 80m
 
 kubeStateMetrics:
   deploymentAnnotations:
@@ -30,10 +35,10 @@ nodeExporter:
 prometheusOperator:
   resources:
     limits:
-      cpu: 200m
+      cpu: 600m
       memory: 200Mi
     requests:
-      cpu: 100m
+      cpu: 300m
       memory: 100Mi
   configReloaderCpu: 100m
   configReloaderMemory: 25Mi

@@ -19,4 +19,10 @@
     tls:
     - hosts:
       - ${ingress_hostname}
-      secretName: kube-resource-report-ingress-tls    
+      secretName: kube-resource-report-ingress-tls
+  resourcesApp:
+    limits:
+      memory: 100Mi
+    requests:
+      cpu: 25m
+      memory: 50Mi
