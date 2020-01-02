@@ -54,8 +54,11 @@ portal:
   replicas: 1
   resources:
    requests:
-     memory: 256Mi
+     memory: 64Mi
      cpu: 100m
+   limits:
+     memory: 256Mi
+     cpu: 150m
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -72,14 +75,16 @@ core:
     initialDelaySeconds: 300
   resources:
    requests:
+     memory: 64Mi
+     cpu: 10m
+   limits:
      memory: 256Mi
-     cpu: 100m
+     cpu: 50m
   nodeSelector: {}
   tolerations: []
   affinity: {}
   ## Additional deployment annotations
   podAnnotations: {}
-
 jobservice:
   image:
     repository: goharbor/harbor-jobservice
@@ -90,8 +95,11 @@ jobservice:
   jobLogger: stdout
   resources:
     requests:
+      memory: 64Mi
+      cpu: 10m
+    limits:
       memory: 256Mi
-      cpu: 100m
+      cpu: 50m
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -138,8 +146,11 @@ chartmuseum:
   replicas: 1
   resources:
     requests:
-      memory: 256Mi
-      cpu: 100m
+      memory: 64Mi
+      cpu: 10m
+    limits:
+      memory: 128Mi
+      cpu: 50m
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -158,7 +169,7 @@ clair:
         cpu: 200m
       limits:
         memory: 2048Mi
-        cpu: 2
+        cpu: 600m
   adapter:
     image:
       repository: goharbor/clair-adapter-photon
@@ -166,6 +177,9 @@ clair:
     resources:
       requests:
         memory: 64Mi
+        cpu: 10m
+      limits:
+        memory: 128Mi
         cpu: 50m
   replicas: 1
   # The interval of clair updaters, the unit is hour, set to 0 to
@@ -186,8 +200,11 @@ notary:
     replicas: 1
     resources:
       requests:
+        memory: 64Mi
+        cpu: 10m
+      limits:
         memory: 256Mi
-        cpu: 100m
+        cpu: 50m
   signer:
     image:
       repository: goharbor/notary-signer-photon
@@ -195,8 +212,11 @@ notary:
     replicas: 1
     resources:
       requests:
+        memory: 64Mi
+        cpu: 10m
+      limits:
         memory: 256Mi
-        cpu: 100m
+        cpu: 50m
   nodeSelector: {}
   tolerations: []
   affinity: {}
