@@ -1,8 +1,6 @@
 variable "namespace" {}
 variable "crd_waiter" {}
-variable "region" {}
 variable "domain" {}
-variable "zone_id" {}
 
 variable "kiali_username" {
   default = "admin"
@@ -18,6 +16,26 @@ variable "cert_issuer_server" {
 
 variable "cert_issuer_name" {
   default = "letsencrypt-dns"
+}
+
+variable "cert_issuer_dns_provider" {
+  default = "route53"
+}
+
+variable "route53_zone_id" {
+  default = ""
+}
+
+variable "route53_region" {
+  default = ""
+}
+
+variable "gcp_dns_project" {
+  default = ""
+}
+
+variable "gcp_dns_service_account_json" {
+  default = ""
 }
 
 variable "enabled" {

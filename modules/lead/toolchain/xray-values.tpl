@@ -12,44 +12,44 @@ ingress:
 postgresql:
   resources:
     requests:
-      cpu: 20m
+      cpu: 50m
       memory: 100Mi
     limits:
-      cpu: 100m
+      cpu: 150m
       memory: 125Mi
 analysis:
   resources:
     requests:
-      cpu: 5m
+      cpu: 10m
       memory: 150Mi
     limits:
-      cpu: 20m
+      cpu: 50m
       memory: 200Mi
 indexer:
   resources:
     requests:
-      cpu: 5m
+      cpu: 10m
       memory: 150Mi
     limits:
-      cpu: 20m
+      cpu: 50m
       memory: 200Mi
 persist:
   resources:
     requests:
-      cpu: 5m
+      cpu: 10m
       memory: 150Mi
     limits:
-      cpu: 20m
+      cpu: 50m
       memory: 200Mi
 server:
   service:
     type: ClusterIP
   resources:
     requests:
-      cpu: 5m
+      cpu: 10m
       memory: 150Mi
     limits:
-      cpu: 20m
+      cpu: 50m
       memory: 200Mi
 rabbitmq-ha:
   resources:
