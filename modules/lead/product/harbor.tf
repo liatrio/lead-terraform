@@ -1,31 +1,31 @@
-data "kubernetes_secret" "harbor-harbor-core" {
+data "kubernetes_secret" "product-harbor-creds" {
   provider = kubernetes.toolchain
   metadata {
-    name      = "harbor-harbor-core"
+    name      = "${var.product-name}-harbor-credentials"
     namespace = "toolchain"
   }
 }
 
-data "template_file" "harbor_cfg" {
+data "template_file" "harbor_dockercfg" {
   template = file("${path.module}/artifactory-dockercfg.tpl")
 
   vars = {
-    url   = "https://harbor.toolchain.${var.cluster_domain}/docker-registry/${var.product_name}"
+    url   = "https:/harbor.toolchain.lead.sandbox.liatr.io"
     email = "jenkins@liatr.io"
     auth = base64encode(
-      "admin:${data.kubernetes_secret.harbor-harbor-core.data.HARBOR_ADMIN_PASSWORD}",
+      "robot$$${var.product-name}:${data.kubernetes_secret.product-harbor-creds.data.AUTH}",
     )
   }
 }
 
-resource "kubernetes_secret" "jenkins_harbor_cfg" {
+resource "kubernetes_secret" "jenkins_harbor_dockercfg" {
   metadata {
-    name      = "jenkins-harbor-cfg"
+    name      = "jenkins-harbor-dockercfg"
     namespace = module.toolchain_namespace.name
   }
 
   data = {
-    "harbor_config.json" = data.template_file.harbor_cfg.rendered
+    "config.json" = data.template_file.harbor_dockercfg.rendered
   }
 
   type = "Opaque"

@@ -14,7 +14,7 @@ data "template_file" "jenkins_values" {
     protocol               = local.protocol
     ssl_redirect           = local.protocol == "http" ? false : true
     ingress_hostname       = "jenkins.${module.toolchain_namespace.name}.${var.cluster_domain}"
-    artifactory_url        = "harbor.toolchain.${var.cluster_domain}/docker-registry"
+    image_repository_url   = "${var.image_repository}.toolchain.${var.cluster_domain}"
     namespace              = module.toolchain_namespace.name
     toolchain_namespace    = var.toolchain_namespace
     logstash_url           = "http://lead-dashboard-logstash.toolchain.svc.cluster.local:9000"
@@ -25,6 +25,8 @@ data "template_file" "jenkins_values" {
     productionDomain       = "${module.production_namespace.name}.${var.cluster_domain}"
     builder_images_version = var.builder_images_version
     allow_anonymous_read   = var.enable_keycloak ? "false" : "true"
+    jenkins-repository-dockercfg = "jenkins-${var.image_repository}-dockercfg"
+
 
     # Keycloak specific vars
     security_realm         = var.enable_keycloak ? "securityRealm: keycloak" : ""

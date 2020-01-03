@@ -21,3 +21,9 @@ variable "enable_istio" {
 variable "enable_keycloak" {
   default = true
 }
+
+variable "image_repository" {
+  default = "harbor"
+  description = "Artifactory or Harbor. Used to determine product image repo manager"
+}
+

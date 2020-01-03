@@ -129,17 +129,14 @@ master:
                     envVars:
                       - envVar:
                           key: "SKAFFOLD_DEFAULT_REPO"
-                          value: "${artifactory_url}/${product_name}"
+                          value: "${image_repository_url}/${product_name}"
                     volumes:
                       - hostPathVolume:
                           hostPath: "/var/run/docker.sock"
                           mountPath: "/var/run/docker.sock"
                       - secretVolume:
                           mountPath: "/root/.docker"
-                          secretName: "jenkins-artifactory-dockercfg"
-                      - secretVolume:
-                          mountPath: "/root/.docker"
-                          secretName: "jenkins-harbor-cfg"
+                          secretName: "${jenkins-repository-dockercfg}"
                     slaveConnectTimeout: 100
                     serviceAccount: "jenkins"
                   - name: "lead-toolchain-aws"
