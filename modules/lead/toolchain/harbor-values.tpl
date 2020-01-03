@@ -29,12 +29,15 @@ persistence:
       existingClaim: harbor-chartmuseum
       accessMode: ReadWriteOnce
     jobservice:
+      storageClass: ${storage_class}
       accessMode: ReadWriteOnce
       size: ${jobservice_pvc_size}
     database:
+      storageClass: ${storage_class}
       accessMode: ReadWriteOnce
       size: ${database_pvc_size}
     redis:
+      storageClass: ${storage_class}
       accessMode: ReadWriteOnce
       size: ${redis_pvc_size}
   imageChartStorage:
