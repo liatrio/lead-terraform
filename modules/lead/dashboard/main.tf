@@ -2,6 +2,7 @@ data "template_file" "dashboard_values" {
   template = file("${path.module}/dashboard-values.tpl")
 
   vars = {
+<<<<<<< HEAD
     cluster_domain = "${var.namespace}.${var.cluster}.${var.root_zone_name}"
     namespace      = var.namespace
     local          = var.local
@@ -18,6 +19,7 @@ data "template_file" "dashboard_values" {
 
     keycloak-enabled = enable_keycloak ? true : false
     proxy-certs    = "proxy-ingress-tls"
+    k8s_storage_class  = var.k8s_storage_class
   }
 }
 

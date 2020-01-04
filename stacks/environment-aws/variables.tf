@@ -166,3 +166,7 @@ locals {
     "Cluster" = var.cluster
   }
 }
+
+variable "k8s_storage_class" {
+  default = "gp2"
+}

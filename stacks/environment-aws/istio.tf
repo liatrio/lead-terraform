@@ -1,6 +1,6 @@
 data "helm_repository" "istio" {
   name     = "istio.io"
-  url      = "https://storage.googleapis.com/istio-release/releases/1.2.2/charts/"
+  url      = "https://storage.googleapis.com/istio-release/releases/1.3.6/charts/"
   provider = helm.system
 }
 
@@ -13,6 +13,7 @@ resource "helm_release" "istio_init" {
   timeout    = 600
   wait       = true
   provider   = helm.system
+  version    = "1.3.6"
 }
 
 # Give the CRD a chance to settle
@@ -28,8 +29,9 @@ module "istio_system" {
   enabled    = var.enable_istio
   namespace  = "istio-system"
   crd_waiter = null_resource.istio_init_delay.id
-  region     = var.region
-  zone_id    = aws_route53_zone.cluster_zone.zone_id
+  cert_issuer_dns_provider = "route53"
+  route53_region     = var.region
+  route53_zone_id    = aws_route53_zone.cluster_zone.zone_id
   domain     = "istio-system.${module.eks.cluster_id}.${var.root_zone_name}"
   providers = {
     helm = helm.system

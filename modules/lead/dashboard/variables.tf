@@ -26,3 +26,5 @@ variable "keycloak_realm_id" {
 
 variable "crd_waiter" {
 }
+
+variable "k8s_storage_class" {}

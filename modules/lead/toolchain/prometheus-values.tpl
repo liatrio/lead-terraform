@@ -8,6 +8,11 @@ grafana:
     repository: grafana/grafana
     tag: 6.5.1-ubuntu
     pullPolicy: IfNotPresent
+  resources:
+    limits:
+      cpu: 300m
+    requests:
+      cpu: 80m
 
 kubeStateMetrics:
   deploymentAnnotations:
@@ -30,10 +35,10 @@ nodeExporter:
 prometheusOperator:
   resources:
     limits:
-      cpu: 200m
+      cpu: 600m
       memory: 200Mi
     requests:
-      cpu: 100m
+      cpu: 300m
       memory: 100Mi
   configReloaderCpu: 100m
   configReloaderMemory: 25Mi
@@ -43,6 +48,13 @@ prometheusOperator:
     enabled: false
 prometheus:
   prometheusSpec:
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 95Gi
     resources:
       requests:
         cpu: 200m
@@ -81,6 +93,9 @@ alertmanager:
         receiver: "null"
       - match:
           alertname: KubeletTooManyPods
+        receiver: "null"
+      - match:
+          alertname: KubeVersionMismatch
         receiver: "null"
       - match:
           namespace: ""

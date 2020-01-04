@@ -131,3 +131,7 @@ variable "prometheus_slack_channel" {
 
 variable "prometheus_slack_webhook_url" {
 }
+
+variable "k8s_storage_class" {
+  default = "hostpath"
+}

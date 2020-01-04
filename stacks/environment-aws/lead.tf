@@ -12,6 +12,8 @@ module "infrastructure" {
   namespace                             = var.system_namespace
   opa_failure_policy                    = var.opa_failure_policy
   enable_opa                            = "false"
+  enable_downscaler                     = true
+  enable_k8s_spot_termination_handler   = true
   issuer_type                           = "acme"
   issuer_server                         = var.cert_issuer_server
   uptime                                = var.uptime
@@ -113,6 +115,7 @@ module "toolchain" {
   ingress_controller_type = "LoadBalancer"
   crd_waiter              = module.infrastructure.crd_waiter
   grafeas_version         = var.grafeas_version
+  k8s_storage_class       = var.k8s_storage_class
 
   harbor_registry_disk_size = "200Gi"
   harbor_chartmuseum_disk_size = "100Gi"
@@ -175,6 +178,7 @@ module "dashboard" {
   cluster           = module.eks.cluster_id
   namespace         = module.toolchain.namespace
   dashboard_version = var.dashboard_version
+  k8s_storage_class = var.k8s_storage_class
   enabled           = var.enable_dashboard
   enable_keycloak   = var.enable_keycloak
   keycloak_realm_id = module.toolchain.keycloak_realm_id
