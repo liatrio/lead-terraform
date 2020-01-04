@@ -2,7 +2,6 @@ data "template_file" "dashboard_values" {
   template = file("${path.module}/dashboard-values.tpl")
 
   vars = {
-<<<<<<< HEAD
     cluster_domain = "${var.namespace}.${var.cluster}.${var.root_zone_name}"
     namespace      = var.namespace
     local          = var.local

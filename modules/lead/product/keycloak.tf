@@ -48,18 +48,3 @@ resource "keycloak_openid_user_property_protocol_mapper" "jenkins_openid_user_pr
   user_property              = "email"
   claim_name                 = "email"
 }
-  
-resource "keycloak_openid_client" "kibana_openid_client" {
-  count                   = var.enable_keycloak? 1 : 0
-  realm_id                = data.kubernetes_secret.keycloak_toolchain_realm.data.id
-  client_id               = "kibana"
-  name                    = "kibana"
-  access_type             = "CONFIDENTIAL"
-  standard_flow_enabled   = true
-
-  valid_redirect_uris     = [
-    "https://KIBANA:5601/api/security/v1/oidc"  # What is the Kibana URL? kibana.toolchain.lead.sandbox.liatr.io?
-    "${local.protocol}://jenkins.${module.toolchain_namespace.name}.${var.cluster_domain}/securityRealm/finishLogin" # for dns routable or via ingress
-  ]
-
-}
