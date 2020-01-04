@@ -5,7 +5,44 @@ data "template_file" "dashboard_values" {
     cluster_domain = "${var.namespace}.${var.cluster}.${var.root_zone_name}"
     namespace      = var.namespace
     local          = var.local
+    elasticsearch-certs = "${module.elasticsearch-certificate.cert_name}-certificate"
+    kibana-certs = "${module.kibana-certificate.cert_name}-certificate"
+
+    kibana-hostname = "kibana.${var.namespace}.${var.cluster}.${var.root_zone_name}"
+
+    client-id      = keycloak_openid_client.kibana_client[0].client_id
+    client-secret  = keycloak_openid_client.kibana_client[0].client_secret
+    discovery-url  = "https://keycloak.${var.namespace}.${var.cluster}.${var.root_zone_name}/auth/realms/${var.keycloak_realm_id}"
+    listen         = 3000
+    upstream-url   = "https://lead-dashboard-kibana:5601"
+
+    keycloak-enabled = enable_keycloak ? true : false
+    proxy-certs    = "proxy-ingress-tls"
   }
+}
+
+module "elasticsearch-certificate" {
+  source = "../../common/certificates"
+ 
+  enabled         = var.enabled
+  name            = "elasticsearch-certs"
+  namespace       = var.namespace
+  domain          = "elasticsearch-master"
+  issuer_name     = "lead-namespace-issuer"
+  certificate_crd = var.crd_waiter
+  wait_for_cert   = true
+}
+
+module "kibana-certificate" {
+  source = "../../common/certificates"
+ 
+  enabled         = var.enabled
+  name            = "kibana-certs"
+  namespace       = var.namespace
+  domain          = "lead-dashboard-kibana"
+  issuer_name     = "lead-namespace-issuer"
+  certificate_crd = var.crd_waiter
+  wait_for_cert   = true
 }
 
 data "helm_repository" "liatrio" {
@@ -23,6 +60,37 @@ resource "helm_release" "lead-dashboard" {
   timeout    = 900
 
   values = [data.template_file.dashboard_values.rendered]
+
+  depends_on = [
+    module.elasticsearch-certificate.cert_status,
+    module.kibana-certificate.cert_status,
+  ]
 }
 
-### setup keycloak client in here
+
+resource "keycloak_openid_client" "kibana_client" {
+  count = var.enable_keycloak ? 1 : 0 
+  realm_id = var.keycloak_realm_id
+  client_id = "kibana"
+  name = "kibana"
+  enabled = true
+ 
+  access_type = "CONFIDENTIAL"
+  standard_flow_enabled = true
+ 
+  valid_redirect_uris = [ 
+    "https://kibana.${var.namespace}.${var.cluster}.${var.root_zone_name}/oauth/callback"
+  ]
+ 
+  depends_on = [ 
+    helm_release.lead-dashboard
+  ]
+}
+
+resource "keycloak_openid_audience_protocol_mapper" "audience_mapper" {
+  realm_id                 = "${keycloak_openid_client.kibana_client[0].realm_id}"
+  client_id                = "${keycloak_openid_client.kibana_client[0].id}"
+  name                     = "audience-mapper"
+
+  included_client_audience = "{keycloak_openid_client.kibana_client[0].client_id}" 
+}

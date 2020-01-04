@@ -17,3 +17,12 @@ variable "namespace" {
 variable "dashboard_version" {
 }
 
+variable "enable_keycloak" {
+  default = false
+}
+
+variable "keycloak_realm_id" {
+}
+
+variable "crd_waiter" {
+}

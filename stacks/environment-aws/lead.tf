@@ -176,6 +176,9 @@ module "dashboard" {
   namespace         = module.toolchain.namespace
   dashboard_version = var.dashboard_version
   enabled           = var.enable_dashboard
+  enable_keycloak   = var.enable_keycloak
+  keycloak_realm_id = module.toolchain.keycloak_realm_id
+  crd_waiter        = module.infrastructure.crd_waiter
 
   providers = {
     helm = helm.toolchain
