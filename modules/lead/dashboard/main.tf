@@ -48,14 +48,24 @@ data "template_file" "dashboard_values" {
   }
 }
 
+module "ca-issuer" {
+  source = "../../common/ca-issuer"
+ 
+  enabled   = var.enable_keycloak
+  name      = "elasticstack"
+  namespace = var.namespace
+  common_name = var.root_zone_name
+  cert-manager-crd = var.crd_waiter
+}
+
 module "elasticsearch-certificate" {
   source = "../../common/certificates"
  
   enabled         = var.enabled
   name            = "elasticsearch-certs"
   namespace       = var.namespace
-  domain          = "elasticsearch-master"
-  issuer_name     = "lead-namespace-issuer"
+  domain          = "elasticsearch-master.${var.namespace}.svc"
+  issuer_name     = module.ca-issuer.name
   certificate_crd = var.crd_waiter
   wait_for_cert   = true
 }
@@ -67,7 +77,7 @@ module "kibana-certificate" {
   name            = "kibana-certs"
   namespace       = var.namespace
   domain          = "lead-dashboard-kibana"
-  issuer_name     = "lead-namespace-issuer"
+  issuer_name     = module.ca-issuer.name
   certificate_crd = var.crd_waiter
   wait_for_cert   = true
 }
