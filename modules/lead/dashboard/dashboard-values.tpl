@@ -9,6 +9,8 @@ elasticsearch:
     limits:
       cpu: 500m
       memory: 3.5Gi
+
+  esJavaOpts: "-Xmx1024m -Xms1024m"
 %{ else }
   # Permit co-located instances for solitary minikube virtual machines.
   antiAffinity: "soft"
