@@ -37,7 +37,7 @@ global:
       limits:
         cpu: 40m
         memory: 64Mi
-    protocolDetectionTimeout: 100ms 
+    protocolDetectionTimeout: 100ms
   defaultResources:
     requests:
       cpu: 10m
@@ -118,6 +118,9 @@ tracing:
     hosts:
     - ${domain}
   jaeger:
+    hub: docker.io/jaegertracing
+    image: all-in-one
+    tag: 1.16
     resources:
       requests:
         cpu: 10m
@@ -164,7 +167,7 @@ pilot:
           memory: 64Mi
 mixer:
   telemetry:
-    loadshedding: 
+    loadshedding:
       mode: logonly
     autoscaleMax: 20
     resources:
