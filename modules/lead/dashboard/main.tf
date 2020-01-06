@@ -83,9 +83,6 @@ resource "keycloak_openid_client" "kibana_client" {
     "https://kibana.${var.namespace}.${var.cluster}.${var.root_zone_name}/oauth/callback"
   ]
  
-  depends_on = [ 
-    helm_release.lead-dashboard
-  ]
 }
 
 resource "keycloak_openid_audience_protocol_mapper" "audience_mapper" {
