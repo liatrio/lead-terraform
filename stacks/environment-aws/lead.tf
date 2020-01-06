@@ -176,6 +176,7 @@ module "dashboard" {
   source            = "../../modules/lead/dashboard"
   root_zone_name    = var.root_zone_name
   cluster           = module.eks.cluster_id
+  cluster_domain    = "${var.cluster}.${var.root_zone_name}"
   namespace         = module.toolchain.namespace
   dashboard_version = var.dashboard_version
   k8s_storage_class = var.k8s_storage_class

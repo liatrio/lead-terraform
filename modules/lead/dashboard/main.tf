@@ -1,3 +1,26 @@
+locals {
+  protocol = var.cluster_domain == "docker-for-desktop.localhost" ? "http" : "https"
+}
+
+
+data "kubernetes_secret" "keycloak_admin_credential" {
+  provider = kubernetes.toolchain
+ 
+  metadata {
+    name      = "keycloak-admin-credential"
+    namespace = "toolchain"
+  }
+}
+ 
+provider "keycloak" {
+  client_id     = "admin-cli"
+  username      = var.enable_keycloak ? data.kubernetes_secret.keycloak_admin_credential.data.username : "username"
+  password      = var.enable_keycloak ? data.kubernetes_secret.keycloak_admin_credential.data.password : "password"
+  url           = "${local.protocol}://keycloak.${var.namespace}.${var.cluster}.${var.root_zone_name}"
+  initial_login = false
+}
+
+
 data "template_file" "dashboard_values" {
   template = file("${path.module}/dashboard-values.tpl")
 
