@@ -41,10 +41,6 @@ elasticsearch:
     path: /usr/share/elasticsearch/config/certs
 
 kibana:
-  secretMounts:
-    - name: ${kibana-certs}
-      secretName: ${kibana-certs}
-      path: /usr/share/kibana/config/certs
   resources:
     requests:
       cpu: 100m
