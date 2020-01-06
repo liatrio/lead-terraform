@@ -122,9 +122,9 @@ resource "keycloak_openid_client" "kibana_client" {
 }
 
 resource "keycloak_openid_audience_protocol_mapper" "audience_mapper" {
-  realm_id                 = "${keycloak_openid_client.kibana_client[0].realm_id}"
-  client_id                = "${keycloak_openid_client.kibana_client[0].id}"
+  realm_id                 = keycloak_openid_client.kibana_client[0].realm_id
+  client_id                = keycloak_openid_client.kibana_client[0].id
   name                     = "audience-mapper"
 
-  included_client_audience = "{keycloak_openid_client.kibana_client[0].client_id}" 
+  included_client_audience = keycloak_openid_client.kibana_client[0].client_id 
 }
