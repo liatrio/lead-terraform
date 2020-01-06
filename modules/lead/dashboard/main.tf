@@ -40,7 +40,7 @@ data "template_file" "dashboard_values" {
     client-secret  = keycloak_openid_client.kibana_client[0].client_secret
     discovery-url  = "https://keycloak.${var.namespace}.${var.cluster}.${var.root_zone_name}/auth/realms/${var.keycloak_realm_id}"
     listen         = 3000
-    upstream-url   = "https://lead-dashboard-kibana:5601"
+    upstream-url   = "http://lead-dashboard-kibana:5601"
 
     keycloak-enabled = var.enable_keycloak ? true : false
     proxy-certs    = "proxy-ingress-tls"
