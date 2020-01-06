@@ -9,20 +9,20 @@ gateways:
       enabled: true
       resources:
         requests:
-          cpu: 10m
+          cpu: 100m
           memory: 128Mi
         limits:
-          cpu: 100m
-          memory: 256Mi
+          cpu: 2000m
+          memory: 1024Mi
       token:
         aud: istio-ca
     resources:
       requests:
-        cpu: 200m
+        cpu: 100m
         memory: 128Mi
       limits:
-        cpu: 300m
-        memory: 128Mi
+        cpu: 2000m
+        memory: 1024Mi
 
 global:
   k8sIngress:
@@ -30,21 +30,29 @@ global:
     enableHttps: true
     gatewayName: istio-ingressgateway
   proxy:
+    init:
+      resources:
+        limits:
+          cpu: 100m
+          memory: 50Mi
+        requests:
+          cpu: 10m
+          memory: 10Mi
     resources:
       requests:
-        cpu: 10m
-        memory: 32Mi
+        cpu: 100m
+        memory: 128Mi
       limits:
-        cpu: 40m
-        memory: 64Mi
+        cpu: 2000m
+        memory: 1024Mi
     protocolDetectionTimeout: 100ms 
   defaultResources:
     requests:
       cpu: 10m
-      memory: 32Mi
+      memory: 128Mi
     limits:
       cpu: 100m
-      memory: 64Mi
+      memory: 128Mi
 
 certmanager:
   enabled: false
@@ -120,10 +128,10 @@ tracing:
   jaeger:
     resources:
       requests:
-        cpu: 10m
+        cpu: 256m
         memory: 400Mi
       limits:
-        cpu: 25m
+        cpu: 512m
         memory: 600Mi
 
 prometheus:
@@ -148,11 +156,11 @@ pilot:
   autoscaleMax: 20
   resources:
     requests:
-      cpu: 20m
-      memory: 96Mi
+      cpu: 500m
+      memory: 2048Mi
     limits:
-      cpu: 80m
-      memory: 192Mi
+      cpu: 1000m
+      memory: 4096Mi
   global:
     proxy:
       resource:
@@ -169,11 +177,12 @@ mixer:
     autoscaleMax: 20
     resources:
       requests:
-        cpu: 64m
-        memory: 64Mi
+        cpu: 1000m
+        memory: 1G
       limits:
-        cpu: 128m
-        memory: 128Mi
+        cpu: 2000m
+        memory: 2G
+
 security:
   resources:
     requests:
@@ -190,13 +199,4 @@ sidecarInjectorWebhook:
       memory: 16Mi
     limits:
       cpu: 25m
-      memory: 64Mi
-
-security:
-  resources:
-    requests:
-      cpu: 2m
-      memory: 32Mi
-    limits:
-      cpu: 100m
       memory: 64Mi
