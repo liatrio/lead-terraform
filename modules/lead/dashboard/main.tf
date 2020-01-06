@@ -43,7 +43,7 @@ data "template_file" "dashboard_values" {
     listen         = 3000
     upstream-url   = "https://lead-dashboard-kibana:5601"
 
-    keycloak-enabled = enable_keycloak ? true : false
+    keycloak-enabled = var,enable_keycloak ? true : false
     proxy-certs    = "proxy-ingress-tls"
     k8s_storage_class  = var.k8s_storage_class
   }
