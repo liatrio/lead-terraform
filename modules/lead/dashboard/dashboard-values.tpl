@@ -47,7 +47,7 @@ kibana:
       path: /usr/share/kibana/config/certs
   resources:
     requests:
-      cpu: 20m
+      cpu: 100m
       memory: 400Mi
     limits:
       cpu: 200m
