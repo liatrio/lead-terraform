@@ -126,6 +126,9 @@ tracing:
     hosts:
     - ${domain}
   jaeger:
+    hub: docker.io/jaegertracing
+    image: all-in-one
+    tag: 1.16
     resources:
       requests:
         cpu: 256m
@@ -172,7 +175,7 @@ pilot:
           memory: 64Mi
 mixer:
   telemetry:
-    loadshedding: 
+    loadshedding:
       mode: logonly
     autoscaleMax: 20
     resources:

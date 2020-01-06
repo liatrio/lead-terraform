@@ -242,11 +242,6 @@ master:
                         resourceLimitCpu: 256m
                         resourceRequestMemory: 128Mi
                         resourceLimitMemory: 256Mi
-                    envVars:
-                    - secretEnvVar:
-                        key: "GITHUB_TOKEN"
-                        secretKey: "password"
-                        secretName: "jenkins-credential-github"
       shared-libraries: |
         unclassified:
           globalLibraries:
