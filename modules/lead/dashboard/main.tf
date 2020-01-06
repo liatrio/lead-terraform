@@ -2,6 +2,10 @@ locals {
   protocol = var.cluster_domain == "docker-for-desktop.localhost" ? "http" : "https"
 }
 
+provider "kubernetes" {
+  alias = "toolchain"
+}
+
 
 data "kubernetes_secret" "keycloak_admin_credential" {
   provider = kubernetes.toolchain
