@@ -187,5 +187,6 @@ module "dashboard" {
 
   providers = {
     helm = helm.toolchain
+    kubernetes = kubernetes
   }
 }

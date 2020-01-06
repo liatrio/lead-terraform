@@ -3,12 +3,11 @@ locals {
 }
 
 provider "kubernetes" {
-  alias = "toolchain"
 }
 
 
 data "kubernetes_secret" "keycloak_admin_credential" {
-  provider = kubernetes.toolchain
+  provider = kubernetes
  
   metadata {
     name      = "keycloak-admin-credential"
