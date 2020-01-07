@@ -70,18 +70,6 @@ module "elasticsearch-certificate" {
   wait_for_cert   = true
 }
 
-module "kibana-certificate" {
-  source = "../../common/certificates"
- 
-  enabled         = var.enabled
-  name            = "kibana-certs"
-  namespace       = var.namespace
-  domain          = "lead-dashboard-kibana"
-  issuer_name     = module.ca-issuer.name
-  certificate_crd = var.crd_waiter
-  wait_for_cert   = true
-}
-
 data "helm_repository" "liatrio" {
   name = "lead.prod.liatr.io"
   url  = "https://artifactory.toolchain.lead.prod.liatr.io/artifactory/helm/"
@@ -100,7 +88,6 @@ resource "helm_release" "lead-dashboard" {
 
   depends_on = [
     module.elasticsearch-certificate.cert_status,
-    module.kibana-certificate.cert_status,
   ]
 }
 
