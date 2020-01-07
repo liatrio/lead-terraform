@@ -108,6 +108,7 @@ resource "keycloak_openid_client" "kibana_client" {
 }
 
 resource "keycloak_openid_audience_protocol_mapper" "audience_mapper" {
+  count                    = var.enable_keycloak ? 1 : 0
   realm_id                 = keycloak_openid_client.kibana_client[0].realm_id
   client_id                = keycloak_openid_client.kibana_client[0].id
   name                     = "audience-mapper"
