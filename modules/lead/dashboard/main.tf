@@ -32,7 +32,6 @@ data "template_file" "dashboard_values" {
     namespace      = var.namespace
     local          = var.local
     elasticsearch-certs = "${module.elasticsearch-certificate.cert_name}-certificate"
-    kibana-certs = "${module.kibana-certificate.cert_name}-certificate"
 
     kibana-hostname = "kibana.${var.namespace}.${var.cluster}.${var.root_zone_name}"
 
