@@ -9,6 +9,8 @@ elasticsearch:
     limits:
       cpu: 500m
       memory: 3.5Gi
+
+  esJavaOpts: "-Xmx1024m -Xms1024m"
 %{ else }
   # Permit co-located instances for solitary minikube virtual machines.
   antiAffinity: "soft"
@@ -33,10 +35,19 @@ elasticsearch:
       requests:
         storage: 100M
 %{ endif }
+  secretMounts:
+  - name: ${elasticsearch-certs}
+    secretName: ${elasticsearch-certs}
+    path: /usr/share/elasticsearch/config/certs
+
 kibana:
+  secretMounts:
+  - name: ${elasticsearch-certs}
+    secretName: ${elasticsearch-certs}
+    path: /usr/share/elasticsearch/config/certs
   resources:
     requests:
-      cpu: 20m
+      cpu: 100m
       memory: 400Mi
     limits:
       cpu: 200m
@@ -100,3 +111,24 @@ fluent-bit:
     limits:
       cpu: 400m
       memory: 128Mi
+  backend:
+    type: es
+    es:
+      host: elasticsearch-master
+      port: 9200
+      type: _doc
+      tls: "on"
+      tls_verify: "off"
+      tls_secret: ${elasticsearch-certs}
+      tls_debug: 4
+gatekeeperConfig:
+  clientId: ${client-id}
+  clientSecret: ${client-secret}
+  discoveryUrl: ${discovery-url}
+  listenPort: ${listen}
+  upstreamUrl: ${upstream-url}
+keycloak:
+  enabled: ${keycloak-enabled}
+  kibanaHostname: ${kibana-hostname}
+  ingress:
+    secretName: ${proxy-certs}

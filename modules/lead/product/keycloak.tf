@@ -48,4 +48,3 @@ resource "keycloak_openid_user_property_protocol_mapper" "jenkins_openid_user_pr
   user_property              = "email"
   claim_name                 = "email"
 }
-  
