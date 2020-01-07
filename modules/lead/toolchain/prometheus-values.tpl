@@ -32,6 +32,13 @@ nodeExporter:
   tolerations:
   - key: EssentialOnly
     operator: "Exists"
+  resources:
+    requests:
+      cpu: 100m
+      memory: 64Mi
+    limits:
+      cpu: 400m
+      memory: 512Mi
 prometheusOperator:
   resources:
     limits:
@@ -57,10 +64,10 @@ prometheus:
               storage: 95Gi
     resources:
       requests:
-        cpu: 200m
+        cpu: 500m
         memory: 2Gi
       limits:
-        cpu: 500m
+        cpu: 700m
         memory: 4Gi
 
 alertmanager:

@@ -92,4 +92,11 @@ logstash-jenkins:
     limits:
       cpu: 400m
       memory: 1.5Gi
-
+fluent-bit:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 8Mi
+    limits:
+      cpu: 400m
+      memory: 128Mi

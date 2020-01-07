@@ -198,8 +198,8 @@ security:
 sidecarInjectorWebhook:
   resources:
     requests:
-      cpu: 15m
+      cpu: 100m
       memory: 16Mi
     limits:
-      cpu: 25m
+      cpu: 400m
       memory: 64Mi
