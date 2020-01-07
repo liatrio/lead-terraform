@@ -1,6 +1,6 @@
 data "helm_repository" "istio" {
   name = "istio.io"
-  url  = "https://storage.googleapis.com/istio-release/releases/1.3.6/charts/"
+  url  = "https://storage.googleapis.com/istio-release/releases/1.4.2/charts/"
 }
 
 resource "helm_release" "istio_init" {
@@ -12,7 +12,7 @@ resource "helm_release" "istio_init" {
   timeout    = 600
   wait       = true
   provider   = helm.system
-  version    = "1.3.6"
+  version    = "1.4.2"
 }
 
 # Give the CRD a chance to settle
