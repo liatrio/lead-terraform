@@ -102,11 +102,15 @@ module "dashboard" {
   source            = "../../modules/lead/dashboard"
   root_zone_name    = var.root_zone_name
   cluster           = var.cluster
+  cluster_domain    = "${var.cluster}.${var.root_zone_name}"
   namespace         = module.toolchain.namespace
   dashboard_version = var.dashboard_version
   k8s_storage_class = var.k8s_storage_class
   enabled           = var.enable_dashboard
   local             = true
+  enable_keycloak   = var.enable_keycloak
+  keycloak_realm_id = module.toolchain.keycloak_realm_id
+  crd_waiter        = module.infrastructure.crd_waiter
 
   providers = {
     helm = helm.toolchain

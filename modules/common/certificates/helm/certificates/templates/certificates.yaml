@@ -89,5 +89,5 @@ spec:
       - name: post-install-job
         image: bitnami/kubectl:1.15
         command: ["/bin/bash", "-c"]
-        args: ["until $(kubectl get certificate {{ .Release.Name }} -n {{ .Values.namespace }} -o jsonpath=\"{.status.conditions[0].status}\" | grep -q \"True\"); do echo \"Waiting...\"; sleep 1; done"]
+        args: ["until $(kubectl get certificate {{ .Release.Name }} -n {{ .Release.Namespace }} -o jsonpath=\"{.status.conditions[0].status}\" | grep -q \"True\"); do echo \"Waiting...\"; sleep 1; done"]
 {{- end  }}
