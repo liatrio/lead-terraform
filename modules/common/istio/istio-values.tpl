@@ -180,11 +180,11 @@ mixer:
     autoscaleMax: 20
     resources:
       requests:
-        cpu: 1000m
-        memory: 1G
+        cpu: 500m
+        memory: 512Mi
       limits:
-        cpu: 2000m
-        memory: 2G
+        cpu: 1000m
+        memory: 1024Mi
 
 security:
   resources:
