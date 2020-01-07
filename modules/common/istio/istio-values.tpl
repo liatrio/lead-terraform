@@ -12,8 +12,8 @@ gateways:
           cpu: 100m
           memory: 128Mi
         limits:
-          cpu: 2000m
-          memory: 1024Mi
+          cpu: 1000m
+          memory: 512Mi
       token:
         aud: istio-ca
     resources:
@@ -21,8 +21,8 @@ gateways:
         cpu: 100m
         memory: 128Mi
       limits:
-        cpu: 2000m
-        memory: 1024Mi
+        cpu: 1000m
+        memory: 512Mi
 
 global:
   k8sIngress:
@@ -43,8 +43,8 @@ global:
         cpu: 100m
         memory: 128Mi
       limits:
-        cpu: 2000m
-        memory: 1024Mi
+        cpu: 1000m
+        memory: 512Mi
     protocolDetectionTimeout: 100ms 
   defaultResources:
     requests:
