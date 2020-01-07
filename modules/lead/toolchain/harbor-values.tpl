@@ -248,6 +248,9 @@ database:
       requests:
         memory: 256Mi
         cpu: 100m
+      limits:
+        memory: 512Mi
+        cpu: 200m
     nodeSelector: {}
     tolerations: []
     affinity: {}

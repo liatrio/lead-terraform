@@ -23,7 +23,7 @@
   resourcesApp:
     limits:
       memory: 100Mi
-      cpu: 200m
+      cpu: 1500m
     requests:
-      cpu: 25m
+      cpu: 100m
       memory: 50Mi

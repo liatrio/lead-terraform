@@ -12,10 +12,10 @@ ingress:
 postgresql:
   resources:
     requests:
-      cpu: 50m
-      memory: 100Mi
-    limits:
       cpu: 150m
+      memory: 75Mi
+    limits:
+      cpu: 600m
       memory: 125Mi
 analysis:
   resources:
