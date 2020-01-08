@@ -189,3 +189,17 @@ resource "kubernetes_horizontal_pod_autoscaler" "kiali_autoscaler" {
     }
   }
 }
+
+resource "helm_release" "kiali" {
+  count      = var.enabled ? 1 : 0
+  chart      = "${path.module}/charts/kiali"
+  namespace  = module.istio_namespace.name
+  name       = "kiali"
+  timeout    = 600
+  wait       = true
+
+  set {
+    name  = "istioDomain"
+    value = var.domain
+  }
+}
