@@ -1,40 +1,46 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: kiali-viewer
   labels:
     app: kiali
+  name: kiali-viewer
 rules:
-  - apiGroups: [""]
+  - apiGroups:
+      - ""
     resources:
       - configmaps
       - endpoints
       - namespaces
       - nodes
       - pods
-      - services
+      - pods/log
       - replicationcontrollers
+      - services
     verbs:
       - get
       - list
       - watch
-  - apiGroups: ["extensions", "apps"]
+  - apiGroups:
+      - extensions
+      - apps
     resources:
       - deployments
-      - statefulsets
       - replicasets
+      - statefulsets
     verbs:
       - get
       - list
       - watch
-  - apiGroups: ["autoscaling"]
+  - apiGroups:
+      - autoscaling
     resources:
       - horizontalpodautoscalers
     verbs:
       - get
       - list
       - watch
-  - apiGroups: ["batch"]
+  - apiGroups:
+      - batch
     resources:
       - cronjobs
       - jobs
@@ -42,70 +48,22 @@ rules:
       - get
       - list
       - watch
-  - apiGroups: ["config.istio.io"]
+  - apiGroups:
+      - config.istio.io
+      - networking.istio.io
+      - authentication.istio.io
+      - rbac.istio.io
+      - security.istio.io
     resources:
-      - apikeys
-      - authorizations
-      - checknothings
-      - circonuses
-      - deniers
-      - fluentds
-      - handlers
-      - kubernetesenvs
-      - kuberneteses
-      - listcheckers
-      - listentries
-      - logentries
-      - memquotas
-      - metrics
-      - opas
-      - prometheuses
-      - quotas
-      - quotaspecbindings
-      - quotaspecs
-      - rbacs
-      - reportnothings
-      - rules
-      - servicecontrolreports
-      - servicecontrols
-      - solarwindses
-      - stackdrivers
-      - statsds
-      - stdios
+      - '*'
     verbs:
       - get
       - list
       - watch
-  - apiGroups: ["networking.istio.io"]
-    resources:
-      - destinationrules
-      - gateways
-      - serviceentries
-      - virtualservices
-    verbs:
-      - get
-      - list
-      - watch
-  - apiGroups: ["authentication.istio.io"]
-    resources:
-      - policies
-      - meshpolicies
-    verbs:
-      - get
-      - list
-      - watch
-  - apiGroups: ["rbac.istio.io"]
-    resources:
-      - clusterrbacconfigs
-      - rbacconfigs
-      - serviceroles
-      - servicerolebindings
-    verbs:
-      - get
-      - list
-      - watch
-  - apiGroups: ["monitoring.kiali.io"]
+  - apiGroups:
+      - monitoring.kiali.io
     resources:
       - monitoringdashboards
     verbs:
       - get
+      - list
