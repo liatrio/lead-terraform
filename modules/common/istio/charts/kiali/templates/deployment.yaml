@@ -23,7 +23,7 @@ spec:
     spec:
       serviceAccountName: kiali-service-account
       containers:
-        - image: docker.io/kiali/kiali:v0.20
+        - image: {{ .Values.image }}
           name: kiali
           command:
             - "/opt/kiali/kiali"

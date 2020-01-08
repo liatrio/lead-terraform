@@ -202,4 +202,13 @@ resource "helm_release" "kiali" {
     name  = "istioDomain"
     value = var.domain
   }
+
+  set {
+    name = "image"
+    value = "quay.io/kiali/kiali:v1.9"
+  }
+
+  depends_on = [
+    helm_release.istio
+  ]
 }
