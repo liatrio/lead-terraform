@@ -45,7 +45,7 @@ global:
       limits:
         cpu: 1000m
         memory: 512Mi
-    protocolDetectionTimeout: 100ms 
+    protocolDetectionTimeout: 100ms
   defaultResources:
     requests:
       cpu: 10m
@@ -108,6 +108,13 @@ kiali:
       secretName: istio-ingress-tls
     hosts:
     - ${domain}
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
 
 tracing:
   enabled: true
