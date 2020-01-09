@@ -131,11 +131,11 @@ tracing:
     tag: 1.16
     resources:
       requests:
-        cpu: 256m
+        cpu: 200m
         memory: 400Mi
       limits:
-        cpu: 512m
-        memory: 600Mi
+        cpu: 500m
+        memory: 800Mi
 
 prometheus:
   resources:
