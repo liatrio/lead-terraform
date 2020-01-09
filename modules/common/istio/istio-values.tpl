@@ -45,7 +45,7 @@ global:
       limits:
         cpu: 1000m
         memory: 512Mi
-    protocolDetectionTimeout: 100ms 
+    protocolDetectionTimeout: 100ms
   defaultResources:
     requests:
       cpu: 10m
@@ -87,27 +87,7 @@ grafana:
       memory: 128Mi
 
 kiali:
-  enabled: true
-  dashboard:
-    auth:
-      strategy: anonymous
-    viewOnlyMode: true
-    grafanaURL: https://${domain}/grafana
-    jaegerURL: https://${domain}/jaeger
-  ingress:
-    enabled: true
-    annotations:
-      kubernetes.io/ingress.class: "nginx"
-      kubernetes.io/tls-acme: "true"
-      acme.cert-manager.io/http01-edit-in-place: "true"
-      nginx.ingress.kubernetes.io/ssl-redirect: "true"
-      cert-manager.io/issuer: "letsencrypt-dns"
-    tls:
-    - hosts:
-      - ${domain}
-      secretName: istio-ingress-tls
-    hosts:
-    - ${domain}
+  enabled: false
 
 tracing:
   enabled: true

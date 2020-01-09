@@ -8,6 +8,8 @@ grafana:
     repository: grafana/grafana
     tag: 6.5.1-ubuntu
     pullPolicy: IfNotPresent
+  service:
+    portName: http
   resources:
     limits:
       cpu: 300m

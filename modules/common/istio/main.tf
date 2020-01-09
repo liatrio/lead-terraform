@@ -46,7 +46,7 @@ module "istio_ingress" {
 
 data "helm_repository" "istio" {
   name = "istio.io"
-  url  = "https://storage.googleapis.com/istio-release/releases/1.3.6/charts/"
+  url  = "https://storage.googleapis.com/istio-release/releases/1.4.2/charts/"
 }
 
 data "template_file" "istio_values" {
@@ -66,7 +66,7 @@ resource "helm_release" "istio" {
   name       = module.istio_namespace.name
   timeout    = 600
   wait       = true
-  version    = "1.3.6"
+  version    = "1.4.2"
 
   set {
     name  = "crd_waiter"
@@ -188,4 +188,27 @@ resource "kubernetes_horizontal_pod_autoscaler" "kiali_autoscaler" {
       name        = "kiali"
     }
   }
+}
+
+resource "helm_release" "kiali" {
+  count      = var.enabled ? 1 : 0
+  chart      = "${path.module}/charts/kiali"
+  namespace  = module.istio_namespace.name
+  name       = "kiali"
+  timeout    = 600
+  wait       = true
+
+  set {
+    name  = "istioDomain"
+    value = var.domain
+  }
+
+  set {
+    name = "image"
+    value = "quay.io/kiali/kiali:v1.9"
+  }
+
+  depends_on = [
+    helm_release.istio
+  ]
 }

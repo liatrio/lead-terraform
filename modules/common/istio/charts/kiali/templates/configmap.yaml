@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kiali
+  labels:
+    app: kiali
+data:
+  config.yaml: |
+    istio_namespace: istio-system
+    server:
+      port: 20001
+      web_root: "/kiali"
+    deployment:
+      accessible_namespaces: ['**']
+    auth:
+      strategy: anonymous
+    external_services:
+      istio:
+        url_service_version: http://istio-pilot:8080/version
+      tracing:
+        enabled: true
+        in_cluster_url: http://jaeger-query.istio-system.svc.cluster.local:16686/jaeger
+        url: https://{{ .Values.istioDomain }}/jaeger
+      grafana:
+        enabled: true
+        url: https://{{ .Values.istioDomain }}/grafana
+      prometheus:
+        url: http://prometheus:9090
