@@ -12,8 +12,8 @@ spec:
   - {{ .Values.altname }}
   {{- end  }}
   issuerRef:
-    kind: Issuer
-    name: {{ .Values.issuer_name }} 
+    kind: {{ .Values.issuer.kind }}
+    name: {{ .Values.issuer.name }}
   secretName: {{ .Release.Name }}-certificate
 {{- if .Values.waitForCert }}
 

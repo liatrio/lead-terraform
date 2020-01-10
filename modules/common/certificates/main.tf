@@ -3,9 +3,10 @@ data "template_file" "certificate_values" {
 
   vars = {
     domain = var.domain
-    issuer_name = var.issuer_name
     altname = var.altname
     wait_for_cert = var.wait_for_cert
+    issuer_name = var.issuer_name
+    issuer_kind = var.issuer_kind
   }
 }
 
