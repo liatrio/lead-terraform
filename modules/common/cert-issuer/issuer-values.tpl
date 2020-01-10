@@ -1,4 +1,5 @@
 issuerName: ${issuer_name}
+issuerKind: ${issuer_kind}
 acme:
   enabled: ${ issuer_type == "acme" }
   server: ${ issuer_server }

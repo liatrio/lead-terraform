@@ -1,3 +1,4 @@
+issuerKind: Issuer
 issuerName: lead-namespace-issuer
 acme:
   enabled: true
