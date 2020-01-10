@@ -52,19 +52,6 @@ module "staging_ingress" {
   }
 }
 
-module "staging_issuer" {
-  enabled       = "${var.enable_istio ? false : true}"
-  source        = "../../common/cert-issuer"
-  namespace     = module.staging_namespace.name
-  issuer_type   = var.issuer_type
-  issuer_server = var.issuer_server
-  crd_waiter    = ""
-
-  providers = {
-    helm = helm.staging
-  }
-}
-
 resource "kubernetes_role" "jenkins_staging_role" {
   provider = kubernetes.staging
   metadata {

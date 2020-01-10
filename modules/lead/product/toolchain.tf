@@ -64,22 +64,6 @@ module "toolchain_ingress" {
   }
 }
 
-module "toolchain_issuer" {
-  source        = "../../common/cert-issuer"
-  namespace     = module.toolchain_namespace.name
-  issuer_type   = var.issuer_type
-  issuer_server = var.issuer_server
-  crd_waiter    = ""
-
-  // variables below are only relevant if var.issuer_type == "acme"
-  acme_solver                 = "http"
-  provider_http_ingress_class = "nginx"
-
-  providers = {
-    helm = helm.toolchain
-  }
-}
-
 resource "helm_release" "jenkins" {
   provider  = helm.toolchain
   name      = "jenkins"
