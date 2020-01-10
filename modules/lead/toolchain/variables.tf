@@ -13,13 +13,9 @@ variable "namespace" {
 variable "image_whitelist" {
 }
 
-variable "issuer_type" {
-  default = "selfSigned"
-}
+variable "issuer_name" {}
 
-variable "issuer_server" {
-  default = "https://acme-v02.api.letsencrypt.org/directory"
-}
+variable "issuer_kind" {}
 
 variable "elb_security_group_id" {
   default = ""
