@@ -35,8 +35,8 @@ data "template_file" "dashboard_values" {
 
     kibana-hostname = "kibana.${var.namespace}.${var.cluster}.${var.root_zone_name}"
 
-    client-id      = keycloak_openid_client.kibana_client[0].client_id
-    client-secret  = keycloak_openid_client.kibana_client[0].client_secret
+    client-id      = var.enable_keycloak ? keycloak_openid_client.kibana_client[0].client_id : "id"
+    client-secret  = var.enable_keycloak ? keycloak_openid_client.kibana_client[0].client_secret : "secret"
     discovery-url  = "https://keycloak.${var.namespace}.${var.cluster}.${var.root_zone_name}/auth/realms/${var.keycloak_realm_id}"
     listen         = 3000
     upstream-url   = "http://lead-dashboard-kibana:5601"
