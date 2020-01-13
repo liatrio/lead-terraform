@@ -9,8 +9,6 @@ ingress:
   enabled: ${ingress_enabled}
   annotations:
     kubernetes.io/ingress.class: "toolchain-nginx"
-    kubernetes.io/tls-acme: "true"
-    acme.cert-manager.io/http01-edit-in-place: "true"
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
     nginx.ingress.kubernetes.io/configuration-snippet: |
@@ -24,8 +22,7 @@ ingress:
       paths:
         - /
   tls:
-    - secretName: mailhog-ingress-tls
-      hosts:
+    - hosts:
         - ${ingress_hostname}
 
   ## Allows the specification of additional environment variables

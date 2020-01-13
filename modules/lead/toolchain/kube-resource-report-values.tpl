@@ -2,8 +2,6 @@
     enabled: true
     annotations:
       kubernetes.io/ingress.class: "toolchain-nginx"
-      kubernetes.io/tls-acme: "true"
-      acme.cert-manager.io/http01-edit-in-place: "true"
       nginx.ingress.kubernetes.io/ssl-redirect: "${ssl_redirect}"
       nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
       nginx.ingress.kubernetes.io/configuration-snippet: |
@@ -19,7 +17,6 @@
     tls:
     - hosts:
       - ${ingress_hostname}
-      secretName: kube-resource-report-ingress-tls
   resourcesApp:
     limits:
       memory: 100Mi

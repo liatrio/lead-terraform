@@ -10,8 +10,6 @@ global:
     configureCertmanager: false
     annotations:
       kubernetes.io/ingress.class: "toolchain-nginx"
-      kubernetes.io/tls-acme: "true"
-      acme.cert-manager.io/http01-edit-in-place: "true"
       nginx.ingress.kubernetes.io/ssl-redirect: "${ssl_redirect}"
       nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
       nginx.ingress.kubernetes.io/configuration-snippet: |
@@ -23,7 +21,8 @@ global:
     hosts:
     - ${ingress_hostname}
     tls:
-      secretName: gitlab-ingress-tls
+    - hosts:
+      - ${ingress_hostname}
   ## doc/charts/globals.md#configure-appconfig-settings
   ## Rails based portions of this chart share many settings
   appConfig:

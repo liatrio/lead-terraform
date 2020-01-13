@@ -9,12 +9,10 @@ operators:
     ingress:
       hostName: operator-slack.${namespace}.${cluster_domain}
       annotations:
-        kubernetes.io/ingress.class: "nginx"
-        kubernetes.io/tls-acme: "true"
+        kubernetes.io/ingress.class: "toolchain-nginx"
       tls:
       - hosts:
         - operator-slack.${namespace}.${cluster_domain}
-        secretName: operator-slack-ingress-tls
     serviceAccountAnnotations: ${slack_service_account_annotations}
     env:
     - name: workspace_role

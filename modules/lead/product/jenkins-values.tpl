@@ -14,8 +14,6 @@ master:
     hostName: ${ingress_hostname}
     annotations:
       kubernetes.io/ingress.class: "jenkins-nginx"
-      kubernetes.io/tls-acme: "true"
-      acme.cert-manager.io/http01-edit-in-place: "true"
       nginx.ingress.kubernetes.io/ssl-redirect: "${ssl_redirect}"
       nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
       nginx.ingress.kubernetes.io/configuration-snippet: |
@@ -26,7 +24,6 @@ master:
     tls:
     - hosts:
       - ${ingress_hostname}
-      secretName: jenkins-ingress-tls
   jenkinsUrlProtocol: ${protocol}
   serviceType: ClusterIP
   healthProbeLivenessFailureThreshold: 5
