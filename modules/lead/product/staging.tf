@@ -40,18 +40,6 @@ module "staging_certificate" {
   }
 }
 
-module "staging_ingress" {
-  source                  = "../../common/nginx-ingress"
-  namespace               = module.staging_namespace.name
-  ingress_controller_type = var.ingress_controller_type
-  enabled                 = var.enable_istio ? false : true
-
-  providers = {
-    helm       = helm.staging
-    kubernetes = kubernetes.staging
-  }
-}
-
 resource "kubernetes_role" "jenkins_staging_role" {
   provider = kubernetes.staging
   metadata {

@@ -13,7 +13,7 @@ data "template_file" "jenkins_values" {
     product_name           = var.product_name
     protocol               = local.protocol
     ssl_redirect           = local.protocol == "http" ? false : true
-    ingress_hostname       = "jenkins.${module.toolchain_namespace.name}.${var.cluster_domain}"
+    ingress_hostname       = "${module.toolchain_namespace.name}.jenkins.${var.cluster_domain}"
     artifactory_url        = "artifactory.toolchain.${var.cluster_domain}/docker-registry"
     namespace              = module.toolchain_namespace.name
     toolchain_namespace    = var.toolchain_namespace
@@ -46,17 +46,6 @@ module "toolchain_namespace" {
   }
   resource_request_cpu = "100m"
   resource_limit_cpu = "250m"
-
-  providers = {
-    helm       = helm.toolchain
-    kubernetes = kubernetes.toolchain
-  }
-}
-
-module "toolchain_ingress" {
-  source                  = "../../common/nginx-ingress"
-  namespace               = module.toolchain_namespace.name
-  ingress_controller_type = var.ingress_controller_type
 
   providers = {
     helm       = helm.toolchain
