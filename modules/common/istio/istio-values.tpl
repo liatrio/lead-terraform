@@ -115,7 +115,7 @@ tracing:
         memory: 400Mi
       limits:
         cpu: 500m
-        memory: 800Mi
+        memory: 1.5Gi
 
 prometheus:
   resources:

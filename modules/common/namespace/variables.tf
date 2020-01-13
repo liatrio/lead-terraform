@@ -34,3 +34,13 @@ variable "resource_limit_memory" {
   type    = string
   default = "512Mi"
 }
+
+variable "resource_max_cpu" {
+  type    = string
+  default = "2"
+}
+
+variable "resource_max_memory" {
+  type    = string
+  default = "7.5Gi"
+}
