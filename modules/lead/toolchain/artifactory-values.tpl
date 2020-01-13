@@ -4,7 +4,7 @@ artifactory:
       cpu: 400m
       memory: 2Gi
     limits:
-      cpu: 1 
+      cpu: 1
       memory: 4Gi
   javaOpts:
     xms: 2g
@@ -14,7 +14,7 @@ nginx:
 ingress:
   enabled: true
   annotations:
-    kubernetes.io/ingress.class: "nginx"
+    kubernetes.io/ingress.class: "toolchain-nginx"
     kubernetes.io/tls-acme: "true"
     acme.cert-manager.io/http01-edit-in-place: "true"
     nginx.ingress.kubernetes.io/ssl-redirect: "${ssl_redirect}"

@@ -5,8 +5,9 @@ ingress:
   annotations:
     kubernetes.io/tls-acme: "true"
     acme.cert-manager.io/http01-edit-in-place: "true"
+    kubernetes.io/ingress.class: "toolchain-nginx"
   tls:
-  - secretName: xray-ingress-tls    
+  - secretName: xray-ingress-tls
     hosts:
     - ${ingress_hostname}
 postgresql:
