@@ -36,7 +36,7 @@ provider "helm" {
     "spec.template.spec.tolerations[0].key=${var.essential_taint_key}",
     "spec.template.spec.tolerations[0].operator=Exists",
     "spec.template.spec.containers[0].resources.limits.memory=512Mi",
-    "spec.template.spec.containers[0].resources.limits.memory=512Mi",
+    "spec.template.spec.containers[0].resources.requests.memory=256Mi",
   ]
 
   kubernetes {
