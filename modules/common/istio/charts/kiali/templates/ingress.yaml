@@ -1,21 +1,23 @@
+{{- if .Values.ingressEnabled }}
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   annotations:
     kubernetes.io/ingress.class: toolchain-nginx
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
   labels:
     app: kiali
   name: kiali
 spec:
   rules:
-    - host: {{ .Values.host }}
+    - host: "kiali.{{ .Values.domain }}"
       http:
         paths:
           - backend:
               serviceName: kiali
               servicePort: 20001
-            path: /kiali
+            path: /
   tls:
     - hosts:
-        - {{ .Values.host }}
+        - "kiali.{{ .Values.domain }}"
+{{- end }}

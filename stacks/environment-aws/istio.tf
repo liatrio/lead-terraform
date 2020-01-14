@@ -32,7 +32,6 @@ module "istio_system" {
   cert_issuer_dns_provider = "route53"
   route53_region     = var.region
   route53_zone_id    = aws_route53_zone.cluster_zone.zone_id
-  domain     = "istio-system.${module.eks.cluster_id}.${var.root_zone_name}"
   providers = {
     helm = helm.system
   }

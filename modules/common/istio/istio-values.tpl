@@ -60,24 +60,21 @@ certmanager:
 
 grafana:
   enabled: true
+  contextPath: "/"
   ingress:
     enabled: true
     image:
       repository: grafana/grafana
       tag: 6.5.1-ubuntu
     annotations:
-      kubernetes.io/ingress.class: "nginx"
-      kubernetes.io/tls-acme: "true"
-      acme.cert-manager.io/http01-edit-in-place: "true"
-      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      kubernetes.io/ingress.class: "toolchain-nginx"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
       nginx.ingress.kubernetes.io/rewrite-target: "/"
-      cert-manager.io/issuer: "letsencrypt-dns"
     tls:
     - hosts:
-      - ${domain}
-      secretName: istio-ingress-tls
+      - istio-grafana.${domain}
     hosts:
-    - ${domain}
+    - istio-grafana.${domain}
   resources:
     requests:
       cpu: 16m
@@ -91,20 +88,17 @@ kiali:
 
 tracing:
   enabled: true
+  contextPath: "/"
   ingress:
     enabled: true
     annotations:
-      kubernetes.io/ingress.class: "nginx"
-      kubernetes.io/tls-acme: "true"
-      acme.cert-manager.io/http01-edit-in-place: "true"
-      nginx.ingress.kubernetes.io/ssl-redirect: "true"
-      cert-manager.io/issuer: "letsencrypt-dns"
+      kubernetes.io/ingress.class: "toolchain-nginx"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     tls:
     - hosts:
-      - ${domain}
-      secretName: istio-ingress-tls
+      - jaeger.${domain}
     hosts:
-    - ${domain}
+    - jaeger.${domain}
   jaeger:
     hub: docker.io/jaegertracing
     image: all-in-one

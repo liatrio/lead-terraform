@@ -56,7 +56,7 @@ grafana:
   ingress:
     annotations:
       kubernetes.io/ingress.class: "toolchain-nginx"
-      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     tls:
     - hosts:
       - grafana.${cluster_domain}

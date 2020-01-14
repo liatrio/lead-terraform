@@ -1,2 +1,3 @@
-host:
+ingressEnabled: true
+domain:
 image:

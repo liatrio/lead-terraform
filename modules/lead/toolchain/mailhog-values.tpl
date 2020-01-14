@@ -9,7 +9,7 @@ ingress:
   enabled: ${ingress_enabled}
   annotations:
     kubernetes.io/ingress.class: "toolchain-nginx"
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
     nginx.ingress.kubernetes.io/configuration-snippet: |
       more_set_headers "X-Forwarded-Proto: https";

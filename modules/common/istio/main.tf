@@ -46,7 +46,7 @@ data "template_file" "istio_values" {
   template = file("${path.module}/istio-values.tpl")
 
   vars = {
-    domain = var.domain
+    domain = "${var.toolchain_namespace}.${var.cluster_domain}"
     pilotTraceSampling = var.pilot_trace_sampling
   }
 }
@@ -192,8 +192,8 @@ resource "helm_release" "kiali" {
   wait       = true
 
   set {
-    name  = "host"
-    value = "kiali.${var.toolchain_namespace}.${var.cluster_domain}"
+    name  = "domain"
+    value = "${var.toolchain_namespace}.${var.cluster_domain}"
   }
 
   set {

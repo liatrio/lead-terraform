@@ -10,7 +10,7 @@ global:
     configureCertmanager: false
     annotations:
       kubernetes.io/ingress.class: "toolchain-nginx"
-      nginx.ingress.kubernetes.io/ssl-redirect: "${ssl_redirect}"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "${ssl_redirect}"
       nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
       nginx.ingress.kubernetes.io/configuration-snippet: |
         more_set_headers "X-Forwarded-Proto: https";

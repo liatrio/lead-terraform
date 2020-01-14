@@ -11,7 +11,7 @@ expose:
     controller: default
     annotations:
       kubernetes.io/ingress.class: "toolchain-nginx"
-      nginx.ingress.kubernetes.io/ssl-redirect: "${ssl_redirect}"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "${ssl_redirect}"
       nginx.ingress.kubernetes.io/proxy-body-size: "0"
 
 externalURL: https://${harbor_ingress_hostname}

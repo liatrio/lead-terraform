@@ -10,6 +10,7 @@ operators:
       hostName: operator-slack.${namespace}.${cluster_domain}
       annotations:
         kubernetes.io/ingress.class: "toolchain-nginx"
+        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
       tls:
       - hosts:
         - operator-slack.${namespace}.${cluster_domain}
