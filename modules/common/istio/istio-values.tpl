@@ -88,6 +88,13 @@ grafana:
 
 kiali:
   enabled: false
+  resources:
+    limits:
+      cpu: 1
+      memory: 256Mi
+    requests:
+      cpu: 50m
+      memory: 40Mi
 
 tracing:
   enabled: true
