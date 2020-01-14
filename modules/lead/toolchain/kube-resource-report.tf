@@ -4,7 +4,6 @@ data "template_file" "kube_resource_report_values" {
   vars = {
     ssl_redirect     = var.root_zone_name == "localhost" ? false : true
     ingress_hostname = "kube-resource-report.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
-    nginx_ingress_waiter = module.toolchain_ingress.nginx_ingress_waiter
   }
 }
 

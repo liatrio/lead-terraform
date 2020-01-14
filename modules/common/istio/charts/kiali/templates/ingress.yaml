@@ -2,17 +2,14 @@ apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   annotations:
-    acme.cert-manager.io/http01-edit-in-place: "true"
-    cert-manager.io/issuer: letsencrypt-dns
-    kubernetes.io/ingress.class: nginx
-    kubernetes.io/tls-acme: "true"
+    kubernetes.io/ingress.class: toolchain-nginx
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
   labels:
     app: kiali
   name: kiali
 spec:
   rules:
-    - host: {{ .Values.istioDomain }}
+    - host: {{ .Values.host }}
       http:
         paths:
           - backend:
@@ -21,5 +18,4 @@ spec:
             path: /kiali
   tls:
     - hosts:
-        - {{ .Values.istioDomain }}
-      secretName: istio-ingress-tls
+        - {{ .Values.host }}

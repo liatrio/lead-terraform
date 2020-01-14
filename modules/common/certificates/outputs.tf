@@ -7,5 +7,5 @@ output "cert_name" {
 }
 
 output "cert_secret_name" {
-  value = "${var.name}-tls"
+  value = "${var.name}-certificate"
 }

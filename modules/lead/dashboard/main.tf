@@ -8,13 +8,13 @@ provider "kubernetes" {
 
 data "kubernetes_secret" "keycloak_admin_credential" {
   provider = kubernetes
- 
+
   metadata {
     name      = "keycloak-admin-credential"
     namespace = "toolchain"
   }
 }
- 
+
 provider "keycloak" {
   client_id     = "admin-cli"
   username      = var.enable_keycloak ? data.kubernetes_secret.keycloak_admin_credential.data.username : "username"
@@ -49,7 +49,7 @@ data "template_file" "dashboard_values" {
 
 module "ca-issuer" {
   source = "../../common/ca-issuer"
- 
+
   enabled   = var.enable_keycloak
   name      = "elasticstack"
   namespace = var.namespace
@@ -59,7 +59,7 @@ module "ca-issuer" {
 
 module "elasticsearch-certificate" {
   source = "../../common/certificates"
- 
+
   enabled         = var.enabled
   name            = "elasticsearch-certs"
   namespace       = var.namespace
@@ -92,19 +92,19 @@ resource "helm_release" "lead-dashboard" {
 
 
 resource "keycloak_openid_client" "kibana_client" {
-  count = var.enable_keycloak ? 1 : 0 
+  count = var.enable_keycloak ? 1 : 0
   realm_id = var.keycloak_realm_id
   client_id = "kibana"
   name = "kibana"
   enabled = true
- 
+
   access_type = "CONFIDENTIAL"
   standard_flow_enabled = true
- 
-  valid_redirect_uris = [ 
+
+  valid_redirect_uris = [
     "https://kibana.${var.namespace}.${var.cluster}.${var.root_zone_name}/oauth/callback"
   ]
- 
+
 }
 
 resource "keycloak_openid_audience_protocol_mapper" "audience_mapper" {
@@ -113,5 +113,5 @@ resource "keycloak_openid_audience_protocol_mapper" "audience_mapper" {
   client_id                = keycloak_openid_client.kibana_client[0].id
   name                     = "audience-mapper"
 
-  included_client_audience = keycloak_openid_client.kibana_client[0].client_id 
+  included_client_audience = keycloak_openid_client.kibana_client[0].client_id
 }

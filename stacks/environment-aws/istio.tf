@@ -37,4 +37,6 @@ module "istio_system" {
     helm = helm.system
   }
   cert_issuer_server = var.cert_issuer_server
+  cluster_domain = "${var.cluster}.${var.root_zone_name}"
+  toolchain_namespace = module.toolchain.namespace
 }

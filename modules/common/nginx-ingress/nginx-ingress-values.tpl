@@ -17,10 +17,10 @@ controller:
   ingressClass: ${ingress_class}
   %{ if default_certificate != "" }
   extraArgs:
-  	default-ssl-certificate: ${default_certificate}
+    default-ssl-certificate: ${default_certificate}
   %{ endif }
   scope:
-      enabled: ${cluster_wide}
+    enabled: ${cluster_wide}
   service:
     type: ${ingress_controller_type}
     externalTrafficPolicy: ${ingress_external_traffic_policy}

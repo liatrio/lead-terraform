@@ -37,13 +37,6 @@ resource "kubernetes_secret" "kiali_dashboard_secret" {
   }
 }
 
-module "istio_ingress" {
-  source                  = "../nginx-ingress"
-  enabled                 = var.enabled
-  namespace               = module.istio_namespace.name
-  ingress_controller_type = var.ingress_controller_type
-}
-
 data "helm_repository" "istio" {
   name = "istio.io"
   url  = "https://storage.googleapis.com/istio-release/releases/1.4.2/charts/"
@@ -199,8 +192,8 @@ resource "helm_release" "kiali" {
   wait       = true
 
   set {
-    name  = "istioDomain"
-    value = var.domain
+    name  = "host"
+    value = "kiali.${var.toolchain_namespace}.${var.cluster_domain}"
   }
 
   set {

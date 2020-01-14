@@ -1,6 +1,8 @@
 variable "namespace" {}
 variable "crd_waiter" {}
 variable "domain" {}
+variable "toolchain_namespace" {}
+variable "cluster_domain" {}
 
 variable "kiali_username" {
   default = "admin"

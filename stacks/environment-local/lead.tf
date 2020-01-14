@@ -80,7 +80,6 @@ module "sdm" {
   slack_client_signing_secret = var.slack_client_signing_secret
   workspace_role_name         = "local_workspace_role"
   product_stack               = "product-local"
-  nginx_ingress_waiter        = module.toolchain.nginx_ingress_waiter
 
   product_vars = {
     issuer_type             = var.cert_issuer_type
