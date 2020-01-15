@@ -18,6 +18,13 @@ provider "helm" {
     load_config_file = var.load_config_file
     config_context   = var.config_context
   }
+
+  override = [
+    "spec.template.spec.containers[0].resources.limits.memory=128Mi",
+    "spec.template.spec.containers[0].resources.requests.memory=64Mi",
+    "spec.template.spec.containers[0].resources.limits.cpu=200m",
+    "spec.template.spec.containers[0].resources.requests.cpu=50m",
+  ]
 }
 
 provider "kubernetes" {
@@ -36,6 +43,13 @@ provider "helm" {
     load_config_file = var.load_config_file
     config_context   = var.config_context
   }
+
+  override = [
+    "spec.template.spec.containers[0].resources.limits.memory=128Mi",
+    "spec.template.spec.containers[0].resources.requests.memory=64Mi",
+    "spec.template.spec.containers[0].resources.limits.cpu=200m",
+    "spec.template.spec.containers[0].resources.requests.cpu=50m",
+  ]
 }
 
 provider "kubernetes" {
@@ -54,6 +68,13 @@ provider "helm" {
     load_config_file = var.load_config_file
     config_context   = var.config_context
   }
+
+  override = [
+    "spec.template.spec.containers[0].resources.limits.memory=128Mi",
+    "spec.template.spec.containers[0].resources.requests.memory=64Mi",
+    "spec.template.spec.containers[0].resources.limits.cpu=200m",
+    "spec.template.spec.containers[0].resources.requests.cpu=50m",
+  ]
 }
 
 provider "kubernetes" {
