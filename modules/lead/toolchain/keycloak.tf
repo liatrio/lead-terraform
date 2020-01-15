@@ -6,9 +6,10 @@ data "template_file" "keycloak_values" {
   template = file("${path.module}/keycloak-values.tpl")
 
   vars = {
-    ssl_redirect     = var.root_zone_name == "localhost" ? false : true
-    cluster_domain   = "${var.cluster}.${var.root_zone_name}"
-    ingress_hostname = "keycloak.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
+    ssl_redirect      = var.root_zone_name == "localhost" ? false : true
+    cluster_domain    = "${var.cluster}.${var.root_zone_name}"
+    ingress_hostname  = "keycloak.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
+    postgres_password = var.keycloak_postgres_password
   }
 }
 

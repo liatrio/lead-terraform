@@ -74,6 +74,9 @@ variable "crd_waiter" {
 variable "keycloak_admin_password" {
 }
 
+variable "keycloak_postgres_password" {
+}
+
 variable "smtp_host" {
 }
 
