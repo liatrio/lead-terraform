@@ -1,4 +1,14 @@
 grafana:
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: "toolchain-nginx"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    tls:
+    - hosts:
+      - ${grafana_hostname}
+    hosts:
+    - ${grafana_hostname}
   grafana.ini:
     auth.anonymous:
       enabled: true
@@ -118,8 +128,8 @@ alertmanager:
       - match:
           namespace: istio-system
         receiver: slack
-    templates:                                                                                                                                                                                                                                                                
-    - /etc/alertmanager/config/template*.tmpl 
+    templates:
+    - /etc/alertmanager/config/template*.tmpl
     receivers:
     - name: 'null'
     - name: 'slack'
@@ -144,8 +154,8 @@ alertmanager:
         send_resolved: true
         title: '{{ template "custom_title" . }}'
         text: '{{ template "custom_slack_message" . }}'
-  templateFiles:                                                                                                                                                                                                                                                              
-    template_1.tmpl: |-                                                                                                                                                                                                                                                       
+  templateFiles:
+    template_1.tmpl: |-
       {{ define "__single_message_title" }}{{ range .Alerts.Firing }}{{ .Labels.alertname }} @ {{ .Annotations.identifier }}{{ end }}{{ range .Alerts.Resolved }}{{ .Labels.alertname }} @ {{ .Annotations.identifier }}{{ end }}{{ end }}
       {{ define "custom_title" }}[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ if or (and (eq (len .Alerts.Firing) 1) (eq (len .Alerts.Resolved) 0)) (and (eq (len .Alerts.Firing) 0) (eq (len .Alerts.Resolved) 1)) }}{{ template "__single_message_title" . }}{{ end }}{{ end }}
       {{ define "custom_slack_message" }}
