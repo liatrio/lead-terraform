@@ -26,11 +26,11 @@ controller:
     externalTrafficPolicy: ${ingress_external_traffic_policy}
   resources:
     requests:
-      cpu: 50m
-      memory: 140Mi
-    limits:
       cpu: 100m
-      memory: 160Mi
+      memory: 256Mi
+    limits:
+      cpu: 200m
+      memory: 512Mi
 defaultBackend:
   resources:
     requests:
