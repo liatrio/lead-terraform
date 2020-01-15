@@ -26,20 +26,6 @@ resource "helm_release" "staging_product_init" {
   provider  = helm.staging
 }
 
-module "staging_certificate" {
-  source = "../../common/certificates"
-  namespace = "istio-system"
-  name = module.staging_namespace.name
-  domain = "${module.staging_namespace.name}.${var.cluster_domain}"
-  enabled = var.enable_istio
-  certificate_crd = "set"
-
-  providers = {
-    helm = "helm.system"
-    kubernetes = "kubernetes.system"
-  }
-}
-
 resource "kubernetes_role" "jenkins_staging_role" {
   provider = kubernetes.staging
   metadata {
