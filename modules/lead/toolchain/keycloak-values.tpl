@@ -48,8 +48,6 @@ keycloak:
     # The database vendor. Can be either "postgres", "mysql", "mariadb", or "h2"
     dbVendor: postgres
 
-    dbPassword: ${psotgres_password}
-
   resources:
     requests:
       memory: 600Mi
