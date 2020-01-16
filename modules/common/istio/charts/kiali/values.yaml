@@ -1,3 +1,10 @@
 ingressEnabled: true
 domain:
 image:
+resources:
+  limits:
+    cpu: 500m
+    memory: 128Mi
+  requests:
+    cpu: 120m
+    memory: 32Mi

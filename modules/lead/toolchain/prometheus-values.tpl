@@ -76,10 +76,10 @@ prometheus:
               storage: 95Gi
     resources:
       requests:
-        cpu: 500m
+        cpu: 250m
         memory: 2Gi
       limits:
-        cpu: 700m
+        cpu: 1500m
         memory: 4Gi
 
 alertmanager:
