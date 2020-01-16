@@ -16,6 +16,10 @@ provider "kubernetes" {
 
 provider "helm" {
   alias = "staging"
+
+  override = [
+    "metadata.annotations.sidecar\\.istio\\.io/inject=false"
+  ]
 }
 
 provider "kubernetes" {
@@ -24,6 +28,10 @@ provider "kubernetes" {
 
 provider "helm" {
   alias = "production"
+
+  override = [
+    "metadata.annotations.sidecar\\.istio\\.io/inject=false"
+  ]
 }
 
 provider "kubernetes" {
