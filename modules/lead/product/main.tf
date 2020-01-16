@@ -16,6 +16,7 @@ provider "kubernetes" {
 
 provider "helm" {
   alias = "staging"
+  namespace = module.staging_namespace.name
 
   override = [
     "metadata.annotations.sidecar\\.istio\\.io/inject=false"
@@ -28,6 +29,7 @@ provider "kubernetes" {
 
 provider "helm" {
   alias = "production"
+  namespace = module.production_namespace.name
 
   override = [
     "metadata.annotations.sidecar\\.istio\\.io/inject=false"
