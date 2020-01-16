@@ -24,10 +24,6 @@ resource "helm_release" "staging_product_init" {
   wait      = true
 
   provider  = helm.staging
-
-  depends_on = [
-    kubernetes_role_binding.default_staging_rolebinding
-  ]
 }
 
 resource "kubernetes_role" "jenkins_staging_role" {
@@ -109,13 +105,8 @@ resource "kubernetes_role" "default_staging_role" {
 
   rule {
     api_groups = [""]
-    resources  = ["pods", "namespaces"]
+    resources  = ["pods"]
     verbs      = ["get", "list", "watch"]
-  }
-  rule {
-    api_groups = [""]
-    resources  = ["configmaps"]
-    verbs      = ["get", "list", "watch", "create"]
   }
   rule {
     api_groups = ["extensions"]
