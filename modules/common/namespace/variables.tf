@@ -42,5 +42,5 @@ variable "resource_max_cpu" {
 
 variable "resource_max_memory" {
   type    = string
-  default = "7.5Gi"
+  default = "7680Mi"
 }
