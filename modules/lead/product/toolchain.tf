@@ -21,8 +21,7 @@ data "template_file" "jenkins_values" {
     slack_team             = "liatrio"
     stagingNamespace       = module.staging_namespace.name
     productionNamespace    = module.production_namespace.name
-    stagingDomain          = "${module.staging_namespace.name}.${var.cluster_domain}"
-    productionDomain       = "${module.production_namespace.name}.${var.cluster_domain}"
+    appDomain              = "apps.${var.cluster_domain}"
     builder_images_version = var.builder_images_version
     allow_anonymous_read   = var.enable_keycloak ? "false" : "true"
 

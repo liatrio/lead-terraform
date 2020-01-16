@@ -83,10 +83,8 @@ master:
                   value: "${stagingNamespace}"
                 - key: "productionNamespace"
                   value: "${productionNamespace}"
-                - key: "stagingDomain"
-                  value: "${stagingDomain}"
-                - key: "productionDomain"
-                  value: "${productionDomain}"
+                - key: "appDomain"
+                  value: "${appDomain}"
       slack-config: |
         unclassified:
           slackNotifier:
