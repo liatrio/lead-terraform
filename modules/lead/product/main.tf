@@ -19,7 +19,7 @@ provider "helm" {
   namespace = module.staging_namespace.name
 
   override = [
-    "metadata.annotations.sidecar\\.istio\\.io/inject=false"
+    "spec.template.metadata.annotations.sidecar\\.istio\\.io/inject=false"
   ]
 }
 
@@ -32,7 +32,7 @@ provider "helm" {
   namespace = module.production_namespace.name
 
   override = [
-    "metadata.annotations.sidecar\\.istio\\.io/inject=false"
+    "spec.template.metadata.annotations.sidecar\\.istio\\.io/inject=false"
   ]
 }
 
