@@ -115,8 +115,8 @@ module "toolchain" {
   enable_xray                = var.enable_xray
   enable_grafeas             = var.enable_grafeas
   enable_harbor              = var.enable_harbor
-  issuer_name             = module.cluster_issuer.issuer_name
-  issuer_kind             = module.cluster_issuer.issuer_kind
+  issuer_name                = module.cluster_issuer.issuer_name
+  issuer_kind                = module.cluster_issuer.issuer_kind
   ingress_controller_type    = "LoadBalancer"
   crd_waiter                 = module.infrastructure.crd_waiter
   grafeas_version            = var.grafeas_version
