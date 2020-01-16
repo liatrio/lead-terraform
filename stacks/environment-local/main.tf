@@ -21,6 +21,13 @@ provider "helm" {
   kubernetes {
     config_context = var.cluster
   }
+
+  override = [
+    "spec.template.spec.containers[0].resources.limits.memory=128Mi",
+    "spec.template.spec.containers[0].resources.requests.memory=64Mi",
+    "spec.template.spec.containers[0].resources.limits.cpu=200m",
+    "spec.template.spec.containers[0].resources.requests.cpu=50m",
+  ]
 }
 
 provider "helm" {
@@ -32,5 +39,12 @@ provider "helm" {
   kubernetes {
     config_context = var.cluster
   }
+
+  override = [
+    "spec.template.spec.containers[0].resources.limits.memory=128Mi",
+    "spec.template.spec.containers[0].resources.requests.memory=64Mi",
+    "spec.template.spec.containers[0].resources.limits.cpu=200m",
+    "spec.template.spec.containers[0].resources.requests.cpu=50m",
+  ]
 }
 
