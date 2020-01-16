@@ -109,13 +109,13 @@ resource "kubernetes_role" "default_production_role" {
 
   rule {
     api_groups = [""]
-    resources  = ["pods"]
+    resources  = ["pods", "namespaces"]
     verbs      = ["get", "list", "watch"]
   }
   rule {
     api_groups = [""]
     resources  = ["configmaps"]
-    verbs      = ["get", "list", "watch"]
+    verbs      = ["get", "list", "watch", "create"]
   }
   rule {
     api_groups = ["extensions"]
