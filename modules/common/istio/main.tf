@@ -169,12 +169,26 @@ resource "helm_release" "kiali" {
   ]
 }
 
-module "app_wildcard" {
+module "staging_app_wildcard" {
   source = "../certificates"
 
-  name      = "app-wildcard"
+  name      = "staging-app-wildcard"
   namespace = module.istio_namespace.name
-  domain    = "apps.${var.cluster_domain}"
+  domain    = "staging.apps.${var.cluster_domain}"
+  enabled   = var.enabled
+
+  issuer_name = var.issuer_name
+  issuer_kind = var.issuer_kind
+
+  certificate_crd = var.crd_waiter
+}
+
+module "prod_app_wildcard" {
+  source = "../certificates"
+
+  name      = "prod-app-wildcard"
+  namespace = module.istio_namespace.name
+  domain    = "prod.apps.${var.cluster_domain}"
   enabled   = var.enabled
 
   issuer_name = var.issuer_name
@@ -192,18 +206,28 @@ resource "helm_release" "app_gateway" {
   wait       = true
 
   set {
-    name  = "host"
-    value = "*.apps.${var.cluster_domain}"
-  }
-
-  set {
     name = "name"
     value = "app"
   }
 
   set {
-    name = "tlsSecret"
-    value = module.app_wildcard.cert_secret_name
+    name  = "staging_host"
+    value = "*.staging.apps.${var.cluster_domain}"
+  }
+
+  set {
+    name = "staging_tlsSecret"
+    value = module.staging_app_wildcard.cert_secret_name
+  }
+
+  set {
+    name  = "prod_host"
+    value = "*.prod.apps.${var.cluster_domain}"
+  }
+
+  set {
+    name = "prod_tlsSecret"
+    value = module.prod_app_wildcard.cert_secret_name
   }
 
   depends_on = [

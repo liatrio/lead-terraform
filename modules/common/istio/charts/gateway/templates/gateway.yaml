@@ -11,7 +11,7 @@ spec:
         name: http
         protocol: HTTP
       hosts:
-        - {{ .Values.host | quote }}
+        - {{ .Values.staging_host | quote }}
       tls:
         httpsRedirect: true
     - port:
@@ -19,7 +19,24 @@ spec:
         name: https
         protocol: HTTPS
       hosts:
-        - {{ .Values.host | quote }}
+        - {{ .Values.staging_host | quote }}
       tls:
         mode: SIMPLE
-        credentialName: {{ .Values.tlsSecret }}
+        credentialName: {{ .Values.staging_tlsSecret }}
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - {{ .Values.prod_host | quote }}
+      tls:
+        httpsRedirect: true
+    - port:
+        number: 443
+        name: https
+        protocol: HTTPS
+      hosts:
+        - {{ .Values.prod_host | quote }}
+      tls:
+        mode: SIMPLE
+        credentialName: {{ .Values.prod_tlsSecret }}
