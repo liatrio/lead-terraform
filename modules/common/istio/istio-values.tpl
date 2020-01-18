@@ -109,6 +109,8 @@ tracing:
     hub: docker.io/jaegertracing
     image: all-in-one
     tag: 1.16
+    memory:
+      max_traces: 25000
     resources:
       requests:
         cpu: 200m
