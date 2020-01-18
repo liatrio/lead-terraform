@@ -112,9 +112,9 @@ tracing:
     resources:
       requests:
         cpu: 200m
-        memory: 400Mi
+        memory: 800Mi
       limits:
-        cpu: 500m
+        cpu: 1
         memory: 1.5Gi
 
 prometheus:
