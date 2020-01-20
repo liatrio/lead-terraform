@@ -26,7 +26,7 @@ data "helm_repository" "flagger" {
 data "template_file" "flagger_values" {
   template = file("${path.module}/flagger-values.tpl")
 
-  vars {
+  vars = {
     mesh_provider  = var.mesh_provider
     metrics_server = var.metrics_url
     event_webhook  = var.event_webhook

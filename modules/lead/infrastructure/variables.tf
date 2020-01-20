@@ -27,13 +27,6 @@ variable "acme_dns_providers" {
   default = []
 }
 
-variable "issuer_type" {
-}
-
-variable "issuer_server" {
-  default = "https://acme-v02.api.letsencrypt.org/directory"
-}
-
 variable "essential_toleration_values" {
   default = ""
 }

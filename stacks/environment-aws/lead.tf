@@ -14,8 +14,6 @@ module "infrastructure" {
   enable_opa                            = "false"
   enable_downscaler                     = true
   enable_k8s_spot_termination_handler   = true
-  issuer_type                           = "acme"
-  issuer_server                         = var.cert_issuer_server
   uptime                                = var.uptime
   downscaler_exclude_namespaces         = var.downscaler_exclude_namespaces
   cert_manager_service_account_role_arn = aws_iam_role.cert_manager_service_account.arn
@@ -162,8 +160,6 @@ module "sdm" {
   }
 
   product_vars = {
-    issuer_type            = var.cert_issuer_type
-    issuer_server          = var.cert_issuer_server
     enable_keycloak        = var.enable_keycloak
     builder_images_version = var.builder_images_version
     jenkins_image_version  = var.jenkins_image_version

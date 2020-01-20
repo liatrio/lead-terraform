@@ -1,8 +1,4 @@
 variable "cluster_domain" {}
-variable "issuer_type" {}
-variable "issuer_server" {
-  default = "https://acme-v02.api.letsencrypt.org/directory"
-}
 variable "product_name" {}
 variable "image_whitelist" {}
 variable "toolchain_namespace" {
