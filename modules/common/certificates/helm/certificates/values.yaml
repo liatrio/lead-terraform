@@ -1,4 +1,6 @@
 domain: sandbox
-issuer_name: letsencrypt-dns
 altname: ""
 waitForCert: false
+issuer:
+  kind:
+  name:

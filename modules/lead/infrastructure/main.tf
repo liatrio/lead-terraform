@@ -14,17 +14,6 @@ module "system_namespace" {
   }
 }
 
-module "system_issuer" {
-  source                      = "../../common/cert-issuer"
-  namespace                   = module.system_namespace.name
-  issuer_type                 = var.issuer_type
-  issuer_server               = var.issuer_server
-  crd_waiter                  = null_resource.cert_manager_crd_delay.id
-
-  acme_solver                 = "http"
-  provider_http_ingress_class = "nginx"
-}
-
 resource "kubernetes_cluster_role" "tiller_cluster_role" {
   metadata {
     name = "lead-system-tiller-cluster-manager"

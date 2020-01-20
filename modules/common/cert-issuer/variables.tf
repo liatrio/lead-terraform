@@ -14,6 +14,10 @@ variable "issuer_email" {
   default = "cloudservices@liatr.io"
 }
 
+variable "issuer_kind" {
+  default = "Issuer"
+}
+
 variable "acme_solver" {
   default = "http"
 }

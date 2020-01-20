@@ -9,7 +9,7 @@ data:
     istio_namespace: istio-system
     server:
       port: 20001
-      web_root: "/kiali"
+      web_root: "/"
     deployment:
       accessible_namespaces: ['**']
     auth:
@@ -20,9 +20,9 @@ data:
       tracing:
         enabled: true
         in_cluster_url: http://jaeger-query.istio-system.svc.cluster.local:16686/jaeger
-        url: https://{{ .Values.istioDomain }}/jaeger
+        url: https://jaeger.{{ .Values.domain }}
       grafana:
         enabled: true
-        url: https://{{ .Values.istioDomain }}/grafana
+        url: https://istio-grafana.{{ .Values.domain }}
       prometheus:
         url: http://prometheus:9090

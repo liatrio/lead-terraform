@@ -26,45 +26,6 @@ resource "helm_release" "staging_product_init" {
   provider  = helm.staging
 }
 
-module "staging_certificate" {
-  source = "../../common/certificates"
-  namespace = "istio-system"
-  name = module.staging_namespace.name
-  domain = "${module.staging_namespace.name}.${var.cluster_domain}"
-  enabled = var.enable_istio
-  certificate_crd = "set"
-
-  providers = {
-    helm = "helm.system"
-    kubernetes = "kubernetes.system"
-  }
-}
-
-module "staging_ingress" {
-  source                  = "../../common/nginx-ingress"
-  namespace               = module.staging_namespace.name
-  ingress_controller_type = var.ingress_controller_type
-  enabled                 = var.enable_istio ? false : true
-
-  providers = {
-    helm       = helm.staging
-    kubernetes = kubernetes.staging
-  }
-}
-
-module "staging_issuer" {
-  enabled       = "${var.enable_istio ? false : true}"
-  source        = "../../common/cert-issuer"
-  namespace     = module.staging_namespace.name
-  issuer_type   = var.issuer_type
-  issuer_server = var.issuer_server
-  crd_waiter    = ""
-
-  providers = {
-    helm = helm.staging
-  }
-}
-
 resource "kubernetes_role" "jenkins_staging_role" {
   provider = kubernetes.staging
   metadata {

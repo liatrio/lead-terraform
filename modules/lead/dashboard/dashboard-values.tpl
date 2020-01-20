@@ -55,14 +55,11 @@ kibana:
 grafana:
   ingress:
     annotations:
-      kubernetes.io/ingress.class: "nginx"
-      kubernetes.io/tls-acme: "true"
-      acme.cert-manager.io/http01-edit-in-place: "true"
-      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      kubernetes.io/ingress.class: "toolchain-nginx"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     tls:
     - hosts:
       - grafana.${cluster_domain}
-      secretName: grafana-ingress-tls
     hosts:
     - grafana.${cluster_domain}
   rbac:

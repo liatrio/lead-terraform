@@ -1,7 +1,3 @@
-locals {
-  gcp_service_account_secret_key = "credentials.json"
-}
-
 module "istio_namespace" {
   source    = "../namespace"
   enabled   = var.enabled
@@ -37,13 +33,6 @@ resource "kubernetes_secret" "kiali_dashboard_secret" {
   }
 }
 
-module "istio_ingress" {
-  source                  = "../nginx-ingress"
-  enabled                 = var.enabled
-  namespace               = module.istio_namespace.name
-  ingress_controller_type = var.ingress_controller_type
-}
-
 data "helm_repository" "istio" {
   name = "istio.io"
   url  = "https://storage.googleapis.com/istio-release/releases/1.4.2/charts/"
@@ -53,7 +42,7 @@ data "template_file" "istio_values" {
   template = file("${path.module}/istio-values.tpl")
 
   vars = {
-    domain = var.domain
+    domain = "${var.toolchain_namespace}.${var.cluster_domain}"
     pilotTraceSampling = var.pilot_trace_sampling
   }
 }
@@ -134,39 +123,6 @@ resource "kubernetes_cluster_role_binding" "tiller_cluster_role_binding" {
   }
 }
 
-resource "kubernetes_secret" "gcp_dns_service_account_key" {
-  count = var.cert_issuer_dns_provider == "gcp" ? 1 : 0
-
-  metadata {
-    name = "gcp-dns-service-account-key"
-    namespace = module.istio_namespace.name
-  }
-
-  data = {
-    (local.gcp_service_account_secret_key) = var.gcp_dns_service_account_json
-  }
-}
-
-module "istio_cert_issuer" {
-  source        = "../cert-issuer"
-  enabled       = var.enabled
-  namespace     = module.istio_namespace.name
-  issuer_name   = var.cert_issuer_name
-  issuer_type   = var.cert_issuer_type
-  issuer_server = var.cert_issuer_server
-  crd_waiter    = var.crd_waiter
-
-  acme_solver             = "dns"
-  provider_dns_type       = var.cert_issuer_dns_provider
-
-  route53_dns_region      = var.route53_region
-  route53_dns_hosted_zone = var.route53_zone_id
-
-  gcp_dns_project = var.gcp_dns_project
-  gcp_dns_service_account_secret_name = var.cert_issuer_dns_provider == "gcp" ? kubernetes_secret.gcp_dns_service_account_key[0].metadata[0].name : ""
-  gcp_dns_service_account_secret_key = local.gcp_service_account_secret_key
-}
-
 module "istio_flagger" {
   source    = "../../common/flagger"
   enable    = var.enabled
@@ -199,13 +155,79 @@ resource "helm_release" "kiali" {
   wait       = true
 
   set {
-    name  = "istioDomain"
-    value = var.domain
+    name  = "domain"
+    value = "${var.toolchain_namespace}.${var.cluster_domain}"
   }
 
   set {
     name = "image"
     value = "quay.io/kiali/kiali:v1.9"
+  }
+
+  depends_on = [
+    helm_release.istio
+  ]
+}
+
+module "staging_app_wildcard" {
+  source = "../certificates"
+
+  name      = "staging-app-wildcard"
+  namespace = module.istio_namespace.name
+  domain    = "staging.apps.${var.cluster_domain}"
+  enabled   = var.enabled
+
+  issuer_name = var.issuer_name
+  issuer_kind = var.issuer_kind
+
+  certificate_crd = var.crd_waiter
+}
+
+module "prod_app_wildcard" {
+  source = "../certificates"
+
+  name      = "prod-app-wildcard"
+  namespace = module.istio_namespace.name
+  domain    = "prod.apps.${var.cluster_domain}"
+  enabled   = var.enabled
+
+  issuer_name = var.issuer_name
+  issuer_kind = var.issuer_kind
+
+  certificate_crd = var.crd_waiter
+}
+
+resource "helm_release" "app_gateway" {
+  count      = var.enabled ? 1 : 0
+  chart      = "${path.module}/charts/gateway"
+  namespace  = module.istio_namespace.name
+  name       = "app-gateway"
+  timeout    = 600
+  wait       = true
+
+  set {
+    name = "name"
+    value = "app"
+  }
+
+  set {
+    name  = "staging_host"
+    value = "*.staging.apps.${var.cluster_domain}"
+  }
+
+  set {
+    name = "staging_tlsSecret"
+    value = module.staging_app_wildcard.cert_secret_name
+  }
+
+  set {
+    name  = "prod_host"
+    value = "*.prod.apps.${var.cluster_domain}"
+  }
+
+  set {
+    name = "prod_tlsSecret"
+    value = module.prod_app_wildcard.cert_secret_name
   }
 
   depends_on = [

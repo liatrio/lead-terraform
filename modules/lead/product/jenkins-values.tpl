@@ -13,25 +13,22 @@ master:
     enabled: true
     hostName: ${ingress_hostname}
     annotations:
-      kubernetes.io/ingress.class: "nginx"
-      kubernetes.io/tls-acme: "true"
-      acme.cert-manager.io/http01-edit-in-place: "true"
-      nginx.ingress.kubernetes.io/ssl-redirect: "${ssl_redirect}"
+      kubernetes.io/ingress.class: "jenkins-nginx"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "${ssl_redirect}"
       nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
       nginx.ingress.kubernetes.io/configuration-snippet: |
-        more_set_headers "X-Forwarded-Proto: https";      
+        more_set_headers "X-Forwarded-Proto: https";
       ingress.kubernetes.io/proxy-body-size: "0"
       ingress.kubernetes.io/proxy-read-timeout: "600"
       ingress.kubernetes.io/proxy-send-timeout: "600"
     tls:
     - hosts:
       - ${ingress_hostname}
-      secretName: jenkins-ingress-tls
   jenkinsUrlProtocol: ${protocol}
   serviceType: ClusterIP
   healthProbeLivenessFailureThreshold: 5
   healthProbeReadinessFailureThreshold: 12
-  healthProbeLivenessInitialDelay: 60 
+  healthProbeLivenessInitialDelay: 60
   healthProbeReadinessInitialDelay: 30
   resources:
     requests:
@@ -52,7 +49,7 @@ master:
           systemMessage: Welcome to our CI\CD server.  This Jenkins is configured and managed 'as code' from https://github.com/liatrio/lead-terraform.
       security-config: |
         jenkins:
-          authorizationStrategy: 
+          authorizationStrategy:
             loggedInUsersCanDoAnything:
               allowAnonymousRead: "${allow_anonymous_read}"
           ${security_realm}
@@ -66,7 +63,7 @@ master:
                 "ssl-required": "${keycloak_ssl}",
                 "resource": "${ingress_hostname}",
                 "public-client": true
-              }          
+              }
       master-node: |
         jenkins:
           labelString: "master"
@@ -87,9 +84,9 @@ master:
                 - key: "productionNamespace"
                   value: "${productionNamespace}"
                 - key: "stagingDomain"
-                  value: "${stagingDomain}"
+                  value: "staging.${appDomain}"
                 - key: "productionDomain"
-                  value: "${productionDomain}"
+                  value: "prod.${appDomain}"
       slack-config: |
         unclassified:
           slackNotifier:
@@ -192,8 +189,8 @@ master:
                         ttyEnabled: true
                         resourceRequestCpu: 128m
                         resourceLimitCpu: 256m
-                        resourceRequestMemory: 256Mi 
-                        resourceLimitMemory: 1024Mi 
+                        resourceRequestMemory: 256Mi
+                        resourceLimitMemory: 1024Mi
                     slaveConnectTimeout: 100
                     volumes:
                       - secretVolume:

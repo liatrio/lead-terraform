@@ -6,6 +6,10 @@ data "template_file" "external_dns_values" {
   }
 }
 
+resource "random_string" "keycloak_postgres_password" {
+  length = 10
+}
+
 module "infrastructure" {
   source                              = "../../modules/lead/infrastructure"
   cluster                             = var.cluster
@@ -33,6 +37,7 @@ module "toolchain" {
   image_whitelist                 = var.image_whitelist
   artifactory_license             = var.artifactory_license
   keycloak_admin_password         = var.keycloak_admin_password
+  keycloak_postgres_password      = random_string.keycloak_postgres_password.result
   enable_istio                    = var.enable_istio
   enable_artifactory              = var.enable_artifactory
   enable_gitlab                   = var.enable_gitlab
@@ -80,7 +85,6 @@ module "sdm" {
   slack_client_signing_secret = var.slack_client_signing_secret
   workspace_role_name         = "local_workspace_role"
   product_stack               = "product-local"
-  nginx_ingress_waiter        = module.toolchain.nginx_ingress_waiter
 
   product_vars = {
     issuer_type             = var.cert_issuer_type

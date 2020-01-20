@@ -25,16 +25,16 @@ resource "null_resource" "istio_init_delay" {
 }
 
 module "istio_system" {
-  source     = "../../modules/common/istio"
-  enabled    = var.enable_istio
-  namespace  = "istio-system"
-  crd_waiter = null_resource.istio_init_delay.id
-  cert_issuer_dns_provider = "route53"
-  route53_region     = var.region
-  route53_zone_id    = aws_route53_zone.cluster_zone.zone_id
-  domain     = "istio-system.${module.eks.cluster_id}.${var.root_zone_name}"
+  source                  = "../../modules/common/istio"
+  enabled                 = var.enable_istio
+  namespace               = "istio-system"
+  crd_waiter              = null_resource.istio_init_delay.id
+  cluster_domain          = "${var.cluster}.${var.root_zone_name}"
+  toolchain_namespace     = module.toolchain.namespace
+  issuer_name             = module.staging_cluster_issuer.issuer_name
+  issuer_kind             = module.staging_cluster_issuer.issuer_kind
+
   providers = {
     helm = helm.system
   }
-  cert_issuer_server = var.cert_issuer_server
 }

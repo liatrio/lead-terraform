@@ -1,4 +1,5 @@
-istioDomain:
+ingressEnabled: true
+domain:
 image:
 resources:
   limits:

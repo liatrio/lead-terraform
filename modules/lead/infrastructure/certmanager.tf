@@ -47,14 +47,6 @@ resource "helm_release" "cert_manager" {
   wait       = true
 
   set {
-    name  = "ingressShim.defaultIssuerName"
-    value = "lead-namespace-issuer"
-  }
-  set {
-    name  = "ingressShim.defaultIssuerKind"
-    value = "Issuer"
-  }
-  set {
     name  = "global.leaderElection.namespace"
     value = module.system_namespace.name
   }
