@@ -8,7 +8,7 @@ spec:
   servers:
     - port:
         number: 80
-        name: http
+        name: http-staging
         protocol: HTTP
       hosts:
         - {{ .Values.staging_host | quote }}
@@ -16,7 +16,7 @@ spec:
         httpsRedirect: true
     - port:
         number: 443
-        name: https
+        name: https-staging
         protocol: HTTPS
       hosts:
         - {{ .Values.staging_host | quote }}
@@ -25,7 +25,7 @@ spec:
         credentialName: {{ .Values.staging_tlsSecret }}
     - port:
         number: 80
-        name: http
+        name: http-prod
         protocol: HTTP
       hosts:
         - {{ .Values.prod_host | quote }}
@@ -33,7 +33,7 @@ spec:
         httpsRedirect: true
     - port:
         number: 443
-        name: https
+        name: https-prod
         protocol: HTTPS
       hosts:
         - {{ .Values.prod_host | quote }}
