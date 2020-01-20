@@ -10,7 +10,6 @@ variable "jenkins_image_version" {
 }
 variable "image_repo" {
 }
-variable "ingress_controller_type" {}
 variable "enable_istio" {
   default = true
 }

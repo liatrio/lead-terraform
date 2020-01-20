@@ -31,8 +31,8 @@ module "istio_system" {
   crd_waiter              = null_resource.istio_init_delay.id
   cluster_domain          = "${var.cluster}.${var.root_zone_name}"
   toolchain_namespace     = module.toolchain.namespace
-  issuer_name             = module.staging_cluster_issuer.issuer_name
-  issuer_kind             = module.staging_cluster_issuer.issuer_kind
+  issuer_name             = module.cluster_issuer.issuer_name
+  issuer_kind             = module.cluster_issuer.issuer_kind
 
   providers = {
     helm = helm.system
