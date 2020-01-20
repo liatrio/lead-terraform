@@ -114,10 +114,7 @@ module "product" {
   source                  = "../../modules/lead/product"
   cluster_domain          = var.cluster_domain
   product_name            = var.product_name
-  issuer_type             = var.issuer_type
-  issuer_server           = var.issuer_server
   image_whitelist         = var.image_whitelist
-  ingress_controller_type = var.ingress_controller_type
   enable_keycloak         = var.enable_keycloak
   enable_istio            = var.enable_istio
   builder_images_version  = var.builder_images_version
