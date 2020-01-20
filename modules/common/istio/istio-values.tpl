@@ -114,9 +114,9 @@ tracing:
     resources:
       requests:
         cpu: 200m
-        memory: 400Mi
+        memory: 800Mi
       limits:
-        cpu: 500m
+        cpu: 1
         memory: 1.5Gi
 
 prometheus:
@@ -142,10 +142,10 @@ pilot:
   resources:
     requests:
       cpu: 500m
-      memory: 2048Mi
+      memory: 500Mi
     limits:
-      cpu: 1000m
-      memory: 4096Mi
+      cpu: 1.3
+      memory: 1Gi
   global:
     proxy:
       resource:
