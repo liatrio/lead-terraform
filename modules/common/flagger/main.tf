@@ -25,6 +25,13 @@ data "helm_repository" "flagger" {
 
 data "template_file" "flagger_values" {
   template = file("${path.module}/flagger-values.tpl")
+
+  vars {
+    mesh_provider  = var.mesh_provider
+    metrics_server = var.metrics_url
+    event_webhook  = var.event_webhook
+    crd_create     = false
+  }
 }
 
 resource "helm_release" "flagger" {
@@ -36,26 +43,6 @@ resource "helm_release" "flagger" {
   timeout    = 600
   wait       = true
   version    = "0.22.0"
-
-  set {
-    name  = "meshProvider"
-    value = var.mesh_provider
-  }
-
-  set {
-    name  = "metricsServer"
-    value = var.metrics_url
-  }
-
-  set {
-    name  = "crd.create"
-    value = false
-  }
-
-  set {
-    name = "eventWebhook"
-    value = var.event_webhook
-  }
 
   values = [data.template_file.flagger_values.rendered]
   depends_on = [null_resource.flagger_crd_delay]
