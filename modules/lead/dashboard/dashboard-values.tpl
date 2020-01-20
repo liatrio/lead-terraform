@@ -5,10 +5,10 @@ elasticsearch:
   resources:
     requests:
       cpu: 100m
-      memory: 2Gi
-    limits:
-      cpu: 500m
       memory: 3.5Gi
+    limits:
+      cpu: 1000m
+      memory: 7.5Gi
 
   esJavaOpts: "-Xmx1024m -Xms1024m"
 %{ else }
