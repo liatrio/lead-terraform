@@ -124,9 +124,10 @@ resource "kubernetes_cluster_role_binding" "tiller_cluster_role_binding" {
 }
 
 module "istio_flagger" {
-  source    = "../../common/flagger"
-  enable    = var.enabled
-  namespace = var.enabled ? helm_release.istio[0].metadata[0].namespace : ""
+  source        = "../../common/flagger"
+  enable        = var.enabled
+  namespace     = var.enabled ? helm_release.istio[0].metadata[0].namespace : ""
+  event_webhook = var.flagger_event_webhook
 }
 
 resource "kubernetes_horizontal_pod_autoscaler" "kiali_autoscaler" {

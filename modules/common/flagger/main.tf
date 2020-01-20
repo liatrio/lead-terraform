@@ -35,7 +35,7 @@ resource "helm_release" "flagger" {
   name       = "flagger"
   timeout    = 600
   wait       = true
-  version    = "0.20.4"
+  version    = "0.22.0"
 
   set {
     name  = "meshProvider"
@@ -50,6 +50,11 @@ resource "helm_release" "flagger" {
   set {
     name  = "crd.create"
     value = false
+  }
+
+  set {
+    name = "eventWebhook"
+    value = var.event_webhook
   }
 
   values = [data.template_file.flagger_values.rendered]
