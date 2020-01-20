@@ -36,7 +36,7 @@ module "cluster_issuer" {
   issuer_name   = "letsencrypt-dns"
   issuer_kind   = "ClusterIssuer"
   issuer_type   = var.cert_issuer_type
-  issuer_server = var.cert_issuer_server
+  issuer_server = "https://acme-v02.api.letsencrypt.org/directory"
   crd_waiter    = module.infrastructure.crd_waiter
 
   acme_solver             = "dns"

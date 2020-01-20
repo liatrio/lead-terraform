@@ -37,4 +37,5 @@ module "istio_system" {
   providers = {
     helm = helm.system
   }
+  flagger_event_webhook = "${module.sdm.slack_operator_in_cluster_url}/canary-events"
 }

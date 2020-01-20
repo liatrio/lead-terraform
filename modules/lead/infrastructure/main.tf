@@ -285,6 +285,11 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
     resources  = ["*/status"]
     verbs      = ["update"]
   }
+  rule {
+    api_groups = ["projectcontour.io"]
+    resources  = ["httpproxies"]
+    verbs      = ["*"]
+  }
 }
 
 resource "kubernetes_cluster_role_binding" "tiller_cluster_role_binding" {
