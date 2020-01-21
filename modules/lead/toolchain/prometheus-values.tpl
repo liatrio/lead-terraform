@@ -44,13 +44,14 @@ nodeExporter:
   tolerations:
   - key: EssentialOnly
     operator: "Exists"
+prometheus-node-exporter:
   resources:
     requests:
-      cpu: 100m
-      memory: 64Mi
+      cpu: 10m
+      memory: 15Mi
     limits:
       cpu: 400m
-      memory: 512Mi
+      memory: 100Mi
 prometheusOperator:
   resources:
     limits:
