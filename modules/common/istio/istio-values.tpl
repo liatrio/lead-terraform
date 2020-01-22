@@ -104,7 +104,11 @@ tracing:
     image: all-in-one
     tag: 1.16
     memory:
-      max_traces: 25000
+      max_traces: 50000
+    spanStorageType: badger
+    persist: true
+    storageClassName: ${k8s_storage_class}
+    accessMode: ReadWriteOnce
     resources:
       requests:
         cpu: 200m

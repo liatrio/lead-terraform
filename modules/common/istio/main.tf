@@ -44,6 +44,7 @@ data "template_file" "istio_values" {
   vars = {
     domain = "${var.toolchain_namespace}.${var.cluster_domain}"
     pilotTraceSampling = var.pilot_trace_sampling
+    k8s_storage_class = var.k8s_storage_class
   }
 }
 
