@@ -77,10 +77,10 @@ grafana:
     - istio-grafana.${domain}
   resources:
     requests:
-      cpu: 16m
+      cpu: 10m
       memory: 64Mi
     limits:
-      cpu: 64m
+      cpu: 250m
       memory: 128Mi
 
 kiali:
