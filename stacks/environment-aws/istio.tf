@@ -38,4 +38,5 @@ module "istio_system" {
     helm = helm.system
   }
   flagger_event_webhook = "${module.sdm.slack_operator_in_cluster_url}/canary-events"
+  k8s_storage_class = var.k8s_storage_class
 }
