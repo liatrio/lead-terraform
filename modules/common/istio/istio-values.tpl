@@ -112,7 +112,7 @@ tracing:
     resources:
       requests:
         cpu: 200m
-        memory: 800Mi
+        memory: 1.5Gi
       limits:
         cpu: 1
         memory: 3Gi
