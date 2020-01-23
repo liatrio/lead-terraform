@@ -136,6 +136,20 @@ master:
                           secretName: "jenkins-artifactory-dockercfg"
                     slaveConnectTimeout: 100
                     serviceAccount: "jenkins"
+                    yaml: |-
+                      apiVersion: v1
+                      kind: Pod
+                      spec:
+                        containers:
+                        - name: jnlp
+                          resources:
+                            requests:
+                              cpu: 1
+                              memory: 42Mi
+                            limits:
+                              cpu: 1
+                              memory: 666Mi
+                    yamlMergeStrategy: "merge"
                   - name: "lead-toolchain-aws"
                     label: "lead-toolchain-aws"
                     nodeUsageMode: NORMAL
