@@ -48,10 +48,10 @@ kibana:
   resources:
     requests:
       cpu: 100m
-      memory: 250Mi
+      memory: 400Mi
     limits:
       cpu: 200m
-      memory: 400Mi
+      memory: 800Mi
 grafana:
   ingress:
     annotations:
