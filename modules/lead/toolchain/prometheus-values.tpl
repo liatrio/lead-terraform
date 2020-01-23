@@ -23,12 +23,21 @@ grafana:
   resources:
     limits:
       cpu: 300m
+      memory: 256Mi
     requests:
       cpu: 80m
+      memory: 128Mi
 
 kubeStateMetrics:
   deploymentAnnotations:
     downscaler/exclude: "true"
+  resources:
+    limits:
+      cpu: 100m
+      memory: 64Mi
+    requests:
+      cpu: 10m
+      memory: 32Mi
 server:
   deploymentAnnotations:
     downscaler/exclude: "true"
@@ -55,11 +64,11 @@ prometheus-node-exporter:
 prometheusOperator:
   resources:
     limits:
-      cpu: 600m
-      memory: 200Mi
+      cpu: 500m
+      memory: 64Mi
     requests:
-      cpu: 300m
-      memory: 100Mi
+      cpu: 100m
+      memory: 32Mi
   configReloaderCpu: 100m
   configReloaderMemory: 25Mi
   admissionWebhooks:
