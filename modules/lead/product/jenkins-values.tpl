@@ -144,11 +144,11 @@ master:
                         - name: jnlp
                           resources:
                             requests:
-                              cpu: 1
-                              memory: 42Mi
+                              cpu: 200m
+                              memory: 128Mi
                             limits:
                               cpu: 1
-                              memory: 666Mi
+                              memory: 256Mi
                     yamlMergeStrategy: "merge"
                   - name: "lead-toolchain-aws"
                     label: "lead-toolchain-aws"
@@ -170,6 +170,20 @@ master:
                         resourceRequestMemory: 128Mi
                         resourceLimitMemory: 256Mi
                     slaveConnectTimeout: 100
+                    yaml: |-
+                      apiVersion: v1
+                      kind: Pod
+                      spec:
+                        containers:
+                        - name: jnlp
+                          resources:
+                            requests:
+                              cpu: 200m
+                              memory: 128Mi
+                            limits:
+                              cpu: 1
+                              memory: 256Mi
+                    yamlMergeStrategy: "merge"
                   - name: "lead-toolchain-terraform"
                     label: "lead-toolchain-terraform"
                     nodeUsageMode: NORMAL
@@ -190,6 +204,20 @@ master:
                         resourceRequestMemory: 256Mi
                         resourceLimitMemory: 1536Mi
                     slaveConnectTimeout: 100
+                    yaml: |-
+                      apiVersion: v1
+                      kind: Pod
+                      spec:
+                        containers:
+                        - name: jnlp
+                          resources:
+                            requests:
+                              cpu: 200m
+                              memory: 128Mi
+                            limits:
+                              cpu: 1
+                              memory: 256Mi
+                    yamlMergeStrategy: "merge"
                   - name: "lead-toolchain-maven"
                     label: "lead-toolchain-maven"
                     nodeUsageMode: NORMAL
@@ -213,6 +241,20 @@ master:
                       - emptyDirVolume:
                           mountPath: "/root/.m2/repository"
                           memory: false
+                    yaml: |-
+                      apiVersion: v1
+                      kind: Pod
+                      spec:
+                        containers:
+                        - name: jnlp
+                          resources:
+                            requests:
+                              cpu: 200m
+                              memory: 128Mi
+                            limits:
+                              cpu: 1
+                              memory: 256Mi
+                    yamlMergeStrategy: "merge"
                   - name: "lead-toolchain-gitops"
                     label: "lead-toolchain-gitops"
                     nodeUsageMode: NORMAL
@@ -238,6 +280,20 @@ master:
                         key: "GITOPS_GIT_PASSWORD"
                         secretKey: "password"
                         secretName: "jenkins-credential-github"
+                    yaml: |-
+                      apiVersion: v1
+                      kind: Pod
+                      spec:
+                        containers:
+                        - name: jnlp
+                          resources:
+                            requests:
+                              cpu: 200m
+                              memory: 128Mi
+                            limits:
+                              cpu: 1
+                              memory: 256Mi
+                    yamlMergeStrategy: "merge"
                   - name: "lead-toolchain-goreleaser"
                     label: "lead-toolchain-goreleaser"
                     nodeUsageMode: NORMAL
@@ -253,6 +309,20 @@ master:
                         resourceLimitCpu: 256m
                         resourceRequestMemory: 128Mi
                         resourceLimitMemory: 256Mi
+                    yaml: |-
+                      apiVersion: v1
+                      kind: Pod
+                      spec:
+                        containers:
+                        - name: jnlp
+                          resources:
+                            requests:
+                              cpu: 200m
+                              memory: 128Mi
+                            limits:
+                              cpu: 1
+                              memory: 256Mi
+                    yamlMergeStrategy: "merge"
       shared-libraries: |
         unclassified:
           globalLibraries:
