@@ -119,8 +119,8 @@ master:
                         command: "/bin/sh -c"
                         args: "cat"
                         ttyEnabled: true
-                        resourceRequestCpu: 256m
-                        resourceLimitCpu: 512m
+                        resourceRequestCpu: 250m
+                        resourceLimitCpu: 500m
                         resourceRequestMemory: 256Mi
                         resourceLimitMemory: 512Mi
                     envVars:
@@ -165,8 +165,8 @@ master:
                         command: "/bin/sh -c"
                         args: "cat"
                         ttyEnabled: true
-                        resourceRequestCpu: 128m
-                        resourceLimitCpu: 256m
+                        resourceRequestCpu: 100m
+                        resourceLimitCpu: 250m
                         resourceRequestMemory: 128Mi
                         resourceLimitMemory: 256Mi
                     slaveConnectTimeout: 100
@@ -199,8 +199,8 @@ master:
                         command: "/bin/sh -c"
                         args: "cat"
                         ttyEnabled: true
-                        resourceRequestCpu: 128m
-                        resourceLimitCpu: 512m
+                        resourceRequestCpu: 100m
+                        resourceLimitCpu: 500m
                         resourceRequestMemory: 256Mi
                         resourceLimitMemory: 1536Mi
                     slaveConnectTimeout: 100
@@ -229,8 +229,8 @@ master:
                         command: "/bin/sh -c"
                         args: "cat"
                         ttyEnabled: true
-                        resourceRequestCpu: 128m
-                        resourceLimitCpu: 256m
+                        resourceRequestCpu: 100m
+                        resourceLimitCpu: 250m
                         resourceRequestMemory: 256Mi
                         resourceLimitMemory: 1024Mi
                     slaveConnectTimeout: 100
@@ -266,8 +266,8 @@ master:
                         command: "/bin/sh -c"
                         args: "cat"
                         ttyEnabled: true
-                        resourceRequestCpu: 128m
-                        resourceLimitCpu: 256m
+                        resourceRequestCpu: 100m
+                        resourceLimitCpu: 250m
                         resourceRequestMemory: 128Mi
                         resourceLimitMemory: 256Mi
                     slaveConnectTimeout: 100
@@ -305,8 +305,8 @@ master:
                         command: "/bin/sh -c"
                         args: "cat"
                         ttyEnabled: true
-                        resourceRequestCpu: 128m
-                        resourceLimitCpu: 256m
+                        resourceRequestCpu: 100m
+                        resourceLimitCpu: 250m
                         resourceRequestMemory: 128Mi
                         resourceLimitMemory: 256Mi
                     yaml: |-
