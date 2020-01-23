@@ -33,3 +33,11 @@ ingress:
   tls:
   - hosts:
     - ${ingress_hostname}
+postgresql:
+  resources:
+    limits:
+      cpu: 600m
+      memory: 256Mi
+    requests:
+      cpu: 20m
+      memory: 128Mi
