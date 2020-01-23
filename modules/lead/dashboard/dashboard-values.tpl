@@ -48,7 +48,7 @@ kibana:
   resources:
     requests:
       cpu: 100m
-      memory: 400Mi
+      memory: 250Mi
     limits:
       cpu: 200m
       memory: 800Mi
