@@ -32,7 +32,7 @@ master:
   healthProbeReadinessInitialDelay: 30
   resources:
     requests:
-      cpu: 100m
+      cpu: 250m
       memory: 1Gi
     limits:
       cpu: 1000m
@@ -119,10 +119,10 @@ master:
                         command: "/bin/sh -c"
                         args: "cat"
                         ttyEnabled: true
-                        resourceRequestCpu: 128m
-                        resourceLimitCpu: 256m
-                        resourceRequestMemory: 128Mi
-                        resourceLimitMemory: 256Mi
+                        resourceRequestCpu: 256m
+                        resourceLimitCpu: 512m
+                        resourceRequestMemory: 256Mi
+                        resourceLimitMemory: 512Mi
                     envVars:
                       - envVar:
                           key: "SKAFFOLD_DEFAULT_REPO"
