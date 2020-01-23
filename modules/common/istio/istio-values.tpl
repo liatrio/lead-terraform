@@ -19,10 +19,10 @@ gateways:
     resources:
       requests:
         cpu: 100m
-        memory: 128Mi
+        memory: 64Mi
       limits:
         cpu: 1000m
-        memory: 512Mi
+        memory: 256Mi
 
 global:
   k8sIngress:
@@ -112,27 +112,27 @@ tracing:
     resources:
       requests:
         cpu: 200m
-        memory: 800Mi
+        memory: 1.5Gi
       limits:
         cpu: 1
-        memory: 1.5Gi
+        memory: 3Gi
 
 prometheus:
   resources:
     requests:
-      cpu: 200m
-      memory: 2Gi
+      cpu: 300m
+      memory: 2.5Gi
     limits:
-      cpu: 500m
-      memory: 4Gi
+      cpu: 800m
+      memory: 5Gi
 
 galley:
   resources:
     requests:
-      cpu: 32m
-      memory: 64Mi
+      cpu: 20m
+      memory: 32Mi
     limits:
-      cpu: 128m
+      cpu: 200m
       memory: 128Mi
 pilot:
   traceSampling: ${pilotTraceSampling}
@@ -170,10 +170,10 @@ security:
   resources:
     requests:
       cpu: 20m
-      memory: 128Mi
+      memory: 32Mi
     limits:
-      cpu: 400m
-      memory: 256Mi
+      cpu: 1
+      memory: 128Mi
 
 sidecarInjectorWebhook:
   resources:
