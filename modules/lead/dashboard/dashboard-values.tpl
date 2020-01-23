@@ -51,7 +51,7 @@ kibana:
       memory: 250Mi
     limits:
       cpu: 200m
-      memory: 400Mi
+      memory: 800Mi
 grafana:
   ingress:
     annotations:
