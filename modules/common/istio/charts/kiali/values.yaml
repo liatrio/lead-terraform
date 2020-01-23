@@ -3,7 +3,7 @@ domain:
 image:
 resources:
   limits:
-    cpu: 500m
+    cpu: 700m
     memory: 128Mi
   requests:
     cpu: 120m
