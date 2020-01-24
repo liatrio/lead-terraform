@@ -121,10 +121,10 @@ prometheus:
   resources:
     requests:
       cpu: 300m
-      memory: 2.5Gi
+      memory: 3Gi
     limits:
-      cpu: 800m
-      memory: 5Gi
+      cpu: 1.5
+      memory: 6Gi
 
 galley:
   resources:
@@ -132,7 +132,7 @@ galley:
       cpu: 20m
       memory: 32Mi
     limits:
-      cpu: 200m
+      cpu: 300m
       memory: 128Mi
 pilot:
   traceSampling: ${pilotTraceSampling}

@@ -22,10 +22,10 @@ grafana:
     portName: http
   resources:
     limits:
-      cpu: 300m
+      cpu: 500m
       memory: 256Mi
     requests:
-      cpu: 80m
+      cpu: 100m
       memory: 128Mi
 
 kubeStateMetrics:

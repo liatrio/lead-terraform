@@ -47,10 +47,10 @@ kibana:
     path: /usr/share/elasticsearch/config/certs
   resources:
     requests:
-      cpu: 100m
+      cpu: 150m
       memory: 250Mi
     limits:
-      cpu: 200m
+      cpu: 500m
       memory: 800Mi
 grafana:
   ingress:
