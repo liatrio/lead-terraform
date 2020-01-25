@@ -87,35 +87,7 @@ kiali:
   enabled: false
 
 tracing:
-  enabled: true
-  contextPath: "/"
-  ingress:
-    enabled: true
-    annotations:
-      kubernetes.io/ingress.class: "toolchain-nginx"
-      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-    tls:
-    - hosts:
-      - jaeger.${domain}
-    hosts:
-    - jaeger.${domain}
-  jaeger:
-    hub: docker.io/jaegertracing
-    image: all-in-one
-    tag: 1.16
-    memory:
-      max_traces: 50000
-    spanStorageType: badger
-    persist: true
-    storageClassName: ${k8s_storage_class}
-    accessMode: ReadWriteOnce
-    resources:
-      requests:
-        cpu: 200m
-        memory: 1.5Gi
-      limits:
-        cpu: 1
-        memory: 3Gi
+  enabled: false
 
 prometheus:
   resources:
