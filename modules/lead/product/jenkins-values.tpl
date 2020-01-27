@@ -353,7 +353,7 @@ master:
       resources:
         requests:
           cpu: 100m
-          memory: 64Gi
+          memory: 64Mi
         limits:
           cpu: 800m
-          memory: 256Gi
+          memory: 256Mi
