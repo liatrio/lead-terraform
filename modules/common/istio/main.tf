@@ -236,3 +236,27 @@ resource "helm_release" "app_gateway" {
     helm_release.istio
   ]
 }
+
+data "template_file" "jaeger_values" {
+  template = file("${path.module}/jaeger-values.tpl")
+
+  vars = {
+    domain = "${var.toolchain_namespace}.${var.cluster_domain}"
+    k8s_storage_class = var.k8s_storage_class
+  }
+}
+
+resource "helm_release" "jaeger" {
+  count      = var.enabled ? 1 : 0
+  chart      = "${path.module}/charts/jaeger"
+  namespace  = module.istio_namespace.name
+  name       = "jaeger"
+  timeout    = 600
+  wait       = true
+
+  values = [data.template_file.jaeger_values.rendered]
+
+  depends_on = [
+    helm_release.istio
+  ]
+}
