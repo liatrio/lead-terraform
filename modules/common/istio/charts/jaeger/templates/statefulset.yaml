@@ -1,7 +1,7 @@
 {{ if eq .Values.provider "jaeger" }}
 
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: istio-tracing
   namespace: {{ .Release.Namespace }}
