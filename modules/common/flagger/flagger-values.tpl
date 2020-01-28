@@ -7,7 +7,7 @@ crd:
 resources:
   limits:
     memory: 64Mi
-    cpu: 25m
+    cpu: 100m
   requests:
     memory: 32Mi
-    cpu: 10m
+    cpu: 20m
