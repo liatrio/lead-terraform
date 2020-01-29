@@ -9,7 +9,7 @@ data "template_file" "dockercfg" {
     )   
     harbor_url = "https://harbor.toolchain.${var.cluster_domain}/${var.product_name}"
     harbor_auth = base64encode(
-      "robot$$${var.product-name}:${data.kubernetes_secret.product-harbor-creds.data.AUTH}",
+      "robot$$imagepusher:${data.kubernetes_secret.product-harbor-creds.data.AUTH}",
     )   
   }
 }
