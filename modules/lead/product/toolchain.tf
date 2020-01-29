@@ -13,16 +13,15 @@ data "template_file" "jenkins_values" {
     product_name           = var.product_name
     protocol               = local.protocol
     ssl_redirect           = local.protocol == "http" ? false : true
-    ingress_hostname       = "jenkins.${module.toolchain_namespace.name}.${var.cluster_domain}"
     image_repository_url   = "${var.image_repository}.toolchain.${var.cluster_domain}"
+    ingress_hostname       = "${module.toolchain_namespace.name}.jenkins.${var.cluster_domain}"
     namespace              = module.toolchain_namespace.name
     toolchain_namespace    = var.toolchain_namespace
     logstash_url           = "http://lead-dashboard-logstash.toolchain.svc.cluster.local:9000"
     slack_team             = "liatrio"
     stagingNamespace       = module.staging_namespace.name
     productionNamespace    = module.production_namespace.name
-    stagingDomain          = "${module.staging_namespace.name}.${var.cluster_domain}"
-    productionDomain       = "${module.production_namespace.name}.${var.cluster_domain}"
+    appDomain              = "apps.${var.cluster_domain}"
     builder_images_version = var.builder_images_version
     allow_anonymous_read   = var.enable_keycloak ? "false" : "true"
     jenkins-repository-dockercfg = "jenkins-${var.image_repository}-dockercfg"
@@ -52,33 +51,6 @@ module "toolchain_namespace" {
   providers = {
     helm       = helm.toolchain
     kubernetes = kubernetes.toolchain
-  }
-}
-
-module "toolchain_ingress" {
-  source                  = "../../common/nginx-ingress"
-  namespace               = module.toolchain_namespace.name
-  ingress_controller_type = var.ingress_controller_type
-
-  providers = {
-    helm       = helm.toolchain
-    kubernetes = kubernetes.toolchain
-  }
-}
-
-module "toolchain_issuer" {
-  source        = "../../common/cert-issuer"
-  namespace     = module.toolchain_namespace.name
-  issuer_type   = var.issuer_type
-  issuer_server = var.issuer_server
-  crd_waiter    = ""
-
-  // variables below are only relevant if var.issuer_type == "acme"
-  acme_solver                 = "http"
-  provider_http_ingress_class = "nginx"
-
-  providers = {
-    helm = helm.toolchain
   }
 }
 

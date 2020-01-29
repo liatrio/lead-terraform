@@ -10,8 +10,8 @@ expose:
       notary: ${notary_ingress_hostname}
     controller: default
     annotations:
-      kubernetes.io/ingress.class: "nginx"
-      nginx.ingress.kubernetes.io/ssl-redirect: "${ssl_redirect}"
+      kubernetes.io/ingress.class: "toolchain-nginx"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "${ssl_redirect}"
       nginx.ingress.kubernetes.io/proxy-body-size: "0"
 
 externalURL: https://${harbor_ingress_hostname}
@@ -29,12 +29,15 @@ persistence:
       existingClaim: harbor-chartmuseum
       accessMode: ReadWriteOnce
     jobservice:
+      storageClass: ${storage_class}
       accessMode: ReadWriteOnce
       size: ${jobservice_pvc_size}
     database:
+      storageClass: ${storage_class}
       accessMode: ReadWriteOnce
       size: ${database_pvc_size}
     redis:
+      storageClass: ${storage_class}
       accessMode: ReadWriteOnce
       size: ${redis_pvc_size}
   imageChartStorage:
@@ -54,8 +57,11 @@ portal:
   replicas: 1
   resources:
    requests:
-     memory: 256Mi
+     memory: 64Mi
      cpu: 100m
+   limits:
+     memory: 256Mi
+     cpu: 150m
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -72,14 +78,16 @@ core:
     initialDelaySeconds: 300
   resources:
    requests:
+     memory: 64Mi
+     cpu: 10m
+   limits:
      memory: 256Mi
-     cpu: 100m
+     cpu: 50m
   nodeSelector: {}
   tolerations: []
   affinity: {}
   ## Additional deployment annotations
   podAnnotations: {}
-
 jobservice:
   image:
     repository: goharbor/harbor-jobservice
@@ -90,8 +98,11 @@ jobservice:
   jobLogger: stdout
   resources:
     requests:
+      memory: 64Mi
+      cpu: 10m
+    limits:
       memory: 256Mi
-      cpu: 100m
+      cpu: 50m
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -138,8 +149,11 @@ chartmuseum:
   replicas: 1
   resources:
     requests:
-      memory: 256Mi
-      cpu: 100m
+      memory: 64Mi
+      cpu: 10m
+    limits:
+      memory: 128Mi
+      cpu: 50m
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -158,7 +172,7 @@ clair:
         cpu: 200m
       limits:
         memory: 2048Mi
-        cpu: 2
+        cpu: 600m
   adapter:
     image:
       repository: goharbor/clair-adapter-photon
@@ -166,6 +180,9 @@ clair:
     resources:
       requests:
         memory: 64Mi
+        cpu: 10m
+      limits:
+        memory: 128Mi
         cpu: 50m
   replicas: 1
   # The interval of clair updaters, the unit is hour, set to 0 to
@@ -186,8 +203,11 @@ notary:
     replicas: 1
     resources:
       requests:
+        memory: 64Mi
+        cpu: 10m
+      limits:
         memory: 256Mi
-        cpu: 100m
+        cpu: 50m
   signer:
     image:
       repository: goharbor/notary-signer-photon
@@ -195,8 +215,11 @@ notary:
     replicas: 1
     resources:
       requests:
+        memory: 64Mi
+        cpu: 10m
+      limits:
         memory: 256Mi
-        cpu: 100m
+        cpu: 50m
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -224,7 +247,10 @@ database:
     resources:
       requests:
         memory: 256Mi
-        cpu: 100m
+        cpu: 25m
+      limits:
+        memory: 512Mi
+        cpu: 200m
     nodeSelector: {}
     tolerations: []
     affinity: {}

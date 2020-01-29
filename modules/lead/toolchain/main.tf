@@ -39,39 +39,6 @@ module "toolchain_namespace" {
   }
 }
 
-module "toolchain_certificate" {
-  source          = "../../common/certificates"
-  namespace       = "istio-system"
-  name            = module.toolchain_namespace.name
-  domain          = "${module.toolchain_namespace.name}.${var.cluster_domain}"
-  enabled         = var.enable_istio
-  certificate_crd = "set"
-
-  providers = {
-    helm       = helm.system
-    kubernetes = kubernetes
-  }
-}
-
-module "toolchain_ingress" {
-  source                          = "../../common/nginx-ingress"
-  namespace                       = module.toolchain_namespace.name
-  ingress_controller_type         = var.ingress_controller_type
-  ingress_external_traffic_policy = var.ingress_external_traffic_policy
-}
-
-module "toolchain_issuer" {
-  source        = "../../common/cert-issuer"
-  namespace     = module.toolchain_namespace.name
-  issuer_type   = var.issuer_type
-  issuer_server = "https://acme-v02.api.letsencrypt.org/directory"
-  crd_waiter    = var.crd_waiter
-
-  // variables below are only relevant if var.issuer_type == "acme"
-  acme_solver                 = "http"
-  provider_http_ingress_class = "nginx"
-}
-
 resource "kubernetes_cluster_role" "tiller_cluster_role" {
   metadata {
     name = "toolchain-tiller-manager"

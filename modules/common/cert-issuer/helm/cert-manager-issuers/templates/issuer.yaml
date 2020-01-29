@@ -1,5 +1,5 @@
 apiVersion: cert-manager.io/v1alpha2
-kind: Issuer
+kind: {{ .Values.issuerKind }}
 metadata:
   name: {{ .Values.issuerName }}
 spec:
@@ -25,6 +25,13 @@ spec:
             region: {{ .Values.acme.dnsProvider.route53.region }}
             hostedZoneID: {{ .Values.acme.dnsProvider.route53.hostedZoneID }}
             role: {{ .Values.acme.dnsProvider.route53.role }}
+{{- end}}
+{{- if eq .Values.acme.dnsProvider.type "gcp" }}
+          clouddns:
+            project: {{ .Values.acme.dnsProvider.gcp.project }}
+            serviceAccountSecretRef:
+              name: {{ .Values.acme.dnsProvider.gcp.serviceAccountSecretName }}
+              key: {{ .Values.acme.dnsProvider.gcp.serviceAccountSecretKey }}
 {{- end}}
 {{- end}}
 {{- end}}

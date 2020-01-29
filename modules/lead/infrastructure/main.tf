@@ -14,17 +14,6 @@ module "system_namespace" {
   }
 }
 
-module "system_issuer" {
-  source                      = "../../common/cert-issuer"
-  namespace                   = module.system_namespace.name
-  issuer_type                 = var.issuer_type
-  issuer_server               = var.issuer_server
-  crd_waiter                  = null_resource.cert_manager_crd_delay.id
-
-  acme_solver                 = "http"
-  provider_http_ingress_class = "nginx"
-}
-
 resource "kubernetes_cluster_role" "tiller_cluster_role" {
   metadata {
     name = "lead-system-tiller-cluster-manager"
@@ -66,8 +55,8 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
   }
   rule {
     api_groups = ["certificates.k8s.io"]
-    resources  = ["certificatesigningrequests"]
-    verbs      = ["list", "watch"]
+    resources  = ["certificatesigningrequests", "certificatesigningrequests/approval", "certificatesigningrequests/status"]
+    verbs      = ["update", "create", "get", "delete"]
   }
   rule {
     api_groups = ["cert-manager.io","certmanager.k8s.io"]
@@ -142,7 +131,7 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
   rule {
     api_groups = ["rbac.istio.io"]
     resources  = ["*"]
-    verbs      = ["get", "list", "watch"]
+    verbs      = ["get", "list", "watch", "create", "delete", "patch"]
   }
   rule {
     api_groups = [""]
@@ -277,9 +266,29 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
     verbs      = ["create", "delete", "patch"]
   }
   rule {
+    api_groups = ["rbac.istio.io"]
+    resources  = ["*/status"]
+    verbs      = ["update"]
+  }
+  rule {
     api_groups = [""]
     resources  = ["pods/log"]
     verbs      = ["get", "list", "watch"]
+  }
+  rule {
+    api_groups = ["security.istio.io"]
+    resources  = ["*"]
+    verbs      = ["create", "delete", "get", "list", "patch", "watch"]
+  }
+  rule {
+    api_groups = ["security.istio.io"]
+    resources  = ["*/status"]
+    verbs      = ["update"]
+  }
+  rule {
+    api_groups = ["projectcontour.io"]
+    resources  = ["httpproxies"]
+    verbs      = ["*"]
   }
 }
 

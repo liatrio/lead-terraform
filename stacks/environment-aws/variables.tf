@@ -35,7 +35,7 @@ variable "asg_max_size" {
 
 variable "instance_types" {
   type    = list
-  default = ["m5.large", "c5.large", "m4.large", "c4.large", "t3.large", "r5.large"]
+  default = ["m5.xlarge", "c5.xlarge", "m4.xlarge", "c4.xlarge", "t3.xlarge", "r5.xlarge"]
 }
 
 variable "essential_taint_key" {
@@ -55,7 +55,7 @@ variable "essential_asg_max_size" {
 }
 
 variable "essential_instance_type" {
-  default = "t3.medium"
+  default = "t3.large"
 }
 
 variable "image_whitelist" {
@@ -80,10 +80,6 @@ variable "dashboard_version" {
 
 variable "cert_issuer_type" {
   default = "acme"
-}
-
-variable "cert_issuer_server" {
-  default = "https://acme-v02.api.letsencrypt.org/directory"
 }
 
 variable "enable_istio" {
@@ -165,4 +161,8 @@ locals {
   tags = {
     "Cluster" = var.cluster
   }
+}
+
+variable "k8s_storage_class" {
+  default = "gp2"
 }

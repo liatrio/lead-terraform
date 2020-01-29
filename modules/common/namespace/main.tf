@@ -10,7 +10,7 @@ resource "kubernetes_namespace" "ns" {
 resource "kubernetes_limit_range" "resource-limits" {
   count = var.enabled ? 1 : 0
   metadata {
-    name = "namespace-resource-limits"
+    name      = "namespace-resource-limits"
     namespace = kubernetes_namespace.ns[0].metadata[0].name
   }
   spec {
@@ -23,6 +23,10 @@ resource "kubernetes_limit_range" "resource-limits" {
       default = {
         cpu    = var.resource_limit_cpu
         memory = var.resource_limit_memory
+      }
+      max = {
+        cpu    = var.resource_max_cpu
+        memory = var.resource_max_memory
       }
     }
   }
@@ -65,23 +69,23 @@ resource "kubernetes_role" "tiller_role" {
   }
   rule {
     api_groups = ["networking.istio.io"]
-    resources = ["*"]
-    verbs = ["get", "create", "watch", "delete", "list", "patch"]
+    resources  = ["*"]
+    verbs      = ["get", "create", "watch", "delete", "list", "patch"]
   }
   rule {
     api_groups = ["autoscaling"]
-    resources = ["horizontalpodautoscalers"]
-    verbs = ["*"]
+    resources  = ["horizontalpodautoscalers"]
+    verbs      = ["*"]
   }
   rule {
     api_groups = ["flagger.app"]
-    resources = ["canaries","canaries/status"]
-    verbs = ["*"]
+    resources  = ["canaries", "canaries/status"]
+    verbs      = ["*"]
   }
   rule {
     api_groups = [""]
-    resources = ["secrets"]
-    verbs = ["get", "create"]
+    resources  = ["secrets"]
+    verbs      = ["get", "create"]
   }
 }
 

@@ -11,3 +11,5 @@ variable "metrics_url" {
 variable "enable" {
   default = true
 }
+
+variable "event_webhook" {}

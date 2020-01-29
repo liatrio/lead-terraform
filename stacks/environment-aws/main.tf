@@ -26,7 +26,7 @@ provider "kubernetes" {
 provider "helm" {
   alias           = "system"
   namespace       = module.infrastructure.namespace
-  tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.14.1"
+  tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.15.1"
   service_account = module.infrastructure.tiller_service_account
 
   override = [
@@ -35,6 +35,10 @@ provider "helm" {
     "spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].values[0]=preemptible",
     "spec.template.spec.tolerations[0].key=${var.essential_taint_key}",
     "spec.template.spec.tolerations[0].operator=Exists",
+    "spec.template.spec.containers[0].resources.limits.memory=400Mi",
+    "spec.template.spec.containers[0].resources.requests.memory=100Mi",
+    "spec.template.spec.containers[0].resources.limits.cpu=800m",
+    "spec.template.spec.containers[0].resources.requests.cpu=100m",
   ]
 
   kubernetes {
@@ -48,7 +52,7 @@ provider "helm" {
 provider "helm" {
   alias           = "toolchain"
   namespace       = module.toolchain.namespace
-  tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.14.1"
+  tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.15.1"
   service_account = module.toolchain.tiller_service_account
 
   override = [
@@ -57,6 +61,10 @@ provider "helm" {
     "spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].values[0]=preemptible",
     "spec.template.spec.tolerations[0].key=${var.essential_taint_key}",
     "spec.template.spec.tolerations[0].operator=Exists",
+    "spec.template.spec.containers[0].resources.limits.memory=400Mi",
+    "spec.template.spec.containers[0].resources.requests.memory=100Mi",
+    "spec.template.spec.containers[0].resources.limits.cpu=800m",
+    "spec.template.spec.containers[0].resources.requests.cpu=100m", 
   ]
 
   kubernetes {

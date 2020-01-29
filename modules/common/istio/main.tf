@@ -33,24 +33,18 @@ resource "kubernetes_secret" "kiali_dashboard_secret" {
   }
 }
 
-module "istio_ingress" {
-  source                  = "../nginx-ingress"
-  enabled                 = var.enabled
-  namespace               = module.istio_namespace.name
-  ingress_controller_type = var.ingress_controller_type
-}
-
 data "helm_repository" "istio" {
   name = "istio.io"
-  url  = "https://storage.googleapis.com/istio-release/releases/1.2.2/charts/"
+  url  = "https://storage.googleapis.com/istio-release/releases/1.4.2/charts/"
 }
 
 data "template_file" "istio_values" {
   template = file("${path.module}/istio-values.tpl")
 
   vars = {
-    domain = var.domain
+    domain = "${var.toolchain_namespace}.${var.cluster_domain}"
     pilotTraceSampling = var.pilot_trace_sampling
+    k8s_storage_class = var.k8s_storage_class
   }
 }
 
@@ -62,7 +56,7 @@ resource "helm_release" "istio" {
   name       = module.istio_namespace.name
   timeout    = 600
   wait       = true
-  version    = "1.2.2"
+  version    = "1.4.2"
 
   set {
     name  = "crd_waiter"
@@ -130,25 +124,11 @@ resource "kubernetes_cluster_role_binding" "tiller_cluster_role_binding" {
   }
 }
 
-module "istio_cert_issuer" {
-  source        = "../cert-issuer"
-  enabled       = var.enabled
-  namespace     = module.istio_namespace.name
-  issuer_name   = var.cert_issuer_name
-  issuer_type   = var.cert_issuer_type
-  issuer_server = var.cert_issuer_server
-  crd_waiter    = var.crd_waiter
-
-  acme_solver             = "dns"
-  provider_dns_type       = "route53"
-  route53_dns_region      = var.region
-  route53_dns_hosted_zone = var.zone_id
-}
-
 module "istio_flagger" {
-  source    = "../../common/flagger"
-  enable    = var.enabled
-  namespace = var.enabled ? helm_release.istio[0].metadata[0].namespace : ""
+  source        = "../../common/flagger"
+  enable        = var.enabled
+  namespace     = var.enabled ? helm_release.istio[0].metadata[0].namespace : ""
+  event_webhook = var.flagger_event_webhook
 }
 
 resource "kubernetes_horizontal_pod_autoscaler" "kiali_autoscaler" {
@@ -158,12 +138,126 @@ resource "kubernetes_horizontal_pod_autoscaler" "kiali_autoscaler" {
     namespace = module.istio_namespace.name
   }
   spec {
-    max_replicas                      = 20
-    target_cpu_utilization_percentage = 80
+    max_replicas                      = 10
+    target_cpu_utilization_percentage = 60
+    min_replicas                      = 2
     scale_target_ref {
       api_version = "apps/v1beta1"
       kind        = "Deployment"
       name        = "kiali"
     }
   }
+}
+
+resource "helm_release" "kiali" {
+  count      = var.enabled ? 1 : 0
+  chart      = "${path.module}/charts/kiali"
+  namespace  = module.istio_namespace.name
+  name       = "kiali"
+  timeout    = 600
+  wait       = true
+
+  set {
+    name  = "domain"
+    value = "${var.toolchain_namespace}.${var.cluster_domain}"
+  }
+
+  set {
+    name = "image"
+    value = "quay.io/kiali/kiali:v1.9"
+  }
+
+  depends_on = [
+    helm_release.istio
+  ]
+}
+
+module "staging_app_wildcard" {
+  source = "../certificates"
+
+  name      = "staging-app-wildcard"
+  namespace = module.istio_namespace.name
+  domain    = "staging.apps.${var.cluster_domain}"
+  enabled   = var.enabled
+
+  issuer_name = var.issuer_name
+  issuer_kind = var.issuer_kind
+
+  certificate_crd = var.crd_waiter
+}
+
+module "prod_app_wildcard" {
+  source = "../certificates"
+
+  name      = "prod-app-wildcard"
+  namespace = module.istio_namespace.name
+  domain    = "prod.apps.${var.cluster_domain}"
+  enabled   = var.enabled
+
+  issuer_name = var.issuer_name
+  issuer_kind = var.issuer_kind
+
+  certificate_crd = var.crd_waiter
+}
+
+resource "helm_release" "app_gateway" {
+  count      = var.enabled ? 1 : 0
+  chart      = "${path.module}/charts/gateway"
+  namespace  = module.istio_namespace.name
+  name       = "app-gateway"
+  timeout    = 600
+  wait       = true
+
+  set {
+    name = "name"
+    value = "app"
+  }
+
+  set {
+    name  = "staging_host"
+    value = "*.staging.apps.${var.cluster_domain}"
+  }
+
+  set {
+    name = "staging_tlsSecret"
+    value = module.staging_app_wildcard.cert_secret_name
+  }
+
+  set {
+    name  = "prod_host"
+    value = "*.prod.apps.${var.cluster_domain}"
+  }
+
+  set {
+    name = "prod_tlsSecret"
+    value = module.prod_app_wildcard.cert_secret_name
+  }
+
+  depends_on = [
+    helm_release.istio
+  ]
+}
+
+data "template_file" "jaeger_values" {
+  template = file("${path.module}/jaeger-values.tpl")
+
+  vars = {
+    domain = "${var.toolchain_namespace}.${var.cluster_domain}"
+    k8s_storage_class = var.k8s_storage_class
+  }
+}
+
+resource "helm_release" "jaeger" {
+  count      = var.enabled ? 1 : 0
+  chart      = "${path.module}/charts/jaeger"
+  namespace  = module.istio_namespace.name
+  name       = "jaeger"
+  timeout    = 600
+  wait       = true
+
+  values = [data.template_file.jaeger_values.rendered]
+
+  depends_on = [
+    helm_release.istio
+  ]
 }

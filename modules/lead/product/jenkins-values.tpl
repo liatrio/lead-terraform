@@ -13,29 +13,26 @@ master:
     enabled: true
     hostName: ${ingress_hostname}
     annotations:
-      kubernetes.io/ingress.class: "nginx"
-      kubernetes.io/tls-acme: "true"
-      acme.cert-manager.io/http01-edit-in-place: "true"
-      nginx.ingress.kubernetes.io/ssl-redirect: "${ssl_redirect}"
+      kubernetes.io/ingress.class: "jenkins-nginx"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "${ssl_redirect}"
       nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
       nginx.ingress.kubernetes.io/configuration-snippet: |
-        more_set_headers "X-Forwarded-Proto: https";      
+        more_set_headers "X-Forwarded-Proto: https";
       ingress.kubernetes.io/proxy-body-size: "0"
       ingress.kubernetes.io/proxy-read-timeout: "600"
       ingress.kubernetes.io/proxy-send-timeout: "600"
     tls:
     - hosts:
       - ${ingress_hostname}
-      secretName: jenkins-ingress-tls
   jenkinsUrlProtocol: ${protocol}
   serviceType: ClusterIP
   healthProbeLivenessFailureThreshold: 5
   healthProbeReadinessFailureThreshold: 12
-  healthProbeLivenessInitialDelay: 60 
+  healthProbeLivenessInitialDelay: 60
   healthProbeReadinessInitialDelay: 30
   resources:
     requests:
-      cpu: 100m
+      cpu: 250m
       memory: 1Gi
     limits:
       cpu: 1000m
@@ -52,7 +49,7 @@ master:
           systemMessage: Welcome to our CI\CD server.  This Jenkins is configured and managed 'as code' from https://github.com/liatrio/lead-terraform.
       security-config: |
         jenkins:
-          authorizationStrategy: 
+          authorizationStrategy:
             loggedInUsersCanDoAnything:
               allowAnonymousRead: "${allow_anonymous_read}"
           ${security_realm}
@@ -66,7 +63,7 @@ master:
                 "ssl-required": "${keycloak_ssl}",
                 "resource": "${ingress_hostname}",
                 "public-client": true
-              }          
+              }
       master-node: |
         jenkins:
           labelString: "master"
@@ -87,9 +84,9 @@ master:
                 - key: "productionNamespace"
                   value: "${productionNamespace}"
                 - key: "stagingDomain"
-                  value: "${stagingDomain}"
+                  value: "staging.${appDomain}"
                 - key: "productionDomain"
-                  value: "${productionDomain}"
+                  value: "prod.${appDomain}"
       slack-config: |
         unclassified:
           slackNotifier:
@@ -122,10 +119,10 @@ master:
                         command: "/bin/sh -c"
                         args: "cat"
                         ttyEnabled: true
-                        resourceRequestCpu: 128m
-                        resourceLimitCpu: 256m
-                        resourceRequestMemory: 128Mi
-                        resourceLimitMemory: 256Mi
+                        resourceRequestCpu: 250m
+                        resourceLimitCpu: 500m
+                        resourceRequestMemory: 256Mi
+                        resourceLimitMemory: 512Mi
                     envVars:
                       - envVar:
                           key: "SKAFFOLD_DEFAULT_REPO"
@@ -139,6 +136,20 @@ master:
                           secretName: "${jenkins-repository-dockercfg}"
                     slaveConnectTimeout: 100
                     serviceAccount: "jenkins"
+                    yaml: |-
+                      apiVersion: v1
+                      kind: Pod
+                      spec:
+                        containers:
+                        - name: jnlp
+                          resources:
+                            requests:
+                              cpu: 200m
+                              memory: 128Mi
+                            limits:
+                              cpu: 1
+                              memory: 256Mi
+                    yamlMergeStrategy: "merge"
                   - name: "lead-toolchain-aws"
                     label: "lead-toolchain-aws"
                     nodeUsageMode: NORMAL
@@ -154,11 +165,25 @@ master:
                         command: "/bin/sh -c"
                         args: "cat"
                         ttyEnabled: true
-                        resourceRequestCpu: 128m
-                        resourceLimitCpu: 256m
+                        resourceRequestCpu: 100m
+                        resourceLimitCpu: 250m
                         resourceRequestMemory: 128Mi
                         resourceLimitMemory: 256Mi
                     slaveConnectTimeout: 100
+                    yaml: |-
+                      apiVersion: v1
+                      kind: Pod
+                      spec:
+                        containers:
+                        - name: jnlp
+                          resources:
+                            requests:
+                              cpu: 200m
+                              memory: 128Mi
+                            limits:
+                              cpu: 1
+                              memory: 256Mi
+                    yamlMergeStrategy: "merge"
                   - name: "lead-toolchain-terraform"
                     label: "lead-toolchain-terraform"
                     nodeUsageMode: NORMAL
@@ -174,11 +199,25 @@ master:
                         command: "/bin/sh -c"
                         args: "cat"
                         ttyEnabled: true
-                        resourceRequestCpu: 128m
-                        resourceLimitCpu: 512m
+                        resourceRequestCpu: 100m
+                        resourceLimitCpu: 500m
                         resourceRequestMemory: 256Mi
                         resourceLimitMemory: 1536Mi
                     slaveConnectTimeout: 100
+                    yaml: |-
+                      apiVersion: v1
+                      kind: Pod
+                      spec:
+                        containers:
+                        - name: jnlp
+                          resources:
+                            requests:
+                              cpu: 200m
+                              memory: 128Mi
+                            limits:
+                              cpu: 1
+                              memory: 256Mi
+                    yamlMergeStrategy: "merge"
                   - name: "lead-toolchain-maven"
                     label: "lead-toolchain-maven"
                     nodeUsageMode: NORMAL
@@ -190,10 +229,10 @@ master:
                         command: "/bin/sh -c"
                         args: "cat"
                         ttyEnabled: true
-                        resourceRequestCpu: 128m
-                        resourceLimitCpu: 256m
-                        resourceRequestMemory: 256Mi 
-                        resourceLimitMemory: 1024Mi 
+                        resourceRequestCpu: 100m
+                        resourceLimitCpu: 250m
+                        resourceRequestMemory: 256Mi
+                        resourceLimitMemory: 1024Mi
                     slaveConnectTimeout: 100
                     volumes:
                       - secretVolume:
@@ -202,6 +241,20 @@ master:
                       - emptyDirVolume:
                           mountPath: "/root/.m2/repository"
                           memory: false
+                    yaml: |-
+                      apiVersion: v1
+                      kind: Pod
+                      spec:
+                        containers:
+                        - name: jnlp
+                          resources:
+                            requests:
+                              cpu: 200m
+                              memory: 128Mi
+                            limits:
+                              cpu: 1
+                              memory: 256Mi
+                    yamlMergeStrategy: "merge"
                   - name: "lead-toolchain-gitops"
                     label: "lead-toolchain-gitops"
                     nodeUsageMode: NORMAL
@@ -213,8 +266,8 @@ master:
                         command: "/bin/sh -c"
                         args: "cat"
                         ttyEnabled: true
-                        resourceRequestCpu: 128m
-                        resourceLimitCpu: 256m
+                        resourceRequestCpu: 100m
+                        resourceLimitCpu: 250m
                         resourceRequestMemory: 128Mi
                         resourceLimitMemory: 256Mi
                     slaveConnectTimeout: 100
@@ -227,6 +280,49 @@ master:
                         key: "GITOPS_GIT_PASSWORD"
                         secretKey: "password"
                         secretName: "jenkins-credential-github"
+                    yaml: |-
+                      apiVersion: v1
+                      kind: Pod
+                      spec:
+                        containers:
+                        - name: jnlp
+                          resources:
+                            requests:
+                              cpu: 200m
+                              memory: 128Mi
+                            limits:
+                              cpu: 1
+                              memory: 256Mi
+                    yamlMergeStrategy: "merge"
+                  - name: "lead-toolchain-goreleaser"
+                    label: "lead-toolchain-goreleaser"
+                    nodeUsageMode: NORMAL
+                    containers:
+                      - name: "goreleaser"
+                        image: "${image_repo}/builder-image-goreleaser:${builder_images_version}"
+                        alwaysPullImage: false
+                        workingDir: "/home/jenkins/agent"
+                        command: "/bin/sh -c"
+                        args: "cat"
+                        ttyEnabled: true
+                        resourceRequestCpu: 100m
+                        resourceLimitCpu: 250m
+                        resourceRequestMemory: 128Mi
+                        resourceLimitMemory: 256Mi
+                    yaml: |-
+                      apiVersion: v1
+                      kind: Pod
+                      spec:
+                        containers:
+                        - name: jnlp
+                          resources:
+                            requests:
+                              cpu: 200m
+                              memory: 128Mi
+                            limits:
+                              cpu: 1
+                              memory: 256Mi
+                    yamlMergeStrategy: "merge"
       shared-libraries: |
         unclassified:
           globalLibraries:
@@ -254,3 +350,10 @@ master:
     configAutoReload:
       enabled: true
       label: jenkins_config
+      resources:
+        requests:
+          cpu: 100m
+          memory: 64Mi
+        limits:
+          cpu: 800m
+          memory: 256Mi

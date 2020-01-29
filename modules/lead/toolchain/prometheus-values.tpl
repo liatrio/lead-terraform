@@ -1,4 +1,14 @@
 grafana:
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: "toolchain-nginx"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    tls:
+    - hosts:
+      - ${grafana_hostname}
+    hosts:
+    - ${grafana_hostname}
   grafana.ini:
     auth.anonymous:
       enabled: true
@@ -8,10 +18,26 @@ grafana:
     repository: grafana/grafana
     tag: 6.5.1-ubuntu
     pullPolicy: IfNotPresent
+  service:
+    portName: http
+  resources:
+    limits:
+      cpu: 500m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
 
 kubeStateMetrics:
   deploymentAnnotations:
     downscaler/exclude: "true"
+  resources:
+    limits:
+      cpu: 100m
+      memory: 64Mi
+    requests:
+      cpu: 10m
+      memory: 32Mi
 server:
   deploymentAnnotations:
     downscaler/exclude: "true"
@@ -27,14 +53,22 @@ nodeExporter:
   tolerations:
   - key: EssentialOnly
     operator: "Exists"
+prometheus-node-exporter:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 15Mi
+    limits:
+      cpu: 400m
+      memory: 100Mi
 prometheusOperator:
   resources:
     limits:
-      cpu: 200m
-      memory: 200Mi
+      cpu: 500m
+      memory: 64Mi
     requests:
       cpu: 100m
-      memory: 100Mi
+      memory: 32Mi
   configReloaderCpu: 100m
   configReloaderMemory: 25Mi
   admissionWebhooks:
@@ -52,10 +86,10 @@ prometheus:
               storage: 95Gi
     resources:
       requests:
-        cpu: 200m
+        cpu: 250m
         memory: 2Gi
       limits:
-        cpu: 500m
+        cpu: 1500m
         memory: 4Gi
 
 alertmanager:
@@ -75,7 +109,7 @@ alertmanager:
       group_by: ['namespace', 'pod']
       group_wait: 30s
       group_interval: 5m
-      repeat_interval: 12h
+      repeat_interval: 1h
       routes:
       - match:
           alertname: Watchdog
@@ -104,8 +138,8 @@ alertmanager:
       - match:
           namespace: istio-system
         receiver: slack
-    templates:                                                                                                                                                                                                                                                                
-    - /etc/alertmanager/config/template*.tmpl 
+    templates:
+    - /etc/alertmanager/config/template*.tmpl
     receivers:
     - name: 'null'
     - name: 'slack'
@@ -130,8 +164,8 @@ alertmanager:
         send_resolved: true
         title: '{{ template "custom_title" . }}'
         text: '{{ template "custom_slack_message" . }}'
-  templateFiles:                                                                                                                                                                                                                                                              
-    template_1.tmpl: |-                                                                                                                                                                                                                                                       
+  templateFiles:
+    template_1.tmpl: |-
       {{ define "__single_message_title" }}{{ range .Alerts.Firing }}{{ .Labels.alertname }} @ {{ .Annotations.identifier }}{{ end }}{{ range .Alerts.Resolved }}{{ .Labels.alertname }} @ {{ .Annotations.identifier }}{{ end }}{{ end }}
       {{ define "custom_title" }}[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ if or (and (eq (len .Alerts.Firing) 1) (eq (len .Alerts.Resolved) 0)) (and (eq (len .Alerts.Firing) 0) (eq (len .Alerts.Resolved) 1)) }}{{ template "__single_message_title" . }}{{ end }}{{ end }}
       {{ define "custom_slack_message" }}

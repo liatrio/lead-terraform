@@ -15,22 +15,36 @@ provider "kubernetes" {
 provider "helm" {
   alias           = "system"
   namespace       = module.infrastructure.namespace
-  tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.15.0"
+  tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.15.1"
   service_account = module.infrastructure.tiller_service_account
 
   kubernetes {
     config_context = var.cluster
   }
+
+  override = [
+    "spec.template.spec.containers[0].resources.limits.memory=128Mi",
+    "spec.template.spec.containers[0].resources.requests.memory=64Mi",
+    "spec.template.spec.containers[0].resources.limits.cpu=200m",
+    "spec.template.spec.containers[0].resources.requests.cpu=50m",
+  ]
 }
 
 provider "helm" {
   alias           = "toolchain"
   namespace       = module.toolchain.namespace
-  tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.15.0"
+  tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.15.1"
   service_account = module.toolchain.tiller_service_account
 
   kubernetes {
     config_context = var.cluster
   }
+
+  override = [
+    "spec.template.spec.containers[0].resources.limits.memory=128Mi",
+    "spec.template.spec.containers[0].resources.requests.memory=64Mi",
+    "spec.template.spec.containers[0].resources.limits.cpu=200m",
+    "spec.template.spec.containers[0].resources.requests.cpu=50m",
+  ]
 }
 

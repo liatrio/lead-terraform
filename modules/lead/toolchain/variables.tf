@@ -13,13 +13,9 @@ variable "namespace" {
 variable "image_whitelist" {
 }
 
-variable "issuer_type" {
-  default = "selfSigned"
-}
+variable "issuer_name" {}
 
-variable "issuer_server" {
-  default = "https://acme-v02.api.letsencrypt.org/directory"
-}
+variable "issuer_kind" {}
 
 variable "elb_security_group_id" {
   default = ""
@@ -78,6 +74,9 @@ variable "crd_waiter" {
 variable "keycloak_admin_password" {
 }
 
+variable "keycloak_postgres_password" {
+}
+
 variable "smtp_host" {
 }
 
@@ -109,3 +108,5 @@ variable "harbor_registry_disk_size" {
 variable "harbor_chartmuseum_disk_size" {
   default = "100Gi"
 }
+
+variable "k8s_storage_class" {}

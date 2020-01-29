@@ -10,6 +10,14 @@ variable "issuer_server" {
   default = "https://acme-v02.api.letsencrypt.org/directory"
 }
 
+variable "issuer_email" {
+  default = "cloudservices@liatr.io"
+}
+
+variable "issuer_kind" {
+  default = "Issuer"
+}
+
 variable "acme_solver" {
   default = "http"
 }
@@ -27,6 +35,18 @@ variable "route53_dns_region" {
 }
 
 variable "route53_dns_hosted_zone" {
+  default = ""
+}
+
+variable "gcp_dns_project" {
+  default = ""
+}
+
+variable "gcp_dns_service_account_secret_name" {
+  default = ""
+}
+
+variable "gcp_dns_service_account_secret_key" {
   default = ""
 }
 

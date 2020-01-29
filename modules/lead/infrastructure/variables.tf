@@ -11,19 +11,20 @@ variable "enable_opa" {
   default = "true"
 }
 
+variable "enable_downscaler" {
+  default = "true"
+}
+
+variable "enable_k8s_spot_termination_handler" {
+  default = "true"
+}
+
 variable "opa_failure_policy" {
 }
 
 variable "acme_dns_providers" {
   type    = list(string)
   default = []
-}
-
-variable "issuer_type" {
-}
-
-variable "issuer_server" {
-  default = "https://acme-v02.api.letsencrypt.org/directory"
 }
 
 variable "essential_toleration_values" {

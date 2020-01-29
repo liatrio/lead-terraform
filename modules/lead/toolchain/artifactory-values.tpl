@@ -4,7 +4,7 @@ artifactory:
       cpu: 400m
       memory: 2Gi
     limits:
-      cpu: 1 
+      cpu: 1
       memory: 4Gi
   javaOpts:
     xms: 2g
@@ -14,10 +14,8 @@ nginx:
 ingress:
   enabled: true
   annotations:
-    kubernetes.io/ingress.class: "nginx"
-    kubernetes.io/tls-acme: "true"
-    acme.cert-manager.io/http01-edit-in-place: "true"
-    nginx.ingress.kubernetes.io/ssl-redirect: "${ssl_redirect}"
+    kubernetes.io/ingress.class: "toolchain-nginx"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "${ssl_redirect}"
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
     nginx.ingress.kubernetes.io/configuration-snippet: |
       more_set_headers "X-Forwarded-Proto: https";
@@ -35,4 +33,11 @@ ingress:
   tls:
   - hosts:
     - ${ingress_hostname}
-    secretName: artifactory-ingress-tls
+postgresql:
+  resources:
+    limits:
+      cpu: 600m
+      memory: 256Mi
+    requests:
+      cpu: 20m
+      memory: 128Mi

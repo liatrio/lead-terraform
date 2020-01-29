@@ -49,6 +49,11 @@ resource "helm_release" "harbor_volumes" {
     name = "components.chartmuseum.size"
     value = var.harbor_chartmuseum_disk_size
   }
+
+  set {
+    name = "storageClassName"
+    value = var.k8s_storage_class
+  }
 }
 
 resource "helm_release" "harbor_certificates" {
@@ -96,6 +101,8 @@ data "template_file" "harbor_values" {
     jobservice_pvc_size = "10Gi"
     database_pvc_size = "10Gi"
     redis_pvc_size = "10Gi"
+
+    storage_class = var.k8s_storage_class
   }
 }
 

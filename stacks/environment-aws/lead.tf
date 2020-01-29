@@ -12,8 +12,8 @@ module "infrastructure" {
   namespace                             = var.system_namespace
   opa_failure_policy                    = var.opa_failure_policy
   enable_opa                            = "false"
-  issuer_type                           = "acme"
-  issuer_server                         = var.cert_issuer_server
+  enable_downscaler                     = true
+  enable_k8s_spot_termination_handler   = true
   uptime                                = var.uptime
   downscaler_exclude_namespaces         = var.downscaler_exclude_namespaces
   cert_manager_service_account_role_arn = aws_iam_role.cert_manager_service_account.arn
@@ -84,35 +84,41 @@ data "aws_ssm_parameter" "keycloak_admin_password" {
   name = "/${var.cluster}/keycloak_admin_password"
 }
 
+data "aws_ssm_parameter" "keycloak_postgres_password" {
+  name = "/${var.cluster}/keycloak_postgres_password"
+}
+
 data "aws_ssm_parameter" "prometheus_slack_webhook_url" {
   name = "/${var.cluster}/prometheus_slack_webhook_url"
 }
 
 
 module "toolchain" {
-  source                  = "../../modules/lead/toolchain"
-  root_zone_name          = var.root_zone_name
-  cluster                 = module.eks.cluster_id
-  cluster_domain          = "${var.cluster}.${var.root_zone_name}"
-  namespace               = var.toolchain_namespace
-  image_whitelist         = var.image_whitelist
-  elb_security_group_id   = aws_security_group.elb.id
-  artifactory_license     = data.aws_ssm_parameter.artifactory_license.value
-  keycloak_admin_password = data.aws_ssm_parameter.keycloak_admin_password.value
-  enable_istio            = var.enable_istio
-  enable_artifactory      = var.enable_artifactory
-  enable_gitlab           = var.enable_gitlab
-  enable_keycloak         = var.enable_keycloak
-  enable_mailhog          = var.enable_mailhog
-  enable_sonarqube        = var.enable_sonarqube
-  enable_xray             = var.enable_xray
-  enable_grafeas          = var.enable_grafeas
-  enable_harbor           = var.enable_harbor
-  issuer_type             = "acme"
-  issuer_server           = var.cert_issuer_server
-  ingress_controller_type = "LoadBalancer"
-  crd_waiter              = module.infrastructure.crd_waiter
-  grafeas_version         = var.grafeas_version
+  source                     = "../../modules/lead/toolchain"
+  root_zone_name             = var.root_zone_name
+  cluster                    = module.eks.cluster_id
+  cluster_domain             = "${var.cluster}.${var.root_zone_name}"
+  namespace                  = var.toolchain_namespace
+  image_whitelist            = var.image_whitelist
+  elb_security_group_id      = aws_security_group.elb.id
+  artifactory_license        = data.aws_ssm_parameter.artifactory_license.value
+  keycloak_admin_password    = data.aws_ssm_parameter.keycloak_admin_password.value
+  keycloak_postgres_password = data.aws_ssm_parameter.keycloak_postgres_password.value
+  enable_istio               = var.enable_istio
+  enable_artifactory         = var.enable_artifactory
+  enable_gitlab              = var.enable_gitlab
+  enable_keycloak            = var.enable_keycloak
+  enable_mailhog             = var.enable_mailhog
+  enable_sonarqube           = var.enable_sonarqube
+  enable_xray                = var.enable_xray
+  enable_grafeas             = var.enable_grafeas
+  enable_harbor              = var.enable_harbor
+  issuer_name                = module.cluster_issuer.issuer_name
+  issuer_kind                = module.cluster_issuer.issuer_kind
+  ingress_controller_type    = "LoadBalancer"
+  crd_waiter                 = module.infrastructure.crd_waiter
+  grafeas_version            = var.grafeas_version
+  k8s_storage_class          = var.k8s_storage_class
 
   harbor_registry_disk_size = "200Gi"
   harbor_chartmuseum_disk_size = "100Gi"
@@ -145,7 +151,6 @@ module "sdm" {
   slack_client_signing_secret = data.aws_ssm_parameter.slack_client_signing_secret.value
   workspace_role_name         = aws_iam_role.workspace_role.name
   product_stack               = "product-aws"
-  nginx_ingress_waiter        = module.toolchain.nginx_ingress_waiter
 
   operator_slack_service_account_annotations = {
     "eks.amazonaws.com/role-arn" = aws_iam_role.operator_slack_service_account.arn
@@ -155,8 +160,6 @@ module "sdm" {
   }
 
   product_vars = {
-    issuer_type            = var.cert_issuer_type
-    issuer_server          = var.cert_issuer_server
     enable_keycloak        = var.enable_keycloak
     builder_images_version = var.builder_images_version
     jenkins_image_version  = var.jenkins_image_version
@@ -173,11 +176,17 @@ module "dashboard" {
   source            = "../../modules/lead/dashboard"
   root_zone_name    = var.root_zone_name
   cluster           = module.eks.cluster_id
+  cluster_domain    = "${var.cluster}.${var.root_zone_name}"
   namespace         = module.toolchain.namespace
   dashboard_version = var.dashboard_version
+  k8s_storage_class = var.k8s_storage_class
   enabled           = var.enable_dashboard
+  enable_keycloak   = var.enable_keycloak
+  keycloak_realm_id = module.toolchain.keycloak_realm_id
+  crd_waiter        = module.infrastructure.crd_waiter
 
   providers = {
     helm = helm.toolchain
+    kubernetes = kubernetes
   }
 }

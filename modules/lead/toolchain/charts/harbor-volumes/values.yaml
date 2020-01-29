@@ -1,9 +1,12 @@
+storageClassName:
 components:
   registry:
+    size:
     mountPath: "/storage"
     initCommands:
       - "mkdir -p /storage/docker && chown -R 10000:10000 /storage"
   chartmuseum:
+    size:
     mountPath: "/chart_storage"
     initCommands:
       - "chown -R 10000:10000 /chart_storage"
