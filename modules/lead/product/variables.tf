@@ -18,7 +18,7 @@ variable "enable_keycloak" {
 }
 
 variable "image_repository" {
-  default = "harbor"
+  default = "artifactory"
   description = "Artifactory or Harbor. Used to determine product image repo manager"
 }
 

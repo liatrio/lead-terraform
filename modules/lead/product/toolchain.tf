@@ -13,7 +13,7 @@ data "template_file" "jenkins_values" {
     product_name           = var.product_name
     protocol               = local.protocol
     ssl_redirect           = local.protocol == "http" ? false : true
-    image_repository_url   = "${var.image_repository}.toolchain.${var.cluster_domain}"
+    image_repository_url   = var.image_repository_url == "artifactory" ? "${local.image_repo_url}/docker-registry" : "${local.image_repo_url}"
     ingress_hostname       = "${module.toolchain_namespace.name}.jenkins.${var.cluster_domain}"
     namespace              = module.toolchain_namespace.name
     toolchain_namespace    = var.toolchain_namespace
