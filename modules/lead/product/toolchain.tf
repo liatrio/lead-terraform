@@ -24,7 +24,7 @@ data "template_file" "jenkins_values" {
     appDomain              = "apps.${var.cluster_domain}"
     builder_images_version = var.builder_images_version
     allow_anonymous_read   = var.enable_keycloak ? "false" : "true"
-    jenkins-repository-dockercfg = "jenkins-repository-dockercfg"
+    jenkins-repository-dockercfg = kubernetes_secret.jenkins_repository_dockercfg.name
 
 
     # Keycloak specific vars
