@@ -156,7 +156,6 @@ variable "toolchain_image_repo" {
 }
 
 variable "product_image_repo" {
-  default = "artifactory.toolchain.${var.cluster_domain}/docker-registry"
 }
 
 variable "prometheus_slack_channel" {
