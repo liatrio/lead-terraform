@@ -126,7 +126,7 @@ master:
                     envVars:
                       - envVar:
                           key: "SKAFFOLD_DEFAULT_REPO"
-                          value: "${product_image_repo_url}/${product_name}"
+                          value: "${product_image_repo}/${product_name}"
                     volumes:
                       - hostPathVolume:
                           hostPath: "/var/run/docker.sock"
