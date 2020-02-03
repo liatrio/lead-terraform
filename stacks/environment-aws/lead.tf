@@ -163,7 +163,8 @@ module "sdm" {
     enable_keycloak        = var.enable_keycloak
     builder_images_version = var.builder_images_version
     jenkins_image_version  = var.jenkins_image_version
-    image_repo             = var.image_repo
+    toolchain_image_repo   = var.toolchain_image_repo
+    product_image_repo     = var.product_image_repo
   }
 
   providers = {

@@ -8,12 +8,12 @@ data "template_file" "jenkins_values" {
 
   vars = {
     cluster_domain         = var.cluster_domain
-    image_repo             = var.image_repo
+    toolchain_image_repo   = var.toolchain_image_repo
     jenkins_image_version  = var.jenkins_image_version
     product_name           = var.product_name
     protocol               = local.protocol
     ssl_redirect           = local.protocol == "http" ? false : true
-    image_repository_url   = var.image_repository == "artifactory" ? "${local.image_repo_url}/docker-registry" : "${local.image_repo_url}"
+    product_image_repo_url = var.product_image_repo == "artifactory" ? "${local.product_image_repo_url}/docker-registry" : local.product_image_repo_url
     ingress_hostname       = "${module.toolchain_namespace.name}.jenkins.${var.cluster_domain}"
     namespace              = module.toolchain_namespace.name
     toolchain_namespace    = var.toolchain_namespace

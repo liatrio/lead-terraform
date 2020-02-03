@@ -8,7 +8,9 @@ variable "builder_images_version" {
 }
 variable "jenkins_image_version" {
 }
-variable "image_repo" {
+variable "toolchain_image_repo" {
+}
+variable "product_image_repo" {
 }
 variable "enable_istio" {
   default = true
@@ -16,9 +18,3 @@ variable "enable_istio" {
 variable "enable_keycloak" {
   default = true
 }
-
-variable "image_repository" {
-  default = "artifactory"
-  description = "Artifactory or Harbor. Used to determine product image repo manager"
-}
-

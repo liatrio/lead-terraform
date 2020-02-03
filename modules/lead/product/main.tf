@@ -1,6 +1,6 @@
 locals {
   protocol = var.cluster_domain == "docker-for-desktop.localhost" ? "http" : "https"
-  image_repo_url = "${var.image_repository}.toolchain.${var.cluster_domain}"
+  product_image_repo_url = "${var.product_image_repo}.toolchain.${var.cluster_domain}"
 }
 
 provider "kubernetes" {

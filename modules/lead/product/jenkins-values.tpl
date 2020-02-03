@@ -7,7 +7,7 @@ persistence:
 
 master:
   installPlugins: false
-  image: "${image_repo}/jenkins-image"
+  image: "${toolchain_image_repo}/jenkins-image"
   tag: ${jenkins_image_version}
   ingress:
     enabled: true
@@ -113,7 +113,7 @@ master:
                     nodeUsageMode: NORMAL
                     containers:
                       - name: "skaffold"
-                        image: "${image_repo}/builder-image-skaffold:${builder_images_version}"
+                        image: "${toolchain_image_repo}/builder-image-skaffold:${builder_images_version}"
                         alwaysPullImage: false
                         workingDir: "/home/jenkins/agent"
                         command: "/bin/sh -c"
@@ -126,7 +126,7 @@ master:
                     envVars:
                       - envVar:
                           key: "SKAFFOLD_DEFAULT_REPO"
-                          value: "${image_repository_url}/${product_name}"
+                          value: "${product_image_repo_url}/${product_name}"
                     volumes:
                       - hostPathVolume:
                           hostPath: "/var/run/docker.sock"
@@ -159,7 +159,7 @@ master:
                           fsGroup: 1000
                     containers:
                       - name: "aws"
-                        image: "${image_repo}/builder-image-aws:${builder_images_version}"
+                        image: "${toolchain_image_repo}/builder-image-aws:${builder_images_version}"
                         alwaysPullImage: false
                         workingDir: "/home/jenkins/agent"
                         command: "/bin/sh -c"
@@ -193,7 +193,7 @@ master:
                           fsGroup: 1000
                     containers:
                       - name: "terraform"
-                        image: "${image_repo}/builder-image-terraform:${builder_images_version}"
+                        image: "${toolchain_image_repo}/builder-image-terraform:${builder_images_version}"
                         alwaysPullImage: false
                         workingDir: "/home/jenkins/agent"
                         command: "/bin/sh -c"
@@ -223,7 +223,7 @@ master:
                     nodeUsageMode: NORMAL
                     containers:
                       - name: "maven"
-                        image: "${image_repo}/builder-image-maven:${builder_images_version}"
+                        image: "${toolchain_image_repo}/builder-image-maven:${builder_images_version}"
                         alwaysPullImage: false
                         workingDir: "/home/jenkins/agent"
                         command: "/bin/sh -c"
@@ -260,7 +260,7 @@ master:
                     nodeUsageMode: NORMAL
                     containers:
                       - name: "gitops"
-                        image: "${image_repo}/builder-image-gitops:${builder_images_version}"
+                        image: "${toolchain_image_repo}/builder-image-gitops:${builder_images_version}"
                         alwaysPullImage: false
                         workingDir: "/home/jenkins/agent"
                         command: "/bin/sh -c"
@@ -299,7 +299,7 @@ master:
                     nodeUsageMode: NORMAL
                     containers:
                       - name: "goreleaser"
-                        image: "${image_repo}/builder-image-goreleaser:${builder_images_version}"
+                        image: "${toolchain_image_repo}/builder-image-goreleaser:${builder_images_version}"
                         alwaysPullImage: false
                         workingDir: "/home/jenkins/agent"
                         command: "/bin/sh -c"
