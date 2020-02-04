@@ -59,7 +59,7 @@ prometheus-node-exporter:
       cpu: 10m
       memory: 15Mi
     limits:
-      cpu: 400m
+      cpu: 500m
       memory: 100Mi
 prometheusOperator:
   resources:
