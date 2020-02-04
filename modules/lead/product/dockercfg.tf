@@ -37,7 +37,7 @@ resource "kubernetes_secret" "jenkins_repository_dockercfg" {
   }
  
   data = { 
-    "config.json" = var.enable_harbor ? data.template_file.multi_dockercfg.rendered : data.template_file.artifactory_dockercfg.rendered
+    "config.json" = var.enable_harbor ? data.template_file.multi_dockercfg[0].rendered : data.template_file.artifactory_dockercfg[0].rendered
   }
  
   type = "Opaque"
