@@ -32,9 +32,15 @@ variable "enable_keycloak" {
   default = false
 }
 
+variable "enable_harbor" {
+  default = true
+}
+
 variable "builder_images_version" {
 }
 variable "jenkins_image_version" {
 }
-variable "image_repo" {
+variable "toolchain_image_repo" {
+}
+variable "product_image_repo" {
 }

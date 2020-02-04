@@ -8,13 +8,13 @@ data "template_file" "jenkins_values" {
 
   vars = {
     cluster_domain         = var.cluster_domain
-    image_repo             = var.image_repo
+    toolchain_image_repo   = var.toolchain_image_repo
     jenkins_image_version  = var.jenkins_image_version
     product_name           = var.product_name
     protocol               = local.protocol
     ssl_redirect           = local.protocol == "http" ? false : true
+    product_image_repo     = var.product_image_repo
     ingress_hostname       = "${module.toolchain_namespace.name}.jenkins.${var.cluster_domain}"
-    artifactory_url        = "artifactory.toolchain.${var.cluster_domain}/docker-registry"
     namespace              = module.toolchain_namespace.name
     toolchain_namespace    = var.toolchain_namespace
     logstash_url           = "http://lead-dashboard-logstash.toolchain.svc.cluster.local:9000"
@@ -24,6 +24,8 @@ data "template_file" "jenkins_values" {
     appDomain              = "apps.${var.cluster_domain}"
     builder_images_version = var.builder_images_version
     allow_anonymous_read   = var.enable_keycloak ? "false" : "true"
+    jenkins-repository-dockercfg = kubernetes_secret.jenkins_repository_dockercfg.metadata[0].name
+
 
     # Keycloak specific vars
     security_realm         = var.enable_keycloak ? "securityRealm: keycloak" : ""

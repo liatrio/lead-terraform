@@ -150,8 +150,12 @@ variable "jenkins_image_version" {
 variable "grafeas_version" {
   default = "v0.1.1-4-ge024b96"
 }
-variable "image_repo" {
+
+variable "toolchain_image_repo" {
   default = "artifactory.toolchain.lead.prod.liatr.io/docker-registry/flywheel"
+}
+
+variable "product_image_repo" {
 }
 
 variable "prometheus_slack_channel" {
