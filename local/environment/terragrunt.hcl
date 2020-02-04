@@ -30,6 +30,7 @@ inputs = {
   enable_sonarqube   = false
   enable_xray        = false
   enable_dashboard   = false
+  enable_harbor      = false
 
   # This will conflict with Istio since it's also configured as a LoadBalancer
   # So ensure `enable_istio = false` before uncommenting this
