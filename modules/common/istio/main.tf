@@ -138,8 +138,9 @@ resource "kubernetes_horizontal_pod_autoscaler" "kiali_autoscaler" {
     namespace = module.istio_namespace.name
   }
   spec {
-    max_replicas                      = 20
-    target_cpu_utilization_percentage = 80
+    max_replicas                      = 10
+    target_cpu_utilization_percentage = 60
+    min_replicas                      = 2
     scale_target_ref {
       api_version = "apps/v1beta1"
       kind        = "Deployment"
@@ -231,6 +232,30 @@ resource "helm_release" "app_gateway" {
     name = "prod_tlsSecret"
     value = module.prod_app_wildcard.cert_secret_name
   }
+
+  depends_on = [
+    helm_release.istio
+  ]
+}
+
+data "template_file" "jaeger_values" {
+  template = file("${path.module}/jaeger-values.tpl")
+
+  vars = {
+    domain = "${var.toolchain_namespace}.${var.cluster_domain}"
+    k8s_storage_class = var.k8s_storage_class
+  }
+}
+
+resource "helm_release" "jaeger" {
+  count      = var.enabled ? 1 : 0
+  chart      = "${path.module}/charts/jaeger"
+  namespace  = module.istio_namespace.name
+  name       = "jaeger"
+  timeout    = 600
+  wait       = true
+
+  values = [data.template_file.jaeger_values.rendered]
 
   depends_on = [
     helm_release.istio

@@ -39,20 +39,6 @@ module "toolchain_namespace" {
   }
 }
 
-module "toolchain_certificate" {
-  source          = "../../common/certificates"
-  namespace       = "istio-system"
-  name            = module.toolchain_namespace.name
-  domain          = "${module.toolchain_namespace.name}.${var.cluster_domain}"
-  enabled         = var.enable_istio
-  certificate_crd = "set"
-
-  providers = {
-    helm       = helm.system
-    kubernetes = kubernetes
-  }
-}
-
 resource "kubernetes_cluster_role" "tiller_cluster_role" {
   metadata {
     name = "toolchain-tiller-manager"

@@ -70,7 +70,7 @@ resource "kubernetes_cluster_role" "nginx_ingress_cluster_role" {
 resource "kubernetes_service_account" "jenkins_nginx_ingress_service_account" {
   metadata {
     name      = "jenkins-nginx-ingress"
-    namespace = var.namespace
+    namespace =  module.toolchain_namespace.name
   }
   automount_service_account_token = true
 }
@@ -123,7 +123,7 @@ module "jenkins_ingress" {
 resource "kubernetes_service_account" "toolchain_nginx_ingress_service_account" {
   metadata {
     name      = "toolchain-nginx-ingress"
-    namespace = var.namespace
+    namespace =  module.toolchain_namespace.name
   }
   automount_service_account_token = true
 }
