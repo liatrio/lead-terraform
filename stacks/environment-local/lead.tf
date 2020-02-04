@@ -18,7 +18,6 @@ module "infrastructure" {
   enable_downscaler                   = false
   enable_k8s_spot_termination_handler = false
   opa_failure_policy                  = var.opa_failure_policy
-  issuer_type                         = "selfSigned"
   uptime                              = var.uptime
 
   external_dns_chart_values = data.template_file.external_dns_values.rendered
@@ -47,12 +46,13 @@ module "toolchain" {
   enable_xray                     = var.enable_xray
   enable_grafeas                  = var.enable_grafeas
   enable_harbor                   = var.enable_harbor
-  issuer_type                     = "selfSigned"
+  issuer_name                     = module.staging_cluster_issuer.issuer_name
+  issuer_kind                     = module.staging_cluster_issuer.issuer_kind
   ingress_controller_type         = var.ingress_controller_type
   ingress_external_traffic_policy = var.ingress_external_traffic_policy
   crd_waiter                      = module.infrastructure.crd_waiter
   grafeas_version                 = var.grafeas_version
-  k8s_storage_class =             var.k8s_storage_class
+  k8s_storage_class               = var.k8s_storage_class
   prometheus_slack_webhook_url    = var.prometheus_slack_webhook_url
   prometheus_slack_channel        = var.prometheus_slack_channel
 
