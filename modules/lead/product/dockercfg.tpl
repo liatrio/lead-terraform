@@ -8,7 +8,7 @@
     "${harbor_url}": {
       "email": "${email}",
       "auth": "${harbor_auth}"
-    }
-  }
+    },
 %{ endif }
+  }
 }
