@@ -32,6 +32,10 @@ variable "enable_keycloak" {
   default = false
 }
 
+variable "enable_keycloak" {
+  default = false
+}
+
 variable "builder_images_version" {
 }
 variable "jenkins_image_version" {

@@ -117,6 +117,7 @@ module "product" {
   image_whitelist         = var.image_whitelist
   enable_keycloak         = var.enable_keycloak
   enable_istio            = var.enable_istio
+  enable_harbor           = var.enable_harbor
   builder_images_version  = var.builder_images_version
   jenkins_image_version   = var.jenkins_image_version
   toolchain_image_repo    = var.toolchain_image_repo

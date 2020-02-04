@@ -165,6 +165,7 @@ module "sdm" {
     jenkins_image_version  = var.jenkins_image_version
     toolchain_image_repo   = var.toolchain_image_repo
     product_image_repo     = var.product_image_repo
+    enable_harbor          = var.enable_harbor
   }
 
   providers = {

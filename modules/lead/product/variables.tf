@@ -18,3 +18,6 @@ variable "enable_istio" {
 variable "enable_keycloak" {
   default = true
 }
+variable "enable_harbor" {
+  default = true
+}
