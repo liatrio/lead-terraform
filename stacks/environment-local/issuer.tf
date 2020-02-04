@@ -33,12 +33,10 @@ resource "kubernetes_cluster_role_binding" "cert_manager_cluster_role_binding" {
 module "staging_cluster_issuer" {
   source        = "../../modules/common/cert-issuer"
   namespace     = module.toolchain.namespace
-  issuer_name   = "staging-letsencrypt-http"
+  issuer_name   = "staging-self-signed"
   issuer_kind   = "ClusterIssuer"
-  issuer_type   = var.cert_issuer_type
-  issuer_server = "https://acme-staging-v02.api.letsencrypt.org/directory"
+  issuer_type   = "selfSigned"
   crd_waiter    = module.infrastructure.crd_waiter
-  acme_solver   = "http"
 
   providers = {
     helm : helm.toolchain
