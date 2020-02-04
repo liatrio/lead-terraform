@@ -32,8 +32,8 @@ variable "enable_keycloak" {
   default = false
 }
 
-variable "enable_keycloak" {
-  default = false
+variable "enable_harbor" {
+  default = true
 }
 
 variable "builder_images_version" {
