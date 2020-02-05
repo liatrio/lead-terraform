@@ -31,3 +31,7 @@ variable "crd_waiter" {
 }
 
 variable "k8s_storage_class" {}
+
+variable "elasticsearch_replicas" {
+  default = 3
+}
