@@ -79,10 +79,10 @@ core:
   resources:
    requests:
      memory: 64Mi
-     cpu: 10m
+     cpu: 20m
    limits:
      memory: 256Mi
-     cpu: 50m
+     cpu: 100m
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -119,6 +119,9 @@ registry:
       requests:
         memory: 256Mi
         cpu: 100m
+      limits:
+        memory: 512Mi
+        cpu: 250m
   controller:
     image:
       repository: goharbor/harbor-registryctl
@@ -128,6 +131,9 @@ registry:
       requests:
         memory: 256Mi
         cpu: 100m
+      requests:
+        memory: 512Mi
+        cpu: 250m
   replicas: 1
   nodeSelector: {}
   tolerations: []
@@ -219,7 +225,7 @@ notary:
         cpu: 10m
       limits:
         memory: 256Mi
-        cpu: 50m
+        cpu: 100m
   nodeSelector: {}
   tolerations: []
   affinity: {}
