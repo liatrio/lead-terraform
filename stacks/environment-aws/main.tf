@@ -24,6 +24,7 @@ provider "kubernetes" {
 }
 
 provider "helm" {
+  version         = "0.10.4"
   alias           = "system"
   namespace       = module.infrastructure.namespace
   tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.15.1"
@@ -50,6 +51,7 @@ provider "helm" {
 }
 
 provider "helm" {
+  version         = "0.10.4"
   alias           = "toolchain"
   namespace       = module.toolchain.namespace
   tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.15.1"
