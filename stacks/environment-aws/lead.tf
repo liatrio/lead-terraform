@@ -120,11 +120,11 @@ module "toolchain" {
   grafeas_version            = var.grafeas_version
   k8s_storage_class          = var.k8s_storage_class
 
-  harbor_registry_disk_size = "200Gi"
+  harbor_registry_disk_size    = "200Gi"
   harbor_chartmuseum_disk_size = "100Gi"
 
-  prometheus_slack_webhook_url    = data.aws_ssm_parameter.prometheus_slack_webhook_url.value
-  prometheus_slack_channel        = var.prometheus_slack_channel
+  prometheus_slack_webhook_url = data.aws_ssm_parameter.prometheus_slack_webhook_url.value
+  prometheus_slack_channel     = var.prometheus_slack_channel
 
   smtp_host       = "email-smtp.${var.region}.amazonaws.com"
   smtp_port       = "587"
@@ -175,20 +175,21 @@ module "sdm" {
 }
 
 module "dashboard" {
-  source            = "../../modules/lead/dashboard"
-  root_zone_name    = var.root_zone_name
-  cluster           = module.eks.cluster_id
-  cluster_domain    = "${var.cluster}.${var.root_zone_name}"
-  namespace         = module.toolchain.namespace
-  dashboard_version = var.dashboard_version
-  k8s_storage_class = var.k8s_storage_class
-  enabled           = var.enable_dashboard
-  enable_keycloak   = var.enable_keycloak
-  keycloak_realm_id = module.toolchain.keycloak_realm_id
-  crd_waiter        = module.infrastructure.crd_waiter
+  source                 = "../../modules/lead/dashboard"
+  root_zone_name         = var.root_zone_name
+  cluster                = module.eks.cluster_id
+  cluster_domain         = "${var.cluster}.${var.root_zone_name}"
+  namespace              = module.toolchain.namespace
+  dashboard_version      = var.dashboard_version
+  k8s_storage_class      = var.k8s_storage_class
+  enabled                = var.enable_dashboard
+  enable_keycloak        = var.enable_keycloak
+  keycloak_realm_id      = module.toolchain.keycloak_realm_id
+  crd_waiter             = module.infrastructure.crd_waiter
+  elasticsearch_replicas = var.dashboard_elasticsearch_replicas
 
   providers = {
-    helm = helm.toolchain
+    helm       = helm.toolchain
     kubernetes = kubernetes
   }
 }
