@@ -131,7 +131,7 @@ registry:
       requests:
         memory: 256Mi
         cpu: 100m
-      requests:
+      limits:
         memory: 512Mi
         cpu: 250m
   replicas: 1
