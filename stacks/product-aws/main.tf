@@ -11,6 +11,7 @@ provider "kubernetes" {
 
 provider "helm" {
   alias           = "toolchain"
+  version         = "0.10.4"
   namespace       = module.product.toolchain_namespace
   tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.15.1"
   service_account = module.product.toolchain_service_account
@@ -41,6 +42,7 @@ provider "kubernetes" {
 
 provider "helm" {
   alias           = "staging"
+  version         = "0.10.4"
   namespace       = module.product.staging_namespace
   tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.15.1"
   service_account = module.product.staging_service_account
@@ -71,6 +73,7 @@ provider "kubernetes" {
 
 provider "helm" {
   alias           = "production"
+  version         = "0.10.4"
   namespace       = module.product.production_namespace
   tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.15.1"
   service_account = module.product.production_service_account
@@ -101,6 +104,7 @@ provider "kubernetes" {
 
 provider "helm" {
   alias           = "system"
+  version         = "0.10.4"
   namespace       = "lead-system"
   install_tiller  = false
 
