@@ -114,6 +114,10 @@ resource "helm_release" "harbor" {
   chart = "harbor"
   version = "1.3.0"
 
+  timeouts {
+    create = "8m"
+  }
+
   values = [
     data.template_file.harbor_values.rendered
   ]
