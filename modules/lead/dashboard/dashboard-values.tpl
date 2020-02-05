@@ -1,5 +1,6 @@
 elasticsearch:
 %{ if local == "false" }
+  replicas: ${elasticsearch_replicas}
   volumeClaimTemplate:
     storageClassName: ${k8s_storage_class}
   resources:

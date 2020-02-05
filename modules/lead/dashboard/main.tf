@@ -30,32 +30,30 @@ data "template_file" "dashboard_values" {
   template = file("${path.module}/dashboard-values.tpl")
 
   vars = {
-    cluster_domain = "${var.namespace}.${var.cluster}.${var.root_zone_name}"
-    namespace      = var.namespace
-    local          = var.local
-    elasticsearch-certs = "${module.elasticsearch-certificate.cert_name}-certificate"
-
-    kibana-hostname = "kibana.${var.namespace}.${var.cluster}.${var.root_zone_name}"
-
-    client-id      = var.enable_keycloak ? keycloak_openid_client.kibana_client[0].client_id : "id"
-    client-secret  = var.enable_keycloak ? keycloak_openid_client.kibana_client[0].client_secret : "secret"
-    discovery-url  = "https://keycloak.${var.namespace}.${var.cluster}.${var.root_zone_name}/auth/realms/${var.keycloak_realm_id}"
-    listen         = 3000
-    upstream-url   = "http://lead-dashboard-kibana:5601"
-
-    keycloak-enabled = var.enable_keycloak ? true : false
-    proxy-certs    = "proxy-ingress-tls"
-    k8s_storage_class  = var.k8s_storage_class
+    cluster_domain         = "${var.namespace}.${var.cluster}.${var.root_zone_name}"
+    namespace              = var.namespace
+    local                  = var.local
+    elasticsearch-certs    = "${module.elasticsearch-certificate.cert_name}-certificate"
+    kibana-hostname        = "kibana.${var.namespace}.${var.cluster}.${var.root_zone_name}"
+    client-id              = var.enable_keycloak ? keycloak_openid_client.kibana_client[0].client_id : "id"
+    client-secret          = var.enable_keycloak ? keycloak_openid_client.kibana_client[0].client_secret : "secret"
+    discovery-url          = "https://keycloak.${var.namespace}.${var.cluster}.${var.root_zone_name}/auth/realms/${var.keycloak_realm_id}"
+    listen                 = 3000
+    upstream-url           = "http://lead-dashboard-kibana:5601"
+    keycloak-enabled       = var.enable_keycloak ? true : false
+    proxy-certs            = "proxy-ingress-tls"
+    k8s_storage_class      = var.k8s_storage_class
+    elasticsearch_replicas = var.elasticsearch_replicas
   }
 }
 
 module "ca-issuer" {
   source = "../../common/ca-issuer"
 
-  enabled   = var.enabled
-  name      = "elasticstack"
-  namespace = var.namespace
-  common_name = var.root_zone_name
+  enabled          = var.enabled
+  name             = "elasticstack"
+  namespace        = var.namespace
+  common_name      = var.root_zone_name
   cert-manager-crd = var.crd_waiter
 }
 
@@ -94,13 +92,12 @@ resource "helm_release" "lead-dashboard" {
 
 
 resource "keycloak_openid_client" "kibana_client" {
-  count = var.enable_keycloak && var.enabled ? 1 : 0
-  realm_id = var.keycloak_realm_id
-  client_id = "kibana"
-  name = "kibana"
-  enabled = true
-
-  access_type = "CONFIDENTIAL"
+  count                 = var.enable_keycloak && var.enabled ? 1 : 0
+  realm_id              = var.keycloak_realm_id
+  client_id             = "kibana"
+  name                  = "kibana"
+  enabled               = true
+  access_type           = "CONFIDENTIAL"
   standard_flow_enabled = true
 
   valid_redirect_uris = [
@@ -110,10 +107,10 @@ resource "keycloak_openid_client" "kibana_client" {
 }
 
 resource "keycloak_openid_audience_protocol_mapper" "audience_mapper" {
-  count                    = var.enable_keycloak && var.enabled ? 1 : 0
-  realm_id                 = keycloak_openid_client.kibana_client[0].realm_id
-  client_id                = keycloak_openid_client.kibana_client[0].id
-  name                     = "audience-mapper"
+  count     = var.enable_keycloak && var.enabled ? 1 : 0
+  realm_id  = keycloak_openid_client.kibana_client[0].realm_id
+  client_id = keycloak_openid_client.kibana_client[0].id
+  name      = "audience-mapper"
 
   included_client_audience = keycloak_openid_client.kibana_client[0].client_id
 }

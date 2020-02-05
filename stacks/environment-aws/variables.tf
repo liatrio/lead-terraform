@@ -170,3 +170,7 @@ locals {
 variable "k8s_storage_class" {
   default = "gp2"
 }
+
+variable "dashboard_elasticsearch_replicas" {
+  default = 3
+}
