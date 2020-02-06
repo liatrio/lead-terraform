@@ -225,7 +225,7 @@ notary:
         cpu: 10m
       limits:
         memory: 256Mi
-        cpu: 350m
+        cpu: 500m
   nodeSelector: {}
   tolerations: []
   affinity: {}
