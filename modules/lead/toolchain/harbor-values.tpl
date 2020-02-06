@@ -121,7 +121,7 @@ registry:
         cpu: 100m
       limits:
         memory: 512Mi
-        cpu: 350m
+        cpu: 500m
   controller:
     image:
       repository: goharbor/harbor-registryctl
@@ -213,7 +213,7 @@ notary:
         cpu: 10m
       limits:
         memory: 256Mi
-        cpu: 150m
+        cpu: 200m
   signer:
     image:
       repository: goharbor/notary-signer-photon
@@ -225,7 +225,7 @@ notary:
         cpu: 10m
       limits:
         memory: 256Mi
-        cpu: 200m
+        cpu: 250m
   nodeSelector: {}
   tolerations: []
   affinity: {}
