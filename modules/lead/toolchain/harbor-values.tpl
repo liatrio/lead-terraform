@@ -121,7 +121,7 @@ registry:
         cpu: 100m
       limits:
         memory: 512Mi
-        cpu: 500m
+        cpu: 600m
   controller:
     image:
       repository: goharbor/harbor-registryctl
