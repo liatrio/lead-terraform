@@ -82,7 +82,7 @@ core:
      cpu: 50m
    limits:
      memory: 256Mi
-     cpu: 150m
+     cpu: 250m
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -121,7 +121,7 @@ registry:
         cpu: 100m
       limits:
         memory: 512Mi
-        cpu: 250m
+        cpu: 350m
   controller:
     image:
       repository: goharbor/harbor-registryctl
@@ -256,7 +256,7 @@ database:
         cpu: 25m
       limits:
         memory: 512Mi
-        cpu: 200m
+        cpu: 250m
     nodeSelector: {}
     tolerations: []
     affinity: {}
