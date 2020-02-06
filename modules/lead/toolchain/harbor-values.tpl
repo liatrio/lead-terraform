@@ -213,7 +213,7 @@ notary:
         cpu: 10m
       limits:
         memory: 256Mi
-        cpu: 50m
+        cpu: 150m
   signer:
     image:
       repository: goharbor/notary-signer-photon
@@ -225,7 +225,7 @@ notary:
         cpu: 10m
       limits:
         memory: 256Mi
-        cpu: 100m
+        cpu: 200m
   nodeSelector: {}
   tolerations: []
   affinity: {}
