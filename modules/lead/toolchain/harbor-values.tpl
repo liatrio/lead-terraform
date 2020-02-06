@@ -82,7 +82,7 @@ core:
      cpu: 50m
    limits:
      memory: 256Mi
-     cpu: 850m
+     cpu: 1000m
   nodeSelector: {}
   tolerations: []
   affinity: {}
