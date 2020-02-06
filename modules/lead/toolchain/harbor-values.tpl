@@ -82,7 +82,7 @@ core:
      cpu: 50m
    limits:
      memory: 256Mi
-     cpu: 500m
+     cpu: 750m
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -159,7 +159,7 @@ chartmuseum:
       cpu: 10m
     limits:
       memory: 128Mi
-      cpu: 50m
+      cpu: 100m
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -213,7 +213,7 @@ notary:
         cpu: 10m
       limits:
         memory: 256Mi
-        cpu: 200m
+        cpu: 250m
   signer:
     image:
       repository: goharbor/notary-signer-photon
