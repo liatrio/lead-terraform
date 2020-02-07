@@ -3,10 +3,12 @@ locals {
 }
 
 provider "helm" {
+  version  = "0.10.4"
 }
 
 provider "helm" {
-  alias = "system"
+  alias    = "system"
+  version  = "0.10.4"
 }
 
 provider "kubernetes" {

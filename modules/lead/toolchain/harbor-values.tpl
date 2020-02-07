@@ -79,10 +79,10 @@ core:
   resources:
    requests:
      memory: 64Mi
-     cpu: 10m
+     cpu: 50m
    limits:
      memory: 256Mi
-     cpu: 50m
+     cpu: 1000m
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -119,6 +119,9 @@ registry:
       requests:
         memory: 256Mi
         cpu: 100m
+      limits:
+        memory: 512Mi
+        cpu: 600m
   controller:
     image:
       repository: goharbor/harbor-registryctl
@@ -128,6 +131,9 @@ registry:
       requests:
         memory: 256Mi
         cpu: 100m
+      limits:
+        memory: 512Mi
+        cpu: 250m
   replicas: 1
   nodeSelector: {}
   tolerations: []
@@ -153,7 +159,7 @@ chartmuseum:
       cpu: 10m
     limits:
       memory: 128Mi
-      cpu: 50m
+      cpu: 100m
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -207,7 +213,7 @@ notary:
         cpu: 10m
       limits:
         memory: 256Mi
-        cpu: 50m
+        cpu: 250m
   signer:
     image:
       repository: goharbor/notary-signer-photon
@@ -219,7 +225,7 @@ notary:
         cpu: 10m
       limits:
         memory: 256Mi
-        cpu: 50m
+        cpu: 500m
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -250,7 +256,7 @@ database:
         cpu: 25m
       limits:
         memory: 512Mi
-        cpu: 200m
+        cpu: 350m
     nodeSelector: {}
     tolerations: []
     affinity: {}

@@ -7,6 +7,7 @@ provider "kubernetes" {
 }
 
 provider "helm" {
+  version = "0.10.4"
   alias = "toolchain"
 }
 
@@ -15,6 +16,7 @@ provider "kubernetes" {
 }
 
 provider "helm" {
+  version = "0.10.4"
   alias = "staging"
 
   namespace                       = module.staging_namespace.name
@@ -31,6 +33,7 @@ provider "kubernetes" {
 }
 
 provider "helm" {
+  version = "0.10.4"
   alias = "production"
 
   namespace                       = module.production_namespace.name
@@ -47,5 +50,6 @@ provider "kubernetes" {
 }
 
 provider "helm" {
+  version = "0.10.4"
   alias = "system"
 }
