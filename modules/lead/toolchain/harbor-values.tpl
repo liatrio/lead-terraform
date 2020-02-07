@@ -24,7 +24,7 @@ persistence:
   persistentVolumeClaim:
     registry:
       existingClaim: harbor-registry
-      accessMode: ReadWriteMany
+      accessMode: ReadWriteOnce
     chartmuseum:
       existingClaim: harbor-chartmuseum
       accessMode: ReadWriteOnce
