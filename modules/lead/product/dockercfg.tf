@@ -6,7 +6,7 @@ data "template_file" "multi_dockercfg" {
     email = "jenkins@liatr.io"
     artifactory_url   = "https://artifactory.toolchain.${var.cluster_domain}/docker-registry/${var.product_name}"
     artifactory_auth = base64encode(
-      "${data.kubernetes_secret.jenkins_artifactory_credential.data.username}:${data.kubernetes_secret.jenkins_artifactory_credential.data.password}",
+      "${data.kubernetes_secret.jenkins_artifactory_credential[0].data.username}:${data.kubernetes_secret.jenkins_artifactory_credential[0].data.password}",
     )   
     harbor_url = "https://harbor.toolchain.${var.cluster_domain}/${var.product_name}"
     harbor_auth = base64encode(
@@ -24,7 +24,7 @@ data "template_file" "artifactory_dockercfg" {
     email = "jenkins@liatr.io"
     artifactory_url   = "https://artifactory.toolchain.${var.cluster_domain}/docker-registry/${var.product_name}"
     artifactory_auth = base64encode(
-      "${data.kubernetes_secret.jenkins_artifactory_credential.data.username}:${data.kubernetes_secret.jenkins_artifactory_credential.data.password}",
+      "${data.kubernetes_secret.jenkins_artifactory_credential[0].data.username}:${data.kubernetes_secret.jenkins_artifactory_credential[0].data.password}",
     )
     enable_harbor = var.enable_harbor
   }
