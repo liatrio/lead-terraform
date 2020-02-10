@@ -12,8 +12,8 @@ data "template_file" "maven_settings" {
   template = file("${path.module}/artifactory-maven-settings.tpl")
 
   vars = {
-    username = data.kubernetes_secret.jenkins_artifactory_credential.data.username
-    password = data.kubernetes_secret.jenkins_artifactory_credential.data.password
+    username = data.kubernetes_secret.jenkins_artifactory_credential[0].data.username
+    password = data.kubernetes_secret.jenkins_artifactory_credential[0].data.password
   }
 }
 
