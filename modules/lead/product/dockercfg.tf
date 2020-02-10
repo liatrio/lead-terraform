@@ -31,6 +31,7 @@ data "template_file" "artifactory_dockercfg" {
 }
 
 resource "kubernetes_secret" "jenkins_repository_dockercfg" {
+  provider = kubernetes.toolchain
   metadata {
     name      = "jenkins-repository-dockercfg"
     namespace = module.toolchain_namespace.name

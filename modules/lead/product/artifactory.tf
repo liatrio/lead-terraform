@@ -19,6 +19,7 @@ data "template_file" "maven_settings" {
 
 resource "kubernetes_secret" "jenkins_artifactory_maven_settings" {
   count = var.enable_artifactory ? 1 : 0
+  provider = kubernetes.toolchain
   metadata {
     name      = "jenkins-artifactory-maven-settings"
     namespace = module.toolchain_namespace.name
