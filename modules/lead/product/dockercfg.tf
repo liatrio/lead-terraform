@@ -1,7 +1,7 @@
 locals {
-  artifactory_user = length(data.kubernetes_secret.jenkins_artifactory_credential[0]) ? data.kubernetes_secret.jenkins_artifactory_credential[0].data.username : ""
-  artifactory_pass = length(data.kubernetes_secret.jenkins_artifactory_credential[0]) ? data.kubernetes_secret.jenkins_artifactory_credential[0].data.password : ""
-  harbor_pass      = length(data.kubernetes_secret.product-harbor-creds[0]) ? data.kubernetes_secret.product-harbor-creds[0].data.AUTH : ""
+  artifactory_user = length(data.kubernetes_secret.jenkins_artifactory_credential) ? data.kubernetes_secret.jenkins_artifactory_credential[0].data.username : ""
+  artifactory_pass = length(data.kubernetes_secret.jenkins_artifactory_credential) ? data.kubernetes_secret.jenkins_artifactory_credential[0].data.password : ""
+  harbor_pass      = length(data.kubernetes_secret.product-harbor-creds) ? data.kubernetes_secret.product-harbor-creds[0].data.AUTH : ""
 }
 
 data "template_file" "dockercfg" {
