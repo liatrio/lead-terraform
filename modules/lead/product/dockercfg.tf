@@ -29,7 +29,7 @@ resource "kubernetes_secret" "jenkins_repository_dockercfg" {
   }
  
   data = { 
-    "config.json" = data.template_file.dockercfg[0].rendered
+    "config.json" = data.template_file.dockercfg.rendered
   }
  
   type = "Opaque"
