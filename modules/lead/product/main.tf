@@ -49,7 +49,7 @@ provider "kubernetes" {
   alias = "system"
 }
 
-provider "helm" {
-  version = "0.10.4"
-  alias = "system"
-}
+#provider "helm" {
+#  version = "0.10.4"
+#  alias = "system"
+#}
