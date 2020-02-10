@@ -10,7 +10,7 @@ data "template_file" "multi_dockercfg" {
     )   
     harbor_url = "https://harbor.toolchain.${var.cluster_domain}/${var.product_name}"
     harbor_auth = base64encode(
-      "robot$imagepusher:${data.kubernetes_secret.product-harbor-creds.data.AUTH}",
+      "robot$imagepusher:${data.kubernetes_secret.product-harbor-creds[0].data.AUTH}",
     )   
     enable_harbor = var.enable_harbor
   }
