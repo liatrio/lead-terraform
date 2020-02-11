@@ -52,8 +52,3 @@ provider "kubernetes" {
   alias = "system"
   load_config_file = "false"
 }
-
-#provider "helm" {
-#  version = "0.10.4"
-#  alias = "system"
-#}
