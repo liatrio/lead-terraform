@@ -78,10 +78,13 @@ spec:
           - name: QUERY_BASE_PATH
             value: {{ if .Values.contextPath }} {{ .Values.contextPath }} {{ else }} /{{ .Values.provider }} {{ end }}
           livenessProbe:
+            failureThreshold: {{ .Values.jaeger.livenessProbe.failureThreshold }}
             httpGet:
               path: /
               port: 14269
           readinessProbe:
+            initialDelaySeconds: {{ .Values.jaeger.readinessProbe.initialDelay }}
+            failureThreshold: {{ .Values.jaeger.readinessProbe.failureThreshold }}
             httpGet:
               path: /
               port: 14269
