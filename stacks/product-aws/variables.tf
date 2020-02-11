@@ -36,6 +36,10 @@ variable "enable_harbor" {
   default = true
 }
 
+variable "enable_artifactory" {
+  default = true
+}
+
 variable "builder_images_version" {
 }
 variable "jenkins_image_version" {
