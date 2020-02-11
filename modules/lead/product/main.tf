@@ -4,6 +4,7 @@ locals {
 
 provider "kubernetes" {
   alias = "toolchain"
+  load_config_file = "false"
 }
 
 provider "helm" {
@@ -13,6 +14,7 @@ provider "helm" {
 
 provider "kubernetes" {
   alias = "staging"
+  load_config_file = "false"
 }
 
 provider "helm" {
@@ -30,6 +32,7 @@ provider "helm" {
 
 provider "kubernetes" {
   alias = "production"
+  load_config_file = "false"
 }
 
 provider "helm" {
@@ -47,9 +50,5 @@ provider "helm" {
 
 provider "kubernetes" {
   alias = "system"
-}
-
-provider "helm" {
-  version = "0.10.4"
-  alias = "system"
+  load_config_file = "false"
 }

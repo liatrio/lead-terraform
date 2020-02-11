@@ -46,3 +46,6 @@ variable "jenkins_image_version" {
 variable "image_repo" {
 }
 
+variable "enable_artifactory" {
+  default = true
+}

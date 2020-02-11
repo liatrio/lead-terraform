@@ -1,19 +1,21 @@
 data "template_file" "artifactory_security_values" {
+  count    = var.enable_artifactory ? 1 : 0
   template = file("${path.module}/artifactory.security.import.xml.tpl")
   vars = {
     # To prefix bcrypt strings with 'bcrypt$', we use format here due to escape issues in template.
     jenkins_bcrypt_pass = format(
       "bcrypt$%s",
-      bcrypt(random_string.artifactory_jenkins_password.result),
+      bcrypt(random_string.artifactory_jenkins_password[0].result),
     )
     admin_bcrypt_pass = format(
       "bcrypt$%s",
-      bcrypt(random_string.artifactory_admin_password.result),
+      bcrypt(random_string.artifactory_admin_password[0].result),
     )
   }
 }
 
 data "template_file" "artifactory_config_values" {
+  count    = var.enable_artifactory ? 1 : 0
   template = file("${path.module}/artifactory.config.import.xml.tpl")
 
   vars = {
@@ -22,6 +24,7 @@ data "template_file" "artifactory_config_values" {
 }
 
 resource "kubernetes_secret" "artifactory_admin" {
+  count = var.enable_artifactory ? 1 : 0
   metadata {
     name      = "artifactory-admin-credential"
     namespace = module.toolchain_namespace.name
@@ -30,11 +33,12 @@ resource "kubernetes_secret" "artifactory_admin" {
 
   data = {
     username = "admin"
-    password = random_string.artifactory_admin_password.result
+    password = random_string.artifactory_admin_password[0].result
   }
 }
 
 resource "kubernetes_secret" "artifactory_jenkins" {
+  count = var.enable_artifactory ? 1 : 0
   metadata {
     name      = "jenkins-artifactory-credential"
     namespace = module.toolchain_namespace.name
@@ -57,19 +61,20 @@ resource "kubernetes_secret" "artifactory_jenkins" {
 
   data = {
     username = "jenkins"
-    password = random_string.artifactory_jenkins_password.result
+    password = random_string.artifactory_jenkins_password[0].result
   }
 }
 
 resource "kubernetes_config_map" "artifactory_config" {
+  count = var.enable_artifactory ? 1 : 0
   metadata {
     name      = "lead-bootstrap-artifactory-config"
     namespace = module.toolchain_namespace.name
   }
 
   data = {
-    "artifactory.config.import.xml" = data.template_file.artifactory_config_values.rendered
-    "security.import.xml"           = data.template_file.artifactory_security_values.rendered
+    "artifactory.config.import.xml" = data.template_file.artifactory_config_values[0].rendered
+    "security.import.xml"           = data.template_file.artifactory_security_values[0].rendered
   }
 
   lifecycle {
@@ -89,16 +94,19 @@ resource "kubernetes_config_map" "artifactory_config" {
 }
 
 resource "random_string" "artifactory_jenkins_password" {
+  count   = var.enable_artifactory ? 1 : 0
   length  = 10
   special = false
 }
 
 resource "random_string" "artifactory_admin_password" {
+  count   = var.enable_artifactory ? 1 : 0
   length  = 10
   special = false
 }
 
 resource "random_string" "artifactory_db_password" {
+  count   = var.enable_artifactory ? 1 : 0
   length  = 10
   special = false
 }
@@ -109,6 +117,7 @@ data "helm_repository" "jfrog" {
 }
 
 data "template_file" "artifactory_values" {
+  count    = var.enable_artifactory ? 1 : 0
   template = file("${path.module}/artifactory-values.tpl")
 
   vars = {
@@ -124,7 +133,7 @@ resource "helm_release" "artifactory" {
   name       = "artifactory"
   namespace  = module.toolchain_namespace.name
   chart      = "artifactory"
-  version    = "7.17.5"
+  version    = "8.0.1"
   timeout    = 1200
 
   set {
@@ -149,10 +158,10 @@ resource "helm_release" "artifactory" {
 
   set_sensitive {
     name  = "postgresql.postgresPassword"
-    value = random_string.artifactory_db_password.result
+    value = random_string.artifactory_db_password[0].result
   }
 
-  values = [data.template_file.artifactory_values.rendered]
+  values = [data.template_file.artifactory_values[0].rendered]
 
   # We would like to ignore changes on artifactory.persistence.size, but currently there's
   # a limitation in Terraform because set members are not individually addressible

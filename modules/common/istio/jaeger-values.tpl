@@ -26,7 +26,11 @@ jaeger:
     limits:
       cpu: 1
       memory: 3Gi
-
+  livenessProbe:
+    failureThreshold: 5
+  readinessProbe:
+    initialDelay: 30
+    failureThreshold: 12
 global:
   defaultResources:
     requests:
