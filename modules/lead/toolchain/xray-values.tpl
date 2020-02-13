@@ -10,7 +10,7 @@ ingress:
 postgresql:
   resources:
     requests:
-      cpu: 150m
+      cpu: 100m
       memory: 75Mi
     limits:
       cpu: 600m
@@ -18,26 +18,26 @@ postgresql:
 analysis:
   resources:
     requests:
-      cpu: 10m
+      cpu: 20m
       memory: 150Mi
     limits:
-      cpu: 50m
+      cpu: 300m
       memory: 200Mi
 indexer:
   resources:
     requests:
-      cpu: 10m
+      cpu: 20m
       memory: 150Mi
     limits:
-      cpu: 50m
+      cpu: 150m
       memory: 200Mi
 persist:
   resources:
     requests:
-      cpu: 10m
+      cpu: 20m
       memory: 150Mi
     limits:
-      cpu: 50m
+      cpu: 150m
       memory: 200Mi
 server:
   service:
