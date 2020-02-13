@@ -82,6 +82,16 @@ resource "helm_release" "harbor_certificates" {
     name = "notary.secret"
     value = "notary-tls"
   }
+
+  set {
+    name = "issuer.kind"
+    value = var.issuer_kind
+  }
+
+  set {
+    name = "issuer.name"
+    value = var.issuer_name
+  }
 }
 
 data "helm_repository" "harbor" {
