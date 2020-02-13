@@ -1,3 +1,7 @@
+issuer:
+  kind: Issuer
+  name: issuer
+
 harbor:
   hostname:
   secret: harbor-tls
