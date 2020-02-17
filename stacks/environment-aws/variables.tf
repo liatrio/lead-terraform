@@ -35,7 +35,7 @@ variable "asg_max_size" {
 
 variable "instance_types" {
   type    = list
-  default = ["m5.large", "c5.large", "m4.large", "c4.large", "t3.large", "r5.large"]
+  default = ["m5.xlarge", "c5.xlarge", "m4.xlarge", "c4.xlarge", "t3.xlarge", "r5.xlarge"]
 }
 
 variable "essential_taint_key" {
@@ -51,11 +51,11 @@ variable "essential_asg_desired_capacity" {
 }
 
 variable "essential_asg_max_size" {
-  default = "5"
+  default = "10"
 }
 
 variable "essential_instance_type" {
-  default = "t3.small"
+  default = "t3.large"
 }
 
 variable "image_whitelist" {
@@ -80,10 +80,6 @@ variable "dashboard_version" {
 
 variable "cert_issuer_type" {
   default = "acme"
-}
-
-variable "cert_issuer_server" {
-  default = "https://acme-v02.api.letsencrypt.org/directory"
 }
 
 variable "enable_istio" {
@@ -118,6 +114,18 @@ variable "enable_xray" {
   default = true
 }
 
+variable "enable_grafeas" {
+  default = true
+}
+
+variable "enable_harbor" {
+  default = true
+}
+
+variable "enable_dashboard" {
+  default = true
+}
+
 variable "enable_autoscaler_scale_down" {
   default = true
 }
@@ -130,7 +138,7 @@ variable "uptime" {
   default = "Mon-Fri 05:00-19:00 America/Los_Angeles"
 }
 variable "downscaler_exclude_namespaces" {
-  type = list(string)
+  type    = list(string)
   default = ["kube-system"]
 }
 variable "builder_images_version" {
@@ -139,13 +147,30 @@ variable "builder_images_version" {
 variable "jenkins_image_version" {
   default = "v1.0.15-7-g2465aa8"
 }
-variable "image_repo" {
+variable "grafeas_version" {
+  default = "v0.1.1-4-ge024b96"
+}
+
+variable "toolchain_image_repo" {
   default = "artifactory.toolchain.lead.prod.liatr.io/docker-registry/flywheel"
 }
 
+variable "product_image_repo" {
+}
+
+variable "prometheus_slack_channel" {
+}
 
 locals {
   tags = {
     "Cluster" = var.cluster
   }
+}
+
+variable "k8s_storage_class" {
+  default = "gp2"
+}
+
+variable "dashboard_elasticsearch_replicas" {
+  default = 3
 }

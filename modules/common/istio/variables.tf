@@ -1,24 +1,15 @@
 variable "namespace" {}
 variable "crd_waiter" {}
-variable "region" {}
-variable "domain" {}
-variable "zone_id" {}
+variable "toolchain_namespace" {}
+variable "cluster_domain" {}
 
 variable "kiali_username" {
   default = "admin"
 }
 
-variable "cert_issuer_type" {
-  default = "acme"
-}
+variable "issuer_name" {}
 
-variable "cert_issuer_server" {
-  default = "https://acme-v02.api.letsencrypt.org/directory"
-}
-
-variable "cert_issuer_name" {
-  default = "letsencrypt-dns"
-}
+variable "issuer_kind" {}
 
 variable "enabled" {
   default = true
@@ -27,3 +18,11 @@ variable "enabled" {
 variable "ingress_controller_type" {
   default = "LoadBalancer"
 }
+
+variable "pilot_trace_sampling" {
+  default = 10.0
+}
+
+variable "flagger_event_webhook" {}
+
+variable "k8s_storage_class" {}

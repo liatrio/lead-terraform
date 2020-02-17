@@ -3,6 +3,15 @@ locals {
 }
 
 provider "helm" {
+  version  = "0.10.4"
+}
+
+provider "helm" {
+  alias    = "system"
+  version  = "0.10.4"
+}
+
+provider "kubernetes" {
 }
 
 data "helm_repository" "codecentric" {
@@ -15,6 +24,11 @@ data "helm_repository" "liatrio" {
   url  = "https://artifactory.liatr.io/artifactory/helm/"
 }
 
+data "helm_repository" "stable" {
+  name = "stable"
+  url  = "https://kubernetes-charts.storage.googleapis.com"
+}
+
 module "toolchain_namespace" {
   source    = "../../common/namespace"
   namespace = var.namespace
@@ -25,21 +39,6 @@ module "toolchain_namespace" {
     "opa.lead.liatrio/image-whitelist"           = var.image_whitelist
     "opa.lead.liatrio/elb-extra-security-groups" = var.elb_security_group_id
   }
-}
-
-module "toolchain_ingress" {
-  source                          = "../../common/nginx-ingress"
-  namespace                       = module.toolchain_namespace.name
-  ingress_controller_type         = var.ingress_controller_type
-  ingress_external_traffic_policy = var.ingress_external_traffic_policy
-}
-
-module "toolchain_issuer" {
-  source        = "../../common/cert-issuer"
-  namespace     = module.toolchain_namespace.name
-  issuer_type   = var.issuer_type
-  issuer_server = "https://acme-v02.api.letsencrypt.org/directory"
-  crd_waiter    = var.crd_waiter
 }
 
 resource "kubernetes_cluster_role" "tiller_cluster_role" {
@@ -63,12 +62,12 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
   }
   rule {
     api_groups = ["networking.k8s.io"]
-    resources  = ["networkpolicies"]
-    verbs      = ["get", "create", "watch", "delete", "list", "patch"]
+    resources  = ["ingresses", "ingresses/status", "networkpolicies"]
+    verbs      = ["get", "create", "update", "watch", "delete", "list", "patch"]
   }
   rule {
-    api_groups = ["certmanager.k8s.io"]
-    resources  = ["issuers"]
+    api_groups = ["cert-manager.io", "certmanager.k8s.io"]
+    resources  = ["issuers", "certificates"]
     verbs      = ["get", "create", "watch", "delete", "list", "patch"]
   }
   rule {
@@ -108,8 +107,37 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
   }
   rule {
     api_groups = ["metrics.k8s.io"]
-    resources  = ["nodes","pods"]
+    resources  = ["nodes", "pods"]
     verbs      = ["get", "list", "watch"]
+  }
+  rule {
+    api_groups = ["admissionregistration.k8s.io"]
+    resources  = ["validatingwebhookconfigurations", "mutatingwebhookconfigurations"]
+    verbs      = ["get", "update", "create"]
+  }
+  rule {
+    api_groups = ["extensions"]
+    resources  = ["podsecuritypolicies"]
+    verbs      = ["use"]
+  }
+  rule {
+    api_groups = ["certificates.k8s.io"]
+    resources  = ["certificatesigningrequests"]
+    verbs      = ["list", "watch"]
+  }
+  rule {
+    api_groups = ["storage.k8s.io"]
+    resources  = ["storageclasses"]
+    verbs      = ["list", "watch"]
+  }
+  rule {
+    api_groups = ["monitoring.coreos.com"]
+    resources  = ["alertmanagers", "alertmanagers/finalizers", "podmonitors", "prometheuses", "prometheuses/finalizers", "prometheusrules", "servicemonitors"]
+    verbs      = ["*"]
+  }
+  rule {
+    non_resource_urls = ["/metrics"]
+    verbs             = ["get"]
   }
 }
 
@@ -127,25 +155,4 @@ resource "kubernetes_cluster_role_binding" "tiller_cluster_role_binding" {
     name      = "tiller"
     namespace = module.toolchain_namespace.name
   }
-}
-
-// TODO move this into the terraform to create grafeas server
-module "ca-issuer" {
-  source = "../../common/ca-issuer"
-  
-  name      = "grafeas"
-  namespace = var.namespace
-  common_name = var.root_zone_name
-  cert-manager-crd = var.crd_waiter
-}
-
-module "certificate" {
-  source = "../../common/certificates"
-
-  enabled = true
-  name = "grafeas-server"
-  namespace = var.namespace
-  domain = var.root_zone_name
-  acme_enabled = false
-  issuer_name = module.ca-issuer.name
 }

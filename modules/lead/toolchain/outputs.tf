@@ -22,5 +22,5 @@ output "keycloak_admin_password" {
 }
 
 output "keycloak_realm_id" {
-  value = keycloak_realm.realm[0].id
+  value = var.enable_keycloak ? keycloak_realm.realm[0].id : ""
 }

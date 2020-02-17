@@ -1,0 +1,74 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ .Values.serviceName }}
+  namespace: {{ .Values.serviceNamespace }}
+  labels:
+    app: {{ .Values.serviceName }}
+    label: {{ .Values.serviceLabel }}
+    chart: {{ template "kritis.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    {{ .Values.kritisInstallLabel }}: ""
+  annotations:
+    downscaler/exclude: "true"
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.serviceName }}
+      label: {{ .Values.serviceLabel }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.serviceName }}
+        label: {{ .Values.serviceLabel }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: {{ .Values.image.name }}
+        image: "{{ .Values.repository }}{{ .Values.image.image }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        args: ["--tls-cert-file=/var/tls/tls.crt",
+               "--tls-key-file=/var/tls/tls.key",
+               "--grafeas-certs=/etc/config/grafeascerts.yaml",
+               "--logtostderr"]
+        ports:
+          - name: https
+            containerPort: 8443
+            protocol: TCP
+        volumeMounts:
+        - mountPath: /var/tls
+          name: tls
+{{- if .Values.gacSecret }}
+        - name: {{ .Values.gacSecret.name }}
+          mountPath: /secret
+{{- end }}
+        - name: certconfig
+          mountPath: /etc/config
+        - name: certificates
+          mountPath: /certificates
+        env:
+{{- if .Values.gacSecret }}
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /secret/{{ .Values.gacSecret.path }}
+{{- end }}
+      volumes:
+        - name: tls
+          secret:
+            secretName: {{ .Values.tlsSecretName }}
+{{- if .Values.gacSecret }}
+        - name: {{ .Values.gacSecret.name }}
+          secret:
+            secretName: {{ .Values.gacSecret.name }}
+{{- end }}
+        - name: certconfig
+          configMap:
+            name: grafeas-certs-config
+            items:
+              - key: config
+                path: grafeascerts.yaml
+        - name: certificates
+          secret:
+            secretName: {{ .Values.certificates.name }}

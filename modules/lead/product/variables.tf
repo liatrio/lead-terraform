@@ -1,8 +1,4 @@
 variable "cluster_domain" {}
-variable "issuer_type" {}
-variable "issuer_server" {
-  default = "https://acme-v02.api.letsencrypt.org/directory"
-}
 variable "product_name" {}
 variable "image_whitelist" {}
 variable "toolchain_namespace" {
@@ -12,12 +8,19 @@ variable "builder_images_version" {
 }
 variable "jenkins_image_version" {
 }
-variable "image_repo" {
+variable "toolchain_image_repo" {
 }
-variable "ingress_controller_type" {}
+variable "product_image_repo" {
+}
 variable "enable_istio" {
   default = true
 }
 variable "enable_keycloak" {
+  default = true
+}
+variable "enable_harbor" {
+  default = false 
+}
+variable "enable_artifactory" {
   default = true
 }

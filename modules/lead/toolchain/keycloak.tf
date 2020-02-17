@@ -1,10 +1,14 @@
+locals {
+  keycloak_hostname = "keycloak.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
+}
+
 data "template_file" "keycloak_values" {
   template = file("${path.module}/keycloak-values.tpl")
 
   vars = {
-    ssl_redirect     = var.root_zone_name == "localhost" ? false : true
-    cluster_domain   = "${var.cluster}.${var.root_zone_name}"
-    ingress_hostname = "keycloak.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
+    ssl_redirect      = var.root_zone_name == "localhost" ? false : true
+    cluster_domain    = "${var.cluster}.${var.root_zone_name}"
+    ingress_hostname  = "keycloak.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
   }
 }
 
@@ -32,25 +36,31 @@ resource "helm_release" "keycloak" {
   timeout    = 1200
 
   values = [data.template_file.keycloak_values.rendered]
+
+  set_sensitive {
+    name = "postgresql.postgresqlPassword"
+    value = var.keycloak_postgres_password
+  }
 }
 
 
-# while using client credentials is preferred, it would require initial client creation using the 
-# old realm import method, so just use password based setup since that is known prior to keycloak 
+# while using client credentials is preferred, it would require initial client creation using the
+# old realm import method, so just use password based setup since that is known prior to keycloak
 # resource
 provider "keycloak" {
   client_id     = "admin-cli"
   username      = "keycloak"
   password      = var.keycloak_admin_password
-  url           = "${local.protocol}://keycloak.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
+  url           = "${local.protocol}://${local.keycloak_hostname}"
   initial_login = false
+  client_timeout = 15
 }
 
 # Give Keycloak API a chance to become responsive
 resource "null_resource" "keycloak_realm_delay" {
-  count      = var.enable_keycloak ? 1 : 0  
+  count      = var.enable_keycloak ? 1 : 0
   depends_on = [helm_release.keycloak]
-  
+
   provisioner "local-exec" {
     command = "sleep 15"
   }
@@ -78,9 +88,14 @@ resource "keycloak_realm" "realm" {
     ssl      = false
     from     = var.smtp_from_email
     from_display_name = "Keycloak - ${var.root_zone_name} ${title(var.cluster)} ${title(var.namespace)}"
-    auth {
-      username = var.smtp_username
-      password = var.smtp_password
+
+    dynamic "auth" {
+      for_each = var.smtp_username == "" || var.smtp_password == "" ? [] : [1]
+
+      content {
+        username = var.smtp_username
+        password = var.smtp_password
+      }
     }
   }
 }
@@ -101,7 +116,7 @@ resource "kubernetes_secret" "keycloak_toolchain_realm" {
 }
 
 resource "kubernetes_secret" "keycloak_toolchain_realm_disabled" {
-  count       = var.enable_keycloak ? 0 : 1 
+  count       = var.enable_keycloak ? 0 : 1
 
   metadata {
     name      = "keycloak-toolchain-realm"

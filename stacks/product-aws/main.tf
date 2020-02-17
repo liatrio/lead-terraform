@@ -11,8 +11,9 @@ provider "kubernetes" {
 
 provider "helm" {
   alias           = "toolchain"
+  version         = "0.10.4"
   namespace       = module.product.toolchain_namespace
-  tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.14.1"
+  tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.15.1"
   service_account = module.product.toolchain_service_account
 
   override = [
@@ -21,6 +22,10 @@ provider "helm" {
     "spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].values[0]=preemptible",
     "spec.template.spec.tolerations[0].key=${var.essential_taint_key}",
     "spec.template.spec.tolerations[0].operator=Exists",
+    "spec.template.spec.containers[0].resources.limits.memory=400Mi",
+    "spec.template.spec.containers[0].resources.requests.memory=100Mi",
+    "spec.template.spec.containers[0].resources.limits.cpu=800m",
+    "spec.template.spec.containers[0].resources.requests.cpu=100m",
   ]
 
   kubernetes {
@@ -37,8 +42,9 @@ provider "kubernetes" {
 
 provider "helm" {
   alias           = "staging"
+  version         = "0.10.4"
   namespace       = module.product.staging_namespace
-  tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.14.1"
+  tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.15.1"
   service_account = module.product.staging_service_account
 
   override = [
@@ -47,6 +53,10 @@ provider "helm" {
     "spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].values[0]=preemptible",
     "spec.template.spec.tolerations[0].key=${var.essential_taint_key}",
     "spec.template.spec.tolerations[0].operator=Exists",
+    "spec.template.spec.containers[0].resources.limits.memory=400Mi",
+    "spec.template.spec.containers[0].resources.requests.memory=100Mi",
+    "spec.template.spec.containers[0].resources.limits.cpu=800m",
+    "spec.template.spec.containers[0].resources.requests.cpu=100m",
   ]
 
   kubernetes {
@@ -63,8 +73,9 @@ provider "kubernetes" {
 
 provider "helm" {
   alias           = "production"
+  version         = "0.10.4"
   namespace       = module.product.production_namespace
-  tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.14.1"
+  tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.15.1"
   service_account = module.product.production_service_account
 
   override = [
@@ -73,6 +84,10 @@ provider "helm" {
     "spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].values[0]=preemptible",
     "spec.template.spec.tolerations[0].key=${var.essential_taint_key}",
     "spec.template.spec.tolerations[0].operator=Exists",
+    "spec.template.spec.containers[0].resources.limits.memory=400Mi",
+    "spec.template.spec.containers[0].resources.requests.memory=100Mi",
+    "spec.template.spec.containers[0].resources.limits.cpu=800m",
+    "spec.template.spec.containers[0].resources.requests.cpu=100m",
   ]
 
   kubernetes {
@@ -89,6 +104,7 @@ provider "kubernetes" {
 
 provider "helm" {
   alias           = "system"
+  version         = "0.10.4"
   namespace       = "lead-system"
   install_tiller  = false
 
@@ -102,15 +118,15 @@ module "product" {
   source                  = "../../modules/lead/product"
   cluster_domain          = var.cluster_domain
   product_name            = var.product_name
-  issuer_type             = var.issuer_type
-  issuer_server           = var.issuer_server
   image_whitelist         = var.image_whitelist
-  ingress_controller_type = var.ingress_controller_type
   enable_keycloak         = var.enable_keycloak
   enable_istio            = var.enable_istio
+  enable_harbor           = var.enable_harbor
+  enable_artifactory      = var.enable_artifactory
   builder_images_version  = var.builder_images_version
   jenkins_image_version   = var.jenkins_image_version
-  image_repo              = var.image_repo
+  toolchain_image_repo    = var.toolchain_image_repo
+  product_image_repo      = var.product_image_repo
 
   providers = {
     kubernetes.toolchain  = kubernetes.toolchain

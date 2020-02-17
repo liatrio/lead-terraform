@@ -1,6 +1,6 @@
 cluster: ${cluster}
 cluster_domain: ${cluster_domain}
-product_version: ${product_version}
+product_version: "${product_version}"
 product_stack: ${product_stack}
 product_vars: ${product_vars}
 
@@ -9,12 +9,11 @@ operators:
     ingress:
       hostName: operator-slack.${namespace}.${cluster_domain}
       annotations:
-        kubernetes.io/ingress.class: "nginx"
-        kubernetes.io/tls-acme: "true"
+        kubernetes.io/ingress.class: "toolchain-nginx"
+        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
       tls:
       - hosts:
         - operator-slack.${namespace}.${cluster_domain}
-        secretName: operator-slack-ingress-tls
     serviceAccountAnnotations: ${slack_service_account_annotations}
     env:
     - name: workspace_role

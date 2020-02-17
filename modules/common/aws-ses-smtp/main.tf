@@ -8,17 +8,17 @@ resource "random_pet" "ses_smtp" {
 }
 
 resource "aws_iam_user" "ses_smtp" {
-  name                  = "${var.name}-${random_pet.ses_smtp.id}"
-  permissions_boundary  = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/lead-workspace_role_boundary"
+  name                 = "${var.name}-${random_pet.ses_smtp.id}"
+  permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/lead-workspace_role_boundary"
 }
 
 resource "aws_iam_access_key" "ses_smtp" {
-  user = "${aws_iam_user.ses_smtp.name}"
+  user = aws_iam_user.ses_smtp.name
 }
 
 resource "aws_iam_user_policy" "ses_smtp_send" {
   name = "AllowSendingEmail"
-  user = "${aws_iam_user.ses_smtp.name}"
+  user = aws_iam_user.ses_smtp.name
 
   policy = <<EOF
 {

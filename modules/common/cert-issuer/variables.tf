@@ -10,31 +10,43 @@ variable "issuer_server" {
   default = "https://acme-v02.api.letsencrypt.org/directory"
 }
 
-variable "provider_http_enabled" {
-  default = "true"
+variable "issuer_email" {
+  default = "cloudservices@liatr.io"
+}
+
+variable "issuer_kind" {
+  default = "Issuer"
+}
+
+variable "acme_solver" {
+  default = "http"
 }
 
 variable "provider_http_ingress_class" {
   default = "nginx"
 }
 
-variable "provider_dns_enabled" {
-  default = "false"
-}
-
-variable "provider_dns_name" {
-  default = "liatrio-route53"
-}
-
 variable "provider_dns_type" {
   default = "route53"
 }
 
-variable "provider_dns_region" {
+variable "route53_dns_region" {
   default = ""
 }
 
-variable "provider_dns_hosted_zone" {
+variable "route53_dns_hosted_zone" {
+  default = ""
+}
+
+variable "gcp_dns_project" {
+  default = ""
+}
+
+variable "gcp_dns_service_account_secret_name" {
+  default = ""
+}
+
+variable "gcp_dns_service_account_secret_key" {
   default = ""
 }
 

@@ -3,8 +3,10 @@ data "template_file" "certificate_values" {
 
   vars = {
     domain = var.domain
-    acme_enabled = var.acme_enabled
+    altname = var.altname
+    wait_for_cert = var.wait_for_cert
     issuer_name = var.issuer_name
+    issuer_kind = var.issuer_kind
   }
 }
 
@@ -17,5 +19,6 @@ resource "helm_release" "certificates" {
   wait      = true
 
   values = [data.template_file.certificate_values.rendered]
-}
 
+  depends_on = [var.certificate_crd]
+}

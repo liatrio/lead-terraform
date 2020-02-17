@@ -9,18 +9,20 @@ gateways:
       enabled: true
       resources:
         requests:
-          cpu: 10m
+          cpu: 100m
           memory: 128Mi
         limits:
-          cpu: 100m
-          memory: 256Mi
+          cpu: 1000m
+          memory: 512Mi
+      token:
+        aud: istio-ca
     resources:
       requests:
-        cpu: 200m
-        memory: 128Mi
+        cpu: 100m
+        memory: 64Mi
       limits:
-        cpu: 300m
-        memory: 128Mi
+        cpu: 1000m
+        memory: 256Mi
 
 global:
   k8sIngress:
@@ -28,20 +30,29 @@ global:
     enableHttps: true
     gatewayName: istio-ingressgateway
   proxy:
+    init:
+      resources:
+        limits:
+          cpu: 100m
+          memory: 50Mi
+        requests:
+          cpu: 10m
+          memory: 10Mi
     resources:
       requests:
-        cpu: 10m
-        memory: 32Mi
+        cpu: 100m
+        memory: 128Mi
       limits:
-        cpu: 40m
-        memory: 64Mi
+        cpu: 1000m
+        memory: 512Mi
+    protocolDetectionTimeout: 100ms
   defaultResources:
     requests:
       cpu: 10m
-      memory: 32Mi
+      memory: 128Mi
     limits:
       cpu: 100m
-      memory: 64Mi
+      memory: 128Mi
 
 certmanager:
   enabled: false
@@ -49,100 +60,62 @@ certmanager:
 
 grafana:
   enabled: true
+  contextPath: "/"
   ingress:
     enabled: true
+    image:
+      repository: grafana/grafana
+      tag: 6.5.1-ubuntu
     annotations:
-      kubernetes.io/ingress.class: "nginx"
-      kubernetes.io/tls-acme: "true"
-      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      kubernetes.io/ingress.class: "toolchain-nginx"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
       nginx.ingress.kubernetes.io/rewrite-target: "/"
-      certmanager.k8s.io/issuer: "letsencrypt-dns"
     tls:
     - hosts:
-      - ${domain}
-      secretName: istio-ingress-tls
+      - istio-grafana.${domain}
     hosts:
-    - ${domain}
+    - istio-grafana.${domain}
   resources:
     requests:
-      cpu: 4m
-      memory: 32Mi
-    limits:
-      cpu: 32m
+      cpu: 10m
       memory: 64Mi
+    limits:
+      cpu: 250m
+      memory: 128Mi
 
 kiali:
-  enabled: true
-  dashboard:
-    auth:
-      strategy: anonymous
-    viewOnlyMode: true
-    grafanaURL: https://${domain}/grafana
-    jaegerURL: https://${domain}/jaeger
-  ingress:
-    enabled: true
-    annotations:
-      kubernetes.io/ingress.class: "nginx"
-      kubernetes.io/tls-acme: "true"
-      nginx.ingress.kubernetes.io/ssl-redirect: "true"
-      certmanager.k8s.io/issuer: "letsencrypt-dns"
-    tls:
-    - hosts:
-      - ${domain}
-      secretName: istio-ingress-tls
-    hosts:
-    - ${domain}
+  enabled: false
 
 tracing:
-  enabled: true
-  ingress:
-    enabled: true
-    annotations:
-      kubernetes.io/ingress.class: "nginx"
-      kubernetes.io/tls-acme: "true"
-      nginx.ingress.kubernetes.io/ssl-redirect: "true"
-      certmanager.k8s.io/issuer: "letsencrypt-dns"
-    tls:
-    - hosts:
-      - ${domain}
-      secretName: istio-ingress-tls
-    hosts:
-    - ${domain}
-  jaeger:
-    resources:
-      requests:
-        cpu: 10m
-        memory: 400Mi
-      limits:
-        cpu: 25m
-        memory: 600Mi
+  enabled: false
 
 prometheus:
   resources:
     requests:
-      cpu: 200m
-      memory: 2Gi
+      cpu: 300m
+      memory: 3Gi
     limits:
-      cpu: 500m
-      memory: 4Gi
+      cpu: 1.5
+      memory: 6Gi
 
 galley:
   resources:
     requests:
-      cpu: 32m
-      memory: 64Mi
+      cpu: 20m
+      memory: 32Mi
     limits:
-      cpu: 128m
+      cpu: 300m
       memory: 128Mi
 pilot:
+  traceSampling: ${pilotTraceSampling}
   autoscaleMax: 20
   resources:
     requests:
-      cpu: 20m
-      memory: 96Mi
+      cpu: 500m
+      memory: 500Mi
     limits:
-      cpu: 80m
-      memory: 192Mi
+      cpu: 1.3
+      memory: 1Gi
   global:
     proxy:
       resource:
@@ -154,39 +127,31 @@ pilot:
           memory: 64Mi
 mixer:
   telemetry:
-    loadshedding: 
+    loadshedding:
       mode: logonly
     autoscaleMax: 20
     resources:
       requests:
-        cpu: 64m
-        memory: 64Mi
+        cpu: 500m
+        memory: 512Mi
       limits:
-        cpu: 128m
-        memory: 128Mi
+        cpu: 1000m
+        memory: 1024Mi
+
 security:
   resources:
     requests:
       cpu: 20m
-      memory: 128Mi
+      memory: 32Mi
     limits:
-      cpu: 400m
-      memory: 256Mi
+      cpu: 1
+      memory: 128Mi
 
 sidecarInjectorWebhook:
   resources:
     requests:
-      cpu: 15m
+      cpu: 100m
       memory: 16Mi
     limits:
-      cpu: 25m
-      memory: 64Mi
-
-security:
-  resources:
-    requests:
-      cpu: 2m
-      memory: 32Mi
-    limits:
-      cpu: 100m
+      cpu: 400m
       memory: 64Mi

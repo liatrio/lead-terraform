@@ -24,12 +24,11 @@ keycloak:
   ingress:
     enabled: true
     annotations:
-      kubernetes.io/ingress.class: "nginx"
-      kubernetes.io/tls-acme: "true"
-      nginx.ingress.kubernetes.io/ssl-redirect: "${ssl_redirect}"
+      kubernetes.io/ingress.class: "toolchain-nginx"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "${ssl_redirect}"
       nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
       nginx.ingress.kubernetes.io/configuration-snippet: |
-        more_set_headers "X-Forwarded-Proto: https";      
+        more_set_headers "X-Forwarded-Proto: https";
       ingress.kubernetes.io/proxy-body-size: "0"
       ingress.kubernetes.io/proxy-read-timeout: "600"
       ingress.kubernetes.io/proxy-send-timeout: "600"
@@ -39,7 +38,6 @@ keycloak:
     tls:
     - hosts:
       - ${ingress_hostname}
-      secretName: keycloak-ingress-tls    
     path: /
 
   ## Persistence configuration
@@ -56,7 +54,7 @@ keycloak:
       cpu: 50m
     limits:
       memory: 800Mi
-      cpu: 1 
+      cpu: 1
 
 
 postgresql:
@@ -75,11 +73,11 @@ postgresql:
     ## Enable PostgreSQL persistence using Persistent Volume Claims.
     ##
     enabled: true
-  
+
   resources:
     requests:
       memory: 64Mi
       cpu: 10m
     limits:
       memory: 128Mi
-      cpu: 100m
+      cpu: 500m

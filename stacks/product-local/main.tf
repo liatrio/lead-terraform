@@ -9,15 +9,23 @@ provider "kubernetes" {
 }
 
 provider "helm" {
+  version         = "0.10.4"
   alias           = "toolchain"
   namespace       = module.product.toolchain_namespace
-  tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.14.1"
+  tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.15.1"
   service_account = module.product.toolchain_service_account
 
   kubernetes {
     load_config_file = var.load_config_file
     config_context   = var.config_context
   }
+
+  override = [
+    "spec.template.spec.containers[0].resources.limits.memory=128Mi",
+    "spec.template.spec.containers[0].resources.requests.memory=64Mi",
+    "spec.template.spec.containers[0].resources.limits.cpu=200m",
+    "spec.template.spec.containers[0].resources.requests.cpu=50m",
+  ]
 }
 
 provider "kubernetes" {
@@ -27,15 +35,23 @@ provider "kubernetes" {
 }
 
 provider "helm" {
+  version         = "0.10.4"
   alias           = "staging"
   namespace       = module.product.staging_namespace
-  tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.14.1"
+  tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.15.1"
   service_account = module.product.staging_service_account
 
   kubernetes {
     load_config_file = var.load_config_file
     config_context   = var.config_context
   }
+
+  override = [
+    "spec.template.spec.containers[0].resources.limits.memory=128Mi",
+    "spec.template.spec.containers[0].resources.requests.memory=64Mi",
+    "spec.template.spec.containers[0].resources.limits.cpu=200m",
+    "spec.template.spec.containers[0].resources.requests.cpu=50m",
+  ]
 }
 
 provider "kubernetes" {
@@ -45,15 +61,23 @@ provider "kubernetes" {
 }
 
 provider "helm" {
+  version         = "0.10.4"
   alias           = "production"
   namespace       = module.product.production_namespace
-  tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.14.1"
+  tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.15.1"
   service_account = module.product.production_service_account
 
   kubernetes {
     load_config_file = var.load_config_file
     config_context   = var.config_context
   }
+
+  override = [
+    "spec.template.spec.containers[0].resources.limits.memory=128Mi",
+    "spec.template.spec.containers[0].resources.requests.memory=64Mi",
+    "spec.template.spec.containers[0].resources.limits.cpu=200m",
+    "spec.template.spec.containers[0].resources.requests.cpu=50m",
+  ]
 }
 
 provider "kubernetes" {
@@ -63,6 +87,7 @@ provider "kubernetes" {
 }
 
 provider "helm" {
+  version         = "0.10.4"
   alias           = "system"
   namespace       = "lead-system"
   install_tiller  = false

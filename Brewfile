@@ -1,12 +1,14 @@
-cask_args appdir: "/Applications"
-tap "homebrew/cask"
-brew "terraform"
-brew "terragrunt"
-brew "kubernetes-cli"
-brew "kubernetes-helm"
-brew "aws-iam-authenticator"
-brew "azure-cli"
-brew "dnsmasq"
-brew "go"
+# frozen_string_literal: true
 
-cask "aws-vault"
+tap 'homebrew/cask'
+
+brew 'terraform'
+brew 'terragrunt'
+brew 'kubernetes-cli'
+brew 'helm@2'
+brew 'aws-iam-authenticator'
+brew 'azure-cli'
+brew 'dnsmasq'
+brew 'go'
+
+cask 'aws-vault'

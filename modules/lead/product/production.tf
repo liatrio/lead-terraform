@@ -26,44 +26,6 @@ resource "helm_release" "production_product_init" {
   provider  = helm.production
 }
 
-module "production_certificate" {
-  source = "../../common/certificates"
-  namespace = "istio-system"
-  name = module.production_namespace.name
-  domain = "${module.production_namespace.name}.${var.cluster_domain}"
-  enabled = "${var.enable_istio}"
-
-  providers = {
-    helm = "helm.system"
-    kubernetes = "kubernetes.system"
-  }
-}
-
-module "production_ingress" {
-  source                  = "../../common/nginx-ingress"
-  namespace               = module.production_namespace.name
-  ingress_controller_type = var.ingress_controller_type
-  enabled                 = "${var.enable_istio ? false : true}"
-
-  providers = {
-    helm       = helm.production
-    kubernetes = kubernetes.production
-  }
-}
-
-module "production_issuer" {
-  enabled     = "${var.enable_istio ? false : true}"
-  source      = "../../common/cert-issuer"
-  namespace   = module.production_namespace.name
-  issuer_type = var.issuer_type
-  issuer_server = var.issuer_server
-  crd_waiter  = ""
-
-  providers = {
-    helm = helm.production
-  }
-}
-
 resource "kubernetes_role" "jenkins_production_role" {
   provider = kubernetes.production
   metadata {
@@ -186,6 +148,6 @@ resource "kubernetes_role_binding" "default_production_rolebinding" {
   subject {
     kind      = "ServiceAccount"
     name      = "default"
-    namespace   = module.staging_namespace.name
+    namespace   = module.production_namespace.name
   }
 }

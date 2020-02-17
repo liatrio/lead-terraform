@@ -1,4 +1,5 @@
 data "kubernetes_secret" "jenkins_artifactory_credential" {
+  count = var.enable_artifactory ? 1 : 0
   provider = kubernetes.toolchain
   metadata {
     name      = "jenkins-artifactory-credential"
@@ -6,26 +7,26 @@ data "kubernetes_secret" "jenkins_artifactory_credential" {
   }
 }
 
-data "template_file" "dockercfg" {
-  template = file("${path.module}/artifactory-dockercfg.tpl")
+data "template_file" "maven_settings" {
+  count = var.enable_artifactory ? 1 : 0
+  template = file("${path.module}/artifactory-maven-settings.tpl")
 
   vars = {
-    url   = "https://artifactory.toolchain.${var.cluster_domain}/docker-registry/${var.product_name}"
-    email = "jenkins@liatr.io"
-    auth = base64encode(
-      "${data.kubernetes_secret.jenkins_artifactory_credential.data.username}:${data.kubernetes_secret.jenkins_artifactory_credential.data.password}",
-    )
+    username = data.kubernetes_secret.jenkins_artifactory_credential[0].data.username
+    password = data.kubernetes_secret.jenkins_artifactory_credential[0].data.password
   }
 }
 
-resource "kubernetes_secret" "jenkins_artifactory_dockercfg" {
+resource "kubernetes_secret" "jenkins_artifactory_maven_settings" {
+  count = var.enable_artifactory ? 1 : 0
+  provider = kubernetes.toolchain
   metadata {
-    name      = "jenkins-artifactory-dockercfg"
+    name      = "jenkins-artifactory-maven-settings"
     namespace = module.toolchain_namespace.name
   }
 
   data = {
-    "config.json" = data.template_file.dockercfg.rendered
+    "settings.xml" = data.template_file.maven_settings[0].rendered
   }
 
   type = "Opaque"

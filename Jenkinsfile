@@ -1,4 +1,3 @@
-library 'LEAD'
 pipeline {
   agent any
   environment {
@@ -10,17 +9,10 @@ pipeline {
         label "lead-toolchain-terraform"
       }
       steps {
-        notifyPipelineStart()
-        notifyStageStart()                                                                                                                                                                      
         container('terraform') {
           sh "make validate"
         }
-        notifyStageEnd([status: "Validated terraform for product version: ${VERSION}"])
-      }
-      post {
-        failure {
-          notifyStageEnd([result: "fail"])
-        }
+        stageMessage "Validated terraform for product version: ${VERSION}"
       }
     }
     stage('Gitops') {
@@ -36,16 +28,10 @@ pipeline {
         GITOPS_VALUES = "inputs.product_version=${VERSION}"
       }
       steps {
-        notifyStageStart()
         container('gitops') {
           sh "/go/bin/gitops"
         }
-        notifyStageEnd([status: "Updated the product version in sandbox to: ${VERSION}"])
-      }
-      post {
-        failure {
-          notifyStageEnd([result: "fail"])
-        }
+        stageMessage "Updated the product version in sandbox to: ${VERSION}"
       }
     }
   }

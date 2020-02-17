@@ -5,3 +5,11 @@ resources:
   limits:
     cpu: 300m
     memory: 2.5Gi
+postgresql:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 32Mi
+    limits:
+      cpu: 150m
+      memory: 64Mi

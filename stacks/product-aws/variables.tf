@@ -12,18 +12,6 @@ variable "image_whitelist" {
   default = ".*"
 }
 
-variable "issuer_type" {
-  default = "acme"
-}
-
-variable "issuer_server" {
-  default = "https://acme-v02.api.letsencrypt.org/directory"
-}
-
-variable "ingress_controller_type" {
-  default = "LoadBalancer"
-}
-
 variable "config_context" {
   default = ""
 }
@@ -44,9 +32,19 @@ variable "enable_keycloak" {
   default = false
 }
 
+variable "enable_harbor" {
+  default = true
+}
+
+variable "enable_artifactory" {
+  default = true
+}
+
 variable "builder_images_version" {
 }
 variable "jenkins_image_version" {
 }
-variable "image_repo" {
+variable "toolchain_image_repo" {
+}
+variable "product_image_repo" {
 }

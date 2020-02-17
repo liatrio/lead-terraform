@@ -14,18 +14,23 @@ controller:
     timeoutSeconds: 10
   publishService:
     enabled: true
+  ingressClass: ${ingress_class}
+  %{ if default_certificate != "" }
+  extraArgs:
+    default-ssl-certificate: ${default_certificate}
+  %{ endif }
   scope:
-    enabled: true
+    enabled: ${!cluster_wide}
   service:
     type: ${ingress_controller_type}
     externalTrafficPolicy: ${ingress_external_traffic_policy}
   resources:
     requests:
-      cpu: 15m
-      memory: 140Mi
+      cpu: 100m
+      memory: 256Mi
     limits:
-      cpu: 50m
-      memory: 160Mi
+      cpu: 200m
+      memory: 512Mi
 defaultBackend:
   resources:
     requests:

@@ -61,10 +61,10 @@ endif
 test:
 	@echo "$(shell pwd)"
 	@echo ${PWD}
-	cd tests && dep -v ensure && go test -v -timeout 90m .
+	cd tests && go test -v -timeout 90m .
 
 build_keycloak_provider:
-TF_KEYCLOAK_VERSION = 1.10.0
+TF_KEYCLOAK_VERSION = 1.11.1
 TF_KEYCLOAK_PLATFORM = $(shell go env GOOS)_$(shell go env GOARCH)
 plugins:
 	mkdir -p ~/.terraform.d/plugins

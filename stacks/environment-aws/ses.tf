@@ -11,8 +11,8 @@ resource "aws_route53_record" "ses_verification" {
 }
 
 resource "aws_ses_domain_identity_verification" "cluster_domain" {
-  domain = "${aws_ses_domain_identity.cluster_domain.domain}"
-  depends_on = ["aws_route53_record.ses_verification"]
+  domain     = aws_ses_domain_identity.cluster_domain.domain
+  depends_on = [aws_route53_record.ses_verification]
 }
 
 module "ses_smtp" {

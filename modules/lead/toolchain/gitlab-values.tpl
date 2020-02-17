@@ -9,12 +9,11 @@ global:
     enabled: true
     configureCertmanager: false
     annotations:
-      kubernetes.io/ingress.class: "nginx"
-      kubernetes.io/tls-acme: "true"
-      nginx.ingress.kubernetes.io/ssl-redirect: "${ssl_redirect}"
+      kubernetes.io/ingress.class: "toolchain-nginx"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "${ssl_redirect}"
       nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
       nginx.ingress.kubernetes.io/configuration-snippet: |
-        more_set_headers "X-Forwarded-Proto: https";      
+        more_set_headers "X-Forwarded-Proto: https";
       ingress.kubernetes.io/proxy-body-size: "0"
       ingress.kubernetes.io/proxy-read-timeout: "600"
       ingress.kubernetes.io/proxy-send-timeout: "600"
@@ -22,7 +21,8 @@ global:
     hosts:
     - ${ingress_hostname}
     tls:
-      secretName: gitlab-ingress-tls
+    - hosts:
+      - ${ingress_hostname}
   ## doc/charts/globals.md#configure-appconfig-settings
   ## Rails based portions of this chart share many settings
   appConfig:
@@ -57,7 +57,7 @@ global:
     enabled: true
     address: ${smtp_host}
     port: ${smtp_port}
-    authentication: 
+    authentication:
   email:
     from: ${smtp_from_email}
     display_name: ${smtp_from_name}
