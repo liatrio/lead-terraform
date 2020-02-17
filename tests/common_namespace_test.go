@@ -39,7 +39,7 @@ func TestTerraformForNamespace(t *testing.T) {
 	// entries to be able to add a new authentication option.
 	tmpConfigPath := k8s.CopyHomeKubeConfigToTemp(t)
 	defer os.Remove(tmpConfigPath)
-	options := k8s.NewKubectlOptions("", tmpConfigPath)
+	options := k8s.NewKubectlOptions("", tmpConfigPath, "")
 
 
 	// At the end of the test, run `terraform destroy` to clean up any resources that were created
@@ -59,7 +59,7 @@ func TestTerraformForNamespace(t *testing.T) {
 		token,
 	))
 
-	serviceAccountKubectlOptions := k8s.NewKubectlOptions(expectedTillerServiceAccountName, tmpConfigPath)
+	serviceAccountKubectlOptions := k8s.NewKubectlOptions(expectedTillerServiceAccountName, tmpConfigPath, "")
 
 	// Run `terraform output` to get the values of output variables
 	actualNamespace := terraform.Output(t, terraformOptions, "name")
