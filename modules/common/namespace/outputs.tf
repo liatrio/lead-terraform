@@ -7,4 +7,3 @@ output "tiller_service_account" {
 
   depends_on = [kubernetes_role_binding.tiller_role_binding]
 }
-

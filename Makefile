@@ -21,10 +21,6 @@ else
 TF_VALIDATE_ARGS = ""
 endif
 
-ifndef GOPATH
-export GOPATH = ${PWD}/../../../go
-endif
-
 validate: 
 	@terraform init -backend=false stacks/environment-aws
 	@terraform validate $(TF_VALIDATE_ARGS) stacks/environment-aws
@@ -58,10 +54,15 @@ endif
 	git tag -a -m "releasing $(NEW_VERSION)" $(NEW_VERSION)
 	git push origin $(NEW_VERSION)
 
-test:
-	@echo "$(shell pwd)"
-	@echo ${PWD}
-	cd tests && go test -v -timeout 90m .
+test: 
+	@cd tests && go test liatr.io/lead-terraform/tests/local -timeout 90m -v --count=1
+
+test-aws: 
+	@cd tests && go test liatr.io/lead-terraform/tests/aws -timeout 90m -v --count=1
+
+test-clean:
+	@rm -r tests/testdata/*/*/.terraform
+	@rm tests/testdata/*/*/terraform.tfstate*
 
 build_keycloak_provider:
 TF_KEYCLOAK_VERSION = 1.11.1

@@ -1,0 +1,5 @@
+variable "cluster" {
+}
+
+variable "region" {
+}
