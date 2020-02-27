@@ -15,9 +15,9 @@ output "production_service_account" {
 }
 
 output "ci_staging_role_name" {
-  value = module.staging_namespace.name
+  value = module.ci_staging_role.name
 }
 
 output "ci_production_role_name" {
-  value = module.production_namespace.name
+  value = module.ci_production_role.name
 }
