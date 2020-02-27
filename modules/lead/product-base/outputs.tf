@@ -15,9 +15,9 @@ output "production_service_account" {
 }
 
 output "ci_staging_role_name" {
-  value = kubernetes_role.ci_staging_role.name
+  value = kubernetes_role.ci_staging_role.metadata[0].name
 }
 
 output "ci_production_role_name" {
-  value = kubernetes.ci_production_role.name
+  value = kubernetes_role.ci_production_role.metadata[0].name
 }
