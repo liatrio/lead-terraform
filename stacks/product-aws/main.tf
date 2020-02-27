@@ -57,6 +57,7 @@ provider "helm" {
     "spec.template.spec.containers[0].resources.requests.memory=100Mi",
     "spec.template.spec.containers[0].resources.limits.cpu=800m",
     "spec.template.spec.containers[0].resources.requests.cpu=100m",
+    "spec.template.metadata.annotations.sidecar\\.istio\\.io/inject=false",
   ]
 
   kubernetes {
@@ -88,6 +89,7 @@ provider "helm" {
     "spec.template.spec.containers[0].resources.requests.memory=100Mi",
     "spec.template.spec.containers[0].resources.limits.cpu=800m",
     "spec.template.spec.containers[0].resources.requests.cpu=100m",
+    "spec.template.metadata.annotations.sidecar\\.istio\\.io/inject=false",
   ]
 
   kubernetes {
