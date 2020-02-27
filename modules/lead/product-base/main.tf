@@ -33,8 +33,3 @@ provider "helm" {
     "spec.template.metadata.annotations.sidecar\\.istio\\.io/inject=false"
   ]
 }
-
-provider "kubernetes" {
-  alias = "system"
-  load_config_file = "false"
-}

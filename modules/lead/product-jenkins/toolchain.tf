@@ -219,32 +219,6 @@ resource "kubernetes_cluster_role_binding" "jenkins_kubernetes_credentials" {
   }
 }
 
-resource "kubernetes_role" "jenkins_staging_role" {
-  provider = kubernetes.staging
-  metadata {
-    name      = "jenkins-staging-role"
-    namespace = module.product_base.staging_namespace
-
-    labels = {
-      "app.kubernetes.io/name"       = "jenkins"
-      "app.kubernetes.io/instance"   = "jenkins"
-      "app.kubernetes.io/component"  = "jenkins-master"
-      "app.kubernetes.io/managed-by" = "Terraform"
-    }
-
-    annotations = {
-      description = "Permission required for Jenkins' to get pods in staging namespace"
-      source-repo = "https://github.com/liatrio/lead-terraform"
-    }
-  }
-
-  rule {
-    api_groups = ["", "extensions"]
-    resources  = ["*"]
-    verbs      = ["*"]
-  }
-}
-
 resource "kubernetes_role_binding" "jenkins_staging_rolebinding" {
   provider = kubernetes.staging
   metadata {
@@ -267,39 +241,13 @@ resource "kubernetes_role_binding" "jenkins_staging_rolebinding" {
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "Role"
-    name      = kubernetes_role.jenkins_staging_role.metadata[0].name
+    name      = module.product_base.ci_staging_role_name
   }
 
   subject {
     kind      = "ServiceAccount"
     name      = kubernetes_service_account.jenkins.metadata[0].name
     namespace = module.toolchain_namespace.name
-  }
-}
-
-resource "kubernetes_role" "jenkins_production_role" {
-  provider = kubernetes.production
-  metadata {
-    name      = "jenkins-production-role"
-    namespace = module.product_base.production_namespace
-
-    labels = {
-      "app.kubernetes.io/name"       = "jenkins"
-      "app.kubernetes.io/instance"   = "jenkins"
-      "app.kubernetes.io/component"  = "jenkins-master"
-      "app.kubernetes.io/managed-by" = "Terraform"
-    }
-
-    annotations = {
-      description = "Permission required for Jenkins' to get pods in production namespace"
-      source-repo = "https://github.com/liatrio/lead-terraform"
-    }
-  }
-
-  rule {
-    api_groups = ["", "extensions"]
-    resources  = ["*"]
-    verbs      = ["*"]
   }
 }
 
@@ -325,7 +273,7 @@ resource "kubernetes_role_binding" "jenkins_production_rolebinding" {
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "Role"
-    name      = kubernetes_role.jenkins_production_role.metadata[0].name
+    name      = module.product_base.ci_production_role_name
   }
 
   subject {

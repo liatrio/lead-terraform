@@ -93,3 +93,28 @@ resource "kubernetes_role_binding" "default_production_rolebinding" {
     namespace   = module.production_namespace.name
   }
 }
+
+resource "kubernetes_role" "ci_production_role" {
+  provider = kubernetes.production
+  metadata {
+    name      = "ci-production-role"
+    namespace = module.production_namespace.name
+
+    labels = {
+      "app.kubernetes.io/name"       = "ci"
+      "app.kubernetes.io/instance"   = "ci"
+      "app.kubernetes.io/managed-by" = "Terraform"
+    }
+
+    annotations = {
+      description = "Permission required for Continous Integration tools to get pods in production namespace"
+      source-repo = "https://github.com/liatrio/lead-terraform"
+    }
+  }
+
+  rule {
+    api_groups = ["", "extensions"]
+    resources  = ["*"]
+    verbs      = ["*"]
+  }
+}
