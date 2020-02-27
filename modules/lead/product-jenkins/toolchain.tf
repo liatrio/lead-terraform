@@ -19,8 +19,8 @@ data "template_file" "jenkins_values" {
     toolchain_namespace    = var.toolchain_namespace
     logstash_url           = "http://lead-dashboard-logstash.toolchain.svc.cluster.local:9000"
     slack_team             = "liatrio"
-    stagingNamespace       = module.product_base.staging_namespace.name
-    productionNamespace    = module.product_base.production_namespace.name
+    stagingNamespace       = module.product_base.staging_namespace
+    productionNamespace    = module.product_base.production_namespace
     appDomain              = "apps.${var.cluster_domain}"
     builder_images_version = var.builder_images_version
     allow_anonymous_read   = var.enable_keycloak ? "false" : "true"
