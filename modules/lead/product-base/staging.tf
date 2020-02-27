@@ -101,7 +101,7 @@ resource "kubernetes_role" "ci_staging_role" {
     name      = "ci-staging-role"
     namespace = module.staging_namespace.name
 
- staging_namespace.name   labels = {
+    labels = {
       "app.kubernetes.io/name"       = "ci"
       "app.kubernetes.io/instance"   = "ci"
       "app.kubernetes.io/managed-by" = "Terraform"
