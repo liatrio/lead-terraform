@@ -174,3 +174,6 @@ variable "k8s_storage_class" {
 variable "dashboard_elasticsearch_replicas" {
   default = 3
 }
+
+variable "product_stack" {
+}
