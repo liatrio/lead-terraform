@@ -11,9 +11,9 @@ provider "kubernetes" {
 provider "helm" {
   version         = "0.10.4"
   alias           = "toolchain"
-  namespace       = module.product.toolchain_namespace
+  namespace       = module.product_jenkins.toolchain_namespace
   tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.15.1"
-  service_account = module.product.toolchain_service_account
+  service_account = module.product_jenkins.toolchain_service_account
 
   kubernetes {
     load_config_file = var.load_config_file
@@ -37,9 +37,9 @@ provider "kubernetes" {
 provider "helm" {
   version         = "0.10.4"
   alias           = "staging"
-  namespace       = module.product.staging_namespace
+  namespace       = module.product_jenkins.staging_namespace
   tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.15.1"
-  service_account = module.product.staging_service_account
+  service_account = module.product_jenkins.staging_service_account
 
   kubernetes {
     load_config_file = var.load_config_file
@@ -63,9 +63,9 @@ provider "kubernetes" {
 provider "helm" {
   version         = "0.10.4"
   alias           = "production"
-  namespace       = module.product.production_namespace
+  namespace       = module.product_jenkins.production_namespace
   tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.15.1"
-  service_account = module.product.production_service_account
+  service_account = module.product_jenkins.production_service_account
 
   kubernetes {
     load_config_file = var.load_config_file
@@ -98,8 +98,8 @@ provider "helm" {
   }
 }
 
-module "product" {
-  source                  = "../../modules/lead/product"
+module "product_jenkins" {
+  source                  = "../../modules/lead/product-jenkins"
   cluster_domain          = var.cluster_domain
   product_name            = var.product_name
   issuer_type             = var.issuer_type
