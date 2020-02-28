@@ -19,8 +19,8 @@ data "template_file" "jenkins_values" {
     toolchain_namespace    = var.toolchain_namespace
     logstash_url           = "http://lead-dashboard-logstash.toolchain.svc.cluster.local:9000"
     slack_team             = "liatrio"
-    stagingNamespace       = module.staging_namespace.name
-    productionNamespace    = module.production_namespace.name
+    stagingNamespace       = module.product_base.staging_namespace
+    productionNamespace    = module.product_base.production_namespace
     appDomain              = "apps.${var.cluster_domain}"
     builder_images_version = var.builder_images_version
     allow_anonymous_read   = var.enable_keycloak ? "false" : "true"
@@ -210,6 +210,70 @@ resource "kubernetes_cluster_role_binding" "jenkins_kubernetes_credentials" {
     api_group = "rbac.authorization.k8s.io"
     kind      = "ClusterRole"
     name      = kubernetes_cluster_role.jenkins_kubernetes_credentials.metadata[0].name
+  }
+
+  subject {
+    kind      = "ServiceAccount"
+    name      = kubernetes_service_account.jenkins.metadata[0].name
+    namespace = module.toolchain_namespace.name
+  }
+}
+
+resource "kubernetes_role_binding" "jenkins_staging_rolebinding" {
+  provider = kubernetes.staging
+  metadata {
+    name      = "jenkins-staging-rolebinding"
+    namespace = module.product_base.staging_namespace
+
+    labels = {
+      "app.kubernetes.io/name"       = "jenkins"
+      "app.kubernetes.io/instance"   = "jenkins"
+      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/managed-by" = "Terraform"
+    }
+
+    annotations = {
+      description = "Permission required for Jenkins' to get pods in staging namespace"
+      source-repo = "https://github.com/liatrio/lead-terraform"
+    }
+  }
+
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "Role"
+    name      = module.product_base.ci_staging_role_name
+  }
+
+  subject {
+    kind      = "ServiceAccount"
+    name      = kubernetes_service_account.jenkins.metadata[0].name
+    namespace = module.toolchain_namespace.name
+  }
+}
+
+resource "kubernetes_role_binding" "jenkins_production_rolebinding" {
+  provider = kubernetes.production
+  metadata {
+    name      = "jenkins-production-rolebinding"
+    namespace = module.product_base.production_namespace
+
+    labels = {
+      "app.kubernetes.io/name"       = "jenkins"
+      "app.kubernetes.io/instance"   = "jenkins"
+      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/managed-by" = "Terraform"
+    }
+
+    annotations = {
+      description = "Permission required for Jenkins' to get pods in production namespace"
+      source-repo = "https://github.com/liatrio/lead-terraform"
+    }
+  }
+
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "Role"
+    name      = module.product_base.ci_production_role_name
   }
 
   subject {

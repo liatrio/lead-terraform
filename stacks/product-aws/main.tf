@@ -12,9 +12,9 @@ provider "kubernetes" {
 provider "helm" {
   alias           = "toolchain"
   version         = "0.10.4"
-  namespace       = module.product.toolchain_namespace
+  namespace       = module.product_jenkins.toolchain_namespace
   tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.15.1"
-  service_account = module.product.toolchain_service_account
+  service_account = module.product_jenkins.toolchain_service_account
 
   override = [
     "spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].key=kubernetes.io/lifecycle",
@@ -43,9 +43,9 @@ provider "kubernetes" {
 provider "helm" {
   alias           = "staging"
   version         = "0.10.4"
-  namespace       = module.product.staging_namespace
+  namespace       = module.product_jenkins.staging_namespace
   tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.15.1"
-  service_account = module.product.staging_service_account
+  service_account = module.product_jenkins.staging_service_account
 
   override = [
     "spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].key=kubernetes.io/lifecycle",
@@ -57,6 +57,7 @@ provider "helm" {
     "spec.template.spec.containers[0].resources.requests.memory=100Mi",
     "spec.template.spec.containers[0].resources.limits.cpu=800m",
     "spec.template.spec.containers[0].resources.requests.cpu=100m",
+    "spec.template.metadata.annotations.sidecar\\.istio\\.io/inject=false",
   ]
 
   kubernetes {
@@ -74,9 +75,9 @@ provider "kubernetes" {
 provider "helm" {
   alias           = "production"
   version         = "0.10.4"
-  namespace       = module.product.production_namespace
+  namespace       = module.product_jenkins.production_namespace
   tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.15.1"
-  service_account = module.product.production_service_account
+  service_account = module.product_jenkins.production_service_account
 
   override = [
     "spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].key=kubernetes.io/lifecycle",
@@ -88,6 +89,7 @@ provider "helm" {
     "spec.template.spec.containers[0].resources.requests.memory=100Mi",
     "spec.template.spec.containers[0].resources.limits.cpu=800m",
     "spec.template.spec.containers[0].resources.requests.cpu=100m",
+    "spec.template.metadata.annotations.sidecar\\.istio\\.io/inject=false",
   ]
 
   kubernetes {
@@ -114,8 +116,8 @@ provider "helm" {
   }
 }
 
-module "product" {
-  source                  = "../../modules/lead/product"
+module "product_jenkins" {
+  source                  = "../../modules/lead/product-jenkins"
   cluster_domain          = var.cluster_domain
   product_name            = var.product_name
   image_whitelist         = var.image_whitelist
