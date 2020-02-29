@@ -16,5 +16,5 @@ resource "local_file" "kubeconfig" {
       token = data.aws_eks_cluster_auth.cluster.token,
     }
   )
-  filename = "${path.module}/kubeconfig"
+  filename = "${var.kubeconfig_path}/kubeconfig"
 }

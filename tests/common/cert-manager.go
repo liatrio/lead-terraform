@@ -8,23 +8,46 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-func CreateCertManager(t *testing.T, terraformOptions *terraform.Options, k8sOptions *k8s.KubectlOptions) {
-	terraform.InitAndApply(t, terraformOptions)
+func CreateCertManager(tm *TestModule) {
+	namespace := tm.GetTerraformVar("namespace")
+	kubeConfigPath := tm.GetStringGlobal(KubeConfigPath)
+	k8sOptions := k8s.NewKubectlOptions("", kubeConfigPath, namespace)
 
-	pods := k8s.ListPods(t, k8sOptions, metav1.ListOptions{ LabelSelector: "app.kubernetes.io/instance=cert-manager" })
-	assert.Equal(t, 3, len(pods))
-	services := k8s.ListServices(t, k8sOptions, metav1.ListOptions{ LabelSelector: "app.kubernetes.io/instance=cert-manager" })
-	assert.Equal(t, 2, len(services))
+	pods := k8s.ListPods(tm.GoTest, k8sOptions, metav1.ListOptions{ LabelSelector: "app.kubernetes.io/instance=cert-manager" })
+	assert.Equal(tm.GoTest, 3, len(pods))
+	services := k8s.ListServices(tm.GoTest, k8sOptions, metav1.ListOptions{ LabelSelector: "app.kubernetes.io/instance=cert-manager" })
+	assert.Equal(tm.GoTest, 2, len(services))
 }
 
-func DestroyCertManager(t *testing.T, terraformOptions *terraform.Options, k8sOptions *k8s.KubectlOptions) {
-	terraform.Destroy(t, terraformOptions)
-	_ = k8s.KubectlDeleteFromStringE(t, k8sOptions, `{"apiVersion": "apiextensions.k8s.io/v1beta1",	"kind": "CustomResourceDefinition", "metadata": { "name": "challenges.acme.cert-manager.io" } }`)
-	_ = k8s.KubectlDeleteFromStringE(t, k8sOptions, `{"apiVersion": "apiextensions.k8s.io/v1beta1",	"kind": "CustomResourceDefinition", "metadata": { "name": "certificaterequests.cert-manager.io" } }`)
-	_ = k8s.KubectlDeleteFromStringE(t, k8sOptions, `{"apiVersion": "apiextensions.k8s.io/v1beta1",	"kind": "CustomResourceDefinition", "metadata": { "name": "certificates.cert-manager.io" } }`)
-	_ = k8s.KubectlDeleteFromStringE(t, k8sOptions, `{"apiVersion": "apiextensions.k8s.io/v1beta1",	"kind": "CustomResourceDefinition", "metadata": { "name": "clusterissuers.cert-manager.io" } }`)
-	_ = k8s.KubectlDeleteFromStringE(t, k8sOptions, `{"apiVersion": "apiextensions.k8s.io/v1beta1",	"kind": "CustomResourceDefinition", "metadata": { "name": "issuers.cert-manager.io" } }`)
-	_ = k8s.KubectlDeleteFromStringE(t, k8sOptions, `{"apiVersion": "apiextensions.k8s.io/v1beta1",	"kind": "CustomResourceDefinition", "metadata": { "name": "orders.acme.cert-manager.io" } }`)
+func DestroyCertManager(tm *TestModule) {
+	namespace := tm.GetTerraformVar("namespace")
+	kubeConfigPath := tm.GetStringGlobal(KubeConfigPath)
+	k8sOptions := k8s.NewKubectlOptions("", kubeConfigPath, namespace)
+
+	_ = k8s.KubectlDeleteFromStringE(tm.GoTest, k8sOptions, `{"apiVersion": "admissionregistration.k8s.io/v1beta1",	"kind": "ValidatingWebhookConfiguration", "metadata": { "name": "cert-manager-webhook" } }`)
+	_ = k8s.KubectlDeleteFromStringE(tm.GoTest, k8sOptions, `{"apiVersion": "admissionregistration.k8s.io/v1beta1",	"kind": "MutatingWebhookConfiguration", "metadata": { "name": "cert-manager-webhook" } }`)
+	_ = k8s.KubectlDeleteFromStringE(tm.GoTest, k8sOptions, `{"apiVersion": "apiregistration.k8s.io/v1", "kind": "APIService", "metadata": { "name": "v1beta1.webhook.cert-manager.io" } }`)
+	_ = k8s.KubectlDeleteFromStringE(tm.GoTest, k8sOptions, `{"apiVersion": "apiextensions.k8s.io/v1beta1",	"kind": "CustomResourceDefinition", "metadata": { "name": "challenges.acme.cert-manager.io" } }`)
+	_ = k8s.KubectlDeleteFromStringE(tm.GoTest, k8sOptions, `{"apiVersion": "apiextensions.k8s.io/v1beta1",	"kind": "CustomResourceDefinition", "metadata": { "name": "certificaterequests.cert-manager.io" } }`)
+	_ = k8s.KubectlDeleteFromStringE(tm.GoTest, k8sOptions, `{"apiVersion": "apiextensions.k8s.io/v1beta1",	"kind": "CustomResourceDefinition", "metadata": { "name": "certificates.cert-manager.io" } }`)
+	_ = k8s.KubectlDeleteFromStringE(tm.GoTest, k8sOptions, `{"apiVersion": "apiextensions.k8s.io/v1beta1",	"kind": "CustomResourceDefinition", "metadata": { "name": "clusterissuers.cert-manager.io" } }`)
+	_ = k8s.KubectlDeleteFromStringE(tm.GoTest, k8sOptions, `{"apiVersion": "apiextensions.k8s.io/v1beta1",	"kind": "CustomResourceDefinition", "metadata": { "name": "issuers.cert-manager.io" } }`)
+	_ = k8s.KubectlDeleteFromStringE(tm.GoTest, k8sOptions, `{"apiVersion": "apiextensions.k8s.io/v1beta1",	"kind": "CustomResourceDefinition", "metadata": { "name": "orders.acme.cert-manager.io" } }`)
+	// _ = k8s.KubectlDeleteFromStringE(t, k8sOptions, `{"apiVersion": "apiextensions.k8s.io/v1beta1",	"kind": "CustomResourceDefinition", "metadata": { "name": "cert-manager-view" } }`)
+}
+
+func SelfSignedIssuerSetup(t *TestModule) {
+	t.SetTerraformVar("issuer_type", "selfSigned")
+	t.SetTerraformVar("issuer_name", "testSelfSigned")
+	t.SetTerraformVar("crd_waiter", "NA")
+}
+
+func SelfSignedIssuerRun(t *TestModule) {
+	t.GoTest.Log("Self Signed Issuer Run")
+}
+
+func SelfSignedIssuerTeardown(t *TestModule) {
+	t.GoTest.Log("Self Signed Issuer Teardown")
 }
 
 func CreateSelfSignedIssuer(t *testing.T, terraformOptions *terraform.Options) {
