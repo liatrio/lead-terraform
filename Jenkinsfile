@@ -15,6 +15,35 @@ pipeline {
         stageMessage "Validated terraform for product version: ${VERSION}"
       }
     }
+    stage('Test Terraform') {
+      agent {
+        kubernetes {
+          label 'lead-toolchain-aws-for-lead-environments'
+          inheritFrom 'lead-toolchain-aws lead-toolchain-terraform'
+          // idleMinutes '60'
+          yaml """
+          spec:
+            serviceAccount: "aws-builder"
+          """
+        }
+      }
+      steps {
+        container('aws') {
+          script {
+            env.AWS_ROLE_SESSION_NAME="lead-environments"
+            def roleArn = "arn:aws:iam::003744521125:role/LeadEnvironmentsBastion"
+            def assumeRoleCreds = readJSON(text: sh(returnStdout: true, script: "aws sts assume-role --role-arn ${roleArn} --role-session-name ${AWS_ROLE_SESSION_NAME} --duration-seconds 900")).Credentials
+            env.AWS_ACCESS_KEY_ID=assumeRoleCreds.AccessKeyId
+            env.AWS_SECRET_ACCESS_KEY=assumeRoleCreds.SecretAccessKey
+            env.AWS_SESSION_TOKEN=assumeRoleCreds.SessionToken
+            env.TERRATEST_IAM_ROLE=arn:aws:iam::774051255656:role/Administrator
+          }
+        }
+        container('terraform') {
+          sh "go test liatr.io/lead-terraform/tests/aws -timeout 90m -v --count=1"
+        }
+      }
+    }
     stage('Gitops') {
       agent {
         label "lead-toolchain-gitops"
