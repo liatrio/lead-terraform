@@ -40,7 +40,9 @@ pipeline {
           }
         }
         container('terraform') {
-          sh "go test liatr.io/lead-terraform/tests/aws -timeout 90m -v --count=1"
+          dir ("tests") {
+            sh "go test liatr.io/lead-terraform/tests/aws -timeout 90m -v --count=1"
+          }
         }
       }
     }
