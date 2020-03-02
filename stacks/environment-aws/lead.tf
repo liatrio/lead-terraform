@@ -150,7 +150,7 @@ module "sdm" {
   slack_bot_token             = data.aws_ssm_parameter.slack_bot_token.value
   slack_client_signing_secret = data.aws_ssm_parameter.slack_client_signing_secret.value
   workspace_role_name         = aws_iam_role.workspace_role.name
-  product_stack               = "product-aws"
+  product_stack               = var.product_stack
 
   operator_slack_service_account_annotations = {
     "eks.amazonaws.com/role-arn" = aws_iam_role.operator_slack_service_account.arn
