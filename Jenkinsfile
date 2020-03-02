@@ -36,7 +36,7 @@ pipeline {
             env.AWS_ACCESS_KEY_ID=assumeRoleCreds.AccessKeyId
             env.AWS_SECRET_ACCESS_KEY=assumeRoleCreds.SecretAccessKey
             env.AWS_SESSION_TOKEN=assumeRoleCreds.SessionToken
-            env.TERRATEST_IAM_ROLE=arn:aws:iam::774051255656:role/Administrator
+            env.TERRATEST_IAM_ROLE="arn:aws:iam::774051255656:role/Administrator"
           }
         }
         container('terraform') {
