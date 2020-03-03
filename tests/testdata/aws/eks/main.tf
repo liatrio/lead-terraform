@@ -1,6 +1,10 @@
 provider "aws" {
   version = ">= 2.29.0"
   region  = var.region
+
+  assume_role {
+    role_arn = "arn:aws:iam::774051255656:role/Administrator"
+  }
 }
 
 module "eks" {
