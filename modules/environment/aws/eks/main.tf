@@ -118,7 +118,7 @@ resource "aws_security_group" "elb" {
 
 module "eks" {
   source                               = "terraform-aws-modules/eks/aws"
-  version                              = "7.0.0"
+  version                              = "7.0.1"
   cluster_version                      = "1.14"
   #cluster_enabled_log_types            = ["api","audit","authenticator","controllerManager","scheduler"]
   cluster_name                         = var.cluster
