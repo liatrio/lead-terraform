@@ -200,7 +200,7 @@ master:
                         args: "cat"
                         ttyEnabled: true
                         resourceRequestCpu: 100m
-                        resourceLimitCpu: 500m
+                        resourceLimitCpu: 1
                         resourceRequestMemory: 256Mi
                         resourceLimitMemory: 1536Mi
                     slaveConnectTimeout: 100
