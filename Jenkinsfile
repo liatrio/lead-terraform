@@ -24,6 +24,23 @@ pipeline {
           yaml """
           spec:
             serviceAccount: "aws-builder"
+            containers:
+            - name: jnlp
+              resources:
+                requests:
+                  cpu: 200m
+                  memory: 128Mi
+                limits:
+                  cpu: 1
+                  memory: 256Mi
+            - name: terraform
+              resources:
+                requests:
+                  cpu: 200m
+                  memory: 512Mi
+                limits:
+                  cpu: 1
+                  memory: 1Gi
           """
         }
       }
