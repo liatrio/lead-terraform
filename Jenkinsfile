@@ -3,7 +3,6 @@ pipeline {
     kubernetes {
       label 'lead-toolchain-aws-for-lead-environments'
       inheritFrom 'lead-toolchain-aws lead-toolchain-terraform lead-toolchain-gitops'
-      // idleMinutes '60'
       yaml """
       spec:
         serviceAccount: "aws-builder"
@@ -37,8 +36,7 @@ pipeline {
           script {
             env.AWS_ROLE_SESSION_NAME="lead-environments"
             def roleArn = "arn:aws:iam::003744521125:role/LeadEnvironmentsBastion"
-            def assumeRoleCreds = readJSON(text: sh(returnStdout: true, script: "aws sts assume-role --role-arn ${roleArn} --role-session-name ${AWS_ROLE_SESSION_NAME} --duration-seconds 1800")).Credentials
-            env.AWS_ROLE_ARN="arn:aws:iam::003744521125:role/LeadEnvironmentsBastion"
+            def assumeRoleCreds = readJSON(text: sh(returnStdout: true, script: "aws sts assume-role --role-arn ${roleArn} --role-session-name ${AWS_ROLE_SESSION_NAME} --duration-seconds 3600")).Credentials
             env.AWS_ACCESS_KEY_ID=assumeRoleCreds.AccessKeyId
             env.AWS_SECRET_ACCESS_KEY=assumeRoleCreds.SecretAccessKey
             env.AWS_SESSION_TOKEN=assumeRoleCreds.SessionToken
@@ -47,7 +45,7 @@ pipeline {
         }
         container('terraform') {
           dir ("tests") {
-            sh "go test liatr.io/lead-terraform/tests/aws -timeout 90m -v --count=1"
+            sh "go test liatr.io/lead-terraform/tests/aws -timeout 60m -v --count=1"
           }
         }
       }
