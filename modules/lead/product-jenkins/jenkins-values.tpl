@@ -218,6 +218,40 @@ master:
                               cpu: 1
                               memory: 256Mi
                     yamlMergeStrategy: "merge"
+                  - name: "lead-toolchain-terratest"
+                    label: "lead-toolchain-terratest"
+                    nodeUsageMode: NORMAL
+                    yaml: |-
+                      spec:
+                        securityContext:
+                          fsGroup: 1000
+                    containers:
+                      - name: "terratest"
+                        image: "${toolchain_image_repo}/builder-image-terratest:${builder_images_version}"
+                        alwaysPullImage: false
+                        workingDir: "/home/jenkins/agent"
+                        command: "/bin/sh -c"
+                        args: "cat"
+                        ttyEnabled: true
+                        resourceRequestCpu: 300m
+                        resourceLimitCpu: 1
+                        resourceRequestMemory: 256Mi
+                        resourceLimitMemory: 1Gi
+                    slaveConnectTimeout: 100
+                    yaml: |-
+                      apiVersion: v1
+                      kind: Pod
+                      spec:
+                        containers:
+                        - name: jnlp
+                          resources:
+                            requests:
+                              cpu: 200m
+                              memory: 128Mi
+                            limits:
+                              cpu: 1
+                              memory: 256Mi
+                    yamlMergeStrategy: "merge"
                   - name: "lead-toolchain-maven"
                     label: "lead-toolchain-maven"
                     nodeUsageMode: NORMAL
