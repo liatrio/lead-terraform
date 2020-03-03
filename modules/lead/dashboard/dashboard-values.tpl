@@ -104,11 +104,11 @@ logstash-jenkins:
 fluent-bit:
   resources:
     requests:
-      cpu: 100m
-      memory: 8Mi
+      cpu: 30m
+      memory: 25Mi
     limits:
-      cpu: 400m
-      memory: 128Mi
+      cpu: 500m
+      memory: 50Mi
   backend:
     type: es
     es:

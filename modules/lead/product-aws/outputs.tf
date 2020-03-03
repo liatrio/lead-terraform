@@ -1,11 +1,3 @@
-output "toolchain_namespace" {
-  value = module.toolchain_namespace.name
-}
-
-output "toolchain_service_account" {
-  value = module.toolchain_namespace.tiller_service_account
-}
-
 output "staging_namespace" {
   value = module.staging_namespace.name
 }
@@ -22,3 +14,10 @@ output "production_service_account" {
   value = module.production_namespace.tiller_service_account
 }
 
+output "ci_staging_role_name" {
+  value = kubernetes_role.ci_staging_role.metadata[0].name
+}
+
+output "ci_production_role_name" {
+  value = kubernetes_role.ci_production_role.metadata[0].name
+}
