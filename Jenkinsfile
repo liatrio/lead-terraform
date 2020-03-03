@@ -2,7 +2,7 @@ pipeline {
   agent {
     kubernetes {
       label 'lead-toolchain-aws-for-lead-environments'
-      inheritFrom 'lead-toolchain-aws lead-toolchain-terraform lead-toolchain-gitops'
+      inheritFrom 'lead-toolchain-aws lead-toolchain-terratest lead-toolchain-gitops'
       yaml """
       spec:
         serviceAccount: "aws-builder"
@@ -27,7 +27,7 @@ pipeline {
         TF_VALIDATE_ARGS = "-no-color"
       }
       steps {
-        container('terraform') {
+        container('terratest') {
           sh "make validate"
         }
         stageMessage "Validated terraform for product version: ${VERSION}"
@@ -46,7 +46,7 @@ pipeline {
             env.TERRATEST_IAM_ROLE="arn:aws:iam::774051255656:role/Administrator"
           }
         }
-        container('terraform') {
+        container('terratest') {
           dir ("tests") {
             sh "go test liatr.io/lead-terraform/tests/aws -timeout 60m -v --count=1"
           }
