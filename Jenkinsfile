@@ -33,6 +33,7 @@ pipeline {
             env.AWS_ROLE_SESSION_NAME="lead-environments"
             def roleArn = "arn:aws:iam::003744521125:role/LeadEnvironmentsBastion"
             def assumeRoleCreds = readJSON(text: sh(returnStdout: true, script: "aws sts assume-role --role-arn ${roleArn} --role-session-name ${AWS_ROLE_SESSION_NAME} --duration-seconds 900")).Credentials
+            env.AWS_ROLE_ARN="arn:aws:iam::003744521125:role/LeadEnvironmentsBastion"
             env.AWS_ACCESS_KEY_ID=assumeRoleCreds.AccessKeyId
             env.AWS_SECRET_ACCESS_KEY=assumeRoleCreds.SecretAccessKey
             env.AWS_SESSION_TOKEN=assumeRoleCreds.SessionToken
