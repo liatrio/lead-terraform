@@ -23,6 +23,9 @@ pipeline {
   }
   stages {
     stage('Validate Terraform') {
+      environment {
+        TF_VALIDATE_ARGS = "-no-color"
+      }
       steps {
         container('terraform') {
           sh "make validate"
