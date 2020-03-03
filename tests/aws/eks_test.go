@@ -19,6 +19,7 @@ func init()  {
 }
 
 func TestEksCluster(t *testing.T) {
+	assumeIamRole, _ := os.LookupEnv("TERRATEST_IAM_ROLE")
 	// CLUSTER 
 	testCluster := common.TestModule{
 		GoTest: t,
@@ -28,6 +29,7 @@ func TestEksCluster(t *testing.T) {
 			clusterName := fmt.Sprintf("test-%s", strings.ToLower(random.UniqueId()))
 			tm.SetTerraformVar("cluster", clusterName)
 			tm.SetTerraformVar("region", "us-east-1")
+			tm.SetTerraformVar("aws_assume_role_arn", assumeIamRole)
 		},
 	}
 	defer testCluster.TeardownTests()
@@ -44,8 +46,9 @@ func TestEksCluster(t *testing.T) {
 				t.Fatalf("Failed to get working directory: %s", err)
 			}
 			tm.SetTerraformVar("cluster_name", testCluster.GetTerraformVar("cluster"))
-			tm.SetTerraformVar("kubeconfig_path", workingDirectory)
 			tm.SetTerraformVar("region", "us-east-1")
+			tm.SetTerraformVar("aws_assume_role_arn", assumeIamRole)
+			tm.SetTerraformVar("kubeconfig_path", workingDirectory)
 		},
 		Tests: createEksClusterConfig,
 	}
