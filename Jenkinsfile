@@ -1,13 +1,29 @@
 pipeline {
-  agent any
+  agent {
+    kubernetes {
+      label 'lead-toolchain-aws-for-lead-environments'
+      inheritFrom 'lead-toolchain-aws lead-toolchain-terraform lead-toolchain-gitops'
+      // idleMinutes '60'
+      yaml """
+      spec:
+        serviceAccount: "aws-builder"
+        containers:
+        - name: jnlp
+          resources:
+            requests:
+              cpu: 200m
+              memory: 128Mi
+            limits:
+              cpu: 1
+              memory: 256Mi
+      """
+    }
+  }
   environment {
     VERSION = version()
   }
   stages {
     stage('Validate Terraform') {
-      agent {
-        label "lead-toolchain-terraform"
-      }
       steps {
         container('terraform') {
           sh "make validate"
@@ -16,34 +32,6 @@ pipeline {
       }
     }
     stage('Test Terraform') {
-      agent {
-        kubernetes {
-          label 'lead-toolchain-aws-for-lead-environments'
-          inheritFrom 'lead-toolchain-aws lead-toolchain-terraform'
-          // idleMinutes '60'
-          yaml """
-          spec:
-            serviceAccount: "aws-builder"
-            containers:
-            - name: jnlp
-              resources:
-                requests:
-                  cpu: 200m
-                  memory: 128Mi
-                limits:
-                  cpu: 1
-                  memory: 256Mi
-            - name: terraform
-              resources:
-                requests:
-                  cpu: 200m
-                  memory: 512Mi
-                limits:
-                  cpu: 1
-                  memory: 1Gi
-          """
-        }
-      }
       steps {
         container('aws') {
           script {
@@ -65,9 +53,6 @@ pipeline {
       }
     }
     stage('Gitops') {
-      agent {
-        label "lead-toolchain-gitops"
-      }
       when {
         branch 'master'
       }
