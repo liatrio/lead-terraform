@@ -45,6 +45,7 @@ func TestEksCluster(t *testing.T) {
 			}
 			tm.SetTerraformVar("cluster_name", testCluster.GetTerraformVar("cluster"))
 			tm.SetTerraformVar("kubeconfig_path", workingDirectory)
+			tm.SetTerraformVar("region", "us-east-1")
 		},
 		Tests: createEksClusterConfig,
 	}
