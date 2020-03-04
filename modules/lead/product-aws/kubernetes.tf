@@ -1,17 +1,17 @@
-resource "kubernetes_role_binding" "cloudbuild_staging_rolebinding" {
+resource "kubernetes_role_binding" "codebuild_staging_rolebinding" {
   provider = kubernetes.staging
   metadata {
-    name      = "cloudbuild-staging-rolebinding"
+    name      = "codebuild-staging-rolebinding"
     namespace = module.product_base.staging_namespace
  
     labels = { 
-      "app.kubernetes.io/name"       = "cloudbuild"
-      "app.kubernetes.io/instance"   = "cloudbuild"
+      "app.kubernetes.io/name"       = "codebuild"
+      "app.kubernetes.io/instance"   = "codebuild"
       "app.kubernetes.io/managed-by" = "Terraform"
     }   
  
     annotations = { 
-      description = "Permission required for cloudbuild' to get pods in staging namespace"
+      description = "Permission required for codebuild' to get pods in staging namespace"
       source-repo = "https://github.com/liatrio/lead-terraform"
     }   
   }
@@ -24,21 +24,21 @@ resource "kubernetes_role_binding" "cloudbuild_staging_rolebinding" {
  
   subject {
     kind      = "User"
-    name      = "CloudBuild" ##How do we know the user for cloudbuild?
-    apiGroup  = "rbac.authorization.k8s.io"
+    name      = var.codebuild_user
+    api_group  = "rbac.authorization.k8s.io"
 
   }
 }
 
-resource "kubernetes_role_binding" "cloudbuild_production_rolebinding" {
+resource "kubernetes_role_binding" "codebuild_production_rolebinding" {
   provider = kubernetes.production
   metadata {
-    name      = "cloudbuild-production-rolebinding"
+    name      = "codebuild-production-rolebinding"
     namespace = module.product_base.production_namespace
  
     labels = { 
-      "app.kubernetes.io/name"       = "cloudbuild"
-      "app.kubernetes.io/instance"   = "cloudbuild"
+      "app.kubernetes.io/name"       = "codebuild"
+      "app.kubernetes.io/instance"   = "codebuild"
       "app.kubernetes.io/managed-by" = "Terraform"
     }   
  
@@ -56,8 +56,8 @@ resource "kubernetes_role_binding" "cloudbuild_production_rolebinding" {
 
   subject {
     kind      = "User"
-    name      = "CloudBuild"
-    apiGroup  = "rbac.authorization.k8s.io"
+    name      = var.codebuild_user
+    api_group  = "rbac.authorization.k8s.io"
 
   }
 }

@@ -17,3 +17,4 @@ variable "source_type" {
 variable "codebuild_role" {}
 variable "codepipeline_role" {}
 variable "s3_bucket" {}
+variable "codebuild_user" {}
