@@ -31,29 +31,12 @@ func TestEksCluster(t *testing.T) {
 			tm.SetTerraformVar("region", "us-east-1")
 			tm.SetTerraformVar("aws_assume_role_arn", assumeIamRole)
 		},
+		Tests: func(tm *common.TestModule) {
+			tm.SetStringGlobal(common.KubeConfigPath, tm.GetTerraformOutput("kubeconfig"))
+		},
 	}
 	defer testCluster.TeardownTests()
 	testCluster.RunTests()
-
-	// CLUSTER CONFIG
-	testClusterConfig := common.TestModule{
-		GoTest: t,
-		Name: "cluster_config",
-		TerraformDir: "../testdata/aws/eks-auth",
-		Setup: func(tm *common.TestModule) {
-			workingDirectory, err := os.Getwd()
-			if err != nil {
-				t.Fatalf("Failed to get working directory: %s", err)
-			}
-			tm.SetTerraformVar("cluster_name", testCluster.GetTerraformVar("cluster"))
-			tm.SetTerraformVar("region", "us-east-1")
-			tm.SetTerraformVar("aws_assume_role_arn", assumeIamRole)
-			tm.SetTerraformVar("kubeconfig_path", workingDirectory)
-		},
-		Tests: createEksClusterConfig,
-	}
-	defer testClusterConfig.TeardownTests()
-	testClusterConfig.RunTests()
 
 	// NAMESPACE
 	testNamespace := common.TestModule{
@@ -61,7 +44,7 @@ func TestEksCluster(t *testing.T) {
 		Name: "namespace",
 		TerraformDir: "../testdata/common/namespace",
 		Setup: func(tm *common.TestModule) {
-			tm.SetTerraformVar("kube_config_path", testClusterConfig.GetTerraformOutput("kube_config_path"))
+			tm.SetTerraformVar("kube_config_path", testCluster.GetTerraformOutput("kubeconfig"))
 			common.NamespaceSetup(tm)
 		},
 		Tests: common.NamespaceTests,
@@ -78,7 +61,7 @@ func TestEksCluster(t *testing.T) {
 			tm.SetTerraformVar("namespace", testNamespace.GetTerraformVar("namespace"))
 			tm.SetTerraformVar("tiller_cluster_role_binding", "NA")
 			tm.SetTerraformVar("tiller_service_account", testNamespace.GetTerraformOutput("tiller_service_account"))
-			tm.SetTerraformVar("kube_config_path", testClusterConfig.GetTerraformOutput("kube_config_path"))
+			tm.SetTerraformVar("kube_config_path", testCluster.GetTerraformOutput("kubeconfig"))
 		},
 		Tests: common.CreateCertManager,
 		Teardown: common.DestroyCertManager,
@@ -92,7 +75,7 @@ func TestEksCluster(t *testing.T) {
 		Name: "ingress",
 		TerraformDir: "../testdata/lead/toolchain-ingress",
 		Setup: func(tm *common.TestModule) {
-			tm.SetTerraformVar("kube_config_path", testClusterConfig.GetTerraformOutput("kube_config_path"))
+			tm.SetTerraformVar("kube_config_path", testCluster.GetTerraformOutput("kubeconfig"))
 			tm.SetTerraformVar("tiller_service_account", testNamespace.GetTerraformOutput("tiller_service_account"))
 		
 			tm.SetTerraformVar("namespace", testNamespace.GetTerraformVar("namespace"))
@@ -112,7 +95,7 @@ func TestEksCluster(t *testing.T) {
 		TerraformDir: "../testdata/tools/sdm",
 		Setup: func(tm *common.TestModule) {
 			tm.SetTerraformVar("tiller_service_account", testNamespace.GetTerraformOutput("tiller_service_account"))
-			tm.SetTerraformVar("kube_config_path", testClusterConfig.GetTerraformOutput("kube_config_path"))
+			tm.SetTerraformVar("kube_config_path", testCluster.GetTerraformOutput("kubeconfig"))
 
 			tm.SetTerraformVar("product_stack", "aws")
 			tm.SetTerraformVar("namespace", testNamespace.GetTerraformVar("namespace"))
@@ -127,11 +110,4 @@ func TestEksCluster(t *testing.T) {
 	}
 	defer testSdm.TeardownTests()
 	testSdm.RunTests()
-}
-
-func createEksClusterConfig(tm *common.TestModule) {
-	// tm.SetString("clusterEndpoint", tm.GetTerraformOutput("cluster_endpoint"))
-	// tm.SetString("clusterCertificateAuthorityData", tm.GetTerraformOutput("cluster_certificate_authority_data"))
-	// tm.SetString("clusterToken", tm.GetTerraformOutput("cluster_token"))
-	tm.SetStringGlobal(common.KubeConfigPath, tm.GetTerraformOutput("kube_config_path"))
 }

@@ -11,20 +11,20 @@ EOF
   tags = {
     "Cluster" = var.cluster
   }
-  
+
   map_roles = [
     {
-      rolearn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/Administrator"
+      rolearn  = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/Administrator"
       username = "administrator"
       groups   = ["system:masters"]
     },
     {
-      rolearn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/Developer"
+      rolearn  = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/Developer"
       username = "developer"
       groups   = ["system:masters"]
     },
     {
-      rolearn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${aws_iam_role.workspace_role.name}"
+      rolearn  = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${aws_iam_role.workspace_role.name}"
       username = "user"
       groups   = ["system:authenticated"]
     },
@@ -36,23 +36,23 @@ data "aws_availability_zones" "available" {
 
 
 module "vpc" {
-  source             = "terraform-aws-modules/vpc/aws"
-  version            = "2.7.0"
-  name               = var.cluster
-  cidr               = "10.0.0.0/16"
-  azs                = [data.aws_availability_zones.available.names[0],
-                        data.aws_availability_zones.available.names[1],
-                        data.aws_availability_zones.available.names[2],
-                        data.aws_availability_zones.available.names[0],
-                        data.aws_availability_zones.available.names[1],
-                        data.aws_availability_zones.available.names[2]]
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "2.7.0"
+  name    = var.cluster
+  cidr    = "10.0.0.0/16"
+  azs = [data.aws_availability_zones.available.names[0],
+    data.aws_availability_zones.available.names[1],
+    data.aws_availability_zones.available.names[2],
+    data.aws_availability_zones.available.names[0],
+    data.aws_availability_zones.available.names[1],
+  data.aws_availability_zones.available.names[2]]
   // First 3 subnets are for EKS control plane, second 3 subnets are for nodes
-  private_subnets    = ["10.0.1.0/24",
-                        "10.0.2.0/24",
-                        "10.0.3.0/24",
-                        "10.0.64.0/18",
-                        "10.0.128.0/18",
-                        "10.0.192.0/18"]
+  private_subnets = ["10.0.1.0/24",
+    "10.0.2.0/24",
+    "10.0.3.0/24",
+    "10.0.64.0/18",
+    "10.0.128.0/18",
+  "10.0.192.0/18"]
   public_subnets     = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
   enable_nat_gateway = true
   single_nat_gateway = true
@@ -117,102 +117,104 @@ resource "aws_security_group" "elb" {
 }
 
 module "eks" {
-  source                               = "terraform-aws-modules/eks/aws"
-  version                              = "7.0.1"
-  cluster_version                      = "1.14"
+  source                                       = "terraform-aws-modules/eks/aws"
+  version                                      = "8.0.0"
+  cluster_version                              = "1.14"
+  cluster_name                                 = var.cluster
+  subnets                                      = [module.vpc.private_subnets[0], module.vpc.private_subnets[1], module.vpc.private_subnets[2]]
+  tags                                         = local.tags
+  vpc_id                                       = module.vpc.vpc_id
+  worker_additional_security_group_ids         = [aws_security_group.worker.id]
+  map_roles                                    = local.map_roles
+  write_kubeconfig                             = var.write_kubeconfig
+  permissions_boundary                         = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${aws_iam_policy.workspace_role_boundary.name}"
+  manage_worker_iam_resources                  = true
+  manage_worker_autoscaling_policy             = true
+  attach_worker_autoscaling_policy             = false
+  kubeconfig_aws_authenticator_additional_args = var.kubeconfig_aws_authenticator_additional_args
+
   #cluster_enabled_log_types            = ["api","audit","authenticator","controllerManager","scheduler"]
-  cluster_name                         = var.cluster
-  subnets                              = [module.vpc.private_subnets[0],module.vpc.private_subnets[1],module.vpc.private_subnets[2]]
-  tags                                 = local.tags
-  vpc_id                               = module.vpc.vpc_id
-  worker_additional_security_group_ids = [aws_security_group.worker.id]
-  map_roles                            = local.map_roles
-  write_kubeconfig                     = false
-  permissions_boundary                 = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${aws_iam_policy.workspace_role_boundary.name}"
-  manage_worker_iam_resources          = true
-  manage_worker_autoscaling_policy     = true
-  attach_worker_autoscaling_policy     = false
 
   workers_additional_policies = [
     "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
 
     // TODO: remove the following policy from the worker node role once terraform is bumped 
     //       to version that includes fix for: https://github.com/hashicorp/terraform/issues/22992
-    aws_iam_policy.operator_jenkins.arn 
+    aws_iam_policy.operator_jenkins.arn
   ]
 
   worker_groups = [
     {
-      name                  = "essential0"
-      instance_type         = var.essential_instance_type
-      subnets               = [module.vpc.private_subnets[3],module.vpc.private_subnets[4],module.vpc.private_subnets[5]]
-      asg_min_size          = var.essential_asg_min_size
-      asg_desired_capacity  = var.essential_asg_desired_capacity
-      asg_max_size          = var.essential_asg_max_size
-      asg_recreate_on_change= true
-      bootstrap_extra_args  = "--enable-docker-bridge 'true'"
-      key_name              = var.key_name
-      autoscaling_enabled   = true
-      protect_from_scale_in = var.protect_from_scale_in
-      enabled_metrics       = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]
-      pre_userdata          = local.ssm_init
-      kubelet_extra_args    = "--node-labels=kubernetes.io/lifecycle=essential --register-with-taints=${var.essential_taint_key}=true:NoSchedule"
+      name                   = "essential0"
+      instance_type          = var.essential_instance_type
+      subnets                = [module.vpc.private_subnets[3], module.vpc.private_subnets[4], module.vpc.private_subnets[5]]
+      asg_min_size           = var.essential_asg_min_size
+      asg_desired_capacity   = var.essential_asg_desired_capacity
+      asg_max_size           = var.essential_asg_max_size
+      asg_recreate_on_change = true
+      bootstrap_extra_args   = "--enable-docker-bridge 'true'"
+      key_name               = var.key_name
+      autoscaling_enabled    = true
+      protect_from_scale_in  = var.protect_from_scale_in
+      enabled_metrics        = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]
+      pre_userdata           = local.ssm_init
+      kubelet_extra_args     = "--node-labels=kubernetes.io/lifecycle=essential --register-with-taints=${var.essential_taint_key}=true:NoSchedule"
     }
   ]
 
   worker_groups_launch_template = [
     {
-      name                    = "preemptible0"
-      override_instance_types = var.preemptible_instance_types
-      subnets                 = [module.vpc.private_subnets[3]]
-      asg_min_size            = var.preemptible_asg_min_size
-      asg_desired_capacity    = var.preemptible_asg_desired_capacity
-      asg_max_size            = var.preemptible_asg_max_size
-      asg_recreate_on_change  = true
-      bootstrap_extra_args    = "--enable-docker-bridge 'true'"
-      key_name                = var.key_name
-      autoscaling_enabled     = true
-      protect_from_scale_in   = var.protect_from_scale_in
-      enabled_metrics         = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]      
-      pre_userdata            = local.ssm_init
-      kubelet_extra_args      = "--node-labels=kubernetes.io/lifecycle=preemptible"
-      on_demand_base_capacity = 0
+      name                                     = "preemptible0"
+      override_instance_types                  = var.preemptible_instance_types
+      subnets                                  = [module.vpc.private_subnets[3]]
+      asg_min_size                             = var.preemptible_asg_min_size
+      asg_desired_capacity                     = var.preemptible_asg_desired_capacity
+      asg_max_size                             = var.preemptible_asg_max_size
+      asg_recreate_on_change                   = true
+      bootstrap_extra_args                     = "--enable-docker-bridge 'true'"
+      key_name                                 = var.key_name
+      autoscaling_enabled                      = true
+      protect_from_scale_in                    = var.protect_from_scale_in
+      enabled_metrics                          = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]
+      pre_userdata                             = local.ssm_init
+      kubelet_extra_args                       = "--node-labels=kubernetes.io/lifecycle=preemptible"
+      on_demand_base_capacity                  = 0
       on_demand_percentage_above_base_capacity = var.on_demand_percentage
     },
     {
-      name                    = "preemptible1"
-      override_instance_types = var.preemptible_instance_types
-      subnets                 = [module.vpc.private_subnets[4]]
-      asg_min_size            = var.preemptible_asg_min_size
-      asg_desired_capacity    = var.preemptible_asg_desired_capacity
-      asg_max_size            = var.preemptible_asg_max_size
-      asg_recreate_on_change  = true
-      bootstrap_extra_args    = "--enable-docker-bridge 'true'"
-      key_name                = var.key_name
-      autoscaling_enabled     = true
-      protect_from_scale_in   = var.protect_from_scale_in
-      enabled_metrics         = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]      
-      pre_userdata            = local.ssm_init
-      kubelet_extra_args      = "--node-labels=kubernetes.io/lifecycle=preemptible"
-      on_demand_base_capacity = 0
+      name                                     = "preemptible1"
+      override_instance_types                  = var.preemptible_instance_types
+      subnets                                  = [module.vpc.private_subnets[4]]
+      asg_min_size                             = var.preemptible_asg_min_size
+      asg_desired_capacity                     = var.preemptible_asg_desired_capacity
+      asg_max_size                             = var.preemptible_asg_max_size
+      asg_recreate_on_change                   = true
+      bootstrap_extra_args                     = "--enable-docker-bridge 'true'"
+      key_name                                 = var.key_name
+      autoscaling_enabled                      = true
+      protect_from_scale_in                    = var.protect_from_scale_in
+      enabled_metrics                          = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]
+      pre_userdata                             = local.ssm_init
+      kubelet_extra_args                       = "--node-labels=kubernetes.io/lifecycle=preemptible"
+      on_demand_base_capacity                  = 0
       on_demand_percentage_above_base_capacity = var.on_demand_percentage
     },
     {
-      name                    = "preemptible2"
-      override_instance_types = var.preemptible_instance_types
-      subnets                 = [module.vpc.private_subnets[5]]
-      asg_min_size            = var.preemptible_asg_min_size
-      asg_desired_capacity    = var.preemptible_asg_desired_capacity
-      asg_max_size            = var.preemptible_asg_max_size
-      asg_recreate_on_change  = true
-      bootstrap_extra_args    = "--enable-docker-bridge 'true'"
-      key_name                = var.key_name
-      autoscaling_enabled     = true
-      protect_from_scale_in   = var.protect_from_scale_in
-      enabled_metrics         = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]      
-      pre_userdata            = local.ssm_init
-      kubelet_extra_args      = "--node-labels=kubernetes.io/lifecycle=preemptible"
-      on_demand_base_capacity = 0
+      name                                     = "preemptible2"
+      override_instance_types                  = var.preemptible_instance_types
+      subnets                                  = [module.vpc.private_subnets[5]]
+      asg_min_size                             = var.preemptible_asg_min_size
+      asg_desired_capacity                     = var.preemptible_asg_desired_capacity
+      asg_max_size                             = var.preemptible_asg_max_size
+      asg_recreate_on_change                   = true
+      bootstrap_extra_args                     = "--enable-docker-bridge 'true'"
+      key_name                                 = var.key_name
+      autoscaling_enabled                      = true
+      protect_from_scale_in                    = var.protect_from_scale_in
+      enabled_metrics                          = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]
+      pre_userdata                             = local.ssm_init
+      kubelet_extra_args                       = "--node-labels=kubernetes.io/lifecycle=preemptible"
+      on_demand_base_capacity                  = 0
       on_demand_percentage_above_base_capacity = var.on_demand_percentage
     },
   ]
@@ -241,8 +243,8 @@ resource "aws_s3_bucket" "tfstates" {
   }
 
   tags = {
-    Name        = "SDM Operator Terraform States"
-    ManagedBy   = "Terraform"
-    Cluster     = "${var.cluster}"
+    Name      = "SDM Operator Terraform States"
+    ManagedBy = "Terraform"
+    Cluster   = "${var.cluster}"
   }
 }
