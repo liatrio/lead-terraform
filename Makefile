@@ -35,6 +35,8 @@ validate:
 clean:
 	@find . -type d -name ".terragrunt-cache" -prune -exec rm -rf {} \;
 	@find . -type d -name ".terraform" -prune -exec rm -rf {} \;
+	@find . -type f -name "terraform.tfstate" -prune -exec rm {} \;
+	@find . -type f -name "terraform.tfstate.backup" -prune -exec rm {} \;
 
 kubeconfig-aws:
 	@aws-vault exec $(AWS_PROFILE) -- aws eks update-kubeconfig --name lead
@@ -59,10 +61,6 @@ test:
 
 test-aws: 
 	@cd tests && go test liatr.io/lead-terraform/tests/aws -timeout 90m -v --count=1
-
-test-clean:
-	@rm -r tests/testdata/*/*/.terraform
-	@rm tests/testdata/*/*/terraform.tfstate*
 
 build_keycloak_provider:
 TF_KEYCLOAK_VERSION = 1.11.1
