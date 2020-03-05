@@ -28,6 +28,8 @@ validate:
 	@terraform validate $(TF_VALIDATE_ARGS) stacks/environment-local
 	@terraform init -backend=false stacks/product-aws
 	@terraform validate $(TF_VALIDATE_ARGS) stacks/product-aws
+	@terraform init -backend=false stacks/product-local
+	@terraform validate $(TF_VALIDATE_ARGS) stacks/product-local
 
 %: environments/%
 	cd $< && terragrunt $(COMMAND) 
