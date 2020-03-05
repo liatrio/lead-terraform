@@ -9,6 +9,11 @@ provider "kubernetes" {
   config_context   = var.config_context
 }
 
+provider "aws" {
+  version = ">= 2.29.0"
+  region  = var.region
+}
+
 provider "helm" {
   alias           = "staging"
   version         = "0.10.4"
@@ -77,5 +82,6 @@ module "product-aws" {
     helm.staging          = helm.staging
     kubernetes.production = kubernetes.production
     helm.production       = helm.production
+    aws                   = aws
   }
 }
