@@ -34,6 +34,12 @@ pipeline {
       }
     }
     stage('Test Terraform') {
+      when {
+        anyOf {
+          branch 'master'
+          branch 'PR-*'
+        }
+      }
       steps {
         container('aws') {
           script {
