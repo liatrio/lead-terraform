@@ -15,7 +15,7 @@ variable "key_name" {
 }
 
 variable "preemptible_instance_types" {
-  type    = list
+  type = list
 }
 
 variable "preemptible_asg_min_size" {}
@@ -38,16 +38,21 @@ variable "essential_taint_key" {
 
 variable "on_demand_percentage" {}
 
+variable "workers_additional_policies" {
+  default = []
+}
+
+# Settings for testing environment
 variable "protect_from_scale_in" {
   default = true
 }
 
 variable "write_kubeconfig" {
-  description = "Flag to create kubeconfig for cluster. Used for testing environments."
-  default = false
+  description = "Flag to create kubeconfig for cluster."
+  default     = false
 }
 
 variable "kubeconfig_aws_authenticator_additional_args" {
-  description = "List of arguments to pass to aws authenticator in kubeconfig. Used for testing environments."
-  default = []
+  description = "List of arguments to pass to aws authenticator in kubeconfig"
+  default     = []
 }

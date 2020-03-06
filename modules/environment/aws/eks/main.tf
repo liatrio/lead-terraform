@@ -135,13 +135,7 @@ module "eks" {
 
   #cluster_enabled_log_types            = ["api","audit","authenticator","controllerManager","scheduler"]
 
-  workers_additional_policies = [
-    "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
-
-    // TODO: remove the following policy from the worker node role once terraform is bumped 
-    //       to version that includes fix for: https://github.com/hashicorp/terraform/issues/22992
-    aws_iam_policy.operator_jenkins.arn
-  ]
+  workers_additional_policies = concat(["arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"], var.workers_additional_policies)
 
   worker_groups = [
     {

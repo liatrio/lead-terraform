@@ -26,7 +26,7 @@ provider "helm" {
 }
 
 module "cert-manager" {
-  source = "../../../../modules/apps/cert-manager"
+  source = "../../../../modules/tools/cert-manager"
   namespace = var.namespace
   tiller_cluster_role_binding = var.tiller_cluster_role_binding
 }
