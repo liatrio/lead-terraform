@@ -13,3 +13,6 @@ provider "kubernetes" {
 provider "helm" {
   alias = "production"
 }
+
+provider "aws" {
+}
