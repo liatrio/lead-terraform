@@ -28,20 +28,4 @@ func TestTerraformForNamespace(t *testing.T) {
 	}
 	defer testNamespace.TeardownTests()
 	testNamespace.RunTests()
-
-
-
-	// kubeConfigPath := k8s.CopyHomeKubeConfigToTemp(t)
-	// defer os.Remove(kubeConfigPath)
-
-	// terraformOptions := &terraform.Options{
-	// 	TerraformDir: "../../modules/common/namespace",
-	// 	Vars: map[string]interface{}{
-	// 		// "namespace": expectedNamespace,
-	// 	},
-	// 	NoColor: true,
-	// }
-
-	// defer common.DestroyNamespace(t, terraformOptions)
-	// common.CreateNamespace(t, terraformOptions, kubeConfigPath)
 }
