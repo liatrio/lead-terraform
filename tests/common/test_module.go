@@ -2,7 +2,6 @@ package common
 
 import (
 	"fmt"
-	// "io/ioutil"
 	"os"
 	"testing"
 
@@ -114,4 +113,18 @@ func (tm *TestModule) TeardownTests() {
 
 func (tm *TestModule) getDataPath() string {
 	return tm.TerraformDir
+}
+
+func TestModuleSetStringGlobal(t *testing.T, name string, value string) {
+	tm := TestModule{
+		GoTest: t,
+	}
+	tm.SetStringGlobal(name, value)
+}
+
+func TestModuleGetStringGlobal(t *testing.T, name string) string {
+	tm := TestModule{
+		GoTest: t,
+	}
+	return tm.GetStringGlobal(name)
 }

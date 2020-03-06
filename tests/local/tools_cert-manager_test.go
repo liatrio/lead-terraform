@@ -14,6 +14,12 @@ import (
 
 func TestCertManager(t *testing.T) {
 	t.Parallel()
+	
+	kubeconfig, err := k8s.GetKubeConfigPathE(t)
+	if err != nil {
+		t.Fatal(err)
+	}
+	common.TestModuleSetStringGlobal(t, common.KubeConfigPath, kubeconfig)
 
 	namespaceName := fmt.Sprintf("test-cert-manager-%s", strings.ToLower(random.UniqueId()))
 
@@ -23,17 +29,22 @@ func TestCertManager(t *testing.T) {
 	k8s.CreateNamespace(t, options, namespaceName)
 
 	// TEST CREATE CERT-MANAGER
-	certManagerTerraformOptions := &terraform.Options{
-		TerraformDir: "../../modules/tools/cert-manager",
-		Vars: map[string]interface{}{
-			"namespace": namespaceName,
-			"tiller_cluster_role_binding": "NA",
+	testCertManager := common.TestModule{
+		GoTest: t,
+		Name: "cert_manager",
+		TerraformDir: "../testdata/tools/cert-manager",
+		Setup: func(tm *common.TestModule) {
+			tm.SetTerraformVar("namespace", namespaceName)
+			tm.SetTerraformVar("tiller_cluster_role_binding", "NA")
+			tm.SetTerraformVar("tiller_service_account", "")
+			// tm.SetTerraformVar("tiller_service_account", testNamespace.GetTerraformOutput("tiller_service_account"))
+			tm.SetTerraformVar("kube_config_path", kubeconfig)
 		},
-		NoColor: false,
+		Tests: common.CreateCertManager,
+		Teardown: common.DestroyCertManager,
 	}
-	defer common.DestroyCertManager(t, certManagerTerraformOptions, options)
-	common.CreateCertManager(t, certManagerTerraformOptions, options)
-
+	defer testCertManager.TeardownTests()
+	testCertManager.RunTests()
 
 	// TEST CREATE SELF SIGNED ISSUER
 	selfSignedIssuerTerraformOptions := &terraform.Options{

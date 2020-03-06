@@ -1,8 +1,6 @@
 package common
 
 import(
-	// "testing"
-	// "github.com/gruntwork-io/terratest/modules/terraform"
 	"github.com/gruntwork-io/terratest/modules/k8s"
 )
 
