@@ -8,6 +8,7 @@ variable "domain" {
 }
 
 variable "enabled" {
+  default = true
 }
 
 variable "issuer_name" {

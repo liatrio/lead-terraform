@@ -97,10 +97,9 @@ module "toolchain" {
   source                     = "../../modules/lead/toolchain"
   root_zone_name             = var.root_zone_name
   cluster                    = module.eks.cluster_id
-  cluster_domain             = "${var.cluster}.${var.root_zone_name}"
   namespace                  = var.toolchain_namespace
   image_whitelist            = var.image_whitelist
-  elb_security_group_id      = aws_security_group.elb.id
+  elb_security_group_id      = module.eks.aws_security_group_elb.id
   artifactory_license        = data.aws_ssm_parameter.artifactory_license.value
   keycloak_admin_password    = data.aws_ssm_parameter.keycloak_admin_password.value
   keycloak_postgres_password = data.aws_ssm_parameter.keycloak_postgres_password.value
@@ -115,7 +114,6 @@ module "toolchain" {
   enable_harbor              = var.enable_harbor
   issuer_name                = module.cluster_issuer.issuer_name
   issuer_kind                = module.cluster_issuer.issuer_kind
-  ingress_controller_type    = "LoadBalancer"
   crd_waiter                 = module.infrastructure.crd_waiter
   grafeas_version            = var.grafeas_version
   k8s_storage_class          = var.k8s_storage_class
@@ -139,6 +137,21 @@ module "toolchain" {
   }
 }
 
+module "toolchain_ingress" {
+  source = "../../modules/lead/toolchain-ingress"
+  namespace = var.toolchain_namespace
+  cluster_domain = "${var.cluster}.${var.root_zone_name}"
+  issuer_name                = module.cluster_issuer.issuer_name
+  issuer_kind                = module.cluster_issuer.issuer_kind
+  ingress_controller_type    = "LoadBalancer"
+  crd_waiter                 = module.infrastructure.crd_waiter
+
+  providers = {
+    helm       = helm.toolchain
+    kubernetes = kubernetes
+  }
+}
+
 module "sdm" {
   source                      = "../../modules/lead/sdm"
   root_zone_name              = var.root_zone_name
@@ -149,7 +162,7 @@ module "sdm" {
   product_version             = var.product_version
   slack_bot_token             = data.aws_ssm_parameter.slack_bot_token.value
   slack_client_signing_secret = data.aws_ssm_parameter.slack_client_signing_secret.value
-  workspace_role_name         = aws_iam_role.workspace_role.name
+  workspace_role_name         = module.eks.workspace_iam_role.name
   product_stack               = var.product_stack
 
   operator_slack_service_account_annotations = {
