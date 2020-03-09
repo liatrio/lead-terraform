@@ -21,14 +21,6 @@ variable "elb_security_group_id" {
   default = ""
 }
 
-variable "ingress_controller_type" {
-  default = "LoadBalancer"
-}
-
-variable "ingress_external_traffic_policy" {
-  default = ""
-}
-
 variable "grafeas_version" {
 }
 
@@ -96,9 +88,6 @@ variable "prometheus_slack_webhook_url" {
 }
 
 variable "prometheus_slack_channel" {
-}
-
-variable "cluster_domain" {
 }
 
 variable "harbor_registry_disk_size" {

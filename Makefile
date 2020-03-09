@@ -28,6 +28,8 @@ validate:
 	@terraform validate $(TF_VALIDATE_ARGS) stacks/environment-local
 	@terraform init -backend=false stacks/product-aws
 	@terraform validate $(TF_VALIDATE_ARGS) stacks/product-aws
+	@terraform init -backend=false stacks/product-local
+	@terraform validate $(TF_VALIDATE_ARGS) stacks/product-local
 
 %: environments/%
 	cd $< && terragrunt $(COMMAND) 
@@ -35,6 +37,9 @@ validate:
 clean:
 	@find . -type d -name ".terragrunt-cache" -prune -exec rm -rf {} \;
 	@find . -type d -name ".terraform" -prune -exec rm -rf {} \;
+	@find . -type d -name ".test-data" -prune -exec rm -rf {} \;
+	@find . -type f -name "terraform.tfstate" -prune -exec rm {} \;
+	@find . -type f -name "terraform.tfstate.backup" -prune -exec rm {} \;
 
 kubeconfig-aws:
 	@aws-vault exec $(AWS_PROFILE) -- aws eks update-kubeconfig --name lead
@@ -54,9 +59,16 @@ endif
 	git tag -a -m "releasing $(NEW_VERSION)" $(NEW_VERSION)
 	git push origin $(NEW_VERSION)
 
+test: 
+	@cd tests && go test liatr.io/lead-terraform/tests/local -timeout 90m -v --count=1
+
+test-aws: 
+	@cd tests && go test liatr.io/lead-terraform/tests/aws -timeout 90m -v --count=1
+
+build_keycloak_provider:
 TF_KEYCLOAK_VERSION = 1.11.1
 TF_KEYCLOAK_PLATFORM = $(shell go env GOOS)_$(shell go env GOARCH)
-plugins: 
+plugins:
 	mkdir -p ~/.terraform.d/plugins
 	curl -LsO https://github.com/mrparkers/terraform-provider-keycloak/releases/download/$(TF_KEYCLOAK_VERSION)/terraform-provider-keycloak_v$(TF_KEYCLOAK_VERSION)_$(TF_KEYCLOAK_PLATFORM).zip
 	unzip -d terraform-provider-keycloak_v$(TF_KEYCLOAK_VERSION) terraform-provider-keycloak*.zip -x "../LICENSE"

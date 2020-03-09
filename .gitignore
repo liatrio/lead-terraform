@@ -1,12 +1,13 @@
 .terragrunt-cache/
 .terraform/
 tf.plan
-terraform.tfstate
+terraform.tfstate*
 local/*local*.tfvars
 local*.tfvars
+.test-data
 .DS_Store
 .idea
-tests/
+.vscode
 
 # Ignore all secrets files, keep directory placeholder
 secrets/*

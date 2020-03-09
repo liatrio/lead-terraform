@@ -15,7 +15,8 @@ brew bundle
 ```
 
 ## Setup
-You'll need to create files in the `secrets/` directory with a file for each environment (e.g. liatrio-sandbox.tfvars) containing the secrets for that account.
+
+You'll need to create a `secrets/` directory with a file for each environment (e.g. liatrio-sandbox.tfvars) containing the secrets for that account.
 
 Required Terraform variables: See [Slack Operator](https://github.com/liatrio/lead-sdm-operators/tree/master/operator-slack) to setup Slack App.
 
@@ -29,6 +30,46 @@ prometheus_slack_webhook_url = "Some Slack Webhook Url"
 ```
 
 See instructions for [creating slack app](https://github.com/liatrio/lead-sdm-operators/tree/master/operator-slack)
+
+## Testing
+
+The `tests` folder contains functional test which apply individual Terraform modules and verify the final state. The tests use [Terratest](https://terratest.gruntwork.io/) which uses golang tests to trigger Terraform and verify the outcome. The tests can be run with a local Kubernetes cluster (docker-for-desktop, minikube, microk8s, etc) or create an EKS cluster and run the tests there.
+
+### Local tests
+
+Make sure your current Kubernetes context points to your local cluster
+```shell
+make test
+```
+
+### AWS tests
+
+The AWS tests create an EKS cluster, run the tests against the cluster and teardown the cluster. This usually takes 25 to 30 minutes. 
+
+The tests will not interfere with other clusters in the same account and multiple tests can safely run at the same time. You should run the tests in the `sandbox` account and you must use a role with sufficient privileges (administrator).
+
+```shell
+aws-vault exec AWS_PROFILE -- make test-aws
+```
+
+The tests will attempt to teardown the cluster on failure but sometimes it is necessary to manually delete the EKS cluster and VPC.
+
+It is possible to disable teardown of the cluster so you can re-run the tests against the same cluster by setting environmental variables.
+
+```
+# disable teardown of the cluster
+export SKIP_eks_cluster_teardown=true
+aws-vault exec AWS_PROFILE -- make test-aws
+
+# now disable creating a new cluster and run the tests again
+export SKIP_eks_cluster_run=true
+aws-vault exec AWS_PROFILE -- make test-aws
+
+# now enable teardown of the cluster and run the tests again to clean up
+unset SKIP_eks_cluster_teardown
+aws-vault exec AWS_PROFILE -- make test-aws
+unset SKIP_eks_cluster_run
+```
 
 ## Running locally
 

@@ -70,7 +70,7 @@ resource "kubernetes_cluster_role" "nginx_ingress_cluster_role" {
 resource "kubernetes_service_account" "jenkins_nginx_ingress_service_account" {
   metadata {
     name      = "jenkins-nginx-ingress"
-    namespace =  module.toolchain_namespace.name
+    namespace =  var.namespace
   }
   automount_service_account_token = true
 }
@@ -96,7 +96,7 @@ module "jenkins_wildcard" {
   source = "../../common/certificates"
 
   name      = "jenkins-wildcard"
-  namespace = module.toolchain_namespace.name
+  namespace = var.namespace
   domain    = "jenkins.${var.cluster_domain}"
   enabled   = true
 
@@ -108,14 +108,14 @@ module "jenkins_wildcard" {
 
 module "jenkins_ingress" {
   source                          = "../../common/nginx-ingress"
-  namespace                       = module.toolchain_namespace.name
+  namespace                       = var.namespace
   name                            = "jenkins"
   ingress_controller_type         = var.ingress_controller_type
   ingress_external_traffic_policy = var.ingress_external_traffic_policy
   ingress_class                   = "jenkins-nginx"
   service_account                 = kubernetes_service_account.jenkins_nginx_ingress_service_account.metadata[0].name
   cluster_wide                    = true
-  default_certificate             = "${module.toolchain_namespace.name}/${module.jenkins_wildcard.cert_secret_name}"
+  default_certificate             = "${var.namespace}/${module.jenkins_wildcard.cert_secret_name}"
 }
 
 // Ingress controller for toolchain namespace
@@ -123,7 +123,7 @@ module "jenkins_ingress" {
 resource "kubernetes_service_account" "toolchain_nginx_ingress_service_account" {
   metadata {
     name      = "toolchain-nginx-ingress"
-    namespace =  module.toolchain_namespace.name
+    namespace =  var.namespace
   }
   automount_service_account_token = true
 }
@@ -148,7 +148,7 @@ module "toolchain_wildcard" {
   source = "../../common/certificates"
 
   name      = "toolchain-wildcard"
-  namespace = module.toolchain_namespace.name
+  namespace = var.namespace
   domain    = "toolchain.${var.cluster_domain}"
   enabled   = true
 
@@ -160,12 +160,12 @@ module "toolchain_wildcard" {
 
 module "toolchain_ingress" {
   source                          = "../../common/nginx-ingress"
-  namespace                       = module.toolchain_namespace.name
+  namespace                       = var.namespace
   name                            = "toolchain"
   ingress_controller_type         = var.ingress_controller_type
   ingress_external_traffic_policy = var.ingress_external_traffic_policy
   ingress_class                   = "toolchain-nginx"
   service_account                 = kubernetes_service_account.toolchain_nginx_ingress_service_account.metadata[0].name
   cluster_wide                    = true
-  default_certificate             = "${module.toolchain_namespace.name}/${module.toolchain_wildcard.cert_secret_name}"
+  default_certificate             = "${var.namespace}/${module.toolchain_wildcard.cert_secret_name}"
 }
