@@ -46,7 +46,7 @@ resource "kubernetes_cluster_role" "tiller_cluster_role" {
     name = "toolchain-tiller-manager"
   }
   rule {
-    api_groups = ["", "batch", "extensions", "apps", "stable.liatr.io", "policy", "apiextensions.k8s.io", "services/proxy"]
+    api_groups = ["", "batch", "extensions", "apps", "sdm.liatr.io", "stable.liatr.io", "policy", "apiextensions.k8s.io", "services/proxy"]
     resources  = ["*"]
     verbs      = ["*"]
   }
