@@ -20,32 +20,3 @@ variable "config_context" {
 variable "load_config_file" {
   default = false
 }
-
-variable "essential_taint_key" {
-  default = "EssentialOnly"
-}
-
-variable "enable_istio" {
-  default = true
-}
-
-variable "enable_keycloak" {
-  default = false
-}
-
-variable "enable_harbor" {
-  default = true
-}
-
-variable "enable_artifactory" {
-  default = true
-}
-
-variable "builder_images_version" {
-}
-variable "jenkins_image_version" {
-}
-variable "toolchain_image_repo" {
-}
-variable "product_image_repo" {
-}
