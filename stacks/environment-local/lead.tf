@@ -23,7 +23,8 @@ module "infrastructure" {
   external_dns_chart_values = data.template_file.external_dns_values.rendered
 
   providers = {
-    helm = helm.system
+    kubernetes = kubernetes
+    helm       = helm.system
   }
 }
 
@@ -97,6 +98,7 @@ module "sdm" {
   }
 
   providers = {
+    kubernetes     = kubernetes
     helm.system    = helm.toolchain
     helm.toolchain = helm.toolchain
   }
@@ -117,6 +119,7 @@ module "dashboard" {
   crd_waiter        = module.infrastructure.crd_waiter
 
   providers = {
-    helm = helm.toolchain
+    kubernetes = kubernetes
+    helm       = helm.toolchain
   }
 }

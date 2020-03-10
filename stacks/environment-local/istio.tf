@@ -35,7 +35,8 @@ module "istio_system" {
   k8s_storage_class     = var.k8s_storage_class
   crd_waiter            = null_resource.istio_init_delay.id
   providers = {
-    helm = helm.system
+    kubernetes = kubernetes
+    helm       = helm.system
   }
 }
 

@@ -22,6 +22,7 @@ resource "helm_release" "prometheus_operator" {
   version    = "8.3.3"
   timeout    = 600
   wait       = true
+  provider   = helm.toolchain
 
   set_sensitive {
     name = "grafana.adminPassword"

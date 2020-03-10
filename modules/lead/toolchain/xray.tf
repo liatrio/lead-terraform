@@ -38,6 +38,7 @@ resource "helm_release" "xray" {
   chart      = "xray"
   version    = "1.1.0"
   timeout    = 1200
+  provider   = helm.toolchain
 
   // set_sensitive {
   //   name  = "xray.license.licenseKey"
