@@ -43,7 +43,7 @@ resource "helm_release" "cert_manager" {
   chart      = "jetstack/cert-manager"
   repository = data.helm_repository.cert_manager.name
   timeout    = 120
-  version    = "v0.11.0"
+  version    = "v0.13.1"
   wait       = true
 
   set {
