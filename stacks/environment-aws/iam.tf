@@ -155,6 +155,11 @@ resource "aws_iam_role_policy" "operator-slack" {
         "cloud9:DescribeEnvironmentMemberships", "cloud9:DescribeEnvironments"
       ],
       "Resource": ["*"]
+    },
+    {
+      "Effect": "Allow",
+      "Action": "codecommit:CreateRepository",
+      "Resource": "*"
     }
   ]
 }

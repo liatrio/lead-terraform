@@ -118,6 +118,11 @@ resource "aws_iam_role_policy" "workspace_role_policy" {
       "Resource": "*"
     },
     {
+      "Effect": "Allow",
+      "Action": "codecommit:GitPush",
+      "Resource": "*"
+    },
+    {
       "Action": [
         "ec2:ModifyVolume"
       ],
