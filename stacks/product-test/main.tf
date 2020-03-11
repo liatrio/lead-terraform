@@ -51,6 +51,8 @@ module "product_base" {
 }
 
 resource "kubernetes_pod" "nginx" {
+  provider = "kubernetes.production"
+
   metadata {
     name = "nginx"
     namespace = module.product_base.production_namespace
