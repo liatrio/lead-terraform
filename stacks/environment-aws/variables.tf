@@ -177,3 +177,6 @@ variable "dashboard_elasticsearch_replicas" {
 
 variable "product_stack" {
 }
+
+variable "enable-aws-codestar" {
+}

@@ -164,6 +164,7 @@ module "sdm" {
   slack_client_signing_secret = data.aws_ssm_parameter.slack_client_signing_secret.value
   workspace_role_name         = module.eks.workspace_iam_role.name
   product_stack               = var.product_stack
+  enable_aws_event_mapper     = var.enable-aws-codestar
 
   operator_slack_service_account_annotations = {
     "eks.amazonaws.com/role-arn" = aws_iam_role.operator_slack_service_account.arn
