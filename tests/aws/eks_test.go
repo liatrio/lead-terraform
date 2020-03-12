@@ -73,6 +73,22 @@ func TestSetupEks(t *testing.T) {
 	}
 	defer testCertManager.TeardownTests()
 	testCertManager.RunTests()
+	
+	// TEST CREATE SELF SIGNED ISSUER
+	testIssuer := common.TestModule{
+		GoTest: t,
+		Name: "issuer",
+		TerraformDir: "../testdata/common/cert-issuer",
+		Setup: func(tm *common.TestModule)  {
+			tm.SetTerraformVar("kube_config_path", testCluster.GetTerraformOutput("kubeconfig"))
+			tm.SetTerraformVar("namespace", testNamespace.GetTerraformVar("namespace"))
+			tm.SetTerraformVar("issuer_kind", "Issuer")
+			tm.SetTerraformVar("issuer_name", "test-issuer")
+			tm.SetTerraformVar("issuer_type", "selfSigned")
+		},
+	}
+	defer testIssuer.TeardownTests()
+	testIssuer.RunTests()
 
 	// Ingress Controller
 	testIngressController := common.TestModule{
@@ -84,7 +100,7 @@ func TestSetupEks(t *testing.T) {
 			tm.SetTerraformVar("namespace", testNamespace.GetTerraformVar("namespace"))
 			tm.SetTerraformVar("cluster_domain", "tests.lead-terraform.liatr.io")
 			tm.SetTerraformVar("issuer_kind", "ClusterIssuer")
-			tm.SetTerraformVar("issuer_name", "testIssuer")
+			tm.SetTerraformVar("issuer_name", "test-issuer")
 			tm.SetTerraformVar("crd_waiter", "NA")
 		},
 	}

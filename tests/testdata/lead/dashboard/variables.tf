@@ -17,7 +17,9 @@ variable "cluster_domain" {}
 
 variable "dashboard_version" {}
 
-variable "k8s_storage_class" {}
+variable "k8s_storage_class" {
+  default = "gp2"
+}
 
 variable "crd_waiter" {
   default = ""

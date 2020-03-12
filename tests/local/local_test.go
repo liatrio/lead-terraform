@@ -76,7 +76,7 @@ func TestSetup(t *testing.T) {
 			tm.SetTerraformVar("namespace", testNamespace.GetTerraformVar("namespace"))
 			tm.SetTerraformVar("issuer_kind", "Issuer")
 			tm.SetTerraformVar("issuer_name", "test-issuer")
-			// tm.SetTerraformVar("issuer_type", "selfSigned")
+			tm.SetTerraformVar("issuer_type", "selfSigned")
 		},
 	}
 	defer testIssuer.TeardownTests()
