@@ -1,7 +1,5 @@
 variable "kube_config_path" {}
 
-variable "tiller_service_account" {}
-
 variable "namespace" {}
 
 variable "issuer_name" {

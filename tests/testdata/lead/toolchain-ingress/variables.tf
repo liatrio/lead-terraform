@@ -5,8 +5,6 @@ variable "essential_taint_key" {
   default = ""
 }
 
-variable "tiller_service_account" {}
-
 // SDM Module
 variable "namespace" {}
 

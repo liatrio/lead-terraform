@@ -21,7 +21,7 @@ resource "helm_release" "nginx_ingress" {
   count      = var.enabled ? 1 : 0
   repository = data.helm_repository.stable.metadata.0.name
   chart      = "nginx-ingress"
-  version    = "1.24.3"
+  version    = "1.33.5"
   namespace  = var.namespace
   name       = "nginx-ingress-${var.name}"
   timeout    = 600

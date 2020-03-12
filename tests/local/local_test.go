@@ -14,7 +14,9 @@ import (
 	"liatr.io/lead-terraform/tests/common"
 )
 
-func TestLocal(t *testing.T) {
+const Namespace = "namespace"
+
+func TestSetup(t *testing.T) {
 	
 	runtime.GOMAXPROCS(2)
 
@@ -41,12 +43,13 @@ func TestLocal(t *testing.T) {
 			// common.NamespaceSetup(tm)
 			tm.SetTerraformVar("namespace", "toolchain")
 		},
-		Tests: common.NamespaceTests,
+		Tests: func (tm *common.TestModule)  {
+			tm.SetStringGlobal(Namespace, tm.GetTerraformVar("namespace"))
+			common.NamespaceTests(tm)
+		},
 	}
 	defer testNamespace.TeardownTests()
 	testNamespace.RunTests()
-
-	common.TestModuleSetStringGlobal(t, "tiller_service_account", testNamespace.GetTerraformOutput("tiller_service_account"))
 
 	// CERT-MANAGER
 	testCertManager := common.TestModule{
@@ -55,8 +58,6 @@ func TestLocal(t *testing.T) {
 		TerraformDir: "../testdata/tools/cert-manager",
 		Setup: func(tm *common.TestModule) {
 			tm.SetTerraformVar("namespace", testNamespace.GetTerraformVar("namespace"))
-			tm.SetTerraformVar("tiller_cluster_role_binding", "NA")
-			tm.SetTerraformVar("tiller_service_account", testNamespace.GetTerraformOutput("tiller_service_account"))
 			tm.SetTerraformVar("kube_config_path", kubeconfig)
 		},
 		Tests: common.CreateCertManager,
@@ -72,11 +73,10 @@ func TestLocal(t *testing.T) {
 		TerraformDir: "../testdata/common/cert-issuer",
 		Setup: func(tm *common.TestModule)  {
 			tm.SetTerraformVar("kube_config_path", kubeconfig)
-			tm.SetTerraformVar("tiller_service_account", testNamespace.GetTerraformOutput("tiller_service_account"))
 			tm.SetTerraformVar("namespace", testNamespace.GetTerraformVar("namespace"))
 			tm.SetTerraformVar("issuer_kind", "Issuer")
 			tm.SetTerraformVar("issuer_name", "test-issuer")
-			tm.SetTerraformVar("issuer_type", "selfSigned")
+			// tm.SetTerraformVar("issuer_type", "selfSigned")
 		},
 	}
 	defer testIssuer.TeardownTests()
@@ -89,7 +89,6 @@ func TestLocal(t *testing.T) {
 		TerraformDir: "../testdata/lead/toolchain-ingress",
 		Setup: func(tm *common.TestModule) {
 			tm.SetTerraformVar("kube_config_path", kubeconfig)
-			tm.SetTerraformVar("tiller_service_account", testNamespace.GetTerraformOutput("tiller_service_account"))
 		
 			tm.SetTerraformVar("namespace", testNamespace.GetTerraformVar("namespace"))
 			tm.SetTerraformVar("cluster_domain", "tests.lead-terraform.liatr.io")
@@ -103,10 +102,10 @@ func TestLocal(t *testing.T) {
 	testIngressController.RunTests()
 
 	// RUN SUB TESTS
-	t.Run("SubTests", subTests)
+	t.Run("Modules", testModules)
 }
 
-func subTests(t *testing.T) {
+func testModules(t *testing.T) {
 	t.Run("Dashboard", testLeadDashboard)
 	t.Run("SDM", testLeadSdm)
 }
@@ -137,13 +136,11 @@ func testLeadDashboard(t *testing.T) {
 		TerraformDir: "../testdata/lead/dashboard",
 		Setup: func(tm *common.TestModule) {
 			tm.SetTerraformVar("kube_config_path", kubeconfig)
-			tm.SetTerraformVar("tiller_service_account", "")
-			// tm.SetTerraformVar("namespace", testNamespace.GetTerraformVar("namespace"))
-			tm.SetTerraformVar("namespace", "toolchain")
+			tm.SetTerraformVar("namespace", tm.GetStringGlobal(Namespace))
 			tm.SetTerraformVar("root_zone_name", "local")
 			tm.SetTerraformVar("cluster_id", "docker-for-desktop")
 			tm.SetTerraformVar("cluster_domain", "local")
-			tm.SetTerraformVar("dashboard_version", "2.0.1")
+			tm.SetTerraformVar("dashboard_version", common.DashboardVersion)
 			tm.SetTerraformVar("k8s_storage_class", "hostpath")
 			tm.SetTerraformVar("local", "true")
 		},
@@ -173,22 +170,19 @@ func testLeadSdm(t *testing.T) {
 	// testNamespace.RunTests()
 	
 	// LEAD SDM
-	tiller_service_account := common.TestModuleGetStringGlobal(t, "tiller_service_account")
+	// tiller_service_account := common.TestModuleGetStringGlobal(t, "tiller_service_account")
 	testSdm := common.TestModule{
 		GoTest: t,
 		Name: "sdm",
 		TerraformDir: "../testdata/tools/sdm",
 		Setup: func(tm *common.TestModule) {
-			tm.SetTerraformVar("tiller_service_account", tiller_service_account)
 			tm.SetTerraformVar("kube_config_path", kubeconfig)
 
 			tm.SetTerraformVar("product_stack", "aws")
-			// tm.SetTerraformVar("namespace", testNamespace.GetTerraformVar("namespace"))
-			tm.SetTerraformVar("namespace", "toolchain")
-			// tm.SetTerraformVar("system_namespace", testNamespace.GetTerraformVar("namespace"))
-			tm.SetTerraformVar("system_namespace", "toolchain")
-			tm.SetTerraformVar("sdm_version", "2.0.3")
-			tm.SetTerraformVar("product_version", "2.0.0")
+			tm.SetTerraformVar("namespace", tm.GetStringGlobal(Namespace))
+			tm.SetTerraformVar("system_namespace", tm.GetStringGlobal(Namespace))
+			tm.SetTerraformVar("sdm_version", common.LeadSdmVersion)
+			tm.SetTerraformVar("product_version", common.ProductVersion)
 			tm.SetTerraformVar("cluster_id", "docker-desktop")
 			tm.SetTerraformVar("slack_bot_token", "xoxb-1111111111-111111111111-aaaaaaaaaaaaaaaaaaaaaaaa")
 			tm.SetTerraformVar("slack_client_signing_secret", "11111111111111111111111111111111")

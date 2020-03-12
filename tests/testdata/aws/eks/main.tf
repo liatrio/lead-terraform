@@ -15,6 +15,7 @@ module "eks" {
   source                                       = "../../../../modules/environment/aws/eks"
   region                                       = var.region
   cluster                                      = var.cluster
+  cluster_version                              = "1.15"
   system_namespace                             = "default"
   toolchain_namespace                          = "default"
   preemptible_instance_types                   = ["m5.large", "c5.large", "m4.large", "c4.large", "t3.large", "r5.large"]

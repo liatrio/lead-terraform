@@ -1,3 +1,4 @@
+// Package common contains shared resources for terratest tests
 package common
 
 import (
@@ -34,20 +35,20 @@ func (tm *TestModule) GetString(name string) string {
 	return test_structure.LoadString(tm.GoTest, path, name)
 }
 
-func (t *TestModule) SetStringGlobal(name string, value string) {
+func (tm *TestModule) SetStringGlobal(name string, value string) {
 	path, err := os.Getwd()
 	if err != nil {
-		t.GoTest.Fatalf("Failed setting global string '%s'. Could not get working directory: %s", name, err)
+		tm.GoTest.Fatalf("Failed setting global string '%s'. Could not get working directory: %s", name, err)
 	}
-	test_structure.SaveString(t.GoTest, path, name, value)
+	test_structure.SaveString(tm.GoTest, path, name, value)
 }
 
-func (t *TestModule) GetStringGlobal(name string) string {
+func (tm *TestModule) GetStringGlobal(name string) string {
 	path, err := os.Getwd()
 	if err != nil {
-		t.GoTest.Fatalf("Failed getting global string '%s'. Could not get working directory: %s", name, err)
+		tm.GoTest.Fatalf("Failed getting global string '%s'. Could not get working directory: %s", name, err)
 	}
-	return test_structure.LoadString(t.GoTest, path, name)
+	return test_structure.LoadString(tm.GoTest, path, name)
 }
 
 func (tm *TestModule) SetTerraformVar(name string, value string) {
@@ -58,18 +59,18 @@ func (tm *TestModule) GetTerraformVar(name string) string {
 	return tm.terraformOptions.Vars[name].(string)
 }
 
-func (t *TestModule) SetTerraformOptions(terraformOptions *terraform.Options) {
-	path := t.getDataPath()
-	test_structure.SaveTerraformOptions(t.GoTest, path, terraformOptions)
+func (tm *TestModule) SetTerraformOptions(terraformOptions *terraform.Options) {
+	path := tm.getDataPath()
+	test_structure.SaveTerraformOptions(tm.GoTest, path, terraformOptions)
 }
 
-func (t *TestModule) GetTerraformOptions() *terraform.Options {
-	path := t.getDataPath()
-	return test_structure.LoadTerraformOptions(t.GoTest, path)
+func (tm *TestModule) GetTerraformOptions() *terraform.Options {
+	path := tm.getDataPath()
+	return test_structure.LoadTerraformOptions(tm.GoTest, path)
 }
 
-func (t *TestModule) GetTerraformOutput(name string) string {
-	return terraform.Output(t.GoTest, t.terraformOptions, name)
+func (tm *TestModule) GetTerraformOutput(name string) string {
+	return terraform.Output(tm.GoTest, tm.terraformOptions, name)
 }
 
 func (tm *TestModule) RunTests() {
