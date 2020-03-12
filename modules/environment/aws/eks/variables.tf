@@ -56,3 +56,5 @@ variable "kubeconfig_aws_authenticator_additional_args" {
   description = "List of arguments to pass to aws authenticator in kubeconfig"
   default     = []
 }
+
+variable "enable_aws_codestar" {}
