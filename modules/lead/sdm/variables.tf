@@ -52,3 +52,6 @@ variable "operator_jenkins_service_account_annotations" {
   type    = map
   default = {}
 }
+
+variable "enable_aws_event_mapper" {
+}

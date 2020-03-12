@@ -22,3 +22,5 @@ operators:
       value: ${region}
   jenkins:
     serviceAccountAnnotations: ${jenkins_service_account_annotations}
+  aws-event-mapper:
+      enabled: ${enable_aws_event_mapper}
