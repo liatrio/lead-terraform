@@ -133,7 +133,7 @@ func testLeadDashboard(t *testing.T) {
 	testLeadDashboard := common.TestModule{
 		GoTest: t,
 		Name: "dashboard",
-		TerraformDir: "../testdata/tools/dashboard",
+		TerraformDir: "../testdata/lead/dashboard",
 		Setup: func (tm *common.TestModule)  {
 			tm.SetTerraformVar("kube_config_path", tm.GetStringGlobal(common.KubeConfigPath))
 			tm.SetTerraformVar("namespace", tm.GetStringGlobal(Namespace))
