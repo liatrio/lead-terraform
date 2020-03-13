@@ -1,4 +1,5 @@
 resource "aws_s3_bucket" "code_services_bucket" {
+  count  = var.enable_aws_code_services ? 1 : 0
   bucket = "code_services-${var.account_id}-${var.cluster}"
   region = var.region
   versioning {
@@ -8,7 +9,8 @@ resource "aws_s3_bucket" "code_services_bucket" {
 }
 
 resource "aws_iam_role" "codebuild_role" {
-  name = "codebuild-role"
+  count  = var.enable_aws_code_services ? 1 : 0
+  name   = "codebuild-role"
 
   assume_role_policy = <<EOF
 {
@@ -27,7 +29,8 @@ EOF
 }
 
 resource "aws_iam_role_policy" "codebuild_policy" {
-  role = aws_iam_role.codebuild_role.name
+  count  = var.enable_aws_code_services ? 1 : 0
+  role   = aws_iam_role.codebuild_role.name
 
   policy = <<POLICY
 {
@@ -82,7 +85,8 @@ POLICY
 }
 
 resource "aws_iam_role" "codepipeline_role" {
-  name = "codepipeline-role"
+  count  = var.enable_aws_code_services ? 1 : 0
+  name   = "codepipeline-role"
 
   assume_role_policy = <<EOF
 {
@@ -101,8 +105,9 @@ EOF
 }
 
 resource "aws_iam_role_policy" "codepipeline_policy" {
-  name = "codepipeline_policy"
-  role = aws_iam_role.codepipeline_role.id
+  count  = var.enable_aws_code_services ? 1 : 0
+  name   = "codepipeline_policy"
+  role   = aws_iam_role.codepipeline_role.id
 
   policy = <<EOF
 {
@@ -146,11 +151,13 @@ EOF
 }
 
 resource "aws_sqs_queue" "code_services_queue" {
+  count                     = var.enable_aws_code_services ? 1 : 0
   name                      = "code_services-${var.account_id}-${var.cluster}"
   message_retention_seconds = 86400
 }
 
 resource "aws_cloudwatch_event_rule" "code_services_event_rule" {
+  count       = var.enable_aws_code_services ? 1 : 0
   name        = "code_services-event-rule"
   description = "code_services-event-rule"
 
@@ -164,11 +171,13 @@ PATTERN
 }
 
 resource "aws_cloudwatch_event_target" "code_services_event_target" {
+  count     = var.enable_aws_code_services ? 1 : 0
   rule      = "${aws_cloudwatch_event_rule.code_services_event_rule.name}"
   arn       = "${aws_sqs_queue.code_services_queue.arn}"
 }
 
 resource "aws_sqs_queue_policy" "code_services_queue_policy" {
+  count     = var.enable_aws_code_services ? 1 : 0
   queue_url = "${aws_sqs_queue.code_services_queue.id}"
 
   policy = <<POLICY
@@ -195,7 +204,8 @@ POLICY
 }
 
 resource "aws_iam_role" "product_operator_service_account" {
-  name = "${var.cluster}_product_operator_service_account"
+  count  = var.enable_aws_code_services ? 1 : 0
+  name   = "${var.cluster}_product_operator_service_account"
 
   assume_role_policy = <<EOF
 {
@@ -220,8 +230,9 @@ EOF
 
 #probably too permissive
 resource "aws_iam_role_policy" "product-operator" {
-  name = "${var.cluster}-product-operator"
-  role = aws_iam_role.product_operator_service_account.name
+  count  = var.enable_aws_code_services ? 1 : 0
+  name   = "${var.cluster}-product-operator"
+  role   = aws_iam_role.product_operator_service_account.name
   
   policy = <<EOF
 { 
