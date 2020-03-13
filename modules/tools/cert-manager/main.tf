@@ -5,8 +5,6 @@ resource "helm_release" "cert_manager_crds" {
   chart     = "${path.module}/helm/cert-manager-crds"
   timeout   = 600
   wait      = true
-
-  depends_on = [var.tiller_cluster_role_binding]
 }
 
 # Give the CRD a chance to settle
@@ -43,7 +41,7 @@ resource "helm_release" "cert_manager" {
   chart      = "jetstack/cert-manager"
   repository = data.helm_repository.cert_manager.name
   timeout    = 120
-  version    = "v0.11.0"
+  version    = "v0.13.1"
   wait       = true
 
   set {
@@ -74,7 +72,6 @@ resource "helm_release" "cert_manager" {
   depends_on = [
     helm_release.cert_manager_crds,
     null_resource.cert_manager_crd_delay,
-    var.tiller_cluster_role_binding,
     kubernetes_cluster_role.cert_manager_leaderelection,
   ]
 }

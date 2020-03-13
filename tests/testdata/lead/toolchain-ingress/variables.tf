@@ -5,8 +5,6 @@ variable "essential_taint_key" {
   default = ""
 }
 
-variable "tiller_service_account" {}
-
 // SDM Module
 variable "namespace" {}
 
@@ -17,3 +15,7 @@ variable "issuer_name" {}
 variable "issuer_kind" {}
 
 variable "crd_waiter" {}
+
+variable "ingress_controller_type" {
+  default = "LoadBalancer"
+}

@@ -131,20 +131,20 @@ module "toolchain" {
   smtp_from_email = "noreply@${aws_ses_domain_identity.cluster_domain.domain}"
 
   providers = {
-    helm        = helm.toolchain
-    helm.system = helm.system
-    kubernetes  = kubernetes
+    helm.toolchain = helm.toolchain
+    helm.system    = helm.system
+    kubernetes     = kubernetes
   }
 }
 
 module "toolchain_ingress" {
-  source = "../../modules/lead/toolchain-ingress"
-  namespace = var.toolchain_namespace
-  cluster_domain = "${var.cluster}.${var.root_zone_name}"
-  issuer_name                = module.cluster_issuer.issuer_name
-  issuer_kind                = module.cluster_issuer.issuer_kind
-  ingress_controller_type    = "LoadBalancer"
-  crd_waiter                 = module.infrastructure.crd_waiter
+  source                  = "../../modules/lead/toolchain-ingress"
+  namespace               = var.toolchain_namespace
+  cluster_domain          = "${var.cluster}.${var.root_zone_name}"
+  issuer_name             = module.cluster_issuer.issuer_name
+  issuer_kind             = module.cluster_issuer.issuer_kind
+  ingress_controller_type = "LoadBalancer"
+  crd_waiter              = module.infrastructure.crd_waiter
 
   providers = {
     helm       = helm.toolchain
@@ -179,7 +179,7 @@ module "sdm" {
     toolchain_image_repo   = var.toolchain_image_repo
     product_image_repo     = var.product_image_repo
     enable_harbor          = var.enable_harbor
-    enable_artifactory      = var.enable_artifactory
+    enable_artifactory     = var.enable_artifactory
   }
 
   providers = {

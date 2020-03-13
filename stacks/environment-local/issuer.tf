@@ -31,14 +31,15 @@ resource "kubernetes_cluster_role_binding" "cert_manager_cluster_role_binding" {
 }
 
 module "staging_cluster_issuer" {
-  source        = "../../modules/common/cert-issuer"
-  namespace     = module.toolchain.namespace
-  issuer_name   = "staging-self-signed"
-  issuer_kind   = "ClusterIssuer"
-  issuer_type   = "selfSigned"
-  crd_waiter    = module.infrastructure.crd_waiter
+  source      = "../../modules/common/cert-issuer"
+  namespace   = module.toolchain.namespace
+  issuer_name = "staging-self-signed"
+  issuer_kind = "ClusterIssuer"
+  issuer_type = "selfSigned"
+  crd_waiter  = module.infrastructure.crd_waiter
 
   providers = {
-    helm : helm.toolchain
+    kubernetes = kubernetes
+    helm       = helm.toolchain
   }
 }

@@ -1,9 +1,3 @@
-provider "helm" {
-  version = "0.10.4"
-}
-
-provider "kubernetes" {}
-
 module "system_namespace" {
   source    = "../../common/namespace"
   namespace = var.namespace

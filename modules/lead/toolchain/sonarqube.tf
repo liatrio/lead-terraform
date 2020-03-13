@@ -21,6 +21,7 @@ resource "helm_release" "sonarqube" {
   version    = "2.0.0"
   timeout    = 1200
   wait       = true
+  provider   = helm.toolchain
 
   set {
     name  = "ingress.enabled"

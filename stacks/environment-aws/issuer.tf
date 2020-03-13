@@ -4,14 +4,15 @@ resource "kubernetes_cluster_role" "cert_manager_cluster_role" {
   }
   rule {
     api_groups = [""]
-    resources = ["configmaps", "namespaces"]
-    verbs = ["get", "list"]
+    resources  = ["configmaps", "namespaces"]
+    verbs      = ["get", "list"]
   }
   rule {
     api_groups = ["*"]
-    resources = ["clusterissuers"]
-    verbs = ["*"]
+    resources  = ["clusterissuers"]
+    verbs      = ["*"]
   }
+  provider = kubernetes
 }
 
 resource "kubernetes_cluster_role_binding" "cert_manager_cluster_role_binding" {
@@ -24,8 +25,8 @@ resource "kubernetes_cluster_role_binding" "cert_manager_cluster_role_binding" {
     name      = kubernetes_cluster_role.cert_manager_cluster_role.metadata[0].name
   }
   subject {
-    kind = "ServiceAccount"
-    name = module.toolchain.tiller_service_account
+    kind      = "ServiceAccount"
+    name      = module.toolchain.tiller_service_account
     namespace = module.toolchain.namespace
   }
 }
@@ -39,14 +40,15 @@ module "cluster_issuer" {
   issuer_server = "https://acme-v02.api.letsencrypt.org/directory"
   crd_waiter    = module.infrastructure.crd_waiter
 
-  acme_solver             = "dns"
-  provider_dns_type       = "route53"
+  acme_solver       = "dns"
+  provider_dns_type = "route53"
 
   route53_dns_region      = var.region
   route53_dns_hosted_zone = aws_route53_zone.cluster_zone.zone_id
 
   providers = {
-    helm: helm.toolchain
+    kubernetes : kubernetes
+    helm : helm.toolchain
   }
 }
 
@@ -59,13 +61,14 @@ module "staging_cluster_issuer" {
   issuer_server = "https://acme-staging-v02.api.letsencrypt.org/directory"
   crd_waiter    = module.infrastructure.crd_waiter
 
-  acme_solver             = "dns"
-  provider_dns_type       = "route53"
+  acme_solver       = "dns"
+  provider_dns_type = "route53"
 
   route53_dns_region      = var.region
   route53_dns_hosted_zone = aws_route53_zone.cluster_zone.zone_id
 
   providers = {
-    helm: helm.toolchain
+    kubernetes = kubernetes
+    helm       = helm.toolchain
   }
 }

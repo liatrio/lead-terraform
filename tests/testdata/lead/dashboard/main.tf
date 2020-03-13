@@ -10,12 +10,15 @@ provider "helm" {
   }
 }
 
-module "ingress" {
-  source = "../../../../modules/lead/toolchain-ingress"
+module "dashboard" {
+  source = "../../../../modules/lead/dashboard"
   namespace = var.namespace
-  issuer_kind = var.issuer_kind
-  issuer_name = var.issuer_name
+  root_zone_name = var.root_zone_name
+  cluster = var.cluster_id
   cluster_domain = var.cluster_domain
   crd_waiter = var.crd_waiter
-  ingress_controller_type = var.ingress_controller_type
+  dashboard_version = var.dashboard_version
+  keycloak_realm_id = ""
+  k8s_storage_class = var.k8s_storage_class
+  local = var.local
 }

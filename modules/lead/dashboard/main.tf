@@ -2,14 +2,8 @@ locals {
   protocol = var.cluster_domain == "docker-for-desktop.localhost" ? "http" : "https"
 }
 
-provider "kubernetes" {
-}
-
-
 data "kubernetes_secret" "keycloak_admin_credential" {
   count = var.enable_keycloak && var.enabled ? 1 : 0
-
-  provider = kubernetes
 
   metadata {
     name      = "keycloak-admin-credential"

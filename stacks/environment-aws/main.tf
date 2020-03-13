@@ -66,7 +66,7 @@ provider "helm" {
     "spec.template.spec.containers[0].resources.limits.memory=400Mi",
     "spec.template.spec.containers[0].resources.requests.memory=100Mi",
     "spec.template.spec.containers[0].resources.limits.cpu=800m",
-    "spec.template.spec.containers[0].resources.requests.cpu=100m", 
+    "spec.template.spec.containers[0].resources.requests.cpu=100m",
   ]
 
   kubernetes {

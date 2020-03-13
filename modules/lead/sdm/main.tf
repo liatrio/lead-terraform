@@ -1,11 +1,9 @@
 provider "helm" {
   alias   = "system"
-  version = "0.10.4"
 }
 
 provider "helm" {
   alias   = "toolchain"
-  version = "0.10.4"
 }
 
 data "helm_repository" "liatrio" {
