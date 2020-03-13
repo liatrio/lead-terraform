@@ -10,12 +10,11 @@ provider "helm" {
   }
 }
 
-module "ingress" {
-  source = "../../../../modules/lead/toolchain-ingress"
+module "cert_issuer" {
+  source = "../../../../modules/common/cert-issuer"
   namespace = var.namespace
   issuer_kind = var.issuer_kind
   issuer_name = var.issuer_name
-  cluster_domain = var.cluster_domain
-  crd_waiter = var.crd_waiter
-  ingress_controller_type = var.ingress_controller_type
+  issuer_type = var.issuer_type
+  crd_waiter  = var.crd_waiter
 }

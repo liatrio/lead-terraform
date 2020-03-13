@@ -126,8 +126,8 @@ resource "aws_security_group" "elb" {
 
 module "eks" {
   source                                       = "terraform-aws-modules/eks/aws"
-  version                                      = "8.0.0"
-  cluster_version                              = "1.14"
+  version                                      = "8.2.0"
+  cluster_version                              = var.cluster_version
   cluster_name                                 = var.cluster
   subnets                                      = [module.vpc.private_subnets[0], module.vpc.private_subnets[1], module.vpc.private_subnets[2]]
   tags                                         = local.tags

@@ -2,6 +2,8 @@ data "helm_repository" "gitlab" {
   count = var.enable_gitlab ? 1 : 0 
   name  = "gitlab"
   url   = "https://charts.gitlab.io/"
+
+  provider = helm.toolchain
 }
 
 data "template_file" "gitlab_values" {
@@ -66,6 +68,7 @@ resource "helm_release" "gitlab" {
   chart      = "gitlab"
   version    = "2.0.3"
   timeout    = 1200
+  provider    = helm.toolchain
 
   values = [data.template_file.gitlab_values[0].rendered]
 }

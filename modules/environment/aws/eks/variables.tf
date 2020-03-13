@@ -58,3 +58,7 @@ variable "kubeconfig_aws_authenticator_additional_args" {
 }
 
 variable "enable_aws_code_services" {}
+
+variable "cluster_version" {
+  default = "1.14"
+}

@@ -11,6 +11,10 @@ module "ca-issuer" {
   namespace = var.namespace
   common_name = var.root_zone_name
   cert-manager-crd = var.crd_waiter
+
+  providers = {
+    helm = helm.toolchain
+  }
 }
 
 module "certificate" {
@@ -24,6 +28,10 @@ module "certificate" {
   certificate_crd = var.crd_waiter
   altname         = "localhost"
   wait_for_cert   = true
+
+  providers = {
+    helm = helm.toolchain
+  }
 }
 
 resource "helm_release" "grafeas" {
@@ -35,6 +43,7 @@ resource "helm_release" "grafeas" {
   version    = var.grafeas_version
   timeout    = 300 
   wait       = true
+  provider   = helm.toolchain
 
   depends_on = [module.certificate.cert_status]
 

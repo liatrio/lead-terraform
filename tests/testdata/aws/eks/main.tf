@@ -7,14 +7,26 @@ provider "aws" {
   }
 }
 
+data "aws_eks_cluster" "cluster" {
+  name = module.eks.cluster_id
+}
+
+data "aws_eks_cluster_auth" "cluster" {
+  name = module.eks.cluster_id
+}
+
 provider "kubernetes" {
-  config_path = "${path.module}/kubeconfig_${module.eks.cluster_id}"
+  host                   = data.aws_eks_cluster.cluster.endpoint
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
+  token                  = data.aws_eks_cluster_auth.cluster.token
+  load_config_file       = false
 }
 
 module "eks" {
   source                                       = "../../../../modules/environment/aws/eks"
   region                                       = var.region
   cluster                                      = var.cluster
+  cluster_version                              = "1.15"
   system_namespace                             = "default"
   toolchain_namespace                          = "default"
   preemptible_instance_types                   = ["m5.large", "c5.large", "m4.large", "c4.large", "t3.large", "r5.large"]
