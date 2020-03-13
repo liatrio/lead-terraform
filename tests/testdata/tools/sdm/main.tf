@@ -37,6 +37,7 @@ module "sdm" {
   product_version = var.product_version
   slack_bot_token = var.slack_bot_token
   slack_client_signing_secret = var.slack_client_signing_secret
+  enable_aws_event_mapper = false
 
   providers = {
     helm.system    = helm.system
