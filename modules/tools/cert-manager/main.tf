@@ -72,7 +72,6 @@ resource "helm_release" "cert_manager" {
   depends_on = [
     helm_release.cert_manager_crds,
     null_resource.cert_manager_crd_delay,
-    # var.tiller_cluster_role_binding,
     kubernetes_cluster_role.cert_manager_leaderelection,
   ]
 }

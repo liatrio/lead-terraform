@@ -4,9 +4,6 @@ provider "kubernetes" {
 
 provider "helm" {
   version         = "1.0.0"
-  # namespace       = var.namespace
-  # tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.15.1"
-  # service_account = var.tiller_service_account
 
   kubernetes {
     config_path            = var.kube_config_path
