@@ -30,5 +30,5 @@ module "eks" {
   protect_from_scale_in                        = false
   write_kubeconfig                             = true
   kubeconfig_aws_authenticator_additional_args = ["-r", var.aws_assume_role_arn]
-  enable_aws_codeservices                      = false
+  enable_aws_code_services                      = false
 }

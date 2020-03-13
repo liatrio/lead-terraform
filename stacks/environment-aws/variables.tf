@@ -178,5 +178,5 @@ variable "dashboard_elasticsearch_replicas" {
 variable "product_stack" {
 }
 
-variable "enable_aws_codeservices" {
+variable "enable_aws_code_services" {
 }

@@ -1,6 +1,6 @@
-resource "aws_s3_bucket" "codeservices_bucket" {
-  count  = var.enable-aws-codeservices ? 1 : 0
-  bucket = "codeservices-${data.aws_caller_identity.current.account_id}-${var.cluster}"
+resource "aws_s3_bucket" "code_services_bucket" {
+  count  = var.enable-aws-code_services ? 1 : 0
+  bucket = "code_services-${data.aws_caller_identity.current.account_id}-${var.cluster}"
   region = var.region
   versioning {
     enabled = true
@@ -9,7 +9,7 @@ resource "aws_s3_bucket" "codeservices_bucket" {
 }
 
 resource "aws_iam_role" "codebuild_role" {
-  count  = var.enable-aws-codeservices ? 1 : 0
+  count  = var.enable-aws-code_services ? 1 : 0
   name = "codebuild-role"
 
   assume_role_policy = <<EOF
@@ -29,7 +29,7 @@ EOF
 }
 
 resource "aws_iam_role_policy" "codebuild_policy" {
-  count  = var.enable-aws-codeservices ? 1 : 0
+  count  = var.enable-aws-code_services ? 1 : 0
   role = aws_iam_role.codebuild_role.name
 
   policy = <<POLICY
@@ -75,8 +75,8 @@ resource "aws_iam_role_policy" "codebuild_policy" {
         "s3:*"
       ],
       "Resource": [
-        "${aws_s3_bucket.codeservices_bucket.arn}",
-        "${aws_s3_bucket.codeservices_bucket.arn}/*"
+        "${aws_s3_bucket.code_services_bucket.arn}",
+        "${aws_s3_bucket.code_services_bucket.arn}/*"
       ]
     }
   ]
@@ -85,7 +85,7 @@ POLICY
 }
 
 resource "aws_iam_role" "codepipeline_role" {
-  count  = var.enable-aws-codeservices ? 1 : 0
+  count  = var.enable-aws-code_services ? 1 : 0
   name = "codepipeline-role"
 
   assume_role_policy = <<EOF
@@ -105,7 +105,7 @@ EOF
 }
 
 resource "aws_iam_role_policy" "codepipeline_policy" {
-  count  = var.enable-aws-codeservices ? 1 : 0
+  count  = var.enable-aws-code_services ? 1 : 0
   name = "codepipeline_policy"
   role = aws_iam_role.codepipeline_role.id
 
@@ -122,8 +122,8 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
         "s3:PutObject"
       ],
       "Resource": [
-        "${aws_s3_bucket.codeservices_bucket.arn}",
-        "${aws_s3_bucket.codeservices_bucket.arn}/*"
+        "${aws_s3_bucket.code_services_bucket.arn}",
+        "${aws_s3_bucket.code_services_bucket.arn}/*"
       ]
     },
 		{
@@ -150,16 +150,16 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
 EOF
 }
 
-resource "aws_sqs_queue" "codeservices_queue" {
-  count  = var.enable-aws-codeservices ? 1 : 0
-  name                      = "codeservices-${data.aws_caller_identity.current.account_id}-${var.cluster}"
+resource "aws_sqs_queue" "code_services_queue" {
+  count  = var.enable-aws-code_services ? 1 : 0
+  name                      = "code_services-${data.aws_caller_identity.current.account_id}-${var.cluster}"
   message_retention_seconds = 86400
 }
 
-resource "aws_cloudwatch_event_rule" "codeservices_event_rule" {
-  count  = var.enable-aws-codeservices ? 1 : 0
-  name        = "codeservices-event-rule"
-  description = "codeservices-event-rule"
+resource "aws_cloudwatch_event_rule" "code_services_event_rule" {
+  count  = var.enable-aws-code_services ? 1 : 0
+  name        = "code_services-event-rule"
+  description = "code_services-event-rule"
 
   event_pattern = <<PATTERN
 {
@@ -170,20 +170,20 @@ resource "aws_cloudwatch_event_rule" "codeservices_event_rule" {
 PATTERN
 }
 
-resource "aws_cloudwatch_event_target" "codeservices_event_target" {
-  count  = var.enable-aws-codeservices ? 1 : 0
-  rule      = "${aws_cloudwatch_event_rule.codeservices_event_rule.name}"
-  arn       = "${aws_sqs_queue.codeservices_queue.arn}"
+resource "aws_cloudwatch_event_target" "code_services_event_target" {
+  count  = var.enable-aws-code_services ? 1 : 0
+  rule      = "${aws_cloudwatch_event_rule.code_services_event_rule.name}"
+  arn       = "${aws_sqs_queue.code_services_queue.arn}"
 }
 
-resource "aws_sqs_queue_policy" "codeservices_queue_policy" {
-  count  = var.enable-aws-codeservices ? 1 : 0
-  queue_url = "${aws_sqs_queue.codeservices_queue.id}"
+resource "aws_sqs_queue_policy" "code_services_queue_policy" {
+  count  = var.enable-aws-code_services ? 1 : 0
+  queue_url = "${aws_sqs_queue.code_services_queue.id}"
 
   policy = <<POLICY
 {
   "Version": "2012-10-17",
-  "Id": "codeservices-sqs-policy",
+  "Id": "code_services-sqs-policy",
   "Statement": [
     {
       "Effect": "Allow",
@@ -191,10 +191,10 @@ resource "aws_sqs_queue_policy" "codeservices_queue_policy" {
         "Service": "events.amazonaws.com"
       },
       "Action": "sqs:SendMessage",
-      "Resource": "${aws_sqs_queue.codeservices_queue.arn}",
+      "Resource": "${aws_sqs_queue.code_services_queue.arn}",
       "Condition": {
         "ArnEquals": {
-          "aws:SourceArn": "${aws_cloudwatch_event_rule.codeservices_event_rule.arn}"
+          "aws:SourceArn": "${aws_cloudwatch_event_rule.code_services_event_rule.arn}"
         }
       }
     }
@@ -204,7 +204,7 @@ POLICY
 }
 
 resource "aws_iam_role" "product_operator_service_account" {
-  count  = var.enable-aws-codeservices ? 1 : 0
+  count  = var.enable-aws-code_services ? 1 : 0
   name = "${var.cluster}_product_operator_service_account"
 
   assume_role_policy = <<EOF
