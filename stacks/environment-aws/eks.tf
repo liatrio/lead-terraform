@@ -15,7 +15,7 @@ module "eks" {
   essential_asg_desired_capacity   = var.essential_asg_desired_capacity
   essential_taint_key              = var.essential_taint_key
   on_demand_percentage             = var.on_demand_percentage
-  enable_aws_codestar              = var.enable_aws_codestar
+  enable_aws_codeservices          = var.enable_aws_codeservices
 
   // TODO: remove the following policy from the worker node role once terraform is bumped 
   //       to version that includes fix for: https://github.com/hashicorp/terraform/issues/22992

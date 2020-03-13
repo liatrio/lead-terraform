@@ -57,4 +57,4 @@ variable "kubeconfig_aws_authenticator_additional_args" {
   default     = []
 }
 
-variable "enable_aws_codestar" {}
+variable "enable_aws_codeservices" {}
