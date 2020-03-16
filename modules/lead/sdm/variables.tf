@@ -52,3 +52,8 @@ variable "operator_jenkins_service_account_annotations" {
   type    = map
   default = {}
 }
+
+variable "operators" {
+  type    = list
+  default = ["slack", "jenkins"]
+}

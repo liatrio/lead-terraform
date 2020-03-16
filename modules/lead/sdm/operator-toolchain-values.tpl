@@ -6,6 +6,7 @@ product_vars: ${product_vars}
 
 operators:
   slack:
+    enabled: ${operator_slack_enabled}
     ingress:
       hostName: operator-slack.${namespace}.${cluster_domain}
       annotations:
@@ -21,4 +22,8 @@ operators:
     - name: AWS_REGION
       value: ${region}
   jenkins:
+    enabled: ${operator_jenkins_enabled}
     serviceAccountAnnotations: ${jenkins_service_account_annotations}
+
+product:
+  enabled: ${operator_product_enabled}

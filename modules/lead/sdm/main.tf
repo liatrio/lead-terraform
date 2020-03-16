@@ -35,6 +35,9 @@ data "template_file" "operator_toolchain_values" {
     region              = var.region
     product_stack       = var.product_stack
     product_vars        = jsonencode(var.product_vars)
+    operator_slack_enabled = contains(var.operators, "slack")
+    operator_jenkins_enabled = contains(var.operators, "jenkins")
+    operator_product_enabled = contains(var.operators, "product")
 
     slack_service_account_annotations   = jsonencode(var.operator_slack_service_account_annotations)
     jenkins_service_account_annotations = jsonencode(var.operator_jenkins_service_account_annotations)
