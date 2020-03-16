@@ -10,7 +10,7 @@ acme:
     type: route53
     route53:
       region: us-east-1
-      hostedZoneID: foo
+      hostedZoneID:
       role: 
     gcp:
       project:

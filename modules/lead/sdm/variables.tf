@@ -55,5 +55,5 @@ variable "operator_jenkins_service_account_annotations" {
 
 variable "operators" {
   type    = list
-  default = ["slack", "jenkins"]
+  default = ["toolchain", "elasticsearch", "slack", "product"]
 }

@@ -86,6 +86,7 @@ module "sdm" {
   slack_client_signing_secret = var.slack_client_signing_secret
   workspace_role_name         = "local_workspace_role"
   product_stack               = "product-local"
+  operators                   = var.lead_sdm_operators
 
   product_vars = {
     issuer_type             = var.cert_issuer_type

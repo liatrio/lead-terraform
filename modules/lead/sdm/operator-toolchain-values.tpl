@@ -5,6 +5,10 @@ product_stack: ${product_stack}
 product_vars: ${product_vars}
 
 operators:
+  toolchain:
+    enabled: ${operator_toolchain_enabled}
+  elasticsearch:
+    enabled: ${operator_elasticsearch_enabled}
   slack:
     enabled: ${operator_slack_enabled}
     ingress:
