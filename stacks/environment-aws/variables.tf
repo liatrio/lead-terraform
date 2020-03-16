@@ -5,6 +5,10 @@ variable "cluster" {
   default = "lead"
 }
 
+variable "cluster_version" {
+  default = "1.15"
+}
+
 variable "system_namespace" {
   default = "lead-system"
 }

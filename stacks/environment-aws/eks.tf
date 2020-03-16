@@ -2,6 +2,7 @@ module "eks" {
   source                           = "../../modules/environment/aws/eks"
   region                           = var.region
   cluster                          = var.cluster
+  cluster_version                  = var.cluster_version
   system_namespace                 = var.system_namespace
   toolchain_namespace              = var.toolchain_namespace
   key_name                         = var.key_name
