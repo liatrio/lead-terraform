@@ -13,13 +13,13 @@ resource "aws_codebuild_project" "codebuild_build" {
   }
 
   artifacts {
-    type = "S3"
+    type = var.source_type
     location = var.s3_bucket
   }
 
   source {
     type            = var.source_type
-    location        = "https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${each.value.repo}"
+    location        = var.s3_bucket
     git_clone_depth = 1
     buildspec       = "buildspec-build.yaml"
 
@@ -51,13 +51,13 @@ resource "aws_codebuild_project" "codebuild_staging" {
   }
 
   artifacts {
-    type = "S3"
+    type = var.source_type
     location = var.s3_bucket
   }
 
   source {
     type            = var.source_type
-    location        = "https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${each.value.repo}"
+    location        = var.s3_bucket
     git_clone_depth = 1
     buildspec       = "buildspec-staging.yaml"
 
@@ -89,13 +89,13 @@ resource "aws_codebuild_project" "codebuild_production" {
   }
 
   artifacts {
-    type = "S3"
+    type = var.source_type
     location = var.s3_bucket
   }
 
   source {
     type            = var.source_type
-    location        = "https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${each.value.repo}"
+    location        = var.s3_bucket
     git_clone_depth = 1
     buildspec       = "buildspec-production.yaml"
 

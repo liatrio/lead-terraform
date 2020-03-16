@@ -14,7 +14,7 @@ variable "pipelines" {
 }
 
 variable "source_type" {
-  default = "CODECOMMIT"
+  default = "CODEPIPELINE"
 }
 
 variable "codebuild_role" {}
