@@ -13,8 +13,6 @@ resource "helm_release" "kube-janitor" {
   timeout    = 600
   wait       = true
 
-  depends_on = [kubernetes_cluster_role_binding.tiller_cluster_role_binding]
-
   values     = [var.essential_toleration_values]
 
   set {

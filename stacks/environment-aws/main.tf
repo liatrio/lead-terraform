@@ -26,22 +26,8 @@ provider "kubernetes" {
 provider "helm" {
   version         = "1.0.0"
   alias           = "system"
-  namespace       = module.infrastructure.namespace
-  # tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.15.1"
-  service_account = module.infrastructure.tiller_service_account
 
-  # override = [
-  #   "spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].key=kubernetes.io/lifecycle",
-  #   "spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].operator=NotIn",
-  #   "spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].values[0]=preemptible",
-  #   "spec.template.spec.tolerations[0].key=${var.essential_taint_key}",
-  #   "spec.template.spec.tolerations[0].operator=Exists",
-  #   "spec.template.spec.containers[0].resources.limits.memory=400Mi",
-  #   "spec.template.spec.containers[0].resources.requests.memory=100Mi",
-  #   "spec.template.spec.containers[0].resources.limits.cpu=800m",
-  #   "spec.template.spec.containers[0].resources.requests.cpu=100m",
-  # ]
-
+  
   kubernetes {
     host                   = data.aws_eks_cluster.cluster.endpoint
     cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority[0].data)
@@ -53,21 +39,6 @@ provider "helm" {
 provider "helm" {
   version         = "1.0.0"
   alias           = "toolchain"
-  namespace       = module.toolchain.namespace
-  # tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.15.1"
-  service_account = module.toolchain.tiller_service_account
-
-  # override = [
-  #   "spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].key=kubernetes.io/lifecycle",
-  #   "spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].operator=NotIn",
-  #   "spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].values[0]=preemptible",
-  #   "spec.template.spec.tolerations[0].key=${var.essential_taint_key}",
-  #   "spec.template.spec.tolerations[0].operator=Exists",
-  #   "spec.template.spec.containers[0].resources.limits.memory=400Mi",
-  #   "spec.template.spec.containers[0].resources.requests.memory=100Mi",
-  #   "spec.template.spec.containers[0].resources.limits.cpu=800m",
-  #   "spec.template.spec.containers[0].resources.requests.cpu=100m",
-  # ]
 
   kubernetes {
     host                   = data.aws_eks_cluster.cluster.endpoint
