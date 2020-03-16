@@ -1,12 +1,14 @@
 variable "cluster_domain" {}
 variable "product_name" {}
-variable "image_whitelist" {}
+variable "image_whitelist" {
+  default = ".*"
+}
 
 variable "pipelines" {
   type = map(object({
-    sourcelocation = string
-    sourcerepo = string
-    sourcebranch = string
+    type = string
+    repo = string
+    org = string
   }))
 }
 

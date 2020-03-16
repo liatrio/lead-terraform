@@ -39,6 +39,7 @@ data "template_file" "operator_toolchain_values" {
     code_services_s3_bucket = var.code_services_s3_bucket
     codebuild_role      = var.codebuild_role
     codepipeline_role   = var.codepipeline_role
+    codebuild_user      = var.codebuild_user
 
     slack_service_account_annotations   = jsonencode(var.operator_slack_service_account_annotations)
     jenkins_service_account_annotations = jsonencode(var.operator_jenkins_service_account_annotations)

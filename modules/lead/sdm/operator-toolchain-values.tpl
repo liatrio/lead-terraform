@@ -10,6 +10,8 @@ product:
     codebuild_role: ${codebuild_role}
     codepipeline_role: ${codepipeline_role}
     s3_bucket: ${code_services_s3_bucket}
+    codebuild_user: ${codebuild_user}
+    cluster_domain: ${cluster_domain}
 %{ endif }
 
 

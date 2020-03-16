@@ -57,10 +57,17 @@ variable "enable_aws_event_mapper" {
 }
 
 variable "code_services_s3_bucket" {
+  default = ""
 }
 
 variable "codebuild_role" {
+  default = ""
 }
 
 variable "codepipeline_role" {
+  default = ""
+}
+
+variable "codebuild_user" {
+  default = ""
 }

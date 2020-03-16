@@ -168,6 +168,7 @@ module "sdm" {
   code_services_s3_bucket     = var.product_stack == "product-aws" ? module.codeservices.s3_bucket : ""
   codebuild_role              = var.product_stack == "product-aws" ? module.codeservices.codebuild_role : ""
   codepipeline_role           = var.product_stack == "product-aws" ? module.codeservices.codepipeline_role : ""
+  codebuild_user              = var.product_stack == "product-aws" ? "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-codebuild" : ""
 
   operator_slack_service_account_annotations = {
     "eks.amazonaws.com/role-arn" = aws_iam_role.operator_slack_service_account.arn
