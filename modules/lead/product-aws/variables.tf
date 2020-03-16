@@ -1,4 +1,5 @@
 variable "cluster_domain" {}
+variable "region" {}
 variable "product_name" {}
 variable "image_whitelist" {
   default = ".*"

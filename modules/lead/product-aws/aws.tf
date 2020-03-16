@@ -19,7 +19,7 @@ resource "aws_codebuild_project" "codebuild_build" {
 
   source {
     type            = var.source_type
-    location        = "https://git-codecommit.us-east-1.amazonaws.com/v1/repos/${each.value.repo}"
+    location        = "https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${each.value.repo}"
     git_clone_depth = 1
     buildspec       = "buildspec-build.yaml"
 
@@ -57,7 +57,7 @@ resource "aws_codebuild_project" "codebuild_staging" {
 
   source {
     type            = var.source_type
-    location        = "https://git-codecommit.us-east-1.amazonaws.com/v1/repos/${each.value.repo}"
+    location        = "https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${each.value.repo}"
     git_clone_depth = 1
     buildspec       = "buildspec-staging.yaml"
 
@@ -95,7 +95,7 @@ resource "aws_codebuild_project" "codebuild_production" {
 
   source {
     type            = var.source_type
-    location        = "https://git-codecommit.us-east-1.amazonaws.com/v1/repos/${each.value.repo}"
+    location        = "https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${each.value.repo}"
     git_clone_depth = 1
     buildspec       = "buildspec-production.yaml"
 
