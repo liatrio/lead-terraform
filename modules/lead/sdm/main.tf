@@ -36,6 +36,9 @@ data "template_file" "operator_toolchain_values" {
     product_stack       = var.product_stack
     product_vars        = jsonencode(var.product_vars)
     enable_aws_event_mapper = var.enable_aws_event_mapper
+    code_services_s3_bucket = var.code_services_s3_bucket
+    codebuild_role      = var.codebuild_role
+    codepipeline_role   = var.codepipeline_role
 
     slack_service_account_annotations   = jsonencode(var.operator_slack_service_account_annotations)
     jenkins_service_account_annotations = jsonencode(var.operator_jenkins_service_account_annotations)

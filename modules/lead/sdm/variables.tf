@@ -55,3 +55,12 @@ variable "operator_jenkins_service_account_annotations" {
 
 variable "enable_aws_event_mapper" {
 }
+
+variable "code_services_s3_bucket" {
+}
+
+variable "codebuild_role" {
+}
+
+variable "codepipeline_role" {
+}

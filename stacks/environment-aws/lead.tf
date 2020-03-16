@@ -165,6 +165,9 @@ module "sdm" {
   workspace_role_name         = module.eks.workspace_iam_role.name
   product_stack               = var.product_stack
   enable_aws_event_mapper     = var.enable_aws_code_services
+  code_services_s3_bucket     = var.product_stack == "product-aws" ? module.codeservices.s3_bucket : ""
+  codebuild_role              = var.product_stack == "product-aws" ? module.codeservices.codebuild_role : ""
+  codepipeline_role           = var.product_stack == "product-aws" ? module.codeservices.codepipeline_role : ""
 
   operator_slack_service_account_annotations = {
     "eks.amazonaws.com/role-arn" = aws_iam_role.operator_slack_service_account.arn

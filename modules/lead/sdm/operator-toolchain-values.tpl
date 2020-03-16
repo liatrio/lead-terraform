@@ -4,6 +4,15 @@ product_version: "${product_version}"
 product_stack: ${product_stack}
 product_vars: ${product_vars}
 
+%{ if product_stack == "product-aws" }
+product:
+  defaultProductVariables:
+    codebuild_role: ${codebuild_role}
+    codepipeline_role: ${codepipeline_role}
+    s3_bucket: ${code_services_s3_bucket}
+%{ endif }
+
+
 operators:
   slack:
     ingress:
