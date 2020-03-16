@@ -34,6 +34,7 @@ resource "helm_release" "keycloak" {
   chart      = "keycloak"
   version    = "5.0.1"
   timeout    = 1200
+  provider   = helm.toolchain
 
   values = [data.template_file.keycloak_values.rendered]
 
