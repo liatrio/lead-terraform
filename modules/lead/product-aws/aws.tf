@@ -1,7 +1,7 @@
 resource "aws_codebuild_project" "codebuild_build" {
   for_each = var.pipelines
 
-  name          = "${var.product_name}-${each.value.sourcerepo}-build"
+  name          = "${var.product_name}-${each.value.repo}-build"
   description   = "terraform_codebuild_project"
   build_timeout = "5"
   service_role  = var.codebuild_role
@@ -13,13 +13,13 @@ resource "aws_codebuild_project" "codebuild_build" {
   }
 
   artifacts {
-    type = "S3"
+    type = var.source_type
     location = var.s3_bucket
   }
 
   source {
     type            = var.source_type
-    location        = each.value.sourcelocation
+    location        = var.s3_bucket
     git_clone_depth = 1
     buildspec       = "buildspec-build.yaml"
 
@@ -29,7 +29,7 @@ resource "aws_codebuild_project" "codebuild_build" {
     }
   }
 
-  source_version = each.value.sourcebranch
+  source_version = "master"
 
   tags = {
     Product = var.product_name
@@ -39,7 +39,7 @@ resource "aws_codebuild_project" "codebuild_build" {
 resource "aws_codebuild_project" "codebuild_staging" {
   for_each = var.pipelines
 
-  name          = "${var.product_name}-${each.value.sourcerepo}-staging"
+  name          = "${var.product_name}-${each.value.repo}-staging"
   description   = "terraform_codebuild_project"
   build_timeout = "5"
   service_role  = var.codebuild_role
@@ -51,13 +51,13 @@ resource "aws_codebuild_project" "codebuild_staging" {
   }
 
   artifacts {
-    type = "S3"
+    type = var.source_type
     location = var.s3_bucket
   }
 
   source {
     type            = var.source_type
-    location        = each.value.sourcelocation
+    location        = var.s3_bucket
     git_clone_depth = 1
     buildspec       = "buildspec-staging.yaml"
 
@@ -67,7 +67,7 @@ resource "aws_codebuild_project" "codebuild_staging" {
     }
   }
 
-  source_version = each.value.sourcebranch
+  source_version = "master"
 
   tags = {
     Product = var.product_name
@@ -77,7 +77,7 @@ resource "aws_codebuild_project" "codebuild_staging" {
 resource "aws_codebuild_project" "codebuild_production" {
   for_each = var.pipelines
 
-  name          = "${var.product_name}-${each.value.sourcerepo}-production"
+  name          = "${var.product_name}-${each.value.repo}-production"
   description   = "terraform_codebuild_project"
   build_timeout = "5"
   service_role  = var.codebuild_role
@@ -89,13 +89,13 @@ resource "aws_codebuild_project" "codebuild_production" {
   }
 
   artifacts {
-    type = "S3"
+    type = var.source_type
     location = var.s3_bucket
   }
 
   source {
     type            = var.source_type
-    location        = each.value.sourcelocation
+    location        = var.s3_bucket
     git_clone_depth = 1
     buildspec       = "buildspec-production.yaml"
 
@@ -105,7 +105,7 @@ resource "aws_codebuild_project" "codebuild_production" {
     }
   }
 
-  source_version = each.value.sourcebranch
+  source_version = "master"
 
   tags = {
     Product = var.product_name
@@ -115,7 +115,7 @@ resource "aws_codebuild_project" "codebuild_production" {
 resource "aws_codepipeline" "codepipeline" {
   for_each = var.pipelines
 
-  name     = "${var.product_name}-${each.value.sourcerepo}"
+  name     = "${var.product_name}-${each.value.repo}"
   role_arn = var.codepipeline_role
 
   artifact_store {
@@ -136,8 +136,8 @@ resource "aws_codepipeline" "codepipeline" {
       output_artifacts = ["source_output"]
 
       configuration = {
-        RepositoryName = each.value.sourcerepo
-        BranchName     = each.value.sourcebranch
+        RepositoryName = each.value.repo
+        BranchName     = "master"
       }
     }
   }

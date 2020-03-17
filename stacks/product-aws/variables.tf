@@ -11,3 +11,11 @@ variable "image_whitelist" {
 variable "region" {
   default = "us-east-1"
 }
+
+variable "config_context" {
+  default = ""
+}
+
+variable "load_config_file" {
+  default = false
+}

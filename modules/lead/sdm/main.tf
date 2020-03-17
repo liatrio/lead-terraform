@@ -35,7 +35,13 @@ data "template_file" "operator_toolchain_values" {
     region          = var.region
     product_stack   = var.product_stack
     product_vars    = jsonencode(var.product_vars)
-
+    
+    enable_aws_event_mapper = var.enable_aws_event_mapper
+    code_services_s3_bucket = var.code_services_s3_bucket
+    codebuild_role      = var.codebuild_role
+    codepipeline_role   = var.codepipeline_role
+    codebuild_user      = var.codebuild_user
+    
     operator_toolchain_enabled     = contains(var.operators, "toolchain")
     operator_elasticsearch_enabled = contains(var.operators, "elasticsearch")
     operator_slack_enabled         = contains(var.operators, "slack")
