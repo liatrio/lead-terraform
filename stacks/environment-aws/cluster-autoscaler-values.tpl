@@ -12,8 +12,7 @@ autoDiscovery:
   clusterName: ${cluster}
   enabled: true
   tags:
-    - "k8s.io/cluster-autoscaler/enabled"
-    - "k8s.io/cluster-autoscaler/${cluster}"
+    - "kubernetes.io/cluster-autoscaler/enabled"
     - "kubernetes.io/cluster/${cluster}"
 
 extraArgs:
