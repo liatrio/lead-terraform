@@ -75,8 +75,8 @@ resource "aws_iam_role_policy" "codebuild_policy" {
         "s3:*"
       ],
       "Resource": [
-        "${aws_s3_bucket.code_services_bucket.arn}",
-        "${aws_s3_bucket.code_services_bucket.arn}/*"
+        "${aws_s3_bucket.code_services_bucket[0].arn}",
+        "${aws_s3_bucket.code_services_bucket[0].arn}/*"
       ]
     }
   ]
@@ -122,8 +122,8 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
         "s3:PutObject"
       ],
       "Resource": [
-        "${aws_s3_bucket.code_services_bucket.arn}",
-        "${aws_s3_bucket.code_services_bucket.arn}/*"
+        "${aws_s3_bucket.code_services_bucket[0].arn}",
+        "${aws_s3_bucket.code_services_bucket[0].arn}/*"
       ]
     },
 		{
@@ -172,13 +172,13 @@ PATTERN
 
 resource "aws_cloudwatch_event_target" "code_services_event_target" {
   count     = var.enable_aws_code_services ? 1 : 0
-  rule      = "${aws_cloudwatch_event_rule.code_services_event_rule.name}"
-  arn       = "${aws_sqs_queue.code_services_queue.arn}"
+  rule      = "${aws_cloudwatch_event_rule.code_services_event_rule[0].name}"
+  arn       = "${aws_sqs_queue.code_services_queue[0].arn}"
 }
 
 resource "aws_sqs_queue_policy" "code_services_queue_policy" {
   count     = var.enable_aws_code_services ? 1 : 0
-  queue_url = "${aws_sqs_queue.code_services_queue.id}"
+  queue_url = "${aws_sqs_queue.code_services_queue[0].id}"
 
   policy = <<POLICY
 {
@@ -191,10 +191,10 @@ resource "aws_sqs_queue_policy" "code_services_queue_policy" {
         "Service": "events.amazonaws.com"
       },
       "Action": "sqs:SendMessage",
-      "Resource": "${aws_sqs_queue.code_services_queue.arn}",
+      "Resource": "${aws_sqs_queue.code_services_queue[0].arn}",
       "Condition": {
         "ArnEquals": {
-          "aws:SourceArn": "${aws_cloudwatch_event_rule.code_services_event_rule.arn}"
+          "aws:SourceArn": "${aws_cloudwatch_event_rule.code_services_event_rule[0].arn}"
         }
       }
     }
