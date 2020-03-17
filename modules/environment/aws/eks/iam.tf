@@ -133,3 +133,10 @@ resource "aws_iam_role_policy" "workspace_role_policy" {
 }
 EOF
 }
+
+resource "aws_iam_role" "sqs_role" {
+  name = "${var.cluster}_sqs_role"
+
+  assume_role_policy = "arn:aws:iam::aws:policy/AmazonSQSReadOnlyAccess"
+  permissions_boundary = "arn:aws:iam::aws:policy/AmazonSQSReadOnlyAccess"
+}
