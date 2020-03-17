@@ -342,7 +342,7 @@ EOF
 resource "aws_iam_role_policy" "product-operator" {
   count  = var.enable_aws_code_services ? 1 : 0
   name = "${var.cluster}-product-operator"
-  role = aws_iam_role.product_operator_service_account.name
+  role = aws_iam_role.product_operator_service_account[0].name
 
   policy = <<EOF
 {

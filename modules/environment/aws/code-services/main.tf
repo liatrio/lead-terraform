@@ -30,7 +30,7 @@ EOF
 
 resource "aws_iam_role_policy" "codebuild_policy" {
   count  = var.enable_aws_code_services ? 1 : 0
-  role   = aws_iam_role.codebuild_role.name
+  role   = aws_iam_role.codebuild_role[0].name
 
   policy = <<POLICY
 {
@@ -107,7 +107,7 @@ EOF
 resource "aws_iam_role_policy" "codepipeline_policy" {
   count  = var.enable_aws_code_services ? 1 : 0
   name   = "codepipeline_policy"
-  role   = aws_iam_role.codepipeline_role.id
+  role   = aws_iam_role.codepipeline_role[0].id
 
   policy = <<EOF
 {
