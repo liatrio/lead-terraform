@@ -376,7 +376,7 @@ resource "aws_iam_role_policy" "product-operator" {
             "codepipeline:UpdatePipeline",
             "codebuild:BatchDeleteBuilds",
             "codebuild:DeleteProject",
-            "codebuild:StartBuild",
+            "codebuild:StartBuild"
         ],
         "Resource": "*"
     }
