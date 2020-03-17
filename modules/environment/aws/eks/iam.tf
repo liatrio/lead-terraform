@@ -133,27 +133,3 @@ resource "aws_iam_role_policy" "workspace_role_policy" {
 }
 EOF
 }
-
-resource "aws_iam_role" "sqs_role" {
-  name = "${var.cluster}_sqs_role"
-
-  assume_role_policy = <<EOF
-{
-"Version": "2012-10-17",
-"Statement": [
-    {
-        "Action": [
-            "sqs:GetQueueAttributes",
-            "sqs:GetQueueUrl",
-            "sqs:ListDeadLetterSourceQueues",
-            "sqs:ListQueues"
-        ],
-        "Effect": "Allow",
-        "Resource": "*"
-    }
-]
-}
-EOF
-
-  permissions_boundary = "arn:aws:iam::aws:policy/AmazonSQSReadOnlyAccess"
-}
