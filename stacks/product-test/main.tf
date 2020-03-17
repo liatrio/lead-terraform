@@ -11,17 +11,7 @@ provider "kubernetes" {
 
 provider "helm" {
   alias           = "staging"
-  version         = "0.10.4"
-  namespace       = module.product_base.staging_namespace
-  tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.15.1"
-  service_account = module.product_base.staging_service_account
-
-  override = [
-    "spec.template.spec.containers[0].resources.limits.memory=128Mi",
-    "spec.template.spec.containers[0].resources.requests.memory=64Mi",
-    "spec.template.spec.containers[0].resources.limits.cpu=200m",
-    "spec.template.spec.containers[0].resources.requests.cpu=50m",
-  ]
+  version         = "1.0.0"
 
   kubernetes {
     load_config_file = var.load_config_file
@@ -37,17 +27,7 @@ provider "kubernetes" {
 
 provider "helm" {
   alias           = "production"
-  version         = "0.10.4"
-  namespace       = module.product_base.production_namespace
-  tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.15.1"
-  service_account = module.product_base.production_service_account
-
-  override = [
-    "spec.template.spec.containers[0].resources.limits.memory=128Mi",
-    "spec.template.spec.containers[0].resources.requests.memory=64Mi",
-    "spec.template.spec.containers[0].resources.limits.cpu=200m",
-    "spec.template.spec.containers[0].resources.requests.cpu=50m",
-  ]
+  version         = "1.0.0"
 
   kubernetes {
     load_config_file = var.load_config_file
