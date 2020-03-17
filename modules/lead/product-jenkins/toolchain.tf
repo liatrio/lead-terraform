@@ -7,33 +7,33 @@ data "template_file" "jenkins_values" {
   template = file("${path.module}/jenkins-values.tpl")
 
   vars = {
-    cluster_domain         = var.cluster_domain
-    toolchain_image_repo   = var.toolchain_image_repo
-    jenkins_image_version  = var.jenkins_image_version
-    product_name           = var.product_name
-    protocol               = local.protocol
-    ssl_redirect           = local.protocol == "http" ? false : true
-    product_image_repo     = var.product_image_repo
-    ingress_hostname       = "${module.toolchain_namespace.name}.jenkins.${var.cluster_domain}"
-    namespace              = module.toolchain_namespace.name
-    toolchain_namespace    = var.toolchain_namespace
-    logstash_url           = "http://lead-dashboard-logstash.toolchain.svc.cluster.local:9000"
-    slack_team             = "liatrio"
-    stagingNamespace       = module.product_base.staging_namespace
-    productionNamespace    = module.product_base.production_namespace
-    appDomain              = "apps.${var.cluster_domain}"
-    builder_images_version = var.builder_images_version
-    allow_anonymous_read   = var.enable_keycloak ? "false" : "true"
+    cluster_domain               = var.cluster_domain
+    toolchain_image_repo         = var.toolchain_image_repo
+    jenkins_image_version        = var.jenkins_image_version
+    product_name                 = var.product_name
+    protocol                     = local.protocol
+    ssl_redirect                 = local.protocol == "http" ? false : true
+    product_image_repo           = var.product_image_repo
+    ingress_hostname             = "${module.toolchain_namespace.name}.jenkins.${var.cluster_domain}"
+    namespace                    = module.toolchain_namespace.name
+    toolchain_namespace          = var.toolchain_namespace
+    logstash_url                 = "http://lead-dashboard-logstash.toolchain.svc.cluster.local:9000"
+    slack_team                   = "liatrio"
+    stagingNamespace             = module.product_base.staging_namespace
+    productionNamespace          = module.product_base.production_namespace
+    appDomain                    = "apps.${var.cluster_domain}"
+    builder_images_version       = var.builder_images_version
+    allow_anonymous_read         = var.enable_keycloak ? "false" : "true"
     jenkins-repository-dockercfg = kubernetes_secret.jenkins_repository_dockercfg.metadata[0].name
 
 
     # Keycloak specific vars
-    security_realm         = var.enable_keycloak ? "securityRealm: keycloak" : ""
-    keycloak_ssl           = local.protocol == "http" ? "none" : "external"
+    security_realm = var.enable_keycloak ? "securityRealm: keycloak" : ""
+    keycloak_ssl   = local.protocol == "http" ? "none" : "external"
     # keycloak_url must be accessible from both inside and outside the cluster.
     # For local environment, you'll need to add this line to your hosts file...
     # [YOUR_HOST_INTERNAL_IP_NOT_127.0.0.1]   keycloak.toolchain.docker-for-desktop.localhost
-    keycloak_url           = "${local.protocol}://keycloak.toolchain.${var.cluster_domain}/auth"
+    keycloak_url = "${local.protocol}://keycloak.toolchain.${var.cluster_domain}/auth"
   }
 }
 
@@ -46,7 +46,7 @@ module "toolchain_namespace" {
     "opa.lead.liatrio/image-whitelist"   = var.image_whitelist
   }
   resource_request_cpu = "100m"
-  resource_limit_cpu = "250m"
+  resource_limit_cpu   = "250m"
 
   providers = {
     helm       = helm.toolchain
@@ -54,13 +54,21 @@ module "toolchain_namespace" {
   }
 }
 
+data "helm_repository" "stable" {
+  name = "stable"
+  url  = "https://kubernetes-charts.storage.googleapis.com"
+
+  provider = helm.toolchain
+}
+
 resource "helm_release" "jenkins" {
-  provider  = helm.toolchain
-  name      = "jenkins"
-  chart     = "stable/jenkins"
-  namespace = module.toolchain_namespace.name
-  timeout   = "600"
-  version   = "1.6.0"
+  provider   = helm.toolchain
+  name       = "jenkins"
+  chart      = "stable/jenkins"
+  repository = data.helm_repository.stable.metadata[0].name
+  namespace  = module.toolchain_namespace.name
+  timeout    = "600"
+  version    = "1.6.0"
 
   set_sensitive {
     name  = "master.adminPassword"
@@ -166,7 +174,7 @@ resource "kubernetes_role_binding" "jenkins_kubernetes_credentials" {
 resource "kubernetes_cluster_role" "jenkins_kubernetes_credentials" {
   provider = kubernetes.toolchain
   metadata {
-    name      = "${module.toolchain_namespace.name}-jenkins-kubernetes-credentials"
+    name = "${module.toolchain_namespace.name}-jenkins-kubernetes-credentials"
 
     labels = {
       "app.kubernetes.io/name"       = "jenkins"
@@ -191,7 +199,7 @@ resource "kubernetes_cluster_role" "jenkins_kubernetes_credentials" {
 resource "kubernetes_cluster_role_binding" "jenkins_kubernetes_credentials" {
   provider = kubernetes.toolchain
   metadata {
-    name      = "${module.toolchain_namespace.name}-jenkins-kubernetes-credentials"
+    name = "${module.toolchain_namespace.name}-jenkins-kubernetes-credentials"
 
     labels = {
       "app.kubernetes.io/name"       = "jenkins"
