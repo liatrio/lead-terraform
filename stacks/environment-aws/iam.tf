@@ -265,3 +265,74 @@ resource "aws_iam_role_policy_attachment" "operator_jenkins" {
   role       = aws_iam_role.operator_jenkins_service_account.name
   policy_arn = aws_iam_policy.operator_jenkins.arn
 }
+resource "aws_iam_role" "product_operator_service_account" {
+  count  = var.enable_aws_code_services ? 1 : 0
+  name = "${var.cluster}_product_operator_service_account"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "${module.eks.aws_iam_openid_connect_provider.arn}"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "${replace(module.eks.aws_iam_openid_connect_provider.url, "https://", "")}:sub": "system:serviceaccount:${var.toolchain_namespace}:product-operator"
+        }
+      }
+    }
+  ]
+}
+EOF
+}
+
+#probably too permissive
+resource "aws_iam_role_policy" "product-operator" {
+  count  = var.enable_aws_code_services ? 1 : 0
+  name = "${var.cluster}-product-operator"
+  role = aws_iam_role.product_operator_service_account.name
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+        "Effect": "Allow",
+        "Action": [
+            "codebuild:StopBuild",
+            "codepipeline:AcknowledgeThirdPartyJob",
+            "codepipeline:DeletePipeline",
+            "codebuild:UpdateProject",
+            "codepipeline:PutThirdPartyJobFailureResult",
+            "codepipeline:EnableStageTransition",
+            "codepipeline:RetryStageExecution",
+            "codepipeline:PutJobFailureResult",
+            "codebuild:ImportSourceCredentials",
+            "codepipeline:DisableStageTransition",
+            "codepipeline:PutThirdPartyJobSuccessResult",
+            "codepipeline:PollForThirdPartyJobs",
+            "codepipeline:StartPipelineExecution",
+            "codepipeline:PutJobSuccessResult",
+            "codebuild:DeleteReportGroup",
+            "codebuild:CreateProject",
+            "codebuild:UpdateReportGroup",
+            "codebuild:CreateReportGroup",
+            "codepipeline:PutApprovalResult",
+            "codepipeline:StopPipelineExecution",
+            "codepipeline:AcknowledgeJob",
+            "codebuild:DeleteReport",
+            "codepipeline:UpdatePipeline",
+            "codebuild:BatchDeleteBuilds",
+            "codebuild:DeleteProject",
+            "codebuild:StartBuild",
+        ],
+        "Resource": "*"
+    }
+  ]
+}
+EOF
+}

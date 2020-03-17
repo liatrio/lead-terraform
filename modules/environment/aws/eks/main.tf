@@ -29,6 +29,14 @@ EOF
       groups   = ["system:authenticated"]
     },
   ]
+
+  map_roles_extra = var.enable_aws_code_services ? [
+    {
+      rolearn  = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-codebuild"
+      username = "user"
+      groups   = ["system:authenticated"]
+    }
+  ] : []
 }
 
 data "aws_availability_zones" "available" {
@@ -125,7 +133,7 @@ module "eks" {
   tags                                         = local.tags
   vpc_id                                       = module.vpc.vpc_id
   worker_additional_security_group_ids         = [aws_security_group.worker.id]
-  map_roles                                    = local.map_roles
+  map_roles                                    = concat(local.map_roles, local.map_roles_extra)
   write_kubeconfig                             = var.write_kubeconfig
   permissions_boundary                         = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${aws_iam_policy.workspace_role_boundary.name}"
   manage_worker_iam_resources                  = true
