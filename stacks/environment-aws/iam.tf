@@ -313,6 +313,7 @@ resource "aws_iam_role_policy_attachment" "operator_jenkins" {
   role       = aws_iam_role.operator_jenkins_service_account.name
   policy_arn = aws_iam_policy.operator_jenkins.arn
 }
+
 resource "aws_iam_role" "product_operator_service_account" {
   count  = var.enable_aws_code_services ? 1 : 0
   name = "${var.cluster}_product_operator_service_account"
