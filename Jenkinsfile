@@ -1,7 +1,7 @@
 pipeline {
   agent {
     kubernetes {
-      label 'lead-toolchain-aws-for-lead-environments'
+      label 'lead-toolchain-aws-for-lead-environments2'
       inheritFrom 'lead-toolchain-aws lead-toolchain-terratest lead-toolchain-gitops'
       yaml """
       spec:
