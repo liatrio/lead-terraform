@@ -45,6 +45,12 @@ module "product-aws" {
   cluster_domain          = var.cluster_domain
   product_name            = var.product_name
   image_whitelist         = var.image_whitelist
+  region                  = var.region
+  pipelines               = var.pipelines
+  codebuild_role          = var.codebuild_role
+  codepipeline_role       = var.codepipeline_role
+  s3_bucket               = var.s3_bucket
+  codebuild_user          = var.codebuild_user
   providers = {
     kubernetes.staging    = kubernetes.staging
     helm.staging          = helm.staging

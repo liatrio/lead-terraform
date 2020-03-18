@@ -1,6 +1,6 @@
 resource "aws_s3_bucket" "code_services_bucket" {
   count  = var.enable_aws_code_services ? 1 : 0
-  bucket = "code_services-${var.account_id}-${var.cluster}"
+  bucket = "code-services-${var.account_id}-${var.cluster}"
   region = var.region
   versioning {
     enabled = true
