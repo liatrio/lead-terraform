@@ -9,14 +9,11 @@ variable "pipelines" {
   type = map(object({
     type = string
     repo = string
-    org = string
+    org  = string
   }))
 }
 
-variable "source_type" {
-  default = "CODEPIPELINE"
-}
-
+variable "source_type" {}
 variable "codebuild_role" {}
 variable "codepipeline_role" {}
 variable "s3_bucket" {}

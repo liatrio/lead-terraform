@@ -11,3 +11,28 @@ variable "image_whitelist" {
 variable "region" {
   default = "us-east-1"
 }
+
+variable "config_context" {
+  default = ""
+}
+
+variable "load_config_file" {
+  default = false
+}
+
+variable "pipelines" {
+  type = map(object({
+    type = string
+    repo = string
+    org = string
+  }))
+}
+
+variable "source_type" {
+  default = "CODEPIPELINE"
+}
+
+variable "codebuild_role" {}
+variable "codepipeline_role" {}
+variable "s3_bucket" {}
+variable "codebuild_user" {}

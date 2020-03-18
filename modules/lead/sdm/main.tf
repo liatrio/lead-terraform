@@ -1,15 +1,15 @@
 provider "helm" {
-  alias   = "system"
+  alias = "system"
 }
 
 provider "helm" {
-  alias   = "toolchain"
+  alias = "toolchain"
 }
 
 data "helm_repository" "liatrio" {
-  name = "lead.prod.liatr.io"
-  url  = "https://artifactory.toolchain.lead.prod.liatr.io/artifactory/helm/"
-  provider   = helm.system
+  name     = "lead.prod.liatr.io"
+  url      = "https://artifactory.toolchain.lead.prod.liatr.io/artifactory/helm/"
+  provider = helm.system
 }
 
 resource "helm_release" "operator_toolchain_definition" {
@@ -26,20 +26,27 @@ data "template_file" "operator_toolchain_values" {
   template = file("${path.module}/operator-toolchain-values.tpl")
 
   vars = {
-    image_tag           = "v${var.sdm_version}"
-    cluster             = var.cluster
-    namespace           = var.namespace
-    cluster_domain      = "${var.cluster}.${var.root_zone_name}"
-    product_version     = var.product_version
-    workspace_role      = var.workspace_role_name
-    region              = var.region
-    product_stack       = var.product_stack
-    product_vars        = jsonencode(var.product_vars)
+    image_tag       = "v${var.sdm_version}"
+    cluster         = var.cluster
+    namespace       = var.namespace
+    cluster_domain  = "${var.cluster}.${var.root_zone_name}"
+    product_version = var.product_version
+    workspace_role  = var.workspace_role_name
+    region          = var.region
+    product_stack   = var.product_stack
+    product_vars    = jsonencode(var.product_vars)
+    
     enable_aws_event_mapper = var.enable_aws_event_mapper
     code_services_s3_bucket = var.code_services_s3_bucket
     codebuild_role      = var.codebuild_role
     codepipeline_role   = var.codepipeline_role
     codebuild_user      = var.codebuild_user
+    
+    operator_toolchain_enabled     = contains(var.operators, "toolchain")
+    operator_elasticsearch_enabled = contains(var.operators, "elasticsearch")
+    operator_slack_enabled         = contains(var.operators, "slack")
+    operator_jenkins_enabled       = contains(var.operators, "jenkins")
+    operator_product_enabled       = contains(var.operators, "product")
 
     slack_service_account_annotations   = jsonencode(var.operator_slack_service_account_annotations)
     jenkins_service_account_annotations = jsonencode(var.operator_jenkins_service_account_annotations)

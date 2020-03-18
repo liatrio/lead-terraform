@@ -60,7 +60,7 @@ resource "helm_release" "cluster_autoscaler" {
   chart      = "cluster-autoscaler"
   timeout    = 600
   wait       = true
-  version    = "6.0.1"
+  version    = "6.6.1"
 
   values = [data.template_file.cluster_autoscaler.rendered, data.template_file.essential_toleration.rendered]
 
@@ -164,6 +164,7 @@ module "sdm" {
   slack_client_signing_secret = data.aws_ssm_parameter.slack_client_signing_secret.value
   workspace_role_name         = module.eks.workspace_iam_role.name
   product_stack               = var.product_stack
+  operators                   = var.lead_sdm_operators
   enable_aws_event_mapper     = var.enable_aws_code_services
   code_services_s3_bucket     = var.product_stack == "product-aws" ? module.codeservices.s3_bucket : ""
   codebuild_role              = var.product_stack == "product-aws" ? module.codeservices.codebuild_role : ""
