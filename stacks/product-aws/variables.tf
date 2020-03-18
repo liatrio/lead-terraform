@@ -19,3 +19,20 @@ variable "config_context" {
 variable "load_config_file" {
   default = false
 }
+
+variable "pipelines" {
+  type = map(object({
+    type = string
+    repo = string
+    org = string
+  }))
+}
+
+variable "source_type" {
+  default = "CODEPIPELINE"
+}
+
+variable "codebuild_role" {}
+variable "codepipeline_role" {}
+variable "s3_bucket" {}
+variable "codebuild_user" {}
