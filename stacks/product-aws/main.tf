@@ -51,6 +51,7 @@ module "product-aws" {
   codepipeline_role       = var.codepipeline_role
   s3_bucket               = var.s3_bucket
   codebuild_user          = var.codebuild_user
+  source_type             = var.source_type
   providers = {
     kubernetes.staging    = kubernetes.staging
     helm.staging          = helm.staging
