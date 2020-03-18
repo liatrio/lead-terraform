@@ -53,6 +53,11 @@ variable "operator_jenkins_service_account_annotations" {
   default = {}
 }
 
+variable "operators" {
+  type    = list
+  default = ["toolchain", "elasticsearch", "slack", "product"]
+}
+
 variable "enable_aws_event_mapper" {
 }
 

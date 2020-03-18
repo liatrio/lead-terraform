@@ -30,7 +30,7 @@ EOF
 
 resource "aws_iam_role_policy" "codebuild_policy" {
   count  = var.enable_aws_code_services ? 1 : 0
-  role   = aws_iam_role.codebuild_role.name
+  role   = aws_iam_role.codebuild_role[0].name
 
   policy = <<POLICY
 {
@@ -75,8 +75,8 @@ resource "aws_iam_role_policy" "codebuild_policy" {
         "s3:*"
       ],
       "Resource": [
-        "${aws_s3_bucket.code_services_bucket.arn}",
-        "${aws_s3_bucket.code_services_bucket.arn}/*"
+        "${aws_s3_bucket.code_services_bucket[0].arn}",
+        "${aws_s3_bucket.code_services_bucket[0].arn}/*"
       ]
     }
   ]
@@ -107,7 +107,7 @@ EOF
 resource "aws_iam_role_policy" "codepipeline_policy" {
   count  = var.enable_aws_code_services ? 1 : 0
   name   = "codepipeline_policy"
-  role   = aws_iam_role.codepipeline_role.id
+  role   = aws_iam_role.codepipeline_role[0].id
 
   policy = <<EOF
 {
@@ -122,8 +122,8 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
         "s3:PutObject"
       ],
       "Resource": [
-        "${aws_s3_bucket.code_services_bucket.arn}",
-        "${aws_s3_bucket.code_services_bucket.arn}/*"
+        "${aws_s3_bucket.code_services_bucket[0].arn}",
+        "${aws_s3_bucket.code_services_bucket[0].arn}/*"
       ]
     },
 		{
@@ -172,13 +172,13 @@ PATTERN
 
 resource "aws_cloudwatch_event_target" "code_services_event_target" {
   count     = var.enable_aws_code_services ? 1 : 0
-  rule      = "${aws_cloudwatch_event_rule.code_services_event_rule.name}"
-  arn       = "${aws_sqs_queue.code_services_queue.arn}"
+  rule      = "${aws_cloudwatch_event_rule.code_services_event_rule[0].name}"
+  arn       = "${aws_sqs_queue.code_services_queue[0].arn}"
 }
 
 resource "aws_sqs_queue_policy" "code_services_queue_policy" {
   count     = var.enable_aws_code_services ? 1 : 0
-  queue_url = "${aws_sqs_queue.code_services_queue.id}"
+  queue_url = "${aws_sqs_queue.code_services_queue[0].id}"
 
   policy = <<POLICY
 {
@@ -191,86 +191,14 @@ resource "aws_sqs_queue_policy" "code_services_queue_policy" {
         "Service": "events.amazonaws.com"
       },
       "Action": "sqs:SendMessage",
-      "Resource": "${aws_sqs_queue.code_services_queue.arn}",
+      "Resource": "${aws_sqs_queue.code_services_queue[0].arn}",
       "Condition": {
         "ArnEquals": {
-          "aws:SourceArn": "${aws_cloudwatch_event_rule.code_services_event_rule.arn}"
+          "aws:SourceArn": "${aws_cloudwatch_event_rule.code_services_event_rule[0].arn}"
         }
       }
     }
   ]
 }
 POLICY
-}
-
-resource "aws_iam_role" "product_operator_service_account" {
-  count  = var.enable_aws_code_services ? 1 : 0
-  name   = "${var.cluster}_product_operator_service_account"
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Federated": "${var.openid_connect_provider_arn}"
-      },
-      "Action": "sts:AssumeRoleWithWebIdentity",
-      "Condition": {
-        "StringEquals": {
-          "${replace(var.openid_connect_provider_url, "https://", "")}:sub": "system:serviceaccount:${var.toolchain_namespace}:product-operator"
-        }
-      }
-    }
-  ]
-}
-EOF
-}
-
-#probably too permissive
-resource "aws_iam_role_policy" "product-operator" {
-  count  = var.enable_aws_code_services ? 1 : 0
-  name   = "${var.cluster}-product-operator"
-  role   = aws_iam_role.product_operator_service_account.name
-  
-  policy = <<EOF
-{ 
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-        "Effect": "Allow",
-        "Action": [
-            "codebuild:StopBuild",
-            "codepipeline:AcknowledgeThirdPartyJob",
-            "codepipeline:DeletePipeline",
-            "codebuild:UpdateProject",
-            "codepipeline:PutThirdPartyJobFailureResult",
-            "codepipeline:EnableStageTransition",
-            "codepipeline:RetryStageExecution",
-            "codepipeline:PutJobFailureResult",
-            "codebuild:ImportSourceCredentials",
-            "codepipeline:DisableStageTransition",
-            "codepipeline:PutThirdPartyJobSuccessResult",
-            "codepipeline:PollForThirdPartyJobs",
-            "codepipeline:StartPipelineExecution",
-            "codepipeline:PutJobSuccessResult",
-            "codebuild:DeleteReportGroup",
-            "codebuild:CreateProject",
-            "codebuild:UpdateReportGroup",
-            "codebuild:CreateReportGroup",
-            "codepipeline:PutApprovalResult",
-            "codepipeline:StopPipelineExecution",
-            "codepipeline:AcknowledgeJob",
-            "codebuild:DeleteReport",
-            "codepipeline:UpdatePipeline",
-            "codebuild:BatchDeleteBuilds",
-            "codebuild:DeleteProject",
-            "codebuild:StartBuild",
-        ],
-        "Resource": "*"
-    }
-  ]
-} 
-EOF
 }

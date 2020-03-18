@@ -126,7 +126,7 @@ resource "aws_security_group" "elb" {
 
 module "eks" {
   source                                       = "terraform-aws-modules/eks/aws"
-  version                                      = "8.2.0"
+  version                                      = "10.0.0"
   cluster_version                              = var.cluster_version
   cluster_name                                 = var.cluster
   subnets                                      = [module.vpc.private_subnets[0], module.vpc.private_subnets[1], module.vpc.private_subnets[2]]
@@ -137,13 +137,22 @@ module "eks" {
   write_kubeconfig                             = var.write_kubeconfig
   permissions_boundary                         = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${aws_iam_policy.workspace_role_boundary.name}"
   manage_worker_iam_resources                  = true
-  manage_worker_autoscaling_policy             = true
-  attach_worker_autoscaling_policy             = false
   kubeconfig_aws_authenticator_additional_args = var.kubeconfig_aws_authenticator_additional_args
+  enable_irsa  = false
 
   #cluster_enabled_log_types            = ["api","audit","authenticator","controllerManager","scheduler"]
 
   workers_additional_policies = concat(["arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"], var.workers_additional_policies)
+
+  workers_group_defaults = {
+    tags = [
+      {
+        "key" = "kubernetes.io/cluster-autoscaler/enabled"
+        "value" = "true"
+        "propagate_at_launch" = true
+      }
+    ]
+  }
 
   worker_groups = [
     {

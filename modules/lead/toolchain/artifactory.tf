@@ -135,7 +135,7 @@ resource "helm_release" "artifactory" {
   name       = "artifactory"
   namespace  = module.toolchain_namespace.name
   chart      = "artifactory"
-  version    = "8.0.1"
+  version    = "8.5.1"
   timeout    = 1200
   provider    = helm.toolchain
 
