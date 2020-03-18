@@ -189,3 +189,7 @@ variable "lead_sdm_operators" {
 
 variable "enable_aws_code_services" {
 }
+
+variable "remote_state_config" {
+  default = ""
+}
