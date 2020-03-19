@@ -209,26 +209,31 @@ resource "aws_iam_role" "sqs_role" {
 
   assume_role_policy = <<EOF
 {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Action": [
-                "sqs:*",
-                "sts:*"
-            ],
-            "Effect": "Allow",
-            "Resource": "*"
-        },
-    ]
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/${module.eks.cluster_oidc_issuer_url}"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "${module.eks.cluster_oidc_issuer_url}:aud": "sts.amazonaws.com"
+        }
+      }
+    }
+  ]
 }
 EOF
 
-  permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${aws_iam_policy.sqs_role_boundary.name}"
+  permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${aws_iam_policy.sqs_role_policy.name}"
 }
 
-resource "aws_iam_role_policy" "sqs_role_boundary" {
+resource "aws_iam_role_policy" "sqs_role_policy" {
   count  = var.enable_aws_code_services ? 1 : 0
-  name   = "${var.cluster}_sqs_role_boundary"
+  name   = "${var.cluster}_sqs_role_policy"
+  role   = aws_iam_role.sqs_role[0].name
 
   policy = <<EOF
 {
