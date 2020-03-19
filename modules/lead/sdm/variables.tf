@@ -53,6 +53,11 @@ variable "operator_jenkins_service_account_annotations" {
   default = {}
 }
 
+variable "operator_product_service_account_annotations" {
+  type    = map(string)
+  default = {}
+}
+
 variable "operators" {
   type    = list(string)
   default = ["toolchain", "elasticsearch", "slack", "product"]

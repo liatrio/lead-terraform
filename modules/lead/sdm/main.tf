@@ -52,6 +52,7 @@ data "template_file" "operator_toolchain_values" {
 
     slack_service_account_annotations   = jsonencode(var.operator_slack_service_account_annotations)
     jenkins_service_account_annotations = jsonencode(var.operator_jenkins_service_account_annotations)
+    product_service_account_annotations = jsonencode(var.operator_product_service_account_annotations)
   }
 }
 
