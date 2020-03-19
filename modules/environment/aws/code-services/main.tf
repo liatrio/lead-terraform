@@ -204,6 +204,7 @@ POLICY
 }
 
 resource "aws_iam_role" "sqs_role" {
+  count  = var.enable_aws_code_services ? 1 : 0
   name = "${var.cluster}_sqs_role"
 
   assume_role_policy = <<EOF
@@ -212,14 +213,36 @@ resource "aws_iam_role" "sqs_role" {
     "Statement": [
         {
             "Action": [
-                "sqs:*"
+                "sqs:*",
+                "sts:*"
             ],
             "Effect": "Allow",
             "Resource": "*"
-        }
+        },
     ]
 }
 EOF
 
-  permissions_boundary = "arn:aws:iam::aws:policy/AmazonSQSFullAccess"
+  permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${aws_iam_policy.sqs_role_boundary.name}"
+}
+
+resource "aws_iam_role_policy" "sqs_role_boundary" {
+  count  = var.enable_aws_code_services ? 1 : 0
+  name   = "${var.cluster}_sqs_role_boundary"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+        "Action": [
+            "sqs:*",
+            "sts:*"
+        ],
+        "Effect": "Allow",
+        "Resource": "*"
+    }
+  ]
+}
+EOF
 }
