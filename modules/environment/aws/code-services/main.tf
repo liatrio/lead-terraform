@@ -227,7 +227,7 @@ resource "aws_iam_role" "sqs_role" {
 }
 EOF
 
-  permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${aws_iam_policy.sqs_role_policy.name}"
+  permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/Developer"
 }
 
 resource "aws_iam_role_policy" "sqs_role_policy" {
