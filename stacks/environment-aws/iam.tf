@@ -355,69 +355,89 @@ resource "aws_iam_role_policy" "product-operator" {
 {
   "Version": "2012-10-17",
   "Statement": [
-    {
-        "Effect": "Allow",
-        "Action": [
-            "codebuild:StopBuild",
-            "codepipeline:AcknowledgeThirdPartyJob",
-            "codepipeline:DeletePipeline",
-            "codebuild:UpdateProject",
-            "codepipeline:PutThirdPartyJobFailureResult",
-            "codepipeline:EnableStageTransition",
-            "codepipeline:RetryStageExecution",
-            "codepipeline:PutJobFailureResult",
-            "codebuild:ImportSourceCredentials",
-            "codepipeline:DisableStageTransition",
-            "codepipeline:PutThirdPartyJobSuccessResult",
-            "codepipeline:PollForThirdPartyJobs",
-            "codepipeline:StartPipelineExecution",
-            "codepipeline:PutJobSuccessResult",
-            "codebuild:DeleteReportGroup",
-            "codebuild:CreateProject",
-            "codebuild:UpdateReportGroup",
-            "codebuild:CreateReportGroup",
-            "codepipeline:PutApprovalResult",
-            "codepipeline:StopPipelineExecution",
-            "codepipeline:AcknowledgeJob",
-            "codebuild:DeleteReport",
-            "codepipeline:UpdatePipeline",
-            "codebuild:BatchDeleteBuilds",
-            "codebuild:DeleteProject",
-            "codebuild:StartBuild"
-        ],
-        "Resource": "*"
-    },
-    {
-     "Effect": "Allow",
-     "Action": [
-                "s3:ListBucket",
-                "s3:GetBucketVersioning",
-                "s3:CreateBucket"
-     ],
-     "Resource": ["arn:aws:s3:::lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${var.cluster}.liatr.io"]
-   },
-   {
-     "Effect": "Allow",
-     "Action": [
-                "s3:PutObject",
-                "s3:GetObject",
-                "s3:DeleteObject"
-     ],
-     "Resource": ["arn:aws:s3:::lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${var.cluster}.liatr.io/*"]
-   },
-   {
-     "Effect": "Allow",
-     "Action": [
-                "dynamodb:PutItem",
-                "dynamodb:GetItem",
-                "dynamodb:DescribeTable",
-                "dynamodb:DeleteItem",
-                "dynamodb:CreateTable",
-                "dynamodb:TagResource"
-     ],
-     "Resource": ["arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/lead-sdm-operators-${var.cluster}"]
-   }
-  ]
+  {
+    "Effect": "Allow",
+    "Action": [
+      "codebuild:StopBuild",
+      "codepipeline:AcknowledgeThirdPartyJob",
+      "codepipeline:DeletePipeline",
+      "codebuild:UpdateProject",
+      "codepipeline:PutThirdPartyJobFailureResult",
+      "codepipeline:EnableStageTransition",
+      "codepipeline:RetryStageExecution",
+      "codepipeline:PutJobFailureResult",
+      "codebuild:ImportSourceCredentials",
+      "codepipeline:DisableStageTransition",
+      "codepipeline:PutThirdPartyJobSuccessResult",
+      "codepipeline:PollForThirdPartyJobs",
+      "codepipeline:StartPipelineExecution",
+      "codepipeline:PutJobSuccessResult",
+      "codebuild:DeleteReportGroup",
+      "codebuild:CreateProject",
+      "codebuild:UpdateReportGroup",
+      "codebuild:CreateReportGroup",
+      "codepipeline:PutApprovalResult",
+      "codepipeline:StopPipelineExecution",
+      "codepipeline:AcknowledgeJob",
+      "codebuild:DeleteReport",
+      "codepipeline:UpdatePipeline",
+      "codebuild:BatchDeleteBuilds",
+      "codebuild:DeleteProject",
+      "codebuild:StartBuild",
+      "codebuild:BatchGetProjects",
+      "codepipeline:CreatePipeline",
+      "codepipeline:GetPipeline",
+      "codepipeline:ListTagsForResource"
+    ],
+    "Resource": "*"
+  },
+  {
+    "Effect": "Allow",
+    "Action": [
+      "s3:ListBucket",
+      "s3:GetBucketVersioning",
+      "s3:CreateBucket"
+    ],
+    "Resource": [
+      "arn:aws:s3:::lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${var.cluster}.liatr.io"
+    ]
+  },
+  {
+    "Effect": "Allow",
+    "Action": [
+      "s3:PutObject",
+      "s3:GetObject",
+      "s3:DeleteObject"
+    ],
+    "Resource": [
+      "arn:aws:s3:::lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${var.cluster}.liatr.io/*"
+    ]
+  },
+  {
+    "Effect": "Allow",
+    "Action": [
+      "dynamodb:PutItem",
+      "dynamodb:GetItem",
+      "dynamodb:DescribeTable",
+      "dynamodb:DeleteItem",
+      "dynamodb:CreateTable",
+      "dynamodb:TagResource"
+    ],
+    "Resource": [
+      "arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/lead-sdm-operators-${var.cluster}"
+    ]
+  },
+  {
+    "Effect": "Allow",
+    "Action": [
+      "iam:PassRole"
+    ],
+    "Resource": [
+      "${module.codeservices.codebuild_role}",
+      "${module.codeservices.codepipeline_role}"
+    ]
+  }
+]
 }
 EOF
 }
