@@ -10,7 +10,7 @@ resource "aws_s3_bucket" "code_services_bucket" {
 
 resource "aws_iam_role" "codebuild_role" {
   count  = var.enable_aws_code_services ? 1 : 0
-  name   = "codebuild-role"
+  name   = "codebuild-role-${var.cluster}"
 
   assume_role_policy = <<EOF
 {
@@ -86,7 +86,7 @@ POLICY
 
 resource "aws_iam_role" "codepipeline_role" {
   count  = var.enable_aws_code_services ? 1 : 0
-  name   = "codepipeline-role"
+  name   = "codepipeline-role-${var.cluster}"
 
   assume_role_policy = <<EOF
 {
@@ -106,7 +106,7 @@ EOF
 
 resource "aws_iam_role_policy" "codepipeline_policy" {
   count  = var.enable_aws_code_services ? 1 : 0
-  name   = "codepipeline_policy"
+  name   = "codepipeline_policy-${var.cluster}"
   role   = aws_iam_role.codepipeline_role[0].id
 
   policy = <<EOF
@@ -158,7 +158,7 @@ resource "aws_sqs_queue" "code_services_queue" {
 
 resource "aws_cloudwatch_event_rule" "code_services_event_rule" {
   count       = var.enable_aws_code_services ? 1 : 0
-  name        = "code_services-event-rule"
+  name        = "code_services-event-rule-${var.cluster}"
   description = "code_services-event-rule"
 
   event_pattern = <<PATTERN
@@ -172,13 +172,13 @@ PATTERN
 
 resource "aws_cloudwatch_event_target" "code_services_event_target" {
   count     = var.enable_aws_code_services ? 1 : 0
-  rule      = "${aws_cloudwatch_event_rule.code_services_event_rule[0].name}"
-  arn       = "${aws_sqs_queue.code_services_queue[0].arn}"
+  rule      = aws_cloudwatch_event_rule.code_services_event_rule[0].name
+  arn       = aws_sqs_queue.code_services_queue[0].arn
 }
 
 resource "aws_sqs_queue_policy" "code_services_queue_policy" {
   count     = var.enable_aws_code_services ? 1 : 0
-  queue_url = "${aws_sqs_queue.code_services_queue[0].id}"
+  queue_url = aws_sqs_queue.code_services_queue[0].id
 
   policy = <<POLICY
 {

@@ -73,6 +73,10 @@ func (tm *TestModule) GetTerraformOutput(name string) string {
 	return terraform.Output(tm.GoTest, tm.terraformOptions, name)
 }
 
+func (tm *TestModule) GetTerraformOutputMap(name string) map[string]string {
+	return terraform.OutputMap(tm.GoTest, tm.terraformOptions, name)
+}
+
 func (tm *TestModule) RunTests() {
 	path := tm.getDataPath()
 
