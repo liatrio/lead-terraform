@@ -26,7 +26,7 @@ data "template_file" "operator_toolchain_values" {
   template = file("${path.module}/operator-toolchain-values.tpl")
 
   vars = {
-    image_tag       = "v${var.sdm_version}"
+    sdm_version     = var.sdm_version
     cluster         = var.cluster
     namespace       = var.namespace
     cluster_domain  = "${var.cluster}.${var.root_zone_name}"
@@ -34,14 +34,16 @@ data "template_file" "operator_toolchain_values" {
     workspace_role  = var.workspace_role_name
     region          = var.region
     product_stack   = var.product_stack
-    product_vars    = jsonencode(var.product_vars)
-    
+    product_vars    = jsonencode(merge(var.product_vars, {
+      region         = var.region
+      cluster_domain = "${var.cluster}.${var.root_zone_name}"
+    }))
+
+    terraformSource     = "github.com/liatrio/lead-terraform//stacks/${var.product_stack}"
+    remote_state_config = var.remote_state_config
+
     enable_aws_event_mapper = var.enable_aws_event_mapper
-    code_services_s3_bucket = var.code_services_s3_bucket
-    codebuild_role      = var.codebuild_role
-    codepipeline_role   = var.codepipeline_role
-    codebuild_user      = var.codebuild_user
-    
+
     operator_toolchain_enabled     = contains(var.operators, "toolchain")
     operator_elasticsearch_enabled = contains(var.operators, "elasticsearch")
     operator_slack_enabled         = contains(var.operators, "slack")
@@ -50,20 +52,26 @@ data "template_file" "operator_toolchain_values" {
 
     slack_service_account_annotations   = jsonencode(var.operator_slack_service_account_annotations)
     jenkins_service_account_annotations = jsonencode(var.operator_jenkins_service_account_annotations)
+    product_service_account_annotations = jsonencode(var.operator_product_service_account_annotations)
   }
 }
 
 resource "helm_release" "operator_toolchain" {
   count      = var.enable_operators ? 1 : 0
   repository = data.helm_repository.liatrio.metadata[0].name
+  timeout    = 120
   name       = "operator-toolchain"
   chart      = "operator-toolchain"
   version    = var.sdm_version
   namespace  = var.namespace
   provider   = helm.toolchain
-  depends_on = [helm_release.operator_toolchain_definition]
+  depends_on = [
+    helm_release.operator_toolchain_definition
+  ]
 
-  values = [data.template_file.operator_toolchain_values.rendered]
+  values = [
+    data.template_file.operator_toolchain_values.rendered
+  ]
 }
 
 resource "kubernetes_secret" "operator_slack_config" {

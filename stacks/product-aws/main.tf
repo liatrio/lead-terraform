@@ -12,6 +12,8 @@ provider "kubernetes" {
 provider "aws" {
   version = ">= 2.29.0"
   region  = var.region
+
+  skip_metadata_api_check = true
 }
 
 provider "helm" {

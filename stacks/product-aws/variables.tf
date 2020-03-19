@@ -36,3 +36,7 @@ variable "codebuild_role" {}
 variable "codepipeline_role" {}
 variable "s3_bucket" {}
 variable "codebuild_user" {}
+
+variable "role_arn" {
+  default = ""
+}

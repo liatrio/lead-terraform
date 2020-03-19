@@ -7,22 +7,22 @@ data "template_file" "external_dns_values" {
 }
 
 module "infrastructure" {
-  source                                = "../../modules/lead/infrastructure"
-  cluster                               = module.eks.cluster_id
-  namespace                             = var.system_namespace
-  opa_failure_policy                    = var.opa_failure_policy
-  enable_opa                            = "false"
-  enable_downscaler                     = true
-  enable_k8s_spot_termination_handler   = true
-  uptime                                = var.uptime
-  downscaler_exclude_namespaces         = var.downscaler_exclude_namespaces
-  cert_manager_service_account_role_arn = aws_iam_role.cert_manager_service_account.arn
-  essential_toleration_values           = data.template_file.essential_toleration.rendered
-  external_dns_chart_values             = data.template_file.external_dns_values.rendered
+  source                                   = "../../modules/lead/infrastructure"
+  cluster                                  = module.eks.cluster_id
+  namespace                                = var.system_namespace
+  opa_failure_policy                       = var.opa_failure_policy
+  enable_opa                               = "false"
+  enable_downscaler                        = true
+  enable_k8s_spot_termination_handler      = true
+  uptime                                   = var.uptime
+  downscaler_exclude_namespaces            = var.downscaler_exclude_namespaces
+  cert_manager_service_account_role_arn    = aws_iam_role.cert_manager_service_account.arn
+  essential_toleration_values              = data.template_file.essential_toleration.rendered
+  external_dns_chart_values                = data.template_file.external_dns_values.rendered
   external_dns_service_account_annotations = {
     "eks.amazonaws.com/role-arn" = aws_iam_role.external_dns_service_account.arn
   }
-  providers = {
+  providers                                = {
     helm       = helm.system
     kubernetes = kubernetes
   }
@@ -42,7 +42,7 @@ data "template_file" "cluster_autoscaler" {
 
 data "template_file" "essential_toleration" {
   template = file("${path.module}/essential-toleration.tpl")
-  vars = {
+  vars     = {
     essential_taint_key = var.essential_taint_key
   }
 }
@@ -62,7 +62,10 @@ resource "helm_release" "cluster_autoscaler" {
   wait       = true
   version    = "6.6.1"
 
-  values = [data.template_file.cluster_autoscaler.rendered, data.template_file.essential_toleration.rendered]
+  values = [
+    data.template_file.cluster_autoscaler.rendered,
+    data.template_file.essential_toleration.rendered
+  ]
 
   provider = helm.system
 }
@@ -166,16 +169,16 @@ module "sdm" {
   product_stack               = var.product_stack
   operators                   = var.lead_sdm_operators
   enable_aws_event_mapper     = var.enable_aws_code_services
-  code_services_s3_bucket     = var.product_stack == "product-aws" ? module.codeservices.s3_bucket : ""
-  codebuild_role              = var.product_stack == "product-aws" ? module.codeservices.codebuild_role : ""
-  codepipeline_role           = var.product_stack == "product-aws" ? module.codeservices.codepipeline_role : ""
-  codebuild_user              = var.product_stack == "product-aws" ? "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-codebuild" : ""
+  remote_state_config         = var.remote_state_config
 
-  operator_slack_service_account_annotations = {
+  operator_slack_service_account_annotations   = {
     "eks.amazonaws.com/role-arn" = aws_iam_role.operator_slack_service_account.arn
   }
   operator_jenkins_service_account_annotations = {
     "eks.amazonaws.com/role-arn" = aws_iam_role.operator_jenkins_service_account.arn
+  }
+  operator_product_service_account_annotations = {
+    "eks.amazonaws.com/role-arn" = aws_iam_role.product_operator_service_account.arn
   }
 
   product_vars = {
@@ -186,6 +189,12 @@ module "sdm" {
     product_image_repo     = var.product_image_repo
     enable_harbor          = var.enable_harbor
     enable_artifactory     = var.enable_artifactory
+
+    s3_bucket         = var.enable_aws_code_services ? module.codeservices.s3_bucket : ""
+    codebuild_role    = var.enable_aws_code_services ? module.codeservices.codebuild_role : ""
+    codepipeline_role = var.enable_aws_code_services ? module.codeservices.codepipeline_role : ""
+    codebuild_user    = var.enable_aws_code_services ? "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-codebuild" : ""
+    role_arn          = aws_iam_role.product_operator_service_account.arn
   }
 
   providers = {

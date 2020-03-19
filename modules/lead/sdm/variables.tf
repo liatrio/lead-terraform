@@ -39,40 +39,33 @@ variable "product_stack" {
 }
 
 variable "product_vars" {
-  type    = map
+  type    = map(string)
   default = {}
 }
 
 variable "operator_slack_service_account_annotations" {
-  type    = map
+  type    = map(string)
   default = {}
 }
 
 variable "operator_jenkins_service_account_annotations" {
-  type    = map
+  type    = map(string)
+  default = {}
+}
+
+variable "operator_product_service_account_annotations" {
+  type    = map(string)
   default = {}
 }
 
 variable "operators" {
-  type    = list
+  type    = list(string)
   default = ["toolchain", "elasticsearch", "slack", "product"]
 }
 
 variable "enable_aws_event_mapper" {
 }
 
-variable "code_services_s3_bucket" {
-  default = ""
-}
-
-variable "codebuild_role" {
-  default = ""
-}
-
-variable "codepipeline_role" {
-  default = ""
-}
-
-variable "codebuild_user" {
+variable "remote_state_config" {
   default = ""
 }
