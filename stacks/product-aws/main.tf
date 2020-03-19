@@ -13,6 +13,8 @@ provider "aws" {
   version = ">= 2.29.0"
   region  = var.region
 
+  token = file("/var/run/secrets/eks.amazonaws.com/serviceaccount/token")
+
   assume_role {
     role_arn = var.role_arn
   }
