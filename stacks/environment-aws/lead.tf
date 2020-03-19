@@ -194,6 +194,7 @@ module "sdm" {
     codebuild_role    = var.enable_aws_code_services ? module.codeservices.codebuild_role : ""
     codepipeline_role = var.enable_aws_code_services ? module.codeservices.codepipeline_role : ""
     codebuild_user    = var.enable_aws_code_services ? "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-codebuild" : ""
+    role_arn          = aws_iam_role.product_operator_service_account.arn
   }
 
   providers = {

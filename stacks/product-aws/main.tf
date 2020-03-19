@@ -12,6 +12,10 @@ provider "kubernetes" {
 provider "aws" {
   version = ">= 2.29.0"
   region  = var.region
+
+  assume_role {
+    role_arn = var.role_arn
+  }
 }
 
 provider "helm" {
