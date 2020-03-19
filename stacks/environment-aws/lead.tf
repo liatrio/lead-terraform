@@ -182,18 +182,18 @@ module "sdm" {
   }
 
   product_vars = {
-    enable_keycloak         = var.enable_keycloak
-    builder_images_version  = var.builder_images_version
-    jenkins_image_version   = var.jenkins_image_version
-    toolchain_image_repo    = var.toolchain_image_repo
-    product_image_repo      = var.product_image_repo
-    enable_harbor           = var.enable_harbor
-    enable_artifactory      = var.enable_artifactory
+    enable_keycloak        = var.enable_keycloak
+    builder_images_version = var.builder_images_version
+    jenkins_image_version  = var.jenkins_image_version
+    toolchain_image_repo   = var.toolchain_image_repo
+    product_image_repo     = var.product_image_repo
+    enable_harbor          = var.enable_harbor
+    enable_artifactory     = var.enable_artifactory
 
-    code_services_s3_bucket = var.enable_aws_code_services ? module.codeservices.s3_bucket : ""
-    codebuild_role          = var.enable_aws_code_services ? module.codeservices.codebuild_role : ""
-    codepipeline_role       = var.enable_aws_code_services ? module.codeservices.codepipeline_role : ""
-    codebuild_user          = var.enable_aws_code_services ? "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-codebuild" : ""
+    s3_bucket         = var.enable_aws_code_services ? module.codeservices.s3_bucket : ""
+    codebuild_role    = var.enable_aws_code_services ? module.codeservices.codebuild_role : ""
+    codepipeline_role = var.enable_aws_code_services ? module.codeservices.codepipeline_role : ""
+    codebuild_user    = var.enable_aws_code_services ? "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-codebuild" : ""
   }
 
   providers = {
