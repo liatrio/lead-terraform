@@ -203,6 +203,9 @@ resource "aws_sqs_queue_policy" "code_services_queue_policy" {
 POLICY
 }
 
+data "aws_caller_identity" "current" {
+}
+
 resource "aws_iam_role" "sqs_role" {
   count  = var.enable_aws_code_services ? 1 : 0
   name = "${var.cluster}_sqs_role"
