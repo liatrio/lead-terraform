@@ -18,7 +18,7 @@ product:
   defaultProductVariables: ${product_vars}
   defaultProductVersion: "${product_version}"
   defaultJobEnvVariables:
-    cluster: ${cluster}
+    CLUSTER: ${cluster}
   rbac:
     serviceAccountAnnotations: ${product_service_account_annotations}
 
