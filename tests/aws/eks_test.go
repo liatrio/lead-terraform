@@ -23,13 +23,18 @@ func init()  {
 
 func TestSetupEks(t *testing.T) {
 	assumeIamRole, _ := os.LookupEnv("TERRATEST_IAM_ROLE")
+	var clusterName string
 	// CLUSTER 
 	testCluster := common.TestModule{
 		GoTest: t,
 		Name: "eks_cluster",
 		TerraformDir: "../testdata/aws/eks",
 		Setup: func(tm *common.TestModule) {
-			clusterName := fmt.Sprintf("test-%s", strings.ToLower(random.UniqueId()))
+			if clusterNameEnv, ok := os.LookupEnv("CLUSTER"); ok {
+				clusterName = clusterNameEnv
+			} else {
+				clusterName = fmt.Sprintf("test-%s", strings.ToLower(random.UniqueId()))
+			}
 			tm.SetTerraformVar("cluster", clusterName)
 			tm.SetTerraformVar("region", "us-east-1")
 			tm.SetTerraformVar("aws_assume_role_arn", assumeIamRole)
@@ -37,6 +42,9 @@ func TestSetupEks(t *testing.T) {
 		Tests: func(tm *common.TestModule) {
 			tm.SetStringGlobal(Cluster, tm.GetTerraformVar("cluster"))
 			tm.SetStringGlobal(common.KubeConfigPath, tm.GetTerraformOutput("kubeconfig"))
+			awsIamOpenidConnectProvider := tm.GetTerraformOutputMap("aws_iam_openid_connect_provider")
+			tm.SetStringGlobal("aws_iam_openid_connect_provider_arn", awsIamOpenidConnectProvider["arn"])
+			tm.SetStringGlobal("aws_iam_openid_connect_provider_url", awsIamOpenidConnectProvider["url"])
 		},
 	}
 	defer testCluster.TeardownTests()
@@ -114,6 +122,7 @@ func TestSetupEks(t *testing.T) {
 func testModules(t *testing.T) {
 	t.Run("SDM", testLeadSdm)
 	t.Run("Dashboard", testLeadDashboard)
+	t.Run("CodeServices", testCodeServices)
 }
 
 func testLeadSdm(t *testing.T) {
@@ -161,4 +170,26 @@ func testLeadDashboard(t *testing.T) {
 	}
 	defer testLeadDashboard.TeardownTests()
 	testLeadDashboard.RunTests()
+}
+
+func testCodeServices(t *testing.T) {
+	t.Parallel()
+
+	assumeIamRole, _ := os.LookupEnv("TERRATEST_IAM_ROLE")
+
+	testCodeServices := common.TestModule{
+		GoTest: t,
+		Name: "codeServices",
+		TerraformDir: "../testdata/aws/code-services",
+		Setup: func (tm *common.TestModule) {
+			tm.SetTerraformVar("cluster", tm.GetStringGlobal(Cluster))
+			tm.SetTerraformVar("region", "us-east-1")
+			tm.SetTerraformVar("aws_assume_role_arn", assumeIamRole)
+			tm.SetTerraformVar("toolchain_namespace", tm.GetStringGlobal(Namespace))
+			tm.SetTerraformVar("openid_connect_provider_arn", tm.GetStringGlobal("aws_iam_openid_connect_provider_arn"))
+			tm.SetTerraformVar("openid_connect_provider_url", tm.GetStringGlobal("aws_iam_openid_connect_provider_url"))
+		},
+	}
+	defer testCodeServices.TeardownTests()
+	testCodeServices.RunTests()
 }
