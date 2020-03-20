@@ -203,9 +203,9 @@ resource "aws_sqs_queue_policy" "code_services_queue_policy" {
 POLICY
 }
 
-resource "aws_iam_role" "sqs_role" {
+resource "aws_iam_role" "event_mapper_role" {
   count  = var.enable_aws_code_services ? 1 : 0
-  name = "${var.cluster}_sqs_role"
+  name = "${var.cluster}_event_mapper_role"
 
   assume_role_policy = <<EOF
 {
@@ -230,10 +230,10 @@ EOF
   permissions_boundary = "arn:aws:iam::${var.account_id}:policy/Developer"
 }
 
-resource "aws_iam_role_policy" "sqs_role_policy" {
+resource "aws_iam_role_policy" "event_mapper_role_policy" {
   count  = var.enable_aws_code_services ? 1 : 0
-  name   = "${var.cluster}_sqs_role_policy"
-  role   = aws_iam_role.sqs_role[0].name
+  name   = "${var.cluster}_event_mapper_role_policy"
+  role   = aws_iam_role.event_mapper_role[0].name
 
   policy = <<EOF
 {
