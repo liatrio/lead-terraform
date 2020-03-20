@@ -8,7 +8,7 @@ provider "helm" {
 
 data "helm_repository" "liatrio" {
   name     = "lead.prod.liatr.io"
-  url      = "https://artifactory.toolchain.lead.prod.liatr.io/artifactory/helm/"
+  url      = "http://liatrio-helm.s3-website-us-east-1.amazonaws.com/charts"
   provider = helm.system
 }
 
