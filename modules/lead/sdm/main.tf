@@ -12,16 +12,6 @@ data "helm_repository" "liatrio" {
   provider = helm.system
 }
 
-resource "helm_release" "operator_toolchain_definition" {
-  count      = var.enable_operators ? 1 : 0
-  repository = data.helm_repository.liatrio.metadata[0].name
-  name       = "operator-toolchain-definition"
-  chart      = "operator-toolchain-definition"
-  version    = var.sdm_version
-  namespace  = var.system_namespace
-  provider   = helm.system
-}
-
 data "template_file" "operator_toolchain_values" {
   template = file("${path.module}/operator-toolchain-values.tpl")
 
@@ -61,7 +51,6 @@ resource "helm_release" "operator_toolchain" {
   version    = var.sdm_version
   namespace  = var.namespace
   provider   = helm.toolchain
-  depends_on = [helm_release.operator_toolchain_definition]
 
   values = [data.template_file.operator_toolchain_values.rendered]
 }

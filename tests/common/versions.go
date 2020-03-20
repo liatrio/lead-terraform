@@ -1,6 +1,6 @@
 package common
 
-const LeadSdmVersion = "2.0.3"
+const LeadSdmVersion = "v2.0.4"
 
 const ProductVersion = "2.0.0"
 
