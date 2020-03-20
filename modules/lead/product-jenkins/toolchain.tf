@@ -127,7 +127,7 @@ resource "kubernetes_role" "jenkins_kubernetes_credentials" {
     verbs      = ["get", "watch", "list"]
   }
   rule {
-    api_groups = ["stable.liatr.io"]
+    api_groups = ["stable.liatr.io", "sdm.liatr.io"]
     resources  = ["builds"]
     verbs      = ["create", "update", "patch", "get", "watch", "list"]
   }
