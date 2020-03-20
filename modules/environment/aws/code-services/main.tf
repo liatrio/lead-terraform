@@ -242,7 +242,7 @@ resource "aws_iam_role_policy" "event_mapper_role_policy" {
     {
         "Action": [
             "sqs:*",
-            "sts:*"
+            "sts:AssumeRoleWithWebIdentity"
         ],
         "Effect": "Allow",
         "Resource": "*"
