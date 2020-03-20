@@ -203,9 +203,6 @@ resource "aws_sqs_queue_policy" "code_services_queue_policy" {
 POLICY
 }
 
-data "aws_caller_identity" "current" {
-}
-
 resource "aws_iam_role" "sqs_role" {
   count  = var.enable_aws_code_services ? 1 : 0
   name = "${var.cluster}_sqs_role"
@@ -217,12 +214,12 @@ resource "aws_iam_role" "sqs_role" {
     {
       "Effect": "Allow",
       "Principal": {
-        "Federated": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/${replace(module.eks.cluster_oidc_issuer_url, "https://", "")}"
+        "Federated": "arn:aws:iam::${var.account_id}:oidc-provider/${replace(var.openid_connect_provider_url, "https://", "")}"
       },
       "Action": "sts:AssumeRoleWithWebIdentity",
       "Condition": {
         "StringEquals": {
-          "${replace(module.eks.cluster_oidc_issuer_url, "https://", "")}:aud": "sts.amazonaws.com"
+          "${replace(var.openid_connect_provider_url, "https://", "")}:aud": "sts.amazonaws.com"
         }
       }
     }
@@ -230,7 +227,7 @@ resource "aws_iam_role" "sqs_role" {
 }
 EOF
 
-  permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/Developer"
+  permissions_boundary = "arn:aws:iam::${var.account_id}:policy/Developer"
 }
 
 resource "aws_iam_role_policy" "sqs_role_policy" {

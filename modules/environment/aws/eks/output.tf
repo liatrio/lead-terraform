@@ -6,10 +6,6 @@ output "aws_iam_openid_connect_provider" {
   value = aws_iam_openid_connect_provider.default
 }
 
-output "cluster_oidc_issuer_url" {
-  value = module.eks.cluster_oidc_issuer_url
-}
-
 output "workspace_iam_role" {
   value = aws_iam_role.workspace_role
 }
