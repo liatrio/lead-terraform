@@ -65,7 +65,7 @@ module "elasticsearch-certificate" {
 
 data "helm_repository" "liatrio" {
   name = "lead.prod.liatr.io"
-  url  = "https://artifactory.toolchain.lead.prod.liatr.io/artifactory/helm/"
+  url  = "s3://liatrio-helm/charts"
 }
 
 resource "helm_release" "lead-dashboard" {
