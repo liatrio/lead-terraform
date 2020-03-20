@@ -43,6 +43,7 @@ data "template_file" "operator_toolchain_values" {
     remote_state_config = var.remote_state_config
 
     enable_aws_event_mapper = var.enable_aws_event_mapper
+    sqs_url                 = var.sqs_url
 
     operator_toolchain_enabled     = contains(var.operators, "toolchain")
     operator_elasticsearch_enabled = contains(var.operators, "elasticsearch")

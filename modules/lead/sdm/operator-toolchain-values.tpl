@@ -22,6 +22,10 @@ product:
   rbac:
     serviceAccountAnnotations: ${product_service_account_annotations}
 
+aws-event-mapper:
+  enabled: ${aws_event_mapper_enabled}
+  sqsUrl: ${sqs_url}
+
 operators:
   toolchain:
     enabled: ${operator_toolchain_enabled}

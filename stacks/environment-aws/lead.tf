@@ -170,6 +170,7 @@ module "sdm" {
   operators                   = var.lead_sdm_operators
   enable_aws_event_mapper     = var.enable_aws_code_services
   remote_state_config         = var.remote_state_config
+  sqs_url                     = var.enable_aws_code_services ? module.codeservices.sqs_url : ""
 
   operator_slack_service_account_annotations   = {
     "eks.amazonaws.com/role-arn" = aws_iam_role.operator_slack_service_account.arn

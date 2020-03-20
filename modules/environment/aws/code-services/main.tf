@@ -245,7 +245,7 @@ resource "aws_iam_role_policy" "event_mapper_role_policy" {
             "sts:AssumeRoleWithWebIdentity"
         ],
         "Effect": "Allow",
-        "Resource": "*"
+        "Resource": "${aws_sqs_queue.code_services_queue[0].arn}"
     }
   ]
 }

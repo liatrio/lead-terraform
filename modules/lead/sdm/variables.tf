@@ -69,3 +69,7 @@ variable "enable_aws_event_mapper" {
 variable "remote_state_config" {
   default = ""
 }
+
+variable "sqs_url" {
+  default = ""
+}
