@@ -32,6 +32,7 @@ module "sdm" {
   slack_bot_token = var.slack_bot_token
   slack_client_signing_secret = var.slack_client_signing_secret
   enable_aws_event_mapper = false
+  operators = ["toolchain", "elasticsearch", "slack", "jenkins"]
 
   providers = {
     helm.system    = helm.system

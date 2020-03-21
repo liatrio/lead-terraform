@@ -7,9 +7,9 @@ provider "helm" {
 }
 
 data "helm_repository" "liatrio" {
-  name     = "lead.prod.liatr.io"
-  url      = "http://liatrio-helm.s3-website-us-east-1.amazonaws.com/charts"
-  provider = helm.system
+  name     = "liatrio"
+  url      = "http://liatrio-helm.s3.us-east-1.amazonaws.com/charts"
+  provider = helm.toolchain
 }
 
 data "template_file" "operator_toolchain_values" {
