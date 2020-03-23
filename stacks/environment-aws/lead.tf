@@ -181,6 +181,9 @@ module "sdm" {
   operator_product_service_account_annotations = {
     "eks.amazonaws.com/role-arn" = aws_iam_role.product_operator_service_account.arn
   }
+  aws_event_mapper_service_account_annotations = {
+    "eks.amazonaws.com/role-arn" = module.codeservices.event_mapper_role_arn
+  }
 
   product_vars = {
     enable_keycloak        = var.enable_keycloak

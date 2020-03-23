@@ -25,6 +25,8 @@ product:
 aws-event-mapper:
   enabled: ${aws_event_mapper_enabled}
   sqsUrl: ${sqs_url}
+  rbac:
+    serviceAccountAnnotations: ${aws_event_mapper_service_account_annotations}
 
 operators:
   toolchain:
