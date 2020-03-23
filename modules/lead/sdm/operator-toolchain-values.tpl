@@ -25,10 +25,16 @@ product:
 operators:
   toolchain:
     enabled: ${operator_toolchain_enabled}
+    image:
+      repository: ${image_repository}
   elasticsearch:
     enabled: ${operator_elasticsearch_enabled}
+    image:
+      repository: ${image_repository}
   slack:
     enabled: ${operator_slack_enabled}
+    image:
+      repository: ${image_repository}
     ingress:
       hostName: operator-slack.${namespace}.${cluster_domain}
       annotations:
@@ -45,6 +51,8 @@ operators:
       value: ${region}
   jenkins:
     enabled: ${operator_jenkins_enabled}
+    image:
+      repository: ${image_repository}
     serviceAccountAnnotations: ${jenkins_service_account_annotations}
 aws-event-mapper:
   enabled: ${enable_aws_event_mapper}

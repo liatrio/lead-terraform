@@ -28,6 +28,8 @@ data "template_file" "operator_toolchain_values" {
       region         = var.region
       cluster_domain = "${var.cluster}.${var.root_zone_name}"
     }))
+    image_repository = var.toolchain_image_repo
+
 
     terraformSource     = "github.com/liatrio/lead-terraform//stacks/${var.product_stack}"
     remote_state_config = var.remote_state_config
