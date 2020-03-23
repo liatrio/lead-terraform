@@ -5,7 +5,7 @@ elasticsearch:
     storageClassName: ${k8s_storage_class}
     resources:
       requests:
-        storage: 30Gi
+        storage: 15Gi
   resources:
     requests:
       cpu: 100m
