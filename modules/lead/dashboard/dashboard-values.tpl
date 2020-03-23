@@ -3,6 +3,9 @@ elasticsearch:
   replicas: ${elasticsearch_replicas}
   volumeClaimTemplate:
     storageClassName: ${k8s_storage_class}
+    resources:
+      requests:
+        storage: 30Gi
   resources:
     requests:
       cpu: 100m
