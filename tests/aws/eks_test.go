@@ -139,7 +139,7 @@ func testLeadSdm(t *testing.T) {
 			tm.SetTerraformVar("product_stack", "aws")
 			tm.SetTerraformVar("namespace", tm.GetStringGlobal(Namespace))
 			tm.SetTerraformVar("system_namespace", tm.GetStringGlobal(Namespace))
-			tm.SetTerraformVar("sdm_version", "2.0.3")
+			tm.SetTerraformVar("sdm_version", common.LeadSdmVersion)
 			tm.SetTerraformVar("product_version", "2.0.0")
 			tm.SetTerraformVar("cluster_id", tm.GetStringGlobal(Cluster))
 			tm.SetTerraformVar("slack_bot_token", "xoxb-1111111111-111111111111-aaaaaaaaaaaaaaaaaaaaaaaa")

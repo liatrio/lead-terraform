@@ -7,19 +7,9 @@ provider "helm" {
 }
 
 data "helm_repository" "liatrio" {
-  name     = "lead.prod.liatr.io"
-  url      = "https://artifactory.toolchain.lead.prod.liatr.io/artifactory/helm/"
-  provider = helm.system
-}
-
-resource "helm_release" "operator_toolchain_definition" {
-  count      = var.enable_operators ? 1 : 0
-  repository = data.helm_repository.liatrio.metadata[0].name
-  name       = "operator-toolchain-definition"
-  chart      = "operator-toolchain-definition"
-  version    = var.sdm_version
-  namespace  = var.system_namespace
-  provider   = helm.system
+  name     = "liatrio"
+  url      = "http://liatrio-helm.s3.us-east-1.amazonaws.com/charts"
+  provider = helm.toolchain
 }
 
 data "template_file" "operator_toolchain_values" {
@@ -65,9 +55,6 @@ resource "helm_release" "operator_toolchain" {
   version    = var.sdm_version
   namespace  = var.namespace
   provider   = helm.toolchain
-  depends_on = [
-    helm_release.operator_toolchain_definition
-  ]
 
   values = [
     data.template_file.operator_toolchain_values.rendered
