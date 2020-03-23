@@ -4,17 +4,23 @@ product_version: "${product_version}"
 product_stack: ${product_stack}
 product_vars: ${product_vars}
 
-%{ if product_stack == "product-aws" }
 product:
-  defaultProductVariables:
-    codebuild_role: ${codebuild_role}
-    codepipeline_role: ${codepipeline_role}
-    s3_bucket: ${code_services_s3_bucket}
-    codebuild_user: ${codebuild_user}
-    cluster_domain: ${cluster_domain}
-    region: ${region}
-%{ endif }
-
+  image:
+    tag: ${sdm_version}
+  convergeImage:
+    tag: ${sdm_version}
+  enabled: ${operator_product_enabled}
+  terraformSource: ${terraformSource}
+  %{ if remote_state_config != "" }
+  remoteStateConfig: |
+    ${indent(4, remote_state_config)}
+  %{ endif }
+  defaultProductVariables: ${product_vars}
+  defaultProductVersion: "${product_version}"
+  defaultJobEnvVariables:
+    CLUSTER: ${cluster}
+  rbac:
+    serviceAccountAnnotations: ${product_service_account_annotations}
 
 operators:
   toolchain:
@@ -40,7 +46,5 @@ operators:
   jenkins:
     enabled: ${operator_jenkins_enabled}
     serviceAccountAnnotations: ${jenkins_service_account_annotations}
-product:
-  enabled: ${operator_product_enabled}
 aws-event-mapper:
   enabled: ${enable_aws_event_mapper}

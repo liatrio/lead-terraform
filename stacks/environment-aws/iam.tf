@@ -214,7 +214,9 @@ data "aws_iam_policy_document" "cluster_autoscaler" {
       "ec2:DescribeLaunchTemplateVersions",
     ]
 
-    resources = ["*"]
+    resources = [
+      "*"
+    ]
   }
 
   statement {
@@ -227,18 +229,24 @@ data "aws_iam_policy_document" "cluster_autoscaler" {
       "autoscaling:UpdateAutoScalingGroup",
     ]
 
-    resources = ["*"]
+    resources = [
+      "*"
+    ]
 
     condition {
       test     = "StringEquals"
       variable = "autoscaling:ResourceTag/kubernetes.io/cluster/${module.eks.cluster_id}"
-      values   = ["owned"]
+      values   = [
+        "owned"
+      ]
     }
 
     condition {
       test     = "StringEquals"
       variable = "autoscaling:ResourceTag/kubernetes.io/cluster-autoscaler/enabled"
-      values   = ["true"]
+      values   = [
+        "true"
+      ]
     }
   }
 }
@@ -315,8 +323,7 @@ resource "aws_iam_role_policy_attachment" "operator_jenkins" {
 }
 
 resource "aws_iam_role" "product_operator_service_account" {
-  count  = var.enable_aws_code_services ? 1 : 0
-  name = "${var.cluster}_product_operator_service_account"
+  name = "${var.cluster}-product-operator-service-account"
 
   assume_role_policy = <<EOF
 {
@@ -330,7 +337,7 @@ resource "aws_iam_role" "product_operator_service_account" {
       "Action": "sts:AssumeRoleWithWebIdentity",
       "Condition": {
         "StringEquals": {
-          "${replace(module.eks.aws_iam_openid_connect_provider.url, "https://", "")}:sub": "system:serviceaccount:${var.toolchain_namespace}:product-operator"
+          "${replace(module.eks.aws_iam_openid_connect_provider.url, "https://", "")}:sub": "system:serviceaccount:${var.toolchain_namespace}:operator-product"
         }
       }
     }
@@ -341,47 +348,96 @@ EOF
 
 #probably too permissive
 resource "aws_iam_role_policy" "product-operator" {
-  count  = var.enable_aws_code_services ? 1 : 0
   name = "${var.cluster}-product-operator"
-  role = aws_iam_role.product_operator_service_account[0].name
+  role = aws_iam_role.product_operator_service_account.name
 
   policy = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
-    {
-        "Effect": "Allow",
-        "Action": [
-            "codebuild:StopBuild",
-            "codepipeline:AcknowledgeThirdPartyJob",
-            "codepipeline:DeletePipeline",
-            "codebuild:UpdateProject",
-            "codepipeline:PutThirdPartyJobFailureResult",
-            "codepipeline:EnableStageTransition",
-            "codepipeline:RetryStageExecution",
-            "codepipeline:PutJobFailureResult",
-            "codebuild:ImportSourceCredentials",
-            "codepipeline:DisableStageTransition",
-            "codepipeline:PutThirdPartyJobSuccessResult",
-            "codepipeline:PollForThirdPartyJobs",
-            "codepipeline:StartPipelineExecution",
-            "codepipeline:PutJobSuccessResult",
-            "codebuild:DeleteReportGroup",
-            "codebuild:CreateProject",
-            "codebuild:UpdateReportGroup",
-            "codebuild:CreateReportGroup",
-            "codepipeline:PutApprovalResult",
-            "codepipeline:StopPipelineExecution",
-            "codepipeline:AcknowledgeJob",
-            "codebuild:DeleteReport",
-            "codepipeline:UpdatePipeline",
-            "codebuild:BatchDeleteBuilds",
-            "codebuild:DeleteProject",
-            "codebuild:StartBuild"
-        ],
-        "Resource": "*"
-    }
-  ]
+  {
+    "Effect": "Allow",
+    "Action": [
+      "codebuild:StopBuild",
+      "codepipeline:AcknowledgeThirdPartyJob",
+      "codepipeline:DeletePipeline",
+      "codebuild:UpdateProject",
+      "codepipeline:PutThirdPartyJobFailureResult",
+      "codepipeline:EnableStageTransition",
+      "codepipeline:RetryStageExecution",
+      "codepipeline:PutJobFailureResult",
+      "codebuild:ImportSourceCredentials",
+      "codepipeline:DisableStageTransition",
+      "codepipeline:PutThirdPartyJobSuccessResult",
+      "codepipeline:PollForThirdPartyJobs",
+      "codepipeline:StartPipelineExecution",
+      "codepipeline:PutJobSuccessResult",
+      "codebuild:DeleteReportGroup",
+      "codebuild:CreateProject",
+      "codebuild:UpdateReportGroup",
+      "codebuild:CreateReportGroup",
+      "codepipeline:PutApprovalResult",
+      "codepipeline:StopPipelineExecution",
+      "codepipeline:AcknowledgeJob",
+      "codebuild:DeleteReport",
+      "codepipeline:UpdatePipeline",
+      "codebuild:BatchDeleteBuilds",
+      "codebuild:DeleteProject",
+      "codebuild:StartBuild",
+      "codebuild:BatchGetProjects",
+      "codepipeline:CreatePipeline",
+      "codepipeline:GetPipeline",
+      "codepipeline:ListTagsForResource"
+    ],
+    "Resource": "*"
+  },
+  {
+    "Effect": "Allow",
+    "Action": [
+      "s3:ListBucket",
+      "s3:GetBucketVersioning",
+      "s3:CreateBucket"
+    ],
+    "Resource": [
+      "arn:aws:s3:::lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${var.cluster}.liatr.io"
+    ]
+  },
+  {
+    "Effect": "Allow",
+    "Action": [
+      "s3:PutObject",
+      "s3:GetObject",
+      "s3:DeleteObject"
+    ],
+    "Resource": [
+      "arn:aws:s3:::lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${var.cluster}.liatr.io/*"
+    ]
+  },
+  {
+    "Effect": "Allow",
+    "Action": [
+      "dynamodb:PutItem",
+      "dynamodb:GetItem",
+      "dynamodb:DescribeTable",
+      "dynamodb:DeleteItem",
+      "dynamodb:CreateTable",
+      "dynamodb:TagResource"
+    ],
+    "Resource": [
+      "arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/lead-sdm-operators-${var.cluster}"
+    ]
+  },
+  {
+    "Effect": "Allow",
+    "Action": [
+      "iam:PassRole"
+    ],
+    "Resource": [
+      "${module.codeservices.codebuild_role}",
+      "${module.codeservices.codepipeline_role}"
+    ]
+  }
+]
 }
 EOF
 }
