@@ -219,7 +219,7 @@ resource "aws_iam_role" "event_mapper_role" {
       "Action": "sts:AssumeRoleWithWebIdentity",
       "Condition": {
         "StringEquals": {
-          "${replace(var.openid_connect_provider_url, "https://", "")}:aud": "sts.amazonaws.com"
+          "${replace(var.openid_connect_provider_url, "https://", "")}:sub": "system:serviceaccount:${var.toolchain_namespace}:aws-event-mapper"
         }
       }
     }

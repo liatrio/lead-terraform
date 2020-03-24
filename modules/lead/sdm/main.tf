@@ -41,9 +41,10 @@ data "template_file" "operator_toolchain_values" {
     operator_jenkins_enabled       = contains(var.operators, "jenkins")
     operator_product_enabled       = contains(var.operators, "product")
 
-    slack_service_account_annotations   = jsonencode(var.operator_slack_service_account_annotations)
-    jenkins_service_account_annotations = jsonencode(var.operator_jenkins_service_account_annotations)
-    product_service_account_annotations = jsonencode(var.operator_product_service_account_annotations)
+    slack_service_account_annotations            = jsonencode(var.operator_slack_service_account_annotations)
+    jenkins_service_account_annotations          = jsonencode(var.operator_jenkins_service_account_annotations)
+    product_service_account_annotations          = jsonencode(var.operator_product_service_account_annotations)
+    aws_event_mapper_service_account_annotations = jsonencode(var.aws_event_mapper_service_account_annotations)
   }
 }
 

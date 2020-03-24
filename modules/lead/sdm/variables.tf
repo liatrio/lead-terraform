@@ -73,3 +73,8 @@ variable "remote_state_config" {
 variable "sqs_url" {
   default = ""
 }
+
+variable "aws_event_mapper_service_account_annotations" {
+  type    = map(string)
+  default = {}
+}
