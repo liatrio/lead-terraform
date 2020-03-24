@@ -7,7 +7,7 @@ provider "helm" {
 }
 
 data "helm_repository" "liatrio" {
-  name     = "liatrio"
+  name     = "liatrio-s3"
   url      = "http://liatrio-helm.s3.us-east-1.amazonaws.com/charts"
   provider = helm.toolchain
 }
