@@ -346,10 +346,9 @@ resource "aws_iam_role" "product_operator_service_account" {
 EOF
 }
 
-#probably too permissive
-resource "aws_iam_role_policy" "product-operator" {
-  name = "${var.cluster}-product-operator"
-  role = aws_iam_role.product_operator_service_account.name
+resource "aws_iam_policy" "product_operator_aws_code_services" {
+  count = var.enable_aws_code_services ? 1 : 0
+  name  = "${var.cluster}-product-operator"
 
   policy = <<EOF
 {
@@ -440,4 +439,10 @@ resource "aws_iam_role_policy" "product-operator" {
 ]
 }
 EOF
+}
+
+resource "aws_iam_role_policy_attachment" "product_operator_aws_code_services" {
+  count      = var.enable_aws_code_services ? 1 : 0
+  role       = aws_iam_role.product_operator_service_account.name
+  policy_arn = aws_iam_policy.product_operator_aws_code_services.arn
 }
