@@ -11,7 +11,7 @@ output "codepipeline_role" {
 }
 
 output "sqs_url" {
-  value = length(aws_sqs_queue.code_services_queue) > 0 ? aws_sqs_queue.code_services_queue[0].url : ""
+  value = length(aws_sqs_queue.code_services_queue) > 0 ? aws_sqs_queue.code_services_queue[0].id : ""
 }
 
 output "event_mapper_role_arn" {
