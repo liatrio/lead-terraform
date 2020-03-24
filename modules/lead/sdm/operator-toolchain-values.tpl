@@ -5,11 +5,13 @@ product_stack: ${product_stack}
 product_vars: ${product_vars}
 
 product:
+  enabled: ${operator_product_enabled}
   image:
+    repository: ${image_repository}/operator-product
     tag: ${sdm_version}
   convergeImage:
+    repository: ${image_repository}/converge-image
     tag: ${sdm_version}
-  enabled: ${operator_product_enabled}
   terraformSource: ${terraformSource}
   %{ if remote_state_config != "" }
   remoteStateConfig: |
@@ -25,10 +27,16 @@ product:
 operators:
   toolchain:
     enabled: ${operator_toolchain_enabled}
+    image:
+      repository: ${image_repository}/operator-toolchain
   elasticsearch:
     enabled: ${operator_elasticsearch_enabled}
+    image:
+      repository: ${image_repository}/operator-elasticsearch
   slack:
     enabled: ${operator_slack_enabled}
+    image:
+      repository: ${image_repository}/operator-slack
     ingress:
       hostName: operator-slack.${namespace}.${cluster_domain}
       annotations:
@@ -45,6 +53,8 @@ operators:
       value: ${region}
   jenkins:
     enabled: ${operator_jenkins_enabled}
+    image:
+      repository: ${image_repository}/operator-jenkins
     serviceAccountAnnotations: ${jenkins_service_account_annotations}
 aws-event-mapper:
   enabled: ${enable_aws_event_mapper}

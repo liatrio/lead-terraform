@@ -69,3 +69,5 @@ variable "enable_aws_event_mapper" {
 variable "remote_state_config" {
   default = ""
 }
+
+variable "toolchain_image_repo" {}
