@@ -170,6 +170,7 @@ module "sdm" {
   operators                   = var.lead_sdm_operators
   enable_aws_event_mapper     = var.enable_aws_code_services
   remote_state_config         = var.remote_state_config
+  sqs_url                     = var.enable_aws_code_services ? module.codeservices.sqs_url : ""
   toolchain_image_repo        = var.toolchain_image_repo
 
   operator_slack_service_account_annotations   = {
@@ -180,6 +181,9 @@ module "sdm" {
   }
   operator_product_service_account_annotations = {
     "eks.amazonaws.com/role-arn" = aws_iam_role.product_operator_service_account.arn
+  }
+  aws_event_mapper_service_account_annotations = {
+    "eks.amazonaws.com/role-arn" = module.codeservices.event_mapper_role_arn
   }
 
   product_vars = {

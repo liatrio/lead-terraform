@@ -24,6 +24,12 @@ product:
   rbac:
     serviceAccountAnnotations: ${product_service_account_annotations}
 
+aws-event-mapper:
+  enabled: ${enable_aws_event_mapper}
+  sqsUrl: ${sqs_url}
+  rbac:
+    serviceAccountAnnotations: ${aws_event_mapper_service_account_annotations}
+
 operators:
   toolchain:
     enabled: ${operator_toolchain_enabled}
@@ -56,5 +62,3 @@ operators:
     image:
       repository: ${image_repository}/operator-jenkins
     serviceAccountAnnotations: ${jenkins_service_account_annotations}
-aws-event-mapper:
-  enabled: ${enable_aws_event_mapper}

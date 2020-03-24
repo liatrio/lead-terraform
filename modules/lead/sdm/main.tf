@@ -35,6 +35,7 @@ data "template_file" "operator_toolchain_values" {
     remote_state_config = var.remote_state_config
 
     enable_aws_event_mapper = var.enable_aws_event_mapper
+    sqs_url                 = var.sqs_url
 
     operator_toolchain_enabled     = contains(var.operators, "toolchain")
     operator_elasticsearch_enabled = contains(var.operators, "elasticsearch")
@@ -42,9 +43,10 @@ data "template_file" "operator_toolchain_values" {
     operator_jenkins_enabled       = contains(var.operators, "jenkins")
     operator_product_enabled       = contains(var.operators, "product")
 
-    slack_service_account_annotations   = jsonencode(var.operator_slack_service_account_annotations)
-    jenkins_service_account_annotations = jsonencode(var.operator_jenkins_service_account_annotations)
-    product_service_account_annotations = jsonencode(var.operator_product_service_account_annotations)
+    slack_service_account_annotations            = jsonencode(var.operator_slack_service_account_annotations)
+    jenkins_service_account_annotations          = jsonencode(var.operator_jenkins_service_account_annotations)
+    product_service_account_annotations          = jsonencode(var.operator_product_service_account_annotations)
+    aws_event_mapper_service_account_annotations = jsonencode(var.aws_event_mapper_service_account_annotations)
   }
 }
 
