@@ -165,7 +165,7 @@ func testLeadDashboard(t *testing.T) {
 			tm.SetTerraformVar("root_zone_name", "lead-terraform.test.liatr.io")
 			tm.SetTerraformVar("cluster_id", tm.GetStringGlobal(Cluster))
 			tm.SetTerraformVar("cluster_domain", "lead-terraform.test.liatr.io")
-			tm.SetTerraformVar("dashboard_version", "2.0.1")
+			tm.SetTerraformVar("dashboard_version", common.DashboardVersion)
 		},
 	}
 	defer testLeadDashboard.TeardownTests()
