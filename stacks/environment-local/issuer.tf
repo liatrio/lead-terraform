@@ -14,22 +14,6 @@ resource "kubernetes_cluster_role" "cert_manager_cluster_role" {
   }
 }
 
-resource "kubernetes_cluster_role_binding" "cert_manager_cluster_role_binding" {
-  metadata {
-    name = "cert-manager-cluster-role-binding"
-  }
-  role_ref {
-    api_group = "rbac.authorization.k8s.io"
-    kind      = "ClusterRole"
-    name      = kubernetes_cluster_role.cert_manager_cluster_role.metadata[0].name
-  }
-  subject {
-    kind      = "ServiceAccount"
-    name      = module.toolchain.tiller_service_account
-    namespace = module.toolchain.namespace
-  }
-}
-
 module "staging_cluster_issuer" {
   source      = "../../modules/common/cert-issuer"
   namespace   = module.toolchain.namespace
