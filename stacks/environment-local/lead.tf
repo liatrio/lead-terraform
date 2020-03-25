@@ -21,11 +21,6 @@ module "infrastructure" {
   uptime                              = var.uptime
 
   external_dns_chart_values = data.template_file.external_dns_values.rendered
-
-  providers = {
-    kubernetes = kubernetes
-    helm       = helm.system
-  }
 }
 
 module "toolchain" {
@@ -66,11 +61,6 @@ module "toolchain" {
   smtp_username   = ""
   smtp_password   = ""
   smtp_from_email = "noreply@liatr.io"
-
-  providers = {
-    helm       = helm.toolchain
-    kubernetes = kubernetes
-  }
 }
 
 module "sdm" {
@@ -97,12 +87,6 @@ module "sdm" {
     image_repo              = var.image_repo
     ingress_controller_type = var.ingress_controller_type
   }
-
-  providers = {
-    kubernetes     = kubernetes
-    helm.system    = helm.toolchain
-    helm.toolchain = helm.toolchain
-  }
 }
 
 module "dashboard" {
@@ -118,9 +102,4 @@ module "dashboard" {
   enable_keycloak   = var.enable_keycloak
   keycloak_realm_id = module.toolchain.keycloak_realm_id
   crd_waiter        = module.infrastructure.crd_waiter
-
-  providers = {
-    kubernetes = kubernetes
-    helm       = helm.toolchain
-  }
 }

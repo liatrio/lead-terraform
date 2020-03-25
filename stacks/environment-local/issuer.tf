@@ -37,9 +37,4 @@ module "staging_cluster_issuer" {
   issuer_kind = "ClusterIssuer"
   issuer_type = "selfSigned"
   crd_waiter  = module.infrastructure.crd_waiter
-
-  providers = {
-    kubernetes = kubernetes
-    helm       = helm.toolchain
-  }
 }

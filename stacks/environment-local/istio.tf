@@ -11,7 +11,6 @@ resource "helm_release" "istio_init" {
   name       = "istio-init"
   timeout    = 600
   wait       = true
-  provider   = helm.system
   version    = "1.4.2"
 }
 
@@ -34,9 +33,5 @@ module "istio_system" {
   flagger_event_webhook = "${module.sdm.slack_operator_in_cluster_url}/canary-events"
   k8s_storage_class     = var.k8s_storage_class
   crd_waiter            = null_resource.istio_init_delay.id
-  providers = {
-    kubernetes = kubernetes
-    helm       = helm.system
-  }
 }
 

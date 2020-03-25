@@ -15,7 +15,6 @@ resource "helm_release" "kube_resource_report" {
   version    = "0.2.2"
   timeout    = 600
   wait       = true
-  provider   = helm.toolchain
 
   depends_on = [data.helm_repository.liatrio]
 

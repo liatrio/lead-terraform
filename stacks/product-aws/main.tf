@@ -18,7 +18,7 @@ provider "aws" {
 
 provider "helm" {
   alias           = "staging"
-  version         = "1.0.0"
+  version         = "1.1.0"
 
   kubernetes {
     load_config_file = var.load_config_file
@@ -34,7 +34,7 @@ provider "kubernetes" {
 
 provider "helm" {
   alias           = "production"
-  version         = "1.0.0"
+  version         = "1.1.0"
 
   kubernetes {
     load_config_file = var.load_config_file
