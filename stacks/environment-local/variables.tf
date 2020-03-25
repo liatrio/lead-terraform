@@ -140,3 +140,11 @@ variable "lead_sdm_operators" {
   type    = list
   default = ["toolchain", "elasticsearch", "slack", "product"]
 }
+
+variable "toolchain_image_repo" {
+  default = "artifactory.toolchain.lead.prod.liatr.io/docker-registry/flywheel"
+}
+
+variable "enable_aws_event_mapper" {
+  default = false
+}

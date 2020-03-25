@@ -290,3 +290,79 @@ resource "kubernetes_role_binding" "jenkins_production_rolebinding" {
     namespace = module.toolchain_namespace.name
   }
 }
+
+resource "kubernetes_config_map" "jcasc_pipelines_configmap" {
+  metadata {
+    name      = "jenkins-jenkins-config-pipelines"
+    namespace = module.toolchain_namespace.name
+
+    labels = {
+      "app.kubernetes.io/name"       = "jenkins"
+      "app.kubernetes.io/instance"   = "jenkins"
+      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/managed-by" = "Terraform"
+    }
+  }
+
+  data = {
+    "pipelines.json" = templatefile("${path.module}/pipelines.tpl", {pipelines=var.pipelines})
+  }
+}
+
+resource "kubernetes_config_map" "jcasc_shared_libraries_configmap" {
+  metadata {
+    name      = "jenkins-jenkins-config-shared-libraries"
+    namespace = module.toolchain_namespace.name
+
+    labels = {
+      "app.kubernetes.io/name"       = "jenkins"
+      "app.kubernetes.io/instance"   = "jenkins"
+      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/managed-by" = "Terraform"
+      "jenkins-jenkins-config"       = "true"
+    }
+  }
+
+  data = {
+    "shared-libraries.yaml" = templatefile("${path.module}/shared-libraries.tpl", {})
+  }
+}
+
+resource "kubernetes_config_map" "jcasc_pod_templates_configmap" {
+  metadata {
+    name      = "jenkins-jenkins-config-pod-templates"
+    namespace = module.toolchain_namespace.name
+
+    labels = {
+      "app.kubernetes.io/name"       = "jenkins"
+      "app.kubernetes.io/instance"   = "jenkins"
+      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/managed-by" = "Terraform"
+      "jenkins-jenkins-config"       = "true"
+    }
+  }
+
+  data = {
+    "pod-templates.yaml" = templatefile("${path.module}/pod-templates.tpl", data.template_file.jenkins_values.vars)
+  }
+}
+
+resource "kubernetes_config_map" "jcasc_slack_configs_configmap" {
+  metadata {
+    name      = "jenkins-jenkins-config-slack-configs"
+    namespace = module.toolchain_namespace.name
+
+    labels = {
+      "app.kubernetes.io/name"       = "jenkins"
+      "app.kubernetes.io/instance"   = "jenkins"
+      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/managed-by" = "Terraform"
+      "jenkins-jenkins-config"       = "true"
+    }
+  }
+  
+
+  data = {
+    "slack-configs.yaml" = templatefile("${path.module}/slack-configs.tpl", data.template_file.jenkins_values.vars)
+  }
+}
