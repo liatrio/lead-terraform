@@ -187,7 +187,7 @@ module "sdm" {
     "eks.amazonaws.com/role-arn" = module.codeservices.event_mapper_role_arn
   }
 
-  producttype_vars = {
+  product_vars = {
     enable_keycloak        = var.enable_keycloak
     builder_images_version = var.builder_images_version
     jenkins_image_version  = var.jenkins_image_version

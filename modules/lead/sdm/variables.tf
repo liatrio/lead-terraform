@@ -38,7 +38,7 @@ variable "product_stack" {
   default = "product-local"
 }
 
-variable "producttype_vars" {
+variable "product_vars" {
   type    = map(string)
   default = {}
 }

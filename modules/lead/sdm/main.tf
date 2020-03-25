@@ -25,18 +25,18 @@ data "template_file" "operator_toolchain_values" {
     region          = var.region
     product_stack   = var.product_stack
 
-    enable_keycloak        = var.producttype_vars["enable_keycloak"]
-    builder_images_version = var.producttype_vars["builder_images_version"]
-    jenkins_image_version  = var.producttype_vars["jenkins_image_version"]
-    toolchain_image_repo   = var.producttype_vars["toolchain_image_repo"]
-    product_image_repo     = var.producttype_vars["product_image_repo"]
-    enable_harbor          = var.producttype_vars["enable_harbor"]
-    enable_artifactory     = var.producttype_vars["enable_artifactory"]
+    enable_keycloak        = var.product_vars["enable_keycloak"]
+    builder_images_version = var.product_vars["builder_images_version"]
+    jenkins_image_version  = var.product_vars["jenkins_image_version"]
+    toolchain_image_repo   = var.product_vars["toolchain_image_repo"]
+    product_image_repo     = var.product_vars["product_image_repo"]
+    enable_harbor          = var.product_vars["enable_harbor"]
+    enable_artifactory     = var.product_vars["enable_artifactory"]
 
-    s3_bucket         = var.producttype_vars["s3_bucket"]
-    codebuild_role    = var.producttype_vars["codebuild_role"]
-    codepipeline_role = var.producttype_vars["codepipeline_role"]
-    codebuild_user    = var.producttype_vars["codebuild_user"]
+    s3_bucket         = var.product_vars["s3_bucket"]
+    codebuild_role    = var.product_vars["codebuild_role"]
+    codepipeline_role = var.product_vars["codepipeline_role"]
+    codebuild_user    = var.product_vars["codebuild_user"]
 
     image_repository = var.toolchain_image_repo
 
