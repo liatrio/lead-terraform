@@ -168,6 +168,7 @@ module "sdm" {
   workspace_role_name         = module.eks.workspace_iam_role.name
   product_stack               = var.product_stack
   operators                   = var.lead_sdm_operators
+  product_types               = var.product_types
   enable_aws_event_mapper     = var.enable_aws_code_services
   remote_state_config         = var.remote_state_config
   sqs_url                     = var.enable_aws_code_services ? module.codeservices.sqs_url : ""
@@ -186,7 +187,7 @@ module "sdm" {
     "eks.amazonaws.com/role-arn" = module.codeservices.event_mapper_role_arn
   }
 
-  product_vars = {
+  producttype_vars = {
     enable_keycloak        = var.enable_keycloak
     builder_images_version = var.builder_images_version
     jenkins_image_version  = var.jenkins_image_version

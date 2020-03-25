@@ -24,10 +24,20 @@ data "template_file" "operator_toolchain_values" {
     workspace_role  = var.workspace_role_name
     region          = var.region
     product_stack   = var.product_stack
-    product_vars    = jsonencode(merge(var.product_vars, {
-      region         = var.region
-      cluster_domain = "${var.cluster}.${var.root_zone_name}"
-    }))
+
+    enable_keycloak        = producttype_vars["enable_keycloak"]
+    builder_images_version = producttype_vars["builder_images_version"]
+    jenkins_image_version  = producttype_vars["jenkins_image_version"]
+    toolchain_image_repo   = producttype_vars["toolchain_image_repo"]
+    product_image_repo     = producttype_vars["product_image_repo"]
+    enable_harbor          = producttype_vars["enable_harbor"]
+    enable_artifactory     = producttype_vars["enable_artifactory"]
+
+    s3_bucket         = producttype_vars["s3_bucket"]
+    codebuild_role    = producttype_vars["codebuild_role"]
+    codepipeline_role = producttype_vars["codepipeline_role"]
+    codebuild_user    = producttype_vars["codebuild_user"]
+
     image_repository = var.toolchain_image_repo
 
 
@@ -42,6 +52,9 @@ data "template_file" "operator_toolchain_values" {
     operator_slack_enabled         = contains(var.operators, "slack")
     operator_jenkins_enabled       = contains(var.operators, "jenkins")
     operator_product_enabled       = contains(var.operators, "product")
+
+    product_type_aws_enabled     = contains(var.product_types, "product-aws")
+    product_type_jenkins_enabled = contains(var.product_types, "product-jenkins")
 
     slack_service_account_annotations            = jsonencode(var.operator_slack_service_account_annotations)
     jenkins_service_account_annotations          = jsonencode(var.operator_jenkins_service_account_annotations)

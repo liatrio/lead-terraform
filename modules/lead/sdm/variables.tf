@@ -38,9 +38,13 @@ variable "product_stack" {
   default = "product-local"
 }
 
-variable "product_vars" {
+variable "producttype_vars" {
   type    = map(string)
   default = {}
+}
+
+variable "product_types" {
+  type = list(string)
 }
 
 variable "operator_slack_service_account_annotations" {

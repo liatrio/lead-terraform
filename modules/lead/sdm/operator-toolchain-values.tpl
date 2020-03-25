@@ -2,8 +2,6 @@ cluster: ${cluster}
 cluster_domain: ${cluster_domain}
 product_version: "${product_version}"
 product_stack: ${product_stack}
-product_vars: ${product_vars}
-
 product:
   enabled: ${operator_product_enabled}
   image:
@@ -17,12 +15,40 @@ product:
   remoteStateConfig: |
     ${indent(4, remote_state_config)}
   %{ endif }
-  defaultProductVariables: ${product_vars}
-  defaultProductVersion: "${product_version}"
-  defaultJobEnvVariables:
-    CLUSTER: ${cluster}
   rbac:
     serviceAccountAnnotations: ${product_service_account_annotations}
+  types:
+    %{ if product_type_aws_enabled }
+    - name: product-aws
+      terraformSource: github.com/liatrio/lead-terraform//stacks/product-aws
+      defaultProductVersion: ${product_version}
+      defaultProductVariables:
+        cluster_domain: ${cluster_domain}
+        codebuild_role: ${codebuild_role}
+        codebuild_user: ${codebuild_user}
+        codepipeline_role: ${codepipeline_role}
+        region: ${region}
+        s3_bucket: ${s3_bucket}
+      defaultJobEnvVariables:
+        CLUSTER: ${cluster}
+    %{ endif }
+    %{ if product_type_jenkins_enabled }
+    - name: product-jenkins
+      terraformSource: github.com/liatrio/lead-terraform//stacks/product-jenkins
+      defaultProductVersion: ${product_version}
+      defaultProductVariables:
+        builder_images_version: ${builder_images_version}
+        cluster_domain: ${cluster_domain}
+        enable_artifactory: ${enable_artifactory}
+        enable_harbor: ${enable_harbor}
+        enable_keycloak: ${enable_keycloak}
+        jenkins_image_version: ${jenkins_image_version}
+        product_image_repo: ${product_image_repo}
+        region: ${region}
+        toolchain_image_repo: ${toolchain_image_repo}
+      defaultJobEnvVariables:
+        CLUSTER: ${cluster}
+    %{ endif }
 
 aws-event-mapper:
   enabled: ${enable_aws_event_mapper}
