@@ -123,6 +123,7 @@ func testModules(t *testing.T) {
 	t.Run("SDM", testLeadSdm)
 	t.Run("Dashboard", testLeadDashboard)
 	t.Run("CodeServices", testCodeServices)
+	t.Run("KubeResourceReport", common.KubeResourceReportTest)
 }
 
 func testLeadSdm(t *testing.T) {
