@@ -34,6 +34,7 @@ module "sdm" {
   enable_aws_event_mapper = false
   toolchain_image_repo = "489130170427.dkr.ecr.us-east-1.amazonaws.com"
   operators = ["toolchain", "elasticsearch", "slack", "jenkins"]
+  product_types = ["product-jenkins"]
 
   providers = {
     helm.system    = helm.system
