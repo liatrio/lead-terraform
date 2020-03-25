@@ -444,5 +444,5 @@ EOF
 resource "aws_iam_role_policy_attachment" "product_operator_aws_code_services" {
   count      = var.enable_aws_code_services ? 1 : 0
   role       = aws_iam_role.product_operator_service_account.name
-  policy_arn = aws_iam_policy.product_operator_aws_code_services.arn
+  policy_arn = aws_iam_policy.product_operator_aws_code_services[0].arn
 }
