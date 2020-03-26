@@ -21,18 +21,12 @@ module "infrastructure" {
   uptime                              = var.uptime
 
   external_dns_chart_values = data.template_file.external_dns_values.rendered
-
-  providers = {
-    kubernetes = kubernetes
-    helm       = helm.system
-  }
 }
 
 module "toolchain" {
   source                          = "../../modules/lead/toolchain"
   root_zone_name                  = var.root_zone_name
   cluster                         = var.cluster
-  cluster_domain                  = "${var.cluster}.${var.root_zone_name}"
   namespace                       = var.toolchain_namespace
   image_whitelist                 = var.image_whitelist
   artifactory_license             = var.artifactory_license
@@ -49,8 +43,6 @@ module "toolchain" {
   enable_harbor                   = var.enable_harbor
   issuer_name                     = module.staging_cluster_issuer.issuer_name
   issuer_kind                     = module.staging_cluster_issuer.issuer_kind
-  ingress_controller_type         = var.ingress_controller_type
-  ingress_external_traffic_policy = var.ingress_external_traffic_policy
   crd_waiter                      = module.infrastructure.crd_waiter
   grafeas_version                 = var.grafeas_version
   k8s_storage_class               = var.k8s_storage_class
@@ -66,11 +58,6 @@ module "toolchain" {
   smtp_username   = ""
   smtp_password   = ""
   smtp_from_email = "noreply@liatr.io"
-
-  providers = {
-    helm       = helm.toolchain
-    kubernetes = kubernetes
-  }
 }
 
 module "sdm" {
@@ -87,6 +74,8 @@ module "sdm" {
   workspace_role_name         = "local_workspace_role"
   product_stack               = "product-local"
   operators                   = var.lead_sdm_operators
+  enable_aws_event_mapper     = var.enable_aws_code_services
+  toolchain_image_repo        = var.toolchain_image_repo
 
   product_vars = {
     issuer_type             = var.cert_issuer_type
@@ -96,12 +85,6 @@ module "sdm" {
     jenkins_image_version   = var.jenkins_image_version
     image_repo              = var.image_repo
     ingress_controller_type = var.ingress_controller_type
-  }
-
-  providers = {
-    kubernetes     = kubernetes
-    helm.system    = helm.toolchain
-    helm.toolchain = helm.toolchain
   }
 }
 
@@ -118,9 +101,4 @@ module "dashboard" {
   enable_keycloak   = var.enable_keycloak
   keycloak_realm_id = module.toolchain.keycloak_realm_id
   crd_waiter        = module.infrastructure.crd_waiter
-
-  providers = {
-    kubernetes = kubernetes
-    helm       = helm.toolchain
-  }
 }

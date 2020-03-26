@@ -3,17 +3,7 @@ provider "kubernetes" {
 }
 
 provider "helm" {
-  alias           = "toolchain"
-  version         = "1.0.0"
-
-  kubernetes {
-    config_path            = var.kube_config_path
-  }
-}
-
-provider "helm" {
-  alias           = "system"
-  version         = "1.0.0"
+  version         = "1.1.0"
 
   kubernetes {
     config_path            = var.kube_config_path
@@ -34,9 +24,4 @@ module "sdm" {
   enable_aws_event_mapper = false
   toolchain_image_repo = "489130170427.dkr.ecr.us-east-1.amazonaws.com"
   operators = ["toolchain", "elasticsearch", "slack", "jenkins"]
-
-  providers = {
-    helm.system    = helm.system
-    helm.toolchain = helm.toolchain
-  }
 }
