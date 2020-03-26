@@ -9,7 +9,7 @@ provider "kubernetes" {
 }
 
 provider "helm" {
-  version         = "1.0.0"
+  version         = "1.1.0"
   alias           = "toolchain"
 
   kubernetes {
@@ -25,7 +25,7 @@ provider "kubernetes" {
 }
 
 provider "helm" {
-  version         = "1.0.0"
+  version         = "1.1.0"
   alias           = "staging"
 
   kubernetes {
@@ -41,7 +41,7 @@ provider "kubernetes" {
 }
 
 provider "helm" {
-  version         = "1.0.0"
+  version         = "1.1.0"
   alias           = "production"
 
   kubernetes {
@@ -57,7 +57,7 @@ provider "kubernetes" {
 }
 
 provider "helm" {
-  version         = "1.0.0"
+  version         = "1.1.0"
   alias           = "system"
 
   kubernetes {
