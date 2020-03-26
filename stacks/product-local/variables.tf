@@ -6,22 +6,11 @@ variable "toolchain_namespace" {
 }
 
 variable "cluster_domain" {
+  default = "localhost"
 }
 
 variable "image_whitelist" {
   default = ".*"
-}
-
-variable "issuer_type" {
-  default = "selfSigned"
-}
-
-variable "issuer_server" {
-  default = ""
-}
-
-variable "ingress_controller_type" {
-  default = "NodePort"
 }
 
 variable "config_context" {
@@ -40,12 +29,27 @@ variable "enable_keycloak" {
   default = false
 }
 variable "builder_images_version" {
+  default = "v2.0.0"
 }
 variable "jenkins_image_version" {
+  default = "v2.0.0"
 }
-variable "image_repo" {
+variable "toolchain_image_repo" {
+  default = "artifactory.toolchain.lead.prod.liatr.io/docker-registry/flywheel"
 }
 
 variable "enable_artifactory" {
   default = true
+}
+
+variable "product_image_repo" {
+  default = "artifactory.toolchain.lead.prod.liatr.io/docker-registry/flywheel"
+}
+
+variable "pipelines" {
+  type = map(object({
+    type = string
+    repo = string
+    org  = string
+  }))
 }
