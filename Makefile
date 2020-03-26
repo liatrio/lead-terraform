@@ -75,3 +75,9 @@ plugins:
 	cp ./terraform-provider-keycloak_v$(TF_KEYCLOAK_VERSION)/terraform-provider-keycloak_v$(TF_KEYCLOAK_VERSION) ~/.terraform.d/plugins/
 	rm ./terraform-provider-keycloak_v$(TF_KEYCLOAK_VERSION)_$(TF_KEYCLOAK_PLATFORM).zip
 	rm -rf ./terraform-provider-keycloak_v$(TF_KEYCLOAK_VERSION)
+
+package-kube-downscaler:
+	git clone https://github.com/hjacobs/kube-downscaler.git /tmp/kube-downscaler/
+	helm package /tmp/kube-downscaler/helm-chart -d /tmp/kube-downscaler/
+	helm s3 push /tmp/kube-downscaler/kube-downscaler-*.tgz liatrio-s3 --acl "public-read" --force
+	rm -rf /tmp/kube-downscaler
