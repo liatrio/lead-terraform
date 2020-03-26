@@ -38,56 +38,10 @@ master:
       cpu: 1000m
       memory: 2Gi
 
-
   JCasC:
     enabled: true
     pluginVersion: 1.19
     supportPluginVersion: 1.19
-    configScripts:
-      welcome-message: |
-        jenkins:
-          systemMessage: Welcome to our CI\CD server.  This Jenkins is configured and managed 'as code' from https://github.com/liatrio/lead-terraform.
-      security-config: |
-        jenkins:
-          authorizationStrategy:
-            loggedInUsersCanDoAnything:
-              allowAnonymousRead: "${allow_anonymous_read}"
-          ${security_realm}
-      keycloak-config: |
-        unclassified:
-          keycloakSecurityRealm:
-            keycloakJson: >
-              {
-                "realm": "toolchain",
-                "auth-server-url": "${keycloak_url}",
-                "ssl-required": "${keycloak_ssl}",
-                "resource": "${ingress_hostname}",
-                "public-client": true
-              }
-      master-node: |
-        jenkins:
-          labelString: "master"
-          numExecutors: 1
-      logstash-url: |
-        jenkins:
-          globalNodeProperties:
-            - envVars:
-                env:
-                - key: "elasticUrl"
-                  value: "${logstash_url}"
-                - key: "toolchainNamespace"
-                  value: "${toolchain_namespace}"
-                - key: "product"
-                  value: "${product_name}"
-                - key: "stagingNamespace"
-                  value: "${stagingNamespace}"
-                - key: "productionNamespace"
-                  value: "${productionNamespace}"
-                - key: "stagingDomain"
-                  value: "staging.${appDomain}"
-                - key: "productionDomain"
-                  value: "prod.${appDomain}"
-
 
   containerEnv:
     - name: elasticUrl

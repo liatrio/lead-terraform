@@ -304,7 +304,6 @@ resource "kubernetes_config_map" "jcasc_pipelines_configmap" {
       "app.kubernetes.io/managed-by" = "Terraform"
     }
   }
-
   data = {
     "pipelines.json" = templatefile("${path.module}/pipelines.tpl", {pipelines=var.pipelines})
   }
@@ -324,7 +323,6 @@ resource "kubernetes_config_map" "jcasc_shared_libraries_configmap" {
       "jenkins-jenkins-config"       = "true"
     }
   }
-
   data = {
     "shared-libraries.yaml" = templatefile("${path.module}/shared-libraries.tpl", {})
   }
@@ -344,7 +342,6 @@ resource "kubernetes_config_map" "jcasc_pod_templates_configmap" {
       "jenkins-jenkins-config"       = "true"
     }
   }
-
   data = {
     "pod-templates.yaml" = templatefile("${path.module}/pod-templates.tpl", data.template_file.jenkins_values.vars)
   }
@@ -364,9 +361,83 @@ resource "kubernetes_config_map" "jcasc_slack_config_configmap" {
       "jenkins-jenkins-config"       = "true"
     }
   }
-  
-
   data = {
     "slack-config.yaml" = templatefile("${path.module}/slack-config.tpl", data.template_file.jenkins_values.vars)
+  }
+}
+
+resource "kubernetes_config_map" "jcasc_logstash_url_configmap" {
+  provider = kubernetes.toolchain
+  metadata {
+    name      = "jenkins-jenkins-config-logstash-url"
+    namespace = module.toolchain_namespace.name
+
+    labels = {
+      "app.kubernetes.io/name"       = "jenkins"
+      "app.kubernetes.io/instance"   = "jenkins"
+      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/managed-by" = "Terraform"
+      "jenkins-jenkins-config"       = "true"
+    }
+  }
+  data = {
+    "logstash-url.yaml" = templatefile("${path.module}/logstash-url.tpl", data.template_file.jenkins_values.vars)
+  }
+}
+
+resource "kubernetes_config_map" "jcasc_keycloak_config_configmap" {
+  provider = kubernetes.toolchain
+  metadata {
+    name      = "jenkins-jenkins-config-keycloak-config"
+    namespace = module.toolchain_namespace.name
+
+    labels = {
+      "app.kubernetes.io/name"       = "jenkins"
+      "app.kubernetes.io/instance"   = "jenkins"
+      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/managed-by" = "Terraform"
+      "jenkins-jenkins-config"       = "true"
+    }
+  }
+  data = {
+    "keycloak-config.yaml" = templatefile("${path.module}/keycloak-config.tpl", data.template_file.jenkins_values.vars)
+  }
+}
+
+resource "kubernetes_config_map" "jcasc_master_node_configmap" {
+  provider = kubernetes.toolchain
+  metadata {
+    name      = "jenkins-jenkins-config-master-node"
+    namespace = module.toolchain_namespace.name
+
+    labels = {
+      "app.kubernetes.io/name"       = "jenkins"
+      "app.kubernetes.io/instance"   = "jenkins"
+      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/managed-by" = "Terraform"
+      "jenkins-jenkins-config"       = "true"
+    }
+  }
+  data = {
+    "master-node.yaml" = templatefile("${path.module}/master-node.tpl", {})
+  }
+}
+
+resource "kubernetes_config_map" "jcasc_welcome_message_configmap" {
+  provider = kubernetes.toolchain
+  metadata {
+    name      = "jenkins-jenkins-config-keycloak-config"
+    namespace = module.toolchain_namespace.name
+
+    labels = {
+      "app.kubernetes.io/name"       = "jenkins"
+      "app.kubernetes.io/instance"   = "jenkins"
+      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/managed-by" = "Terraform"
+      "jenkins-jenkins-config"       = "true"
+    }
+  }
+  data = {
+    "welcome-message.yaml" = templatefile("${path.module}/welcome-message.tpl", {})
   }
 }
