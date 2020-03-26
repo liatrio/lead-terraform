@@ -1,15 +1,10 @@
 package local
 
 import (
-	// "fmt"
-	// "strings"
 	"runtime"
 	"testing"
 
 	"github.com/gruntwork-io/terratest/modules/k8s"
-	// "github.com/gruntwork-io/terratest/modules/files"
-
-	// "github.com/gruntwork-io/terratest/modules/random"
 
 	"liatr.io/lead-terraform/tests/common"
 )
@@ -108,6 +103,7 @@ func TestSetup(t *testing.T) {
 func testModules(t *testing.T) {
 	t.Run("Dashboard", testLeadDashboard)
 	t.Run("SDM", testLeadSdm)
+	t.Run("KubeResourceReport", common.KubeResourceReportTest)
 }
 
 func testLeadDashboard(t *testing.T) {

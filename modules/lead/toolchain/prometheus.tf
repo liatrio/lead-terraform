@@ -22,7 +22,6 @@ resource "helm_release" "prometheus_operator" {
   version    = "8.3.3"
   timeout    = 600
   wait       = true
-  provider   = helm.toolchain
 
   set_sensitive {
     name = "grafana.adminPassword"
@@ -30,6 +29,4 @@ resource "helm_release" "prometheus_operator" {
   }
 
   values = [data.template_file.prometheus_values.rendered]
-
-  depends_on = [kubernetes_cluster_role_binding.tiller_cluster_role_binding]
 }

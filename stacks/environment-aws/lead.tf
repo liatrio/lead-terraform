@@ -7,24 +7,20 @@ data "template_file" "external_dns_values" {
 }
 
 module "infrastructure" {
-  source                                = "../../modules/lead/infrastructure"
-  cluster                               = module.eks.cluster_id
-  namespace                             = var.system_namespace
-  opa_failure_policy                    = var.opa_failure_policy
-  enable_opa                            = "false"
-  enable_downscaler                     = true
-  enable_k8s_spot_termination_handler   = true
-  uptime                                = var.uptime
-  downscaler_exclude_namespaces         = var.downscaler_exclude_namespaces
-  cert_manager_service_account_role_arn = aws_iam_role.cert_manager_service_account.arn
-  essential_toleration_values           = data.template_file.essential_toleration.rendered
-  external_dns_chart_values             = data.template_file.external_dns_values.rendered
+  source                                   = "../../modules/lead/infrastructure"
+  cluster                                  = module.eks.cluster_id
+  namespace                                = var.system_namespace
+  opa_failure_policy                       = var.opa_failure_policy
+  enable_opa                               = "false"
+  enable_downscaler                        = true
+  enable_k8s_spot_termination_handler      = true
+  uptime                                   = var.uptime
+  downscaler_exclude_namespaces            = var.downscaler_exclude_namespaces
+  cert_manager_service_account_role_arn    = aws_iam_role.cert_manager_service_account.arn
+  essential_toleration_values              = data.template_file.essential_toleration.rendered
+  external_dns_chart_values                = data.template_file.external_dns_values.rendered
   external_dns_service_account_annotations = {
     "eks.amazonaws.com/role-arn" = aws_iam_role.external_dns_service_account.arn
-  }
-  providers = {
-    helm       = helm.system
-    kubernetes = kubernetes
   }
 }
 
@@ -42,7 +38,7 @@ data "template_file" "cluster_autoscaler" {
 
 data "template_file" "essential_toleration" {
   template = file("${path.module}/essential-toleration.tpl")
-  vars = {
+  vars     = {
     essential_taint_key = var.essential_taint_key
   }
 }
@@ -50,7 +46,6 @@ data "template_file" "essential_toleration" {
 data "helm_repository" "stable" {
   name     = "stable"
   url      = "https://kubernetes-charts.storage.googleapis.com"
-  provider = helm.system
 }
 
 resource "helm_release" "cluster_autoscaler" {
@@ -60,11 +55,12 @@ resource "helm_release" "cluster_autoscaler" {
   chart      = "cluster-autoscaler"
   timeout    = 600
   wait       = true
-  version    = "6.0.1"
+  version    = "6.6.1"
 
-  values = [data.template_file.cluster_autoscaler.rendered, data.template_file.essential_toleration.rendered]
-
-  provider = helm.system
+  values = [
+    data.template_file.cluster_autoscaler.rendered,
+    data.template_file.essential_toleration.rendered
+  ]
 }
 
 
@@ -129,12 +125,6 @@ module "toolchain" {
   smtp_username   = module.ses_smtp.smtp_username
   smtp_password   = module.ses_smtp.smtp_password
   smtp_from_email = "noreply@${aws_ses_domain_identity.cluster_domain.domain}"
-
-  providers = {
-    helm.toolchain = helm.toolchain
-    helm.system    = helm.system
-    kubernetes     = kubernetes
-  }
 }
 
 module "toolchain_ingress" {
@@ -145,11 +135,6 @@ module "toolchain_ingress" {
   issuer_kind             = module.cluster_issuer.issuer_kind
   ingress_controller_type = "LoadBalancer"
   crd_waiter              = module.infrastructure.crd_waiter
-
-  providers = {
-    helm       = helm.toolchain
-    kubernetes = kubernetes
-  }
 }
 
 module "sdm" {
@@ -164,17 +149,24 @@ module "sdm" {
   slack_client_signing_secret = data.aws_ssm_parameter.slack_client_signing_secret.value
   workspace_role_name         = module.eks.workspace_iam_role.name
   product_stack               = var.product_stack
+  operators                   = var.lead_sdm_operators
+  product_types               = var.product_types
   enable_aws_event_mapper     = var.enable_aws_code_services
-  code_services_s3_bucket     = var.product_stack == "product-aws" ? module.codeservices.s3_bucket : ""
-  codebuild_role              = var.product_stack == "product-aws" ? module.codeservices.codebuild_role : ""
-  codepipeline_role           = var.product_stack == "product-aws" ? module.codeservices.codepipeline_role : ""
-  codebuild_user              = var.product_stack == "product-aws" ? "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-codebuild" : ""
+  remote_state_config         = var.remote_state_config
+  sqs_url                     = var.enable_aws_code_services ? module.codeservices.sqs_url : ""
+  toolchain_image_repo        = var.toolchain_image_repo
 
-  operator_slack_service_account_annotations = {
+  operator_slack_service_account_annotations   = {
     "eks.amazonaws.com/role-arn" = aws_iam_role.operator_slack_service_account.arn
   }
   operator_jenkins_service_account_annotations = {
     "eks.amazonaws.com/role-arn" = aws_iam_role.operator_jenkins_service_account.arn
+  }
+  operator_product_service_account_annotations = {
+    "eks.amazonaws.com/role-arn" = aws_iam_role.product_operator_service_account.arn
+  }
+  aws_event_mapper_service_account_annotations = {
+    "eks.amazonaws.com/role-arn" = module.codeservices.event_mapper_role_arn
   }
 
   product_vars = {
@@ -185,11 +177,11 @@ module "sdm" {
     product_image_repo     = var.product_image_repo
     enable_harbor          = var.enable_harbor
     enable_artifactory     = var.enable_artifactory
-  }
 
-  providers = {
-    helm.system    = helm.system
-    helm.toolchain = helm.toolchain
+    s3_bucket         = var.enable_aws_code_services ? module.codeservices.s3_bucket : ""
+    codebuild_role    = var.enable_aws_code_services ? module.codeservices.codebuild_role : ""
+    codepipeline_role = var.enable_aws_code_services ? module.codeservices.codepipeline_role : ""
+    codebuild_user    = var.enable_aws_code_services ? "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-codebuild" : ""
   }
 }
 
@@ -206,9 +198,4 @@ module "dashboard" {
   keycloak_realm_id      = module.toolchain.keycloak_realm_id
   crd_waiter             = module.infrastructure.crd_waiter
   elasticsearch_replicas = var.dashboard_elasticsearch_replicas
-
-  providers = {
-    helm       = helm.toolchain
-    kubernetes = kubernetes
-  }
 }

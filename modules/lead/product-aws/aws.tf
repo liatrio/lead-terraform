@@ -136,7 +136,7 @@ resource "aws_codepipeline" "codepipeline" {
       output_artifacts = ["source_output"]
 
       configuration = {
-        RepositoryName = each.value.repo
+        RepositoryName = "${var.product_name}-${each.value.repo}"
         BranchName     = "master"
       }
     }

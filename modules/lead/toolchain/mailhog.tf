@@ -16,7 +16,6 @@ resource "helm_release" "mailhog" {
   chart      = "mailhog"
   version    = "3.0.0"
   timeout    = 1200
-  provider   = helm.toolchain
 
   values = [data.template_file.mailhog_values.rendered]
 }

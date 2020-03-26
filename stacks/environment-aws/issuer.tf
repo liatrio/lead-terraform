@@ -15,22 +15,6 @@ resource "kubernetes_cluster_role" "cert_manager_cluster_role" {
   provider = kubernetes
 }
 
-resource "kubernetes_cluster_role_binding" "cert_manager_cluster_role_binding" {
-  metadata {
-    name = "cert-manager-cluster-role-binding"
-  }
-  role_ref {
-    api_group = "rbac.authorization.k8s.io"
-    kind      = "ClusterRole"
-    name      = kubernetes_cluster_role.cert_manager_cluster_role.metadata[0].name
-  }
-  subject {
-    kind      = "ServiceAccount"
-    name      = module.toolchain.tiller_service_account
-    namespace = module.toolchain.namespace
-  }
-}
-
 module "cluster_issuer" {
   source        = "../../modules/common/cert-issuer"
   namespace     = module.toolchain.namespace
@@ -45,11 +29,6 @@ module "cluster_issuer" {
 
   route53_dns_region      = var.region
   route53_dns_hosted_zone = aws_route53_zone.cluster_zone.zone_id
-
-  providers = {
-    kubernetes : kubernetes
-    helm : helm.toolchain
-  }
 }
 
 module "staging_cluster_issuer" {
@@ -66,9 +45,4 @@ module "staging_cluster_issuer" {
 
   route53_dns_region      = var.region
   route53_dns_hosted_zone = aws_route53_zone.cluster_zone.zone_id
-
-  providers = {
-    kubernetes = kubernetes
-    helm       = helm.toolchain
-  }
 }

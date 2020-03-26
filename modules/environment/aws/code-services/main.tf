@@ -1,6 +1,6 @@
 resource "aws_s3_bucket" "code_services_bucket" {
   count  = var.enable_aws_code_services ? 1 : 0
-  bucket = "code_services-${var.account_id}-${var.cluster}"
+  bucket = "code-services-${var.account_id}-${var.cluster}"
   region = var.region
   versioning {
     enabled = true
@@ -10,7 +10,7 @@ resource "aws_s3_bucket" "code_services_bucket" {
 
 resource "aws_iam_role" "codebuild_role" {
   count  = var.enable_aws_code_services ? 1 : 0
-  name   = "codebuild-role"
+  name   = "codebuild-role-${var.cluster}"
 
   assume_role_policy = <<EOF
 {
@@ -30,7 +30,7 @@ EOF
 
 resource "aws_iam_role_policy" "codebuild_policy" {
   count  = var.enable_aws_code_services ? 1 : 0
-  role   = aws_iam_role.codebuild_role.name
+  role   = aws_iam_role.codebuild_role[0].name
 
   policy = <<POLICY
 {
@@ -75,8 +75,8 @@ resource "aws_iam_role_policy" "codebuild_policy" {
         "s3:*"
       ],
       "Resource": [
-        "${aws_s3_bucket.code_services_bucket.arn}",
-        "${aws_s3_bucket.code_services_bucket.arn}/*"
+        "${aws_s3_bucket.code_services_bucket[0].arn}",
+        "${aws_s3_bucket.code_services_bucket[0].arn}/*"
       ]
     }
   ]
@@ -86,7 +86,7 @@ POLICY
 
 resource "aws_iam_role" "codepipeline_role" {
   count  = var.enable_aws_code_services ? 1 : 0
-  name   = "codepipeline-role"
+  name   = "codepipeline-role-${var.cluster}"
 
   assume_role_policy = <<EOF
 {
@@ -106,8 +106,8 @@ EOF
 
 resource "aws_iam_role_policy" "codepipeline_policy" {
   count  = var.enable_aws_code_services ? 1 : 0
-  name   = "codepipeline_policy"
-  role   = aws_iam_role.codepipeline_role.id
+  name   = "codepipeline_policy-${var.cluster}"
+  role   = aws_iam_role.codepipeline_role[0].id
 
   policy = <<EOF
 {
@@ -122,8 +122,8 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
         "s3:PutObject"
       ],
       "Resource": [
-        "${aws_s3_bucket.code_services_bucket.arn}",
-        "${aws_s3_bucket.code_services_bucket.arn}/*"
+        "${aws_s3_bucket.code_services_bucket[0].arn}",
+        "${aws_s3_bucket.code_services_bucket[0].arn}/*"
       ]
     },
 		{
@@ -158,7 +158,7 @@ resource "aws_sqs_queue" "code_services_queue" {
 
 resource "aws_cloudwatch_event_rule" "code_services_event_rule" {
   count       = var.enable_aws_code_services ? 1 : 0
-  name        = "code_services-event-rule"
+  name        = "code_services-event-rule-${var.cluster}"
   description = "code_services-event-rule"
 
   event_pattern = <<PATTERN
@@ -172,13 +172,13 @@ PATTERN
 
 resource "aws_cloudwatch_event_target" "code_services_event_target" {
   count     = var.enable_aws_code_services ? 1 : 0
-  rule      = "${aws_cloudwatch_event_rule.code_services_event_rule.name}"
-  arn       = "${aws_sqs_queue.code_services_queue.arn}"
+  rule      = aws_cloudwatch_event_rule.code_services_event_rule[0].name
+  arn       = aws_sqs_queue.code_services_queue[0].arn
 }
 
 resource "aws_sqs_queue_policy" "code_services_queue_policy" {
   count     = var.enable_aws_code_services ? 1 : 0
-  queue_url = "${aws_sqs_queue.code_services_queue.id}"
+  queue_url = aws_sqs_queue.code_services_queue[0].id
 
   policy = <<POLICY
 {
@@ -191,10 +191,10 @@ resource "aws_sqs_queue_policy" "code_services_queue_policy" {
         "Service": "events.amazonaws.com"
       },
       "Action": "sqs:SendMessage",
-      "Resource": "${aws_sqs_queue.code_services_queue.arn}",
+      "Resource": "${aws_sqs_queue.code_services_queue[0].arn}",
       "Condition": {
         "ArnEquals": {
-          "aws:SourceArn": "${aws_cloudwatch_event_rule.code_services_event_rule.arn}"
+          "aws:SourceArn": "${aws_cloudwatch_event_rule.code_services_event_rule[0].arn}"
         }
       }
     }
@@ -203,9 +203,9 @@ resource "aws_sqs_queue_policy" "code_services_queue_policy" {
 POLICY
 }
 
-resource "aws_iam_role" "product_operator_service_account" {
+resource "aws_iam_role" "event_mapper_role" {
   count  = var.enable_aws_code_services ? 1 : 0
-  name   = "${var.cluster}_product_operator_service_account"
+  name = "${var.cluster}_event_mapper_role"
 
   assume_role_policy = <<EOF
 {
@@ -214,63 +214,40 @@ resource "aws_iam_role" "product_operator_service_account" {
     {
       "Effect": "Allow",
       "Principal": {
-        "Federated": "${var.openid_connect_provider_arn}"
+        "Federated": "arn:aws:iam::${var.account_id}:oidc-provider/${replace(var.openid_connect_provider_url, "https://", "")}"
       },
       "Action": "sts:AssumeRoleWithWebIdentity",
       "Condition": {
         "StringEquals": {
-          "${replace(var.openid_connect_provider_url, "https://", "")}:sub": "system:serviceaccount:${var.toolchain_namespace}:product-operator"
+          "${replace(var.openid_connect_provider_url, "https://", "")}:sub": "system:serviceaccount:${var.toolchain_namespace}:aws-event-mapper"
         }
       }
     }
   ]
 }
 EOF
+
+  permissions_boundary = "arn:aws:iam::${var.account_id}:policy/Developer"
 }
 
-#probably too permissive
-resource "aws_iam_role_policy" "product-operator" {
+resource "aws_iam_role_policy" "event_mapper_role_policy" {
   count  = var.enable_aws_code_services ? 1 : 0
-  name   = "${var.cluster}-product-operator"
-  role   = aws_iam_role.product_operator_service_account.name
-  
+  name   = "${var.cluster}_event_mapper_role_policy"
+  role   = aws_iam_role.event_mapper_role[0].name
+
   policy = <<EOF
-{ 
+{
   "Version": "2012-10-17",
   "Statement": [
     {
-        "Effect": "Allow",
         "Action": [
-            "codebuild:StopBuild",
-            "codepipeline:AcknowledgeThirdPartyJob",
-            "codepipeline:DeletePipeline",
-            "codebuild:UpdateProject",
-            "codepipeline:PutThirdPartyJobFailureResult",
-            "codepipeline:EnableStageTransition",
-            "codepipeline:RetryStageExecution",
-            "codepipeline:PutJobFailureResult",
-            "codebuild:ImportSourceCredentials",
-            "codepipeline:DisableStageTransition",
-            "codepipeline:PutThirdPartyJobSuccessResult",
-            "codepipeline:PollForThirdPartyJobs",
-            "codepipeline:StartPipelineExecution",
-            "codepipeline:PutJobSuccessResult",
-            "codebuild:DeleteReportGroup",
-            "codebuild:CreateProject",
-            "codebuild:UpdateReportGroup",
-            "codebuild:CreateReportGroup",
-            "codepipeline:PutApprovalResult",
-            "codepipeline:StopPipelineExecution",
-            "codepipeline:AcknowledgeJob",
-            "codebuild:DeleteReport",
-            "codepipeline:UpdatePipeline",
-            "codebuild:BatchDeleteBuilds",
-            "codebuild:DeleteProject",
-            "codebuild:StartBuild",
+            "sqs:*",
+            "sts:AssumeRoleWithWebIdentity"
         ],
-        "Resource": "*"
+        "Effect": "Allow",
+        "Resource": "${aws_sqs_queue.code_services_queue[0].arn}"
     }
   ]
-} 
+}
 EOF
 }

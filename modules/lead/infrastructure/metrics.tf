@@ -17,7 +17,5 @@ resource "helm_release" "metrics" {
   }
 
   values = [var.essential_toleration_values]
-
-  depends_on = [kubernetes_cluster_role_binding.tiller_cluster_role_binding]
 }
 

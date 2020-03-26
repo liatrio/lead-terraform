@@ -135,3 +135,14 @@ variable "prometheus_slack_webhook_url" {
 variable "k8s_storage_class" {
   default = "hostpath"
 }
+
+variable "lead_sdm_operators" {
+  type    = list
+  default = ["toolchain", "elasticsearch", "slack", "product"]
+}
+
+variable "toolchain_image_repo" {
+}
+
+variable "enable_aws_code_services" {
+}

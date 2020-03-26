@@ -2,22 +2,73 @@ cluster: ${cluster}
 cluster_domain: ${cluster_domain}
 product_version: "${product_version}"
 product_stack: ${product_stack}
-product_vars: ${product_vars}
-
-%{ if product_stack == "product-aws" }
 product:
-  defaultProductVariables:
-    codebuild_role: ${codebuild_role}
-    codepipeline_role: ${codepipeline_role}
-    s3_bucket: ${code_services_s3_bucket}
-    codebuild_user: ${codebuild_user}
-    cluster_domain: ${cluster_domain}
-    region: ${region}
-%{ endif }
+  enabled: ${operator_product_enabled}
+  image:
+    repository: ${image_repository}/operator-product
+    tag: ${sdm_version}
+  convergeImage:
+    repository: ${image_repository}/converge-image
+    tag: ${sdm_version}
+  terraformSource: ${terraformSource}
+  %{ if remote_state_config != "" }
+  remoteStateConfig: |
+    ${indent(4, remote_state_config)}
+  %{ endif }
+  rbac:
+    serviceAccountAnnotations: ${product_service_account_annotations}
+  types:
+    %{ if product_type_aws_enabled }
+    - name: product-aws
+      terraformSource: github.com/liatrio/lead-terraform//stacks/product-aws
+      defaultProductVersion: ${product_version}
+      defaultProductVariables:
+        cluster_domain: ${cluster_domain}
+        codebuild_role: ${codebuild_role}
+        codebuild_user: ${codebuild_user}
+        codepipeline_role: ${codepipeline_role}
+        region: ${region}
+        s3_bucket: ${s3_bucket}
+      defaultJobEnvVariables:
+        CLUSTER: ${cluster}
+    %{ endif }
+    %{ if product_type_jenkins_enabled }
+    - name: product-jenkins
+      terraformSource: github.com/liatrio/lead-terraform//stacks/product-jenkins
+      defaultProductVersion: ${product_version}
+      defaultProductVariables:
+        builder_images_version: ${builder_images_version}
+        cluster_domain: ${cluster_domain}
+        enable_artifactory: "${enable_artifactory}"
+        enable_harbor: "${enable_harbor}"
+        enable_keycloak: "${enable_keycloak}"
+        jenkins_image_version: ${jenkins_image_version}
+        product_image_repo: ${product_image_repo}
+        region: ${region}
+        toolchain_image_repo: ${toolchain_image_repo}
+      defaultJobEnvVariables:
+        CLUSTER: ${cluster}
+    %{ endif }
 
+aws-event-mapper:
+  enabled: ${enable_aws_event_mapper}
+  sqsUrl: ${sqs_url}
+  rbac:
+    serviceAccountAnnotations: ${aws_event_mapper_service_account_annotations}
 
 operators:
+  toolchain:
+    enabled: ${operator_toolchain_enabled}
+    image:
+      repository: ${image_repository}/operator-toolchain
+  elasticsearch:
+    enabled: ${operator_elasticsearch_enabled}
+    image:
+      repository: ${image_repository}/operator-elasticsearch
   slack:
+    enabled: ${operator_slack_enabled}
+    image:
+      repository: ${image_repository}/operator-slack
     ingress:
       hostName: operator-slack.${namespace}.${cluster_domain}
       annotations:
@@ -33,6 +84,7 @@ operators:
     - name: AWS_REGION
       value: ${region}
   jenkins:
+    enabled: ${operator_jenkins_enabled}
+    image:
+      repository: ${image_repository}/operator-jenkins
     serviceAccountAnnotations: ${jenkins_service_account_annotations}
-aws-event-mapper:
-    enabled: ${enable_aws_event_mapper}

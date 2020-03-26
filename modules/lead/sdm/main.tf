@@ -1,62 +1,71 @@
-provider "helm" {
-  alias   = "system"
-}
-
-provider "helm" {
-  alias   = "toolchain"
-}
-
 data "helm_repository" "liatrio" {
-  name = "lead.prod.liatr.io"
-  url  = "https://artifactory.toolchain.lead.prod.liatr.io/artifactory/helm/"
-  provider   = helm.system
-}
-
-resource "helm_release" "operator_toolchain_definition" {
-  count      = var.enable_operators ? 1 : 0
-  repository = data.helm_repository.liatrio.metadata[0].name
-  name       = "operator-toolchain-definition"
-  chart      = "operator-toolchain-definition"
-  version    = var.sdm_version
-  namespace  = var.system_namespace
-  provider   = helm.system
+  name     = "liatrio"
+  url      = "https://liatrio-helm.s3.us-east-1.amazonaws.com/charts"
 }
 
 data "template_file" "operator_toolchain_values" {
   template = file("${path.module}/operator-toolchain-values.tpl")
 
   vars = {
-    image_tag           = "v${var.sdm_version}"
-    cluster             = var.cluster
-    namespace           = var.namespace
-    cluster_domain      = "${var.cluster}.${var.root_zone_name}"
-    product_version     = var.product_version
-    workspace_role      = var.workspace_role_name
-    region              = var.region
-    product_stack       = var.product_stack
-    product_vars        = jsonencode(var.product_vars)
-    enable_aws_event_mapper = var.enable_aws_event_mapper
-    code_services_s3_bucket = var.code_services_s3_bucket
-    codebuild_role      = var.codebuild_role
-    codepipeline_role   = var.codepipeline_role
-    codebuild_user      = var.codebuild_user
+    sdm_version     = var.sdm_version
+    cluster         = var.cluster
+    namespace       = var.namespace
+    cluster_domain  = "${var.cluster}.${var.root_zone_name}"
+    product_version = var.product_version
+    workspace_role  = var.workspace_role_name
+    region          = var.region
+    product_stack   = var.product_stack
 
-    slack_service_account_annotations   = jsonencode(var.operator_slack_service_account_annotations)
-    jenkins_service_account_annotations = jsonencode(var.operator_jenkins_service_account_annotations)
+    enable_keycloak        = var.product_vars["enable_keycloak"]
+    builder_images_version = var.product_vars["builder_images_version"]
+    jenkins_image_version  = var.product_vars["jenkins_image_version"]
+    toolchain_image_repo   = var.product_vars["toolchain_image_repo"]
+    product_image_repo     = var.product_vars["product_image_repo"]
+    enable_harbor          = var.product_vars["enable_harbor"]
+    enable_artifactory     = var.product_vars["enable_artifactory"]
+
+    s3_bucket         = var.product_vars["s3_bucket"]
+    codebuild_role    = var.product_vars["codebuild_role"]
+    codepipeline_role = var.product_vars["codepipeline_role"]
+    codebuild_user    = var.product_vars["codebuild_user"]
+
+    image_repository = var.toolchain_image_repo
+
+
+    terraformSource     = "github.com/liatrio/lead-terraform//stacks/${var.product_stack}"
+    remote_state_config = var.remote_state_config
+
+    enable_aws_event_mapper = var.enable_aws_event_mapper
+    sqs_url                 = var.sqs_url
+
+    operator_toolchain_enabled     = contains(var.operators, "toolchain")
+    operator_elasticsearch_enabled = contains(var.operators, "elasticsearch")
+    operator_slack_enabled         = contains(var.operators, "slack")
+    operator_jenkins_enabled       = contains(var.operators, "jenkins")
+    operator_product_enabled       = contains(var.operators, "product")
+
+    product_type_aws_enabled     = contains(var.product_types, "product-aws")
+    product_type_jenkins_enabled = contains(var.product_types, "product-jenkins")
+
+    slack_service_account_annotations            = jsonencode(var.operator_slack_service_account_annotations)
+    jenkins_service_account_annotations          = jsonencode(var.operator_jenkins_service_account_annotations)
+    product_service_account_annotations          = jsonencode(var.operator_product_service_account_annotations)
+    aws_event_mapper_service_account_annotations = jsonencode(var.aws_event_mapper_service_account_annotations)
   }
 }
 
 resource "helm_release" "operator_toolchain" {
   count      = var.enable_operators ? 1 : 0
   repository = data.helm_repository.liatrio.metadata[0].name
+  timeout    = 120
   name       = "operator-toolchain"
   chart      = "operator-toolchain"
   version    = var.sdm_version
   namespace  = var.namespace
-  provider   = helm.toolchain
-  depends_on = [helm_release.operator_toolchain_definition]
 
-  values = [data.template_file.operator_toolchain_values.rendered]
+  values = [
+    data.template_file.operator_toolchain_values.rendered
+  ]
 }
 
 resource "kubernetes_secret" "operator_slack_config" {

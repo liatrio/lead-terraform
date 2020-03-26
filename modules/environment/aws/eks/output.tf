@@ -2,10 +2,6 @@ output "cluster_id" {
   value = module.eks.cluster_id
 }
 
-output "worker_autoscaling_policy_arn" {
-  value = module.eks.worker_autoscaling_policy_arn
-}
-
 output "aws_iam_openid_connect_provider" {
   value = aws_iam_openid_connect_provider.default
 }

@@ -114,8 +114,6 @@ resource "random_string" "artifactory_db_password" {
 data "helm_repository" "jfrog" {
   name = "jfrog"
   url  = "https://charts.jfrog.io"
-
-  provider = helm.toolchain
 }
 
 data "template_file" "artifactory_values" {
@@ -135,9 +133,8 @@ resource "helm_release" "artifactory" {
   name       = "artifactory"
   namespace  = module.toolchain_namespace.name
   chart      = "artifactory"
-  version    = "8.0.1"
+  version    = "8.5.1"
   timeout    = 1200
-  provider    = helm.toolchain
 
   set {
     name  = "artifactory.configMapName"

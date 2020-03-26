@@ -20,17 +20,20 @@ inputs = {
   root_zone_name  = "localhost"
   cluster         = "docker-for-desktop"
 
-  enable_artifactory = false
-  enable_gitlab      = false
-  enable_istio       = false
-  enable_grafeas     = false
-  enable_keycloak    = false
-  enable_mailhog     = false
-  enable_operators   = true
-  enable_sonarqube   = false
-  enable_xray        = false
-  enable_dashboard   = false
-  enable_harbor      = false
+  toolchain_image_repo = "489130170427.dkr.ecr.us-east-1.amazonaws.com"
+
+  enable_artifactory       = false
+  enable_gitlab            = false
+  enable_istio             = false
+  enable_grafeas           = false
+  enable_keycloak          = false
+  enable_mailhog           = false
+  enable_operators         = true
+  enable_sonarqube         = false
+  enable_xray              = false
+  enable_dashboard         = false
+  enable_harbor            = false
+  enable_aws_code_services = false
 
   # This will conflict with Istio since it's also configured as a LoadBalancer
   # So ensure `enable_istio = false` before uncommenting this
