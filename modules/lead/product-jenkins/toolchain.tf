@@ -422,22 +422,3 @@ resource "kubernetes_config_map" "jcasc_master_node_configmap" {
     "master-node.yaml" = templatefile("${path.module}/master-node.tpl", {})
   }
 }
-
-resource "kubernetes_config_map" "jcasc_welcome_message_configmap" {
-  provider = kubernetes.toolchain
-  metadata {
-    name      = "jenkins-jenkins-config-welcome-message"
-    namespace = module.toolchain_namespace.name
-
-    labels = {
-      "app.kubernetes.io/name"       = "jenkins"
-      "app.kubernetes.io/instance"   = "jenkins"
-      "app.kubernetes.io/component"  = "jenkins-master"
-      "app.kubernetes.io/managed-by" = "Terraform"
-      "jenkins-jenkins-config"       = "true"
-    }
-  }
-  data = {
-    "welcome-message.yaml" = templatefile("${path.module}/welcome-message.tpl", {})
-  }
-}
