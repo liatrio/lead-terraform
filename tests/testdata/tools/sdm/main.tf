@@ -40,10 +40,4 @@ module "sdm" {
     codepipeline_role = "TEST"
     codebuild_user    = "TEST"
   }
-
-
-  providers = {
-    helm.system    = helm.system
-    helm.toolchain = helm.toolchain
-  }
 }
