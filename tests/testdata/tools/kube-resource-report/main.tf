@@ -10,11 +10,9 @@ provider "helm" {
   }
 }
 
-module "cert_issuer" {
-  source = "../../../../modules/common/cert-issuer"
+module "kube-resource-report" {
+  source = "../../../../modules/tools/kube-resource-report"
+  cluster = var.cluster
   namespace = var.namespace
-  issuer_kind = var.issuer_kind
-  issuer_name = var.issuer_name
-  issuer_type = var.issuer_type
-  crd_waiter  = var.crd_waiter
+  root_zone_name = var.root_zone_name
 }

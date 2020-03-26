@@ -39,7 +39,6 @@ resource "helm_release" "harbor_volumes" {
   name = "harbor-volumes"
   namespace = module.toolchain_namespace.name
   wait = true
-  provider = helm.toolchain
 
   set {
     name = "components.registry.size"
@@ -63,7 +62,6 @@ resource "helm_release" "harbor_certificates" {
   name = "harbor-certificates"
   namespace = module.toolchain_namespace.name
   wait = true
-  provider = helm.toolchain
 
   set {
     name = "harbor.hostname"
@@ -99,7 +97,6 @@ resource "helm_release" "harbor_certificates" {
 data "helm_repository" "harbor" {
   name = "harbor"
   url = "https://helm.goharbor.io"
-  provider = helm.toolchain
 }
 
 data "template_file" "harbor_values" {
@@ -126,7 +123,6 @@ resource "helm_release" "harbor" {
   namespace = module.toolchain_namespace.name
   chart = "harbor"
   version = "1.3.0"
-  provider = helm.toolchain
 
   values = [
     data.template_file.harbor_values.rendered
@@ -202,7 +198,6 @@ resource "helm_release" "harbor_config" {
   name = "harbor-config"
   namespace = module.toolchain_namespace.name
   wait = true
-  provider = helm.toolchain
 
   set {
     name = "harbor.username"
