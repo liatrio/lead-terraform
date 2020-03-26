@@ -426,7 +426,7 @@ resource "kubernetes_config_map" "jcasc_master_node_configmap" {
 resource "kubernetes_config_map" "jcasc_welcome_message_configmap" {
   provider = kubernetes.toolchain
   metadata {
-    name      = "jenkins-jenkins-config-keycloak-config"
+    name      = "jenkins-jenkins-config-welcome-message"
     namespace = module.toolchain_namespace.name
 
     labels = {
