@@ -347,9 +347,9 @@ resource "kubernetes_config_map" "jcasc_pod_templates_configmap" {
   }
 }
 
-resource "kubernetes_config_map" "jcasc_slack_configs_configmap" {
+resource "kubernetes_config_map" "jcasc_slack_config_configmap" {
   metadata {
-    name      = "jenkins-jenkins-config-slack-configs"
+    name      = "jenkins-jenkins-config-slack-config"
     namespace = module.toolchain_namespace.name
 
     labels = {
@@ -363,6 +363,6 @@ resource "kubernetes_config_map" "jcasc_slack_configs_configmap" {
   
 
   data = {
-    "slack-configs.yaml" = templatefile("${path.module}/slack-configs.tpl", data.template_file.jenkins_values.vars)
+    "slack-config.yaml" = templatefile("${path.module}/slack-config.tpl", data.template_file.jenkins_values.vars)
   }
 }
