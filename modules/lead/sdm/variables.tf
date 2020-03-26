@@ -43,6 +43,10 @@ variable "product_vars" {
   default = {}
 }
 
+variable "product_types" {
+  type = list(string)
+}
+
 variable "operator_slack_service_account_annotations" {
   type    = map(string)
   default = {}
