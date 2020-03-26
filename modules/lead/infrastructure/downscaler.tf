@@ -1,8 +1,3 @@
-data "helm_repository" "liatrio" {
-  name = "liatrio"
-  url  = "https://artifactory.liatr.io/artifactory/helm/"
-}
-
 locals {
   downscaler_values = <<EOF
 rbac:
