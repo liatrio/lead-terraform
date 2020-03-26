@@ -292,6 +292,7 @@ resource "kubernetes_role_binding" "jenkins_production_rolebinding" {
 }
 
 resource "kubernetes_config_map" "jcasc_pipelines_configmap" {
+  provider = kubernetes.toolchain
   metadata {
     name      = "jenkins-jenkins-config-pipelines"
     namespace = module.toolchain_namespace.name
@@ -310,6 +311,7 @@ resource "kubernetes_config_map" "jcasc_pipelines_configmap" {
 }
 
 resource "kubernetes_config_map" "jcasc_shared_libraries_configmap" {
+  provider = kubernetes.toolchain
   metadata {
     name      = "jenkins-jenkins-config-shared-libraries"
     namespace = module.toolchain_namespace.name
@@ -329,6 +331,7 @@ resource "kubernetes_config_map" "jcasc_shared_libraries_configmap" {
 }
 
 resource "kubernetes_config_map" "jcasc_pod_templates_configmap" {
+  provider = kubernetes.toolchain
   metadata {
     name      = "jenkins-jenkins-config-pod-templates"
     namespace = module.toolchain_namespace.name
@@ -348,6 +351,7 @@ resource "kubernetes_config_map" "jcasc_pod_templates_configmap" {
 }
 
 resource "kubernetes_config_map" "jcasc_slack_config_configmap" {
+  provider = kubernetes.toolchain
   metadata {
     name      = "jenkins-jenkins-config-slack-config"
     namespace = module.toolchain_namespace.name
