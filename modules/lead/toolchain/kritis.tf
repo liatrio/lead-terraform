@@ -8,10 +8,6 @@ module "kritis_certificate" {
   issuer_name     = module.ca-issuer.name
   certificate_crd = var.crd_waiter
   wait_for_cert   = true
-
-  providers = {
-    helm =helm.toolchain
-  }
 }
 
 resource "helm_release" "kritis-crd" {
@@ -22,8 +18,6 @@ resource "helm_release" "kritis-crd" {
   version   = "0.1.0"
   timeout   = 600
   wait      = true
-
-  provider = helm.toolchain
 }
 
 data "kubernetes_secret" "kritis" {
@@ -47,7 +41,6 @@ resource "helm_release" "kritis" {
   version   = "0.1.1"
   timeout   = 600
   wait      = true
-  provider  = helm.toolchain
 
   depends_on = [module.kritis_certificate.cert_status, helm_release.kritis-crd]
 

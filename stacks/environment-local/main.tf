@@ -13,17 +13,7 @@ provider "kubernetes" {
 }
 
 provider "helm" {
-  version         = "1.0.0"
-  alias           = "system"
-
-  kubernetes {
-    config_context = var.cluster
-  }
-}
-
-provider "helm" {
-  version         = "1.0.0"
-  alias           = "toolchain"
+  version         = "1.1.0"
 
   kubernetes {
     config_context = var.cluster

@@ -1,15 +1,6 @@
-provider "helm" {
-  alias = "system"
-}
-
-provider "helm" {
-  alias = "toolchain"
-}
-
 data "helm_repository" "liatrio" {
-  name     = "liatrio-s3"
-  url      = "http://liatrio-helm.s3.us-east-1.amazonaws.com/charts"
-  provider = helm.toolchain
+  name     = "liatrio"
+  url      = "https://liatrio-helm.s3.us-east-1.amazonaws.com/charts"
 }
 
 data "template_file" "operator_toolchain_values" {
@@ -58,7 +49,6 @@ resource "helm_release" "operator_toolchain" {
   chart      = "operator-toolchain"
   version    = var.sdm_version
   namespace  = var.namespace
-  provider   = helm.toolchain
 
   values = [
     data.template_file.operator_toolchain_values.rendered

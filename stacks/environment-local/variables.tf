@@ -142,9 +142,7 @@ variable "lead_sdm_operators" {
 }
 
 variable "toolchain_image_repo" {
-  default = "artifactory.toolchain.lead.prod.liatr.io/docker-registry/flywheel"
 }
 
-variable "enable_aws_event_mapper" {
-  default = false
+variable "enable_aws_code_services" {
 }

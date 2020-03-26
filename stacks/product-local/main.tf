@@ -9,8 +9,8 @@ provider "kubernetes" {
 }
 
 provider "helm" {
+  version         = "1.1.0"
   alias           = "toolchain"
-  version         = "1.0.0"
 
   kubernetes {
     load_config_file = var.load_config_file
@@ -25,8 +25,8 @@ provider "kubernetes" {
 }
 
 provider "helm" {
+  version         = "1.1.0"
   alias           = "staging"
-  version         = "1.0.0"
 
   kubernetes {
     load_config_file = var.load_config_file
@@ -41,8 +41,8 @@ provider "kubernetes" {
 }
 
 provider "helm" {
+  version         = "1.1.0"
   alias           = "production"
-  version         = "1.0.0"
 
   kubernetes {
     load_config_file = var.load_config_file
@@ -57,7 +57,7 @@ provider "kubernetes" {
 }
 
 provider "helm" {
-  version         = "1.0.0"
+  version         = "1.1.0"
   alias           = "system"
 
   kubernetes {

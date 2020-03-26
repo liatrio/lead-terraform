@@ -22,10 +22,6 @@ module "infrastructure" {
   external_dns_service_account_annotations = {
     "eks.amazonaws.com/role-arn" = aws_iam_role.external_dns_service_account.arn
   }
-  providers                                = {
-    helm       = helm.system
-    kubernetes = kubernetes
-  }
 }
 
 
@@ -50,7 +46,6 @@ data "template_file" "essential_toleration" {
 data "helm_repository" "stable" {
   name     = "stable"
   url      = "https://kubernetes-charts.storage.googleapis.com"
-  provider = helm.system
 }
 
 resource "helm_release" "cluster_autoscaler" {
@@ -66,8 +61,6 @@ resource "helm_release" "cluster_autoscaler" {
     data.template_file.cluster_autoscaler.rendered,
     data.template_file.essential_toleration.rendered
   ]
-
-  provider = helm.system
 }
 
 
@@ -132,12 +125,6 @@ module "toolchain" {
   smtp_username   = module.ses_smtp.smtp_username
   smtp_password   = module.ses_smtp.smtp_password
   smtp_from_email = "noreply@${aws_ses_domain_identity.cluster_domain.domain}"
-
-  providers = {
-    helm.toolchain = helm.toolchain
-    helm.system    = helm.system
-    kubernetes     = kubernetes
-  }
 }
 
 module "toolchain_ingress" {
@@ -148,11 +135,6 @@ module "toolchain_ingress" {
   issuer_kind             = module.cluster_issuer.issuer_kind
   ingress_controller_type = "LoadBalancer"
   crd_waiter              = module.infrastructure.crd_waiter
-
-  providers = {
-    helm       = helm.toolchain
-    kubernetes = kubernetes
-  }
 }
 
 module "sdm" {
@@ -200,11 +182,6 @@ module "sdm" {
     codepipeline_role = var.enable_aws_code_services ? module.codeservices.codepipeline_role : ""
     codebuild_user    = var.enable_aws_code_services ? "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-codebuild" : ""
   }
-
-  providers = {
-    helm.system    = helm.system
-    helm.toolchain = helm.toolchain
-  }
 }
 
 module "dashboard" {
@@ -220,9 +197,4 @@ module "dashboard" {
   keycloak_realm_id      = module.toolchain.keycloak_realm_id
   crd_waiter             = module.infrastructure.crd_waiter
   elasticsearch_replicas = var.dashboard_elasticsearch_replicas
-
-  providers = {
-    helm       = helm.toolchain
-    kubernetes = kubernetes
-  }
 }

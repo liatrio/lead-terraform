@@ -47,22 +47,14 @@ module "toolchain_namespace" {
   }
   resource_request_cpu = "100m"
   resource_limit_cpu   = "250m"
-
-  providers = {
-    helm       = helm.toolchain
-    kubernetes = kubernetes.toolchain
-  }
 }
 
 data "helm_repository" "stable" {
   name = "stable"
   url  = "https://kubernetes-charts.storage.googleapis.com"
-
-  provider = helm.toolchain
 }
 
 resource "helm_release" "jenkins" {
-  provider   = helm.toolchain
   name       = "jenkins"
   chart      = "stable/jenkins"
   repository = data.helm_repository.stable.metadata[0].name

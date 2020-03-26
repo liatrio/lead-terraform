@@ -1,3 +1,8 @@
+data "helm_repository" "liatrio" {
+  name = "liatrio"
+  url  = "https://liatrio-helm.s3.us-east-1.amazonaws.com/charts"
+}
+
 module "system_namespace" {
   source    = "../../common/namespace"
   namespace = var.namespace

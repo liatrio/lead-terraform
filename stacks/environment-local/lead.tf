@@ -21,11 +21,6 @@ module "infrastructure" {
   uptime                              = var.uptime
 
   external_dns_chart_values = data.template_file.external_dns_values.rendered
-
-  providers = {
-    kubernetes = kubernetes
-    helm       = helm.system
-  }
 }
 
 module "toolchain" {
@@ -63,11 +58,6 @@ module "toolchain" {
   smtp_username   = ""
   smtp_password   = ""
   smtp_from_email = "noreply@liatr.io"
-
-  providers = {
-    helm       = helm.toolchain
-    kubernetes = kubernetes
-  }
 }
 
 module "sdm" {
@@ -84,8 +74,8 @@ module "sdm" {
   workspace_role_name         = "local_workspace_role"
   product_stack               = "product-local"
   operators                   = var.lead_sdm_operators
+  enable_aws_event_mapper     = var.enable_aws_code_services
   toolchain_image_repo        = var.toolchain_image_repo
-  enable_aws_event_mapper     = var.enable_aws_event_mapper
 
   product_vars = {
     issuer_type             = var.cert_issuer_type
@@ -95,12 +85,6 @@ module "sdm" {
     jenkins_image_version   = var.jenkins_image_version
     image_repo              = var.image_repo
     ingress_controller_type = var.ingress_controller_type
-  }
-
-  providers = {
-    kubernetes     = kubernetes
-    helm.system    = helm.toolchain
-    helm.toolchain = helm.toolchain
   }
 }
 
@@ -117,9 +101,4 @@ module "dashboard" {
   enable_keycloak   = var.enable_keycloak
   keycloak_realm_id = module.toolchain.keycloak_realm_id
   crd_waiter        = module.infrastructure.crd_waiter
-
-  providers = {
-    kubernetes = kubernetes
-    helm       = helm.toolchain
-  }
 }
