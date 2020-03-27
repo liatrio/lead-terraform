@@ -6,3 +6,9 @@ data "kubernetes_secret" "product-harbor-creds" {
     namespace = "toolchain"
   }
 }
+
+// harbor project
+
+// harbor robot account
+
+// kuberentes secret "${var.product_name}-harbor-credentials" with robot account creds
