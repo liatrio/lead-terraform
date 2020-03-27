@@ -291,7 +291,7 @@ resource "kubernetes_role_binding" "jenkins_production_rolebinding" {
 resource "kubernetes_config_map" "jcasc_pipelines_configmap" {
   provider = kubernetes.toolchain
   metadata {
-    name      = "jenkins-jenkins-config-pipelines"
+    name      = "jenkins-casc"
     namespace = module.toolchain_namespace.name
 
     labels = {
@@ -302,7 +302,7 @@ resource "kubernetes_config_map" "jcasc_pipelines_configmap" {
     }
   }
   data = {
-    "pipelines.json" = replace(templatefile("${path.module}/pipelines.tpl", {pipelines=var.pipelines}), "/},\n}\n$/", "}\n}\n")
+    "pipelines.json" = replace(templatefile("${path.module}/pipelines.tpl", {pipelines=var.pipelines}), "/}\"},]}$/", "}\"}]}")
   }
 }
 
