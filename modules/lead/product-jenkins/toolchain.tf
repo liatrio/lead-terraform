@@ -72,6 +72,11 @@ resource "helm_release" "jenkins" {
     value = random_string.jenkins_admin_password.result
   }
 
+  providers = {
+    helm       = helm.toolchain
+    kubernetes = kubernetes.toolchain
+  }
+
   values = [data.template_file.jenkins_values.rendered]
 }
 
