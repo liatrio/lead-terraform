@@ -374,7 +374,8 @@ resource "kubernetes_config_map" "jcasc_logstash_url_configmap" {
       "app.kubernetes.io/name"       = "jenkins"
       "app.kubernetes.io/instance"   = "jenkins"
       "app.kubernetes.io/component"  = "jenkins-master"
-      "app.kubernetes.io/managed-by" = "Terraform"
+      "app.kubernetes.io/managed-by" = "Helm"
+      "helm.sh/chart"                = "jenkins-1.6.0"
       "jenkins-jenkins-config"       = "true"
     }
   }
