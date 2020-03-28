@@ -1,4 +1,3 @@
-master-node: |
-  jenkins:
-    labelString: "master"
-    numExecutors: 1
+jenkins:
+  labelString: "master"
+  numExecutors: 1
