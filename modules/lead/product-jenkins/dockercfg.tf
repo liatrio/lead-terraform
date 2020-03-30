@@ -1,7 +1,7 @@
 locals {
   artifactory_user = length(data.kubernetes_secret.jenkins_artifactory_credential) == 1 ? data.kubernetes_secret.jenkins_artifactory_credential[0].data.username : ""
   artifactory_pass = length(data.kubernetes_secret.jenkins_artifactory_credential) == 1 ? data.kubernetes_secret.jenkins_artifactory_credential[0].data.password : ""
-  harbor_pass      = var.enable_harbor ? harbor_robot_account.robot.token : ""
+  harbor_pass      = var.enable_harbor ? harbor_robot_account.robot[0].token : ""
 }
 
 data "template_file" "dockercfg" {
