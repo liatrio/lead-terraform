@@ -19,7 +19,7 @@ variable "enable_keycloak" {
   default = true
 }
 variable "enable_harbor" {
-  default = false 
+  default = false
 }
 variable "enable_artifactory" {
   default = true
