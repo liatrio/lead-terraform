@@ -47,6 +47,11 @@ module "toolchain_namespace" {
   }
   resource_request_cpu = "100m"
   resource_limit_cpu   = "250m"
+
+  providers = {
+    helm       = helm.toolchain
+    kubernetes = kubernetes.toolchain
+  }
 }
 
 data "helm_repository" "stable" {
