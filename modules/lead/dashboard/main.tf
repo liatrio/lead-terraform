@@ -64,7 +64,7 @@ module "elasticsearch-certificate" {
 }
 
 data "helm_repository" "liatrio" {
-  name = "lead.prod.liatr.io"
+  name = "liatrio"
   url  = "https://liatrio-helm.s3.us-east-1.amazonaws.com/charts"
 }
 
