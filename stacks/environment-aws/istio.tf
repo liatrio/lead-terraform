@@ -1,7 +1,6 @@
 data "helm_repository" "istio" {
   name     = "istio.io"
   url      = "https://storage.googleapis.com/istio-release/releases/1.4.2/charts/"
-  provider = helm.system
 }
 
 resource "helm_release" "istio_init" {
@@ -12,7 +11,6 @@ resource "helm_release" "istio_init" {
   name       = "istio-init"
   timeout    = 600
   wait       = true
-  provider   = helm.system
   version    = "1.4.2"
 }
 
@@ -34,9 +32,6 @@ module "istio_system" {
   issuer_name             = module.cluster_issuer.issuer_name
   issuer_kind             = module.cluster_issuer.issuer_kind
 
-  providers = {
-    helm = helm.system
-  }
   flagger_event_webhook = "${module.sdm.slack_operator_in_cluster_url}/canary-events"
   k8s_storage_class = var.k8s_storage_class
 }

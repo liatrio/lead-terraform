@@ -2,14 +2,6 @@ locals {
   protocol = var.root_zone_name == "localhost" ? "http" : "https"
 }
 
-provider "helm" {
-  alias   = "toolchain"
-}
-
-provider "helm" {
-  alias    = "system"
-}
-
 data "helm_repository" "codecentric" {
   name = "codecentric"
   url  = "https://codecentric.github.io/helm-charts"
@@ -17,7 +9,7 @@ data "helm_repository" "codecentric" {
 
 data "helm_repository" "liatrio" {
   name = "liatrio"
-  url  = "https://artifactory.liatr.io/artifactory/helm/"
+  url  = "https://liatrio-helm.s3.us-east-1.amazonaws.com/charts"
 }
 
 data "helm_repository" "stable" {

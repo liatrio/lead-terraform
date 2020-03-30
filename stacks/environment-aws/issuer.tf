@@ -29,11 +29,6 @@ module "cluster_issuer" {
 
   route53_dns_region      = var.region
   route53_dns_hosted_zone = aws_route53_zone.cluster_zone.zone_id
-
-  providers = {
-    kubernetes : kubernetes
-    helm : helm.toolchain
-  }
 }
 
 module "staging_cluster_issuer" {
@@ -50,9 +45,4 @@ module "staging_cluster_issuer" {
 
   route53_dns_region      = var.region
   route53_dns_hosted_zone = aws_route53_zone.cluster_zone.zone_id
-
-  providers = {
-    kubernetes = kubernetes
-    helm       = helm.toolchain
-  }
 }

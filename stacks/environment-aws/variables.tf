@@ -193,3 +193,7 @@ variable "enable_aws_code_services" {
 variable "remote_state_config" {
   default = ""
 }
+
+variable "product_types" {
+  type = list(string)
+}

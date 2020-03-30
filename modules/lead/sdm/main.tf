@@ -1,15 +1,6 @@
-provider "helm" {
-  alias = "system"
-}
-
-provider "helm" {
-  alias = "toolchain"
-}
-
 data "helm_repository" "liatrio" {
-  name     = "liatrio-s3"
-  url      = "http://liatrio-helm.s3.us-east-1.amazonaws.com/charts"
-  provider = helm.toolchain
+  name     = "liatrio"
+  url      = "https://liatrio-helm.s3.us-east-1.amazonaws.com/charts"
 }
 
 data "template_file" "operator_toolchain_values" {
@@ -24,10 +15,20 @@ data "template_file" "operator_toolchain_values" {
     workspace_role  = var.workspace_role_name
     region          = var.region
     product_stack   = var.product_stack
-    product_vars    = jsonencode(merge(var.product_vars, {
-      region         = var.region
-      cluster_domain = "${var.cluster}.${var.root_zone_name}"
-    }))
+
+    enable_keycloak        = var.product_vars["enable_keycloak"]
+    builder_images_version = var.product_vars["builder_images_version"]
+    jenkins_image_version  = var.product_vars["jenkins_image_version"]
+    toolchain_image_repo   = var.product_vars["toolchain_image_repo"]
+    product_image_repo     = var.product_vars["product_image_repo"]
+    enable_harbor          = var.product_vars["enable_harbor"]
+    enable_artifactory     = var.product_vars["enable_artifactory"]
+
+    s3_bucket         = var.product_vars["s3_bucket"]
+    codebuild_role    = var.product_vars["codebuild_role"]
+    codepipeline_role = var.product_vars["codepipeline_role"]
+    codebuild_user    = var.product_vars["codebuild_user"]
+
     image_repository = var.toolchain_image_repo
 
 
@@ -42,6 +43,9 @@ data "template_file" "operator_toolchain_values" {
     operator_slack_enabled         = contains(var.operators, "slack")
     operator_jenkins_enabled       = contains(var.operators, "jenkins")
     operator_product_enabled       = contains(var.operators, "product")
+
+    product_type_aws_enabled     = contains(var.product_types, "product-aws")
+    product_type_jenkins_enabled = contains(var.product_types, "product-jenkins")
 
     slack_service_account_annotations            = jsonencode(var.operator_slack_service_account_annotations)
     jenkins_service_account_annotations          = jsonencode(var.operator_jenkins_service_account_annotations)
@@ -58,7 +62,6 @@ resource "helm_release" "operator_toolchain" {
   chart      = "operator-toolchain"
   version    = var.sdm_version
   namespace  = var.namespace
-  provider   = helm.toolchain
 
   values = [
     data.template_file.operator_toolchain_values.rendered
