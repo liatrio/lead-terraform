@@ -296,14 +296,12 @@ resource "kubernetes_config_map" "jcasc_pipelines_configmap" {
     namespace = module.toolchain_namespace.name
 
     labels = {
-      "app.kubernetes.io/name"       = "jenkins"
-      "app.kubernetes.io/instance"   = "jenkins"
-      "app.kubernetes.io/component"  = "jenkins-master"
-      "app.kubernetes.io/managed-by" = "Terraform"
+      "jenkins-jenkins-config"       = "true"
     }
   }
   data = {
-    "pipelines.json" = jsonencode(replace(templatefile("${path.module}/pipelines.tpl", {pipelines=var.pipelines}), "/}\"},]}$/", "}\"}]}"))
+    "job.yaml" = replace(jsonencode(replace(templatefile("${path.module}/pipelines.tpl", {pipelines=var.pipelines}), "/}\"},]}$/", "}\"}]}")), "/\\\\\"/", "\"")
+    #"job.yaml" = jsonencode(replace(templatefile("${path.module}/pipelines.tpl", {pipelines=var.pipelines}), "/}\"},]}$/", "}\"}]}"))
   }
 }
 
