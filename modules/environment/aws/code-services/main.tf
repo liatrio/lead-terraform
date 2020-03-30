@@ -241,7 +241,8 @@ resource "aws_iam_role_policy" "event_mapper_role_policy" {
   "Statement": [
     {
         "Action": [
-            "sqs:*"
+            "sqs:ReceiveMessage"
+            "sqs:DeleteMessage"
         ],
         "Effect": "Allow",
         "Resource": "${aws_sqs_queue.code_services_queue[0].arn}"
