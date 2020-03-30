@@ -29,10 +29,8 @@ variable "enable_keycloak" {
   default = false
 }
 variable "builder_images_version" {
-  default = "v2.0.0"
 }
 variable "jenkins_image_version" {
-  default = "v2.0.0"
 }
 variable "toolchain_image_repo" {
   default = "artifactory.toolchain.lead.prod.liatr.io/docker-registry/flywheel"
