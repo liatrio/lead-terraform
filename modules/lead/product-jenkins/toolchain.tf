@@ -60,6 +60,7 @@ data "helm_repository" "stable" {
 }
 
 resource "helm_release" "jenkins" {
+  provider   = helm.toolchain
   name       = "jenkins"
   chart      = "stable/jenkins"
   repository = data.helm_repository.stable.metadata[0].name
