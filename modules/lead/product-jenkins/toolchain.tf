@@ -303,7 +303,7 @@ resource "kubernetes_config_map" "jcasc_pipelines_configmap" {
     }
   }
   data = {
-    "pipelines.json" = replace(templatefile("${path.module}/pipelines.tpl", {pipelines=var.pipelines}), "/}\"},]}$/", "}\"}]}")
+    "pipelines.json" = jsonencode(replace(templatefile("${path.module}/pipelines.tpl", {pipelines=var.pipelines}), "/}\"},]}$/", "}\"}]}"))
   }
 }
 

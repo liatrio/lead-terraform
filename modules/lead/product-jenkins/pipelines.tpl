@@ -17,5 +17,4 @@
                 numToKeep(20)
             }
         }
-    }"},%{ endfor ~}
-]}
+    }"},%{ endfor ~}]}
