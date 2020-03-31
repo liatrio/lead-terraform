@@ -24,3 +24,10 @@ variable "enable_harbor" {
 variable "enable_artifactory" {
   default = true
 }
+variable "pipelines" {
+  type = map(object({
+    type = string
+    repo = string
+    org  = string
+  }))
+}
