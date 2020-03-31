@@ -1,15 +1,18 @@
 package aws
 
 import (
-	"fmt"
-	"os"
-	"flag"
-	"strings"
+    "flag"
+    "fmt"
+    "os"
+    "strings"
 
-	"liatr.io/lead-terraform/tests/common"
+    "liatr.io/lead-terraform/tests/common"
 
-	"testing"
-	"github.com/gruntwork-io/terratest/modules/random"
+    "github.com/aws/aws-sdk-go/service/sqs"
+    "github.com/gruntwork-io/terratest/modules/aws"
+    "github.com/gruntwork-io/terratest/modules/random"
+    "github.com/stretchr/testify/assert"
+    "testing"
 )
 
 const Cluster = "clusterName"
@@ -24,7 +27,7 @@ func init()  {
 func TestSetupEks(t *testing.T) {
 	assumeIamRole, _ := os.LookupEnv("TERRATEST_IAM_ROLE")
 	var clusterName string
-	// CLUSTER 
+	// CLUSTER
 	testCluster := common.TestModule{
 		GoTest: t,
 		Name: "eks_cluster",
@@ -81,7 +84,7 @@ func TestSetupEks(t *testing.T) {
 	}
 	defer testCertManager.TeardownTests()
 	testCertManager.RunTests()
-	
+
 	// TEST CREATE SELF SIGNED ISSUER
 	testIssuer := common.TestModule{
 		GoTest: t,
@@ -190,6 +193,56 @@ func testCodeServices(t *testing.T) {
 			tm.SetTerraformVar("openid_connect_provider_arn", tm.GetStringGlobal("aws_iam_openid_connect_provider_arn"))
 			tm.SetTerraformVar("openid_connect_provider_url", tm.GetStringGlobal("aws_iam_openid_connect_provider_url"))
 		},
+        Tests: func (tm *common.TestModule) {
+            var (
+                sqsUrl string
+                expectedMessage string
+                timeout int64
+            )
+
+            sqsUrl = tm.GetTerraformOutput("sqs_url")
+            expectedMessage = random.UniqueId()
+            timeout = 5
+
+            err := aws.SendMessageToQueueE(tm.GoTest, "us-east-1", sqsUrl, expectedMessage)
+            if err != nil {
+                tm.GoTest.Fatal("couldn't send message to SQS queue")
+            }
+			sess, err := aws.CreateAwsSessionFromRole("us-east-1", tm.GetTerraformOutput("event_mapper_role_arn"))
+			svc := sqs.New(sess)
+
+            tempMessage := random.UniqueId()
+
+            sendMessageInput := &sqs.SendMessageInput{
+                MessageBody: &tempMessage,
+                QueueUrl: &sqsUrl,
+            }
+            _, err = svc.SendMessage(sendMessageInput)
+            assert.Error(tm.GoTest, err)
+
+            receiveMessageInput := &sqs.ReceiveMessageInput{
+                QueueUrl: &sqsUrl,
+                WaitTimeSeconds: &timeout,
+            }
+			output, err := svc.ReceiveMessage(receiveMessageInput)
+            assert.NoError(tm.GoTest, err)
+
+            tm.GoTest.Log("printing message output")
+			tm.GoTest.Log(output.String())
+
+            assert.Len(tm.GoTest, output.Messages, 1)
+            message := output.Messages[0].Body
+            messageReceipt := output.Messages[0].ReceiptHandle
+
+            assert.Equal(tm.GoTest, message, expectedMessage)
+
+            deleteMessageInput := &sqs.DeleteMessageInput{
+                ReceiptHandle: messageReceipt,
+                QueueUrl: &sqsUrl,
+            }
+            _, err = svc.DeleteMessage(deleteMessageInput)
+            assert.NoError(tm.GoTest, err)
+        },
 	}
 	defer testCodeServices.TeardownTests()
 	testCodeServices.RunTests()
