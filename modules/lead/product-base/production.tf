@@ -23,7 +23,7 @@ resource "helm_release" "production_product_init" {
   timeout   = 600
   wait      = true
 
-  provider  = helm.production
+  provider = helm.production
 }
 
 resource "kubernetes_role" "default_production_role" {
@@ -90,7 +90,7 @@ resource "kubernetes_role_binding" "default_production_rolebinding" {
   subject {
     kind      = "ServiceAccount"
     name      = "default"
-    namespace   = module.production_namespace.name
+    namespace = module.production_namespace.name
   }
 }
 
@@ -115,6 +115,18 @@ resource "kubernetes_role" "ci_production_role" {
   rule {
     api_groups = ["", "extensions", "apps", "batch", "networking.istio.io"]
     resources  = ["*"]
+    verbs      = ["*"]
+  }
+
+  rule {
+    api_groups = ["autoscaling"]
+    resources  = ["horizontalpodautoscalers"]
+    verbs      = ["*"]
+  }
+
+  rule {
+    api_groups = ["flagger.app"]
+    resources  = ["canaries", "canaries/status"]
     verbs      = ["*"]
   }
 }

@@ -23,7 +23,7 @@ resource "helm_release" "staging_product_init" {
   timeout   = 600
   wait      = true
 
-  provider  = helm.staging
+  provider = helm.staging
 }
 
 
@@ -91,7 +91,7 @@ resource "kubernetes_role_binding" "default_staging_rolebinding" {
   subject {
     kind      = "ServiceAccount"
     name      = "default"
-    namespace   = module.staging_namespace.name
+    namespace = module.staging_namespace.name
   }
 }
 
@@ -116,6 +116,18 @@ resource "kubernetes_role" "ci_staging_role" {
   rule {
     api_groups = ["", "extensions", "apps", "batch", "networking.istio.io"]
     resources  = ["*"]
+    verbs      = ["*"]
+  }
+
+  rule {
+    api_groups = ["autoscaling"]
+    resources  = ["horizontalpodautoscalers"]
+    verbs      = ["*"]
+  }
+
+  rule {
+    api_groups = ["flagger.app"]
+    resources  = ["canaries", "canaries/status"]
     verbs      = ["*"]
   }
 }
