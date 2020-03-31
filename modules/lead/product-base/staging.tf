@@ -114,7 +114,7 @@ resource "kubernetes_role" "ci_staging_role" {
   }
 
   rule {
-    api_groups = ["", "extensions", "apps", "batch"]
+    api_groups = ["", "extensions", "apps", "batch", "networking.istio.io"]
     resources  = ["*"]
     verbs      = ["*"]
   }
