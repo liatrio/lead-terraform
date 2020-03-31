@@ -114,7 +114,7 @@ resource "kubernetes_role" "ci_staging_role" {
   }
 
   rule {
-    api_groups = ["", "extensions", "apps"]
+    api_groups = ["", "extensions", "apps", "batch"]
     resources  = ["*"]
     verbs      = ["*"]
   }

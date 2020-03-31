@@ -113,7 +113,7 @@ resource "kubernetes_role" "ci_production_role" {
   }
 
   rule {
-    api_groups = ["", "extensions"]
+    api_groups = ["", "extensions", "apps", "batch"]
     resources  = ["*"]
     verbs      = ["*"]
   }
