@@ -1,5 +1,5 @@
 data "kubernetes_secret" "jenkins_artifactory_credential" {
-  count = var.enable_artifactory ? 1 : 0
+  count    = var.enable_artifactory ? 1 : 0
   provider = kubernetes.toolchain
   metadata {
     name      = "jenkins-artifactory-credential"
@@ -8,7 +8,7 @@ data "kubernetes_secret" "jenkins_artifactory_credential" {
 }
 
 data "template_file" "maven_settings" {
-  count = var.enable_artifactory ? 1 : 0
+  count    = var.enable_artifactory ? 1 : 0
   template = file("${path.module}/artifactory-maven-settings.tpl")
 
   vars = {
@@ -18,7 +18,7 @@ data "template_file" "maven_settings" {
 }
 
 resource "kubernetes_secret" "jenkins_artifactory_maven_settings" {
-  count = var.enable_artifactory ? 1 : 0
+  count    = var.enable_artifactory ? 1 : 0
   provider = kubernetes.toolchain
   metadata {
     name      = "jenkins-artifactory-maven-settings"
