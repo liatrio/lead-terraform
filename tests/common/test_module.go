@@ -116,6 +116,11 @@ func (tm *TestModule) TeardownTests() {
 	})
 }
 
+func (tm *TestModule) IsTestDataPresent() bool {
+	path := tm.getDataPath()
+	return test_structure.IsTestDataPresent(tm.GoTest, test_structure.FormatTestDataPath(path, "TerraformOptions.json"))
+}
+
 func (tm *TestModule) getDataPath() string {
 	return tm.TerraformDir
 }

@@ -239,12 +239,19 @@ resource "aws_iam_policy" "event_mapper_role_policy" {
   "Version": "2012-10-17",
   "Statement": [
     {
-        "Action": [
-            "sqs:ReceiveMessage",
-            "sqs:DeleteMessage"
-        ],
-        "Effect": "Allow",
-        "Resource": "${aws_sqs_queue.code_services_queue[0].arn}"
+      "Action": [
+        "sqs:ReceiveMessage",
+        "sqs:DeleteMessage"
+      ],
+      "Effect": "Allow",
+      "Resource": "${aws_sqs_queue.code_services_queue[0].arn}"
+    },
+    {
+      "Action": [
+        "codepipeline:GetPipelineExecution"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
     }
   ]
 }

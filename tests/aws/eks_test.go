@@ -3,17 +3,12 @@ package aws
 import (
     "flag"
     "fmt"
-
     "os"
     "strings"
 
     "liatr.io/lead-terraform/tests/common"
 
-    "github.com/aws/aws-sdk-go/service/iam"
-    "github.com/aws/aws-sdk-go/service/sqs"
-    terratestAws "github.com/gruntwork-io/terratest/modules/aws"
     "github.com/gruntwork-io/terratest/modules/random"
-    "github.com/stretchr/testify/assert"
     "testing"
 )
 
@@ -21,8 +16,10 @@ const Cluster = "clusterName"
 const Namespace = "namespace"
 
 var flagNoColor bool
+var flagDestroyCluster bool
 
 func init()  {
+  flag.BoolVar(&flagDestroyCluster, "destroyCluster", true, "Destroy cluster after tests")
   flag.BoolVar(&flagNoColor, "noColor", false, "Disable color in log output")
 }
 
@@ -51,6 +48,12 @@ func TestSetupEks(t *testing.T) {
       tm.SetStringGlobal("aws_iam_openid_connect_provider_arn", awsIamOpenidConnectProvider["arn"])
       tm.SetStringGlobal("aws_iam_openid_connect_provider_url", awsIamOpenidConnectProvider["url"])
     },
+  }
+  if testCluster.IsTestDataPresent() {
+    os.Setenv("SKIP_eks_cluster_run", "true")
+  }
+  if flagDestroyCluster == false {
+    os.Setenv("SKIP_eks_cluster_teardown", "true")
   }
   defer testCluster.TeardownTests()
   testCluster.RunTests()
@@ -120,14 +123,19 @@ func TestSetupEks(t *testing.T) {
   defer testIngressController.TeardownTests()
   testIngressController.RunTests()
 
+  t.Run("Infrastructure", setupInfrastructure)
   t.Run("Modules", testModules)
+}
+
+func setupInfrastructure(t *testing.T) {
+  
 }
 
 // This runs sub tests in parallel while blocking main tests from being torn down
 func testModules(t *testing.T) {
   t.Run("SDM", testLeadSdm)
   t.Run("Dashboard", testLeadDashboard)
-  t.Run("CodeServices", testCodeServices)
+  t.Run("CodeServices", common.CodeServicesTest)
   t.Run("KubeResourceReport", common.KubeResourceReportTest)
 }
 
@@ -178,119 +186,3 @@ func testLeadDashboard(t *testing.T) {
   testLeadDashboard.RunTests()
 }
 
-func testCodeServices(t *testing.T) {
-  t.Parallel()
-
-  assumeIamRole, _ := os.LookupEnv("TERRATEST_IAM_ROLE")
-
-  testCodeServices := common.TestModule{
-    GoTest: t,
-    Name: "codeServices",
-    TerraformDir: "../testdata/aws/code-services",
-    Setup: func (tm *common.TestModule) {
-      tm.SetTerraformVar("cluster", tm.GetStringGlobal(Cluster))
-      tm.SetTerraformVar("region", "us-east-1")
-      tm.SetTerraformVar("aws_assume_role_arn", assumeIamRole)
-      tm.SetTerraformVar("toolchain_namespace", tm.GetStringGlobal(Namespace))
-      tm.SetTerraformVar("openid_connect_provider_arn", tm.GetStringGlobal("aws_iam_openid_connect_provider_arn"))
-      tm.SetTerraformVar("openid_connect_provider_url", tm.GetStringGlobal("aws_iam_openid_connect_provider_url"))
-    },
-    Tests: func (tm *common.TestModule) {
-      var (
-        sqsUrl string
-        expectedMessage string
-        timeout int64
-      )
-
-      sqsUrl = tm.GetTerraformOutput("sqs_url")
-      expectedMessage = random.UniqueId()
-      timeout = 5
-
-      err := terratestAws.SendMessageToQueueE(tm.GoTest, "us-east-1", sqsUrl, expectedMessage)
-      if err != nil {
-        tm.GoTest.Fatal("couldn't send message to SQS queue")
-        return
-      }
-
-      awsAdminSession, err := terratestAws.NewAuthenticatedSession("us-east-1")
-      if err != nil {
-        tm.GoTest.Fatal("couldn't create aws authenticated session", err)
-        return
-      }
-
-      iamClient := iam.New(awsAdminSession)
-
-      awsAccountId, err := terratestAws.GetAccountIdE(tm.GoTest)
-      if err != nil {
-        tm.GoTest.Fatal("couldn't get sts CallerIdentity", err)
-        return
-      }
-
-      policy := fmt.Sprintf("{\"Version\": \"2012-10-17\",\"Statement\": [{\"Effect\": \"Allow\",\"Principal\": {\"AWS\": \"arn:aws:iam::%s:role/Administrator\"},\"Action\": \"sts:AssumeRole\"}]}", awsAccountId)
-      roleName := fmt.Sprintf("%s-testing-role", tm.GetStringGlobal(Cluster))
-      defer iamClient.DeleteRole(&iam.DeleteRoleInput{RoleName: &roleName})
-      roleResponse, err := iamClient.CreateRole(&iam.CreateRoleInput{
-        AssumeRolePolicyDocument: &policy,
-        RoleName:                 &roleName,
-      })
-      if err != nil {
-        tm.GoTest.Fatal("couldn't create an aws role", err)
-        return
-      }
-
-      policyArn := tm.GetTerraformOutput("event_mapper_role_policy_arn")
-
-      defer iamClient.DetachRolePolicy(&iam.DetachRolePolicyInput{
-          PolicyArn: &policyArn,
-          RoleName:  roleResponse.Role.RoleName,
-      })
-      _, err = iamClient.AttachRolePolicy(&iam.AttachRolePolicyInput{
-        PolicyArn: &policyArn,
-        RoleName:  roleResponse.Role.RoleName,
-      })
-      if err != nil {
-        tm.GoTest.Fatal("couldn't attach policy to role", err)
-        return
-      }
-
-      eventMapperSession := terratestAws.AssumeRole(awsAdminSession, *roleResponse.Role.Arn)
-      /*eventMapperSession, err := terratestAws.CreateAwsSessionFromRole("us-east-1", *roleResponse.Role.Arn)
-      if err != nil {
-        tm.GoTest.Fatal("couldn't send message to SQS queue", err)
-        return
-      }*/
-      svc := sqs.New(eventMapperSession)
-
-      tempMessage := random.UniqueId()
-
-      _, err = svc.SendMessage(&sqs.SendMessageInput{
-        MessageBody: &tempMessage,
-        QueueUrl: &sqsUrl,
-      })
-      assert.Error(tm.GoTest, err)
-
-      output, err := svc.ReceiveMessage(&sqs.ReceiveMessageInput{
-        QueueUrl: &sqsUrl,
-        WaitTimeSeconds: &timeout,
-      })
-      assert.NoError(tm.GoTest, err)
-
-      tm.GoTest.Log("printing message output")
-      tm.GoTest.Log(output.String())
-
-      assert.Len(tm.GoTest, output.Messages, 1)
-      message := output.Messages[0].Body
-      messageReceipt := output.Messages[0].ReceiptHandle
-
-      assert.Equal(tm.GoTest, expectedMessage, *message)
-
-      _, err = svc.DeleteMessage(&sqs.DeleteMessageInput{
-        ReceiptHandle: messageReceipt,
-        QueueUrl: &sqsUrl,
-      })
-      assert.NoError(tm.GoTest, err)
-    },
-  }
-  defer testCodeServices.TeardownTests()
-  testCodeServices.RunTests()
-}
