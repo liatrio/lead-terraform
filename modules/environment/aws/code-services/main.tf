@@ -230,10 +230,9 @@ EOF
   permissions_boundary = "arn:aws:iam::${var.account_id}:policy/Developer"
 }
 
-resource "aws_iam_role_policy" "event_mapper_role_policy" {
+resource "aws_iam_policy" "event_mapper_role_policy" {
   count  = var.enable_aws_code_services ? 1 : 0
   name   = "${var.cluster}_event_mapper_role_policy"
-  role   = aws_iam_role.event_mapper_role[0].name
 
   policy = <<EOF
 {
@@ -250,4 +249,10 @@ resource "aws_iam_role_policy" "event_mapper_role_policy" {
   ]
 }
 EOF
+}
+
+resource "aws_iam_role_policy_attachment" "event_mapper_role_policy_attachment" {
+  count = var.enable_aws_code_services ? 1 : 0
+  policy_arn = aws_iam_policy.event_mapper_role_policy[0].arn
+  role   = aws_iam_role.event_mapper_role[0].name
 }

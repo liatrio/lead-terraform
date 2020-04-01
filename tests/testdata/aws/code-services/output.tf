@@ -18,3 +18,6 @@ output "event_mapper_role_arn" {
   value = module.code_services.event_mapper_role_arn
 }
 
+output "event_mapper_role_policy_arn" {
+  value = module.code_services.event_mapper_role_policy_arn
+}
