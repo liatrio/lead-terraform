@@ -48,3 +48,11 @@ variable "toolchain_image_repo" {
 }
 variable "product_image_repo" {
 }
+
+variable "pipelines" {
+  type = map(object({
+    type = string
+    repo = string
+    org  = string
+  }))
+}

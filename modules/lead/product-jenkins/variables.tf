@@ -19,8 +19,15 @@ variable "enable_keycloak" {
   default = true
 }
 variable "enable_harbor" {
-  default = false 
+  default = false
 }
 variable "enable_artifactory" {
   default = true
+}
+variable "pipelines" {
+  type = map(object({
+    type = string
+    repo = string
+    org  = string
+  }))
 }
