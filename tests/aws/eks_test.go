@@ -24,7 +24,7 @@ func init()  {
 func TestSetupEks(t *testing.T) {
 	assumeIamRole, _ := os.LookupEnv("TERRATEST_IAM_ROLE")
 	var clusterName string
-	// CLUSTER 
+	// CLUSTER
 	testCluster := common.TestModule{
 		GoTest: t,
 		Name: "eks_cluster",
@@ -81,7 +81,7 @@ func TestSetupEks(t *testing.T) {
 	}
 	defer testCertManager.TeardownTests()
 	testCertManager.RunTests()
-	
+
 	// TEST CREATE SELF SIGNED ISSUER
 	testIssuer := common.TestModule{
 		GoTest: t,
@@ -137,7 +137,6 @@ func testLeadSdm(t *testing.T) {
 		Setup: func(tm *common.TestModule) {
 			tm.SetTerraformVar("kube_config_path", tm.GetStringGlobal(common.KubeConfigPath))
 
-			tm.SetTerraformVar("product_stack", "aws")
 			tm.SetTerraformVar("namespace", tm.GetStringGlobal(Namespace))
 			tm.SetTerraformVar("system_namespace", tm.GetStringGlobal(Namespace))
 			tm.SetTerraformVar("sdm_version", common.LeadSdmVersion)

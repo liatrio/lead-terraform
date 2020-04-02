@@ -148,7 +148,6 @@ module "sdm" {
   slack_bot_token             = data.aws_ssm_parameter.slack_bot_token.value
   slack_client_signing_secret = data.aws_ssm_parameter.slack_client_signing_secret.value
   workspace_role_name         = module.eks.workspace_iam_role.name
-  product_stack               = var.product_stack
   operators                   = var.lead_sdm_operators
   product_types               = var.product_types
   enable_aws_event_mapper     = var.enable_aws_code_services

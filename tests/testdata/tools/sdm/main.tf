@@ -12,7 +12,6 @@ provider "helm" {
 
 module "sdm" {
   source                      = "../../../../modules/lead/sdm"
-  product_stack               = var.product_stack
   namespace                   = var.namespace
   system_namespace            = var.system_namespace
   root_zone_name              = var.root_zone_name
