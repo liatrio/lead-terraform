@@ -34,10 +34,6 @@ variable "region" {
   default = "us-east-1"
 }
 
-variable "product_stack" {
-  default = "product-local"
-}
-
 variable "product_vars" {
   type    = map(string)
   default = {}

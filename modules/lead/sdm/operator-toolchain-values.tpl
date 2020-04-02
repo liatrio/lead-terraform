@@ -1,7 +1,6 @@
 cluster: ${cluster}
 cluster_domain: ${cluster_domain}
 product_version: "${product_version}"
-product_stack: ${product_stack}
 product:
   enabled: ${operator_product_enabled}
   image:
@@ -10,7 +9,6 @@ product:
   convergeImage:
     repository: ${image_repository}/converge-image
     tag: ${sdm_version}
-  terraformSource: ${terraformSource}
   %{ if remote_state_config != "" }
   remoteStateConfig: |
     ${indent(4, remote_state_config)}

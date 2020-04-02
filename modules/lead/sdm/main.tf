@@ -14,7 +14,6 @@ data "template_file" "operator_toolchain_values" {
     product_version = var.product_version
     workspace_role  = var.workspace_role_name
     region          = var.region
-    product_stack   = var.product_stack
 
     enable_keycloak        = var.product_vars["enable_keycloak"]
     builder_images_version = var.product_vars["builder_images_version"]
@@ -31,8 +30,6 @@ data "template_file" "operator_toolchain_values" {
 
     image_repository = var.toolchain_image_repo
 
-
-    terraformSource     = "github.com/liatrio/lead-terraform//stacks/${var.product_stack}"
     remote_state_config = var.remote_state_config
 
     enable_aws_event_mapper = var.enable_aws_event_mapper

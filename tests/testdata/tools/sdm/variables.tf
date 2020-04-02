@@ -7,8 +7,6 @@ variable "essential_taint_key" {
 
 // SDM Module
 
-variable "product_stack" {}
-
 variable "namespace" {}
 
 variable "system_namespace" {}

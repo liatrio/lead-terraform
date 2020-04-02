@@ -12,7 +12,7 @@ import (
 const Namespace = "namespace"
 
 func TestSetup(t *testing.T) {
-	
+
 	runtime.GOMAXPROCS(2)
 
 	kubeconfig, err := k8s.GetKubeConfigPathE(t)
@@ -20,7 +20,7 @@ func TestSetup(t *testing.T) {
 		t.Fatal(err)
 	}
 	common.TestModuleSetStringGlobal(t, common.KubeConfigPath, kubeconfig)
-	
+
 	// namespaceName = fmt.Sprintf("test-cert-manager-%s", strings.ToLower(random.UniqueId()))
 
 	// options := k8s.NewKubectlOptions("", "", namespaceName)
@@ -60,7 +60,7 @@ func TestSetup(t *testing.T) {
 	}
 	defer testCertManager.TeardownTests()
 	testCertManager.RunTests()
-	
+
 	// TEST CREATE SELF SIGNED ISSUER
 	testIssuer := common.TestModule{
 		GoTest: t,
@@ -84,7 +84,7 @@ func TestSetup(t *testing.T) {
 		TerraformDir: "../testdata/lead/toolchain-ingress",
 		Setup: func(tm *common.TestModule) {
 			tm.SetTerraformVar("kube_config_path", kubeconfig)
-		
+
 			tm.SetTerraformVar("namespace", testNamespace.GetTerraformVar("namespace"))
 			tm.SetTerraformVar("cluster_domain", "tests.lead-terraform.liatr.io")
 			tm.SetTerraformVar("issuer_kind", "Issuer")
@@ -164,7 +164,7 @@ func testLeadSdm(t *testing.T) {
 	// }
 	// defer testNamespace.TeardownTests()
 	// testNamespace.RunTests()
-	
+
 	// LEAD SDM
 	// tiller_service_account := common.TestModuleGetStringGlobal(t, "tiller_service_account")
 	testSdm := common.TestModule{
@@ -174,7 +174,6 @@ func testLeadSdm(t *testing.T) {
 		Setup: func(tm *common.TestModule) {
 			tm.SetTerraformVar("kube_config_path", kubeconfig)
 
-			tm.SetTerraformVar("product_stack", "aws")
 			tm.SetTerraformVar("namespace", tm.GetStringGlobal(Namespace))
 			tm.SetTerraformVar("system_namespace", tm.GetStringGlobal(Namespace))
 			tm.SetTerraformVar("sdm_version", common.LeadSdmVersion)
