@@ -49,3 +49,18 @@ module "product_base" {
   image_whitelist = var.image_whitelist
   product_name    = var.product_name
 }
+
+resource "kubernetes_pod" "nginx" {
+  provider = "kubernetes.production"
+
+  metadata {
+    name = "nginx"
+    namespace = module.product_base.production_namespace
+  }
+  spec {
+    container {
+      name = "nginx"
+      image = "nginx:latest"
+    }
+  }
+}
