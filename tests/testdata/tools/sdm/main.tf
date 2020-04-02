@@ -3,7 +3,7 @@ provider "kubernetes" {
 }
 
 provider "helm" {
-  version = "1.1.0"
+  version = "1.1.1"
 
   kubernetes {
     config_path = var.kube_config_path
