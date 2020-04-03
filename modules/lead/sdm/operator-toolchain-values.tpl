@@ -49,6 +49,9 @@ product:
     %{ endif }
 
 aws-event-mapper:
+  image:
+    repository: ${image_repository}/aws-event-mapper
+    tag: ${sdm_version}
   enabled: ${enable_aws_event_mapper}
   sqsUrl: ${sqs_url}
   rbac:
