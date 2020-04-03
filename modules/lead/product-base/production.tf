@@ -113,9 +113,15 @@ resource "kubernetes_role" "ci_production_role" {
   }
 
   rule {
-    api_groups = ["", "extensions", "apps", "batch", "networking.istio.io"]
+    api_groups = ["", "extensions", "apps", "batch"]
     resources  = ["*"]
     verbs      = ["*"]
+  }
+
+  rule {
+    api_groups = ["networking.istio.io"]
+    resources  = ["*"]
+    verbs      = ["list", "watch", "create", "patch", "get", "delete", "update"]
   }
 
   rule {
