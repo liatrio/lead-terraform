@@ -151,7 +151,7 @@ module "sdm" {
   operators                   = var.lead_sdm_operators
   product_types               = var.product_types
   enable_aws_event_mapper     = var.enable_aws_code_services
-  remote_state_config         = var.remote_state_config
+  remote_state_config         = file("./terragrunt-product-backend-s3.hcl")
   sqs_url                     = var.enable_aws_code_services ? module.codeservices.sqs_url : ""
   toolchain_image_repo        = var.toolchain_image_repo
 
