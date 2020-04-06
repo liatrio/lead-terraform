@@ -7,8 +7,9 @@ resource "aws_codebuild_project" "codebuild_build" {
   service_role  = var.codebuild_role
 
   environment {
+    privileged_mode             = true
     compute_type                = "BUILD_GENERAL1_SMALL"
-    image                       = "aws/codebuild/amazonlinux2-x86_64-standard:2.0"
+    image                       = "489130170427.dkr.ecr.us-east-1.amazonaws.com/builder-image-skaffold:v2.0.2-20-gc4561af"
     type                        = "LINUX_CONTAINER"
   }
 
