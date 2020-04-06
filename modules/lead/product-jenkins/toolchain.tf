@@ -1,4 +1,4 @@
-resource "random_string" "jenkins_admin_password" {
+resource "random_password" "jenkins_admin_password" {
   length  = 10
   special = false
 }
@@ -70,7 +70,7 @@ resource "helm_release" "jenkins" {
 
   set_sensitive {
     name  = "master.adminPassword"
-    value = random_string.jenkins_admin_password.result
+    value = random_password.jenkins_admin_password.result
   }
 
   values = [data.template_file.jenkins_values.rendered]
