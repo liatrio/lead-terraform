@@ -1,6 +1,7 @@
 resource "harbor_project" "project" {
   count = var.enable_harbor ? 1 : 0
   name  = var.product_name
+  public = true
 }
 
 resource "harbor_robot_account" "robot" {
