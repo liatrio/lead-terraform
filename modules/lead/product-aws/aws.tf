@@ -50,6 +50,7 @@ resource "aws_codebuild_project" "codebuild_staging" {
     compute_type                = "BUILD_GENERAL1_SMALL"
     image                       = "489130170427.dkr.ecr.us-east-1.amazonaws.com/builder-image-skaffold:v2.0.2-20-gc4561af"
     type                        = "LINUX_CONTAINER"
+    image_pull_credentials_type = "SERVICE_ROLE"
   }
 
   artifacts {
@@ -86,8 +87,9 @@ resource "aws_codebuild_project" "codebuild_production" {
 
   environment {
     compute_type                = "BUILD_GENERAL1_SMALL"
-    image                       = "aws/codebuild/amazonlinux2-x86_64-standard:2.0"
+    image                       = "489130170427.dkr.ecr.us-east-1.amazonaws.com/builder-image-skaffold:v2.0.2-20-gc4561af"
     type                        = "LINUX_CONTAINER"
+    image_pull_credentials_type = "SERVICE_ROLE"
   }
 
   artifacts {
