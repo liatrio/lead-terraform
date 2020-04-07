@@ -179,19 +179,12 @@ variable "dashboard_elasticsearch_replicas" {
   default = 3
 }
 
-variable "product_stack" {
-}
-
 variable "lead_sdm_operators" {
   type    = list
   default = ["toolchain", "elasticsearch", "slack", "product"]
 }
 
 variable "enable_aws_code_services" {
-}
-
-variable "remote_state_config" {
-  default = ""
 }
 
 variable "product_types" {

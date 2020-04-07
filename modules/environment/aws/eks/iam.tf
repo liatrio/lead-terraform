@@ -118,8 +118,10 @@ resource "aws_iam_role_policy" "workspace_role_policy" {
       "Resource": "*"
     },
     {
+      "Action": [
+        "codecommit:GitPush", "codecommit:GitPull"
+      ],
       "Effect": "Allow",
-      "Action": "codecommit:GitPush",
       "Resource": "*"
     },
     {

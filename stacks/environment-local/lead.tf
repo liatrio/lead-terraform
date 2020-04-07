@@ -72,7 +72,6 @@ module "sdm" {
   slack_bot_token             = var.slack_bot_token
   slack_client_signing_secret = var.slack_client_signing_secret
   workspace_role_name         = "local_workspace_role"
-  product_stack               = "product-local"
   operators                   = var.lead_sdm_operators
   enable_aws_event_mapper     = var.enable_aws_code_services
   toolchain_image_repo        = var.toolchain_image_repo

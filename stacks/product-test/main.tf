@@ -11,7 +11,7 @@ provider "kubernetes" {
 
 provider "helm" {
   alias           = "staging"
-  version         = "1.1.0"
+  version         = "1.1.1"
 
   kubernetes {
     load_config_file = var.load_config_file
@@ -27,7 +27,7 @@ provider "kubernetes" {
 
 provider "helm" {
   alias           = "production"
-  version         = "1.1.0"
+  version         = "1.1.1"
 
   kubernetes {
     load_config_file = var.load_config_file
@@ -48,4 +48,19 @@ module "product_base" {
   cluster_domain  = var.cluster_domain
   image_whitelist = var.image_whitelist
   product_name    = var.product_name
+}
+
+resource "kubernetes_pod" "nginx" {
+  provider = "kubernetes.production"
+
+  metadata {
+    name = "nginx"
+    namespace = module.product_base.production_namespace
+  }
+  spec {
+    container {
+      name = "nginx"
+      image = "nginx:latest"
+    }
+  }
 }

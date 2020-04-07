@@ -1,4 +1,4 @@
-resource "random_string" "jenkins_admin_password" {
+resource "random_password" "jenkins_admin_password" {
   length  = 10
   special = false
 }
@@ -70,7 +70,7 @@ resource "helm_release" "jenkins" {
 
   set_sensitive {
     name  = "master.adminPassword"
-    value = random_string.jenkins_admin_password.result
+    value = random_password.jenkins_admin_password.result
   }
 
   values = [data.template_file.jenkins_values.rendered]
@@ -320,6 +320,25 @@ resource "kubernetes_config_map" "jcasc_shared_libraries_configmap" {
   }
   data = {
     "shared-libraries.yaml" = templatefile("${path.module}/shared-libraries.tpl", {})
+  }
+}
+
+resource "kubernetes_config_map" "jcasc_security_configmap" {
+  provider = kubernetes.toolchain
+  metadata {
+    name      = "jenkins-jenkins-config-security-config"
+    namespace = module.toolchain_namespace.name
+
+    labels = {
+      "app.kubernetes.io/name"       = "jenkins"
+      "app.kubernetes.io/instance"   = "jenkins"
+      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/managed-by" = "Terraform"
+      "jenkins-jenkins-config"       = "true"
+    }
+  }
+  data = {
+    "shared-libraries.yaml" = templatefile("${path.module}/security-config.tpl", data.template_file.jenkins_values.vars)
   }
 }
 

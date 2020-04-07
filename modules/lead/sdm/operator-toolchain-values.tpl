@@ -1,7 +1,6 @@
 cluster: ${cluster}
 cluster_domain: ${cluster_domain}
 product_version: "${product_version}"
-product_stack: ${product_stack}
 product:
   enabled: ${operator_product_enabled}
   image:
@@ -10,7 +9,6 @@ product:
   convergeImage:
     repository: ${image_repository}/converge-image
     tag: ${sdm_version}
-  terraformSource: ${terraformSource}
   %{ if remote_state_config != "" }
   remoteStateConfig: |
     ${indent(4, remote_state_config)}
@@ -51,6 +49,9 @@ product:
     %{ endif }
 
 aws-event-mapper:
+  image:
+    repository: ${image_repository}/aws-event-mapper
+    tag: ${sdm_version}
   enabled: ${enable_aws_event_mapper}
   sqsUrl: ${sqs_url}
   rbac:
@@ -83,6 +84,8 @@ operators:
       value: ${workspace_role}
     - name: AWS_REGION
       value: ${region}
+    - name: CLUSTER_DOMAIN
+      value: ${cluster_domain}
   jenkins:
     enabled: ${operator_jenkins_enabled}
     image:
