@@ -338,7 +338,7 @@ resource "kubernetes_config_map" "jcasc_security_configmap" {
     }
   }
   data = {
-    "shared-libraries.yaml" = templatefile("${path.module}/security_config.tpl", data.template_file.jenkins_values.vars)
+    "shared-libraries.yaml" = templatefile("${path.module}/security-config.tpl", data.template_file.jenkins_values.vars)
   }
 }
 
