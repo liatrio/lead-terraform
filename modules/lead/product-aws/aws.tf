@@ -3,7 +3,7 @@ resource "aws_codebuild_project" "codebuild_build" {
 
   name          = "${var.product_name}-${each.value.repo}-build"
   description   = "terraform_codebuild_project"
-  build_timeout = "5"
+  build_timeout = "10"
   service_role  = var.codebuild_role
 
   environment {
@@ -43,7 +43,7 @@ resource "aws_codebuild_project" "codebuild_staging" {
 
   name          = "${var.product_name}-${each.value.repo}-staging"
   description   = "terraform_codebuild_project"
-  build_timeout = "5"
+  build_timeout = "10"
   service_role  = var.codebuild_role
 
   environment {
@@ -91,7 +91,7 @@ resource "aws_codebuild_project" "codebuild_production" {
 
   name          = "${var.product_name}-${each.value.repo}-production"
   description   = "terraform_codebuild_project"
-  build_timeout = "5"
+  build_timeout = "10"
   service_role  = var.codebuild_role
 
   environment {
