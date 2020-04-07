@@ -18,4 +18,6 @@ variable "codebuild_role" {}
 variable "codepipeline_role" {}
 variable "s3_bucket" {}
 variable "codebuild_user" {}
-variable "builder_images_version" {}
+variable "builder_images_version" {
+  default = "test"
+}
