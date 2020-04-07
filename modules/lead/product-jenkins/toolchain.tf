@@ -323,6 +323,25 @@ resource "kubernetes_config_map" "jcasc_shared_libraries_configmap" {
   }
 }
 
+resource "kubernetes_config_map" "jcasc_security_configmap" {
+  provider = kubernetes.toolchain
+  metadata {
+    name      = "jenkins-jenkins-config-security-config"
+    namespace = module.toolchain_namespace.name
+
+    labels = {
+      "app.kubernetes.io/name"       = "jenkins"
+      "app.kubernetes.io/instance"   = "jenkins"
+      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/managed-by" = "Terraform"
+      "jenkins-jenkins-config"       = "true"
+    }
+  }
+  data = {
+    "shared-libraries.yaml" = templatefile("${path.module}/security_config.tpl", data.template_file.jenkins_values.vars)
+  }
+}
+
 resource "kubernetes_config_map" "jcasc_pod_templates_configmap" {
   provider = kubernetes.toolchain
   metadata {
