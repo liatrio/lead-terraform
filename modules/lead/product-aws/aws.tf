@@ -68,7 +68,7 @@ resource "aws_codebuild_project" "codebuild_staging" {
   }
 
   artifacts {
-    name = ""
+    name = null
     type = "NO_ARTIFACTS"
   }
 
@@ -121,7 +121,7 @@ resource "aws_codebuild_project" "codebuild_production" {
   }
 
   artifacts {
-    name = ""
+    name = null
     type = "NO_ARTIFACTS"
   }
 
