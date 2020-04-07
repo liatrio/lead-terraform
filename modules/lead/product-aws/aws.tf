@@ -62,6 +62,10 @@ resource "aws_codebuild_project" "codebuild_staging" {
     }
   }
 
+  artifacts {
+    type = "NO_ARTIFACTS"
+  }
+
   source {
     type            = var.source_type
     location        = var.s3_bucket
@@ -103,6 +107,10 @@ resource "aws_codebuild_project" "codebuild_production" {
       name  = "ISTIO_DOMAIN"
       value = "${var.product_name}-staging.lead.prod.liatr.io"
     }
+  }
+
+  artifacts {
+    type = "NO_ARTIFACTS"
   }
 
   source {
