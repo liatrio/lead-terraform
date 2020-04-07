@@ -19,6 +19,11 @@ resource "aws_codebuild_project" "codebuild_build" {
     location = var.s3_bucket
   }
 
+  cache {
+    type  = "LOCAL"
+    modes = ["LOCAL_DOCKER_LAYER_CACHE"]
+  }
+
   source {
     type            = var.source_type
     location        = var.s3_bucket
@@ -63,7 +68,13 @@ resource "aws_codebuild_project" "codebuild_staging" {
   }
 
   artifacts {
+    name = ""
     type = "NO_ARTIFACTS"
+  }
+
+  cache {
+    type  = "LOCAL"
+    modes = ["LOCAL_DOCKER_LAYER_CACHE"]
   }
 
   source {
@@ -110,7 +121,13 @@ resource "aws_codebuild_project" "codebuild_production" {
   }
 
   artifacts {
+    name = ""
     type = "NO_ARTIFACTS"
+  }
+
+  cache {
+    type  = "LOCAL"
+    modes = ["LOCAL_DOCKER_LAYER_CACHE"]
   }
 
   source {
@@ -148,11 +165,11 @@ resource "aws_codepipeline" "codepipeline" {
     name = "Source"
 
     action {
-      name             = "Source"
-      category         = "Source"
-      owner            = "AWS"
-      provider         = "CodeCommit"
-      version          = "1"
+      name     = "Source"
+      category = "Source"
+      owner    = "AWS"
+      provider = "CodeCommit"
+      version  = "1"
 
       configuration = {
         RepositoryName = "${var.product_name}-${each.value.repo}"
