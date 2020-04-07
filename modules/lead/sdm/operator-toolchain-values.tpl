@@ -21,6 +21,7 @@ product:
       terraformSource: github.com/liatrio/lead-terraform//stacks/product-aws
       defaultProductVersion: ${product_version}
       defaultProductVariables:
+        builder_images_version: ${builder_images_version}
         cluster_domain: ${cluster_domain}
         codebuild_role: ${codebuild_role}
         codebuild_user: ${codebuild_user}

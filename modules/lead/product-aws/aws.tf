@@ -8,7 +8,7 @@ resource "aws_codebuild_project" "codebuild_build" {
 
   environment {
     privileged_mode             = true
-    compute_type                = "BUILD_GENERAL1_SMALL"
+    compute_type                = "BUILD_GENERAL1_LARGE"
     image                       = "489130170427.dkr.ecr.us-east-1.amazonaws.com/builder-image-skaffold:${var.builder_images_version}"
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "SERVICE_ROLE"
@@ -47,7 +47,7 @@ resource "aws_codebuild_project" "codebuild_staging" {
   service_role  = var.codebuild_role
 
   environment {
-    compute_type                = "BUILD_GENERAL1_SMALL"
+    compute_type                = "BUILD_GENERAL1_LARGE"
     image                       = "489130170427.dkr.ecr.us-east-1.amazonaws.com/builder-image-skaffold:${var.builder_images_version}"
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "SERVICE_ROLE"
@@ -95,7 +95,7 @@ resource "aws_codebuild_project" "codebuild_production" {
   service_role  = var.codebuild_role
 
   environment {
-    compute_type                = "BUILD_GENERAL1_SMALL"
+    compute_type                = "BUILD_GENERAL1_LARGE"
     image                       = "489130170427.dkr.ecr.us-east-1.amazonaws.com/builder-image-skaffold:${var.builder_images_version}"
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "SERVICE_ROLE"
