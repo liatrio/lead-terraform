@@ -84,6 +84,8 @@ operators:
       value: ${workspace_role}
     - name: AWS_REGION
       value: ${region}
+    - name: CLUSTER_DOMAIN
+      value: ${cluster_domain}
   jenkins:
     enabled: ${operator_jenkins_enabled}
     image:
