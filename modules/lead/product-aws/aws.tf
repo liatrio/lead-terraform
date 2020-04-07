@@ -62,11 +62,6 @@ resource "aws_codebuild_project" "codebuild_staging" {
     }
   }
 
-  artifacts {
-    type     = var.source_type
-    location = var.s3_bucket
-  }
-
   source {
     type            = var.source_type
     location        = var.s3_bucket
@@ -110,11 +105,6 @@ resource "aws_codebuild_project" "codebuild_production" {
     }
   }
 
-  artifacts {
-    type     = var.source_type
-    location = var.s3_bucket
-  }
-
   source {
     type            = var.source_type
     location        = var.s3_bucket
@@ -155,7 +145,6 @@ resource "aws_codepipeline" "codepipeline" {
       owner            = "AWS"
       provider         = "CodeCommit"
       version          = "1"
-      output_artifacts = ["source_output"]
 
       configuration = {
         RepositoryName = "${var.product_name}-${each.value.repo}"
@@ -172,7 +161,6 @@ resource "aws_codepipeline" "codepipeline" {
       category         = "Build"
       owner            = "AWS"
       provider         = "CodeBuild"
-      input_artifacts  = ["source_output"]
       output_artifacts = ["build_output"]
       version          = "1"
 
@@ -190,7 +178,7 @@ resource "aws_codepipeline" "codepipeline" {
       category        = "Build"
       owner           = "AWS"
       provider        = "CodeBuild"
-      input_artifacts = ["source_output"]
+      input_artifacts = ["build_output"]
       version         = "1"
 
       configuration = {
@@ -219,7 +207,7 @@ resource "aws_codepipeline" "codepipeline" {
       category        = "Build"
       owner           = "AWS"
       provider        = "CodeBuild"
-      input_artifacts = ["source_output"]
+      input_artifacts = ["build_output"]
       version         = "1"
 
       configuration = {
