@@ -9,13 +9,13 @@ resource "aws_codebuild_project" "codebuild_build" {
   environment {
     privileged_mode             = true
     compute_type                = "BUILD_GENERAL1_SMALL"
-    image                       = "489130170427.dkr.ecr.us-east-1.amazonaws.com/builder-image-skaffold:v2.0.2-20-gc4561af"
+    image                       = "489130170427.dkr.ecr.us-east-1.amazonaws.com/builder-image-skaffold:${var.builder_images_version}"
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "SERVICE_ROLE"
   }
 
   artifacts {
-    type = var.source_type
+    type     = var.source_type
     location = var.s3_bucket
   }
 
@@ -27,7 +27,7 @@ resource "aws_codebuild_project" "codebuild_build" {
 
 
     git_submodules_config {
-        fetch_submodules = true
+      fetch_submodules = true
     }
   }
 
@@ -48,13 +48,22 @@ resource "aws_codebuild_project" "codebuild_staging" {
 
   environment {
     compute_type                = "BUILD_GENERAL1_SMALL"
-    image                       = "489130170427.dkr.ecr.us-east-1.amazonaws.com/builder-image-skaffold:v2.0.2-20-gc4561af"
+    image                       = "489130170427.dkr.ecr.us-east-1.amazonaws.com/builder-image-skaffold:${var.builder_images_version}"
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "SERVICE_ROLE"
+
+    environment_variable {
+      name  = "STAGING_NAMESPACE"
+      value = "${var.product_name}-staging"
+    }
+    environment_variable {
+      name  = "ISTIO_DOMAIN"
+      value = "${var.product_name}-staging.lead.prod.liatr.io"
+    }
   }
 
   artifacts {
-    type = var.source_type
+    type     = var.source_type
     location = var.s3_bucket
   }
 
@@ -66,7 +75,7 @@ resource "aws_codebuild_project" "codebuild_staging" {
 
 
     git_submodules_config {
-        fetch_submodules = true
+      fetch_submodules = true
     }
   }
 
@@ -87,13 +96,22 @@ resource "aws_codebuild_project" "codebuild_production" {
 
   environment {
     compute_type                = "BUILD_GENERAL1_SMALL"
-    image                       = "489130170427.dkr.ecr.us-east-1.amazonaws.com/builder-image-skaffold:v2.0.2-20-gc4561af"
+    image                       = "489130170427.dkr.ecr.us-east-1.amazonaws.com/builder-image-skaffold:${var.builder_images_version}"
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "SERVICE_ROLE"
+
+    environment_variable {
+      name  = "STAGING_NAMESPACE"
+      value = "${var.product_name}-staging"
+    }
+    environment_variable {
+      name  = "ISTIO_DOMAIN"
+      value = "${var.product_name}-staging.lead.prod.liatr.io"
+    }
   }
 
   artifacts {
-    type = var.source_type
+    type     = var.source_type
     location = var.s3_bucket
   }
 
@@ -105,7 +123,7 @@ resource "aws_codebuild_project" "codebuild_production" {
 
 
     git_submodules_config {
-        fetch_submodules = true
+      fetch_submodules = true
     }
   }
 
@@ -168,12 +186,12 @@ resource "aws_codepipeline" "codepipeline" {
     name = "Staging"
 
     action {
-      name             = "Staging"
-      category         = "Build"
-      owner            = "AWS"
-      provider         = "CodeBuild"
-      input_artifacts  = ["source_output"]
-      version          = "1"
+      name            = "Staging"
+      category        = "Build"
+      owner           = "AWS"
+      provider        = "CodeBuild"
+      input_artifacts = ["source_output"]
+      version         = "1"
 
       configuration = {
         ProjectName = "${aws_codebuild_project.codebuild_staging[each.key].id}"
@@ -197,12 +215,12 @@ resource "aws_codepipeline" "codepipeline" {
     name = "Production"
 
     action {
-      name             = "Production"
-      category         = "Build"
-      owner            = "AWS"
-      provider         = "CodeBuild"
-      input_artifacts  = ["source_output"]
-      version          = "1"
+      name            = "Production"
+      category        = "Build"
+      owner           = "AWS"
+      provider        = "CodeBuild"
+      input_artifacts = ["source_output"]
+      version         = "1"
 
       configuration = {
         ProjectName = "${aws_codebuild_project.codebuild_production[each.key].id}"
