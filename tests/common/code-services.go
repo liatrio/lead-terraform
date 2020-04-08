@@ -55,14 +55,14 @@ func CodeServicesTest(t *testing.T) {
 				return
 			}
 
-			awsAdminSession, err := terratestAws.NewAuthenticatedSession("us-east-1")
+			defaultSession, err := terratestAws.NewAuthenticatedSession("us-east-1")
 			if err != nil {
 				tm.GoTest.Fatal("couldn't create aws authenticated session", err)
 				return
 			}
 
-			iamClient := iam.New(awsAdminSession)
-			stsClient := sts.New(awsAdminSession)
+			iamClient := iam.New(defaultSession)
+			stsClient := sts.New(defaultSession)
 
 			callerIdentity, err := stsClient.GetCallerIdentity(&sts.GetCallerIdentityInput{})
 			if err != nil {
@@ -96,7 +96,7 @@ func CodeServicesTest(t *testing.T) {
 				return
 			}
 
-			eventMapperSession, err := assumeRole(*roleResponse.Role.Arn)
+			eventMapperSession, err := createTestSession(defaultSession, *roleResponse.Role.Arn)
 			if err != nil {
 				tm.GoTest.Fatal(err)
 			}
@@ -139,15 +139,21 @@ func CodeServicesTest(t *testing.T) {
 	testCodeServices.RunTests()
 }
 
-func assumeRole(role string) (session *session.Session, err error) {
-	session, err = terratestAws.CreateAwsSessionFromRole("us-east-1", role)
-	stsClient := sts.New(session)
+func createTestSession(currentSession *session.Session, role string) (*session.Session, error) {
+	newSession, err := session.NewSession(currentSession.Config)
+	if err != nil {
+		return nil, fmt.Errorf("Failed to created AWS session: %s", err)
+	}
+
+	terratestAws.AssumeRole(newSession, role)
+
+	stsClient := sts.New(newSession)
 	for timeout := 60; timeout > 0; timeout-- {
 		_, err = stsClient.GetCallerIdentity(&sts.GetCallerIdentityInput{})
 		if err == nil {
-			return session, nil
+			return newSession, nil
 		}
 		time.Sleep(1 * time.Second)
 	}
-	return nil, fmt.Errorf("Failed to assume event mapper policy role: %s", err)
+	return nil, fmt.Errorf("Failed to assume event mapper policy role: %s", terratestAws.CredentialsError{UnderlyingErr: err})
 }
