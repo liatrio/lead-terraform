@@ -17,3 +17,7 @@ output "sqs_url" {
 output "event_mapper_role_arn" {
   value = length(aws_iam_role.event_mapper_role) > 0 ? aws_iam_role.event_mapper_role[0].arn : ""
 }
+
+output "event_mapper_role_policy_arn" {
+  value = length(aws_iam_policy.event_mapper_role_policy) > 0 ? aws_iam_policy.event_mapper_role_policy[0].arn : ""
+}

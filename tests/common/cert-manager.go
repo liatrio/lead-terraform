@@ -20,9 +20,8 @@ func CreateCertManager(tm *TestModule) {
 }
 
 func DestroyCertManager(tm *TestModule) {
-	namespace := tm.GetTerraformVar("namespace")
 	kubeConfigPath := tm.GetStringGlobal(KubeConfigPath)
-	k8sOptions := k8s.NewKubectlOptions("", kubeConfigPath, namespace)
+	k8sOptions := k8s.NewKubectlOptions("", kubeConfigPath, "")
 
 	_ = k8s.KubectlDeleteFromStringE(tm.GoTest, k8sOptions, `{"apiVersion": "admissionregistration.k8s.io/v1beta1",	"kind": "ValidatingWebhookConfiguration", "metadata": { "name": "cert-manager-webhook" } }`)
 	_ = k8s.KubectlDeleteFromStringE(tm.GoTest, k8sOptions, `{"apiVersion": "admissionregistration.k8s.io/v1beta1",	"kind": "MutatingWebhookConfiguration", "metadata": { "name": "cert-manager-webhook" } }`)
@@ -33,7 +32,27 @@ func DestroyCertManager(tm *TestModule) {
 	_ = k8s.KubectlDeleteFromStringE(tm.GoTest, k8sOptions, `{"apiVersion": "apiextensions.k8s.io/v1beta1",	"kind": "CustomResourceDefinition", "metadata": { "name": "clusterissuers.cert-manager.io" } }`)
 	_ = k8s.KubectlDeleteFromStringE(tm.GoTest, k8sOptions, `{"apiVersion": "apiextensions.k8s.io/v1beta1",	"kind": "CustomResourceDefinition", "metadata": { "name": "issuers.cert-manager.io" } }`)
 	_ = k8s.KubectlDeleteFromStringE(tm.GoTest, k8sOptions, `{"apiVersion": "apiextensions.k8s.io/v1beta1",	"kind": "CustomResourceDefinition", "metadata": { "name": "orders.acme.cert-manager.io" } }`)
-	// _ = k8s.KubectlDeleteFromStringE(t, k8sOptions, `{"apiVersion": "apiextensions.k8s.io/v1beta1",	"kind": "CustomResourceDefinition", "metadata": { "name": "cert-manager-view" } }`)
+	_ = k8s.KubectlDeleteFromStringE(tm.GoTest, k8sOptions, `{"apiVersion": "rbac.authorization.k8s.io/v1",	"kind": "ClusterRole", "metadata": { "name": "cert-manager-cainjector" } }`)
+	_ = k8s.KubectlDeleteFromStringE(tm.GoTest, k8sOptions, `{"apiVersion": "rbac.authorization.k8s.io/v1",	"kind": "ClusterRole", "metadata": { "name": "cert-manager-controller-certificates" } }`)
+	_ = k8s.KubectlDeleteFromStringE(tm.GoTest, k8sOptions, `{"apiVersion": "rbac.authorization.k8s.io/v1",	"kind": "ClusterRole", "metadata": { "name": "cert-manager-controller-challenges" } }`)
+	_ = k8s.KubectlDeleteFromStringE(tm.GoTest, k8sOptions, `{"apiVersion": "rbac.authorization.k8s.io/v1",	"kind": "ClusterRole", "metadata": { "name": "cert-manager-controller-clusterissuers" } }`)
+	_ = k8s.KubectlDeleteFromStringE(tm.GoTest, k8sOptions, `{"apiVersion": "rbac.authorization.k8s.io/v1",	"kind": "ClusterRole", "metadata": { "name": "cert-manager-controller-ingress-shim" } }`)
+	_ = k8s.KubectlDeleteFromStringE(tm.GoTest, k8sOptions, `{"apiVersion": "rbac.authorization.k8s.io/v1",	"kind": "ClusterRole", "metadata": { "name": "cert-manager-controller-issuers" } }`)
+	_ = k8s.KubectlDeleteFromStringE(tm.GoTest, k8sOptions, `{"apiVersion": "rbac.authorization.k8s.io/v1",	"kind": "ClusterRole", "metadata": { "name": "cert-manager-controller-orders" } }`)
+	_ = k8s.KubectlDeleteFromStringE(tm.GoTest, k8sOptions, `{"apiVersion": "rbac.authorization.k8s.io/v1",	"kind": "ClusterRole", "metadata": { "name": "cert-manager-edit" } }`)
+	_ = k8s.KubectlDeleteFromStringE(tm.GoTest, k8sOptions, `{"apiVersion": "rbac.authorization.k8s.io/v1",	"kind": "ClusterRole", "metadata": { "name": "cert-manager-view" } }`)
+	_ = k8s.KubectlDeleteFromStringE(tm.GoTest, k8sOptions, `{"apiVersion": "rbac.authorization.k8s.io/v1",	"kind": "ClusterRole", "metadata": { "name": "cert-manager-webhook:webhook-requester" } }`)
+	_ = k8s.KubectlDeleteFromStringE(tm.GoTest, k8sOptions, `{"apiVersion": "rbac.authorization.k8s.io/v1",	"kind": "ClusterRoleBinding", "metadata": { "name": "cert-manager-cainjector" } }`)
+	_ = k8s.KubectlDeleteFromStringE(tm.GoTest, k8sOptions, `{"apiVersion": "rbac.authorization.k8s.io/v1",	"kind": "ClusterRoleBinding", "metadata": { "name": "cert-manager-controller-certificates" } }`)
+	_ = k8s.KubectlDeleteFromStringE(tm.GoTest, k8sOptions, `{"apiVersion": "rbac.authorization.k8s.io/v1",	"kind": "ClusterRoleBinding", "metadata": { "name": "cert-manager-controller-challenges" } }`)
+	_ = k8s.KubectlDeleteFromStringE(tm.GoTest, k8sOptions, `{"apiVersion": "rbac.authorization.k8s.io/v1",	"kind": "ClusterRoleBinding", "metadata": { "name": "cert-manager-controller-clusterissuers" } }`)
+	_ = k8s.KubectlDeleteFromStringE(tm.GoTest, k8sOptions, `{"apiVersion": "rbac.authorization.k8s.io/v1",	"kind": "ClusterRoleBinding", "metadata": { "name": "cert-manager-controller-ingress-shim" } }`)
+	_ = k8s.KubectlDeleteFromStringE(tm.GoTest, k8sOptions, `{"apiVersion": "rbac.authorization.k8s.io/v1",	"kind": "ClusterRoleBinding", "metadata": { "name": "cert-manager-controller-issuers" } }`)
+	_ = k8s.KubectlDeleteFromStringE(tm.GoTest, k8sOptions, `{"apiVersion": "rbac.authorization.k8s.io/v1",	"kind": "ClusterRoleBinding", "metadata": { "name": "cert-manager-controller-orders" } }`)
+	_ = k8s.KubectlDeleteFromStringE(tm.GoTest, k8sOptions, `{"apiVersion": "rbac.authorization.k8s.io/v1",	"kind": "ClusterRoleBinding", "metadata": { "name": "cert-manager-webhook:auth-delegator" } }`)
+
+	k8sOptions = k8s.NewKubectlOptions("", kubeConfigPath, "kube-system")
+	_ = k8s.KubectlDeleteFromStringE(tm.GoTest, k8sOptions, `{"apiVersion": "rbac.authorization.k8s.io/v1",	"kind": "RoleBinding", "metadata": { "namespace": "kube-system", "name": "cert-manager-webhook:webhook-authentication-reader" } }`)
 }
 
 func SelfSignedIssuerSetup(t *TestModule) {

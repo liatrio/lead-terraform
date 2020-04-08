@@ -54,21 +54,14 @@ aws-vault exec AWS_PROFILE -- make test-aws
 
 The tests will attempt to teardown the cluster on failure but sometimes it is necessary to manually delete the EKS cluster and VPC.
 
-It is possible to disable teardown of the cluster so you can re-run the tests against the same cluster by setting environmental variables.
-
+To speed up running tests repeatedly the `--destroyCluster` flag can be set to false to skip tearing down the cluster and re-use it on subsequent tests. The `test-aws-nodestroy` make target uses this flag.
 ```
-# disable teardown of the cluster
-export SKIP_eks_cluster_teardown=true
-aws-vault exec AWS_PROFILE -- make test-aws
+aws-vault exec AWS_PROFILE -- make test-aws-nodestroy
+```
 
-# now disable creating a new cluster and run the tests again
-export SKIP_eks_cluster_run=true
+**Don't forget to run the test with --destroyCluster set to true to cleanup the cluster.**
+```shell
 aws-vault exec AWS_PROFILE -- make test-aws
-
-# now enable teardown of the cluster and run the tests again to clean up
-unset SKIP_eks_cluster_teardown
-aws-vault exec AWS_PROFILE -- make test-aws
-unset SKIP_eks_cluster_run
 ```
 
 ## Running locally
