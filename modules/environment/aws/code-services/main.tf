@@ -56,11 +56,7 @@ resource "aws_iam_role_policy" "codebuild_policy" {
         "ec2:DeleteNetworkInterface",
         "ec2:DescribeSubnets",
         "ec2:DescribeSecurityGroups",
-        "ec2:DescribeVpcs",
-        "ecr:GetAuthorizationToken",
-        "ecr:GetDownloadUrlForLayer",
-        "ecr:BatchGetImage",
-        "ecr:BatchCheckLayerAvailability"
+        "ec2:DescribeVpcs"
       ],
       "Resource": "*"
     },
@@ -81,6 +77,27 @@ resource "aws_iam_role_policy" "codebuild_policy" {
       "Resource": [
         "${aws_s3_bucket.code_services_bucket[0].arn}",
         "${aws_s3_bucket.code_services_bucket[0].arn}/*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ecr:GetAuthorizationToken",
+        "ecr:GetDownloadUrlForLayer",
+        "ecr:BatchGetImage",
+        "ecr:BatchCheckLayerAvailability"
+      ],
+      "Resource": [
+          "*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "eks:DescribeCluster"
+      ],
+      "Resource": [
+          "*"
       ]
     }
   ]
