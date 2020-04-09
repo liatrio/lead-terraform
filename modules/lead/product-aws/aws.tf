@@ -65,6 +65,10 @@ resource "aws_codebuild_project" "codebuild_staging" {
       name  = "ISTIO_DOMAIN"
       value = "${var.product_name}-staging.lead.prod.liatr.io"
     }
+    environment_variable {
+      name  = "PRODUCT_NAME"
+      value = "${var.product_name}"
+    }
   }
 
   artifacts {
@@ -117,6 +121,10 @@ resource "aws_codebuild_project" "codebuild_production" {
     environment_variable {
       name  = "ISTIO_DOMAIN"
       value = "${var.product_name}-staging.lead.prod.liatr.io"
+    }
+    environment_variable {
+      name  = "PRODUCT_NAME"
+      value = "${var.product_name}"
     }
   }
 
