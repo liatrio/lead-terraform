@@ -180,7 +180,7 @@ module "sdm" {
     s3_bucket         = var.enable_aws_code_services ? module.codeservices.s3_bucket : ""
     codebuild_role    = var.enable_aws_code_services ? module.codeservices.codebuild_role : ""
     codepipeline_role = var.enable_aws_code_services ? module.codeservices.codepipeline_role : ""
-    codebuild_user    = var.enable_aws_code_services ? "aws-codebuild" : ""
+    codebuild_user    = var.enable_aws_code_services ? "codebuild" : ""
   }
 }
 

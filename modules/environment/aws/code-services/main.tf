@@ -10,7 +10,7 @@ resource "aws_s3_bucket" "code_services_bucket" {
 
 resource "aws_iam_role" "codebuild_role" {
   count  = var.enable_aws_code_services ? 1 : 0
-  name   = "aws-codebuild"
+  name   = "codebuild-role-${var.cluster}"
 
   assume_role_policy = <<EOF
 {
