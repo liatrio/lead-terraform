@@ -132,7 +132,7 @@ resource "aws_codebuild_project" "codebuild_production" {
     }
     environment_variable {
       name  = "SKAFFOLD_DEFAULT_REPO"
-      value = "${var.product_image_repo}/${product_name}"
+      value = "${var.product_image_repo}/${var.product_name}"
     }
   }
 
