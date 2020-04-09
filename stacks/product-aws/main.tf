@@ -46,6 +46,7 @@ module "product-aws" {
   source                  = "../../modules/lead/product-aws"
   cluster_domain          = var.cluster_domain
   product_name            = var.product_name
+  product_image_repo      = var.product_image_repo
   image_whitelist         = var.image_whitelist
   region                  = var.region
   pipelines               = var.pipelines

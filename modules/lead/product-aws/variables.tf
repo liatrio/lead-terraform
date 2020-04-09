@@ -21,3 +21,4 @@ variable "codebuild_user" {}
 variable "builder_images_version" {
   default = "v2.0.2-38-g3407090"
 }
+variable "product_image_repo" {}

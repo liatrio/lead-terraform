@@ -69,6 +69,10 @@ resource "aws_codebuild_project" "codebuild_staging" {
       name  = "PRODUCT_NAME"
       value = "${var.product_name}"
     }
+    environment_variable {
+      name  = "SKAFFOLD_DEFAULT_REPO"
+      value = "${var.product_image_repo}/${product_name}"
+    }
   }
 
   artifacts {
@@ -125,6 +129,10 @@ resource "aws_codebuild_project" "codebuild_production" {
     environment_variable {
       name  = "PRODUCT_NAME"
       value = "${var.product_name}"
+    }
+    environment_variable {
+      name  = "SKAFFOLD_DEFAULT_REPO"
+      value = "${var.product_image_repo}/${product_name}"
     }
   }
 
