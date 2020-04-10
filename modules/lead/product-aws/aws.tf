@@ -3,7 +3,7 @@ resource "aws_codebuild_project" "codebuild_build" {
 
   name          = "${var.product_name}-${each.value.repo}-build"
   description   = "terraform_codebuild_project"
-  build_timeout = "10"
+  build_timeout = "20"
   service_role  = var.codebuild_role
 
   environment {
@@ -12,6 +12,11 @@ resource "aws_codebuild_project" "codebuild_build" {
     image                       = "489130170427.dkr.ecr.us-east-1.amazonaws.com/builder-image-skaffold:${var.builder_images_version}"
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "SERVICE_ROLE"
+
+    environment_variable {
+      name  = "SKAFFOLD_DEFAULT_REPO"
+      value = "${var.product_image_repo}/${var.product_name}"
+    }
   }
 
   artifacts {
@@ -69,10 +74,6 @@ resource "aws_codebuild_project" "codebuild_staging" {
       name  = "PRODUCT_NAME"
       value = "${var.product_name}"
     }
-    environment_variable {
-      name  = "SKAFFOLD_DEFAULT_REPO"
-      value = "${var.product_image_repo}/${var.product_name}"
-    }
   }
 
   artifacts {
@@ -129,10 +130,6 @@ resource "aws_codebuild_project" "codebuild_production" {
     environment_variable {
       name  = "PRODUCT_NAME"
       value = "${var.product_name}"
-    }
-    environment_variable {
-      name  = "SKAFFOLD_DEFAULT_REPO"
-      value = "${var.product_image_repo}/${var.product_name}"
     }
   }
 
