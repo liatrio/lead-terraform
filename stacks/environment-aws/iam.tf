@@ -165,7 +165,10 @@ resource "aws_iam_role_policy" "operator-slack" {
     },
     {
       "Effect": "Allow",
-      "Action": "codecommit:CreateRepository",
+      "Action": [
+        "codecommit:CreateRepository",
+        "codecommit:GetRepository",
+      ],
       "Resource": "*"
     }
   ]
