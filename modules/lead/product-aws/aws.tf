@@ -1,7 +1,7 @@
 resource "aws_codebuild_project" "codebuild_build" {
   for_each = var.pipelines
 
-  name          = "${var.product_name}-${each.value.repo}-build"
+  name          = "${each.value.repo}-build"
   description   = "terraform_codebuild_project"
   build_timeout = "20"
   service_role  = var.codebuild_role
@@ -15,7 +15,7 @@ resource "aws_codebuild_project" "codebuild_build" {
 
     environment_variable {
       name  = "SKAFFOLD_DEFAULT_REPO"
-      value = "774051255656.dkr.ecr.us-east-1.amazonaws.com/${each.value.repo}/${var.product_name}"
+      value = "774051255656.dkr.ecr.us-east-1.amazonaws.com/${var.product_name}"
     }
   }
 
@@ -52,7 +52,7 @@ resource "aws_codebuild_project" "codebuild_build" {
 resource "aws_codebuild_project" "codebuild_staging" {
   for_each = var.pipelines
 
-  name          = "${var.product_name}-${each.value.repo}-staging"
+  name          = "${each.value.repo}-staging"
   description   = "terraform_codebuild_project"
   build_timeout = "10"
   service_role  = var.codebuild_role
@@ -108,7 +108,7 @@ resource "aws_codebuild_project" "codebuild_staging" {
 resource "aws_codebuild_project" "codebuild_production" {
   for_each = var.pipelines
 
-  name          = "${var.product_name}-${each.value.repo}-production"
+  name          = "${each.value.repo}-production"
   description   = "terraform_codebuild_project"
   build_timeout = "10"
   service_role  = var.codebuild_role
@@ -160,7 +160,7 @@ resource "aws_codebuild_project" "codebuild_production" {
 resource "aws_codepipeline" "codepipeline" {
   for_each = var.pipelines
 
-  name     = "${var.product_name}-${each.value.repo}"
+  name     = "${each.value.repo}"
   role_arn = var.codepipeline_role
 
   artifact_store {
@@ -181,7 +181,7 @@ resource "aws_codepipeline" "codepipeline" {
       output_artifacts = ["source_output"]
 
       configuration = {
-        RepositoryName = "${var.product_name}-${each.value.repo}"
+        RepositoryName = "${each.value.repo}"
         BranchName     = "master"
       }
     }
