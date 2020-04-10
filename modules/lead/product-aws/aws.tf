@@ -81,6 +81,10 @@ resource "aws_codebuild_project" "codebuild_staging" {
     }
   }
 
+  artifacts {
+    type = "NO_ARTIFACTS"
+  }
+
   cache {
     type  = "LOCAL"
     modes = ["LOCAL_DOCKER_LAYER_CACHE"]
@@ -131,6 +135,10 @@ resource "aws_codebuild_project" "codebuild_production" {
       name  = "PRODUCT_NAME"
       value = "${var.product_name}"
     }
+  }
+
+  artifacts {
+    type = "NO_ARTIFACTS"
   }
 
   cache {
