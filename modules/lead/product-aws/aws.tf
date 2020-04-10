@@ -82,7 +82,7 @@ resource "aws_codebuild_project" "codebuild_staging" {
   }
 
   artifacts {
-    type = "NO_ARTIFACTS"
+    type = var.source_type
   }
 
   cache {
@@ -138,7 +138,7 @@ resource "aws_codebuild_project" "codebuild_production" {
   }
 
   artifacts {
-    type = "NO_ARTIFACTS"
+    type = var.source_type
   }
 
   cache {
