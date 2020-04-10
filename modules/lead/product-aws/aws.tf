@@ -15,13 +15,14 @@ resource "aws_codebuild_project" "codebuild_build" {
 
     environment_variable {
       name  = "SKAFFOLD_DEFAULT_REPO"
-      value = "${var.product_image_repo}/${var.product_name}"
+      value = "774051255656.dkr.ecr.us-east-1.amazonaws.com/${each.value.repo}/${var.product_name}"
     }
   }
 
   artifacts {
-    type     = var.source_type
-    location = var.s3_bucket
+    type               = var.source_type
+    location           = var.s3_bucket
+    artifactIdentifier = "build_output"
   }
 
   cache {
@@ -68,17 +69,16 @@ resource "aws_codebuild_project" "codebuild_staging" {
     }
     environment_variable {
       name  = "ISTIO_DOMAIN"
-      value = "${var.product_name}-staging.lead.prod.liatr.io"
+      value = "${var.product_name}-staging.${var.cluster_domain}.prod.liatr.io"
     }
     environment_variable {
       name  = "PRODUCT_NAME"
       value = "${var.product_name}"
     }
-  }
-
-  artifacts {
-    type     = var.source_type
-    location = var.s3_bucket
+    environment_variable {
+      name  = "CLUSTER_DOMAIN"
+      value = "${var.cluster_domain}"
+    }
   }
 
   cache {
@@ -125,17 +125,12 @@ resource "aws_codebuild_project" "codebuild_production" {
     }
     environment_variable {
       name  = "ISTIO_DOMAIN"
-      value = "${var.product_name}-staging.lead.prod.liatr.io"
+      value = "${var.product_name}-staging.${var.cluster_domain}.prod.liatr.io"
     }
     environment_variable {
       name  = "PRODUCT_NAME"
       value = "${var.product_name}"
     }
-  }
-
-  artifacts {
-    type     = var.source_type
-    location = var.s3_bucket
   }
 
   cache {
@@ -218,7 +213,7 @@ resource "aws_codepipeline" "codepipeline" {
       category        = "Build"
       owner           = "AWS"
       provider        = "CodeBuild"
-      input_artifacts = ["build_output"]
+      input_artifacts = ["source_output", "build_output"]
       version         = "1"
 
       configuration = {
@@ -247,7 +242,7 @@ resource "aws_codepipeline" "codepipeline" {
       category        = "Build"
       owner           = "AWS"
       provider        = "CodeBuild"
-      input_artifacts = ["build_output"]
+      input_artifacts = ["source_output", "build_output"]
       version         = "1"
 
       configuration = {

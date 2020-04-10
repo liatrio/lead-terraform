@@ -173,7 +173,6 @@ module "sdm" {
     builder_images_version = var.builder_images_version
     jenkins_image_version  = var.jenkins_image_version
     toolchain_image_repo   = var.toolchain_image_repo
-    product_image_repo     = var.product_image_repo
     enable_harbor          = var.enable_harbor
     enable_artifactory     = var.enable_artifactory
 
