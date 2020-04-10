@@ -174,7 +174,6 @@ resource "aws_codepipeline" "codepipeline" {
   artifact_store {
     location = var.s3_bucket
     type     = "S3"
-
   }
 
   stage {
@@ -225,7 +224,8 @@ resource "aws_codepipeline" "codepipeline" {
       version         = "1"
 
       configuration = {
-        ProjectName = "${aws_codebuild_project.codebuild_staging[each.key].id}"
+        ProjectName   = "${aws_codebuild_project.codebuild_staging[each.key].id}"
+        PrimarySource = "source_output"
       }
     }
   }
@@ -255,6 +255,7 @@ resource "aws_codepipeline" "codepipeline" {
 
       configuration = {
         ProjectName = "${aws_codebuild_project.codebuild_production[each.key].id}"
+        PrimarySource = "source_output"
       }
     }
   }
