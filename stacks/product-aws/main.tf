@@ -45,7 +45,7 @@ provider "helm" {
 module "product-aws" {
   source                  = "../../modules/lead/product-aws"
   cluster_domain          = var.cluster_domain
-  cluster                 = ${get_env("CLUSTER", "lead")}
+  cluster                 = "${get_env("CLUSTER", "lead")}"
   product_name            = var.product_name
   image_whitelist         = var.image_whitelist
   region                  = var.region
