@@ -69,15 +69,15 @@ resource "aws_codebuild_project" "codebuild_staging" {
     }
     environment_variable {
       name  = "ISTIO_DOMAIN"
-      value = "${var.product_name}-staging.${var.cluster_domain}.prod.liatr.io"
+      value = "${var.product_name}-staging.${var.cluster}.prod.liatr.io"
     }
     environment_variable {
       name  = "PRODUCT_NAME"
       value = "${var.product_name}"
     }
     environment_variable {
-      name  = "CLUSTER_DOMAIN"
-      value = "${var.cluster_domain}"
+      name  = "CLUSTER"
+      value = "${var.cluster}"
     }
   }
 
@@ -95,11 +95,15 @@ resource "aws_codebuild_project" "codebuild_staging" {
     location        = var.s3_bucket
     git_clone_depth = 1
     buildspec       = "buildspec-staging.yaml"
-
-
     git_submodules_config {
       fetch_submodules = true
     }
+  }
+
+  secondary_sources {
+    type                = var.source_type
+    location            = var.s3_bucket
+    artifact_identifier = "build_output"
   }
 
   source_version = "master"
@@ -129,11 +133,15 @@ resource "aws_codebuild_project" "codebuild_production" {
     }
     environment_variable {
       name  = "ISTIO_DOMAIN"
-      value = "${var.product_name}-staging.${var.cluster_domain}.prod.liatr.io"
+      value = "${var.product_name}-staging.${var.cluster}.prod.liatr.io"
     }
     environment_variable {
       name  = "PRODUCT_NAME"
       value = "${var.product_name}"
+    }
+    environment_variable {
+      name  = "CLUSTER"
+      value = "${var.cluster}"
     }
   }
 
@@ -151,11 +159,14 @@ resource "aws_codebuild_project" "codebuild_production" {
     location        = var.s3_bucket
     git_clone_depth = 1
     buildspec       = "buildspec-production.yaml"
-
-
     git_submodules_config {
       fetch_submodules = true
     }
+  }
+  secondary_sources {
+    type                = var.source_type
+    location            = var.s3_bucket
+    artifact_identifier = "build_output"
   }
 
   source_version = "master"
