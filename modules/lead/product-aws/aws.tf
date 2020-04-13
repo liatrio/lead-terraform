@@ -35,8 +35,6 @@ resource "aws_codebuild_project" "codebuild_build" {
     location        = var.s3_bucket
     git_clone_depth = 1
     buildspec       = "buildspec-build.yaml"
-
-
     git_submodules_config {
       fetch_submodules = true
     }
@@ -100,12 +98,6 @@ resource "aws_codebuild_project" "codebuild_staging" {
     }
   }
 
-  secondary_sources {
-    source_identifier   = "build_output"
-    type                = var.source_type
-    location            = var.s3_bucket
-  }
-
   source_version = "master"
 
   tags = {
@@ -127,7 +119,7 @@ resource "aws_codebuild_project" "codebuild_production" {
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "SERVICE_ROLE"
 
-    environment_variable { 
+    environment_variable {
       name  = "STAGING_NAMESPACE"
       value = "${var.product_name}-staging"
     }
@@ -163,12 +155,6 @@ resource "aws_codebuild_project" "codebuild_production" {
       fetch_submodules = true
     }
   }
-  secondary_sources {
-    source_identifier   = "build_output"
-    type                = var.source_type
-    location            = var.s3_bucket
-  }
-
 
   source_version = "master"
 
@@ -232,12 +218,11 @@ resource "aws_codepipeline" "codepipeline" {
       category        = "Build"
       owner           = "AWS"
       provider        = "CodeBuild"
-      input_artifacts = ["source_output", "build_output"]
+      input_artifacts = ["build_output"]
       version         = "1"
 
       configuration = {
         ProjectName   = "${aws_codebuild_project.codebuild_staging[each.key].id}"
-        PrimarySource = "source_output"
       }
     }
   }
@@ -262,12 +247,11 @@ resource "aws_codepipeline" "codepipeline" {
       category        = "Build"
       owner           = "AWS"
       provider        = "CodeBuild"
-      input_artifacts = ["source_output", "build_output"]
+      input_artifacts = ["build_output"]
       version         = "1"
 
       configuration = {
         ProjectName = "${aws_codebuild_project.codebuild_production[each.key].id}"
-        PrimarySource = "source_output"
       }
     }
   }
