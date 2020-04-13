@@ -127,7 +127,7 @@ resource "aws_codebuild_project" "codebuild_production" {
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "SERVICE_ROLE"
 
-    environment_variable {
+    environment_variable { 
       name  = "STAGING_NAMESPACE"
       value = "${var.product_name}-staging"
     }
@@ -168,6 +168,7 @@ resource "aws_codebuild_project" "codebuild_production" {
     type                = "S3"
     location            = var.s3_bucket
   }
+
 
   source_version = "master"
 
