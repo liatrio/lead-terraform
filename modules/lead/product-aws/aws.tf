@@ -101,6 +101,7 @@ resource "aws_codebuild_project" "codebuild_staging" {
   }
 
   secondary_sources {
+    source_identifier   = "build_output"
     type                = var.source_type
     location            = var.s3_bucket
     artifact_identifier = "build_output"
@@ -164,6 +165,7 @@ resource "aws_codebuild_project" "codebuild_production" {
     }
   }
   secondary_sources {
+    source_identifier   = "build_output"
     type                = var.source_type
     location            = var.s3_bucket
     artifact_identifier = "build_output"
