@@ -104,7 +104,6 @@ resource "aws_codebuild_project" "codebuild_staging" {
     source_identifier   = "build_output"
     type                = var.source_type
     location            = var.s3_bucket
-    artifact_identifier = "build_output"
   }
 
   source_version = "master"
@@ -168,7 +167,6 @@ resource "aws_codebuild_project" "codebuild_production" {
     source_identifier   = "build_output"
     type                = var.source_type
     location            = var.s3_bucket
-    artifact_identifier = "build_output"
   }
 
   source_version = "master"
