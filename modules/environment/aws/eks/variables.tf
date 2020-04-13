@@ -6,6 +6,8 @@ variable "cluster" {
   description = "Cluster name"
 }
 
+variable "aws_environment" {}
+
 variable "system_namespace" {}
 
 variable "toolchain_namespace" {}

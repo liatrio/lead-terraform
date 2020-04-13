@@ -5,6 +5,8 @@ variable "cluster" {
   default = "lead"
 }
 
+variable "aws_environment" {}
+
 variable "cluster_version" {
   default = "1.15"
 }

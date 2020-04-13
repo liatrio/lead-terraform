@@ -18,7 +18,8 @@ module "eks" {
   on_demand_percentage             = var.on_demand_percentage
   enable_aws_code_services         = var.enable_aws_code_services
 
-  // TODO: remove the following policy from the worker node role once terraform is bumped 
+  // TODO: remove the following policy from the worker node role once terraform is bumped
   //       to version that includes fix for: https://github.com/hashicorp/terraform/issues/22992
   workers_additional_policies = [aws_iam_policy.operator_jenkins.arn]
+  aws_environment             = var.aws_environment
 }
