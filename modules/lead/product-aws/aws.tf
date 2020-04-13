@@ -165,8 +165,8 @@ resource "aws_codebuild_project" "codebuild_production" {
   }
   secondary_sources {
     source_identifier   = "build_output"
-    type                = var.source_type
-    location            = "S3"
+    type                = "S3"
+    location            = var.s3_bucket
   }
 
   source_version = "master"
