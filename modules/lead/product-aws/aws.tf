@@ -17,6 +17,10 @@ resource "aws_codebuild_project" "codebuild_build" {
       name  = "SKAFFOLD_DEFAULT_REPO"
       value = "774051255656.dkr.ecr.us-east-1.amazonaws.com/${var.product_name}"
     }
+    environment_variable {
+      name  = "REGION"
+      value = var.region
+    }
   }
 
   artifacts {
