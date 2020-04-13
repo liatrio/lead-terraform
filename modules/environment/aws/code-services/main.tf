@@ -86,7 +86,10 @@ resource "aws_iam_role_policy" "codebuild_policy" {
         "ecr:GetDownloadUrlForLayer",
         "ecr:BatchGetImage",
         "ecr:BatchCheckLayerAvailability",
-        "ecr:InitiateLayerUpload"
+        "ecr:InitiateLayerUpload",
+        "ecr:UploadLayerPart",
+        "ecr:CompleteLayerUpload",
+        "ecr:PutImage"
       ],
       "Resource": [
           "*"
