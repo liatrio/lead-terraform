@@ -39,42 +39,43 @@ EOF
   ] : []
 }
 
-data "aws_availability_zones" "available" {
+data "aws_vpc" "lead_vpc" {
+  tags = {
+    Name = "${var.aws_environment}-lead-vpc"
+  }
 }
 
+data "aws_subnet_ids" "eks_masters" {
+  vpc_id = data.aws_vpc.lead_vpc.id
 
-module "vpc" {
-  source  = "terraform-aws-modules/vpc/aws"
-  version = "2.7.0"
-  name    = var.cluster
-  cidr    = "10.0.0.0/16"
-  azs = [data.aws_availability_zones.available.names[0],
-    data.aws_availability_zones.available.names[1],
-    data.aws_availability_zones.available.names[2],
-    data.aws_availability_zones.available.names[0],
-    data.aws_availability_zones.available.names[1],
-  data.aws_availability_zones.available.names[2]]
-  // First 3 subnets are for EKS control plane, second 3 subnets are for nodes
-  private_subnets = ["10.0.1.0/24",
-    "10.0.2.0/24",
-    "10.0.3.0/24",
-    "10.0.64.0/18",
-    "10.0.128.0/18",
-  "10.0.192.0/18"]
-  public_subnets     = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
-  enable_nat_gateway = true
-  single_nat_gateway = true
-  tags = merge(
-    local.tags,
-    {
-      "kubernetes.io/cluster/${var.cluster}" = "shared"
-    },
-  )
+  filter {
+    name   = "tag:subnet-kind"
+    values = ["private"]
+  }
+
+  filter {
+    name   = "cidr-block"
+    values = ["*/24"]
+  }
+}
+
+data "aws_subnet_ids" "eks_workers" {
+  vpc_id = data.aws_vpc.lead_vpc.id
+
+  filter {
+    name   = "tag:subnet-kind"
+    values = ["private"]
+  }
+
+  filter {
+    name   = "cidr-block"
+    values = ["*/18"]
+  }
 }
 
 resource "aws_security_group" "worker" {
   name_prefix = "${var.cluster}-worker"
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = data.aws_vpc.lead_vpc.id
 
   ingress {
     from_port = 22
@@ -96,7 +97,7 @@ resource "aws_security_group" "worker" {
 
 resource "aws_security_group" "elb" {
   name_prefix = "${var.cluster}-ingress-elb"
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = data.aws_vpc.lead_vpc.id
 
   tags = {
     Name    = "${var.cluster}-ingress-elb"
@@ -126,12 +127,12 @@ resource "aws_security_group" "elb" {
 
 module "eks" {
   source                                       = "terraform-aws-modules/eks/aws"
-  version                                      = "10.0.0"
+  version                                      = "11.0.0"
   cluster_version                              = var.cluster_version
   cluster_name                                 = var.cluster
-  subnets                                      = [module.vpc.private_subnets[0], module.vpc.private_subnets[1], module.vpc.private_subnets[2]]
+  subnets                                      = sort(data.aws_subnet_ids.eks_masters.ids)
   tags                                         = local.tags
-  vpc_id                                       = module.vpc.vpc_id
+  vpc_id                                       = data.aws_vpc.lead_vpc.id
   worker_additional_security_group_ids         = [aws_security_group.worker.id]
   map_roles                                    = concat(local.map_roles, local.map_roles_extra)
   write_kubeconfig                             = var.write_kubeconfig
@@ -139,6 +140,13 @@ module "eks" {
   manage_worker_iam_resources                  = true
   kubeconfig_aws_authenticator_additional_args = var.kubeconfig_aws_authenticator_additional_args
   enable_irsa  = false
+
+  cluster_endpoint_private_access = true
+  cluster_endpoint_public_access  = false
+  cluster_endpoint_private_access_cidrs = [
+    "10.1.32.0/20",                  // internal VPN cidr
+    data.aws_vpc.lead_vpc.cidr_block // anything running within the lead VPC, such as codebuild projects
+  ]
 
   #cluster_enabled_log_types            = ["api","audit","authenticator","controllerManager","scheduler"]
 
@@ -158,7 +166,7 @@ module "eks" {
     {
       name                   = "essential0"
       instance_type          = var.essential_instance_type
-      subnets                = [module.vpc.private_subnets[3], module.vpc.private_subnets[4], module.vpc.private_subnets[5]]
+      subnets                = sort(data.aws_subnet_ids.eks_workers.ids)
       asg_min_size           = var.essential_asg_min_size
       asg_desired_capacity   = var.essential_asg_desired_capacity
       asg_max_size           = var.essential_asg_max_size
@@ -177,7 +185,7 @@ module "eks" {
     {
       name                                     = "preemptible0"
       override_instance_types                  = var.preemptible_instance_types
-      subnets                                  = [module.vpc.private_subnets[3]]
+      subnets                                  = [sort(data.aws_subnet_ids.eks_workers.ids)[0]]
       asg_min_size                             = var.preemptible_asg_min_size
       asg_desired_capacity                     = var.preemptible_asg_desired_capacity
       asg_max_size                             = var.preemptible_asg_max_size
@@ -195,7 +203,7 @@ module "eks" {
     {
       name                                     = "preemptible1"
       override_instance_types                  = var.preemptible_instance_types
-      subnets                                  = [module.vpc.private_subnets[4]]
+      subnets                                  = [sort(data.aws_subnet_ids.eks_workers.ids)[1]]
       asg_min_size                             = var.preemptible_asg_min_size
       asg_desired_capacity                     = var.preemptible_asg_desired_capacity
       asg_max_size                             = var.preemptible_asg_max_size
@@ -213,7 +221,7 @@ module "eks" {
     {
       name                                     = "preemptible2"
       override_instance_types                  = var.preemptible_instance_types
-      subnets                                  = [module.vpc.private_subnets[5]]
+      subnets                                  = [sort(data.aws_subnet_ids.eks_workers.ids)[2]]
       asg_min_size                             = var.preemptible_asg_min_size
       asg_desired_capacity                     = var.preemptible_asg_desired_capacity
       asg_max_size                             = var.preemptible_asg_max_size
@@ -256,6 +264,6 @@ resource "aws_s3_bucket" "tfstates" {
   tags = {
     Name      = "SDM Operator Terraform States"
     ManagedBy = "Terraform"
-    Cluster   = "${var.cluster}"
+    Cluster   = var.cluster
   }
 }
