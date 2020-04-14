@@ -62,6 +62,14 @@ module "vpc" {
     "kubernetes.io/cluster/${var.cluster}" = "shared",
     "terratest"                            = "terratest"
   }
+
+  private_subnet_tags = {
+    "subnet-kind" = "private"
+  }
+
+  public_subnet_tags = {
+    "subnet-kind" = "public"
+  }
 }
 
 module "eks" {
