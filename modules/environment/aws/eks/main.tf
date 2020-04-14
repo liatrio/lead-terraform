@@ -83,7 +83,7 @@ resource "aws_security_group" "worker" {
     protocol  = "tcp"
 
     cidr_blocks = [
-      "10.0.0.0/16",
+      data.aws_vpc.lead_vpc.cidr_block,
     ]
   }
   ingress {
@@ -132,14 +132,14 @@ module "eks" {
   cluster_name                                 = var.cluster
   subnets                                      = sort(data.aws_subnet_ids.eks_masters.ids)
   tags                                         = local.tags
-  vpc_id                                       = var.vpc_id == "" ? data.aws_vpc.lead_vpc.id : var.vpc_id
+  vpc_id                                       = data.aws_vpc.lead_vpc.id
   worker_additional_security_group_ids         = [aws_security_group.worker.id]
   map_roles                                    = concat(local.map_roles, local.map_roles_extra)
   write_kubeconfig                             = var.write_kubeconfig
   permissions_boundary                         = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${aws_iam_policy.workspace_role_boundary.name}"
   manage_worker_iam_resources                  = true
   kubeconfig_aws_authenticator_additional_args = var.kubeconfig_aws_authenticator_additional_args
-  enable_irsa  = false
+  enable_irsa                                  = false
 
   cluster_endpoint_private_access = true
   cluster_endpoint_public_access  = var.enable_public_endpoint

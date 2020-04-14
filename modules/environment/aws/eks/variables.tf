@@ -12,10 +12,6 @@ variable "enable_public_endpoint" {
 
 variable "aws_environment" {}
 
-variable "vpc_id" {
-  default = ""
-}
-
 variable "system_namespace" {}
 
 variable "toolchain_namespace" {}

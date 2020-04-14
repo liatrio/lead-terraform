@@ -25,18 +25,33 @@ func init() {
 
 func TestSetupEks(t *testing.T) {
 	assumeIamRole, _ := os.LookupEnv("TERRATEST_IAM_ROLE")
+
 	var clusterName string
+	if clusterNameEnv, ok := os.LookupEnv("CLUSTER"); ok {
+		clusterName = clusterNameEnv
+	} else {
+		clusterName = fmt.Sprintf("test-%s", strings.ToLower(random.UniqueId()))
+	}
+
+	testVpc := common.TestModule{
+		GoTest:       t,
+		Name:         "vpc",
+		TerraformDir: "../testdata/aws/vpc",
+		Setup: func(tm *common.TestModule) {
+			tm.SetTerraformVar("cluster", clusterName)
+			tm.SetTerraformVar("region", "us-east-1")
+			tm.SetTerraformVar("aws_assume_role_arn", assumeIamRole)
+		},
+	}
+	defer testVpc.TeardownTests()
+	testVpc.RunTests()
+
 	// CLUSTER
 	testCluster := common.TestModule{
 		GoTest:       t,
 		Name:         "eks_cluster",
 		TerraformDir: "../testdata/aws/eks",
 		Setup: func(tm *common.TestModule) {
-			if clusterNameEnv, ok := os.LookupEnv("CLUSTER"); ok {
-				clusterName = clusterNameEnv
-			} else {
-				clusterName = fmt.Sprintf("test-%s", strings.ToLower(random.UniqueId()))
-			}
 			tm.SetTerraformVar("cluster", clusterName)
 			tm.SetTerraformVar("region", "us-east-1")
 			tm.SetTerraformVar("aws_assume_role_arn", assumeIamRole)
