@@ -6,7 +6,15 @@ variable "cluster" {
   description = "Cluster name"
 }
 
+variable "enable_public_endpoint" {
+  default = false
+}
+
 variable "aws_environment" {}
+
+variable "vpc_id" {
+  default = ""
+}
 
 variable "system_namespace" {}
 

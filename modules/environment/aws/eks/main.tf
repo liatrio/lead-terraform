@@ -132,7 +132,7 @@ module "eks" {
   cluster_name                                 = var.cluster
   subnets                                      = sort(data.aws_subnet_ids.eks_masters.ids)
   tags                                         = local.tags
-  vpc_id                                       = data.aws_vpc.lead_vpc.id
+  vpc_id                                       = var.vpc_id == "" ? data.aws_vpc.lead_vpc.id : var.vpc_id
   worker_additional_security_group_ids         = [aws_security_group.worker.id]
   map_roles                                    = concat(local.map_roles, local.map_roles_extra)
   write_kubeconfig                             = var.write_kubeconfig
@@ -142,7 +142,7 @@ module "eks" {
   enable_irsa  = false
 
   cluster_endpoint_private_access = true
-  cluster_endpoint_public_access  = false
+  cluster_endpoint_public_access  = var.enable_public_endpoint
   cluster_endpoint_private_access_cidrs = [
     "10.1.32.0/20",                  // internal VPN cidr
     data.aws_vpc.lead_vpc.cidr_block // anything running within the lead VPC, such as codebuild projects
