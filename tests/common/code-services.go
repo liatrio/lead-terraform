@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
@@ -107,8 +107,8 @@ func CodeServicesTest(t *testing.T) {
 				PipelineExecutionId: aws.String("11111111-1111-1111-1111-111111111111"),
 				PipelineName:        aws.String(random.UniqueId()),
 			})
-			assert.Error(tm.GoTest, err)
-			assert.Equal(tm.GoTest, "PipelineNotFoundException", err.(awserr.Error).Code())
+			require.Error(tm.GoTest, err)
+			require.Equal(tm.GoTest, "PipelineNotFoundException", err.(awserr.Error).Code())
 
 			// Assert adding message to queue using event mapper policy fails
 			sqsClient := sqs.New(eventMapperSession)
@@ -116,23 +116,23 @@ func CodeServicesTest(t *testing.T) {
 				MessageBody: aws.String(random.UniqueId()),
 				QueueUrl:    &sqsURL,
 			})
-			assert.Error(tm.GoTest, err)
+			require.Error(tm.GoTest, err)
 
 			// Assert reading message from queue using event mapper policy works
 			output, err := sqsClient.ReceiveMessage(&sqs.ReceiveMessageInput{
 				QueueUrl:        &sqsURL,
 				WaitTimeSeconds: &timeout,
 			})
-			assert.NoError(tm.GoTest, err)
-			assert.Len(tm.GoTest, output.Messages, 1)
-			assert.Equal(tm.GoTest, expectedMessage, *output.Messages[0].Body)
+			require.NoError(tm.GoTest, err)
+			require.Len(tm.GoTest, output.Messages, 1)
+			require.Equal(tm.GoTest, expectedMessage, *output.Messages[0].Body)
 
 			// Assert deleteing message from queue using event mapper policy works
 			_, err = sqsClient.DeleteMessage(&sqs.DeleteMessageInput{
 				ReceiptHandle: output.Messages[0].ReceiptHandle,
 				QueueUrl:      &sqsURL,
 			})
-			assert.NoError(tm.GoTest, err)
+			require.NoError(tm.GoTest, err)
 		},
 	}
 	defer testCodeServices.TeardownTests()

@@ -6,7 +6,7 @@ import (
 
 	"github.com/gruntwork-io/terratest/modules/random"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func NamespaceSetup(tm *TestModule) {
@@ -19,5 +19,5 @@ func NamespaceTests(tm *TestModule) {
 
 	actualNamespace := tm.GetTerraformOutput("name")
 
-	assert.Equal(tm.GoTest, expectedNamespace, actualNamespace)
+	require.Equal(tm.GoTest, expectedNamespace, actualNamespace)
 }

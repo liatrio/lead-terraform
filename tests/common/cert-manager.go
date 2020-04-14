@@ -1,11 +1,11 @@
 package common
 
 import (
-	"testing"
-	"github.com/gruntwork-io/terratest/modules/terraform"
 	"github.com/gruntwork-io/terratest/modules/k8s"
-	"github.com/stretchr/testify/assert"
+	"github.com/gruntwork-io/terratest/modules/terraform"
+	"github.com/stretchr/testify/require"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"testing"
 )
 
 func CreateCertManager(tm *TestModule) {
@@ -13,10 +13,10 @@ func CreateCertManager(tm *TestModule) {
 	kubeConfigPath := tm.GetStringGlobal(KubeConfigPath)
 	k8sOptions := k8s.NewKubectlOptions("", kubeConfigPath, namespace)
 
-	pods := k8s.ListPods(tm.GoTest, k8sOptions, metav1.ListOptions{ LabelSelector: "app.kubernetes.io/instance=cert-manager" })
-	assert.Equal(tm.GoTest, 3, len(pods))
-	services := k8s.ListServices(tm.GoTest, k8sOptions, metav1.ListOptions{ LabelSelector: "app.kubernetes.io/instance=cert-manager" })
-	assert.Equal(tm.GoTest, 2, len(services))
+	pods := k8s.ListPods(tm.GoTest, k8sOptions, metav1.ListOptions{LabelSelector: "app.kubernetes.io/instance=cert-manager"})
+	require.Equal(tm.GoTest, 3, len(pods))
+	services := k8s.ListServices(tm.GoTest, k8sOptions, metav1.ListOptions{LabelSelector: "app.kubernetes.io/instance=cert-manager"})
+	require.Equal(tm.GoTest, 2, len(services))
 }
 
 func DestroyCertManager(tm *TestModule) {
