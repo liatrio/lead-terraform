@@ -248,8 +248,8 @@ resource "aws_iam_policy" "event_mapper_role_policy" {
     },
     {
       "Action": [
-        "codepipeline:GetPipeline"
-        "codepipeline:GetPipelineExecution"
+        "codepipeline:GetPipeline",
+        "codepipeline:GetPipelineExecution",
         "codepipeline:ListTagsForResource"
       ],
       "Effect": "Allow",
