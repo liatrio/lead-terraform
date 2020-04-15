@@ -255,24 +255,38 @@ EOF
   permissions_boundary = "arn:aws:iam::${var.account_id}:policy/Developer"
 }
 
-resource "aws_iam_role_policy" "event_mapper_role_policy" {
+resource "aws_iam_policy" "event_mapper_role_policy" {
   count  = var.enable_aws_code_services ? 1 : 0
   name   = "${var.cluster}_event_mapper_role_policy"
-  role   = aws_iam_role.event_mapper_role[0].name
 
   policy = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
     {
-        "Action": [
-            "sqs:*",
-            "sts:AssumeRoleWithWebIdentity"
-        ],
-        "Effect": "Allow",
-        "Resource": "${aws_sqs_queue.code_services_queue[0].arn}"
+      "Action": [
+        "sqs:ReceiveMessage",
+        "sqs:DeleteMessage"
+      ],
+      "Effect": "Allow",
+      "Resource": "${aws_sqs_queue.code_services_queue[0].arn}"
+    },
+    {
+      "Action": [
+        "codepipeline:GetPipeline",
+        "codepipeline:GetPipelineExecution",
+        "codepipeline:ListTagsForResource"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
     }
   ]
 }
 EOF
+}
+
+resource "aws_iam_role_policy_attachment" "event_mapper_role_policy_attachment" {
+  count = var.enable_aws_code_services ? 1 : 0
+  policy_arn = aws_iam_policy.event_mapper_role_policy[0].arn
+  role   = aws_iam_role.event_mapper_role[0].name
 }

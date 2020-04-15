@@ -1,40 +1,57 @@
 package aws
 
 import (
+	"flag"
 	"fmt"
 	"os"
-	"flag"
 	"strings"
 
 	"liatr.io/lead-terraform/tests/common"
 
-	"testing"
 	"github.com/gruntwork-io/terratest/modules/random"
+	"testing"
 )
 
 const Cluster = "clusterName"
 const Namespace = "namespace"
 
 var flagNoColor bool
+var flagDestroyCluster bool
 
-func init()  {
+func init() {
+	flag.BoolVar(&flagDestroyCluster, "destroyCluster", true, "Destroy cluster after tests")
 	flag.BoolVar(&flagNoColor, "noColor", false, "Disable color in log output")
 }
 
 func TestSetupEks(t *testing.T) {
 	assumeIamRole, _ := os.LookupEnv("TERRATEST_IAM_ROLE")
+
 	var clusterName string
+	if clusterNameEnv, ok := os.LookupEnv("CLUSTER"); ok {
+		clusterName = clusterNameEnv
+	} else {
+		clusterName = fmt.Sprintf("test-%s", strings.ToLower(random.UniqueId()))
+	}
+
+	testVpc := common.TestModule{
+		GoTest:       t,
+		Name:         "vpc",
+		TerraformDir: "../testdata/aws/vpc",
+		Setup: func(tm *common.TestModule) {
+			tm.SetTerraformVar("cluster", clusterName)
+			tm.SetTerraformVar("region", "us-east-1")
+			tm.SetTerraformVar("aws_assume_role_arn", assumeIamRole)
+		},
+	}
+	defer testVpc.TeardownTests()
+	testVpc.RunTests()
+
 	// CLUSTER
 	testCluster := common.TestModule{
-		GoTest: t,
-		Name: "eks_cluster",
+		GoTest:       t,
+		Name:         "eks_cluster",
 		TerraformDir: "../testdata/aws/eks",
 		Setup: func(tm *common.TestModule) {
-			if clusterNameEnv, ok := os.LookupEnv("CLUSTER"); ok {
-				clusterName = clusterNameEnv
-			} else {
-				clusterName = fmt.Sprintf("test-%s", strings.ToLower(random.UniqueId()))
-			}
 			tm.SetTerraformVar("cluster", clusterName)
 			tm.SetTerraformVar("region", "us-east-1")
 			tm.SetTerraformVar("aws_assume_role_arn", assumeIamRole)
@@ -52,8 +69,8 @@ func TestSetupEks(t *testing.T) {
 
 	// NAMESPACE
 	testNamespace := common.TestModule{
-		GoTest: t,
-		Name: "namespace",
+		GoTest:       t,
+		Name:         "namespace",
 		TerraformDir: "../testdata/common/namespace",
 		Setup: func(tm *common.TestModule) {
 			tm.SetTerraformVar("kube_config_path", testCluster.GetTerraformOutput("kubeconfig"))
@@ -69,14 +86,14 @@ func TestSetupEks(t *testing.T) {
 
 	// CERT-MANAGER
 	testCertManager := common.TestModule{
-		GoTest: t,
-		Name: "cert_manager",
+		GoTest:       t,
+		Name:         "cert_manager",
 		TerraformDir: "../testdata/tools/cert-manager",
 		Setup: func(tm *common.TestModule) {
 			tm.SetTerraformVar("namespace", testNamespace.GetTerraformVar("namespace"))
 			tm.SetTerraformVar("kube_config_path", testCluster.GetTerraformOutput("kubeconfig"))
 		},
-		Tests: common.CreateCertManager,
+		Tests:    common.CreateCertManager,
 		Teardown: common.DestroyCertManager,
 	}
 	defer testCertManager.TeardownTests()
@@ -84,10 +101,10 @@ func TestSetupEks(t *testing.T) {
 
 	// TEST CREATE SELF SIGNED ISSUER
 	testIssuer := common.TestModule{
-		GoTest: t,
-		Name: "issuer",
+		GoTest:       t,
+		Name:         "issuer",
 		TerraformDir: "../testdata/common/cert-issuer",
-		Setup: func(tm *common.TestModule)  {
+		Setup: func(tm *common.TestModule) {
 			tm.SetTerraformVar("kube_config_path", testCluster.GetTerraformOutput("kubeconfig"))
 			tm.SetTerraformVar("namespace", testNamespace.GetTerraformVar("namespace"))
 			tm.SetTerraformVar("issuer_kind", "Issuer")
@@ -100,8 +117,8 @@ func TestSetupEks(t *testing.T) {
 
 	// Ingress Controller
 	testIngressController := common.TestModule{
-		GoTest: t,
-		Name: "ingress",
+		GoTest:       t,
+		Name:         "ingress",
 		TerraformDir: "../testdata/lead/toolchain-ingress",
 		Setup: func(tm *common.TestModule) {
 			tm.SetTerraformVar("kube_config_path", testCluster.GetTerraformOutput("kubeconfig"))
@@ -122,7 +139,7 @@ func TestSetupEks(t *testing.T) {
 func testModules(t *testing.T) {
 	t.Run("SDM", testLeadSdm)
 	t.Run("Dashboard", testLeadDashboard)
-	t.Run("CodeServices", testCodeServices)
+	t.Run("CodeServices", common.CodeServicesTest)
 	t.Run("KubeResourceReport", common.KubeResourceReportTest)
 }
 
@@ -131,8 +148,8 @@ func testLeadSdm(t *testing.T) {
 
 	// SDM
 	testSdm := common.TestModule{
-		GoTest: t,
-		Name: "sdm",
+		GoTest:       t,
+		Name:         "sdm",
 		TerraformDir: "../testdata/tools/sdm",
 		Setup: func(tm *common.TestModule) {
 			tm.SetTerraformVar("kube_config_path", tm.GetStringGlobal(common.KubeConfigPath))
@@ -156,10 +173,10 @@ func testLeadDashboard(t *testing.T) {
 
 	// LEAD Dashboard
 	testLeadDashboard := common.TestModule{
-		GoTest: t,
-		Name: "dashboard",
+		GoTest:       t,
+		Name:         "dashboard",
 		TerraformDir: "../testdata/lead/dashboard",
-		Setup: func (tm *common.TestModule)  {
+		Setup: func(tm *common.TestModule) {
 			tm.SetTerraformVar("kube_config_path", tm.GetStringGlobal(common.KubeConfigPath))
 			tm.SetTerraformVar("namespace", tm.GetStringGlobal(Namespace))
 			tm.SetTerraformVar("root_zone_name", "lead-terraform.test.liatr.io")
@@ -178,10 +195,10 @@ func testCodeServices(t *testing.T) {
 	assumeIamRole, _ := os.LookupEnv("TERRATEST_IAM_ROLE")
 
 	testCodeServices := common.TestModule{
-		GoTest: t,
-		Name: "codeServices",
+		GoTest:       t,
+		Name:         "codeServices",
 		TerraformDir: "../testdata/aws/code-services",
-		Setup: func (tm *common.TestModule) {
+		Setup: func(tm *common.TestModule) {
 			tm.SetTerraformVar("cluster", tm.GetStringGlobal(Cluster))
 			tm.SetTerraformVar("region", "us-east-1")
 			tm.SetTerraformVar("aws_assume_role_arn", assumeIamRole)

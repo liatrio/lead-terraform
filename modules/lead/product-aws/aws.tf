@@ -259,4 +259,8 @@ resource "aws_codepipeline" "codepipeline" {
       }
     }
   }
+
+  tags = {
+    Product = var.product_name
+  }
 }
