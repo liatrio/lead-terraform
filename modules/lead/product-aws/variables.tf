@@ -18,3 +18,5 @@ variable "codebuild_role" {}
 variable "codepipeline_role" {}
 variable "s3_bucket" {}
 variable "codebuild_user" {}
+variable "codebuild_security_group_id" {}
+variable "aws_environment" {}

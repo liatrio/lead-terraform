@@ -1,6 +1,6 @@
 data "helm_repository" "liatrio" {
-  name     = "liatrio"
-  url      = "https://liatrio-helm.s3.us-east-1.amazonaws.com/charts"
+  name = "liatrio"
+  url  = "https://liatrio-helm.s3.us-east-1.amazonaws.com/charts"
 }
 
 data "template_file" "operator_toolchain_values" {
@@ -23,10 +23,12 @@ data "template_file" "operator_toolchain_values" {
     enable_harbor          = var.product_vars["enable_harbor"]
     enable_artifactory     = var.product_vars["enable_artifactory"]
 
-    s3_bucket         = var.product_vars["s3_bucket"]
-    codebuild_role    = var.product_vars["codebuild_role"]
-    codepipeline_role = var.product_vars["codepipeline_role"]
-    codebuild_user    = var.product_vars["codebuild_user"]
+    aws_environment             = var.product_vars["aws_environment"]
+    s3_bucket                   = var.product_vars["s3_bucket"]
+    codebuild_role              = var.product_vars["codebuild_role"]
+    codepipeline_role           = var.product_vars["codepipeline_role"]
+    codebuild_user              = var.product_vars["codebuild_user"]
+    codebuild_security_group_id = var.product_vars["codebuild_security_group_id"]
 
     image_repository = var.toolchain_image_repo
 

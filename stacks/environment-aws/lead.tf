@@ -44,8 +44,8 @@ data "template_file" "essential_toleration" {
 }
 
 data "helm_repository" "stable" {
-  name     = "stable"
-  url      = "https://kubernetes-charts.storage.googleapis.com"
+  name = "stable"
+  url  = "https://kubernetes-charts.storage.googleapis.com"
 }
 
 resource "helm_release" "cluster_autoscaler" {
@@ -177,10 +177,12 @@ module "sdm" {
     enable_harbor          = var.enable_harbor
     enable_artifactory     = var.enable_artifactory
 
-    s3_bucket         = var.enable_aws_code_services ? module.codeservices.s3_bucket : ""
-    codebuild_role    = var.enable_aws_code_services ? module.codeservices.codebuild_role : ""
-    codepipeline_role = var.enable_aws_code_services ? module.codeservices.codepipeline_role : ""
-    codebuild_user    = var.enable_aws_code_services ? "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-codebuild" : ""
+    s3_bucket                   = var.enable_aws_code_services ? module.codeservices.s3_bucket : ""
+    codebuild_role              = var.enable_aws_code_services ? module.codeservices.codebuild_role : ""
+    codepipeline_role           = var.enable_aws_code_services ? module.codeservices.codepipeline_role : ""
+    codebuild_user              = var.enable_aws_code_services ? "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-codebuild" : ""
+    codebuild_security_group_id = module.codeservices.codebuild_security_group_id
+    aws_environment             = var.aws_environment
   }
 }
 

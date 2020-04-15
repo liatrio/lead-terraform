@@ -445,8 +445,14 @@ resource "aws_iam_policy" "product_operator_aws_code_services" {
       "${module.codeservices.codebuild_role}",
       "${module.codeservices.codepipeline_role}"
     ]
-  }
-]
+  },
+  {
+    "Effect": "Allow",
+    "Action": [
+      "ec2:DescribeVpcs"
+    ],
+    "Resource": "*"
+  }]
 }
 EOF
 }

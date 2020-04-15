@@ -1,3 +1,26 @@
+data "aws_vpc" "lead_vpc" {
+  tags = {
+    Name = "${var.aws_environment}-lead-vpc"
+  }
+}
+
+// builds will run in the subnet originally created for eks workers, since these subnets are large enough
+data "aws_subnet_ids" "eks_workers" {
+  vpc_id = data.aws_vpc.lead_vpc.id
+
+  filter {
+    name   = "tag:subnet-kind"
+    values = [
+      "private"]
+  }
+
+  filter {
+    name   = "cidr-block"
+    values = [
+      "*/18"]
+  }
+}
+
 resource "aws_codebuild_project" "codebuild_build" {
   for_each = var.pipelines
 
@@ -7,13 +30,13 @@ resource "aws_codebuild_project" "codebuild_build" {
   service_role  = var.codebuild_role
 
   environment {
-    compute_type                = "BUILD_GENERAL1_SMALL"
-    image                       = "aws/codebuild/amazonlinux2-x86_64-standard:2.0"
-    type                        = "LINUX_CONTAINER"
+    compute_type = "BUILD_GENERAL1_SMALL"
+    image        = "aws/codebuild/amazonlinux2-x86_64-standard:2.0"
+    type         = "LINUX_CONTAINER"
   }
 
   artifacts {
-    type = var.source_type
+    type     = var.source_type
     location = var.s3_bucket
   }
 
@@ -25,7 +48,7 @@ resource "aws_codebuild_project" "codebuild_build" {
 
 
     git_submodules_config {
-        fetch_submodules = true
+      fetch_submodules = true
     }
   }
 
@@ -33,6 +56,14 @@ resource "aws_codebuild_project" "codebuild_build" {
 
   tags = {
     Product = var.product_name
+  }
+
+  vpc_config {
+    security_group_ids = [
+      var.codebuild_security_group_id
+    ]
+    subnets            = sort(data.aws_subnet_ids.eks_workers.ids)
+    vpc_id             = data.aws_vpc.lead_vpc.id
   }
 }
 
@@ -45,13 +76,13 @@ resource "aws_codebuild_project" "codebuild_staging" {
   service_role  = var.codebuild_role
 
   environment {
-    compute_type                = "BUILD_GENERAL1_SMALL"
-    image                       = "aws/codebuild/amazonlinux2-x86_64-standard:2.0"
-    type                        = "LINUX_CONTAINER"
+    compute_type = "BUILD_GENERAL1_SMALL"
+    image        = "aws/codebuild/amazonlinux2-x86_64-standard:2.0"
+    type         = "LINUX_CONTAINER"
   }
 
   artifacts {
-    type = var.source_type
+    type     = var.source_type
     location = var.s3_bucket
   }
 
@@ -63,7 +94,7 @@ resource "aws_codebuild_project" "codebuild_staging" {
 
 
     git_submodules_config {
-        fetch_submodules = true
+      fetch_submodules = true
     }
   }
 
@@ -83,13 +114,13 @@ resource "aws_codebuild_project" "codebuild_production" {
   service_role  = var.codebuild_role
 
   environment {
-    compute_type                = "BUILD_GENERAL1_SMALL"
-    image                       = "aws/codebuild/amazonlinux2-x86_64-standard:2.0"
-    type                        = "LINUX_CONTAINER"
+    compute_type = "BUILD_GENERAL1_SMALL"
+    image        = "aws/codebuild/amazonlinux2-x86_64-standard:2.0"
+    type         = "LINUX_CONTAINER"
   }
 
   artifacts {
-    type = var.source_type
+    type     = var.source_type
     location = var.s3_bucket
   }
 
@@ -101,7 +132,7 @@ resource "aws_codebuild_project" "codebuild_production" {
 
 
     git_submodules_config {
-        fetch_submodules = true
+      fetch_submodules = true
     }
   }
 
@@ -133,7 +164,8 @@ resource "aws_codepipeline" "codepipeline" {
       owner            = "AWS"
       provider         = "CodeCommit"
       version          = "1"
-      output_artifacts = ["source_output"]
+      output_artifacts = [
+        "source_output"]
 
       configuration = {
         RepositoryName = "${var.product_name}-${each.value.repo}"
@@ -150,8 +182,10 @@ resource "aws_codepipeline" "codepipeline" {
       category         = "Build"
       owner            = "AWS"
       provider         = "CodeBuild"
-      input_artifacts  = ["source_output"]
-      output_artifacts = ["build_output"]
+      input_artifacts  = [
+        "source_output"]
+      output_artifacts = [
+        "build_output"]
       version          = "1"
 
       configuration = {
@@ -164,12 +198,13 @@ resource "aws_codepipeline" "codepipeline" {
     name = "Staging"
 
     action {
-      name             = "Staging"
-      category         = "Build"
-      owner            = "AWS"
-      provider         = "CodeBuild"
-      input_artifacts  = ["source_output"]
-      version          = "1"
+      name            = "Staging"
+      category        = "Build"
+      owner           = "AWS"
+      provider        = "CodeBuild"
+      input_artifacts = [
+        "source_output"]
+      version         = "1"
 
       configuration = {
         ProjectName = "${aws_codebuild_project.codebuild_staging[each.key].id}"
@@ -193,12 +228,13 @@ resource "aws_codepipeline" "codepipeline" {
     name = "Production"
 
     action {
-      name             = "Production"
-      category         = "Build"
-      owner            = "AWS"
-      provider         = "CodeBuild"
-      input_artifacts  = ["source_output"]
-      version          = "1"
+      name            = "Production"
+      category        = "Build"
+      owner           = "AWS"
+      provider        = "CodeBuild"
+      input_artifacts = [
+        "source_output"]
+      version         = "1"
 
       configuration = {
         ProjectName = "${aws_codebuild_project.codebuild_production[each.key].id}"

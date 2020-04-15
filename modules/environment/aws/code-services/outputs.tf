@@ -6,6 +6,10 @@ output "codebuild_role" {
   value = length(aws_iam_role.codebuild_role) > 0 ? aws_iam_role.codebuild_role[0].arn : ""
 }
 
+output "codebuild_security_group_id" {
+  value = length(aws_security_group.codebuild_security_group) > 0 ? aws_security_group.codebuild_security_group[0].id : ""
+}
+
 output "codepipeline_role" {
   value = length(aws_iam_role.codepipeline_role) > 0 ? aws_iam_role.codepipeline_role[0].arn : ""
 }
