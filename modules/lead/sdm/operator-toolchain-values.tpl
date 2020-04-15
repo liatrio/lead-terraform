@@ -26,7 +26,9 @@ product:
         codebuild_role: ${codebuild_role}
         codebuild_user: ${codebuild_user}
         codepipeline_role: ${codepipeline_role}
+        product_image_repo: ${product_image_repo}
         region: ${region}
+        toolchain_image_repo: ${toolchain_image_repo}
         s3_bucket: ${s3_bucket}
       defaultJobEnvVariables:
         CLUSTER: ${cluster}

@@ -20,3 +20,5 @@ variable "codepipeline_role" {}
 variable "s3_bucket" {}
 variable "codebuild_user" {}
 variable "builder_images_version" {}
+variable "product_image_repo" {}
+variable "toolchain_image_repo" {}

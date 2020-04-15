@@ -1,7 +1,7 @@
 resource "aws_codebuild_project" "codebuild_build" {
   for_each = var.pipelines
 
-  name          = "${each.value.repo}-build"
+  name          = "${var.product_name}-${each.value.repo}-build"
   description   = "terraform_codebuild_project"
   build_timeout = "20"
   service_role  = var.codebuild_role
@@ -9,17 +9,21 @@ resource "aws_codebuild_project" "codebuild_build" {
   environment {
     privileged_mode             = true
     compute_type                = "BUILD_GENERAL1_LARGE"
-    image                       = "489130170427.dkr.ecr.us-east-1.amazonaws.com/builder-image-skaffold:${var.builder_images_version}"
+    image                       = "${var.toolchain_image_repo}/builder-image-skaffold:${var.builder_images_version}"
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "SERVICE_ROLE"
 
     environment_variable {
       name  = "SKAFFOLD_DEFAULT_REPO"
-      value = "774051255656.dkr.ecr.us-east-1.amazonaws.com/${var.product_name}"
+      value = "${var.product_image_repo}/${var.product_name}"
     }
     environment_variable {
       name  = "REGION"
       value = var.region
+    }
+    environment_variable {
+      name  = "PRODUCT_IMAGE_REPO"
+      value = var.product_image_repo
     }
   }
 
@@ -54,14 +58,14 @@ resource "aws_codebuild_project" "codebuild_build" {
 resource "aws_codebuild_project" "codebuild_staging" {
   for_each = var.pipelines
 
-  name          = "${each.value.repo}-staging"
+  name          = "${var.product_name}-${each.value.repo}-staging"
   description   = "terraform_codebuild_project"
   build_timeout = "10"
   service_role  = var.codebuild_role
 
   environment {
     compute_type                = "BUILD_GENERAL1_LARGE"
-    image                       = "489130170427.dkr.ecr.us-east-1.amazonaws.com/builder-image-skaffold:${var.builder_images_version}"
+    image                       = "${var.toolchain_image_repo}/builder-image-skaffold:${var.builder_images_version}"
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "SERVICE_ROLE"
 
@@ -112,14 +116,14 @@ resource "aws_codebuild_project" "codebuild_staging" {
 resource "aws_codebuild_project" "codebuild_production" {
   for_each = var.pipelines
 
-  name          = "${each.value.repo}-production"
+  name          = "${var.product_name}-${each.value.repo}-production"
   description   = "terraform_codebuild_project"
   build_timeout = "10"
   service_role  = var.codebuild_role
 
   environment {
     compute_type                = "BUILD_GENERAL1_LARGE"
-    image                       = "489130170427.dkr.ecr.us-east-1.amazonaws.com/builder-image-skaffold:${var.builder_images_version}"
+    image                       = "${var.toolchain_image_repo}/builder-image-skaffold:${var.builder_images_version}"
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "SERVICE_ROLE"
 
