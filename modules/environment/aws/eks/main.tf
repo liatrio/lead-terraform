@@ -32,7 +32,8 @@ EOF
 
   map_roles_extra = var.enable_aws_code_services ? [
     {
-      rolearn  = var.codebuild_role
+      rolearn  = var.enable_aws_code_services ? var.codebuild_role : ""
+
       username = "codebuild"
       groups   = ["system:authenticated"]
     }
