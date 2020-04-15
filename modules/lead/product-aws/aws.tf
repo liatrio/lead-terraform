@@ -11,13 +11,15 @@ data "aws_subnet_ids" "eks_workers" {
   filter {
     name   = "tag:subnet-kind"
     values = [
-      "private"]
+      "private"
+    ]
   }
 
   filter {
     name   = "cidr-block"
     values = [
-      "*/18"]
+      "*/18"
+    ]
   }
 }
 
@@ -165,7 +167,8 @@ resource "aws_codepipeline" "codepipeline" {
       provider         = "CodeCommit"
       version          = "1"
       output_artifacts = [
-        "source_output"]
+        "source_output"
+      ]
 
       configuration = {
         RepositoryName = "${var.product_name}-${each.value.repo}"
@@ -183,9 +186,11 @@ resource "aws_codepipeline" "codepipeline" {
       owner            = "AWS"
       provider         = "CodeBuild"
       input_artifacts  = [
-        "source_output"]
+        "source_output"
+      ]
       output_artifacts = [
-        "build_output"]
+        "build_output"
+      ]
       version          = "1"
 
       configuration = {
@@ -203,7 +208,8 @@ resource "aws_codepipeline" "codepipeline" {
       owner           = "AWS"
       provider        = "CodeBuild"
       input_artifacts = [
-        "source_output"]
+        "source_output"
+      ]
       version         = "1"
 
       configuration = {
@@ -233,7 +239,8 @@ resource "aws_codepipeline" "codepipeline" {
       owner           = "AWS"
       provider        = "CodeBuild"
       input_artifacts = [
-        "source_output"]
+        "source_output"
+      ]
       version         = "1"
 
       configuration = {
