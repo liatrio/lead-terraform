@@ -141,7 +141,6 @@ module "eks" {
   manage_worker_iam_resources                  = true
   kubeconfig_aws_authenticator_additional_args = var.kubeconfig_aws_authenticator_additional_args
   enable_irsa                                  = false
-  codebuild_role                               = var.codebuild_role
 
   cluster_endpoint_private_access = true
   cluster_endpoint_public_access  = var.enable_public_endpoint
