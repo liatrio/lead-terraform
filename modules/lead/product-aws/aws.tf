@@ -1,7 +1,7 @@
 resource "aws_codebuild_project" "codebuild_build" {
   for_each = var.pipelines
 
-  name          = "${var.product_name}-${each.value.repo}-build"
+  name          = replace("${var.product_name}-${each.value.repo}-build", "/^${var.product_name}-${var.product_name}/", var.product_name)
   description   = "terraform_codebuild_project"
   build_timeout = "20"
   service_role  = var.codebuild_role
@@ -58,7 +58,7 @@ resource "aws_codebuild_project" "codebuild_build" {
 resource "aws_codebuild_project" "codebuild_staging" {
   for_each = var.pipelines
 
-  name          = "${var.product_name}-${each.value.repo}-staging"
+  name          = replace("${var.product_name}-${each.value.repo}-staging", "/^${var.product_name}-${var.product_name}/", var.product_name)
   description   = "terraform_codebuild_project"
   build_timeout = "10"
   service_role  = var.codebuild_role
@@ -116,7 +116,7 @@ resource "aws_codebuild_project" "codebuild_staging" {
 resource "aws_codebuild_project" "codebuild_production" {
   for_each = var.pipelines
 
-  name          = "${var.product_name}-${each.value.repo}-production"
+  name          = replace("${var.product_name}-${each.value.repo}-production", "/^${var.product_name}-${var.product_name}/", var.product_name)
   description   = "terraform_codebuild_project"
   build_timeout = "10"
   service_role  = var.codebuild_role
