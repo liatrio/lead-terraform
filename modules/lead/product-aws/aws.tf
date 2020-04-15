@@ -189,7 +189,7 @@ resource "aws_codepipeline" "codepipeline" {
       version          = "1"
 
       configuration = {
-        ProjectName = "${aws_codebuild_project.codebuild_build[each.key].id}"
+        ProjectName = aws_codebuild_project.codebuild_build[each.key].id
       }
     }
   }
@@ -207,7 +207,7 @@ resource "aws_codepipeline" "codepipeline" {
       version         = "1"
 
       configuration = {
-        ProjectName = "${aws_codebuild_project.codebuild_staging[each.key].id}"
+        ProjectName = aws_codebuild_project.codebuild_staging[each.key].id
       }
     }
   }
@@ -237,7 +237,7 @@ resource "aws_codepipeline" "codepipeline" {
       version         = "1"
 
       configuration = {
-        ProjectName = "${aws_codebuild_project.codebuild_production[each.key].id}"
+        ProjectName = aws_codebuild_project.codebuild_production[each.key].id
       }
     }
   }
