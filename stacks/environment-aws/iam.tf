@@ -396,7 +396,9 @@ resource "aws_iam_policy" "product_operator_aws_code_services" {
       "codebuild:BatchGetProjects",
       "codepipeline:CreatePipeline",
       "codepipeline:GetPipeline",
-      "codepipeline:ListTagsForResource"
+      "codepipeline:ListTagsForResource",
+      "codepipeline:TagResource",
+      "codepipeline:UntagResource"
     ],
     "Resource": "*"
   },
@@ -449,7 +451,8 @@ resource "aws_iam_policy" "product_operator_aws_code_services" {
   {
     "Effect": "Allow",
     "Action": [
-      "ec2:DescribeVpcs"
+      "ec2:DescribeVpc*",
+      "ec2:DescribeSubnets"
     ],
     "Resource": "*"
   }]
