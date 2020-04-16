@@ -35,3 +35,7 @@ variable "k8s_storage_class" {}
 variable "elasticsearch_replicas" {
   default = 3
 }
+
+variable "keycloak_admin_credential_secret" {}
+
+variable "toolchain_namespace" {}

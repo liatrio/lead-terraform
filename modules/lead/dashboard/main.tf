@@ -6,8 +6,8 @@ data "kubernetes_secret" "keycloak_admin_credential" {
   count = var.enable_keycloak && var.enabled ? 1 : 0
 
   metadata {
-    name      = "keycloak-admin-credential"
-    namespace = "toolchain"
+    name      = var.keycloak_admin_credential_secret
+    namespace = var.toolchain_namespace
   }
 }
 
