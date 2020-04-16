@@ -128,12 +128,12 @@ resource "aws_codebuild_project" "codebuild_production" {
     image_pull_credentials_type = "SERVICE_ROLE"
 
     environment_variable {
-      name  = "STAGING_NAMESPACE"
-      value = "${var.product_name}-staging"
+      name  = "PROD_NAMESPACE"
+      value = "${var.product_name}-production"
     }
     environment_variable {
       name  = "ISTIO_DOMAIN"
-      value = "${var.product_name}-staging.${var.cluster}.prod.liatr.io"
+      value = "${var.product_name}-production.${var.cluster}.prod.liatr.io"
     }
     environment_variable {
       name  = "PRODUCT_NAME"
@@ -158,7 +158,7 @@ resource "aws_codebuild_project" "codebuild_production" {
     type            = var.source_type
     location        = var.s3_bucket
     git_clone_depth = 1
-    buildspec       = "buildspec-production.yaml"
+    buildspec       = "buildspec-prod.yaml"
     git_submodules_config {
       fetch_submodules = true
     }

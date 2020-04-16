@@ -45,7 +45,7 @@ provider "helm" {
 module "product-aws" {
   source                  = "../../modules/lead/product-aws"
   cluster_domain          = var.cluster_domain
-  cluster                 = split(".", var.cluster_domain)[0]
+  cluster                 = var.cluster
   product_name            = var.product_name
   image_whitelist         = var.image_whitelist
   region                  = var.region

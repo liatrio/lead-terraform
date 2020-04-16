@@ -30,6 +30,7 @@ product:
         region: ${region}
         toolchain_image_repo: ${toolchain_image_repo}
         s3_bucket: ${s3_bucket}
+        cluster: ${cluster}
       defaultJobEnvVariables:
         CLUSTER: ${cluster}
     %{ endif }
