@@ -9,8 +9,8 @@ resource "aws_s3_bucket" "code_services_bucket" {
 }
 
 resource "aws_iam_role" "codebuild_role" {
-  count  = var.enable_aws_code_services ? 1 : 0
-  name   = "codebuild-role-${var.cluster}"
+  count = var.enable_aws_code_services ? 1 : 0
+  name  = "codebuild-role-${var.cluster}"
 
   assume_role_policy = <<EOF
 {
@@ -29,8 +29,8 @@ EOF
 }
 
 resource "aws_iam_role_policy" "codebuild_policy" {
-  count  = var.enable_aws_code_services ? 1 : 0
-  role   = aws_iam_role.codebuild_role[0].name
+  count = var.enable_aws_code_services ? 1 : 0
+  role  = aws_iam_role.codebuild_role[0].name
 
   policy = <<POLICY
 {
@@ -110,8 +110,8 @@ POLICY
 }
 
 resource "aws_iam_role" "codepipeline_role" {
-  count  = var.enable_aws_code_services ? 1 : 0
-  name   = "codepipeline-role-${var.cluster}"
+  count = var.enable_aws_code_services ? 1 : 0
+  name  = "codepipeline-role-${var.cluster}"
 
   assume_role_policy = <<EOF
 {
@@ -130,9 +130,9 @@ EOF
 }
 
 resource "aws_iam_role_policy" "codepipeline_policy" {
-  count  = var.enable_aws_code_services ? 1 : 0
-  name   = "codepipeline_policy-${var.cluster}"
-  role   = aws_iam_role.codepipeline_role[0].id
+  count = var.enable_aws_code_services ? 1 : 0
+  name  = "codepipeline_policy-${var.cluster}"
+  role  = aws_iam_role.codepipeline_role[0].id
 
   policy = <<EOF
 {
@@ -196,9 +196,9 @@ PATTERN
 }
 
 resource "aws_cloudwatch_event_target" "code_services_event_target" {
-  count     = var.enable_aws_code_services ? 1 : 0
-  rule      = aws_cloudwatch_event_rule.code_services_event_rule[0].name
-  arn       = aws_sqs_queue.code_services_queue[0].arn
+  count = var.enable_aws_code_services ? 1 : 0
+  rule  = aws_cloudwatch_event_rule.code_services_event_rule[0].name
+  arn   = aws_sqs_queue.code_services_queue[0].arn
 }
 
 resource "aws_sqs_queue_policy" "code_services_queue_policy" {
@@ -229,8 +229,8 @@ POLICY
 }
 
 resource "aws_iam_role" "event_mapper_role" {
-  count  = var.enable_aws_code_services ? 1 : 0
-  name = "${var.cluster}_event_mapper_role"
+  count = var.enable_aws_code_services ? 1 : 0
+  name  = "${var.cluster}_event_mapper_role"
 
   assume_role_policy = <<EOF
 {
@@ -256,8 +256,8 @@ EOF
 }
 
 resource "aws_iam_policy" "event_mapper_role_policy" {
-  count  = var.enable_aws_code_services ? 1 : 0
-  name   = "${var.cluster}_event_mapper_role_policy"
+  count = var.enable_aws_code_services ? 1 : 0
+  name  = "${var.cluster}_event_mapper_role_policy"
 
   policy = <<EOF
 {
@@ -286,7 +286,28 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "event_mapper_role_policy_attachment" {
-  count = var.enable_aws_code_services ? 1 : 0
+  count      = var.enable_aws_code_services ? 1 : 0
   policy_arn = aws_iam_policy.event_mapper_role_policy[0].arn
-  role   = aws_iam_role.event_mapper_role[0].name
+  role       = aws_iam_role.event_mapper_role[0].name
+}
+
+data "aws_vpc" "lead_vpc" {
+  tags = {
+    Name = "${var.aws_environment}-lead-vpc"
+  }
+}
+
+resource "aws_security_group" "codebuild_security_group" {
+  count  = var.enable_aws_code_services ? 1 : 0
+  name   = "codebuild-egress"
+  vpc_id = data.aws_vpc.lead_vpc.id
+
+  egress {
+    from_port   = 0
+    protocol    = "-1"
+    to_port     = 0
+    cidr_blocks = [
+      "0.0.0.0/0"
+    ]
+  }
 }

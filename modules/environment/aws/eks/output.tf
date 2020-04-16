@@ -13,3 +13,7 @@ output "workspace_iam_role" {
 output "aws_security_group_elb" {
   value = aws_security_group.elb
 }
+
+output "vpc_id" {
+  value = data.aws_vpc.lead_vpc.id
+}

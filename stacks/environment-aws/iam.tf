@@ -167,7 +167,7 @@ resource "aws_iam_role_policy" "operator-slack" {
       "Effect": "Allow",
       "Action": [
         "codecommit:CreateRepository",
-        "codecommit:GetRepository",
+        "codecommit:GetRepository"
       ],
       "Resource": "*"
     }
@@ -396,7 +396,9 @@ resource "aws_iam_policy" "product_operator_aws_code_services" {
       "codebuild:BatchGetProjects",
       "codepipeline:CreatePipeline",
       "codepipeline:GetPipeline",
-      "codepipeline:ListTagsForResource"
+      "codepipeline:ListTagsForResource",
+      "codepipeline:TagResource",
+      "codepipeline:UntagResource"
     ],
     "Resource": "*"
   },
@@ -445,8 +447,15 @@ resource "aws_iam_policy" "product_operator_aws_code_services" {
       "${module.codeservices.codebuild_role}",
       "${module.codeservices.codepipeline_role}"
     ]
-  }
-]
+  },
+  {
+    "Effect": "Allow",
+    "Action": [
+      "ec2:DescribeVpc*",
+      "ec2:DescribeSubnets"
+    ],
+    "Resource": "*"
+  }]
 }
 EOF
 }

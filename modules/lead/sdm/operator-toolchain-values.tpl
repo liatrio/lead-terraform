@@ -25,12 +25,14 @@ product:
         cluster_domain: ${cluster_domain}
         codebuild_role: ${codebuild_role}
         codebuild_user: ${codebuild_user}
+        codebuild_security_group_id: ${codebuild_security_group_id}
         codepipeline_role: ${codepipeline_role}
         product_image_repo: ${product_image_repo}
         region: ${region}
         toolchain_image_repo: ${toolchain_image_repo}
         s3_bucket: ${s3_bucket}
         cluster: ${cluster}
+        aws_environment: ${aws_environment}
       defaultJobEnvVariables:
         CLUSTER: ${cluster}
     %{ endif }

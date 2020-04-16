@@ -40,3 +40,5 @@ variable "builder_images_version" {}
 variable "product_image_repo" {}
 variable "toolchain_image_repo" {}
 variable "cluster" {}
+variable "codebuild_security_group_id" {}
+variable "aws_environment" {}
