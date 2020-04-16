@@ -1,4 +1,5 @@
 variable "cluster_domain" {}
+variable "cluster" {}
 variable "region" {}
 variable "product_name" {}
 variable "image_whitelist" {
@@ -18,3 +19,6 @@ variable "codebuild_role" {}
 variable "codepipeline_role" {}
 variable "s3_bucket" {}
 variable "codebuild_user" {}
+variable "builder_images_version" {}
+variable "product_image_repo" {}
+variable "toolchain_image_repo" {}

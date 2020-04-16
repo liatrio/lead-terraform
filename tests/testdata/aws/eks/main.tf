@@ -45,4 +45,5 @@ module "eks" {
   enable_aws_code_services                     = false
   aws_environment                              = var.cluster
   enable_public_endpoint                       = true
+  codebuild_role                               = ""
 }

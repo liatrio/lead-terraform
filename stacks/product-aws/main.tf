@@ -45,6 +45,7 @@ provider "helm" {
 module "product-aws" {
   source                  = "../../modules/lead/product-aws"
   cluster_domain          = var.cluster_domain
+  cluster                 = var.cluster
   product_name            = var.product_name
   image_whitelist         = var.image_whitelist
   region                  = var.region
@@ -54,6 +55,10 @@ module "product-aws" {
   s3_bucket               = var.s3_bucket
   codebuild_user          = var.codebuild_user
   source_type             = var.source_type
+  toolchain_image_repo    = var.toolchain_image_repo
+  product_image_repo      = var.product_image_repo
+  builder_images_version  = var.builder_images_version
+
   providers = {
     kubernetes.staging    = kubernetes.staging
     helm.staging          = helm.staging

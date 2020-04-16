@@ -32,8 +32,9 @@ EOF
 
   map_roles_extra = var.enable_aws_code_services ? [
     {
-      rolearn  = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-codebuild"
-      username = "user"
+      rolearn  = var.codebuild_role
+
+      username = "codebuild"
       groups   = ["system:authenticated"]
     }
   ] : []

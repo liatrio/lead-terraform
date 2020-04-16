@@ -78,6 +78,31 @@ resource "aws_iam_role_policy" "codebuild_policy" {
         "${aws_s3_bucket.code_services_bucket[0].arn}",
         "${aws_s3_bucket.code_services_bucket[0].arn}/*"
       ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ecr:GetAuthorizationToken",
+        "ecr:GetDownloadUrlForLayer",
+        "ecr:BatchGetImage",
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:InitiateLayerUpload",
+        "ecr:UploadLayerPart",
+        "ecr:CompleteLayerUpload",
+        "ecr:PutImage"
+      ],
+      "Resource": [
+          "*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "eks:DescribeCluster"
+      ],
+      "Resource": [
+          "*"
+      ]
     }
   ]
 }

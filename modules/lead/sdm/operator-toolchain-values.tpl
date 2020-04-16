@@ -21,12 +21,16 @@ product:
       terraformSource: github.com/liatrio/lead-terraform//stacks/product-aws
       defaultProductVersion: ${product_version}
       defaultProductVariables:
+        builder_images_version: ${builder_images_version}
         cluster_domain: ${cluster_domain}
         codebuild_role: ${codebuild_role}
         codebuild_user: ${codebuild_user}
         codepipeline_role: ${codepipeline_role}
+        product_image_repo: ${product_image_repo}
         region: ${region}
+        toolchain_image_repo: ${toolchain_image_repo}
         s3_bucket: ${s3_bucket}
+        cluster: ${cluster}
       defaultJobEnvVariables:
         CLUSTER: ${cluster}
     %{ endif }

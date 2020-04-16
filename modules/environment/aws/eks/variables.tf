@@ -68,3 +68,5 @@ variable "enable_aws_code_services" {}
 variable "cluster_version" {
   default = "1.14"
 }
+
+variable "codebuild_role" {}
