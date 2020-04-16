@@ -182,6 +182,7 @@ module "sdm" {
     codebuild_user              = var.enable_aws_code_services ? "codebuild" : ""
     codebuild_security_group_id = module.codeservices.codebuild_security_group_id
     aws_environment             = var.aws_environment
+    product_image_repo          = var.product_image_repo
   }
 }
 
