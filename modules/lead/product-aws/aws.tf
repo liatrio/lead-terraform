@@ -55,7 +55,7 @@ resource "aws_codebuild_project" "codebuild_build" {
   artifacts {
     type     = var.source_type
     location = var.s3_bucket
-	artifact_identifier = "build_output"
+    artifact_identifier = "build_output"
   }
 
   cache {
