@@ -38,7 +38,8 @@ resource "helm_release" "grafeas" {
   wait       = true
 
   depends_on = [
-    module.certificate.cert_status]
+    module.certificate.cert_status,
+  ]
 
   set {
     name  = "certificates.secretname"
