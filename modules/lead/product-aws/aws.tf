@@ -75,7 +75,7 @@ resource "aws_codebuild_project" "codebuild_staging" {
     }
     environment_variable {
       name  = "ISTIO_DOMAIN"
-      value = "${var.product_name}-staging.${var.cluster}.prod.liatr.io"
+      value = "${var.product_name}-staging.${var.cluster_domain}"
     }
     environment_variable {
       name  = "PRODUCT_NAME"
@@ -133,7 +133,7 @@ resource "aws_codebuild_project" "codebuild_production" {
     }
     environment_variable {
       name  = "ISTIO_DOMAIN"
-      value = "${var.product_name}-production.${var.cluster}.prod.liatr.io"
+      value = "${var.product_name}-prod.${var.cluster_domain}"
     }
     environment_variable {
       name  = "PRODUCT_NAME"
