@@ -79,11 +79,11 @@ resource "aws_codebuild_project" "codebuild_staging" {
     }
     environment_variable {
       name  = "PRODUCT_NAME"
-      value = "${var.product_name}"
+      value = var.product_name
     }
     environment_variable {
       name  = "CLUSTER"
-      value = "${var.cluster}"
+      value = var.cluster
     }
   }
 
@@ -137,11 +137,11 @@ resource "aws_codebuild_project" "codebuild_production" {
     }
     environment_variable {
       name  = "PRODUCT_NAME"
-      value = "${var.product_name}"
+      value = var.product_name
     }
     environment_variable {
       name  = "CLUSTER"
-      value = "${var.cluster}"
+      value = var.cluster
     }
   }
 
@@ -213,7 +213,7 @@ resource "aws_codepipeline" "codepipeline" {
       version          = "1"
 
       configuration = {
-        ProjectName = "${aws_codebuild_project.codebuild_build[each.key].id}"
+        ProjectName = aws_codebuild_project.codebuild_build[each.key].id
       }
     }
   }
@@ -230,7 +230,7 @@ resource "aws_codepipeline" "codepipeline" {
       version         = "1"
 
       configuration = {
-        ProjectName   = "${aws_codebuild_project.codebuild_staging[each.key].id}"
+        ProjectName   = aws_codebuild_project.codebuild_staging[each.key].id
       }
     }
   }
@@ -259,7 +259,7 @@ resource "aws_codepipeline" "codepipeline" {
       version         = "1"
 
       configuration = {
-        ProjectName = "${aws_codebuild_project.codebuild_production[each.key].id}"
+        ProjectName = aws_codebuild_project.codebuild_production[each.key].id
       }
     }
   }
