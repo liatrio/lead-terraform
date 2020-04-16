@@ -105,6 +105,14 @@ resource "aws_codebuild_project" "codebuild_staging" {
   tags = {
     Product = var.product_name
   }
+
+  vpc_config {
+    security_group_ids = [
+      var.codebuild_security_group_id
+    ]
+    subnets            = sort(data.aws_subnet_ids.eks_workers.ids)
+    vpc_id             = data.aws_vpc.lead_vpc.id
+  }
 }
 
 resource "aws_codebuild_project" "codebuild_production" {
@@ -142,6 +150,14 @@ resource "aws_codebuild_project" "codebuild_production" {
 
   tags = {
     Product = var.product_name
+  }
+
+  vpc_config {
+    security_group_ids = [
+      var.codebuild_security_group_id
+    ]
+    subnets            = sort(data.aws_subnet_ids.eks_workers.ids)
+    vpc_id             = data.aws_vpc.lead_vpc.id
   }
 }
 
