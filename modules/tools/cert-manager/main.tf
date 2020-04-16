@@ -53,6 +53,10 @@ resource "helm_release" "cert_manager" {
     value = "--issuer-ambient-credentials"
   }
   set {
+    name  = "extraArgs[1]"
+    value = "--dns01-recursive-nameservers=1.1.1.1:53\\,208.67.222.222:53"
+  }
+  set {
     name  = "serviceAccount.name"
     value = "cert-manager"
   }

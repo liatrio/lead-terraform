@@ -1,15 +1,16 @@
 data "helm_repository" "liatrio-flywheel" {
-  name = "lead.prod.liatr.io"
-  url  = "https://artifactory.toolchain.lead.prod.liatr.io/artifactory/helm/"
+  count = var.enable_grafeas ? 1 : 0
+  name  = "lead.prod.liatr.io"
+  url   = "https://artifactory.toolchain.lead.prod.liatr.io/artifactory/helm/"
 }
 
 module "ca-issuer" {
   source = "../../common/ca-issuer"
 
-  enabled   = var.enable_grafeas
-  name      = "grafeas"
-  namespace = var.namespace
-  common_name = var.root_zone_name
+  enabled          = var.enable_grafeas
+  name             = "grafeas"
+  namespace        = var.namespace
+  common_name      = var.root_zone_name
   cert-manager-crd = var.crd_waiter
 }
 
@@ -29,22 +30,24 @@ module "certificate" {
 resource "helm_release" "grafeas" {
   name       = "grafeas-server"
   count      = var.enable_grafeas ? 1 : 0
-  repository = data.helm_repository.liatrio-flywheel.metadata[0].name
+  repository = data.helm_repository.liatrio-flywheel[0].metadata[0].name
   namespace  = var.namespace
   chart      = "grafeas-server"
   version    = var.grafeas_version
-  timeout    = 300 
+  timeout    = 300
   wait       = true
 
-  depends_on = [module.certificate.cert_status]
+  depends_on = [
+    module.certificate.cert_status,
+  ]
 
   set {
-    name = "certificates.secretname"
+    name  = "certificates.secretname"
     value = "${module.certificate.cert_name}-certificate"
   }
 
   set {
-    name = "grafeas_version"
+    name  = "grafeas_version"
     value = var.grafeas_version
   }
 }

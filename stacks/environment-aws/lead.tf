@@ -182,20 +182,23 @@ module "sdm" {
     codebuild_user              = var.enable_aws_code_services ? "codebuild" : ""
     codebuild_security_group_id = module.codeservices.codebuild_security_group_id
     aws_environment             = var.aws_environment
+    product_image_repo          = var.product_image_repo
   }
 }
 
 module "dashboard" {
-  source                 = "../../modules/lead/dashboard"
-  root_zone_name         = var.root_zone_name
-  cluster                = module.eks.cluster_id
-  cluster_domain         = "${var.cluster}.${var.root_zone_name}"
-  namespace              = module.toolchain.namespace
-  dashboard_version      = var.dashboard_version
-  k8s_storage_class      = var.k8s_storage_class
-  enabled                = var.enable_dashboard
-  enable_keycloak        = var.enable_keycloak
-  keycloak_realm_id      = module.toolchain.keycloak_realm_id
-  crd_waiter             = module.infrastructure.crd_waiter
-  elasticsearch_replicas = var.dashboard_elasticsearch_replicas
+  source                           = "../../modules/lead/dashboard"
+  root_zone_name                   = var.root_zone_name
+  cluster                          = module.eks.cluster_id
+  cluster_domain                   = "${var.cluster}.${var.root_zone_name}"
+  namespace                        = module.toolchain.namespace
+  dashboard_version                = var.dashboard_version
+  k8s_storage_class                = var.k8s_storage_class
+  enabled                          = var.enable_dashboard
+  enable_keycloak                  = var.enable_keycloak
+  keycloak_realm_id                = module.toolchain.keycloak_realm_id
+  crd_waiter                       = module.infrastructure.crd_waiter
+  elasticsearch_replicas           = var.dashboard_elasticsearch_replicas
+  toolchain_namespace              = module.toolchain.namespace
+  keycloak_admin_credential_secret = module.toolchain.keycloak_admin_credential_secret
 }
