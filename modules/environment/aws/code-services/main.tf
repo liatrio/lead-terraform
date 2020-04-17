@@ -65,7 +65,7 @@ resource "aws_iam_role_policy" "codebuild_policy" {
       "Action": [
         "ec2:CreateNetworkInterfacePermission"
       ],
-      "Resource": "arn:aws:ec2:region:account-id:network-interface/*",
+      "Resource": "arn:aws:ec2:${var.region}:${var.account_id}:network-interface/*",
       "Condition": {
         "StringEquals": {
           "ec2:Subnet": ${var.aws_vpc_subnet_arns_json},
