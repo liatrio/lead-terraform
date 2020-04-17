@@ -169,9 +169,6 @@ variable "toolchain_image_repo" {
   default = "artifactory.toolchain.lead.prod.liatr.io/docker-registry/flywheel"
 }
 
-variable "product_image_repo" {
-}
-
 variable "prometheus_slack_channel" {
 }
 

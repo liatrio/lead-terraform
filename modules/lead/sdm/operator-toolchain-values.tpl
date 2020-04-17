@@ -27,7 +27,7 @@ product:
         codebuild_user: ${codebuild_user}
         codebuild_security_group_id: ${codebuild_security_group_id}
         codepipeline_role: ${codepipeline_role}
-        product_image_repo: ${product_image_repo}
+        product_image_repo: ${ecr_image_repo}
         region: ${region}
         toolchain_image_repo: ${toolchain_image_repo}
         s3_bucket: ${s3_bucket}
@@ -47,7 +47,7 @@ product:
         enable_harbor: "${enable_harbor}"
         enable_keycloak: "${enable_keycloak}"
         jenkins_image_version: ${jenkins_image_version}
-        product_image_repo: ${product_image_repo}
+        product_image_repo: ${harbor_image_repo}
         region: ${region}
         toolchain_image_repo: ${toolchain_image_repo}
       defaultJobEnvVariables:
