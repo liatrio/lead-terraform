@@ -62,6 +62,19 @@ resource "aws_iam_role_policy" "codebuild_policy" {
     },
     {
       "Effect": "Allow",
+      "Action": [
+        "ec2:CreateNetworkInterfacePermission"
+      ],
+      "Resource": "arn:aws:ec2:region:account-id:network-interface/*",
+      "Condition": {
+        "StringEquals": {
+          "ec2:Subnet": ${var.aws_vpc_subnet_arns_json},
+          "ec2:AuthorizedService": "codebuild.amazonaws.com"
+        }
+      }
+    },
+    {
+      "Effect": "Allow",
       "Resource": [
           "*"
       ],
