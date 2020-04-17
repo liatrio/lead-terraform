@@ -21,7 +21,7 @@ else
 TF_VALIDATE_ARGS = ""
 endif
 
-validate: 
+validate:
 	@terraform init -backend=false stacks/environment-aws
 	@terraform validate $(TF_VALIDATE_ARGS) stacks/environment-aws
 	@terraform init -backend=false stacks/environment-local
@@ -32,7 +32,7 @@ validate:
 	@terraform validate $(TF_VALIDATE_ARGS) stacks/product-local
 
 %: environments/%
-	cd $< && terragrunt $(COMMAND) 
+	cd $< && terragrunt $(COMMAND)
 
 clean:
 	@find . -type d -name ".terragrunt-cache" -prune -exec rm -rf {} \;
@@ -59,17 +59,17 @@ endif
 	git tag -a -m "releasing $(NEW_VERSION)" $(NEW_VERSION)
 	git push origin $(NEW_VERSION)
 
-test: 
+test:
 	cd tests && go test liatr.io/lead-terraform/tests/local -timeout 90m -v --count=1
 
-test-aws: 
+test-aws:
 	cd tests && go test liatr.io/lead-terraform/tests/aws -timeout 90m -v --count=1
 
 test-aws-nodestroy:
 	cd tests && go test liatr.io/lead-terraform/tests/aws -timeout 90m -v --count=1 --destroyCluster=false
 
 build_keycloak_provider:
-TF_KEYCLOAK_VERSION = 1.11.1
+TF_KEYCLOAK_VERSION = 1.18.0
 TF_KEYCLOAK_PLATFORM = $(shell go env GOOS)_$(shell go env GOARCH)
 plugins:
 	mkdir -p ~/.terraform.d/plugins
