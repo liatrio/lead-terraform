@@ -223,7 +223,7 @@ resource "aws_codebuild_project" "codebuild_production" {
 resource "aws_codepipeline" "codepipeline" {
   for_each = var.pipelines
 
-  name     = "${var.product_name}-${each.value.repo}"
+  name = replace("${var.product_name}-${each.value.repo}", "/^${var.product_name}-${var.product_name}/", var.product_name)
   role_arn = var.codepipeline_role
 
   artifact_store {
@@ -245,7 +245,7 @@ resource "aws_codepipeline" "codepipeline" {
       ]
 
       configuration = {
-        RepositoryName = "${var.product_name}-${each.value.repo}"
+        RepositoryName = replace("${var.product_name}-${each.value.repo}", "/^${var.product_name}-${var.product_name}/", var.product_name)
         BranchName     = "master"
       }
     }
