@@ -104,6 +104,10 @@ variable "enable_keycloak" {
   default = true
 }
 
+variable "enable_google_login" {
+  default = false
+}
+
 variable "enable_mailhog" {
   default = false
 }

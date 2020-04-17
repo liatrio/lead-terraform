@@ -88,31 +88,44 @@ data "aws_ssm_parameter" "prometheus_slack_webhook_url" {
   name = "/${var.cluster}/prometheus_slack_webhook_url"
 }
 
+data "aws_ssm_parameter" "google_identity_provider_client_id" {
+  count = var.enable_google_login ? 1 : 0
+  name  = "/${var.cluster}/google_identity_provider_client_id"
+}
+
+data "aws_ssm_parameter" "google_identity_provider_client_secret" {
+  count = var.enable_google_login ? 1 : 0
+  name  = "/${var.cluster}/google_identity_provider_client_secret"
+}
+
 
 module "toolchain" {
-  source                     = "../../modules/lead/toolchain"
-  root_zone_name             = var.root_zone_name
-  cluster                    = module.eks.cluster_id
-  namespace                  = var.toolchain_namespace
-  image_whitelist            = var.image_whitelist
-  elb_security_group_id      = module.eks.aws_security_group_elb.id
-  artifactory_license        = data.aws_ssm_parameter.artifactory_license.value
-  keycloak_admin_password    = data.aws_ssm_parameter.keycloak_admin_password.value
-  keycloak_postgres_password = data.aws_ssm_parameter.keycloak_postgres_password.value
-  enable_istio               = var.enable_istio
-  enable_artifactory         = var.enable_artifactory
-  enable_gitlab              = var.enable_gitlab
-  enable_keycloak            = var.enable_keycloak
-  enable_mailhog             = var.enable_mailhog
-  enable_sonarqube           = var.enable_sonarqube
-  enable_xray                = var.enable_xray
-  enable_grafeas             = var.enable_grafeas
-  enable_harbor              = var.enable_harbor
-  issuer_name                = module.cluster_issuer.issuer_name
-  issuer_kind                = module.cluster_issuer.issuer_kind
-  crd_waiter                 = module.infrastructure.crd_waiter
-  grafeas_version            = var.grafeas_version
-  k8s_storage_class          = var.k8s_storage_class
+  source                                 = "../../modules/lead/toolchain"
+  root_zone_name                         = var.root_zone_name
+  cluster                                = module.eks.cluster_id
+  namespace                              = var.toolchain_namespace
+  image_whitelist                        = var.image_whitelist
+  elb_security_group_id                  = module.eks.aws_security_group_elb.id
+  artifactory_license                    = data.aws_ssm_parameter.artifactory_license.value
+  keycloak_admin_password                = data.aws_ssm_parameter.keycloak_admin_password.value
+  keycloak_postgres_password             = data.aws_ssm_parameter.keycloak_postgres_password.value
+  enable_google_login                    = var.enable_google_login
+  google_identity_provider_client_id     = var.enable_google_login ? data.aws_ssm_parameter.google_identity_provider_client_id[0].value : ""
+  google_identity_provider_client_secret = var.enable_google_login ? data.aws_ssm_parameter.google_identity_provider_client_secret[0].value : ""
+  enable_istio                           = var.enable_istio
+  enable_artifactory                     = var.enable_artifactory
+  enable_gitlab                          = var.enable_gitlab
+  enable_keycloak                        = var.enable_keycloak
+  enable_mailhog                         = var.enable_mailhog
+  enable_sonarqube                       = var.enable_sonarqube
+  enable_xray                            = var.enable_xray
+  enable_grafeas                         = var.enable_grafeas
+  enable_harbor                          = var.enable_harbor
+  issuer_name                            = module.cluster_issuer.issuer_name
+  issuer_kind                            = module.cluster_issuer.issuer_kind
+  crd_waiter                             = module.infrastructure.crd_waiter
+  grafeas_version                        = var.grafeas_version
+  k8s_storage_class                      = var.k8s_storage_class
 
   harbor_registry_disk_size    = "200Gi"
   harbor_chartmuseum_disk_size = "100Gi"

@@ -63,6 +63,10 @@ variable "enable_harbor" {
 variable "crd_waiter" {
 }
 
+variable "enable_google_login" {}
+variable "google_identity_provider_client_id" {}
+variable "google_identity_provider_client_secret" {}
+
 variable "keycloak_admin_password" {
 }
 
