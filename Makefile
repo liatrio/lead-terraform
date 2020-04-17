@@ -69,7 +69,7 @@ test-aws-nodestroy:
 	cd tests && go test liatr.io/lead-terraform/tests/aws -timeout 90m -v --count=1 --destroyCluster=false
 
 build_keycloak_provider:
-TF_KEYCLOAK_VERSION = 1.17.1
+TF_KEYCLOAK_VERSION = 1.18.0
 TF_KEYCLOAK_PLATFORM = $(shell go env GOOS)_$(shell go env GOARCH)
 plugins:
 	mkdir -p ~/.terraform.d/plugins

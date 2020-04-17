@@ -98,6 +98,11 @@ data "aws_ssm_parameter" "google_identity_provider_client_secret" {
   name  = "/${var.cluster}/google_identity_provider_client_secret"
 }
 
+data "aws_ssm_parameter" "test_user_password" {
+  count = var.enable_test_user ? 1 : 0
+  name  = "/${var.cluster}/test_user_password"
+}
+
 
 module "toolchain" {
   source                                 = "../../modules/lead/toolchain"
@@ -112,6 +117,8 @@ module "toolchain" {
   enable_google_login                    = var.enable_google_login
   google_identity_provider_client_id     = var.enable_google_login ? data.aws_ssm_parameter.google_identity_provider_client_id[0].value : ""
   google_identity_provider_client_secret = var.enable_google_login ? data.aws_ssm_parameter.google_identity_provider_client_secret[0].value : ""
+  enable_test_user                       = var.enable_test_user
+  test_user_password                     = var.enable_test_user ? data.aws_ssm_parameter.test_user_password[0].value : ""
   enable_istio                           = var.enable_istio
   enable_artifactory                     = var.enable_artifactory
   enable_gitlab                          = var.enable_gitlab

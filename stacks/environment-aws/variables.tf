@@ -108,6 +108,10 @@ variable "enable_google_login" {
   default = false
 }
 
+variable "enable_test_user" {
+  default = false
+}
+
 variable "enable_mailhog" {
   default = false
 }
