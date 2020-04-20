@@ -175,6 +175,9 @@ module "sdm" {
   sqs_url                     = var.enable_aws_code_services ? module.codeservices.sqs_url : ""
   toolchain_image_repo        = var.toolchain_image_repo
 
+  harbor_image_repo = "harbor.${module.toolchain.namespace}.${module.eks.cluster_id}.${var.root_zone_name}"
+  ecr_image_repo    = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.region}.amazonaws.com"
+
   operator_slack_service_account_annotations   = {
     "eks.amazonaws.com/role-arn" = aws_iam_role.operator_slack_service_account.arn
   }
@@ -202,7 +205,6 @@ module "sdm" {
     codebuild_user              = var.enable_aws_code_services ? "codebuild" : ""
     codebuild_security_group_id = module.codeservices.codebuild_security_group_id
     aws_environment             = var.aws_environment
-    product_image_repo          = var.product_image_repo
   }
 }
 

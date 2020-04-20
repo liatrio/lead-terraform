@@ -15,11 +15,13 @@ data "template_file" "operator_toolchain_values" {
     workspace_role  = var.workspace_role_name
     region          = var.region
 
+    harbor_image_repo = var.harbor_image_repo
+    ecr_image_repo    = var.ecr_image_repo
+
     enable_keycloak        = var.product_vars["enable_keycloak"]
     builder_images_version = var.product_vars["builder_images_version"]
     jenkins_image_version  = var.product_vars["jenkins_image_version"]
     toolchain_image_repo   = var.product_vars["toolchain_image_repo"]
-    product_image_repo     = var.product_vars["product_image_repo"]
     enable_harbor          = var.product_vars["enable_harbor"]
     enable_artifactory     = var.product_vars["enable_artifactory"]
 
