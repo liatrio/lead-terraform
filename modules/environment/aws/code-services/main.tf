@@ -1,3 +1,9 @@
+data "aws_vpc" "lead_vpc" {
+  tags = {
+    Name = "${var.aws_environment}-lead-vpc"
+  }
+}
+
 data "aws_subnet_ids" "eks_workers" {
   vpc_id = data.aws_vpc.lead_vpc.id
 
@@ -320,12 +326,6 @@ resource "aws_iam_role_policy_attachment" "event_mapper_role_policy_attachment" 
   count      = var.enable_aws_code_services ? 1 : 0
   policy_arn = aws_iam_policy.event_mapper_role_policy[0].arn
   role       = aws_iam_role.event_mapper_role[0].name
-}
-
-data "aws_vpc" "lead_vpc" {
-  tags = {
-    Name = "${var.aws_environment}-lead-vpc"
-  }
 }
 
 resource "aws_security_group" "codebuild_security_group" {
