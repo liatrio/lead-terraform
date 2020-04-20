@@ -11,7 +11,7 @@ variable "key_name" {
 }
 
 variable "preemptible_instance_types" {
-  type = list
+  type    = list
   default = ["m5.xlarge", "c5.xlarge", "m4.xlarge", "c4.xlarge", "t3.xlarge", "r5.xlarge"]
 }
 
