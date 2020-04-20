@@ -1,3 +1,27 @@
+data "aws_vpc" "lead_vpc" {
+  tags = {
+    Name = "${var.vpc_name}"
+  }
+}
+
+data "aws_subnet_ids" "eks_workers" {
+  vpc_id = data.aws_vpc.lead_vpc.id
+
+  filter {
+    name   = "tag:subnet-kind"
+    values = [
+      "private"
+    ]
+  }
+
+  filter {
+    name   = "cidr-block"
+    values = [
+      "*/18"
+    ]
+  }
+}
+
 resource "aws_s3_bucket" "code_services_bucket" {
   count  = var.enable_aws_code_services ? 1 : 0
   bucket = "code-services-${var.account_id}-${var.cluster}"
@@ -59,6 +83,19 @@ resource "aws_iam_role_policy" "codebuild_policy" {
         "ec2:DescribeVpcs"
       ],
       "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ec2:CreateNetworkInterfacePermission"
+      ],
+      "Resource": "arn:aws:ec2:${var.region}:${var.account_id}:network-interface/*",
+      "Condition": {
+        "StringEquals": {
+          "ec2:Subnet": "${jsonencode(formatlist("arn:aws:ec2:${var.region}:${var.account_id}:subnet/%s", data.aws_subnet_ids.eks_workers.ids))}",
+          "ec2:AuthorizedService": "codebuild.amazonaws.com"
+        }
+      }
     },
     {
       "Effect": "Allow",
@@ -289,12 +326,6 @@ resource "aws_iam_role_policy_attachment" "event_mapper_role_policy_attachment" 
   count      = var.enable_aws_code_services ? 1 : 0
   policy_arn = aws_iam_policy.event_mapper_role_policy[0].arn
   role       = aws_iam_role.event_mapper_role[0].name
-}
-
-data "aws_vpc" "lead_vpc" {
-  tags = {
-    Name = "${var.vpc_name}"
-  }
 }
 
 resource "aws_security_group" "codebuild_security_group" {
