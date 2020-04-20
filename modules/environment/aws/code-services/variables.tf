@@ -5,4 +5,4 @@ variable "account_id" {}
 variable "cluster" {}
 variable "openid_connect_provider_arn" {}
 variable "openid_connect_provider_url" {}
-variable "aws_environment" {}
+variable "vpc_name" {}

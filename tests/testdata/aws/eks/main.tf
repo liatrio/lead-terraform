@@ -43,7 +43,7 @@ module "eks" {
   write_kubeconfig                             = true
   kubeconfig_aws_authenticator_additional_args = ["-r", var.aws_assume_role_arn]
   enable_aws_code_services                     = false
-  aws_environment                              = var.cluster
+  vpc_name                                     = var.vpc_name
   enable_public_endpoint                       = true
   codebuild_role                               = ""
 }

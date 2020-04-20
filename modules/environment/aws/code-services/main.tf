@@ -293,7 +293,7 @@ resource "aws_iam_role_policy_attachment" "event_mapper_role_policy_attachment" 
 
 data "aws_vpc" "lead_vpc" {
   tags = {
-    Name = "${var.aws_environment}-lead-vpc"
+    Name = "${var.vpc_name}"
   }
 }
 

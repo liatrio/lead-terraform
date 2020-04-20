@@ -10,7 +10,7 @@ variable "enable_public_endpoint" {
   default = false
 }
 
-variable "aws_environment" {}
+variable "vpc_name" {}
 
 variable "system_namespace" {}
 
