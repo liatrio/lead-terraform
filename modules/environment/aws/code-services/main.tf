@@ -1,3 +1,21 @@
+data "aws_subnet_ids" "eks_workers" {
+  vpc_id = data.aws_vpc.lead_vpc.id
+
+  filter {
+    name   = "tag:subnet-kind"
+    values = [
+      "private"
+    ]
+  }
+
+  filter {
+    name   = "cidr-block"
+    values = [
+      "*/18"
+    ]
+  }
+}
+
 resource "aws_s3_bucket" "code_services_bucket" {
   count  = var.enable_aws_code_services ? 1 : 0
   bucket = "code-services-${var.account_id}-${var.cluster}"
@@ -68,7 +86,7 @@ resource "aws_iam_role_policy" "codebuild_policy" {
       "Resource": "arn:aws:ec2:${var.region}:${var.account_id}:network-interface/*",
       "Condition": {
         "StringEquals": {
-          "ec2:Subnet": ${var.aws_vpc_subnet_arns_json},
+          "ec2:Subnet": "${jsonencode(formatlist("arn:aws:ec2:${var.region}:${var.account_id}:subnet/%s", data.aws_subnet_ids.eks_workers.ids))}",
           "ec2:AuthorizedService": "codebuild.amazonaws.com"
         }
       }
