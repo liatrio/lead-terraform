@@ -12,10 +12,6 @@ variable "enable_public_endpoint" {
 
 variable "vpc_name" {}
 
-variable "system_namespace" {}
-
-variable "toolchain_namespace" {}
-
 variable "key_name" {
   default = ""
 }

@@ -3,8 +3,6 @@ module "eks" {
   region                           = var.region
   cluster                          = var.cluster_name
   cluster_version                  = var.cluster_version
-  system_namespace                 = var.system_namespace
-  toolchain_namespace              = var.toolchain_namespace
   key_name                         = var.key_name
   preemptible_instance_types       = var.preemptible_instance_types
   preemptible_asg_min_size         = var.preemptible_asg_min_size
