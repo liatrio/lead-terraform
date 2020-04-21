@@ -92,7 +92,7 @@ resource "aws_iam_role_policy" "codebuild_policy" {
       "Resource": "arn:aws:ec2:${var.region}:${var.account_id}:network-interface/*",
       "Condition": {
         "StringEquals": {
-          "ec2:Subnet": "${jsonencode(formatlist("arn:aws:ec2:${var.region}:${var.account_id}:subnet/%s", data.aws_subnet_ids.eks_workers.ids))}",
+          "ec2:Subnet": ${jsonencode(formatlist("arn:aws:ec2:${var.region}:${var.account_id}:subnet/%s", data.aws_subnet_ids.eks_workers.ids))},
           "ec2:AuthorizedService": "codebuild.amazonaws.com"
         }
       }
