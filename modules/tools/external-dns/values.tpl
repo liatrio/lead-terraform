@@ -1,4 +1,4 @@
-provider: aws
+provider: ${dns_provider}
 sources:
 - ingress
 - istio-gateway

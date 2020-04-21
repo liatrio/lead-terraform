@@ -40,7 +40,7 @@ variable "asg_max_size" {
 }
 
 variable "instance_types" {
-  type    = list
+  type    = list(string)
   default = ["m5.xlarge", "c5.xlarge", "m4.xlarge", "c4.xlarge", "t3.xlarge", "r5.xlarge"]
 }
 
@@ -187,7 +187,7 @@ variable "dashboard_elasticsearch_replicas" {
 }
 
 variable "lead_sdm_operators" {
-  type    = list
+  type    = list(string)
   default = ["toolchain", "elasticsearch", "slack", "product"]
 }
 

@@ -7,7 +7,7 @@ resource "helm_release" "istio_init" {
   count      = var.enable_istio ? 1 : 0
   repository = data.helm_repository.istio.metadata[0].name
   chart      = "istio-init"
-  namespace  = module.infrastructure.namespace
+  namespace  = module.system_namespace.name
   name       = "istio-init"
   timeout    = 600
   wait       = true
