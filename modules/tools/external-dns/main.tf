@@ -24,6 +24,10 @@ resource "helm_release" "external_dns" {
     value = kubernetes_service_account.external_dns_service_account[0].metadata[0].name
   }
   set {
+    name  = "rbac.serviceAccountCreate"
+    value = "false"
+  }
+  set {
     name  = "policy"
     value = "sync"
   }
