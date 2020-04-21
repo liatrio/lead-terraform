@@ -14,6 +14,7 @@ resource "helm_release" "kube_downscaler" {
   values     = [
     templatefile("${path.module}/values.tpl", {
       excluded_namespaces = length(var.excluded_namespaces) > 0 ? join(",", var.excluded_namespaces) : ""
+      uptime              = var.uptime
     }),
     var.extra_values != "" ? var.extra_values : null
   ]

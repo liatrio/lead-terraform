@@ -1,16 +1,3 @@
-locals {
-  valid_external_dns_providers = [
-    "aws"
-  ]
-}
-
-resource "null_resource" "validation" {
-  validation {
-    error_message = "external_dns.dns_provider must be one of ${jsonencode(local.valid_external_dns_providers)}"
-    condition     = contains(local.valid_external_dns_providers, var.dns_provider)
-  }
-}
-
 data "helm_repository" "bitnami" {
   name = "bitnami"
   url  = "https://charts.bitnami.com/bitnami"
@@ -34,7 +21,7 @@ resource "helm_release" "external_dns" {
 
   set {
     name  = "rbac.serviceAccountName"
-    value = kubernetes_service_account.external_dns_service_account.metadata[0].name
+    value = kubernetes_service_account.external_dns_service_account[0].metadata[0].name
   }
   set {
     name  = "policy"

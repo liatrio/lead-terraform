@@ -63,7 +63,7 @@ module "metrics_server" {
 }
 
 module "cluster_autoscaler" {
-  source = "../../modules/tools/cluster_autoscaler"
+  source = "../../modules/tools/cluster-autoscaler"
 
   cluster                                = var.cluster
   region                                 = var.region

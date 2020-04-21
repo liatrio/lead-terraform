@@ -6,7 +6,7 @@ image:
     - --exclude-namespaces=${excluded_namespaces}
     %{~ endif }
     - --exclude-deployments=kube-downscaler,metrics-server,cluster-autoscaler-aws-cluster-autoscaler
-    - --default-uptime=${var.uptime}
+    - --default-uptime=${uptime}
     - --include-resources=deployments,statefulsets
 resources:
   limits:
