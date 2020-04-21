@@ -3,8 +3,6 @@ module "eks" {
   region                           = var.region
   cluster                          = var.cluster
   cluster_version                  = var.cluster_version
-  system_namespace                 = var.system_namespace
-  toolchain_namespace              = var.toolchain_namespace
   key_name                         = var.key_name
   preemptible_instance_types       = var.instance_types
   preemptible_asg_min_size         = var.asg_min_size
@@ -18,9 +16,9 @@ module "eks" {
   on_demand_percentage             = var.on_demand_percentage
   enable_aws_code_services         = var.enable_aws_code_services
   codebuild_role                   = var.enable_aws_code_services ? module.codeservices.codebuild_role : ""
+  vpc_name                         = "${var.aws_environment}-${var.cluster}-vpc"
 
   // TODO: remove the following policy from the worker node role once terraform is bumped
   //       to version that includes fix for: https://github.com/hashicorp/terraform/issues/22992
   workers_additional_policies = [aws_iam_policy.operator_jenkins.arn]
-  aws_environment             = var.aws_environment
 }

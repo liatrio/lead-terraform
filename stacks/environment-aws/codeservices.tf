@@ -7,5 +7,5 @@ module "codeservices" {
   toolchain_namespace         = var.toolchain_namespace
   openid_connect_provider_arn = module.eks.aws_iam_openid_connect_provider.arn
   openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider.url
-  aws_environment             = var.aws_environment
+  vpc_name                    = "${var.aws_environment}-${var.cluster}-vpc"
 }

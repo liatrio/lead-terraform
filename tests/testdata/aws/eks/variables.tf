@@ -7,3 +7,5 @@ variable "region" {
 variable "aws_assume_role_arn" {
   default=""
 }
+
+variable "vpc_name" {}

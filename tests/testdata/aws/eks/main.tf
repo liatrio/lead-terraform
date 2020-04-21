@@ -27,8 +27,6 @@ module "eks" {
   region                                       = var.region
   cluster                                      = var.cluster
   cluster_version                              = "1.15"
-  system_namespace                             = "default"
-  toolchain_namespace                          = "default"
   preemptible_instance_types                   = ["m5.large", "c5.large", "m4.large", "c4.large", "t3.large", "r5.large"]
   preemptible_asg_min_size                     = 1
   preemptible_asg_desired_capacity             = 1
@@ -43,7 +41,7 @@ module "eks" {
   write_kubeconfig                             = true
   kubeconfig_aws_authenticator_additional_args = ["-r", var.aws_assume_role_arn]
   enable_aws_code_services                     = false
-  aws_environment                              = var.cluster
+  vpc_name                                     = var.vpc_name
   enable_public_endpoint                       = true
   codebuild_role                               = ""
 }

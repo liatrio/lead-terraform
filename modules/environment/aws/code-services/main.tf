@@ -1,6 +1,6 @@
 data "aws_vpc" "lead_vpc" {
   tags = {
-    Name = "${var.aws_environment}-lead-vpc"
+    Name = "${var.vpc_name}"
   }
 }
 

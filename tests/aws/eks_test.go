@@ -33,6 +33,7 @@ func TestSetupEks(t *testing.T) {
 		clusterName = fmt.Sprintf("test-%s", strings.ToLower(random.UniqueId()))
 	}
 
+	// VPC
 	testVpc := common.TestModule{
 		GoTest:       t,
 		Name:         "vpc",
@@ -55,6 +56,7 @@ func TestSetupEks(t *testing.T) {
 			tm.SetTerraformVar("cluster", clusterName)
 			tm.SetTerraformVar("region", "us-east-1")
 			tm.SetTerraformVar("aws_assume_role_arn", assumeIamRole)
+			tm.SetTerraformVar("vpc_name", testVpc.GetTerraformOutput("name"))
 		},
 		Tests: func(tm *common.TestModule) {
 			tm.SetStringGlobal(Cluster, tm.GetTerraformVar("cluster"))
