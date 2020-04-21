@@ -22,7 +22,7 @@ module "cluster_issuer" {
   issuer_kind   = "ClusterIssuer"
   issuer_type   = var.cert_issuer_type
   issuer_server = "https://acme-v02.api.letsencrypt.org/directory"
-  crd_waiter    = module.infrastructure.crd_waiter
+  crd_waiter    = module.cert_manager.crd_waiter
 
   acme_solver       = "dns"
   provider_dns_type = "route53"
@@ -38,7 +38,7 @@ module "staging_cluster_issuer" {
   issuer_kind   = "ClusterIssuer"
   issuer_type   = var.cert_issuer_type
   issuer_server = "https://acme-staging-v02.api.letsencrypt.org/directory"
-  crd_waiter    = module.infrastructure.crd_waiter
+  crd_waiter    = module.cert_manager.crd_waiter
 
   acme_solver       = "dns"
   provider_dns_type = "route53"

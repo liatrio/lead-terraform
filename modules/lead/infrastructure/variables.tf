@@ -4,9 +4,6 @@ variable "cluster" {
 variable "namespace" {
 }
 
-variable "external_dns_chart_values" {
-}
-
 variable "enable_opa" {
   default = "true"
 }
@@ -38,12 +35,9 @@ variable "cert_manager_service_account_role_arn" {
 variable "uptime" {
 }
 
-variable "external_dns_service_account_annotations" {
-  type = map
-  default = {}
-}
-
 variable "downscaler_exclude_namespaces" {
-  type = list(string)
-  default = ["kube-system"]
+  type    = list(string)
+  default = [
+    "kube-system"
+  ]
 }
