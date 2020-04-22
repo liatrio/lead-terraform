@@ -106,7 +106,8 @@ func testModules(t *testing.T) {
 	//t.Run("KubeResourceReport", common.KubeResourceReportTest)
 	//t.Run("ExternalDNS", common.ExternalDnsTest)
 	//t.Run("KubeDownscaler", common.KubeDownscalerTest)
-	t.Run("K8sSpotTerminationHandler", common.K8sSpotTerminationHandlerTest)
+	//t.Run("K8sSpotTerminationHandler", common.K8sSpotTerminationHandlerTest)
+	t.Run("KubeJanitor", common.KubeJanitorTest)
 }
 
 func testLeadDashboard(t *testing.T) {
