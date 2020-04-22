@@ -1,17 +1,17 @@
 package common
 
-import(
+import (
 	"testing"
 )
 
 func KubeResourceReportTest(t *testing.T) {
 	t.Parallel()
 
-	kubeconfig:= TestModuleGetStringGlobal(t, KubeConfigPath)
+	kubeconfig := TestModuleGetStringGlobal(t, KubeConfigPath)
 
-	testDashboard := TestModule{
-		GoTest: t,
-		Name: "kube_resource_report",
+	testKubeResourceReport := TestModule{
+		GoTest:       t,
+		Name:         "kube_resource_report",
 		TerraformDir: "../testdata/tools/kube-resource-report",
 		Setup: func(tm *TestModule) {
 			tm.SetTerraformVar("kube_config_path", kubeconfig)
@@ -20,7 +20,6 @@ func KubeResourceReportTest(t *testing.T) {
 			tm.SetTerraformVar("cluster", "docker-for-desktop")
 		},
 	}
-	defer testDashboard.TeardownTests()
-	testDashboard.RunTests()
-
+	defer testKubeResourceReport.TeardownTests()
+	testKubeResourceReport.RunTests()
 }
