@@ -1,111 +1,33 @@
 data "aws_caller_identity" "current" {
 }
 
-resource "aws_iam_role" "cert_manager_service_account" {
-  name = "${var.cluster}_cert_manager_service_account"
+module "cert_manager_iam" {
+  source = "../../modules/environment/aws/iam/cert-manager"
 
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Federated": "${module.eks.aws_iam_openid_connect_provider.arn}"
-      },
-      "Action": "sts:AssumeRoleWithWebIdentity",
-      "Condition": {
-        "StringEquals": {
-          "${replace(module.eks.aws_iam_openid_connect_provider.url, "https://", "")}:sub": "system:serviceaccount:${var.system_namespace}:cert-manager"
-        }
-      }
-    }
-  ]
-}
-EOF
+
+  cluster                     = var.cluster
+  namespace                   = var.system_namespace
+  openid_connect_provider_arn = module.eks.aws_iam_openid_connect_provider.arn
+  openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider.url
 }
 
-resource "aws_iam_role_policy" "cert_manager" {
-  name = "${var.cluster}-cert-manager"
-  role = aws_iam_role.cert_manager_service_account.name
+module "external_dns_iam" {
+  source = "../../modules/environment/aws/iam/external-dns"
 
-  policy = <<EOF
-{
- "Version": "2012-10-17",
- "Statement": [
-    {
-        "Effect": "Allow",
-        "Action": "route53:GetChange",
-        "Resource": "arn:aws:route53:::change/*"
-    },
-    {
-        "Effect": "Allow",
-        "Action": "route53:ChangeResourceRecordSets",
-        "Resource": "arn:aws:route53:::hostedzone/*"
-    },
-    {
-        "Effect": "Allow",
-        "Action": "route53:ListHostedZonesByName",
-        "Resource": "*"
-    }
- ]
-}
-EOF
+  cluster                     = var.cluster
+  namespace                   = var.system_namespace
+  openid_connect_provider_arn = module.eks.aws_iam_openid_connect_provider.arn
+  openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider.url
+  route53_zone_id             = aws_route53_zone.cluster_zone.zone_id
 }
 
-resource "aws_iam_role" "external_dns_service_account" {
-  name = "${var.cluster}_external_dns_service_account"
+module "cluster_autoscaler_iam" {
+  source = "../../modules/environment/aws/iam/cluster-autoscaler"
 
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Federated": "${module.eks.aws_iam_openid_connect_provider.arn}"
-      },
-      "Action": "sts:AssumeRoleWithWebIdentity",
-      "Condition": {
-        "StringEquals": {
-          "${replace(module.eks.aws_iam_openid_connect_provider.url, "https://", "")}:sub": "system:serviceaccount:${var.system_namespace}:external-dns"
-        }
-      }
-    }
-  ]
-}
-EOF
-}
-
-resource "aws_iam_role_policy" "external_dns" {
-  name = "${var.cluster}-external-dns"
-  role = aws_iam_role.external_dns_service_account.name
-
-  policy = <<EOF
-{
- "Version": "2012-10-17",
- "Statement": [
-   {
-     "Effect": "Allow",
-     "Action": [
-       "route53:ChangeResourceRecordSets",
-       "route53:ListResourceRecordSets"
-     ],
-     "Resource": [
-       "arn:aws:route53:::hostedzone/${aws_route53_zone.cluster_zone.zone_id}"
-     ]
-   },
-   {
-     "Effect": "Allow",
-     "Action": [
-       "route53:ListHostedZones",
-       "route53:GetChange"
-     ],
-     "Resource": ["*"]
-   }
- ]
-}
-EOF
+  cluster                     = var.cluster
+  namespace                   = var.system_namespace
+  openid_connect_provider_arn = module.eks.aws_iam_openid_connect_provider.arn
+  openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider.url
 }
 
 resource "aws_iam_role" "operator_slack_service_account" {
@@ -174,91 +96,6 @@ resource "aws_iam_role_policy" "operator-slack" {
   ]
 }
 EOF
-}
-
-resource "aws_iam_role" "cluster_autoscaler_service_account" {
-  name = "${var.cluster}_cluster_autoscaler_service_account"
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Federated": "${module.eks.aws_iam_openid_connect_provider.arn}"
-      },
-      "Action": "sts:AssumeRoleWithWebIdentity",
-      "Condition": {
-        "StringEquals": {
-          "${replace(module.eks.aws_iam_openid_connect_provider.url, "https://", "")}:sub": "system:serviceaccount:${var.system_namespace}:cluster-autoscaler-aws-cluster-autoscaler"
-        }
-      }
-    }
-  ]
-}
-EOF
-}
-
-resource "aws_iam_role_policy_attachment" "cluster_autoscaler" {
-  role       = aws_iam_role.cluster_autoscaler_service_account.name
-  policy_arn = aws_iam_policy.cluster_autoscaler.arn
-}
-
-resource "aws_iam_policy" "cluster_autoscaler" {
-  name_prefix = "cluster-autoscaler"
-  description = "EKS cluster-autoscaler policy for cluster ${module.eks.cluster_id}"
-  policy      = data.aws_iam_policy_document.cluster_autoscaler.json
-}
-
-data "aws_iam_policy_document" "cluster_autoscaler" {
-  statement {
-    sid    = "clusterAutoscalerAll"
-    effect = "Allow"
-
-    actions = [
-      "autoscaling:DescribeAutoScalingGroups",
-      "autoscaling:DescribeAutoScalingInstances",
-      "autoscaling:DescribeLaunchConfigurations",
-      "autoscaling:DescribeTags",
-      "ec2:DescribeLaunchTemplateVersions",
-    ]
-
-    resources = [
-      "*"
-    ]
-  }
-
-  statement {
-    sid    = "clusterAutoscalerOwn"
-    effect = "Allow"
-
-    actions = [
-      "autoscaling:SetDesiredCapacity",
-      "autoscaling:TerminateInstanceInAutoScalingGroup",
-      "autoscaling:UpdateAutoScalingGroup",
-    ]
-
-    resources = [
-      "*"
-    ]
-
-    condition {
-      test     = "StringEquals"
-      variable = "autoscaling:ResourceTag/kubernetes.io/cluster/${module.eks.cluster_id}"
-      values   = [
-        "owned"
-      ]
-    }
-
-    condition {
-      test     = "StringEquals"
-      variable = "autoscaling:ResourceTag/kubernetes.io/cluster-autoscaler/enabled"
-      values   = [
-        "true"
-      ]
-    }
-  }
 }
 
 resource "aws_iam_role" "operator_jenkins_service_account" {
