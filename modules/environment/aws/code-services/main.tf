@@ -316,7 +316,14 @@ resource "aws_iam_policy" "event_mapper_role_policy" {
       ],
       "Effect": "Allow",
       "Resource": "*"
-    }
+    },
+	{
+	  "Action": [
+	    "codecommit:GetCommit"
+	  ],
+	  "Effect": "Allow",
+	  "Resource": "*"
+	}
   ]
 }
 EOF
