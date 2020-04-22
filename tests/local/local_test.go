@@ -30,15 +30,15 @@ func TestSetup(t *testing.T) {
 
 	// SETUP NAMESPACE
 	testNamespace := common.TestModule{
-		GoTest: t,
-		Name: "namespace",
+		GoTest:       t,
+		Name:         "namespace",
 		TerraformDir: "../testdata/common/namespace",
 		Setup: func(tm *common.TestModule) {
 			tm.SetTerraformVar("kube_config_path", kubeconfig)
 			// common.NamespaceSetup(tm)
 			tm.SetTerraformVar("namespace", "toolchain")
 		},
-		Tests: func (tm *common.TestModule)  {
+		Tests: func(tm *common.TestModule) {
 			tm.SetStringGlobal(Namespace, tm.GetTerraformVar("namespace"))
 			common.NamespaceTests(tm)
 		},
@@ -48,14 +48,14 @@ func TestSetup(t *testing.T) {
 
 	// CERT-MANAGER
 	testCertManager := common.TestModule{
-		GoTest: t,
-		Name: "cert_manager",
+		GoTest:       t,
+		Name:         "cert_manager",
 		TerraformDir: "../testdata/tools/cert-manager",
 		Setup: func(tm *common.TestModule) {
 			tm.SetTerraformVar("namespace", testNamespace.GetTerraformVar("namespace"))
 			tm.SetTerraformVar("kube_config_path", kubeconfig)
 		},
-		Tests: common.CreateCertManager,
+		Tests:    common.CreateCertManager,
 		Teardown: common.DestroyCertManager,
 	}
 	defer testCertManager.TeardownTests()
@@ -63,10 +63,10 @@ func TestSetup(t *testing.T) {
 
 	// TEST CREATE SELF SIGNED ISSUER
 	testIssuer := common.TestModule{
-		GoTest: t,
-		Name: "issuer",
+		GoTest:       t,
+		Name:         "issuer",
 		TerraformDir: "../testdata/common/cert-issuer",
-		Setup: func(tm *common.TestModule)  {
+		Setup: func(tm *common.TestModule) {
 			tm.SetTerraformVar("kube_config_path", kubeconfig)
 			tm.SetTerraformVar("namespace", testNamespace.GetTerraformVar("namespace"))
 			tm.SetTerraformVar("issuer_kind", "Issuer")
@@ -79,8 +79,8 @@ func TestSetup(t *testing.T) {
 
 	// Ingress Controller
 	testIngressController := common.TestModule{
-		GoTest: t,
-		Name: "ingress",
+		GoTest:       t,
+		Name:         "ingress",
 		TerraformDir: "../testdata/lead/toolchain-ingress",
 		Setup: func(tm *common.TestModule) {
 			tm.SetTerraformVar("kube_config_path", kubeconfig)
@@ -101,15 +101,16 @@ func TestSetup(t *testing.T) {
 }
 
 func testModules(t *testing.T) {
-	t.Run("Dashboard", testLeadDashboard)
-	t.Run("SDM", testLeadSdm)
-	t.Run("KubeResourceReport", common.KubeResourceReportTest)
+	//t.Run("Dashboard", testLeadDashboard)
+	//t.Run("SDM", testLeadSdm)
+	//t.Run("KubeResourceReport", common.KubeResourceReportTest)
+	t.Run("ExternalDNS", common.ExternalDnsTest)
 }
 
 func testLeadDashboard(t *testing.T) {
 	t.Parallel()
 
-	kubeconfig:= common.TestModuleGetStringGlobal(t, common.KubeConfigPath)
+	kubeconfig := common.TestModuleGetStringGlobal(t, common.KubeConfigPath)
 
 	// LEAD DASHBOARD NAMESPACE
 	// testNamespace := common.TestModule{
@@ -127,8 +128,8 @@ func testLeadDashboard(t *testing.T) {
 
 	// LEAD DASHBOARD
 	testDashboard := common.TestModule{
-		GoTest: t,
-		Name: "lead_dashboard",
+		GoTest:       t,
+		Name:         "lead_dashboard",
 		TerraformDir: "../testdata/lead/dashboard",
 		Setup: func(tm *common.TestModule) {
 			tm.SetTerraformVar("kube_config_path", kubeconfig)
@@ -148,7 +149,7 @@ func testLeadDashboard(t *testing.T) {
 func testLeadSdm(t *testing.T) {
 	t.Parallel()
 
-	kubeconfig:= common.TestModuleGetStringGlobal(t, common.KubeConfigPath)
+	kubeconfig := common.TestModuleGetStringGlobal(t, common.KubeConfigPath)
 
 	// LEAD SDM NAMESPACE
 	// testNamespace := common.TestModule{
@@ -168,8 +169,8 @@ func testLeadSdm(t *testing.T) {
 	// LEAD SDM
 	// tiller_service_account := common.TestModuleGetStringGlobal(t, "tiller_service_account")
 	testSdm := common.TestModule{
-		GoTest: t,
-		Name: "sdm",
+		GoTest:       t,
+		Name:         "sdm",
 		TerraformDir: "../testdata/tools/sdm",
 		Setup: func(tm *common.TestModule) {
 			tm.SetTerraformVar("kube_config_path", kubeconfig)
