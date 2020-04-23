@@ -14,8 +14,9 @@ resource "helm_release" "external_dns" {
 
   values = [
     templatefile("${path.module}/values.tpl", {
-      dns_provider  = var.dns_provider
-      domain_filter = var.domain_filter
+      dns_provider   = var.dns_provider
+      domain_filters = yamlencode(var.domain_filters)
+      istio_enabled  = var.istio_enabled
     })
   ]
 
