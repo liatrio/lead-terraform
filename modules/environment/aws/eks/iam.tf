@@ -130,6 +130,25 @@ resource "aws_iam_role_policy" "workspace_role_policy" {
       ],
       "Effect": "Allow",
       "Resource": "*"
+    },
+    {
+      "Action": [
+        "codepipeline:ListPipelines",
+        "codepipeline:ListPipelineExecutions",
+        "codepipeline:GetPipeline",
+        "codepipeline:GetPipelineExecution",
+        "codepipeline:GetPipelineState"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    },
+    {
+      "Action": [
+        "ecr:DescribeRepositories",
+        "ecr:DescribeImages"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
     }
   ]
 }
