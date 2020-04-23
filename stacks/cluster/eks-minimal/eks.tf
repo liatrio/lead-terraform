@@ -12,7 +12,7 @@ module "eks" {
   essential_asg_max_size           = var.essential_asg_max_size
   essential_asg_min_size           = var.essential_asg_min_size
   essential_asg_desired_capacity   = var.essential_asg_desired_capacity
-  essential_taint_key              = "EssentialOnly"
+  essential_taint_key              = var.essential_taint_key
   on_demand_percentage             = "0"
   enable_aws_code_services         = false
   codebuild_role                   = ""

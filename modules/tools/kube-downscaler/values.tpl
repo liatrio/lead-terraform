@@ -2,9 +2,9 @@ rbac:
   create: true
 image:
   args:
-    %{~ if excluded_namespaces != "" }
+    %{~ if excluded_namespaces != "" ~}
     - --exclude-namespaces=${excluded_namespaces}
-    %{~ endif }
+    %{~ endif ~}
     - --exclude-deployments=kube-downscaler,metrics-server,cluster-autoscaler-aws-cluster-autoscaler
     - --default-uptime=${uptime}
     - --include-resources=deployments,statefulsets
