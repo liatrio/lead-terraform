@@ -36,9 +36,7 @@ resource "aws_iam_role_policy" "external_dns" {
        "route53:ChangeResourceRecordSets",
        "route53:ListResourceRecordSets"
      ],
-     "Resource": [
-       "arn:aws:route53:::hostedzone/${var.route53_zone_id}"
-     ]
+     "Resource": ${jsonencode(formatlist("arn:aws:route53:::hostedzone/%s", var.route53_zone_ids))}
    },
    {
      "Effect": "Allow",

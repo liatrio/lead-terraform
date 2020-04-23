@@ -4,7 +4,6 @@ data "aws_caller_identity" "current" {
 module "cert_manager_iam" {
   source = "../../modules/environment/aws/iam/cert-manager"
 
-
   cluster                     = var.cluster
   namespace                   = var.system_namespace
   openid_connect_provider_arn = module.eks.aws_iam_openid_connect_provider.arn
@@ -18,7 +17,9 @@ module "external_dns_iam" {
   namespace                   = var.system_namespace
   openid_connect_provider_arn = module.eks.aws_iam_openid_connect_provider.arn
   openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider.url
-  route53_zone_id             = aws_route53_zone.cluster_zone.zone_id
+  route53_zone_ids            = [
+    aws_route53_zone.cluster_zone.zone_id
+  ]
 }
 
 module "cluster_autoscaler_iam" {
