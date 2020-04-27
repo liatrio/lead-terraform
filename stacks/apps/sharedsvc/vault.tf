@@ -1,3 +1,7 @@
+locals {
+  vault_hostname = "vault.${var.internal_cluster_domain}"
+}
+
 module "vault_namespace" {
   source      = "../../../modules/common/namespace"
   namespace   = "vault"
@@ -15,6 +19,6 @@ module "vault" {
   cert_issuer_name          = module.internal_services_cluster_issuer.issuer_name
   namespace                 = module.vault_namespace.name
   region                    = var.region
-  vault_hostname            = "vault.internal.services.liatr.io"
-  vault_dynamodb_table_name = "vault.internal.services.liatr.io"
+  vault_hostname            = local.vault_hostname
+  vault_dynamodb_table_name = local.vault_hostname
 }
