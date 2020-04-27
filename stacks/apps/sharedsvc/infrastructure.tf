@@ -38,6 +38,8 @@ module "external_dns" {
     var.internal_cluster_domain
   ]
   namespace                   = module.system_namespace.name
+  aws_zone_type               = "private"
+  watch_services              = true
 }
 
 module "cert_manager" {

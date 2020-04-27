@@ -2,8 +2,8 @@ ui = true
 
 listener "tcp" {
   address                  = "0.0.0.0:8200"
-  tls_cert_file            = "/tls-certificate/tls.crt"
-  tls_key_file             = "/tls-certificate/tls.key"
+  tls_cert_file            = "/tls/vault-tls-certificate/tls.crt"
+  tls_key_file             = "/tls/vault-tls-certificate/tls.key"
   tls_disable_client_certs = true
 }
 
