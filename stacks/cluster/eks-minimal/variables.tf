@@ -43,4 +43,8 @@ variable "essential_asg_max_size" {
   default = "5"
 }
 
+variable "essential_taint_key" {
+  default = "EssentialOnly"
+}
+
 variable "vpc_name" {}

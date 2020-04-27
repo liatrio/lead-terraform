@@ -21,11 +21,14 @@ module "external_dns" {
   source = "../../modules/tools/external-dns"
 
   enabled                     = true
+  istio_enabled               = true
   dns_provider                = "aws"
   service_account_annotations = {
     "eks.amazonaws.com/role-arn" = module.external_dns_iam.external_dns_service_account_arn
   }
-  domain_filter               = "${module.eks.cluster_id}.${var.root_zone_name}"
+  domain_filters              = [
+    "${module.eks.cluster_id}.${var.root_zone_name}"
+  ]
   namespace                   = module.system_namespace.name
 }
 
