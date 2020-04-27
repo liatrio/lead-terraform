@@ -4,7 +4,13 @@ variable "enabled" {
 }
 
 variable "istio_enabled" {
-  type    = bool
+  type = bool
+}
+
+variable "watch_services" {
+  type        = bool
+  default     = false
+  description = "when true, externaldns will create DNS entries for kubernetes service resources"
 }
 
 variable "dns_provider" {
@@ -23,4 +29,8 @@ variable "service_account_annotations" {
 
 variable "namespace" {
   type = string
+}
+
+variable "aws_zone_type" {
+  default = "public"
 }
