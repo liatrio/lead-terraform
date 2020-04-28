@@ -16,6 +16,11 @@ resource "helm_release" "kube-janitor" {
   values     = var.extra_values != "" ? [var.extra_values] : null
 
   set {
+    name  = "image.tag"
+    value = "v0.2.1"
+  }
+
+  set {
     name  = "kubejanitor.expiration"
     value = 15
   }
