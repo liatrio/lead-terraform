@@ -187,6 +187,21 @@ resource "aws_iam_role_policy" "workspace_role_policy_codeservices" {
     },
     {
       "Action": [
+        "codebuild:BatchGetBuilds"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    },
+    {
+      "Action": [
+        "logs:GetLogEvents"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    },
+
+    {
+      "Action": [
         "ecr:DescribeRepositories",
         "ecr:DescribeImages"
       ],
