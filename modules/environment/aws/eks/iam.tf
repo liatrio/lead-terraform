@@ -199,7 +199,6 @@ resource "aws_iam_role_policy" "workspace_role_policy_codeservices" {
       "Effect": "Allow",
       "Resource": "*"
     },
-
     {
       "Action": [
         "ecr:DescribeRepositories",
