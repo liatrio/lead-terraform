@@ -16,17 +16,6 @@ module "staging_namespace" {
   }
 }
 
-resource "helm_release" "staging_product_init" {
-  name      = "product-init"
-  namespace = module.staging_namespace.name
-  chart     = "${path.module}/helm/product-init"
-  timeout   = 600
-  wait      = true
-
-  provider = helm.staging
-}
-
-
 resource "kubernetes_role" "default_staging_role" {
   provider = kubernetes.staging
   metadata {
