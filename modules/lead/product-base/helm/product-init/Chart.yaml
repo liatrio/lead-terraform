@@ -1,4 +1,0 @@
-name: product-init
-version: v0.1.0
-appVersion: v0.1.0
-description: A Helm chart to initialize product deployment namespaces

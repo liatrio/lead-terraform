@@ -16,16 +16,6 @@ module "production_namespace" {
   }
 }
 
-resource "helm_release" "production_product_init" {
-  name      = "product-init"
-  namespace = module.production_namespace.name
-  chart     = "${path.module}/helm/product-init"
-  timeout   = 600
-  wait      = true
-
-  provider = helm.production
-}
-
 resource "kubernetes_role" "default_production_role" {
   provider = kubernetes.production
   metadata {
