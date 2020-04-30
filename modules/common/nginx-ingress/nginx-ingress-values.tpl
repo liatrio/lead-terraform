@@ -29,7 +29,7 @@ controller:
       cpu: 300m
       memory: 256Mi
     limits:
-      cpu: 400m
+      cpu: 750m
       memory: 512Mi
 defaultBackend:
   resources:
