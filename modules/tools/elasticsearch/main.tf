@@ -18,6 +18,23 @@ module "elasticsearch_certificate" {
   wait_for_cert   = true
 }
 
+resource "random_password" "elasticsearch_password" {
+  length  = 12
+  special = false
+}
+
+resource "kubernetes_secret" "elasticsearch_credentials" {
+  metadata {
+    name      = "elasticsearch-credentials"
+    namespace = var.namespace
+  }
+
+  data = {
+    username = "elastic"
+    password = random_password.elasticsearch_password.result
+  }
+}
+
 data "helm_repository" "elastic" {
   name = "elastic"
   url  = "https://helm.elastic.co"
@@ -33,10 +50,11 @@ resource "helm_release" "elasticsearch" {
 
   values = [
     templatefile("${path.module}/elasticsearch-values.tpl", {
-      local                           = var.local
-      replicas                        = var.replicas
-      k8s_storage_class               = var.k8s_storage_class
-      elasticsearch_certs_secret_name = module.elasticsearch_certificate.cert_secret_name
+      local                                 = var.local
+      replicas                              = var.replicas
+      k8s_storage_class                     = var.k8s_storage_class
+      elasticsearch_certs_secret_name       = module.elasticsearch_certificate.cert_secret_name
+      elasticsearch_credentials_secret_name = kubernetes_secret.elasticsearch_credentials.metadata[0].name
     })
   ]
 }
