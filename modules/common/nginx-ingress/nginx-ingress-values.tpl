@@ -6,8 +6,8 @@ serviceAccount:
 controller:
   autoscaling:
     enabled: true
-    targetCPUUtilizationPercentage: 80
-    targetMemoryUtilizationPercentage: 95
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 85
   livenessProbe:
     timeoutSeconds: 10
   readinessProbe:
@@ -26,10 +26,10 @@ controller:
     externalTrafficPolicy: ${ingress_external_traffic_policy}
   resources:
     requests:
-      cpu: 100m
+      cpu: 300m
       memory: 256Mi
     limits:
-      cpu: 200m
+      cpu: 750m
       memory: 512Mi
 defaultBackend:
   resources:
