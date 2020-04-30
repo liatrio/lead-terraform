@@ -1,3 +1,7 @@
+locals {
+  elasticsearch_username = "elastic"
+}
+
 module "ca_issuer" {
   source = "../../common/ca-issuer"
 
@@ -30,7 +34,7 @@ resource "kubernetes_secret" "elasticsearch_credentials" {
   }
 
   data = {
-    username = "elastic"
+    username = local.elasticsearch_username
     password = random_password.elasticsearch_password.result
   }
 }
