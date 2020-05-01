@@ -25,7 +25,6 @@ provider "kubernetes" {
 
 provider "helm" {
   version         = "1.1.1"
-  debug = true
 
   kubernetes {
     host                   = data.aws_eks_cluster.cluster.endpoint
