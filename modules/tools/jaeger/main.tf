@@ -36,6 +36,7 @@ resource "helm_release" "jeager" {
       elasticsearch_password_secret_name = kubernetes_secret.elasticsearch_password.metadata[0].name
 
       jaeger_zipkin_port = local.jaeger_zipkin_port
+      jaeger_query_port  = local.jaeger_query_port
     })
   ]
 }
@@ -58,7 +59,7 @@ resource "kubernetes_ingress" "jaeger" {
           path = "/"
           backend {
             service_name = "jaeger-query"
-            service_port = 16686
+            service_port = local.jaeger_query_port
           }
         }
       }

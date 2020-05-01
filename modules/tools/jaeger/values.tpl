@@ -7,7 +7,7 @@ collector:
 
 query:
   service:
-    port: 16686
+    port: ${jaeger_query_port}
 
 provisionDataStore:
   cassandra: false
