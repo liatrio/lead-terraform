@@ -26,3 +26,9 @@ variable "pilot_trace_sampling" {
 variable "flagger_event_webhook" {}
 
 variable "k8s_storage_class" {}
+
+variable "jaeger_elasticsearch_host" {}
+variable "jaeger_elasticsearch_username" {}
+variable "jaeger_elasticsearch_password" {}
+
+variable "ingress_class" {}
