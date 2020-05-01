@@ -56,7 +56,7 @@ resource "helm_release" "istio" {
   name       = module.istio_namespace.name
   timeout    = 600
   wait       = true
-  version    = "1.4.2"
+  version    = "1.4.8"
 
   set {
     name  = "crd_waiter"

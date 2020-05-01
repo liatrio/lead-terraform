@@ -108,7 +108,7 @@ galley:
       memory: 128Mi
 pilot:
   traceSampling: ${pilotTraceSampling}
-  autoscaleMax: 20
+  autoscaleMax: 30
   resources:
     requests:
       cpu: 500m
