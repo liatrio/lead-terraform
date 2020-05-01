@@ -2,9 +2,9 @@ nodeSelector:
   kubernetes.io/lifecycle: preemptible
 resources:
   limits:
-    cpu: 10m
-    memory: 64Mi
-  requests:
-    cpu: 1m
+    cpu: 100m
     memory: 16Mi
+  requests:
+    cpu: 2m
+    memory: 8Mi
 priorityClassName: system-node-critical
