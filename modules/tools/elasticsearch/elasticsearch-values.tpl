@@ -6,7 +6,7 @@ volumeClaimTemplate:
   %{~ endif ~}
   resources:
     requests:
-      storage: 15Gi
+      storage: ${disk_size}
 resources:
   requests:
     cpu: 100m
@@ -44,7 +44,29 @@ volumeClaimTemplate:
     requests:
       storage: 100M
 %{~ endif }
+
+extraEnvs:
+  - name: ELASTIC_USERNAME
+    valueFrom:
+      secretKeyRef:
+        name: ${elasticsearch_credentials_secret_name}
+        key: username
+  - name: ELASTIC_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: ${elasticsearch_credentials_secret_name}
+        key: password
+
 secretMounts:
   - name: ${elasticsearch_certs_secret_name}
     secretName: ${elasticsearch_certs_secret_name}
     path: /usr/share/elasticsearch/config/certs
+
+protocol: https
+
+esConfig:
+  elasticsearch.yml: |
+    xpack.security.http.ssl.enabled: true
+    xpack.security.http.ssl.key:  /usr/share/elasticsearch/config/certs/tls.key
+    xpack.security.http.ssl.certificate: /usr/share/elasticsearch/config/certs/tls.crt
+    xpack.security.http.ssl.certificate_authorities: [ "/usr/share/elasticsearch/config/certs/ca.crt" ]

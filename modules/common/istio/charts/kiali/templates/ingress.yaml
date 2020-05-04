@@ -1,9 +1,9 @@
-{{- if .Values.ingressEnabled }}
+{{- if .Values.ingress.enabled }}
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   annotations:
-    kubernetes.io/ingress.class: toolchain-nginx
+    kubernetes.io/ingress.class: {{ .Values.ingress.class }}
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
   labels:
     app: kiali

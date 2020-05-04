@@ -38,16 +38,6 @@ data "helm_repository" "istio" {
   url  = "https://storage.googleapis.com/istio-release/releases/1.4.2/charts/"
 }
 
-data "template_file" "istio_values" {
-  template = file("${path.module}/istio-values.tpl")
-
-  vars = {
-    domain = "${var.toolchain_namespace}.${var.cluster_domain}"
-    pilotTraceSampling = var.pilot_trace_sampling
-    k8s_storage_class = var.k8s_storage_class
-  }
-}
-
 resource "helm_release" "istio" {
   count      = var.enabled ? 1 : 0
   repository = data.helm_repository.istio.metadata[0].name
@@ -63,7 +53,17 @@ resource "helm_release" "istio" {
     value = var.crd_waiter
   }
 
-  values = [data.template_file.istio_values.rendered]
+  values = [
+    templatefile("${path.module}/istio-values.tpl", {
+      domain             = "${var.toolchain_namespace}.${var.cluster_domain}"
+      pilotTraceSampling = var.pilot_trace_sampling
+      k8s_storage_class  = var.k8s_storage_class
+      ingress_class      = var.ingress_class
+
+      jaeger_collector_hostname    = module.jaeger.jaeger_collector_internal_hostname
+      jaeger_collector_zipkin_port = module.jaeger.jaeger_collector_zipkin_port
+    })
+  ]
 }
 
 resource "kubernetes_cluster_role" "tiller_cluster_role" {
@@ -163,8 +163,28 @@ resource "helm_release" "kiali" {
   }
 
   set {
+    name  = "ingress.class"
+    value = var.ingress_class
+  }
+
+  set {
     name = "image"
     value = "quay.io/kiali/kiali:v1.9"
+  }
+
+  set {
+    name  = "jaeger.query.internalHostname"
+    value = module.jaeger.jaeger_query_internal_hostname
+  }
+
+  set {
+    name  = "jaeger.query.externalHostname"
+    value = module.jaeger.jaeger_query_external_hostname
+  }
+
+  set {
+    name  = "jaeger.query.port"
+    value = module.jaeger.jaeger_query_port
   }
 
   depends_on = [
@@ -238,26 +258,14 @@ resource "helm_release" "app_gateway" {
   ]
 }
 
-data "template_file" "jaeger_values" {
-  template = file("${path.module}/jaeger-values.tpl")
+module "jaeger" {
+  source = "../../tools/jaeger"
 
-  vars = {
-    domain = "${var.toolchain_namespace}.${var.cluster_domain}"
-    k8s_storage_class = var.k8s_storage_class
-  }
-}
-
-resource "helm_release" "jaeger" {
-  count      = var.enabled ? 1 : 0
-  chart      = "${path.module}/charts/jaeger"
-  namespace  = module.istio_namespace.name
-  name       = "jaeger"
-  timeout    = 600
-  wait       = true
-
-  values = [data.template_file.jaeger_values.rendered]
-
-  depends_on = [
-    helm_release.istio
-  ]
+  elasticsearch_host     = var.jaeger_elasticsearch_host
+  elasticsearch_username = var.jaeger_elasticsearch_username
+  elasticsearch_password = var.jaeger_elasticsearch_password
+  namespace              = module.istio_namespace.name
+  cluster_domain         = var.cluster_domain
+  toolchain_namespace    = var.toolchain_namespace
+  ingress_class          = var.ingress_class
 }

@@ -25,6 +25,9 @@ gateways:
         memory: 256Mi
 
 global:
+  tracer:
+    zipkin:
+      address: ${jaeger_collector_hostname}:${jaeger_collector_zipkin_port}
   k8sIngress:
     enabled: false
     enableHttps: true
@@ -67,7 +70,7 @@ grafana:
       repository: grafana/grafana
       tag: 6.5.1-ubuntu
     annotations:
-      kubernetes.io/ingress.class: "toolchain-nginx"
+      kubernetes.io/ingress.class: ${ingress_class}
       nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
       nginx.ingress.kubernetes.io/rewrite-target: "/"
     tls:

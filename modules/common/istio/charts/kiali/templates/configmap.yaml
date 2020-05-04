@@ -19,8 +19,8 @@ data:
         url_service_version: http://istio-pilot:8080/version
       tracing:
         enabled: true
-        in_cluster_url: http://jaeger-query.istio-system.svc.cluster.local:16686/jaeger
-        url: https://jaeger.{{ .Values.domain }}
+        in_cluster_url: http://{{ .Values.jaeger.query.internalHostname }}:{{ .Values.jaeger.query.port }}
+        url: https://{{ .Values.jaeger.query.externalHostname }}
       grafana:
         enabled: true
         url: https://istio-grafana.{{ .Values.domain }}
