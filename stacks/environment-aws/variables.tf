@@ -197,3 +197,7 @@ variable "enable_aws_code_services" {
 variable "product_types" {
   type = list(string)
 }
+
+variable "create_public_ecr_repos" {
+  default = false
+}
