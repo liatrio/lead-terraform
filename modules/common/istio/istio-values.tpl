@@ -40,10 +40,10 @@ global:
           memory: 10Mi
     resources:
       requests:
-        cpu: 100m
+        cpu: 1000m
         memory: 128Mi
       limits:
-        cpu: 1000m
+        cpu: 3000m
         memory: 512Mi
     protocolDetectionTimeout: 100ms
   defaultResources:
@@ -101,14 +101,14 @@ prometheus:
 galley:
   resources:
     requests:
-      cpu: 20m
+      cpu: 40m
       memory: 32Mi
     limits:
-      cpu: 300m
+      cpu: 400m
       memory: 128Mi
 pilot:
   traceSampling: ${pilotTraceSampling}
-  autoscaleMax: 30
+  autoscaleMax: 20
   resources:
     requests:
       cpu: 500m
