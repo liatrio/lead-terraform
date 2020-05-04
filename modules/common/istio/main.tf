@@ -38,20 +38,6 @@ data "helm_repository" "istio" {
   url  = "https://storage.googleapis.com/istio-release/releases/1.4.2/charts/"
 }
 
-data "template_file" "istio_values" {
-  template = file("${path.module}/istio-values.tpl")
-
-  vars = {
-    domain                    = "${var.toolchain_namespace}.${var.cluster_domain}"
-    pilotTraceSampling        = var.pilot_trace_sampling
-    k8s_storage_class         = var.k8s_storage_class
-    ingress_class             = var.ingress_class
-
-    jaeger_collector_hostname    = module.jaeger.jaeger_collector_internal_hostname
-    jaeger_collector_zipkin_port = module.jaeger.jaeger_collector_zipkin_port
-  }
-}
-
 resource "helm_release" "istio" {
   count      = var.enabled ? 1 : 0
   repository = data.helm_repository.istio.metadata[0].name
@@ -67,7 +53,17 @@ resource "helm_release" "istio" {
     value = var.crd_waiter
   }
 
-  values = [data.template_file.istio_values.rendered]
+  values = [
+    templatefile("${path.module}/istio-values.tpl", {
+      domain             = "${var.toolchain_namespace}.${var.cluster_domain}"
+      pilotTraceSampling = var.pilot_trace_sampling
+      k8s_storage_class  = var.k8s_storage_class
+      ingress_class      = var.ingress_class
+
+      jaeger_collector_hostname    = module.jaeger.jaeger_collector_internal_hostname
+      jaeger_collector_zipkin_port = module.jaeger.jaeger_collector_zipkin_port
+    })
+  ]
 }
 
 resource "kubernetes_cluster_role" "tiller_cluster_role" {

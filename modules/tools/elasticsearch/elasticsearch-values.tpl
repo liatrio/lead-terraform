@@ -6,7 +6,7 @@ volumeClaimTemplate:
   %{~ endif ~}
   resources:
     requests:
-      storage: 15Gi
+      storage: ${disk_size}
 resources:
   requests:
     cpu: 100m

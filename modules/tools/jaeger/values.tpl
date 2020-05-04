@@ -1,3 +1,6 @@
+agent:
+  enabled: false
+
 collector:
   service:
     zipkin:

@@ -57,6 +57,7 @@ resource "helm_release" "elasticsearch" {
       local                                 = var.local
       replicas                              = var.replicas
       k8s_storage_class                     = var.k8s_storage_class
+      disk_size                             = var.disk_size
       elasticsearch_certs_secret_name       = module.elasticsearch_certificate.cert_secret_name
       elasticsearch_credentials_secret_name = kubernetes_secret.elasticsearch_credentials.metadata[0].name
     })
