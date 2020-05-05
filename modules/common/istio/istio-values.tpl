@@ -118,7 +118,7 @@ pilot:
       memory: 500Mi
     limits:
       cpu: 2
-      memory: 700Mi
+      memory: 1Gi
 mixer:
   telemetry:
     loadshedding:
