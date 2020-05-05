@@ -28,8 +28,8 @@ grafana:
       cpu: 100m
       memory: 128Mi
 
-kubeStateMetrics:
-  deploymentAnnotations:
+kube-state-metrics:
+  podAnnotations:
     downscaler/exclude: "true"
   resources:
     limits:
@@ -38,6 +38,9 @@ kubeStateMetrics:
     requests:
       cpu: 10m
       memory: 32Mi
+  service:
+    annotations:
+      prometheus.io/scrape: "false"
 server:
   deploymentAnnotations:
     downscaler/exclude: "true"
@@ -54,6 +57,9 @@ nodeExporter:
   - key: EssentialOnly
     operator: "Exists"
 prometheus-node-exporter:
+  service:
+    annotations:
+      prometheus.io/scrape: "false"
   resources:
     requests:
       cpu: 10m
