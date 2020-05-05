@@ -5,6 +5,7 @@ module "istio_namespace" {
   annotations = {
     name = var.namespace
   }
+  resource_max_cpu = "3"
 }
 
 resource "random_string" "kiali_admin_password" {
@@ -35,7 +36,7 @@ resource "kubernetes_secret" "kiali_dashboard_secret" {
 
 data "helm_repository" "istio" {
   name = "istio.io"
-  url  = "https://storage.googleapis.com/istio-release/releases/1.4.2/charts/"
+  url  = "https://storage.googleapis.com/istio-release/releases/1.4.8/charts/"
 }
 
 data "template_file" "istio_values" {
@@ -64,64 +65,6 @@ resource "helm_release" "istio" {
   }
 
   values = [data.template_file.istio_values.rendered]
-}
-
-resource "kubernetes_cluster_role" "tiller_cluster_role" {
-  count = var.enabled ? 1 : 0
-
-  metadata {
-    name = "${var.namespace}-tiller-manager"
-  }
-
-  rule {
-    api_groups = ["", "batch", "extensions", "apps", "stable.liatr.io", "policy", "apiextensions.k8s.io"]
-    resources  = ["*"]
-    verbs      = ["*"]
-  }
-
-  rule {
-    api_groups = ["apiextensions.k8s.io"]
-    resources  = ["customresourcedefinitions"]
-    verbs      = ["*"]
-  }
-
-  rule {
-    api_groups = ["rbac.authorization.k8s.io"]
-    resources  = ["roles", "rolebindings", "clusterroles", "clusterrolebindings"]
-    verbs      = ["get", "create", "watch", "delete", "list", "patch"]
-  }
-
-  rule {
-    api_groups = ["networking.k8s.io"]
-    resources  = ["networkpolicies"]
-    verbs      = ["get", "create", "watch", "delete", "list", "patch"]
-  }
-
-  rule {
-    api_groups = ["cert-manager.io"]
-    resources  = ["issuers"]
-    verbs      = ["get", "create", "watch", "delete", "list", "patch"]
-  }
-}
-
-resource "kubernetes_cluster_role_binding" "tiller_cluster_role_binding" {
-  count = var.enabled ? 1 : 0
-
-  metadata {
-    name = "${var.namespace}-tiller-binding"
-  }
-
-  role_ref {
-    api_group = "rbac.authorization.k8s.io"
-    kind      = "ClusterRole"
-    name      = kubernetes_cluster_role.tiller_cluster_role[0].metadata[0].name
-  }
-
-  subject {
-    kind      = "ServiceAccount"
-    name      = "tiller"
-    namespace = module.istio_namespace.name
-  }
 }
 
 module "istio_flagger" {

@@ -40,10 +40,10 @@ global:
           memory: 10Mi
     resources:
       requests:
-        cpu: 1000m
+        cpu: 100m
         memory: 128Mi
       limits:
-        cpu: 3000m
+        cpu: 1000m
         memory: 512Mi
     protocolDetectionTimeout: 100ms
   defaultResources:
@@ -111,11 +111,11 @@ pilot:
   autoscaleMax: 20
   resources:
     requests:
-      cpu: 500m
+      cpu: 750m
       memory: 500Mi
     limits:
-      cpu: 1.3
-      memory: 1Gi
+      cpu: 2
+      memory: 700Mi
   global:
     proxy:
       resource:
