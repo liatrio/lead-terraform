@@ -14,6 +14,10 @@ IS_SNAPSHOT = $(if $(findstring -, $(VERSION)),true,false)
 TAG_VERSION = v$(VERSION)
 ### check terraform version, since args are different
 TF_VERSION := $(shell terraform --version | head -n1)
+### custom TF providers
+TF_PLATFORM = $(shell go env GOOS)_$(shell go env GOARCH)
+TF_KEYCLOAK_VERSION = 1.18.0
+TF_HARBOR_VERSION = 0.1.0
 IS_TF_11 = $(if $(findstring 0.11, $(TF_VERSION)),true,false)
 ifeq (true,$(IS_TF_11))
 TF_VALIDATE_ARGS = "-check-variables=false"
@@ -68,16 +72,18 @@ test-aws:
 test-aws-nodestroy:
 	cd tests && go test liatr.io/lead-terraform/tests/aws -timeout 90m -v --count=1 --destroyCluster=false
 
-build_keycloak_provider:
-TF_KEYCLOAK_VERSION = 1.18.0
-TF_KEYCLOAK_PLATFORM = $(shell go env GOOS)_$(shell go env GOARCH)
 plugins:
 	mkdir -p ~/.terraform.d/plugins
-	curl -LsO https://github.com/mrparkers/terraform-provider-keycloak/releases/download/$(TF_KEYCLOAK_VERSION)/terraform-provider-keycloak_v$(TF_KEYCLOAK_VERSION)_$(TF_KEYCLOAK_PLATFORM).zip
+	curl -LsO https://github.com/mrparkers/terraform-provider-keycloak/releases/download/$(TF_KEYCLOAK_VERSION)/terraform-provider-keycloak_v$(TF_KEYCLOAK_VERSION)_$(TF_PLATFORM).zip
 	unzip -d terraform-provider-keycloak_v$(TF_KEYCLOAK_VERSION) terraform-provider-keycloak*.zip -x "../LICENSE"
 	cp ./terraform-provider-keycloak_v$(TF_KEYCLOAK_VERSION)/terraform-provider-keycloak_v$(TF_KEYCLOAK_VERSION) ~/.terraform.d/plugins/
-	rm ./terraform-provider-keycloak_v$(TF_KEYCLOAK_VERSION)_$(TF_KEYCLOAK_PLATFORM).zip
+	rm ./terraform-provider-keycloak_v$(TF_KEYCLOAK_VERSION)_$(TF_PLATFORM).zip
 	rm -rf ./terraform-provider-keycloak_v$(TF_KEYCLOAK_VERSION)
+	curl -LsO https://github.com/liatrio/terraform-provider-harbor/releases/download/v$(TF_HARBOR_VERSION)/terraform-provider-harbor_$(TF_HARBOR_VERSION)_$(TF_PLATFORM).zip
+	unzip -d terraform-provider-harbor_v$(TF_HARBOR_VERSION) terraform-provider-harbor*.zip
+	cp ./terraform-provider-harbor_v$(TF_HARBOR_VERSION)/terraform-provider-harbor_v$(TF_HARBOR_VERSION) ~/.terraform.d/plugins/
+	rm ./terraform-provider-harbor_$(TF_HARBOR_VERSION)_$(TF_PLATFORM).zip
+	rm -rf ./terraform-provider-harbor_v$(TF_HARBOR_VERSION)
 
 package-kube-downscaler:
 	git clone https://github.com/hjacobs/kube-downscaler.git /tmp/kube-downscaler/
