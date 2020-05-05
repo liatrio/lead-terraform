@@ -224,3 +224,52 @@ resource "helm_release" "harbor_config" {
     value = keycloak_openid_client.harbor_client[0].client_secret
   }
 }
+
+provider "harbor" {
+  url      = "https://${local.harbor_hostname}"
+  username = "admin"
+  password = random_string.harbor_admin_password.result
+}
+
+resource "harbor_project" "liatrio_project" {
+  count = var.enable_harbor ? 1 : 0
+  name  = "liatrio"
+  public = true
+
+  depends_on = [
+    helm_release.harbor
+  ]
+}
+
+resource "harbor_robot_account" "liatrio_project_robot_account" {
+  count      = var.enable_harbor ? 1 : 0
+  name       = "robot$imagepusher"
+  project_id = harbor_project.liatrio_project[0].id
+  access {
+    resource = "image"
+    action   = "pull"
+  }
+
+  access {
+    resource = "image"
+    action   = "push"
+  }
+
+  depends_on = [
+    helm_release.harbor
+  ]
+}
+
+resource "kubernetes_secret" "liatrio_project_robot_account_credentials" {
+  count = var.enable_harbor ? 1 : 0
+  metadata {
+    name      = "liatrio-harbor-project-robot-account-credentials"
+    namespace = module.toolchain_namespace.name
+  }
+  type = "Opaque"
+
+  data = {
+    username = harbor_robot_account.liatrio_project_robot_account[0].name
+    password = harbor_robot_account.liatrio_project_robot_account[0].token
+  }
+}
