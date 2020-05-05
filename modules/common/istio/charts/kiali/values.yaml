@@ -1,4 +1,11 @@
-ingressEnabled: true
+ingress:
+  enabled: true
+  class:
+jaeger:
+  query:
+    internalHostname:
+    externalHostname:
+    port:
 domain:
 image:
 resources:

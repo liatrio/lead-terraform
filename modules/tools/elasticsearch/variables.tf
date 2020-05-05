@@ -10,3 +10,6 @@ variable "local" {
 variable "replicas" {
   default = 3
 }
+variable "disk_size" {
+  default = "15Gi"
+}
