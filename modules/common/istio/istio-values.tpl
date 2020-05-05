@@ -119,15 +119,6 @@ pilot:
     limits:
       cpu: 2
       memory: 700Mi
-  global:
-    proxy:
-      resource:
-        requests:
-          cpu: 5m
-          memory: 32Mi
-        limits:
-          cpu: 20m
-          memory: 64Mi
 mixer:
   telemetry:
     loadshedding:
