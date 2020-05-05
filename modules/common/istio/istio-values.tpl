@@ -93,12 +93,13 @@ tracing:
   enabled: false
 
 prometheus:
+  retention: 2h
   resources:
     requests:
-      cpu: 300m
-      memory: 3Gi
+      cpu: 500m
+      memory: 5Gi
     limits:
-      cpu: 1.5
+      cpu: 2
       memory: 6Gi
 
 galley:
