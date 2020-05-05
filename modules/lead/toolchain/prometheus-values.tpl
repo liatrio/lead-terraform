@@ -33,11 +33,11 @@ kube-state-metrics:
     downscaler/exclude: "true"
   resources:
     limits:
-      cpu: 100m
-      memory: 64Mi
+      cpu: 200m
+      memory: 100Mi
     requests:
       cpu: 10m
-      memory: 32Mi
+      memory: 50Mi
   service:
     annotations:
       prometheus.io/scrape: "false"
@@ -71,10 +71,10 @@ prometheusOperator:
   resources:
     limits:
       cpu: 500m
-      memory: 64Mi
+      memory: 100Mi
     requests:
       cpu: 100m
-      memory: 32Mi
+      memory: 70Mi
   configReloaderCpu: 100m
   configReloaderMemory: 25Mi
   admissionWebhooks:
