@@ -28,16 +28,19 @@ grafana:
       cpu: 100m
       memory: 128Mi
 
-kubeStateMetrics:
-  deploymentAnnotations:
+kube-state-metrics:
+  podAnnotations:
     downscaler/exclude: "true"
   resources:
     limits:
-      cpu: 100m
-      memory: 64Mi
+      cpu: 200m
+      memory: 100Mi
     requests:
       cpu: 10m
-      memory: 32Mi
+      memory: 50Mi
+  service:
+    annotations:
+      prometheus.io/scrape: "false"
 server:
   deploymentAnnotations:
     downscaler/exclude: "true"
@@ -54,6 +57,9 @@ nodeExporter:
   - key: EssentialOnly
     operator: "Exists"
 prometheus-node-exporter:
+  service:
+    annotations:
+      prometheus.io/scrape: "false"
   resources:
     requests:
       cpu: 10m
@@ -65,10 +71,10 @@ prometheusOperator:
   resources:
     limits:
       cpu: 500m
-      memory: 64Mi
+      memory: 100Mi
     requests:
       cpu: 100m
-      memory: 32Mi
+      memory: 70Mi
   configReloaderCpu: 100m
   configReloaderMemory: 25Mi
   admissionWebhooks:
@@ -86,11 +92,16 @@ prometheus:
               storage: 95Gi
     resources:
       requests:
-        cpu: 250m
-        memory: 2Gi
+        cpu: 500m
+        memory: 3Gi
       limits:
-        cpu: 1500m
+        cpu: 2
         memory: 4Gi
+    containers:
+      - name: prometheus
+        env:
+        - name: GOGC
+          value: "70"
 
 alertmanager:
   enabled: true
