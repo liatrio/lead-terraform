@@ -93,7 +93,6 @@ tracing:
   enabled: false
 
 prometheus:
-  retention: 2h
   resources:
     requests:
       cpu: 500m

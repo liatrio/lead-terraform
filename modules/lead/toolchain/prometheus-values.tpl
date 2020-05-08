@@ -92,11 +92,16 @@ prometheus:
               storage: 95Gi
     resources:
       requests:
-        cpu: 250m
-        memory: 2Gi
+        cpu: 500m
+        memory: 3Gi
       limits:
-        cpu: 1500m
+        cpu: 2
         memory: 4Gi
+    containers:
+      - name: prometheus
+        env:
+        - name: GOGC
+          value: "70"
 
 alertmanager:
   enabled: true
