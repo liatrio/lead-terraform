@@ -104,30 +104,21 @@ prometheus:
 galley:
   resources:
     requests:
-      cpu: 20m
+      cpu: 40m
       memory: 32Mi
     limits:
-      cpu: 300m
+      cpu: 400m
       memory: 128Mi
 pilot:
   traceSampling: ${pilotTraceSampling}
   autoscaleMax: 20
   resources:
     requests:
-      cpu: 500m
+      cpu: 750m
       memory: 500Mi
     limits:
-      cpu: 1.3
+      cpu: 2
       memory: 1Gi
-  global:
-    proxy:
-      resource:
-        requests:
-          cpu: 5m
-          memory: 32Mi
-        limits:
-          cpu: 20m
-          memory: 64Mi
 mixer:
   telemetry:
     loadshedding:
