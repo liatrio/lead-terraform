@@ -195,9 +195,53 @@ resource "aws_iam_role" "product_operator_service_account" {
 EOF
 }
 
+resource "aws_iam_policy" "product_operator_main" {
+  name  = "${var.cluster}-product-operator-main"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+  {
+    "Effect": "Allow",
+    "Action": [
+      "s3:ListBucket",
+      "s3:GetBucketVersioning",
+      "s3:CreateBucket",
+      "s3:PutObject",
+      "s3:GetObject",
+      "s3:DeleteObject"
+    ],
+    "Resource": [
+      "arn:aws:s3:::lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${var.cluster}.liatr.io"
+    ]
+  },
+  {
+    "Effect": "Allow",
+    "Action": [
+      "dynamodb:PutItem",
+      "dynamodb:GetItem",
+      "dynamodb:DescribeTable",
+      "dynamodb:DeleteItem",
+      "dynamodb:CreateTable",
+      "dynamodb:TagResource"
+    ],
+    "Resource": [
+      "arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/lead-sdm-operators-${var.cluster}"
+    ]
+  }]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "product_operator_main" {
+  role       = aws_iam_role.product_operator_service_account.name
+  policy_arn = aws_iam_policy.product_operator_main.arn
+}
+
 resource "aws_iam_policy" "product_operator_aws_code_services" {
   count = var.enable_aws_code_services ? 1 : 0
-  name  = "${var.cluster}-product-operator"
+  name  = "${var.cluster}-product-operator-code-services"
 
   policy = <<EOF
 {
@@ -240,42 +284,6 @@ resource "aws_iam_policy" "product_operator_aws_code_services" {
       "codepipeline:UntagResource"
     ],
     "Resource": "*"
-  },
-  {
-    "Effect": "Allow",
-    "Action": [
-      "s3:ListBucket",
-      "s3:GetBucketVersioning",
-      "s3:CreateBucket"
-    ],
-    "Resource": [
-      "arn:aws:s3:::lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${var.cluster}.liatr.io"
-    ]
-  },
-  {
-    "Effect": "Allow",
-    "Action": [
-      "s3:PutObject",
-      "s3:GetObject",
-      "s3:DeleteObject"
-    ],
-    "Resource": [
-      "arn:aws:s3:::lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${var.cluster}.liatr.io/*"
-    ]
-  },
-  {
-    "Effect": "Allow",
-    "Action": [
-      "dynamodb:PutItem",
-      "dynamodb:GetItem",
-      "dynamodb:DescribeTable",
-      "dynamodb:DeleteItem",
-      "dynamodb:CreateTable",
-      "dynamodb:TagResource"
-    ],
-    "Resource": [
-      "arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/lead-sdm-operators-${var.cluster}"
-    ]
   },
   {
     "Effect": "Allow",
