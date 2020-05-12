@@ -34,7 +34,7 @@ kube-state-metrics:
   resources:
     limits:
       cpu: 200m
-      memory: 100Mi
+      memory: 200Mi
     requests:
       cpu: 10m
       memory: 50Mi
@@ -71,10 +71,10 @@ prometheusOperator:
   resources:
     limits:
       cpu: 500m
-      memory: 100Mi
+      memory: 300Mi
     requests:
       cpu: 100m
-      memory: 70Mi
+      memory: 100Mi
   configReloaderCpu: 100m
   configReloaderMemory: 25Mi
   admissionWebhooks:
@@ -93,10 +93,10 @@ prometheus:
     resources:
       requests:
         cpu: 500m
-        memory: 3Gi
+        memory: 4Gi
       limits:
         cpu: 2
-        memory: 4Gi
+        memory: 5Gi
     containers:
       - name: prometheus
         env:
