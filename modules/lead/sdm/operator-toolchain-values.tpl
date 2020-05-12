@@ -93,7 +93,7 @@ operators:
     - name: CLUSTER_DOMAIN
       value: ${cluster_domain}
     - name: SUPPORT_IMAGE
-      value: ${toolchain_image_repo}/support:${builder_images_version}
+      value: ${toolchain_image_repo}/support:${sdm_version}
   jenkins:
     enabled: ${operator_jenkins_enabled}
     image:
