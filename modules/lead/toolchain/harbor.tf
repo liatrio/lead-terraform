@@ -92,6 +92,10 @@ resource "helm_release" "harbor_certificates" {
     name = "issuer.name"
     value = var.issuer_name
   }
+
+  depends_on = [
+    var.crd_waiter
+  ]
 }
 
 data "helm_repository" "harbor" {

@@ -39,10 +39,14 @@ elasticsearch:
       requests:
         storage: 100M
 %{ endif }
+  enabled: true
   secretMounts:
   - name: ${elasticsearch-certs}
     secretName: ${elasticsearch-certs}
     path: /usr/share/elasticsearch/config/certs
+
+elasticsearch-curator:
+  enabled: true
 
 kibana:
   secretMounts:
