@@ -32,3 +32,11 @@ module "kibana" {
   keycloak_realm                   = module.toolchain.keycloak_realm_id
   kibana_hostname                  = "kibana.${module.toolchain.namespace}.${var.cluster}.${var.root_zone_name}"
 }
+
+module "fluent_bit" {
+  source = "../../modules/tools/fluent-bit"
+
+  namespace                              = module.elasticsearch_namespace.name
+  elasticsearch_credentials_secret_name  = module.elasticsearch.elasticsearch_credentials_secret_name
+  elasticsearch_username                 = module.elasticsearch.elasticsearch_username
+}
