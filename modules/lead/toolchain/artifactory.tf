@@ -1,19 +1,3 @@
-data "template_file" "artifactory_security_values" {
-  count    = var.enable_artifactory ? 1 : 0
-  template = file("${path.module}/artifactory.security.import.xml.tpl")
-  vars = {
-    # To prefix bcrypt strings with 'bcrypt$', we use format here due to escape issues in template.
-    jenkins_bcrypt_pass = format(
-      "bcrypt$%s",
-      bcrypt(random_string.artifactory_jenkins_password[0].result),
-    )
-    admin_bcrypt_pass = format(
-      "bcrypt$%s",
-      bcrypt(random_string.artifactory_admin_password[0].result),
-    )
-  }
-}
-
 data "template_file" "artifactory_config_values" {
   count    = var.enable_artifactory ? 1 : 0
   template = file("${path.module}/artifactory.config.import.xml.tpl")
@@ -74,7 +58,17 @@ resource "kubernetes_config_map" "artifactory_config" {
 
   data = {
     "artifactory.config.import.xml" = data.template_file.artifactory_config_values[0].rendered
-    "security.import.xml"           = data.template_file.artifactory_security_values[0].rendered
+    "security.import.xml"           = templatefile("${path.module}/artifactory.security.import.xml.tpl", {
+      # To prefix bcrypt strings with 'bcrypt$', we use format here due to escape issues in template.
+      jenkins_bcrypt_pass = format(
+        "bcrypt$%s",
+        bcrypt(random_string.artifactory_jenkins_password[0].result),
+      )
+      admin_bcrypt_pass = format(
+        "bcrypt$%s",
+        bcrypt(random_string.artifactory_admin_password[0].result),
+      )
+    })
   }
 
   lifecycle {
