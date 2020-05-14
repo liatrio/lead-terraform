@@ -22,3 +22,19 @@ output "elasticsearch_password" {
     helm_release.elasticsearch
   ]
 }
+
+output "elasticsearch_credentials_secret_name" {
+  value = kubernetes_secret.elasticsearch_credentials.metadata[0].name
+
+  depends_on = [
+    helm_release.elasticsearch
+  ]
+}
+
+output "elasticsearch_certificates_secret_name" {
+  value = module.elasticsearch_certificate.cert_secret_name
+
+  depends_on = [
+    helm_release.elasticsearch
+  ]
+}
