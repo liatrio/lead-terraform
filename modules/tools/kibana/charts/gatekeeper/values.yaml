@@ -1,0 +1,7 @@
+port:
+clientId:
+clientSecret:
+discoveryUrl:
+upstreamPort:
+upstreamHost:
+kibanaHostname:
