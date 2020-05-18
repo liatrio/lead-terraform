@@ -144,17 +144,7 @@ module "sdm" {
 
 module "dashboard" {
   source                           = "../../modules/lead/dashboard"
-  root_zone_name                   = var.root_zone_name
-  cluster                          = module.eks.cluster_id
-  cluster_domain                   = "${var.cluster}.${var.root_zone_name}"
+  enabled                          = var.enable_dashboard
   namespace                        = module.toolchain.namespace
   dashboard_version                = var.dashboard_version
-  k8s_storage_class                = var.k8s_storage_class
-  enabled                          = var.enable_dashboard
-  enable_keycloak                  = var.enable_keycloak
-  keycloak_realm_id                = module.toolchain.keycloak_realm_id
-  crd_waiter                       = module.cert_manager.crd_waiter
-  elasticsearch_replicas           = var.dashboard_elasticsearch_replicas
-  toolchain_namespace              = module.toolchain.namespace
-  keycloak_admin_credential_secret = module.toolchain.keycloak_admin_credential_secret
 }

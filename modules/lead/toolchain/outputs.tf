@@ -24,3 +24,7 @@ output "keycloak_realm_id" {
 output "keycloak_admin_credential_secret" {
   value = kubernetes_secret.keycloak_admin.metadata[0].name
 }
+
+output "keycloak_hostname" {
+  value = local.keycloak_hostname
+}

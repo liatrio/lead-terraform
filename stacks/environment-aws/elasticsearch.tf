@@ -1,9 +1,9 @@
 module "elasticsearch_namespace" {
   source = "../../modules/common/namespace"
 
-  namespace = "elasticsearch"
+  namespace   = "elasticsearch"
   annotations = {
-    name = "elasticsearch"
+    name    = "elasticsearch"
     cluster = module.eks.cluster_id
   }
 }
@@ -15,4 +15,28 @@ module "elasticsearch" {
   namespace               = module.elasticsearch_namespace.name
   root_zone_name          = var.root_zone_name
   disk_size               = "30Gi"
+}
+
+module "kibana" {
+  source = "../../modules/tools/kibana"
+
+  namespace                              = module.elasticsearch_namespace.name
+  elasticsearch_credentials_secret_name  = module.elasticsearch.elasticsearch_credentials_secret_name
+  elasticsearch_certificates_secret_name = module.elasticsearch.elasticsearch_certificates_secret_name
+
+  // keycloak configuration for gatekeeper
+  enable_keycloak                  = var.enable_keycloak
+  keycloak_hostname                = module.toolchain.keycloak_hostname
+  keycloak_admin_credential_secret = module.toolchain.keycloak_admin_credential_secret
+  toolchain_namespace              = module.toolchain.namespace
+  keycloak_realm                   = module.toolchain.keycloak_realm_id
+  kibana_hostname                  = "kibana.${module.toolchain.namespace}.${var.cluster}.${var.root_zone_name}"
+}
+
+module "fluent_bit" {
+  source = "../../modules/tools/fluent-bit"
+
+  namespace                              = module.elasticsearch_namespace.name
+  elasticsearch_credentials_secret_name  = module.elasticsearch.elasticsearch_credentials_secret_name
+  elasticsearch_username                 = module.elasticsearch.elasticsearch_username
 }

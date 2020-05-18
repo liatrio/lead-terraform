@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gatekeeper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: gatekeeper
+  template:
+    metadata:
+      labels:
+        name: gatekeeper
+    spec:
+      containers:
+        - name: gatekeeper
+          image: keycloak/keycloak-gatekeeper
+          imagePullPolicy: IfNotPresent
+          args:
+            - --listen=0.0.0.0:{{ .Values.port }}
+            - --client-id={{ .Values.clientId }}
+            - --client-secret={{ .Values.clientSecret }}
+            - --discovery-url={{ .Values.discoveryUrl }}
+            - --upstream-url=http://{{ .Values.upstreamHost }}:{{ .Values.upstreamPort }}
+            - --enable-default-deny=true
+            - --enable-logging=true
+            - --enable-json-logging=true
+            - --verbose=true
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi
