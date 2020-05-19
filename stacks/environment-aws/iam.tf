@@ -75,7 +75,9 @@ resource "aws_iam_role_policy" "operator-slack" {
     {
       "Effect": "Allow",
       "Action": [
-        "cloud9:DescribeEnvironmentMemberships", "cloud9:DescribeEnvironments"
+        "cloud9:DescribeEnvironmentMemberships", 
+        "cloud9:DescribeEnvironments",
+        "cloud9:CreateEnvironmentMembership"
       ],
       "Resource": ["*"]
     },
