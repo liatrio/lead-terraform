@@ -149,6 +149,9 @@ alertmanager:
       - match:
           namespace: istio-system
         receiver: slack
+      - match:
+          namespace: elasticsearch
+        receiver: slack
     templates:
     - /etc/alertmanager/config/template*.tmpl
     receivers:
