@@ -20,7 +20,7 @@ variable "ingress_controller_type" {
 }
 
 variable "pilot_trace_sampling" {
-  default = 5.0
+  default = 2.0
 }
 
 variable "flagger_event_webhook" {}
