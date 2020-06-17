@@ -179,6 +179,7 @@ module "eks" {
       enabled_metrics        = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]
       pre_userdata           = local.ssm_init
       kubelet_extra_args     = "--node-labels=kubernetes.io/lifecycle=essential --register-with-taints=${var.essential_taint_key}=true:NoSchedule"
+      root_volume_size       = var.root_volume_size
     }
   ]
 
@@ -200,6 +201,7 @@ module "eks" {
       kubelet_extra_args                       = "--node-labels=kubernetes.io/lifecycle=preemptible"
       on_demand_base_capacity                  = 0
       on_demand_percentage_above_base_capacity = var.on_demand_percentage
+      root_volume_size                         = var.root_volume_size
     },
     {
       name                                     = "preemptible1"
@@ -218,6 +220,7 @@ module "eks" {
       kubelet_extra_args                       = "--node-labels=kubernetes.io/lifecycle=preemptible"
       on_demand_base_capacity                  = 0
       on_demand_percentage_above_base_capacity = var.on_demand_percentage
+      root_volume_size                         = var.root_volume_size
     },
     {
       name                                     = "preemptible2"
@@ -236,6 +239,7 @@ module "eks" {
       kubelet_extra_args                       = "--node-labels=kubernetes.io/lifecycle=preemptible"
       on_demand_base_capacity                  = 0
       on_demand_percentage_above_base_capacity = var.on_demand_percentage
+      root_volume_size                         = var.root_volume_size
     },
   ]
 }

@@ -66,3 +66,7 @@ variable "cluster_version" {
 }
 
 variable "codebuild_role" {}
+
+variable "root_volume_size" {
+  default = 50
+}
