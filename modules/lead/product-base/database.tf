@@ -18,13 +18,6 @@ data "helm_repository" "bitnami" {
 }
 
 resource "helm_release" "mongo-db" {
-  name      = "mongo-db"
-  namespace = module.database_namespace.name
-  chart     = "${path.module}/charts/mongo"
-  wait      = true
-}
-
-resource "helm_release" "mongo-db" {
   name       = "mongo-db"
   namespace  = module.database_namespace.name
   repository = data.helm_repository.bitnami.name
