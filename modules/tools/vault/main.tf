@@ -54,6 +54,16 @@ resource "aws_iam_user_policy" "vault" {
       "Resource": "${aws_dynamodb_table.vault_dynamodb_storage.arn}"
     },
     {
+      "Effect": "Allow",
+      "Action": [
+        "ec2:DescribeInstances",
+        "iam:GetInstanceProfile",
+        "iam:GetUser",
+        "iam:GetRole"
+      ],
+      "Resource": "*"
+    },
+    {
       "Action": [
         "kms:Encrypt",
         "kms:Decrypt",
@@ -95,6 +105,7 @@ resource "helm_release" "vault" {
     templatefile("${path.module}/values.tpl", {
       vault_tls_secret = module.vault_tls_certificate.cert_secret_name
       vault_hostname   = var.vault_hostname
+      vault_version    = "1.4.2"
       vault_config     = indent(6, templatefile("${path.module}/vault-config.hcl.tpl", {
         region                = var.region
         aws_access_key_id     = aws_iam_access_key.vault.id

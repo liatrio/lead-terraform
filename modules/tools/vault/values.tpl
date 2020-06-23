@@ -2,6 +2,8 @@ global:
   tlsDisable: false
 
 server:
+  image:
+    tag: ${vault_version}
   service:
     enabled: true
     type: LoadBalancer
