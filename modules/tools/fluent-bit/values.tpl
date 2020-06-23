@@ -22,8 +22,8 @@ filter:
   mergeLogKey: details
 resources:
   limits:
-    cpu: 100m
+    cpu: 300m
     memory: 128Mi
   requests:
-    cpu: 10m
+    cpu: 50m
     memory: 8Mi
