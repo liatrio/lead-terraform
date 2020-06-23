@@ -197,3 +197,5 @@ variable "enable_aws_code_services" {
 variable "product_types" {
   type = list(string)
 }
+
+variable "iam_caller_identity_headers" {}
