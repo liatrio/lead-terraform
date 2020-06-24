@@ -59,13 +59,27 @@ variable "kubeconfig_aws_authenticator_additional_args" {
   default     = []
 }
 
-variable "enable_aws_code_services" {}
+variable "enable_aws_code_services" {
+  default = false
+}
+
+variable "additional_mapped_roles" {
+  type = list(object({
+    rolearn  = string
+    username = string
+    groups   = list(string)
+  }))
+
+  default = []
+}
 
 variable "cluster_version" {
   default = "1.14"
 }
 
-variable "codebuild_role" {}
+variable "codebuild_role" {
+  default = ""
+}
 
 variable "root_volume_size" {
   default = 50
