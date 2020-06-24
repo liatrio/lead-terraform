@@ -12,7 +12,14 @@ variable "key_name" {
 
 variable "preemptible_instance_types" {
   type    = list
-  default = ["m5.xlarge", "c5.xlarge", "m4.xlarge", "c4.xlarge", "t3.xlarge", "r5.xlarge"]
+  default = [
+    "m5.xlarge",
+    "c5.xlarge",
+    "m4.xlarge",
+    "c4.xlarge",
+    "t3.xlarge",
+    "r5.xlarge"
+  ]
 }
 
 variable "preemptible_asg_min_size" {
@@ -48,3 +55,13 @@ variable "essential_taint_key" {
 }
 
 variable "vpc_name" {}
+
+variable "additional_mapped_roles" {
+  type    = list(object({
+    rolearn  = string
+    username = string
+    groups   = list(string)
+  }))
+
+  default = []
+}
