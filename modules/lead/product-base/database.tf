@@ -10,6 +10,11 @@ module "database_namespace" {
     "opa.lead.liatrio/ingress-whitelist" = "*.${var.product_name}-db.${var.cluster_domain}"
     "opa.lead.liatrio/image-whitelist"   = var.image_whitelist
   }
+  
+  providers = {
+    helm       = helm.system
+    kubernetes = kubernetes.system
+  }
 }
 
 data "helm_repository" "bitnami" {
