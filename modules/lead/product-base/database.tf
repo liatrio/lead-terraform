@@ -22,6 +22,10 @@ data "helm_repository" "bitnami" {
   url   = "https://charts.bitnami.com/bitnami"
 }
 
+data "template_file" "mongo_values" {
+  template = file("${path.module}/mongo.tpl")
+}
+
 resource "helm_release" "mongodb" {
   provider   = helm.system
   name       = "mongodb"
@@ -32,4 +36,5 @@ resource "helm_release" "mongodb" {
   timeout    = 600
   wait       = true
 
+  values = [data.template_file.mongo_values.rendered]
 }
