@@ -22,8 +22,9 @@ data "helm_repository" "bitnami" {
   url   = "https://charts.bitnami.com/bitnami"
 }
 
-resource "helm_release" "mongoDb" {
-  name       = "mongoDb"
+resource "helm_release" "mongodb" {
+  provider   = helm.system
+  name       = "mongodb"
   namespace  = module.database_namespace.name
   repository = data.helm_repository.bitnami.name
   chart      = "bitnami/mongodb"
