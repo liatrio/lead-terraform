@@ -18,7 +18,8 @@ variable "preemptible_instance_types" {
     "m4.xlarge",
     "c4.xlarge",
     "t3.xlarge",
-    "r5.xlarge"]
+    "r5.xlarge"
+  ]
 }
 
 variable "preemptible_asg_min_size" {
