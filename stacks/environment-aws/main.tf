@@ -37,7 +37,7 @@ provider "helm" {
 }
 
 provider "vault" {
-  address = "https://vault.internal.services.liatr.io"
+  address = var.vault_address
 
   auth_login {
     path = "auth/aws/login"
