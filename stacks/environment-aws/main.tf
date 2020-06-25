@@ -51,11 +51,3 @@ provider "vault" {
     }
   }
 }
-
-data "vault_generic_secret" "test" {
-  path = "lead/aws/${data.aws_caller_identity.current.account_id}/test"
-}
-
-output "test" {
-  value = data.vault_generic_secret.test.data
-}
