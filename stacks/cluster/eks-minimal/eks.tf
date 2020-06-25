@@ -14,9 +14,8 @@ module "eks" {
   essential_asg_desired_capacity   = var.essential_asg_desired_capacity
   essential_taint_key              = var.essential_taint_key
   on_demand_percentage             = "0"
-  enable_aws_code_services         = false
-  codebuild_role                   = ""
   vpc_name                         = var.vpc_name
+  additional_mapped_roles          = var.additional_mapped_roles
 
   workers_additional_policies = []
 }

@@ -12,7 +12,7 @@ EOF
     "Cluster" = var.cluster
   }
 
-  map_roles = [
+  default_roles = [
     {
       rolearn  = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/Administrator"
       username = "administrator"
@@ -30,7 +30,7 @@ EOF
     },
   ]
 
-  map_roles_extra = var.enable_aws_code_services ? [
+  codebuild_roles = var.enable_aws_code_services ? [
     {
       rolearn  = var.codebuild_role
 
@@ -135,7 +135,7 @@ module "eks" {
   tags                                         = local.tags
   vpc_id                                       = data.aws_vpc.lead_vpc.id
   worker_additional_security_group_ids         = [aws_security_group.worker.id]
-  map_roles                                    = concat(local.map_roles, local.map_roles_extra)
+  map_roles                                    = concat(local.default_roles, local.codebuild_roles, var.additional_mapped_roles)
   write_kubeconfig                             = var.write_kubeconfig
   permissions_boundary                         = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${aws_iam_policy.workspace_role_boundary.name}"
   manage_worker_iam_resources                  = true
