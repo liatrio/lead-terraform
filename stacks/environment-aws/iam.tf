@@ -1,6 +1,3 @@
-data "aws_caller_identity" "current" {
-}
-
 module "cert_manager_iam" {
   source = "../../modules/environment/aws/iam/cert-manager"
 
@@ -75,7 +72,7 @@ resource "aws_iam_role_policy" "operator-slack" {
     {
       "Effect": "Allow",
       "Action": [
-        "cloud9:DescribeEnvironmentMemberships", 
+        "cloud9:DescribeEnvironmentMemberships",
         "cloud9:DescribeEnvironments",
         "cloud9:CreateEnvironmentMembership"
       ],
