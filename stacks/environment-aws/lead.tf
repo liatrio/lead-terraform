@@ -1,40 +1,17 @@
-data "aws_ssm_parameter" "slack_client_signing_secret" {
-  name = "/${var.cluster}/slack_client_signing_secret"
+data "vault_generic_secret" "slack" {
+  path = "lead/aws/${data.aws_caller_identity.current.account_id}/slack"
 }
 
-data "aws_ssm_parameter" "slack_bot_token" {
-  name = "/${var.cluster}/slack_bot_token"
+data "vault_generic_secret" "artifactory" {
+  path = "lead/aws/${data.aws_caller_identity.current.account_id}/artifactory"
 }
 
-data "aws_ssm_parameter" "artifactory_license" {
-  name = "/${var.cluster}/artifactory_license"
+data "vault_generic_secret" "keycloak" {
+  path = "lead/aws/${data.aws_caller_identity.current.account_id}/keycloak"
 }
 
-data "aws_ssm_parameter" "keycloak_admin_password" {
-  name = "/${var.cluster}/keycloak_admin_password"
-}
-
-data "aws_ssm_parameter" "keycloak_postgres_password" {
-  name = "/${var.cluster}/keycloak_postgres_password"
-}
-
-data "aws_ssm_parameter" "prometheus_slack_webhook_url" {
-  name = "/${var.cluster}/prometheus_slack_webhook_url"
-}
-
-data "aws_ssm_parameter" "google_identity_provider_client_id" {
-  count = var.enable_google_login ? 1 : 0
-  name  = "/${var.cluster}/google_identity_provider_client_id"
-}
-
-data "aws_ssm_parameter" "google_identity_provider_client_secret" {
-  count = var.enable_google_login ? 1 : 0
-  name  = "/${var.cluster}/google_identity_provider_client_secret"
-}
-
-data "aws_ssm_parameter" "test_user_password" {
-  count = var.enable_test_user ? 1 : 0
-  name  = "/${var.cluster}/test_user_password"
+data "vault_generic_secret" "prometheus" {
+  path = "lead/aws/${data.aws_caller_identity.current.account_id}/prometheus"
 }
 
 
@@ -45,14 +22,14 @@ module "toolchain" {
   namespace                              = var.toolchain_namespace
   image_whitelist                        = var.image_whitelist
   elb_security_group_id                  = module.eks.aws_security_group_elb.id
-  artifactory_license                    = data.aws_ssm_parameter.artifactory_license.value
-  keycloak_admin_password                = data.aws_ssm_parameter.keycloak_admin_password.value
-  keycloak_postgres_password             = data.aws_ssm_parameter.keycloak_postgres_password.value
+  artifactory_license                    = data.vault_generic_secret.artifactory.data["license"]
+  keycloak_admin_password                = data.vault_generic_secret.keycloak.data["admin-password"]
+  keycloak_postgres_password             = data.vault_generic_secret.keycloak.data["postgres-password"]
   enable_google_login                    = var.enable_google_login
-  google_identity_provider_client_id     = var.enable_google_login ? data.aws_ssm_parameter.google_identity_provider_client_id[0].value : ""
-  google_identity_provider_client_secret = var.enable_google_login ? data.aws_ssm_parameter.google_identity_provider_client_secret[0].value : ""
+  google_identity_provider_client_id     = var.enable_google_login ? data.vault_generic_secret.keycloak.data["google-idp-client-id"] : ""
+  google_identity_provider_client_secret = var.enable_google_login ? data.vault_generic_secret.keycloak.data["google-idp-client-secret"] : ""
   enable_test_user                       = var.enable_test_user
-  test_user_password                     = var.enable_test_user ? data.aws_ssm_parameter.test_user_password[0].value : ""
+  test_user_password                     = var.enable_test_user ? data.vault_generic_secret.keycloak.data["test-user-password"] : ""
   enable_istio                           = var.enable_istio
   enable_artifactory                     = var.enable_artifactory
   enable_gitlab                          = var.enable_gitlab
@@ -71,7 +48,7 @@ module "toolchain" {
   harbor_registry_disk_size    = "200Gi"
   harbor_chartmuseum_disk_size = "100Gi"
 
-  prometheus_slack_webhook_url = data.aws_ssm_parameter.prometheus_slack_webhook_url.value
+  prometheus_slack_webhook_url = data.vault_generic_secret.prometheus.data["slack-webhook-url"]
   prometheus_slack_channel     = var.prometheus_slack_channel
 
   smtp_host       = "email-smtp.${var.region}.amazonaws.com"
@@ -99,8 +76,8 @@ module "sdm" {
   system_namespace            = module.system_namespace.name
   sdm_version                 = var.sdm_version
   product_version             = var.product_version
-  slack_bot_token             = data.aws_ssm_parameter.slack_bot_token.value
-  slack_client_signing_secret = data.aws_ssm_parameter.slack_client_signing_secret.value
+  slack_bot_token             = data.vault_generic_secret.slack.data["bot-token"]
+  slack_client_signing_secret = data.vault_generic_secret.slack.data["client-signing-secret"]
   workspace_role_name         = module.eks.workspace_iam_role.name
   operators                   = var.lead_sdm_operators
   product_types               = var.product_types

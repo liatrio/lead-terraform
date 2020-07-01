@@ -37,7 +37,7 @@ provider "helm" {
 }
 
 provider "vault" {
-  address = "https://vault.internal.services.liatr.io"
+  address = var.vault_address
 
   auth_login {
     path = "auth/aws/login"
@@ -50,12 +50,4 @@ provider "vault" {
       iam_request_headers     = var.iam_caller_identity_headers
     }
   }
-}
-
-data "vault_generic_secret" "test" {
-  path = "lead/aws/${data.aws_caller_identity.current.account_id}/test"
-}
-
-output "test" {
-  value = data.vault_generic_secret.test.data
 }
