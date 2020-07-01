@@ -9,5 +9,7 @@ module "product_base" {
     kubernetes.staging    = kubernetes.staging
     helm.production       = helm.production
     kubernetes.production = kubernetes.production
+    helm.system           = helm.system
+    kubernetes.system     = kubernetes.system
   }
 }
