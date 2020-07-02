@@ -125,3 +125,16 @@ module "dashboard" {
   namespace                        = module.toolchain.namespace
   dashboard_version                = var.dashboard_version
 }
+
+module "lab_partner" {
+  source                      = "../../modules/tools/lab-partner"
+  enable_lab_partner          = var.enable_lab_partner
+  root_zone_name              = var.root_zone_name
+  cluster                     = module.eks.cluster_id
+  namespace                   = var.toolchain_namespace
+  slack_bot_token             = data.vault_generic_secret.slack.data["bot-token"]
+  slack_client_signing_secret = data.vault_generic_secret.slack.data["client-signing-secret"]
+  
+  lab_partner_version         = var.lab_partner_version
+
+}
