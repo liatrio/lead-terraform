@@ -146,3 +146,9 @@ variable "toolchain_image_repo" {
 
 variable "enable_aws_code_services" {
 }
+
+variable "enable_lab_partner" {
+}
+
+variable "lab_partner_version" {
+}
