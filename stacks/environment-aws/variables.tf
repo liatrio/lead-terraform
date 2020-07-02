@@ -208,3 +208,6 @@ variable "lab_partner_version" {
 variable "enable_lab_partner" {
   default = true
 }
+
+variable "team_id" {
+}
