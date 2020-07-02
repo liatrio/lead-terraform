@@ -30,6 +30,10 @@ provider "kubernetes" {
   alias = "system"
 }
 
+provider "helm" {
+  alias = "system"
+}
+
 data "kubernetes_secret" "harbor_admin_creds" {
   provider = kubernetes.system
   metadata {

@@ -199,6 +199,7 @@ variable "product_types" {
 }
 
 variable "iam_caller_identity_headers" {}
+
 variable "vault_address" {}
 
 variable "lab_partner_version" {
