@@ -1,6 +1,3 @@
-cluster: ${cluster}
-cluster_domain: ${cluster_domain}
-
 secrets:
   slackSigningSecret: ${slack_client_signing_secret}
   slackBotUserOauthAccessToken: ${slack_bot_token}

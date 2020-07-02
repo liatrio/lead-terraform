@@ -7,8 +7,6 @@ data "template_file" "lab_partner_values" {
   template = file("${path.module}/lab-partner-values.tpl")
 
   vars = {
-    cluster         = var.cluster
-    namespace       = var.namespace
     cluster_domain  = "${var.cluster}.${var.root_zone_name}"
 
     slack_bot_token = var.slack_bot_token
