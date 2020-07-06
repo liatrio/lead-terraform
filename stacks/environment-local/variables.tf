@@ -152,3 +152,6 @@ variable "enable_lab_partner" {
 
 variable "lab_partner_version" {
 }
+
+variable "team_id" {
+}
