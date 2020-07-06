@@ -108,10 +108,9 @@ module "lab_partner" {
   root_zone_name              = var.root_zone_name
   cluster                     = var.cluster
   namespace                   = var.toolchain_namespace
-  slack_bot_token             = data.vault_generic_secret.slack.data["bot-token"]
-  slack_client_signing_secret = data.vault_generic_secret.slack.data["client-signing-secret"]
-  team_id                     = var.team_id 
+  slack_bot_token             = var.slack_bot_token
+  slack_client_signing_secret = var.slack_client_signing_secret 
+  team_id                     = var.team_id
   lab_partner_version         = var.lab_partner_version
-
 }
 
