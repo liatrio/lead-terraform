@@ -1,9 +1,10 @@
 // aws authentication / roles
 
 locals {
-  prod_aws_account      = "489130170427"
-  sandbox_aws_account   = "774051255656"
-  sharedsvc_aws_account = "265560927720"
+  prod_aws_account       = "489130170427"
+  sandbox_aws_account    = "774051255656"
+  sharedsvc_aws_account  = "265560927720"
+  remote_k8s_aws_account = "210831435012"
 }
 
 resource "vault_auth_backend" "aws" {
@@ -30,6 +31,7 @@ resource "vault_aws_auth_backend_role" "aws_admin" {
   bound_iam_principal_arns = formatlist("arn:aws:iam::%s:role/Administrator", [
     local.prod_aws_account,
     local.sandbox_aws_account,
+    local.remote_k8s_aws_account,
   ])
   resolve_aws_unique_ids   = false
   token_policies           = [
@@ -43,7 +45,8 @@ resource "vault_aws_auth_backend_role" "aws_developer" {
   auth_type                = "iam"
   bound_iam_principal_arns = formatlist("arn:aws:iam::%s:role/Developer", [
     local.prod_aws_account,
-    local.sandbox_aws_account
+    local.sandbox_aws_account,
+    local.remote_k8s_aws_account,
   ])
   resolve_aws_unique_ids   = false
   token_policies           = [
