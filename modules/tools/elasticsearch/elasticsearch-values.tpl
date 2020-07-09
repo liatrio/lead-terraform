@@ -10,7 +10,7 @@ volumeClaimTemplate:
 resources:
   requests:
     cpu: 100m
-    memory: 3.5Gi
+    memory: 7.0Gi
   limits:
     cpu: 1000m
     memory: 7.5Gi

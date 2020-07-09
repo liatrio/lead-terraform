@@ -17,4 +17,5 @@ autoDiscovery:
 
 extraArgs:
   balance-similar-node-groups: true
+  skip-nodes-with-local-storage: false
   scale-down-enabled: ${scale_down_enabled}
