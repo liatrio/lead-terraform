@@ -1,5 +1,5 @@
-data "vault_generic_secret" "slack" {
-  path = "lead/aws/${data.aws_caller_identity.current.account_id}/slack"
+data "vault_generic_secret" "sparky" {
+  path = "lead/aws/${data.aws_caller_identity.current.account_id}/sparky"
 }
 
 data "vault_generic_secret" "artifactory" {
@@ -14,6 +14,9 @@ data "vault_generic_secret" "prometheus" {
   path = "lead/aws/${data.aws_caller_identity.current.account_id}/prometheus"
 }
 
+data "vault_generic_secret" "lab_partner" {
+  path = "lead/aws/${data.aws_caller_identity.current.account_id}/lab-partner"
+}
 
 module "toolchain" {
   source                                 = "../../modules/lead/toolchain"
@@ -76,8 +79,8 @@ module "sdm" {
   system_namespace            = module.system_namespace.name
   sdm_version                 = var.sdm_version
   product_version             = var.product_version
-  slack_bot_token             = data.vault_generic_secret.slack.data["bot-token"]
-  slack_client_signing_secret = data.vault_generic_secret.slack.data["client-signing-secret"]
+  slack_bot_token             = data.vault_generic_secret.sparky.data["bot-token"]
+  slack_client_signing_secret = data.vault_generic_secret.sparky.data["client-signing-secret"]
   workspace_role_name         = module.eks.workspace_iam_role.name
   operators                   = var.lead_sdm_operators
   product_types               = var.product_types
@@ -132,8 +135,8 @@ module "lab_partner" {
   root_zone_name              = var.root_zone_name
   cluster                     = module.eks.cluster_id
   namespace                   = var.toolchain_namespace
-  slack_bot_token             = data.vault_generic_secret.slack.data["bot-token"]
-  slack_client_signing_secret = data.vault_generic_secret.slack.data["client-signing-secret"]
-  team_id                     = data.vault_generic_secret.slack.data["team-id"]
+  slack_bot_token             = data.vault_generic_secret.lab_partner.data["slack-bot-user-oauth-access-token"]
+  slack_client_signing_secret = data.vault_generic_secret.lab_partner.data["slack-signing-secret"]
+  team_id                     = data.vault_generic_secret.lab_partner.data["slack-team-id"]
   lab_partner_version         = var.lab_partner_version
 }
