@@ -79,8 +79,8 @@ module "sdm" {
   system_namespace            = module.system_namespace.name
   sdm_version                 = var.sdm_version
   product_version             = var.product_version
-  slack_bot_token             = data.vault_generic_secret.sparky.data["bot-token"]
-  slack_client_signing_secret = data.vault_generic_secret.sparky.data["client-signing-secret"]
+  slack_bot_token             = data.vault_generic_secret.sparky.data["slack-bot-user-oauth-access-token"]
+  slack_client_signing_secret = data.vault_generic_secret.sparky.data["slack-signing-secret"]
   workspace_role_name         = module.eks.workspace_iam_role.name
   operators                   = var.lead_sdm_operators
   product_types               = var.product_types
