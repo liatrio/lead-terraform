@@ -139,4 +139,5 @@ module "lab_partner" {
   slack_client_signing_secret = data.vault_generic_secret.lab_partner.data["slack-signing-secret"]
   team_id                     = data.vault_generic_secret.lab_partner.data["slack-team-id"]
   lab_partner_version         = var.lab_partner_version
+  mongodb_password            = data.vault_generic_secret.lab_partner.data["mongodb-password"]
 }

@@ -22,3 +22,6 @@ variable "enable_lab_partner" {
 
 variable "lab_partner_version" {
 }
+
+variable "mongodb_password" {
+}

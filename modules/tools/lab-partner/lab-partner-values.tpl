@@ -7,4 +7,6 @@ ingress:
   annotations:
     kubernetes.io/ingress.class: ${namespace}-nginx
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-
+mongodb:
+  auth:
+    rootPassword: ${mongodb_password}
