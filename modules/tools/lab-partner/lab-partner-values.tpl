@@ -9,4 +9,5 @@ ingress:
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
 mongodb:
   auth:
-    rootPassword: ${mongodb_password}
+    custom_user:
+      password: ${mongodb_password}
