@@ -13,6 +13,7 @@ data "template_file" "lab_partner_values" {
     slack_bot_token = var.slack_bot_token
     slack_client_signing_secret = var.slack_client_signing_secret
     team_id = var.team_id
+    mongodb_password = var.mongodb_password
   }
 }
 
