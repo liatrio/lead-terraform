@@ -35,7 +35,8 @@ resource "vault_aws_auth_backend_role" "aws_admin" {
   ])
   resolve_aws_unique_ids   = false
   token_policies           = [
-    vault_policy.lead_aws_admin.name
+    vault_policy.lead_aws_admin.name,
+    vault_policy.openstack_aws_admin.name
   ]
 }
 
