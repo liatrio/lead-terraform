@@ -92,7 +92,7 @@ module "sdm" {
   harbor_image_repo = "harbor.${module.toolchain.namespace}.${module.eks.cluster_id}.${var.root_zone_name}"
   ecr_image_repo    = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.region}.amazonaws.com"
 
-  operator_slack_service_account_annotations   = {
+  operator_slack_service_account_annotations = {
     "eks.amazonaws.com/role-arn" = aws_iam_role.operator_slack_service_account.arn
   }
   operator_jenkins_service_account_annotations = {
@@ -123,10 +123,10 @@ module "sdm" {
 }
 
 module "dashboard" {
-  source                           = "../../modules/lead/dashboard"
-  enabled                          = var.enable_dashboard
-  namespace                        = module.toolchain.namespace
-  dashboard_version                = var.dashboard_version
+  source            = "../../modules/lead/dashboard"
+  enabled           = var.enable_dashboard
+  namespace         = module.toolchain.namespace
+  dashboard_version = var.dashboard_version
 }
 
 module "lab_partner" {
@@ -149,4 +149,5 @@ module "vault" {
   region                    = var.region
   vault_dynamodb_table_name = "vault.toolchain.${module.eks.cluster_id}.${var.root_zone_name}"
   vault_hostname            = "vault.toolchain.${module.eks.cluster_id}.${var.root_zone_name}"
+  cluster_domain            = "${var.cluster}.${var.root_zone_name}"
 }

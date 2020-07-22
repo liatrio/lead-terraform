@@ -93,7 +93,7 @@ resource "helm_release" "vault" {
     templatefile("${path.module}/values.tpl", {
       vault_hostname = var.vault_hostname
       vault_version  = "1.4.2"
-      vault_config   = indent(6, templatefile("${path.module}/vault-config.hcl.tpl", {
+      vault_config = indent(6, templatefile("${path.module}/vault-config.hcl.tpl", {
         region                = var.region
         aws_access_key_id     = aws_iam_access_key.vault.id
         aws_secret_access_key = aws_iam_access_key.vault.secret
@@ -130,4 +130,72 @@ resource "kubernetes_secret" "vault_root_token" {
   data = {
     token = module.vault_operator_init.stdout
   }
+}
+
+resource "kubernetes_service_account" "vault_token_reviewer" {
+  metadata {
+    name      = "vault-token-reviewer"
+    namespace = var.namespace
+  }
+}
+
+resource "kubernetes_cluster_role_binding" "vault_token_reviewer" {
+  metadata {
+    name = "vault-tokenreview-binding"
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = "system:auth-delegator"
+  }
+  subject {
+    kind      = "ServiceAccount"
+    name      = kubernetes_service_account.vault_token_reviewer.metadata[0].name
+    namespace = kubernetes_service_account.vault_token_reviewer.metadata[0].namespace
+  }
+}
+
+data "kubernetes_secret" "vault_token_reviewer_service_account_token" {
+  metadata {
+    name      = kubernetes_service_account.vault_token_reviewer.default_secret_name
+    namespace = kubernetes_service_account.vault_token_reviewer.metadata[0].namespace
+  }
+}
+
+resource "vault_auth_backend" "kubernetes" {
+  type = "kubernetes"
+}
+
+resource "vault_kubernetes_auth_backend_config" "k8s_vault_backend_config" {
+  backend            = vault_auth_backend.kubernetes.path
+  kubernetes_host    = var.cluster_domain
+  kubernetes_ca_cert = data.kubernetes_secret.vault_token_reviewer_service_account_token.data["ca.crt"] // should be "default" svc acct cert
+  token_reviewer_jwt = data.kubernetes_secret.vault_token_reviewer_service_account_token.data["token"]  //should be "default" svc acct token
+}
+
+resource "vault_policy" "token_lookup_self" {
+  name   = "token-lookup-self"
+  policy = <<EOF
+path "auth/token/lookup-self" {
+  capabilities = ["read", "update"]
+}
+EOF
+}
+
+resource "vault_kubernetes_auth_backend_role" "vault_auth_role" {
+  backend = vault_auth_backend.kubernetes.path
+  bound_service_account_names = [
+    kubernetes_service_account.vault_token_reviewer.metadata[0].name
+  ]
+  bound_service_account_namespaces = [
+    "*"
+  ]
+  role_name = "vault_auth_role"
+
+  token_ttl     = 300
+  token_max_ttl = 300
+  token_policies = [
+    vault_policy.token_lookup_self.name,
+    "default"
+  ]
 }

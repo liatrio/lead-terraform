@@ -1,3 +1,7 @@
+locals {
+  vault_mongodb_role = "${var.product_name}-mongodb"
+}
+
 module "staging_namespace" {
   source    = "../../common/namespace"
   namespace = "${var.product_name}-staging"
@@ -125,4 +129,52 @@ resource "kubernetes_role" "ci_staging_role" {
     resources  = ["canaries", "canaries/status"]
     verbs      = ["*"]
   }
+}
+
+resource "vault_mount" "mongodb" {
+  path = "${var.product_name}-staging-db"
+  type = "database"
+
+  depends_on = [
+    helm_release.mongodb
+  ]
+}
+
+resource "vault_database_secret_backend_connection" "mongodb" {
+  backend = vault_mount.mongodb.path
+  name    = "mongodb"
+
+  allowed_roles = [
+    local.vault_mongodb_role
+  ]
+
+  data = {
+    username = "root"
+    password = local.mongodb_root_password
+  }
+
+  mongodb {
+    connection_url = "mongodb://{{username}}:{{password}}@mongodb.${var.product_name}-db.svc.cluster.local/admin"
+  }
+}
+
+resource "vault_database_secret_backend_role" "mongodb_role" {
+  backend = vault_mount.mongodb.path
+  creation_statements = [
+    jsonencode({
+      db = "admin"
+      roles = [
+        {
+          role = "readWrite"
+          db   = local.mongodb_database
+        }
+      ]
+    })
+  ]
+
+  db_name = vault_database_secret_backend_connection.mongodb.name
+  name    = local.vault_mongodb_role
+
+  default_ttl = 60
+  max_ttl     = 60
 }
