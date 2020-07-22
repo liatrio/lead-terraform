@@ -51,3 +51,17 @@ provider "vault" {
     }
   }
 }
+
+data "kubernetes_secret" "vault_root_token_secret" {
+  metadata {
+    namespace = module.vault.vault_namespace
+    name      = module.vault.vault_root_token_secret
+  }
+}
+
+provider "vault" {
+  address = "https://vault.toolchain.${module.eks.cluster_id}.${var.root_zone_name}"
+  token   = data.kubernetes_secret.vault_root_token_secret.data.token
+
+  alias = "vault_less_secure"
+}

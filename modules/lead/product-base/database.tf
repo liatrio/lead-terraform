@@ -6,20 +6,9 @@ module "database_namespace" {
     "appmesh.k8s.aws/sidecarInjectorWebhook" = "enabled"
   }
   annotations = {
-    name                                                     = "${var.product_name}-db"
-    "opa.lead.liatrio/ingress-whitelist"                     = "*.${var.product_name}-db.${var.cluster_domain}"
-    "opa.lead.liatrio/image-whitelist"                       = var.image_whitelist
-    "vault.hashicorp.com/agent-inject"                       = "true"
-    "vault.hashicorp.com/role"                               = "${var.product-name}-mongodb"
-    "vault.hashicorp.com/agent-inject-secret-mongodb.json"   = "database/creds/${var.product_name}-mongodb"
-    "vault.hashicorp.com/agent-inject-template-mongodb.json" = <<EOF
-  {{- with secret "database/creds/${var.product_name}-mongodb" -}}
-  {
-    "username": "{{ .Data.username }}",
-    "password": "{{ .Data.password }}"
-  }
-  {{- end }}
-EOF
+    name                                 = "${var.product_name}-db"
+    "opa.lead.liatrio/ingress-whitelist" = "*.${var.product_name}-db.${var.cluster_domain}"
+    "opa.lead.liatrio/image-whitelist"   = var.image_whitelist
   }
 
   providers = {

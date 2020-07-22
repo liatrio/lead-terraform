@@ -132,7 +132,7 @@ resource "kubernetes_role" "ci_staging_role" {
 }
 
 resource "vault_mount" "mongodb" {
-  path = "${var.product_name}-staging-db"
+  path = "${var.product_name}-staging"
   type = "database"
 
   depends_on = [
@@ -142,7 +142,7 @@ resource "vault_mount" "mongodb" {
 
 resource "vault_database_secret_backend_connection" "mongodb" {
   backend = vault_mount.mongodb.path
-  name    = "mongodb"
+  name    = "${var.product_name}-staging-mongodb"
 
   allowed_roles = [
     local.vault_mongodb_role
@@ -150,7 +150,7 @@ resource "vault_database_secret_backend_connection" "mongodb" {
 
   data = {
     username = "root"
-    password = local.mongodb_root_password
+    password = "changeme"
   }
 
   mongodb {
@@ -166,7 +166,7 @@ resource "vault_database_secret_backend_role" "mongodb_role" {
       roles = [
         {
           role = "readWrite"
-          db   = local.mongodb_database
+          db   = "foo"
         }
       ]
     })
@@ -177,4 +177,31 @@ resource "vault_database_secret_backend_role" "mongodb_role" {
 
   default_ttl = 60
   max_ttl     = 60
+}
+
+resource "vault_policy" "get_mongodb_creds" {
+  name   = "get-${var.product_name}-mongodb-creds"
+  policy = <<EOF
+path "${var.product_name}-staging/creds/mongodb" {
+  capabilities = ["read"]
+}
+EOF
+}
+
+resource "vault_kubernetes_auth_backend_role" "vault_auth_role" {
+  backend = "/kubernetes"
+  bound_service_account_names = [
+    "*"
+  ]
+  bound_service_account_namespaces = [ // Can scope this to just <product>-staging at end
+    "*"
+  ]
+  role_name = "${var.product_name}-auth-role"
+
+  token_ttl     = 300
+  token_max_ttl = 300
+  token_policies = [
+    vault_policy.get_mongodb_creds.name,
+    "default"
+  ]
 }
