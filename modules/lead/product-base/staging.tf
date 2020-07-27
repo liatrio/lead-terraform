@@ -178,7 +178,7 @@ resource "vault_database_secret_backend_role" "mongodb_role" {
 resource "vault_policy" "get_mongodb_creds" {
   name   = "get-${var.product_name}-mongodb-creds"
   policy = <<EOF
-path "mongodb/creds/${var.product_name}-staging/" {
+path "mongodb/creds/${var.product_name}-staging" {
   capabilities = ["read"]
 }
 EOF
