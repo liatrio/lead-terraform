@@ -1,6 +1,9 @@
 global:
   tlsDisable: true
 
+injector:
+  enabled: false
+
 server:
   image:
     tag: ${vault_version}

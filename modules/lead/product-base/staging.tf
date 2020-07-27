@@ -1,5 +1,5 @@
 locals {
-  vault_mongodb_role = "${var.product_name}-mongodb"
+  vault_mongodb_role = "${var.product_name}-staging"
 }
 
 module "staging_namespace" {
@@ -131,18 +131,10 @@ resource "kubernetes_role" "ci_staging_role" {
   }
 }
 
-resource "vault_mount" "mongodb" {
-  path = "${var.product_name}-staging"
-  type = "database"
-
-  depends_on = [
-    helm_release.mongodb
-  ]
-}
 
 resource "vault_database_secret_backend_connection" "mongodb" {
-  backend = vault_mount.mongodb.path
-  name    = "${var.product_name}-staging-mongodb"
+  backend = "mongodb"
+  name    = "${var.product_name}-staging"
 
   allowed_roles = [
     local.vault_mongodb_role
@@ -156,17 +148,21 @@ resource "vault_database_secret_backend_connection" "mongodb" {
   mongodb {
     connection_url = "mongodb://{{username}}:{{password}}@mongodb.${var.product_name}-db.svc.cluster.local/admin"
   }
+
+  depends_on = [
+    helm_release.mongodb
+  ]
 }
 
 resource "vault_database_secret_backend_role" "mongodb_role" {
-  backend = vault_mount.mongodb.path
+  backend = "mongodb"
   creation_statements = [
     jsonencode({
       db = "admin"
       roles = [
         {
           role = "readWrite"
-          db   = "foo"
+          db   = "database"
         }
       ]
     })
@@ -182,7 +178,7 @@ resource "vault_database_secret_backend_role" "mongodb_role" {
 resource "vault_policy" "get_mongodb_creds" {
   name   = "get-${var.product_name}-mongodb-creds"
   policy = <<EOF
-path "${var.product_name}-staging/creds/mongodb" {
+path "mongodb/creds/${var.product_name}-staging/" {
   capabilities = ["read"]
 }
 EOF
@@ -194,8 +190,9 @@ resource "vault_kubernetes_auth_backend_role" "vault_auth_role" {
     "*"
   ]
   bound_service_account_namespaces = [ // Can scope this to just <product>-staging at end
-    "*"
+    "${var.product_name}-staging"
   ]
+
   role_name = "${var.product_name}-auth-role"
 
   token_ttl     = 300

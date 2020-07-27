@@ -90,7 +90,7 @@ resource "helm_release" "vault" {
   wait       = true
 
   values = [
-    templatefile("${path.module}/values.tpl", {
+    templatefile("${path.module}/vault-values.tpl", {
       vault_hostname = var.vault_hostname
       vault_version  = "1.4.2"
       vault_config = indent(6, templatefile("${path.module}/vault-config.hcl.tpl", {
@@ -109,6 +109,25 @@ resource "helm_release" "vault" {
     aws_iam_access_key.vault,
     aws_kms_key.vault_seal_key,
     aws_dynamodb_table.vault_dynamodb_storage
+  ]
+}
+
+resource "helm_release" "vault-injector" {
+  chart      = "vault"
+  name       = "vault-injector"
+  namespace  = var.namespace
+  repository = "https://helm.releases.hashicorp.com"
+  version    = "0.6.0"
+  wait       = true
+
+  values = [
+    templatefile("${path.module}/vault-injector-values.tpl", {
+      vault_hostname = "https://${var.vault_hostname}"
+    })
+  ]
+
+  depends_on = [
+    helm_release.vault
   ]
 }
 
@@ -171,4 +190,9 @@ resource "vault_kubernetes_auth_backend_config" "k8s_vault_backend_config" {
   kubernetes_host    = "https://kubernetes.default.svc"
   kubernetes_ca_cert = data.kubernetes_secret.vault_token_reviewer_service_account_token.data["ca.crt"]
   token_reviewer_jwt = data.kubernetes_secret.vault_token_reviewer_service_account_token.data["token"]
+}
+
+resource "vault_mount" "mongodb" {
+  path = "mongodb"
+  type = "database"
 }
