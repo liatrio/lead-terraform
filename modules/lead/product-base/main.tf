@@ -35,3 +35,7 @@ provider "vault" {
   token   = data.kubernetes_secret.vault_root_token_secret.data.token
 }
 
+resource "random_password" "mongodb_root_password" {
+  length = 8
+  special = false
+}

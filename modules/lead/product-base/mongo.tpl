@@ -1,1 +1,1 @@
-mongodbRootPassword: "changeme"
+mongodbRootPassword: "${mongodbRootPassword}"

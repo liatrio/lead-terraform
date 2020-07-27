@@ -142,7 +142,7 @@ resource "vault_database_secret_backend_connection" "mongodb" {
 
   data = {
     username = "root"
-    password = "changeme"
+    password = random_password.mongodb_root_password.result
   }
 
   mongodb {
@@ -189,7 +189,7 @@ resource "vault_kubernetes_auth_backend_role" "vault_auth_role" {
   bound_service_account_names = [
     "*"
   ]
-  bound_service_account_namespaces = [ // Can scope this to just <product>-staging at end
+  bound_service_account_namespaces = [
     "${var.product_name}-staging"
   ]
 
