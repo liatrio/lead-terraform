@@ -171,8 +171,8 @@ resource "vault_database_secret_backend_role" "mongodb_role" {
   db_name = vault_database_secret_backend_connection.mongodb.name
   name    = local.vault_mongodb_role
 
-  default_ttl = 60
-  max_ttl     = 60
+  default_ttl = 600
+  max_ttl     = 600
 }
 
 resource "vault_policy" "get_mongodb_creds" {
