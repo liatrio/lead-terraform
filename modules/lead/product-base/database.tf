@@ -37,7 +37,4 @@ resource "helm_release" "mongodb" {
       mongodbRootPassword = random_password.mongodb_root_password.result
     })
   ]
-  depends_on = [
-    random_password.mongodb_root_password
-  ]
 }
