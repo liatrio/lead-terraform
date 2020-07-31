@@ -162,7 +162,7 @@ resource "vault_database_secret_backend_role" "mongodb_role" {
       roles = [
         {
           role = "readWrite"
-          db   = "database"
+          db   = "staging"
         }
       ]
     })
