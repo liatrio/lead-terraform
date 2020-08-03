@@ -28,6 +28,63 @@ module "cluster_autoscaler_iam" {
   openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider.url
 }
 
+resource "aws_iam_role" "rode_service_account" {
+  name = "${var.cluster}_rode_service_account"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "${module.eks.aws_iam_openid_connect_provider.arn}"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "${replace(module.eks.aws_iam_openid_connect_provider.url, "https://", "")}:sub": "system:serviceaccount:${var.toolchain_namespace}:rode"
+        }
+      }
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy" "rode" {
+  name = "${var.cluster}-rode"
+  role = aws_iam_role.rode_service_account.name
+
+  policy = <<EOF
+{
+ "Version": "2012-10-17",
+ "Statement": [
+   {
+     "Effect": "Allow",
+     "Action": [
+       "sqs:CreateQueue"
+       "sqs:SetQueueAttributes",
+       "sqs:GetQueueUrl",
+       "sqs:GetQueueAttributes",
+       "sqs:ReceiveMessage",
+       "sqs:DeleteMessage",
+     ],
+     "Resource": ["*"]
+   },
+   {
+     "Effect": "Allow",
+     "Action": [
+       "events:PutTargets",
+       "events:PutRule"
+     ],
+     "Resource": ["*"]
+   }
+ ]
+}
+EOF
+}
+
 resource "aws_iam_role" "operator_slack_service_account" {
   name = "${var.cluster}_operator_slack_service_account"
 

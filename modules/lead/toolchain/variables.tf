@@ -60,6 +60,10 @@ variable "enable_harbor" {
   default = true
 }
 
+variable "enable_rode" {
+  default = true
+}
+
 variable "crd_waiter" {
 }
 
@@ -105,3 +109,5 @@ variable "harbor_chartmuseum_disk_size" {
 }
 
 variable "k8s_storage_class" {}
+
+variable "rode_service_account_arn" {}
