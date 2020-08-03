@@ -128,10 +128,6 @@ variable "enable_xray" {
   default = true
 }
 
-variable "enable_grafeas" {
-  default = true
-}
-
 variable "enable_harbor" {
   default = true
 }
@@ -160,9 +156,6 @@ variable "builder_images_version" {
 }
 variable "jenkins_image_version" {
   default = "v1.0.15-7-g2465aa8"
-}
-variable "grafeas_version" {
-  default = "v0.1.1-4-ge024b96"
 }
 
 variable "toolchain_image_repo" {

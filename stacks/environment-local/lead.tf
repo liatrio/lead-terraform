@@ -39,12 +39,10 @@ module "toolchain" {
   enable_mailhog                  = var.enable_mailhog
   enable_sonarqube                = var.enable_sonarqube
   enable_xray                     = var.enable_xray
-  enable_grafeas                  = var.enable_grafeas
   enable_harbor                   = var.enable_harbor
   issuer_name                     = module.staging_cluster_issuer.issuer_name
   issuer_kind                     = module.staging_cluster_issuer.issuer_kind
   crd_waiter                      = module.infrastructure.crd_waiter
-  grafeas_version                 = var.grafeas_version
   k8s_storage_class               = var.k8s_storage_class
   prometheus_slack_webhook_url    = var.prometheus_slack_webhook_url
   prometheus_slack_channel        = var.prometheus_slack_channel

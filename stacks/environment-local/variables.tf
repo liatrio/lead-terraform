@@ -84,10 +84,6 @@ variable "enable_xray" {
   default = true
 }
 
-variable "enable_grafeas" {
-  default = true
-}
-
 variable "enable_dashboard" {
   default = false
 }
@@ -120,10 +116,6 @@ locals {
   tags = {
     "Cluster" = var.cluster
   }
-}
-
-variable "grafeas_version" {
-  default = "v0.1.1-4-ge024b96"
 }
 
 variable "prometheus_slack_channel" {

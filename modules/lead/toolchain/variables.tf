@@ -21,9 +21,6 @@ variable "elb_security_group_id" {
   default = ""
 }
 
-variable "grafeas_version" {
-}
-
 variable "enable_istio" {
   default = true
 }
@@ -49,10 +46,6 @@ variable "enable_sonarqube" {
 }
 
 variable "enable_xray" {
-  default = true
-}
-
-variable "enable_grafeas" {
   default = true
 }
 
