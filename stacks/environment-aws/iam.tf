@@ -58,29 +58,29 @@ resource "aws_iam_role_policy" "rode" {
 
   policy = <<EOF
 {
- "Version": "2012-10-17",
- "Statement": [
-   {
-     "Effect": "Allow",
-     "Action": [
-       "sqs:CreateQueue"
-       "sqs:SetQueueAttributes",
-       "sqs:GetQueueUrl",
-       "sqs:GetQueueAttributes",
-       "sqs:ReceiveMessage",
-       "sqs:DeleteMessage",
-     ],
-     "Resource": ["*"]
-   },
-   {
-     "Effect": "Allow",
-     "Action": [
-       "events:PutTargets",
-       "events:PutRule"
-     ],
-     "Resource": ["*"]
-   }
- ]
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "sqs:CreateQueue",
+                "sqs:SetQueueAttributes",
+                "sqs:GetQueueUrl",
+                "sqs:GetQueueAttributes",
+                "sqs:ReceiveMessage",
+                "sqs:DeleteMessage"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "events:PutTargets",
+                "events:PutRule"
+            ],
+            "Resource": "*"
+        }
+    ]
 }
 EOF
 }

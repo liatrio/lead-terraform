@@ -47,7 +47,7 @@ module "toolchain" {
   crd_waiter                             = module.cert_manager.crd_waiter
   k8s_storage_class                      = var.k8s_storage_class
 
-  rode_service_account_arn               = aws_iam_role.product_rode_service_account.arn
+  rode_service_account_arn               = aws_iam_role.rode_service_account.arn
 
   harbor_registry_disk_size    = "200Gi"
   harbor_chartmuseum_disk_size = "100Gi"

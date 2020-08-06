@@ -132,6 +132,10 @@ variable "enable_harbor" {
   default = true
 }
 
+variable "enable_rode" {
+  default = true
+}
+
 variable "enable_dashboard" {
   default = true
 }
