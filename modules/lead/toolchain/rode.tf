@@ -1,37 +1,3 @@
-module "ca-issuer" {
-  source = "../../common/ca-issuer"
-
-  enabled          = var.enable_rode
-  name             = "rode"
-  namespace        = var.namespace
-  common_name      = var.root_zone_name
-  cert-manager-crd = var.crd_waiter
-}
-
-module "grafeas_certificate" {
-  source = "../../common/certificates"
-
-  enabled         = var.enable_rode
-  name            = "grafeas-cert"
-  namespace       = var.namespace
-  domain          = "grafeas-server"
-  issuer_name     = module.ca-issuer.name
-  certificate_crd = var.crd_waiter
-  wait_for_cert   = true
-}
-
-module "rode_certificate" {
-  source = "../../common/certificates"
-
-  enabled         = var.enable_rode
-  name            = "rode-cert"
-  namespace       = var.namespace
-  domain          = "rode"
-  issuer_name     = module.ca-issuer.name
-  certificate_crd = var.crd_waiter
-  wait_for_cert   = true
-}
-
 data "helm_repository" "liatrio-harbor" {
   name = "liatrio-harbor"
   url  =  "https://harbor.toolchain.lead.prod.liatr.io/chartrepo/public"
@@ -48,8 +14,8 @@ resource "helm_release" "rode" {
   values    = [
     templatefile("${path.module}/rode-values.tpl", {
       iam_arn      = var.rode_service_account_arn
-      grafeas_cert = module.grafeas_certificate.cert_name
-      rode_cert    = module.rode_certificate.cert_name
+      grafeas_cert = "grafeas-cert"
+      rode_cert    = "rode-cert"
       ingress_hostname     = "rode.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
     })
   ]
