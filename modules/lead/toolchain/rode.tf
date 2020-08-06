@@ -1,11 +1,11 @@
-data "helm_repository" "liatrio-harbor" {
+data "helm_repository" "liatrio_harbor" {
   name = "liatrio-harbor"
   url  =  "https://harbor.toolchain.lead.prod.liatr.io/chartrepo/public"
 }
 
 resource "helm_release" "rode" {
   count      = var.enable_rode ? 1 : 0
-  repository = data.helm_repository.liatrio-harbor.metadata[0].name
+  repository = data.helm_repository.liatrio_harbor.metadata[0].name
   timeout    = 120
   name       = "rode"
   chart      = "rode"
@@ -18,9 +18,6 @@ resource "helm_release" "rode" {
       rode_cert    = "rode-cert"
       ingress_hostname     = "rode.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
     })
-  ]
-  values = [
-    data.template_file.rode_values.rendered
   ]
 }
 
