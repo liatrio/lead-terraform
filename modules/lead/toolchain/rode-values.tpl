@@ -21,4 +21,10 @@ resources:
     memory: 200Mi
 
 ingress:
-  enabled: false
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: "toolchain-nginx"
+  hostName: ${ingress_hostname}
+  tls:
+  - hosts:
+    - ${ingress_hostname}

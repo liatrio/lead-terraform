@@ -41,9 +41,10 @@ data "template_file" "rode_values" {
   template = file("${path.module}/rode-values.tpl")
 
   vars = {
-    iam_arn              = var.rode_service_account_arn
-    grafeas_cert         = module.grafeas_certificate.cert_name
-    rode_cert            = module.rode_certificate.cert_name
+    iam_arn      = var.rode_service_account_arn
+    grafeas_cert = module.grafeas_certificate.cert_name
+    rode_cert    = module.rode_certificate.cert_name
+    ingress_hostname     = "rode.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}
   }
 }
 
