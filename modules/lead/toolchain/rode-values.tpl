@@ -14,11 +14,11 @@ localstack:
 
 resources:
   limits:
-    cpu: 1
-    memory: 400Mi
+    cpu: 50m
+    memory: 200Mi
   requests:
     cpu: 10m
-    memory: 200Mi
+    memory: 100Mi
 
 ingress:
   enabled: true
