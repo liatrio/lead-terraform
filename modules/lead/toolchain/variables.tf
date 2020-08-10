@@ -21,9 +21,6 @@ variable "elb_security_group_id" {
   default = ""
 }
 
-variable "grafeas_version" {
-}
-
 variable "enable_istio" {
   default = true
 }
@@ -52,11 +49,11 @@ variable "enable_xray" {
   default = true
 }
 
-variable "enable_grafeas" {
+variable "enable_harbor" {
   default = true
 }
 
-variable "enable_harbor" {
+variable "enable_rode" {
   default = true
 }
 
@@ -105,3 +102,5 @@ variable "harbor_chartmuseum_disk_size" {
 }
 
 variable "k8s_storage_class" {}
+
+variable "rode_service_account_arn" {}

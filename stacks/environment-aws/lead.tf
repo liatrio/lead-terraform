@@ -40,13 +40,14 @@ module "toolchain" {
   enable_mailhog                         = var.enable_mailhog
   enable_sonarqube                       = var.enable_sonarqube
   enable_xray                            = var.enable_xray
-  enable_grafeas                         = var.enable_grafeas
   enable_harbor                          = var.enable_harbor
+  enable_rode                            = var.enable_rode
   issuer_name                            = module.cluster_issuer.issuer_name
   issuer_kind                            = module.cluster_issuer.issuer_kind
   crd_waiter                             = module.cert_manager.crd_waiter
-  grafeas_version                        = var.grafeas_version
   k8s_storage_class                      = var.k8s_storage_class
+
+  rode_service_account_arn               = aws_iam_role.rode_service_account.arn
 
   harbor_registry_disk_size    = "200Gi"
   harbor_chartmuseum_disk_size = "100Gi"

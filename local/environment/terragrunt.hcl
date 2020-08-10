@@ -25,7 +25,6 @@ inputs = {
   enable_artifactory       = false
   enable_gitlab            = false
   enable_istio             = false
-  enable_grafeas           = false
   enable_keycloak          = false
   enable_mailhog           = false
   enable_operators         = true
