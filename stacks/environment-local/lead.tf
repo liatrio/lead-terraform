@@ -112,7 +112,8 @@ module "lab_partner" {
 module "prometheus" {
   source = "../../modules/tools/prometheus"
 
-  namespace                    = module.toolchain_namespace
+  namespace                    = module.toolchain.namespace
+  grafana_hostname             = "grafana.${module.toolchain.namespace}.${var.cluster}.${var.root_zone_name}"
   prometheus_slack_webhook_url = var.prometheus_slack_webhook_url
   prometheus_slack_channel     = var.prometheus_slack_channel
 }

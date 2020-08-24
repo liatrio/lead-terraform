@@ -151,7 +151,8 @@ module "vault" {
 module "prometheus" {
   source = "../../modules/tools/prometheus"
 
-  namespace                    = module.toolchain_namespace
+  namespace                    = module.toolchain.namespace
+  grafana_hostname             = "grafana.${module.toolchain.namespace}.${var.cluster}.${var.root_zone_name}"
   prometheus_slack_webhook_url = data.vault_generic_secret.prometheus.data["slack-webhook-url"]
   prometheus_slack_channel     = var.prometheus_slack_channel
 }
