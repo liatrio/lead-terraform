@@ -1,0 +1,16 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  annotations:
+    cert-manager.io/issue-temporary-certificate: "true"
+  labels:
+    app: harbor
+  name: harbor-certificate
+spec:
+  dnsNames:
+    - {{ .Values.harbor.hostname }}
+  issuerRef:
+    group: cert-manager.io
+    kind: {{ .Values.issuer.kind }}
+    name: {{ .Values.issuer.name }}
+  secretName: {{ .Values.harbor.secret }}

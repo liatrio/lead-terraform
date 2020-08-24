@@ -1,0 +1,11 @@
+issuer:
+  kind: Issuer
+  name: issuer
+
+harbor:
+  hostname:
+  secret: harbor-tls
+
+notary:
+  hostname:
+  secret: notary-tls
