@@ -64,12 +64,6 @@ variable "keycloak_admin_password" {
 variable "keycloak_postgres_password" {
 }
 
-variable "prometheus_slack_webhook_url" {
-}
-
-variable "prometheus_slack_channel" {
-}
-
 variable "harbor_registry_disk_size" {
   default = "200Gi"
 }
