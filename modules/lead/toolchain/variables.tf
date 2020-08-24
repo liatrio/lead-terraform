@@ -45,10 +45,6 @@ variable "enable_sonarqube" {
   default = true
 }
 
-variable "enable_xray" {
-  default = true
-}
-
 variable "enable_harbor" {
   default = true
 }

@@ -80,10 +80,6 @@ variable "enable_sonarqube" {
   default = true
 }
 
-variable "enable_xray" {
-  default = true
-}
-
 variable "enable_dashboard" {
   default = false
 }

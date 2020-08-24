@@ -29,7 +29,6 @@ inputs = {
   enable_mailhog           = false
   enable_operators         = true
   enable_sonarqube         = false
-  enable_xray              = false
   enable_dashboard         = false
   enable_harbor            = false
   enable_aws_code_services = false
