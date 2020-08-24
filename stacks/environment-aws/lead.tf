@@ -148,7 +148,7 @@ module "vault" {
   vault_hostname            = "vault.toolchain.${module.eks.cluster_id}.${var.root_zone_name}"
 }
 
-module "prometheus" {
+module "prometheus-operator" {
   source = "../../modules/tools/prometheus"
 
   namespace                    = module.toolchain.namespace

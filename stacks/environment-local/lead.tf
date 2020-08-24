@@ -109,7 +109,7 @@ module "lab_partner" {
   lab_partner_version         = var.lab_partner_version
 }
 
-module "prometheus" {
+module "prometheus-operator" {
   source = "../../modules/tools/prometheus"
 
   namespace                    = module.toolchain.namespace
