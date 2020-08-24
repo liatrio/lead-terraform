@@ -37,7 +37,6 @@ module "toolchain" {
   enable_artifactory                     = var.enable_artifactory
   enable_gitlab                          = var.enable_gitlab
   enable_keycloak                        = var.enable_keycloak
-  enable_mailhog                         = var.enable_mailhog
   enable_sonarqube                       = var.enable_sonarqube
   enable_harbor                          = var.enable_harbor
   enable_rode                            = var.enable_rode

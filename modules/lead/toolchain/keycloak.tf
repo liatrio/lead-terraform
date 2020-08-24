@@ -27,9 +27,6 @@ resource "kubernetes_secret" "keycloak_admin" {
 
 resource "helm_release" "keycloak" {
   count      = var.enable_keycloak ? 1 : 0
-  depends_on = [
-    helm_release.mailhog
-  ]
   repository = data.helm_repository.codecentric.metadata[0].name
   name       = "keycloak"
   namespace  = module.toolchain_namespace.name

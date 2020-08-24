@@ -37,10 +37,6 @@ variable "enable_keycloak" {
   default = true
 }
 
-variable "enable_mailhog" {
-  default = true
-}
-
 variable "enable_sonarqube" {
   default = true
 }
