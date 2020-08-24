@@ -52,12 +52,6 @@ module "toolchain" {
 
   prometheus_slack_webhook_url = data.vault_generic_secret.prometheus.data["slack-webhook-url"]
   prometheus_slack_channel     = var.prometheus_slack_channel
-
-  smtp_host       = "email-smtp.${var.region}.amazonaws.com"
-  smtp_port       = "587"
-  smtp_username   = module.ses_smtp.smtp_username
-  smtp_password   = module.ses_smtp.smtp_password
-  smtp_from_email = "noreply@${aws_ses_domain_identity.cluster_domain.domain}"
 }
 
 module "toolchain_ingress" {
