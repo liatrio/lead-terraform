@@ -86,24 +86,6 @@ resource "keycloak_realm" "realm" {
   verify_email                   = true
   login_with_email_allowed       = true
   duplicate_emails_allowed       = false
-
-  smtp_server {
-    host              = var.smtp_host
-    port              = var.smtp_port
-    starttls          = true
-    ssl               = false
-    from              = var.smtp_from_email
-    from_display_name = "Keycloak - ${var.root_zone_name} ${title(var.cluster)} ${title(var.namespace)}"
-
-    dynamic "auth" {
-      for_each = var.smtp_username == "" || var.smtp_password == "" ? [] : [1]
-
-      content {
-        username = var.smtp_username
-        password = var.smtp_password
-      }
-    }
-  }
 }
 
 resource "keycloak_oidc_google_identity_provider" "google" {

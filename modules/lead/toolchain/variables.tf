@@ -64,21 +64,6 @@ variable "keycloak_admin_password" {
 variable "keycloak_postgres_password" {
 }
 
-variable "smtp_host" {
-}
-
-variable "smtp_port" {
-}
-
-variable "smtp_username" {
-}
-
-variable "smtp_password" {
-}
-
-variable "smtp_from_email" {
-}
-
 variable "prometheus_slack_webhook_url" {
 }
 
