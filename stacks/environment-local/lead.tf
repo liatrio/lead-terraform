@@ -43,8 +43,6 @@ module "toolchain" {
   issuer_kind                     = module.staging_cluster_issuer.issuer_kind
   crd_waiter                      = module.infrastructure.crd_waiter
   k8s_storage_class               = var.k8s_storage_class
-  prometheus_slack_webhook_url    = var.prometheus_slack_webhook_url
-  prometheus_slack_channel        = var.prometheus_slack_channel
 
   harbor_registry_disk_size    = "200Gi"
   harbor_chartmuseum_disk_size = "100Gi"
@@ -111,3 +109,10 @@ module "lab_partner" {
   lab_partner_version         = var.lab_partner_version
 }
 
+module "prometheus" {
+  source = "../../modules/tools/prometheus"
+
+  namespace                    = module.toolchain_namespace
+  prometheus_slack_webhook_url = var.prometheus_slack_webhook_url
+  prometheus_slack_channel     = var.prometheus_slack_channel
+}

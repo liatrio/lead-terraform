@@ -83,12 +83,6 @@ variable "smtp_password" {
 variable "smtp_from_email" {
 }
 
-variable "prometheus_slack_webhook_url" {
-}
-
-variable "prometheus_slack_channel" {
-}
-
 variable "harbor_registry_disk_size" {
   default = "200Gi"
 }

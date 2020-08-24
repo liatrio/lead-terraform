@@ -51,9 +51,6 @@ module "toolchain" {
   harbor_registry_disk_size    = "200Gi"
   harbor_chartmuseum_disk_size = "100Gi"
 
-  prometheus_slack_webhook_url = data.vault_generic_secret.prometheus.data["slack-webhook-url"]
-  prometheus_slack_channel     = var.prometheus_slack_channel
-
   smtp_host       = "email-smtp.${var.region}.amazonaws.com"
   smtp_port       = "587"
   smtp_username   = module.ses_smtp.smtp_username
@@ -149,4 +146,12 @@ module "vault" {
   region                    = var.region
   vault_dynamodb_table_name = "vault.toolchain.${module.eks.cluster_id}.${var.root_zone_name}"
   vault_hostname            = "vault.toolchain.${module.eks.cluster_id}.${var.root_zone_name}"
+}
+
+module "prometheus" {
+  source = "../../modules/tools/prometheus"
+
+  namespace                    = module.toolchain_namespace
+  prometheus_slack_webhook_url = data.vault_generic_secret.prometheus.data["slack-webhook-url"]
+  prometheus_slack_channel     = var.prometheus_slack_channel
 }
