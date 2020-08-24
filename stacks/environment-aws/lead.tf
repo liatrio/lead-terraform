@@ -149,7 +149,7 @@ module "vault" {
 }
 
 module "prometheus-operator" {
-  source = "../../modules/tools/prometheus"
+  source = "../../modules/tools/prometheus-operator"
 
   namespace                    = module.toolchain.namespace
   grafana_hostname             = "grafana.${module.toolchain.namespace}.${var.cluster}.${var.root_zone_name}"
