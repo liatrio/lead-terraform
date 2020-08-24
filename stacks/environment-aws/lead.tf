@@ -39,7 +39,6 @@ module "toolchain" {
   enable_keycloak                        = var.enable_keycloak
   enable_mailhog                         = var.enable_mailhog
   enable_sonarqube                       = var.enable_sonarqube
-  enable_xray                            = var.enable_xray
   enable_harbor                          = var.enable_harbor
   enable_rode                            = var.enable_rode
   issuer_name                            = module.cluster_issuer.issuer_name
