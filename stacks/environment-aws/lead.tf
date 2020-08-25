@@ -38,7 +38,6 @@ module "toolchain" {
   enable_gitlab                          = var.enable_gitlab
   enable_keycloak                        = var.enable_keycloak
   enable_mailhog                         = var.enable_mailhog
-  enable_sonarqube                       = var.enable_sonarqube
   enable_harbor                          = var.enable_harbor
   enable_rode                            = var.enable_rode
   issuer_name                            = module.cluster_issuer.issuer_name
@@ -155,4 +154,11 @@ module "prometheus-operator" {
   grafana_hostname             = "grafana.${module.toolchain.namespace}.${var.cluster}.${var.root_zone_name}"
   prometheus_slack_webhook_url = data.vault_generic_secret.prometheus.data["slack-webhook-url"]
   prometheus_slack_channel     = var.prometheus_slack_channel
+}
+
+module "sonarqube" {
+  source = "../../modules/tools/sonarqube"
+
+  enable_sonarqube            = var.enable_sonarqube
+  namespace                   = module.toolchain.namespace
 }

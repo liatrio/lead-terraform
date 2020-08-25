@@ -41,10 +41,6 @@ variable "enable_mailhog" {
   default = true
 }
 
-variable "enable_sonarqube" {
-  default = true
-}
-
 variable "enable_harbor" {
   default = true
 }

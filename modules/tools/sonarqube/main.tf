@@ -16,7 +16,7 @@ resource "helm_release" "sonarqube" {
   count      = var.enable_sonarqube ? 1 : 0
   repository = "stable"
   name       = "sonarqube"
-  namespace  = module.toolchain_namespace.name
+  namespace  = var.namespace
   chart      = "sonarqube"
   version    = "2.0.0"
   timeout    = 1200
@@ -43,7 +43,7 @@ resource "helm_release" "sonarqube" {
 resource "kubernetes_secret" "jenkins_sonar" {
   metadata {
     name      = "jenkins-sonarqube-credential"
-    namespace = module.toolchain_namespace.name
+    namespace = var.namespace
 
     labels = {
       "app.kubernetes.io/name"       = "jenkins"
