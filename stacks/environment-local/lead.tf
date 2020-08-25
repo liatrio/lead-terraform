@@ -36,7 +36,6 @@ module "toolchain" {
   enable_artifactory              = var.enable_artifactory
   enable_gitlab                   = var.enable_gitlab
   enable_keycloak                 = var.enable_keycloak
-  enable_mailhog                  = var.enable_mailhog
   enable_sonarqube                = var.enable_sonarqube
   enable_harbor                   = var.enable_harbor
   issuer_name                     = module.staging_cluster_issuer.issuer_name
@@ -46,13 +45,6 @@ module "toolchain" {
 
   harbor_registry_disk_size    = "200Gi"
   harbor_chartmuseum_disk_size = "100Gi"
-
-
-  smtp_host       = "mailhog"
-  smtp_port       = "1025"
-  smtp_username   = ""
-  smtp_password   = ""
-  smtp_from_email = "noreply@liatr.io"
 }
 
 module "sdm" {

@@ -53,16 +53,6 @@ global:
         - secret: gitlab-keycloak-saml
 
 
-  smtp:
-    enabled: true
-    address: ${smtp_host}
-    port: ${smtp_port}
-    authentication:
-  email:
-    from: ${smtp_from_email}
-    display_name: ${smtp_from_name}
-    reply_to: ${smtp_replyto}
-    subject_suffix: " | ${smtp_from_name}"
   operator:
     enabled: false
 
