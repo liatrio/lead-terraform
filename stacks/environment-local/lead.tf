@@ -109,3 +109,11 @@ module "prometheus-operator" {
   prometheus_slack_webhook_url = var.prometheus_slack_webhook_url
   prometheus_slack_channel     = var.prometheus_slack_channel
 }
+
+module "kube_resource_report" {
+  source = "../../modules/tools/kube-resource-report"
+
+  namespace      = module.toolchain.namespace
+  cluster        = var.cluster
+  root_zone_name = var.root_zone_name
+}
