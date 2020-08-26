@@ -37,7 +37,7 @@ variable "enable_keycloak" {
   default = true
 }
 
-variable "enable_mailhog" {
+variable "enable_sonarqube" {
   default = true
 }
 
@@ -62,21 +62,6 @@ variable "keycloak_admin_password" {
 }
 
 variable "keycloak_postgres_password" {
-}
-
-variable "smtp_host" {
-}
-
-variable "smtp_port" {
-}
-
-variable "smtp_username" {
-}
-
-variable "smtp_password" {
-}
-
-variable "smtp_from_email" {
 }
 
 variable "harbor_registry_disk_size" {

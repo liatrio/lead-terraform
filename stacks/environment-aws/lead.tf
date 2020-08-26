@@ -37,7 +37,6 @@ module "toolchain" {
   enable_artifactory                     = var.enable_artifactory
   enable_gitlab                          = var.enable_gitlab
   enable_keycloak                        = var.enable_keycloak
-  enable_mailhog                         = var.enable_mailhog
   enable_harbor                          = var.enable_harbor
   enable_rode                            = var.enable_rode
   issuer_name                            = module.cluster_issuer.issuer_name
@@ -49,12 +48,6 @@ module "toolchain" {
 
   harbor_registry_disk_size    = "200Gi"
   harbor_chartmuseum_disk_size = "100Gi"
-
-  smtp_host       = "email-smtp.${var.region}.amazonaws.com"
-  smtp_port       = "587"
-  smtp_username   = module.ses_smtp.smtp_username
-  smtp_password   = module.ses_smtp.smtp_password
-  smtp_from_email = "noreply@${aws_ses_domain_identity.cluster_domain.domain}"
 }
 
 module "toolchain_ingress" {

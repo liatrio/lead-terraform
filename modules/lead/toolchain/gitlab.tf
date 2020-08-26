@@ -11,11 +11,6 @@ data "template_file" "gitlab_values" {
   vars = {
     ssl_redirect     = var.root_zone_name == "localhost" ? false : true
     ingress_hostname = "gitlab.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
-    smtp_host        = "mailhog"
-    smtp_port        = "1025"
-    smtp_from_email  = "noreply@gitlab.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
-    smtp_from_name   = "Gitlab - ${module.toolchain_namespace.name}"
-    smtp_replyto     = "noreply@gitlab.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
   }
 }
 
