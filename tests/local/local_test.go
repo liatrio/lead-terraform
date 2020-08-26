@@ -93,7 +93,7 @@ func TestSetup(t *testing.T) {
 }
 
 func testModules(t *testing.T) {
-	//t.Run("Dashboard", testLeadDashboard)
+	t.Run("Dashboard", testLeadDashboard)
 
 	//t.Run("SDM", testLeadSdm)
 	//t.Run("KubeResourceReport", common.KubeResourceReportTest)
@@ -102,7 +102,7 @@ func testModules(t *testing.T) {
 	//t.Run("K8sSpotTerminationHandler", common.K8sSpotTerminationHandlerTest)
 	//t.Run("KubeJanitor", common.KubeJanitorTest)
 	//t.Run("MetricsServer", common.MetricsServerTest)
-	t.Run("PrometheusOperator", common.TestPrometheusOperator)
+	//t.Run("PrometheusOperator", common.TestPrometheusOperator)
 }
 
 func testLeadDashboard(t *testing.T) {
