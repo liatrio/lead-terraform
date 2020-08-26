@@ -1,6 +1,6 @@
 package common
 
-import(
+import (
 	"testing"
 )
 
@@ -17,8 +17,8 @@ func TestPrometheusOperator(t *testing.T) {
 			tm.SetTerraformVar("kube_config_path", kubeconfig)
 			tm.SetTerraformVar("namespace", tm.GetStringGlobal("namespace"))
 			tm.SetTerraformVar("grafana_hostname", "grafana.toolchain.lead-terraform.liatr.io")
-      tm.SetTerraformVar("prometheus_slack_webhook_url", "https://fake.slack.io")
-      tm.SetTerraformVar("prometheus_slack_channel", "fake_channel")
+			tm.SetTerraformVar("prometheus_slack_webhook_url", "https://fake.slack.io")
+			tm.SetTerraformVar("prometheus_slack_channel", "fake_channel")
 		},
 	}
 	defer testDashboard.TeardownTests()
