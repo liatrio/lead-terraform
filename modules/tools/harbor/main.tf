@@ -46,8 +46,18 @@ resource "helm_release" "harbor_volumes" {
   }
 
   set {
+    name = "components.registry.protectPvcResource"
+    value = var.protect_pvc_resources
+  }
+
+  set {
     name = "components.chartmuseum.size"
     value = var.harbor_chartmuseum_disk_size
+  }
+
+  set {
+    name = "components.chartmuseum.protectPvcResource"
+    value = var.protect_pvc_resources
   }
 
   set {

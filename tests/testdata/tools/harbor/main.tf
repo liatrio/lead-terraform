@@ -16,10 +16,11 @@ module "harbor" {
   toolchain_namespace          = var.toolchain_namespace
   cluster                      = var.cluster
   root_zone_name               = var.root_zone_name
-  harbor_registry_disk_size    = "2Gi"
-  harbor_chartmuseum_disk_size = "2Gi"
+  harbor_registry_disk_size    = "1Gi"
+  harbor_chartmuseum_disk_size = "1Gi"
   k8s_storage_class            = var.k8s_storage_class
   issuer_name                  = var.issuer_kind
   issuer_kind                  = var.issuer_name
   crd_waiter                   = true
+  protect_pvc_resources        = false
 }

@@ -12,7 +12,9 @@ metadata:
     component: {{ $name }}
     managed-by: Terraform
   annotations:
-    helm.sh/resource-policy: keep
+    {{- if $component.protectPvcResource }}
+    helm.sh/resource-policy: "keep"
+    {{- end }}
 spec:
   accessModes:
     - ReadWriteOnce
