@@ -83,10 +83,11 @@ func (tm *TestModule) RunTests() {
 	if  test_structure.IsTestDataPresent(tm.GoTest, test_structure.FormatTestDataPath(path, "TerraformOptions.json")) {
 		tm.terraformOptions = tm.GetTerraformOptions()
 	} else {
+		noColor := os.Getenv("TERRATEST_NO_COLOR")
 		tm.terraformOptions = &terraform.Options{
 			TerraformDir: tm.TerraformDir,
 			Vars: map[string]interface{}{},
-			NoColor: true,
+			NoColor: noColor == "true",
 		}
 	}
 
