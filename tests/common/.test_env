@@ -1,0 +1,3 @@
+export SKIP_cert_manager_run=true
+export SKIP_issuer_run=true
+export SKIP_ingress_run=true

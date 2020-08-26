@@ -16,7 +16,7 @@ func ExternalDnsTest(t *testing.T) {
 		Setup: func(tm *TestModule) {
 			tm.SetTerraformVar("kube_config_path", kubeconfig)
 			tm.SetTerraformVar("namespace", tm.GetStringGlobal("namespace"))
-			tm.SetTerraformVar("domain_filter", "test.com")
+      tm.SetTerraformVar("istio_enabled", "false")
 		},
 	}
 	defer testExternalDns.TeardownTests()
