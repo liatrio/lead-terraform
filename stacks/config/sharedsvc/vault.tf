@@ -24,6 +24,19 @@ resource "vault_aws_auth_backend_role" "vault_admin" {
   ]
 }
 
+resource "vault_aws_auth_backend_role" "gpg_aws_admin" {
+  backend                  = vault_auth_backend.aws.path
+  role                     = "gpg-aws-admin"
+  auth_type                = "iam"
+  bound_iam_principal_arns = [
+    "arn:aws:iam::${local.prod_aws_account}:role/Administrator"
+  ]
+  resolve_aws_unique_ids   = false
+  token_policies           = [
+    vault_policy.gpg_aws_admin.name
+  ]
+}
+
 resource "vault_aws_auth_backend_role" "aws_admin" {
   backend                  = vault_auth_backend.aws.path
   role                     = "aws-admin"
