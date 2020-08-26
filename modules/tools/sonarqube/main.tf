@@ -3,22 +3,27 @@ resource "random_string" "sonarqube_db_password" {
   special = false
 }
 
-resource "random_string" "sonar_jenkins_password" {
-  length  = 10
-  special = false
-}
+#resource "random_string" "sonar_jenkins_password" {
+#  length  = 10
+#  special = false
+#}
 
 data "template_file" "sonarqube_values" {
   template = file("${path.module}/sonarqube-values.tpl")
 }
 
+data "helm_repository" "stable" {
+  name = "sonarqube"
+  url = "https://oteemo.github.io/charts"
+}
+
 resource "helm_release" "sonarqube" {
   count      = var.enable_sonarqube ? 1 : 0
-  repository = "stable"
+  repository = data.helm_repository.stable.name
   name       = "sonarqube"
   namespace  = var.namespace
   chart      = "sonarqube"
-  version    = "2.0.0"
+  version    = "6.6.0"
   timeout    = 1200
   wait       = true
 
