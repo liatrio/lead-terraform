@@ -3,11 +3,6 @@ resource "random_string" "sonarqube_db_password" {
   special = false
 }
 
-#resource "random_string" "sonar_jenkins_password" {
-#  length  = 10
-#  special = false
-#}
-
 data "template_file" "sonarqube_values" {
   template = file("${path.module}/sonarqube-values.tpl")
 }
