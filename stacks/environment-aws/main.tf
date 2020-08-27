@@ -51,3 +51,24 @@ provider "vault" {
     }
   }
 }
+
+provider "keycloak" {
+  client_id      = "admin-cli"
+  username       = "keycloak"
+  password       = data.vault_generic_secret.keycloak.data["admin-password"]
+  url            = var.root_zone_name == "localhost" ? "http://${var.cluster}.${var.root_zone_name}" : "https://${var.cluster}.${var.root_zone_name}"
+  initial_login  = false
+  client_timeout = 15
+}
+
+resource "random_string" "harbor_admin_password" {
+  length = 10
+  special = false
+}
+
+provider "harbor" {
+  url      = "harbor.${var.toolchain_namespace}.${var.cluster}.${var.root_zone_name}"
+  username = "admin"
+  password = random_string.harbor_admin_password.result
+}
+

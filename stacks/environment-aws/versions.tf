@@ -1,4 +1,3 @@
-
 terraform {
   required_version = ">= 0.12"
   required_providers {
@@ -7,16 +6,6 @@ terraform {
     }
     harbor = {
       source = "liatrio/harbor"
-      # TF-UPGRADE-TODO
-      #
-      # No source detected for this provider. You must add a source address
-      # in the following format:
-      #
-      # source = "your-registry.example.com/organization/harbor"
-      #
-      # For more information, see the provider source documentation:
-      #
-      # https://www.terraform.io/docs/configuration/providers.html#provider-source
       version = "= 0.2.0-pre"
     }
     helm = {
@@ -24,16 +13,6 @@ terraform {
     }
     keycloak = {
       source = "mrparkers/keycloak"
-      # TF-UPGRADE-TODO
-      #
-      # No source detected for this provider. You must add a source address
-      # in the following format:
-      #
-      # source = "your-registry.example.com/organization/keycloak"
-      #
-      # For more information, see the provider source documentation:
-      #
-      # https://www.terraform.io/docs/configuration/providers.html#provider-source
       version = "= 2.0.0-rc.0"
     }
     kubernetes = {
