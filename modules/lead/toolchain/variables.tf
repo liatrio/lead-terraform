@@ -34,6 +34,9 @@ variable "enable_gitlab" {
 }
 
 variable "enable_keycloak" {
+}
+
+variable "enable_sonarqube" {
   default = true
 }
 
@@ -48,19 +51,17 @@ variable "enable_rode" {
   default = true
 }
 
+variable "enable_keycloak" {
+  default = true
+}
+
+variable "keycloak_hostname" {
+}
+
+variable "keycloak_realm_id" {
+}
+
 variable "crd_waiter" {
-}
-
-variable "enable_google_login" {}
-variable "google_identity_provider_client_id" {}
-variable "google_identity_provider_client_secret" {}
-variable "enable_test_user" {}
-variable "test_user_password" {}
-
-variable "keycloak_admin_password" {
-}
-
-variable "keycloak_postgres_password" {
 }
 
 variable "harbor_registry_disk_size" {

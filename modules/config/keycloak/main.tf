@@ -1,21 +1,7 @@
-locals {
-  keycloak_hostname = "keycloak.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
-}
-
-data "template_file" "keycloak_values" {
-  template = file("${path.module}/keycloak-values.tpl")
-
-  vars = {
-    ssl_redirect     = var.root_zone_name == "localhost" ? false : true
-    cluster_domain   = "${var.cluster}.${var.root_zone_name}"
-    ingress_hostname = "keycloak.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
-  }
-}
-
 resource "kubernetes_secret" "keycloak_admin" {
   metadata {
     name      = "keycloak-admin-credential"
-    namespace = module.toolchain_namespace.name
+    namespace = var.namespace
   }
   type = "Opaque"
 
@@ -47,9 +33,6 @@ resource "helm_release" "keycloak" {
 # Give Keycloak API a chance to become responsive
 resource "null_resource" "keycloak_realm_delay" {
   count      = var.enable_keycloak ? 1 : 0
-  depends_on = [
-    helm_release.keycloak
-  ]
 
   provisioner "local-exec" {
     command = "sleep 15"
@@ -59,12 +42,11 @@ resource "null_resource" "keycloak_realm_delay" {
 resource "keycloak_realm" "realm" {
   count        = var.enable_keycloak ? 1 : 0
   depends_on   = [
-    helm_release.keycloak,
     null_resource.keycloak_realm_delay
   ]
-  realm        = module.toolchain_namespace.name
+  realm        = var.namespace
   enabled      = true
-  display_name = title(module.toolchain_namespace.name)
+  display_name = title(var.namespace)
 
   registration_allowed           = false
   registration_email_as_username = false
@@ -107,7 +89,7 @@ resource "kubernetes_secret" "keycloak_toolchain_realm" {
 
   metadata {
     name      = "keycloak-toolchain-realm"
-    namespace = module.toolchain_namespace.name
+    namespace = var.namespace
   }
   type = "Opaque"
 
@@ -121,7 +103,7 @@ resource "kubernetes_secret" "keycloak_toolchain_realm_disabled" {
 
   metadata {
     name      = "keycloak-toolchain-realm"
-    namespace = module.toolchain_namespace.name
+    namespace = var.namespace
   }
   type = "Opaque"
 

@@ -42,6 +42,7 @@ module "toolchain" {
   enable_artifactory                     = var.enable_artifactory
   enable_gitlab                          = var.enable_gitlab
   enable_keycloak                        = var.enable_keycloak
+  enable_sonarqube                       = var.enable_sonarqube
   enable_harbor                          = var.enable_harbor
   enable_rode                            = var.enable_rode
   issuer_name                            = module.cluster_issuer.issuer_name
@@ -170,3 +171,30 @@ module "kube_resource_report" {
   root_zone_name = var.root_zone_name
 }
 
+module "keycloak" {
+  source = "../../modules/tools/keycloak"
+
+  enable_keycloak   = var.enable_keycloak
+  namespace         = module.toolchain.namespace
+  cluster           = var.cluster
+  root_zone_name    = var.root_zone_name
+  postgres_password = data.vault_generic_secret.keycloak.data["postgres-password"]
+}
+
+module "keycloak_config" {
+  source = "../../modules/config/keycloak"
+
+  enable_keycloak                        = var.enable_keycloak
+  namespace                              = module.toolchain.namespace
+  protocol                               = var.root_zone_name == "localhost" ? "http" : "https"
+  keycloak_admin_password                = data.vault_generic_secret.keycloak.data["admin-password"]
+  enable_google_login                    = var.enable_google_login
+  google_identity_provider_client_id     = var.enable_google_login ? data.vault_generic_secret.keycloak.data["google-idp-client-id"] : ""
+  google_identity_provider_client_secret = var.enable_google_login ? data.vault_generic_secret.keycloak.data["google-idp-client-secret"] : ""
+  enable_test_user                       = var.enable_test_user
+  test_user_password                     = var.enable_test_user ? data.vault_generic_secret.keycloak.data["test-user-password"] : ""
+
+  depends_on = [
+    module.keycloak
+  ]
+}

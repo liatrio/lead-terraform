@@ -31,7 +31,6 @@ module "toolchain" {
   image_whitelist                 = var.image_whitelist
   artifactory_license             = var.artifactory_license
   keycloak_admin_password         = var.keycloak_admin_password
-  keycloak_postgres_password      = random_string.keycloak_postgres_password.result
   enable_istio                    = var.enable_istio
   enable_artifactory              = var.enable_artifactory
   enable_gitlab                   = var.enable_gitlab
@@ -95,7 +94,7 @@ module "lab_partner" {
   cluster                     = var.cluster
   namespace                   = var.toolchain_namespace
   slack_bot_token             = var.slack_bot_token
-  slack_client_signing_secret = var.slack_client_signing_secret 
+  slack_client_signing_secret = var.slack_client_signing_secret
   team_id                     = var.team_id
   lab_partner_version         = var.lab_partner_version
 }
