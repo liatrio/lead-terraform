@@ -8,10 +8,10 @@ func TestPrometheusOperator(t *testing.T) {
 	t.Parallel()
 	kubeconfig := TestModuleGetStringGlobal(t, KubeConfigPath)
 
-	// LEAD HARBOR
-	testDashboard := TestModule{
+	// Prometheus Operator
+	testPrometheusOperator := TestModule{
 		GoTest:       t,
-		Name:         "harbor",
+		Name:         "prometheus-operator",
 		TerraformDir: "../testdata/tools/prometheus-operator",
 		Setup: func(tm *TestModule) {
 			tm.SetTerraformVar("kube_config_path", kubeconfig)
@@ -21,6 +21,6 @@ func TestPrometheusOperator(t *testing.T) {
 			tm.SetTerraformVar("prometheus_slack_channel", "fake_channel")
 		},
 	}
-	defer testDashboard.TeardownTests()
-	testDashboard.RunTests()
+	defer testPrometheusOperator.TeardownTests()
+	testPrometheusOperator.RunTests()
 }
