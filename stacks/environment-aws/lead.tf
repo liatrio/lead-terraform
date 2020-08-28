@@ -37,7 +37,7 @@ module "toolchain" {
   google_identity_provider_client_secret = var.enable_google_login ? data.vault_generic_secret.keycloak.data["google-idp-client-secret"] : ""
   enable_test_user                       = var.enable_test_user
   test_user_password                     = var.enable_test_user ? data.vault_generic_secret.keycloak.data["test-user-password"] : ""
-  harbor_admin_password                  = data.vault_generic_secret.keycloak.data["admin-password"]
+  harbor_admin_password                  = data.vault_generic_secret.harbor.data["admin-password"]
   enable_istio                           = var.enable_istio
   enable_artifactory                     = var.enable_artifactory
   enable_gitlab                          = var.enable_gitlab
