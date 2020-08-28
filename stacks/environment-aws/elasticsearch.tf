@@ -26,10 +26,10 @@ module "kibana" {
 
   // keycloak configuration for gatekeeper
   enable_keycloak                  = var.enable_keycloak
-  keycloak_hostname                = module.toolchain.keycloak_hostname
-  keycloak_admin_credential_secret = module.toolchain.keycloak_admin_credential_secret
+  keycloak_hostname                = module.keycloak.keycloak_hostname
+  keycloak_admin_credential_secret = module.keycloak.keycloak_admin_credential_secret
   toolchain_namespace              = module.toolchain.namespace
-  keycloak_realm                   = module.toolchain.keycloak_realm_id
+  keycloak_realm                   = module.keycloak_config.keycloak_realm_id
   kibana_hostname                  = "kibana.${module.toolchain.namespace}.${var.cluster}.${var.root_zone_name}"
 }
 
