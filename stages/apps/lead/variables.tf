@@ -5,11 +5,11 @@ variable "cluster" {
   default = "lead"
 }
 
-variable "aws_environment" {}
-
-variable "cluster_version" {
-  default = "1.15"
+variable "cluster_zone_id" {
+  description = "Cluster zone id provided by cloud-provider stage"
 }
+
+variable "aws_environment" {}
 
 variable "system_namespace" {
   default = "lead-system"
@@ -190,3 +190,35 @@ variable "enable_lab_partner" {
   default = true
 }
 
+variable "cert_manager_service_account_arn" {
+}
+
+variable "workspace_role_name" {
+}
+
+variable "codeservices_sqs_url" {
+}
+
+variable "operator_slack_service_account_arn" {
+}
+
+variable "operator_jenkins_service_account_arn" {
+}
+
+variable "product_operator_service_account_arn" {
+}
+
+variable "codeservices_event_mapper_service_account_arn" {
+}
+
+variable "codeservices_s3_bucket" {
+}
+
+variable "codeservices_codebuild_role" {
+}
+
+variable "codeservices_pipeline_role" {
+}
+
+variable "codeservices_codebuild_security_group_id" {
+}

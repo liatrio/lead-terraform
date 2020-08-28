@@ -1,6 +1,7 @@
 module "dashboard" {
   source                           = "../../modules/lead/dashboard"
+
   enabled                          = var.enable_dashboard
-  namespace                        = module.toolchain.namespace
+  namespace                        = var.toolchain_namespace
   dashboard_version                = var.dashboard_version
 }

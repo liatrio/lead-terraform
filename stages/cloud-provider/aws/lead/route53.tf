@@ -3,13 +3,13 @@ data "aws_route53_zone" "root_zone" {
 }
 
 resource "aws_route53_zone" "cluster_zone" {
-  name = "${var.cluster}.${data.aws_route53_zone.root_zone.name}"
+  name = "${var.cluster_name}.${data.aws_route53_zone.root_zone.name}"
   tags = local.tags
 }
 
 resource "aws_route53_record" "cluster_zone" {
   zone_id = data.aws_route53_zone.root_zone.zone_id
-  name    = "${var.cluster}.${data.aws_route53_zone.root_zone.name}"
+  name    = "${var.cluster_name}.${data.aws_route53_zone.root_zone.name}"
   type    = "NS"
   ttl     = "30"
 
@@ -20,4 +20,3 @@ resource "aws_route53_record" "cluster_zone" {
     aws_route53_zone.cluster_zone.name_servers[3],
   ]
 }
-

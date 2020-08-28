@@ -6,7 +6,7 @@ module "keycloak" {
   source = "../../modules/tools/keycloak"
 
   enable_keycloak         = var.enable_keycloak
-  namespace               = module.toolchain.namespace
+  namespace               = var.toolchain_namespace
   cluster                 = var.cluster
   root_zone_name          = var.root_zone_name
   postgres_password       = data.vault_generic_secret.keycloak.data["postgres-password"]

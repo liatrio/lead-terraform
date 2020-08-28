@@ -4,7 +4,7 @@ module "elasticsearch_namespace" {
   namespace   = "elasticsearch"
   annotations = {
     name    = "elasticsearch"
-    cluster = module.eks.cluster_id
+    cluster = var.cluster
   }
 }
 
@@ -28,9 +28,9 @@ module "kibana" {
   enable_keycloak                  = var.enable_keycloak
   keycloak_hostname                = module.keycloak.keycloak_hostname
   keycloak_admin_credential_secret = module.keycloak.keycloak_admin_credential_secret
-  toolchain_namespace              = module.toolchain.namespace
+  toolchain_namespace              = var.toolchain_namespace
   keycloak_realm                   = module.keycloak_config.keycloak_realm_id
-  kibana_hostname                  = "kibana.${module.toolchain.namespace}.${var.cluster}.${var.root_zone_name}"
+  kibana_hostname                  = "kibana.${var.toolchain_namespace}.${var.cluster}.${var.root_zone_name}"
 }
 
 module "fluent_bit" {

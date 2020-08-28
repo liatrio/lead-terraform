@@ -1,16 +1,16 @@
 module "cert_manager_iam" {
-  source = "../../modules/environment/aws/iam/cert-manager"
+  source = "../../../../modules/environment/aws/iam/cert-manager"
 
-  cluster                     = var.cluster
+  cluster                     = var.cluster_name
   namespace                   = var.system_namespace
   openid_connect_provider_arn = module.eks.aws_iam_openid_connect_provider.arn
   openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider.url
 }
 
 module "external_dns_iam" {
-  source = "../../modules/environment/aws/iam/external-dns"
+  source = "../../../../modules/environment/aws/iam/external-dns"
 
-  cluster                     = var.cluster
+  cluster                     = var.cluster_name
   namespace                   = var.system_namespace
   openid_connect_provider_arn = module.eks.aws_iam_openid_connect_provider.arn
   openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider.url
@@ -20,16 +20,16 @@ module "external_dns_iam" {
 }
 
 module "cluster_autoscaler_iam" {
-  source = "../../modules/environment/aws/iam/cluster-autoscaler"
+  source = "../../../../modules/environment/aws/iam/cluster-autoscaler"
 
-  cluster                     = var.cluster
+  cluster                     = var.cluster_name
   namespace                   = var.system_namespace
   openid_connect_provider_arn = module.eks.aws_iam_openid_connect_provider.arn
   openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider.url
 }
 
 resource "aws_iam_role" "rode_service_account" {
-  name = "${var.cluster}_rode_service_account"
+  name = "${var.cluster_name}_rode_service_account"
 
   assume_role_policy = <<EOF
 {
@@ -53,7 +53,7 @@ EOF
 }
 
 resource "aws_iam_role_policy" "rode" {
-  name = "${var.cluster}-rode"
+  name = "${var.cluster_name}-rode"
   role = aws_iam_role.rode_service_account.name
 
   policy = <<EOF
@@ -86,7 +86,7 @@ EOF
 }
 
 resource "aws_iam_role" "operator_slack_service_account" {
-  name = "${var.cluster}_operator_slack_service_account"
+  name = "${var.cluster_name}_operator_slack_service_account"
 
   assume_role_policy = <<EOF
 {
@@ -100,7 +100,7 @@ resource "aws_iam_role" "operator_slack_service_account" {
       "Action": "sts:AssumeRoleWithWebIdentity",
       "Condition": {
         "StringEquals": {
-          "${replace(module.eks.aws_iam_openid_connect_provider.url, "https://", "")}:sub": "system:serviceaccount:${var.toolchain_namespace}:operator-slack"
+          default = "toolchain"
         }
       }
     }
@@ -110,7 +110,7 @@ EOF
 }
 
 resource "aws_iam_role_policy" "operator-slack" {
-  name = "${var.cluster}-operator-slack"
+  name = "${var.cluster_name}-operator-slack"
   role = aws_iam_role.operator_slack_service_account.name
 
   policy = <<EOF
@@ -158,7 +158,7 @@ EOF
 }
 
 resource "aws_iam_role" "operator_jenkins_service_account" {
-  name = "${var.cluster}_operator_jenkins_service_account"
+  name = "${var.cluster_name}_operator_jenkins_service_account"
 
   assume_role_policy = <<EOF
 {
@@ -172,7 +172,7 @@ resource "aws_iam_role" "operator_jenkins_service_account" {
       "Action": "sts:AssumeRoleWithWebIdentity",
       "Condition": {
         "StringEquals": {
-          "${replace(module.eks.aws_iam_openid_connect_provider.url, "https://", "")}:sub": "system:serviceaccount:${module.toolchain.namespace}:operator-jenkins"
+          "${replace(module.eks.aws_iam_openid_connect_provider.url, "https://", "")}:sub": "system:serviceaccount:${var.toolchain_namespace}:operator-jenkins"
         }
       }
     }
@@ -182,7 +182,7 @@ EOF
 }
 
 resource "aws_iam_policy" "operator_jenkins" {
-  name = "${var.cluster}-operator-jenkins"
+  name = "${var.cluster_name}-operator-jenkins"
 
   policy = <<EOF
 {
@@ -195,7 +195,7 @@ resource "aws_iam_policy" "operator_jenkins" {
                 "s3:GetBucketVersioning",
                 "s3:CreateBucket"
      ],
-     "Resource": ["arn:aws:s3:::lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${var.cluster}.liatr.io"]
+     "Resource": ["arn:aws:s3:::lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${var.cluster_name}.liatr.io"]
    },
    {
      "Effect": "Allow",
@@ -204,7 +204,7 @@ resource "aws_iam_policy" "operator_jenkins" {
                 "s3:GetObject",
                 "s3:DeleteObject"
      ],
-     "Resource": ["arn:aws:s3:::lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${var.cluster}.liatr.io/*"]
+     "Resource": ["arn:aws:s3:::lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${var.cluster_name}.liatr.io/*"]
    },
    {
      "Effect": "Allow",
@@ -216,7 +216,7 @@ resource "aws_iam_policy" "operator_jenkins" {
                 "dynamodb:CreateTable",
                 "dynamodb:TagResource"
      ],
-     "Resource": ["arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/lead-sdm-operators-${var.cluster}"]
+     "Resource": ["arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/lead-sdm-operators-${var.cluster_name}"]
    }
  ]
 }
@@ -229,7 +229,7 @@ resource "aws_iam_role_policy_attachment" "operator_jenkins" {
 }
 
 resource "aws_iam_role" "product_operator_service_account" {
-  name = "${var.cluster}-product-operator-service-account"
+  name = "${var.cluster_name}-product-operator-service-account"
 
   assume_role_policy = <<EOF
 {
@@ -253,7 +253,7 @@ EOF
 }
 
 resource "aws_iam_policy" "product_operator_main" {
-  name  = "${var.cluster}-product-operator-main"
+  name  = "${var.cluster_name}-product-operator-main"
 
   policy = <<EOF
 {
@@ -270,7 +270,7 @@ resource "aws_iam_policy" "product_operator_main" {
       "s3:DeleteObject"
     ],
     "Resource": [
-      "arn:aws:s3:::lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${var.cluster}.liatr.io"
+      "arn:aws:s3:::lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${var.cluster_name}.liatr.io"
     ]
   },
   {
@@ -284,7 +284,7 @@ resource "aws_iam_policy" "product_operator_main" {
       "dynamodb:TagResource"
     ],
     "Resource": [
-      "arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/lead-sdm-operators-${var.cluster}"
+      "arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/lead-sdm-operators-${var.cluster_name}"
     ]
   }]
 }
@@ -298,7 +298,7 @@ resource "aws_iam_role_policy_attachment" "product_operator_main" {
 
 resource "aws_iam_policy" "product_operator_aws_code_services" {
   count = var.enable_aws_code_services ? 1 : 0
-  name  = "${var.cluster}-product-operator-code-services"
+  name  = "${var.cluster_name}-product-operator-code-services"
 
   policy = <<EOF
 {

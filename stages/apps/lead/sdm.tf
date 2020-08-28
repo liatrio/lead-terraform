@@ -5,35 +5,35 @@ data "vault_generic_secret" "sparky" {
 module "sdm" {
   source                      = "../../modules/lead/sdm"
   root_zone_name              = var.root_zone_name
-  cluster                     = module.eks.cluster_id
-  namespace                   = module.toolchain.namespace
-  system_namespace            = module.system_namespace.name
+  cluster                     = var.cluster
+  namespace                   = var.toolchain_namespace
+  system_namespace            = var.system_namespace
   sdm_version                 = var.sdm_version
   product_version             = var.product_version
   slack_bot_token             = data.vault_generic_secret.sparky.data["slack-bot-user-oauth-access-token"]
   slack_client_signing_secret = data.vault_generic_secret.sparky.data["slack-signing-secret"]
-  workspace_role_name         = module.eks.workspace_iam_role.name
+  workspace_role_name         = var.workspace_role_name
   operators                   = var.lead_sdm_operators
   product_types               = var.product_types
   enable_aws_event_mapper     = var.enable_aws_code_services
   remote_state_config         = file("./terragrunt-product-backend-s3.hcl")
-  sqs_url                     = var.enable_aws_code_services ? module.codeservices.sqs_url : ""
+  sqs_url                     = var.enable_aws_code_services ? var.codeservices_sqs_url : ""
   toolchain_image_repo        = var.toolchain_image_repo
 
-  harbor_image_repo = "harbor.${module.toolchain.namespace}.${module.eks.cluster_id}.${var.root_zone_name}"
+  harbor_image_repo = "harbor.${var.toolchain_namespace}.${var.cluster}.${var.root_zone_name}"
   ecr_image_repo    = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.region}.amazonaws.com"
 
   operator_slack_service_account_annotations   = {
-    "eks.amazonaws.com/role-arn" = aws_iam_role.operator_slack_service_account.arn
+    "eks.amazonaws.com/role-arn" = var.operator_slack_service_account.arn
   }
   operator_jenkins_service_account_annotations = {
-    "eks.amazonaws.com/role-arn" = aws_iam_role.operator_jenkins_service_account.arn
+    "eks.amazonaws.com/role-arn" = var.operator_jenkins_service_account.arn
   }
   operator_product_service_account_annotations = {
-    "eks.amazonaws.com/role-arn" = aws_iam_role.product_operator_service_account.arn
+    "eks.amazonaws.com/role-arn" = var.product_operator_service_account.arn
   }
   aws_event_mapper_service_account_annotations = {
-    "eks.amazonaws.com/role-arn" = module.codeservices.event_mapper_role_arn
+    "eks.amazonaws.com/role-arn" = var.codeservices_event_mapper_service_account_arn
   }
 
   product_vars = {
@@ -44,11 +44,11 @@ module "sdm" {
     enable_harbor          = var.enable_harbor
     enable_artifactory     = var.enable_artifactory
 
-    s3_bucket                   = var.enable_aws_code_services ? module.codeservices.s3_bucket : ""
-    codebuild_role              = var.enable_aws_code_services ? module.codeservices.codebuild_role : ""
-    codepipeline_role           = var.enable_aws_code_services ? module.codeservices.codepipeline_role : ""
+    s3_bucket                   = var.enable_aws_code_services ? var.codeservices_s3_bucket : ""
+    codebuild_role              = var.enable_aws_code_services ? var.codeservices_codebuild_role : ""
+    codepipeline_role           = var.enable_aws_code_services ? var.codeservices_pipeline_role : ""
     codebuild_user              = var.enable_aws_code_services ? "codebuild" : ""
-    codebuild_security_group_id = module.codeservices.codebuild_security_group_id
+    codebuild_security_group_id = var.codeservices_codebuild_security_group_id
     aws_environment             = var.aws_environment
   }
 }

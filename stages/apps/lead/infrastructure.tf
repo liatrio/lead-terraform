@@ -3,7 +3,7 @@ module "system_namespace" {
   namespace   = var.system_namespace
   annotations = {
     name    = var.system_namespace
-    cluster = module.eks.cluster_id
+    cluster = var.cluster
   }
   labels      = {
     "openpolicyagent.org/webhook" = "ignore"
@@ -35,7 +35,7 @@ module "external_dns" {
 module "cert_manager" {
   source                                = "../../modules/tools/cert-manager"
   namespace                             = module.system_namespace.name
-  cert_manager_service_account_role_arn = module.cert_manager_iam.cert_manager_service_account_arn
+  cert_manager_service_account_role_arn = var.cert_manager_service_account_role_arn
 }
 
 module "kube_downscaler" {
@@ -70,7 +70,7 @@ module "cluster_autoscaler" {
 
   cluster                                = var.cluster
   region                                 = var.region
-  cluster_autoscaler_service_account_arn = module.cluster_autoscaler_iam.cluster_autoscaler_service_account_arn
+  cluster_autoscaler_service_account_arn = var.cert_manager_service_account_role_arn
   enable_autoscaler_scale_down           = var.enable_autoscaler_scale_down
   namespace                              = module.system_namespace.name
   extra_values                           = data.template_file.essential_toleration.rendered

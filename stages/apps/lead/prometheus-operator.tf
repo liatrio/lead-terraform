@@ -5,8 +5,8 @@ data "vault_generic_secret" "prometheus" {
 module "prometheus-operator" {
   source = "../../modules/tools/prometheus-operator"
 
-  namespace                    = module.toolchain.namespace
-  grafana_hostname             = "grafana.${module.toolchain.namespace}.${var.cluster}.${var.root_zone_name}"
+  namespace                    = var.toolchain_namespace
+  grafana_hostname             = "grafana.${var.toolchain_namespace}.${var.cluster}.${var.root_zone_name}"
   prometheus_slack_webhook_url = data.vault_generic_secret.prometheus.data["slack-webhook-url"]
   prometheus_slack_channel     = var.prometheus_slack_channel
 }

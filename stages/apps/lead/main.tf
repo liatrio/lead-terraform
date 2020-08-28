@@ -9,7 +9,7 @@ provider "aws" {
 }
 
 data "aws_eks_cluster" "cluster" {
-  name = module.eks.cluster_id
+  name = var.cluster
 }
 
 data "aws_caller_identity" "current" {}

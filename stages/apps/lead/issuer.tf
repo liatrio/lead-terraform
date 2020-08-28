@@ -17,7 +17,7 @@ resource "kubernetes_cluster_role" "cert_manager_cluster_role" {
 
 module "cluster_issuer" {
   source        = "../../modules/common/cert-issuer"
-  namespace     = module.toolchain.namespace
+  namespace     = var.toolchain_namespace
   issuer_name   = "letsencrypt-dns"
   issuer_kind   = "ClusterIssuer"
   issuer_type   = var.cert_issuer_type
@@ -28,12 +28,12 @@ module "cluster_issuer" {
   provider_dns_type = "route53"
 
   route53_dns_region      = var.region
-  route53_dns_hosted_zone = aws_route53_zone.cluster_zone.zone_id
+  route53_dns_hosted_zone = var.cluster_zone_id
 }
 
 module "staging_cluster_issuer" {
   source        = "../../modules/common/cert-issuer"
-  namespace     = module.toolchain.namespace
+  namespace     = var.toolchain_namespace
   issuer_name   = "staging-letsencrypt-dns"
   issuer_kind   = "ClusterIssuer"
   issuer_type   = var.cert_issuer_type
@@ -44,5 +44,5 @@ module "staging_cluster_issuer" {
   provider_dns_type = "route53"
 
   route53_dns_region      = var.region
-  route53_dns_hosted_zone = aws_route53_zone.cluster_zone.zone_id
+  route53_dns_hosted_zone = var.cluster_zone_id
 }
