@@ -36,7 +36,6 @@ module "toolchain" {
   enable_artifactory              = var.enable_artifactory
   enable_gitlab                   = var.enable_gitlab
   enable_keycloak                 = var.enable_keycloak
-  enable_sonarqube                = var.enable_sonarqube
   enable_harbor                   = var.enable_harbor
   issuer_name                     = module.staging_cluster_issuer.issuer_name
   issuer_kind                     = module.staging_cluster_issuer.issuer_kind
@@ -110,6 +109,13 @@ module "prometheus-operator" {
   prometheus_slack_channel     = var.prometheus_slack_channel
 }
 
+module "sonarqube" {
+  source = "../../modules/tools/sonarqube"
+
+  enable_sonarqube            = var.enable_sonarqube
+  namespace                   = module.toolchain.namespace
+}
+
 module "kube_resource_report" {
   source = "../../modules/tools/kube-resource-report"
 
@@ -117,3 +123,4 @@ module "kube_resource_report" {
   cluster        = var.cluster
   root_zone_name = var.root_zone_name
 }
+
