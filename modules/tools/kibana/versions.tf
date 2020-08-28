@@ -4,10 +4,6 @@ terraform {
     external = {
       source = "hashicorp/external"
     }
-    harbor = {
-      source = "liatrio/harbor"
-      version = "= 0.2.0-pre"
-    }
     helm = {
       source = "hashicorp/helm"
     }

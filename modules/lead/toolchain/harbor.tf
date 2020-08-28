@@ -3,11 +3,6 @@ locals {
   notary_hostname = "notary.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
 }
 
-resource "random_string" "harbor_admin_password" {
-  length = 10
-  special = false
-}
-
 resource "random_string" "harbor_db_password" {
   length = 10
   special = false
@@ -134,7 +129,7 @@ resource "helm_release" "harbor" {
 
   set_sensitive {
     name = "harborAdminPassword"
-    value = random_string.harbor_admin_password.result
+    value = var.harbor_admin_password
   }
 
   set_sensitive {
@@ -210,7 +205,7 @@ resource "helm_release" "harbor_config" {
 
   set_sensitive {
     name = "harbor.password"
-    value = random_string.harbor_admin_password.result
+    value = var.harbor_admin_password
   }
 
   set {
@@ -227,12 +222,6 @@ resource "helm_release" "harbor_config" {
     name = "keycloak.secret"
     value = keycloak_openid_client.harbor_client[0].client_secret
   }
-}
-
-provider "harbor" {
-  url      = "https://${local.harbor_hostname}"
-  username = "admin"
-  password = random_string.harbor_admin_password.result
 }
 
 resource "harbor_project" "liatrio_project" {
