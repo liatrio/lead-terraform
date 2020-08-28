@@ -21,13 +21,6 @@ func TestSetup(t *testing.T) {
 	}
 	common.TestModuleSetStringGlobal(t, common.KubeConfigPath, kubeconfig)
 
-	// namespaceName = fmt.Sprintf("test-cert-manager-%s", strings.ToLower(random.UniqueId()))
-
-	// options := k8s.NewKubectlOptions("", "", namespaceName)
-
-	// defer k8s.DeleteNamespace(t, options, namespaceName)
-	// k8s.CreateNamespace(t, options, namespaceName)
-
 	// SETUP NAMESPACE
 	testNamespace := common.TestModule{
 		GoTest:       t,
@@ -35,7 +28,6 @@ func TestSetup(t *testing.T) {
 		TerraformDir: "../testdata/common/namespace",
 		Setup: func(tm *common.TestModule) {
 			tm.SetTerraformVar("kube_config_path", kubeconfig)
-			// common.NamespaceSetup(tm)
 			tm.SetTerraformVar("namespace", "toolchain")
 		},
 		Tests: func(tm *common.TestModule) {
@@ -101,14 +93,16 @@ func TestSetup(t *testing.T) {
 }
 
 func testModules(t *testing.T) {
-	//t.Run("Dashboard", testLeadDashboard)
-	//t.Run("SDM", testLeadSdm)
-	//t.Run("KubeResourceReport", common.KubeResourceReportTest)
-	//t.Run("ExternalDNS", common.ExternalDnsTest)
-	//t.Run("KubeDownscaler", common.KubeDownscalerTest)
-	//t.Run("K8sSpotTerminationHandler", common.K8sSpotTerminationHandlerTest)
-	//t.Run("KubeJanitor", common.KubeJanitorTest)
-	//t.Run("MetricsServer", common.MetricsServerTest)
+  t.Run("Dashboard", testLeadDashboard)
+	t.Run("SDM", testLeadSdm)
+	t.Run("KubeResourceReport", common.KubeResourceReportTest)
+	t.Run("ExternalDNS", common.ExternalDnsTest)
+	t.Run("KubeDownscaler", common.KubeDownscalerTest)
+	t.Run("K8sSpotTerminationHandler", common.K8sSpotTerminationHandlerTest)
+	t.Run("KubeJanitor", common.KubeJanitorTest)
+	t.Run("MetricsServer", common.MetricsServerTest)
+	t.Run("PrometheusOperator", common.TestPrometheusOperator)
+	t.Run("SonarQube", common.SonarQubeTest);
   t.Run("Keycloak", common.TestKeycloak)
 }
 
@@ -116,20 +110,6 @@ func testLeadDashboard(t *testing.T) {
 	t.Parallel()
 
 	kubeconfig := common.TestModuleGetStringGlobal(t, common.KubeConfigPath)
-
-	// LEAD DASHBOARD NAMESPACE
-	// testNamespace := common.TestModule{
-	// 	GoTest: t,
-	// 	Name: "lead_dashboard_namespace",
-	// 	TerraformDir: tempNamespaceModule,
-	// 	Setup: func(tm *common.TestModule) {
-	// 		tm.SetTerraformVar("kube_config_path", kubeconfig)
-	// 		common.NamespaceSetup(tm)
-	// 	},
-	// 	Tests: common.NamespaceTests,
-	// }
-	// defer testNamespace.TeardownTests()
-	// testNamespace.RunTests()
 
 	// LEAD DASHBOARD
 	testDashboard := common.TestModule{
@@ -139,12 +119,7 @@ func testLeadDashboard(t *testing.T) {
 		Setup: func(tm *common.TestModule) {
 			tm.SetTerraformVar("kube_config_path", kubeconfig)
 			tm.SetTerraformVar("namespace", tm.GetStringGlobal(Namespace))
-			tm.SetTerraformVar("root_zone_name", "local")
-			tm.SetTerraformVar("cluster_id", "docker-for-desktop")
-			tm.SetTerraformVar("cluster_domain", "local")
 			tm.SetTerraformVar("dashboard_version", common.DashboardVersion)
-			tm.SetTerraformVar("k8s_storage_class", "hostpath")
-			tm.SetTerraformVar("local", "true")
 		},
 	}
 	defer testDashboard.TeardownTests()
@@ -156,23 +131,7 @@ func testLeadSdm(t *testing.T) {
 
 	kubeconfig := common.TestModuleGetStringGlobal(t, common.KubeConfigPath)
 
-	// LEAD SDM NAMESPACE
-	// testNamespace := common.TestModule{
-	// 	GoTest: t,
-	// 	Name: "sdm_namespace",
-	// 	TerraformDir: "../testdata/common/namespace",
-	// 	Setup: func(tm *common.TestModule) {
-	// 		tm.SetTerraformVar("kube_config_path", kubeconfig)
-	// 		tm.SetTerraformVar("namespace", "toolchain")
-	// 		// common.NamespaceSetup(tm)
-	// 	},
-	// 	Tests: common.NamespaceTests,
-	// }
-	// defer testNamespace.TeardownTests()
-	// testNamespace.RunTests()
-
 	// LEAD SDM
-	// tiller_service_account := common.TestModuleGetStringGlobal(t, "tiller_service_account")
 	testSdm := common.TestModule{
 		GoTest:       t,
 		Name:         "sdm",

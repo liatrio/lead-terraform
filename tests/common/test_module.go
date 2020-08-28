@@ -23,7 +23,7 @@ type TestModule struct {
 	terraformOptions *terraform.Options
 }
 
-type testCallback func(*TestModule) 
+type testCallback func(*TestModule)
 
 func (tm *TestModule) SetString(name string, value string) {
 	path := tm.getDataPath()
