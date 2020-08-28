@@ -2,8 +2,6 @@ variable "namespace" {}
 
 variable "enable_keycloak" {}
 
-variable "protocol" {}
-
 variable "enable_google_login" {}
 
 variable "google_identity_provider_client_id" {}

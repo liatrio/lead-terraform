@@ -92,14 +92,6 @@ variable "enable_istio" {
   default = true
 }
 
-variable "enable_artifactory" {
-  default = true
-}
-
-variable "enable_gitlab" {
-  default = true
-}
-
 variable "enable_keycloak" {
   default = true
 }
