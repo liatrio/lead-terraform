@@ -61,14 +61,9 @@ provider "keycloak" {
   client_timeout = 15
 }
 
-resource "random_string" "harbor_admin_password" {
-  length = 10
-  special = false
-}
-
 provider "harbor" {
   url      = "harbor.${var.toolchain_namespace}.${var.cluster}.${var.root_zone_name}"
   username = "admin"
-  password = random_string.harbor_admin_password.result
+  password = data.vault_generic_secret.harbor.data["admin-password"]
 }
 
