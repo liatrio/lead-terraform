@@ -15,7 +15,6 @@ data "template_file" "gitlab_values" {
 }
 
 data "external" "keycloak_realm_certificate" {
-  depends_on = [helm_release.keycloak, keycloak_realm.realm]
   count      = var.enable_gitlab && var.enable_keycloak ? 1 : 0 
   program    = ["sh", "${path.module}/scripts/get_keycloak_realm_certificate.sh", "${local.protocol}://keycloak.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}/auth/realms/${module.toolchain_namespace.name}/protocol/saml/descriptor"]
 }
@@ -67,8 +66,7 @@ resource "helm_release" "gitlab" {
 
 resource "keycloak_saml_client" "gitlab_saml_client" {
   count                   = var.enable_gitlab && var.enable_keycloak ? 1 : 0
-  depends_on              = [keycloak_realm.realm]
-  realm_id                = keycloak_realm.realm[0].id
+  realm_id                = var.keycloak_realm_id
   client_id               = "ui.gitlab.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
   name                    = "Gitlab"
 
@@ -91,7 +89,7 @@ resource "keycloak_saml_client" "gitlab_saml_client" {
 
 resource "keycloak_saml_user_property_protocol_mapper" "gitlab_saml_user_property_mapper_roles" {
   count                      = var.enable_gitlab && var.enable_keycloak ? 1 : 0
-  realm_id                   = keycloak_realm.realm[0].id
+  realm_id                   = var.keycloak_realm_id
   client_id                  = keycloak_saml_client.gitlab_saml_client[0].id
   name                       = "roles"
 
@@ -103,7 +101,7 @@ resource "keycloak_saml_user_property_protocol_mapper" "gitlab_saml_user_propert
 
 resource "keycloak_saml_user_property_protocol_mapper" "gitlab_saml_user_property_mapper_last_name" {
   count                      = var.enable_gitlab && var.enable_keycloak ? 1 : 0
-  realm_id                   = keycloak_realm.realm[0].id
+  realm_id                   = var.keycloak_realm_id
   client_id                  = keycloak_saml_client.gitlab_saml_client[0].id
   name                       = "last_name"
 
@@ -115,7 +113,7 @@ resource "keycloak_saml_user_property_protocol_mapper" "gitlab_saml_user_propert
 
 resource "keycloak_saml_user_property_protocol_mapper" "gitlab_saml_user_property_mapper_first_name" {
   count                      = var.enable_gitlab && var.enable_keycloak ? 1 : 0
-  realm_id                   = keycloak_realm.realm[0].id
+  realm_id                   = var.keycloak_realm_id
   client_id                  = keycloak_saml_client.gitlab_saml_client[0].id
   name                       = "first_name"
 
@@ -127,7 +125,7 @@ resource "keycloak_saml_user_property_protocol_mapper" "gitlab_saml_user_propert
 
 resource "keycloak_saml_user_property_protocol_mapper" "gitlab_saml_user_property_mapper_email" {
   count                      = var.enable_gitlab && var.enable_keycloak ? 1 : 0
-  realm_id                   = keycloak_realm.realm[0].id
+  realm_id                   = var.keycloak_realm_id
   client_id                  = keycloak_saml_client.gitlab_saml_client[0].id
   name                       = "email"
 
@@ -139,7 +137,7 @@ resource "keycloak_saml_user_property_protocol_mapper" "gitlab_saml_user_propert
 
 resource "keycloak_saml_user_property_protocol_mapper" "gitlab_saml_user_property_mapper_username" {
   count                      = var.enable_gitlab && var.enable_keycloak ? 1 : 0
-  realm_id                   = keycloak_realm.realm[0].id
+  realm_id                   = var.keycloak_realm_id
   client_id                  = keycloak_saml_client.gitlab_saml_client[0].id
   name                       = "username"
 
