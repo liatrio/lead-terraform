@@ -1,35 +1,3 @@
-resource "kubernetes_secret" "keycloak_admin" {
-  metadata {
-    name      = "keycloak-admin-credential"
-    namespace = var.namespace
-  }
-  type = "Opaque"
-
-  data = {
-    username = "keycloak"
-    password = var.keycloak_admin_password
-  }
-}
-
-resource "helm_release" "keycloak" {
-  count      = var.enable_keycloak ? 1 : 0
-  repository = data.helm_repository.codecentric.metadata[0].name
-  name       = "keycloak"
-  namespace  = module.toolchain_namespace.name
-  chart      = "keycloak"
-  version    = "5.0.1"
-  timeout    = 1200
-
-  values = [
-    data.template_file.keycloak_values.rendered
-  ]
-
-  set_sensitive {
-    name  = "postgresql.postgresqlPassword"
-    value = var.keycloak_postgres_password
-  }
-}
-
 # Give Keycloak API a chance to become responsive
 resource "null_resource" "keycloak_realm_delay" {
   count      = var.enable_keycloak ? 1 : 0

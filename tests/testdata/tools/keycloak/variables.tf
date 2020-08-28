@@ -1,4 +1,4 @@
-variable "enable_keycloak" {}
+variable "kube_config_path" {}
 
 variable "namespace" {}
 

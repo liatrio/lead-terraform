@@ -3,6 +3,19 @@ data "helm_repository" "codecentric" {
   url  = "https://codecentric.github.io/helm-charts"
 }
 
+resource "kubernetes_secret" "keycloak_admin" {
+  metadata {
+    name      = "keycloak-admin-credential"
+    namespace = var.namespace
+  }
+  type = "Opaque"
+
+  data = {
+    username = "keycloak"
+    password = var.keycloak_admin_password
+  }
+}
+
 resource "helm_release" "keycloak" {
   count      = var.enable_keycloak ? 1 : 0
 

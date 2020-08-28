@@ -4,8 +4,6 @@ variable "enable_keycloak" {}
 
 variable "protocol" {}
 
-variable "keycloak_admin_password" {}
-
 variable "enable_google_login" {}
 
 variable "google_identity_provider_client_id" {}
