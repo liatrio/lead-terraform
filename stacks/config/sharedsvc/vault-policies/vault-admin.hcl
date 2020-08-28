@@ -32,6 +32,17 @@ path "sys/policy/*" {
     ]
 }
 
+path "sys/policies/*" {
+    capabilities = [
+        "create",
+        "read",
+        "update",
+        "delete",
+        "list",
+        "sudo"
+    ]
+}
+
 // Manage secret backends
 path "sys/mounts/*" {
     capabilities = [

@@ -44,19 +44,6 @@ resource "helm_release" "keycloak" {
   }
 }
 
-
-# while using client credentials is preferred, it would require initial client creation using the
-# old realm import method, so just use password based setup since that is known prior to keycloak
-# resource
-provider "keycloak" {
-  client_id      = "admin-cli"
-  username       = "keycloak"
-  password       = var.keycloak_admin_password
-  url            = "${local.protocol}://${local.keycloak_hostname}"
-  initial_login  = false
-  client_timeout = 15
-}
-
 # Give Keycloak API a chance to become responsive
 resource "null_resource" "keycloak_realm_delay" {
   count      = var.enable_keycloak ? 1 : 0

@@ -10,6 +10,10 @@ data "vault_generic_secret" "keycloak" {
   path = "lead/aws/${data.aws_caller_identity.current.account_id}/keycloak"
 }
 
+data "vault_generic_secret" "harbor" {
+  path = "lead/aws/${data.aws_caller_identity.current.account_id}/harbor"
+}
+
 data "vault_generic_secret" "prometheus" {
   path = "lead/aws/${data.aws_caller_identity.current.account_id}/prometheus"
 }
@@ -33,11 +37,11 @@ module "toolchain" {
   google_identity_provider_client_secret = var.enable_google_login ? data.vault_generic_secret.keycloak.data["google-idp-client-secret"] : ""
   enable_test_user                       = var.enable_test_user
   test_user_password                     = var.enable_test_user ? data.vault_generic_secret.keycloak.data["test-user-password"] : ""
+  harbor_admin_password                  = data.vault_generic_secret.harbor.data["admin-password"]
   enable_istio                           = var.enable_istio
   enable_artifactory                     = var.enable_artifactory
   enable_gitlab                          = var.enable_gitlab
   enable_keycloak                        = var.enable_keycloak
-  enable_sonarqube                       = var.enable_sonarqube
   enable_harbor                          = var.enable_harbor
   enable_rode                            = var.enable_rode
   issuer_name                            = module.cluster_issuer.issuer_name
@@ -149,3 +153,20 @@ module "prometheus-operator" {
   prometheus_slack_webhook_url = data.vault_generic_secret.prometheus.data["slack-webhook-url"]
   prometheus_slack_channel     = var.prometheus_slack_channel
 }
+
+
+module "sonarqube" {
+  source = "../../modules/tools/sonarqube"
+
+  enable_sonarqube            = var.enable_sonarqube
+  namespace                   = module.toolchain.namespace
+}
+
+module "kube_resource_report" {
+  source = "../../modules/tools/kube-resource-report"
+
+  namespace      = module.toolchain.namespace
+  cluster        = var.cluster
+  root_zone_name = var.root_zone_name
+}
+

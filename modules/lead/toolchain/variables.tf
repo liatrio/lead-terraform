@@ -37,12 +37,11 @@ variable "enable_keycloak" {
   default = true
 }
 
-variable "enable_sonarqube" {
+variable "enable_harbor" {
   default = true
 }
 
-variable "enable_harbor" {
-  default = true
+variable "harbor_admin_password" {
 }
 
 variable "enable_rode" {
