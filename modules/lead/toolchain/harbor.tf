@@ -164,11 +164,11 @@ resource "helm_release" "harbor" {
 }
 
 resource "keycloak_openid_client" "harbor_client" {
-  count = var.enable_harbor && var.enable_keycloak ? 1 : 0
-  realm_id = keycloak_realm.realm[0].id
+  count     = var.enable_harbor && var.enable_keycloak ? 1 : 0
+  realm_id  = var.keycloak_realm_id
   client_id = "harbor"
-  name = "harbor"
-  enabled = true
+  name      = "harbor"
+  enabled   = true
 
   access_type = "CONFIDENTIAL"
   standard_flow_enabled = true
@@ -215,7 +215,7 @@ resource "helm_release" "harbor_config" {
 
   set {
     name = "keycloak.hostname"
-    value = local.keycloak_hostname
+    value = var.keycloak_hostname
   }
 
   set_sensitive {

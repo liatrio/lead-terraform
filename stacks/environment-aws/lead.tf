@@ -30,13 +30,8 @@ module "toolchain" {
   image_whitelist                        = var.image_whitelist
   elb_security_group_id                  = module.eks.aws_security_group_elb.id
   artifactory_license                    = data.vault_generic_secret.artifactory.data["license"]
-  keycloak_admin_password                = data.vault_generic_secret.keycloak.data["admin-password"]
-  keycloak_postgres_password             = data.vault_generic_secret.keycloak.data["postgres-password"]
-  enable_google_login                    = var.enable_google_login
-  google_identity_provider_client_id     = var.enable_google_login ? data.vault_generic_secret.keycloak.data["google-idp-client-id"] : ""
-  google_identity_provider_client_secret = var.enable_google_login ? data.vault_generic_secret.keycloak.data["google-idp-client-secret"] : ""
-  enable_test_user                       = var.enable_test_user
-  test_user_password                     = var.enable_test_user ? data.vault_generic_secret.keycloak.data["test-user-password"] : ""
+  keycloak_hostname                      = module.keycloak.keycloak_hostname
+  keycloak_realm_id                      = module.keycloak_config.keycloak_realm_id
   harbor_admin_password                  = data.vault_generic_secret.harbor.data["admin-password"]
   enable_istio                           = var.enable_istio
   enable_artifactory                     = var.enable_artifactory
@@ -188,7 +183,6 @@ module "keycloak_config" {
   enable_keycloak                        = var.enable_keycloak
   namespace                              = module.toolchain.namespace
   protocol                               = var.root_zone_name == "localhost" ? "http" : "https"
-  keycloak_admin_password                = data.vault_generic_secret.keycloak.data["admin-password"]
   enable_google_login                    = var.enable_google_login
   google_identity_provider_client_id     = var.enable_google_login ? data.vault_generic_secret.keycloak.data["google-idp-client-id"] : ""
   google_identity_provider_client_secret = var.enable_google_login ? data.vault_generic_secret.keycloak.data["google-idp-client-secret"] : ""

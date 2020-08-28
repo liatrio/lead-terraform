@@ -3,8 +3,6 @@ output "keycloak_hostname" {
   value       = "keycloak.${var.namespace}.${var.cluster}.${var.root_zone_name}"
 }
 
-output "keycloak_admin_password" {
-  sensitive = true
-  value = var.keycloak_admin_password
+output "keycloak_admin_credential_secret" {
+  value = kubernetes_secret.keycloak_admin.metadata[0].name
 }
-
