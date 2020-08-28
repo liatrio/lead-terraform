@@ -102,11 +102,8 @@ func testModules(t *testing.T) {
 	t.Run("K8sSpotTerminationHandler", common.K8sSpotTerminationHandlerTest)
 	t.Run("KubeJanitor", common.KubeJanitorTest)
 	t.Run("MetricsServer", common.MetricsServerTest)
-<<<<<<< HEAD
 	t.Run("PrometheusOperator", common.TestPrometheusOperator)
-=======
 	t.Run("SonarQube", common.SonarQubeTest);
->>>>>>> origin
 }
 
 func testLeadDashboard(t *testing.T) {
