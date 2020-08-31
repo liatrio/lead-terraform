@@ -43,7 +43,6 @@ product:
       defaultProductVariables:
         builder_images_version: ${builder_images_version}
         cluster_domain: ${cluster_domain}
-        enable_artifactory: "${enable_artifactory}"
         enable_harbor: "${enable_harbor}"
         enable_keycloak: "${enable_keycloak}"
         jenkins_image_version: ${jenkins_image_version}
