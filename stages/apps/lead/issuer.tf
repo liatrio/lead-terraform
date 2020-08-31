@@ -16,7 +16,7 @@ resource "kubernetes_cluster_role" "cert_manager_cluster_role" {
 }
 
 module "cluster_issuer" {
-  source        = "../../modules/common/cert-issuer"
+  source        = "../../../modules/common/cert-issuer"
   namespace     = var.toolchain_namespace
   issuer_name   = "letsencrypt-dns"
   issuer_kind   = "ClusterIssuer"
@@ -32,7 +32,7 @@ module "cluster_issuer" {
 }
 
 module "staging_cluster_issuer" {
-  source        = "../../modules/common/cert-issuer"
+  source        = "../../../modules/common/cert-issuer"
   namespace     = var.toolchain_namespace
   issuer_name   = "staging-letsencrypt-dns"
   issuer_kind   = "ClusterIssuer"

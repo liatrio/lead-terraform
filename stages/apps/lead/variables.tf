@@ -27,47 +27,8 @@ variable "key_name" {
   default = ""
 }
 
-variable "asg_min_size" {
-  default = "1"
-}
-
-variable "asg_desired_capacity" {
-  default = "1"
-}
-
-variable "asg_max_size" {
-  default = "5"
-}
-
-variable "instance_types" {
-  type    = list(string)
-  default = ["m5.xlarge", "c5.xlarge", "m4.xlarge", "c4.xlarge", "t3.xlarge", "r5.xlarge"]
-}
-
 variable "essential_taint_key" {
-  default = "EssentialOnly"
 }
-
-variable "essential_asg_min_size" {
-  default = "1"
-}
-
-variable "essential_asg_desired_capacity" {
-  default = "1"
-}
-
-variable "essential_asg_max_size" {
-  default = "10"
-}
-
-variable "essential_instance_type" {
-  default = "t3.large"
-}
-
-variable "image_whitelist" {
-  default = ".*"
-}
-
 variable "opa_failure_policy" {
   default = "Fail"
 }
@@ -96,14 +57,6 @@ variable "enable_keycloak" {
   default = true
 }
 
-variable "enable_google_login" {
-  default = false
-}
-
-variable "enable_test_user" {
-  default = false
-}
-
 variable "enable_operators" {
   default = true
 }
@@ -128,13 +81,10 @@ variable "enable_autoscaler_scale_down" {
   default = true
 }
 
-variable "on_demand_percentage" {
-  default = "0"
-}
-
 variable "uptime" {
   default = "Mon-Fri 05:00-19:00 America/Los_Angeles"
 }
+
 variable "downscaler_exclude_namespaces" {
   type    = list(string)
   default = ["kube-system"]
@@ -188,6 +138,9 @@ variable "lab_partner_version" {
 
 variable "enable_lab_partner" {
   default = true
+}
+
+variable "external_dns_service_account_arn" {
 }
 
 variable "cert_manager_service_account_arn" {

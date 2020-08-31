@@ -11,3 +11,11 @@ output "keycloak_hostname" {
 output "harbor_hostname" {
   value = "TBD"
 }
+
+output "kibana_hostname" {
+  value = "kibana.${var.toolchain_namespace}.${var.cluster}.${var.root_zone_name}"
+}
+
+output "aws_region" {
+  value = var.region
+}

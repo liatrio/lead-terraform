@@ -3,7 +3,7 @@ data "vault_generic_secret" "sparky" {
 }
 
 module "sdm" {
-  source                      = "../../modules/lead/sdm"
+  source                      = "../../../modules/lead/sdm"
   root_zone_name              = var.root_zone_name
   cluster                     = var.cluster
   namespace                   = var.toolchain_namespace
@@ -24,13 +24,13 @@ module "sdm" {
   ecr_image_repo    = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.region}.amazonaws.com"
 
   operator_slack_service_account_annotations   = {
-    "eks.amazonaws.com/role-arn" = var.operator_slack_service_account.arn
+    "eks.amazonaws.com/role-arn" = var.operator_slack_service_account_arn
   }
   operator_jenkins_service_account_annotations = {
-    "eks.amazonaws.com/role-arn" = var.operator_jenkins_service_account.arn
+    "eks.amazonaws.com/role-arn" = var.operator_jenkins_service_account_arn
   }
   operator_product_service_account_annotations = {
-    "eks.amazonaws.com/role-arn" = var.product_operator_service_account.arn
+    "eks.amazonaws.com/role-arn" = var.product_operator_service_account_arn
   }
   aws_event_mapper_service_account_annotations = {
     "eks.amazonaws.com/role-arn" = var.codeservices_event_mapper_service_account_arn
@@ -42,7 +42,6 @@ module "sdm" {
     jenkins_image_version  = var.jenkins_image_version
     toolchain_image_repo   = var.toolchain_image_repo
     enable_harbor          = var.enable_harbor
-    enable_artifactory     = var.enable_artifactory
 
     s3_bucket                   = var.enable_aws_code_services ? var.codeservices_s3_bucket : ""
     codebuild_role              = var.enable_aws_code_services ? var.codeservices_codebuild_role : ""

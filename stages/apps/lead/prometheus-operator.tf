@@ -3,7 +3,7 @@ data "vault_generic_secret" "prometheus" {
 }
 
 module "prometheus-operator" {
-  source = "../../modules/tools/prometheus-operator"
+  source = "../../../modules/tools/prometheus-operator"
 
   namespace                    = var.toolchain_namespace
   grafana_hostname             = "grafana.${var.toolchain_namespace}.${var.cluster}.${var.root_zone_name}"

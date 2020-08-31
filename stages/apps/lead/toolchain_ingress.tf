@@ -1,5 +1,5 @@
 module "toolchain_ingress" {
-  source                  = "../../modules/lead/toolchain-ingress"
+  source                  = "../../../modules/lead/toolchain-ingress"
   namespace               = var.toolchain_namespace
   cluster_domain          = "${var.cluster}.${var.root_zone_name}"
   issuer_name             = module.cluster_issuer.issuer_name

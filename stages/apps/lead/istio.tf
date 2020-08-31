@@ -25,7 +25,7 @@ resource "null_resource" "istio_init_delay" {
 }
 
 module "istio_system" {
-  source              = "../../modules/common/istio"
+  source              = "../../../modules/common/istio"
   enabled             = var.enable_istio
   namespace           = "istio-system"
   crd_waiter          = null_resource.istio_init_delay.id

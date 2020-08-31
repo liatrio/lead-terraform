@@ -3,7 +3,7 @@ data "vault_generic_secret" "lab_partner" {
 }
 
 module "lab_partner" {
-  source                      = "../../modules/tools/lab-partner"
+  source                      = "../../../modules/tools/lab-partner"
   enable_lab_partner          = var.enable_lab_partner
   root_zone_name              = var.root_zone_name
   cluster                     = var.cluster

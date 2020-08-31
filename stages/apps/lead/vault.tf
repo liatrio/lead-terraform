@@ -1,5 +1,5 @@
 module "vault" {
-  source = "../../modules/tools/vault-less-secure"
+  source = "../../../modules/tools/vault-less-secure"
 
   namespace                 = var.toolchain_namespace
   region                    = var.region
