@@ -123,3 +123,11 @@ module "kube_resource_report" {
   root_zone_name = var.root_zone_name
 }
 
+module "rode" {
+  source = "../../modules/tools/rode"
+
+  enable_rode              = var.enable_rode
+  namespace                = var.toolchain_namespace
+  cluster                  = var.cluster
+  root_zone_name           = var.root_zone_name
+}
