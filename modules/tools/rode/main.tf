@@ -17,6 +17,7 @@ resource "helm_release" "rode" {
       grafeas_cert = "grafeas-cert"
       rode_cert    = "rode-cert"
       ingress_hostname     = "rode.${var.namespace}.${var.cluster}.${var.root_zone_name}"
+      localstack_enabled   = var.localstack_enabled
     })
   ]
 }

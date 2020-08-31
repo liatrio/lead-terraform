@@ -130,4 +130,5 @@ module "rode" {
   namespace                = var.toolchain_namespace
   cluster                  = var.cluster
   root_zone_name           = var.root_zone_name
+  localstack_enabled       = var.localstack_enabled
 }

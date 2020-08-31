@@ -9,3 +9,7 @@ variable "namespace" {}
 variable "cluster" {}
 
 variable "root_zone_name" {}
+
+variable "localstack_enabled" {
+  default = false
+}
