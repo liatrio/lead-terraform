@@ -6,6 +6,8 @@ import (
 )
 
 func TestHarbor(t *testing.T) {
+	t.Parallel()
+
 	kubeconfig := TestModuleGetStringGlobal(t, KubeConfigPath)
 
 	// HARBOR
