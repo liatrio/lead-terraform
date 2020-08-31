@@ -48,9 +48,6 @@ module "toolchain" {
 
   rode_service_account_arn               = aws_iam_role.rode_service_account.arn
 
-  harbor_registry_disk_size    = "200Gi"
-  harbor_chartmuseum_disk_size = "100Gi"
-
   prometheus_slack_webhook_url = data.vault_generic_secret.prometheus.data["slack-webhook-url"]
   prometheus_slack_channel     = var.prometheus_slack_channel
 
@@ -59,6 +56,30 @@ module "toolchain" {
   smtp_username   = module.ses_smtp.smtp_username
   smtp_password   = module.ses_smtp.smtp_password
   smtp_from_email = "noreply@${aws_ses_domain_identity.cluster_domain.domain}"
+}
+
+module "harbor" {
+  source = "../../modules/tools/harbor"
+
+  enable = var.enable_harbor
+  cluster = var.cluster
+  toolchain_namespace = module.toolchain.namespace
+  root_zone_name = var.root_zone_name
+  k8s_storage_class = var.k8s_storage_class
+  harbor_registry_disk_size    = "200Gi"
+  harbor_chartmuseum_disk_size = "100Gi"
+  issuer_name                            = module.cluster_issuer.issuer_name
+  issuer_kind                            = module.cluster_issuer.issuer_kind
+  crd_waiter = module.cert_manager.crd_waiter
+}
+
+module "harbor_config" {
+  source = "../../modules/config/harbor"
+  
+  enable = var.enable_harbor
+  enable_keycloak = var.enable_keycloak
+
+  depends_on = [module.harbor]
 }
 
 module "toolchain_ingress" {

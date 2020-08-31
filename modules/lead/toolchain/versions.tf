@@ -17,7 +17,7 @@ terraform {
       # For more information, see the provider source documentation:
       #
       # https://www.terraform.io/docs/configuration/providers.html#provider-source
-      version = "= 1.0.0"
+      version = "= 0.1.0"
     }
     helm = {
       source = "hashicorp/helm"
