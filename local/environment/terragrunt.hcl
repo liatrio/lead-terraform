@@ -26,7 +26,6 @@ inputs = {
   enable_gitlab            = false
   enable_istio             = false
   enable_keycloak          = false
-  enable_mailhog           = false
   enable_operators         = true
   enable_sonarqube         = false
   enable_dashboard         = false

@@ -14,6 +14,7 @@ module "external_dns" {
   source = "../../../../modules/tools/external-dns"
 
   enabled       = true
-  domain_filter = var.domain_filter
+  domain_filters = var.domain_filters
   namespace     = var.namespace
+  istio_enabled = var.istio_enabled
 }

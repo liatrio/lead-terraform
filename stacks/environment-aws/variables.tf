@@ -112,10 +112,6 @@ variable "enable_test_user" {
   default = false
 }
 
-variable "enable_mailhog" {
-  default = false
-}
-
 variable "enable_operators" {
   default = true
 }

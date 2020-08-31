@@ -10,6 +10,10 @@ data "vault_generic_secret" "keycloak" {
   path = "lead/aws/${data.aws_caller_identity.current.account_id}/keycloak"
 }
 
+data "vault_generic_secret" "harbor" {
+  path = "lead/aws/${data.aws_caller_identity.current.account_id}/harbor"
+}
+
 data "vault_generic_secret" "prometheus" {
   path = "lead/aws/${data.aws_caller_identity.current.account_id}/prometheus"
 }
@@ -26,18 +30,13 @@ module "toolchain" {
   image_whitelist                        = var.image_whitelist
   elb_security_group_id                  = module.eks.aws_security_group_elb.id
   artifactory_license                    = data.vault_generic_secret.artifactory.data["license"]
-  keycloak_admin_password                = data.vault_generic_secret.keycloak.data["admin-password"]
-  keycloak_postgres_password             = data.vault_generic_secret.keycloak.data["postgres-password"]
-  enable_google_login                    = var.enable_google_login
-  google_identity_provider_client_id     = var.enable_google_login ? data.vault_generic_secret.keycloak.data["google-idp-client-id"] : ""
-  google_identity_provider_client_secret = var.enable_google_login ? data.vault_generic_secret.keycloak.data["google-idp-client-secret"] : ""
-  enable_test_user                       = var.enable_test_user
-  test_user_password                     = var.enable_test_user ? data.vault_generic_secret.keycloak.data["test-user-password"] : ""
+  keycloak_hostname                      = module.keycloak.keycloak_hostname
+  keycloak_realm_id                      = module.keycloak_config.keycloak_realm_id
+  harbor_admin_password                  = data.vault_generic_secret.harbor.data["admin-password"]
   enable_istio                           = var.enable_istio
   enable_artifactory                     = var.enable_artifactory
   enable_gitlab                          = var.enable_gitlab
   enable_keycloak                        = var.enable_keycloak
-  enable_mailhog                         = var.enable_mailhog
   enable_sonarqube                       = var.enable_sonarqube
   enable_harbor                          = var.enable_harbor
   enable_rode                            = var.enable_rode
@@ -47,15 +46,6 @@ module "toolchain" {
   k8s_storage_class                      = var.k8s_storage_class
 
   rode_service_account_arn               = aws_iam_role.rode_service_account.arn
-
-  prometheus_slack_webhook_url = data.vault_generic_secret.prometheus.data["slack-webhook-url"]
-  prometheus_slack_channel     = var.prometheus_slack_channel
-
-  smtp_host       = "email-smtp.${var.region}.amazonaws.com"
-  smtp_port       = "587"
-  smtp_username   = module.ses_smtp.smtp_username
-  smtp_password   = module.ses_smtp.smtp_password
-  smtp_from_email = "noreply@${aws_ses_domain_identity.cluster_domain.domain}"
 }
 
 module "harbor" {
@@ -170,4 +160,57 @@ module "vault" {
   region                    = var.region
   vault_dynamodb_table_name = "vault.toolchain.${module.eks.cluster_id}.${var.root_zone_name}"
   vault_hostname            = "vault.toolchain.${module.eks.cluster_id}.${var.root_zone_name}"
+}
+
+module "prometheus-operator" {
+  source = "../../modules/tools/prometheus-operator"
+
+  namespace                    = module.toolchain.namespace
+  grafana_hostname             = "grafana.${module.toolchain.namespace}.${var.cluster}.${var.root_zone_name}"
+  prometheus_slack_webhook_url = data.vault_generic_secret.prometheus.data["slack-webhook-url"]
+  prometheus_slack_channel     = var.prometheus_slack_channel
+}
+
+
+module "sonarqube" {
+  source = "../../modules/tools/sonarqube"
+
+  enable_sonarqube            = var.enable_sonarqube
+  namespace                   = module.toolchain.namespace
+}
+
+module "kube_resource_report" {
+  source = "../../modules/tools/kube-resource-report"
+
+  namespace      = module.toolchain.namespace
+  cluster        = var.cluster
+  root_zone_name = var.root_zone_name
+}
+
+module "keycloak" {
+  source = "../../modules/tools/keycloak"
+
+  enable_keycloak         = var.enable_keycloak
+  namespace               = module.toolchain.namespace
+  cluster                 = var.cluster
+  root_zone_name          = var.root_zone_name
+  postgres_password       = data.vault_generic_secret.keycloak.data["postgres-password"]
+  keycloak_admin_password = data.vault_generic_secret.keycloak.data["admin-password"]
+}
+
+module "keycloak_config" {
+  source = "../../modules/config/keycloak"
+
+  enable_keycloak                        = var.enable_keycloak
+  namespace                              = module.toolchain.namespace
+  protocol                               = var.root_zone_name == "localhost" ? "http" : "https"
+  enable_google_login                    = var.enable_google_login
+  google_identity_provider_client_id     = var.enable_google_login ? data.vault_generic_secret.keycloak.data["google-idp-client-id"] : ""
+  google_identity_provider_client_secret = var.enable_google_login ? data.vault_generic_secret.keycloak.data["google-idp-client-secret"] : ""
+  enable_test_user                       = var.enable_test_user
+  test_user_password                     = var.enable_test_user ? data.vault_generic_secret.keycloak.data["test-user-password"] : ""
+
+  depends_on = [
+    module.keycloak
+  ]
 }

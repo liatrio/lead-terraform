@@ -1,24 +1,25 @@
 package common
 
-import (
+import(
 	"testing"
 )
 
-func ExternalDnsTest(t *testing.T) {
+func SonarQubeTest(t *testing.T) {
 	t.Parallel()
-
 	kubeconfig := TestModuleGetStringGlobal(t, KubeConfigPath)
 
-	testExternalDns := TestModule{
+
+	// LEAD SONARQUBE
+	testSonarQube := TestModule{
 		GoTest:       t,
-		Name:         "external_dns",
-		TerraformDir: "../testdata/tools/external-dns",
+		Name:         "sonarqube",
+		TerraformDir: "../testdata/tools/sonarqube",
 		Setup: func(tm *TestModule) {
 			tm.SetTerraformVar("kube_config_path", kubeconfig)
 			tm.SetTerraformVar("namespace", tm.GetStringGlobal("namespace"))
-			tm.SetTerraformVar("istio_enabled", "false")
+			tm.SetTerraformVar("enable_sonarqube", "true");
 		},
 	}
-	defer testExternalDns.TeardownTests()
-	testExternalDns.RunTests()
-}
+	defer testSonarQube.TeardownTests()
+	testSonarQube.RunTests()
+} 

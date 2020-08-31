@@ -31,30 +31,18 @@ module "toolchain" {
   image_whitelist                 = var.image_whitelist
   artifactory_license             = var.artifactory_license
   keycloak_admin_password         = var.keycloak_admin_password
-  keycloak_postgres_password      = random_string.keycloak_postgres_password.result
   enable_istio                    = var.enable_istio
   enable_artifactory              = var.enable_artifactory
   enable_gitlab                   = var.enable_gitlab
   enable_keycloak                 = var.enable_keycloak
-  enable_mailhog                  = var.enable_mailhog
-  enable_sonarqube                = var.enable_sonarqube
   enable_harbor                   = var.enable_harbor
   issuer_name                     = module.staging_cluster_issuer.issuer_name
   issuer_kind                     = module.staging_cluster_issuer.issuer_kind
   crd_waiter                      = module.infrastructure.crd_waiter
   k8s_storage_class               = var.k8s_storage_class
-  prometheus_slack_webhook_url    = var.prometheus_slack_webhook_url
-  prometheus_slack_channel        = var.prometheus_slack_channel
 
   harbor_registry_disk_size    = "200Gi"
   harbor_chartmuseum_disk_size = "100Gi"
-
-
-  smtp_host       = "mailhog"
-  smtp_port       = "1025"
-  smtp_username   = ""
-  smtp_password   = ""
-  smtp_from_email = "noreply@liatr.io"
 }
 
 module "sdm" {
@@ -106,8 +94,32 @@ module "lab_partner" {
   cluster                     = var.cluster
   namespace                   = var.toolchain_namespace
   slack_bot_token             = var.slack_bot_token
-  slack_client_signing_secret = var.slack_client_signing_secret 
+  slack_client_signing_secret = var.slack_client_signing_secret
   team_id                     = var.team_id
   lab_partner_version         = var.lab_partner_version
+}
+
+module "prometheus-operator" {
+  source = "../../modules/tools/prometheus-operator"
+
+  namespace                    = module.toolchain.namespace
+  grafana_hostname             = "grafana.${module.toolchain.namespace}.${var.cluster}.${var.root_zone_name}"
+  prometheus_slack_webhook_url = var.prometheus_slack_webhook_url
+  prometheus_slack_channel     = var.prometheus_slack_channel
+}
+
+module "sonarqube" {
+  source = "../../modules/tools/sonarqube"
+
+  enable_sonarqube            = var.enable_sonarqube
+  namespace                   = module.toolchain.namespace
+}
+
+module "kube_resource_report" {
+  source = "../../modules/tools/kube-resource-report"
+
+  namespace      = module.toolchain.namespace
+  cluster        = var.cluster
+  root_zone_name = var.root_zone_name
 }
 

@@ -12,15 +12,8 @@ provider "helm" {
 
 module "dashboard" {
   source                           = "../../../../modules/lead/dashboard"
-  namespace                        = var.namespace
-  root_zone_name                   = var.root_zone_name
-  cluster                          = var.cluster_id
-  cluster_domain                   = var.cluster_domain
-  crd_waiter                       = var.crd_waiter
-  dashboard_version                = var.dashboard_version
-  keycloak_realm_id                = ""
-  k8s_storage_class                = var.k8s_storage_class
-  local                            = var.local
-  keycloak_admin_credential_secret = ""
-  toolchain_namespace              = ""
+
+  enabled           = true
+  namespace         = var.namespace
+  dashboard_version = var.dashboard_version
 }

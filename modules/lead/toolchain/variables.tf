@@ -37,8 +37,10 @@ variable "enable_keycloak" {
   default = true
 }
 
-variable "enable_mailhog" {
-  default = true
+variable "keycloak_hostname" {
+}
+
+variable "keycloak_realm_id" {
 }
 
 variable "enable_sonarqube" {
@@ -49,44 +51,14 @@ variable "enable_harbor" {
   default = true
 }
 
+variable "harbor_admin_password" {
+}
+
 variable "enable_rode" {
   default = true
 }
 
 variable "crd_waiter" {
-}
-
-variable "enable_google_login" {}
-variable "google_identity_provider_client_id" {}
-variable "google_identity_provider_client_secret" {}
-variable "enable_test_user" {}
-variable "test_user_password" {}
-
-variable "keycloak_admin_password" {
-}
-
-variable "keycloak_postgres_password" {
-}
-
-variable "smtp_host" {
-}
-
-variable "smtp_port" {
-}
-
-variable "smtp_username" {
-}
-
-variable "smtp_password" {
-}
-
-variable "smtp_from_email" {
-}
-
-variable "prometheus_slack_webhook_url" {
-}
-
-variable "prometheus_slack_channel" {
 }
 
 variable "harbor_registry_disk_size" {
