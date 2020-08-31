@@ -3,6 +3,13 @@ terraform {
   }
 }
 
+provider "aws" {
+  version = "2.53"
+  region  = var.region
+}
+
+data "aws_caller_identity" "current" {}
+
 provider "vault" {
   address = var.vault_address
 
