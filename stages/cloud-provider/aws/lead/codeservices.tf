@@ -1,5 +1,5 @@
 module "codeservices" {
-  source                      = "../../modules/environment/aws/code-services"
+  source                      = "../../../../modules/environment/aws/code-services"
 
   enable_aws_code_services    = var.enable_aws_code_services
   cluster                     = var.cluster_name

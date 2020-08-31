@@ -23,6 +23,10 @@ output "cluster_zone_id" {
   description = "Route53 zone id for EKS cluster; passed as input to app stage"
 }
 
+output "external_dns_service_account_arn" {
+  value = module.external_dns_iam.external_dns_service_account_arn
+}
+
 output "cert_manager_service_account_arn" {
   value = module.cert_manager_iam.cert_manager_service_account_arn
 }
