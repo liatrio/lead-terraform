@@ -62,7 +62,7 @@ provider "keycloak" {
 }
 
 provider "harbor" {
-  url      = "harbor.${var.toolchain_namespace}.${var.cluster}.${var.root_zone_name}"
+  url      = "https://harbor.${var.toolchain_namespace}.${var.cluster}.${var.root_zone_name}"
   username = "admin"
   password = data.vault_generic_secret.harbor.data["admin-password"]
 }

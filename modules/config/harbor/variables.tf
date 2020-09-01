@@ -2,11 +2,11 @@ variable enable {
   default = true
 }
 
-variable toolchain_namespace {}
+variable namespace {}
 
-variable harbor_hostname {}
+variable hostname {}
 
-variable harbor_admin_password {}
+variable admin_password {}
 
 variable enable_keycloak {
   default = true

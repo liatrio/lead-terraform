@@ -1,7 +1,7 @@
 variable kube_config_path {}
 
-variable toolchain_namespace {}
+variable namespace {}
 
-variable harbor_hostname {}
+variable hostname {}
 
-variable harbor_admin_password {}
+variable admin_password {}

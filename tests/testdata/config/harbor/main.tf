@@ -26,12 +26,12 @@ provider "keycloak" {
 }
 
 module "harbor" {
-  source                = "../../../../modules/config/harbor"
-  enable                = true
-  toolchain_namespace   = var.toolchain_namespace
-  harbor_admin_password = var.harbor_admin_password
-  harbor_hostname       = var.harbor_hostname
-  enable_keycloak       = false
-  keycloak_hostname     = ""
-  keycloak_realm        = ""
+  source            = "../../../../modules/config/harbor"
+  enable            = true
+  namespace         = var.namespace
+  admin_password    = var.admin_password
+  hostname          = var.hostname
+  enable_keycloak   = false
+  keycloak_hostname = ""
+  keycloak_realm    = ""
 }

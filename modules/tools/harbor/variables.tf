@@ -2,7 +2,7 @@ variable enable {
   default = true
 }
 
-variable toolchain_namespace {}
+variable namespace {}
 
 variable cluster {}
 
@@ -27,3 +27,5 @@ variable crd_waiter {}
 variable protect_pvc_resources {
   default = true
 }
+
+variable admin_password {}

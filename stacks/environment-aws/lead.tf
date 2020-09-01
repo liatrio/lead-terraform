@@ -23,51 +23,57 @@ data "vault_generic_secret" "lab_partner" {
 }
 
 module "toolchain" {
-  source                                 = "../../modules/lead/toolchain"
-  root_zone_name                         = var.root_zone_name
-  cluster                                = module.eks.cluster_id
-  namespace                              = var.toolchain_namespace
-  image_whitelist                        = var.image_whitelist
-  elb_security_group_id                  = module.eks.aws_security_group_elb.id
-  artifactory_license                    = data.vault_generic_secret.artifactory.data["license"]
-  keycloak_hostname                      = module.keycloak.keycloak_hostname
-  keycloak_realm_id                      = module.keycloak_config.keycloak_realm_id
-  harbor_admin_password                  = data.vault_generic_secret.harbor.data["admin-password"]
-  enable_istio                           = var.enable_istio
-  enable_artifactory                     = var.enable_artifactory
-  enable_gitlab                          = var.enable_gitlab
-  enable_keycloak                        = var.enable_keycloak
-  enable_sonarqube                       = var.enable_sonarqube
-  enable_harbor                          = var.enable_harbor
-  enable_rode                            = var.enable_rode
-  issuer_name                            = module.cluster_issuer.issuer_name
-  issuer_kind                            = module.cluster_issuer.issuer_kind
-  crd_waiter                             = module.cert_manager.crd_waiter
-  k8s_storage_class                      = var.k8s_storage_class
+  source                = "../../modules/lead/toolchain"
+  root_zone_name        = var.root_zone_name
+  cluster               = module.eks.cluster_id
+  namespace             = var.toolchain_namespace
+  image_whitelist       = var.image_whitelist
+  elb_security_group_id = module.eks.aws_security_group_elb.id
+  artifactory_license   = data.vault_generic_secret.artifactory.data["license"]
+  keycloak_hostname     = module.keycloak.keycloak_hostname
+  keycloak_realm_id     = module.keycloak_config.keycloak_realm_id
+  harbor_admin_password = data.vault_generic_secret.harbor.data["admin-password"]
+  enable_istio          = var.enable_istio
+  enable_artifactory    = var.enable_artifactory
+  enable_gitlab         = var.enable_gitlab
+  enable_keycloak       = false
+  enable_sonarqube      = false
+  enable_harbor         = false
+  enable_rode           = var.enable_rode
+  issuer_name           = module.cluster_issuer.issuer_name
+  issuer_kind           = module.cluster_issuer.issuer_kind
+  crd_waiter            = module.cert_manager.crd_waiter
+  k8s_storage_class     = var.k8s_storage_class
 
-  rode_service_account_arn               = aws_iam_role.rode_service_account.arn
+  rode_service_account_arn = aws_iam_role.rode_service_account.arn
 }
 
 module "harbor" {
   source = "../../modules/tools/harbor"
 
-  enable = var.enable_harbor
-  cluster = var.cluster
-  toolchain_namespace = module.toolchain.namespace
-  root_zone_name = var.root_zone_name
-  k8s_storage_class = var.k8s_storage_class
+  enable                       = var.enable_harbor
+  cluster                      = var.cluster
+  namespace                    = module.toolchain.namespace
+  admin_password               = data.vault_generic_secret.harbor.data["admin-password"]
+  root_zone_name               = var.root_zone_name
+  k8s_storage_class            = var.k8s_storage_class
   harbor_registry_disk_size    = "200Gi"
   harbor_chartmuseum_disk_size = "100Gi"
-  issuer_name                            = module.cluster_issuer.issuer_name
-  issuer_kind                            = module.cluster_issuer.issuer_kind
-  crd_waiter = module.cert_manager.crd_waiter
+  issuer_name                  = module.cluster_issuer.issuer_name
+  issuer_kind                  = module.cluster_issuer.issuer_kind
+  crd_waiter                   = module.cert_manager.crd_waiter
 }
 
 module "harbor_config" {
   source = "../../modules/config/harbor"
-  
-  enable = var.enable_harbor
-  enable_keycloak = var.enable_keycloak
+
+  enable            = var.enable_harbor
+  namespace         = module.toolchain.namespace
+  hostname          = module.harbor.hostname
+  admin_password    = data.vault_generic_secret.harbor.data["admin-password"]
+  enable_keycloak   = var.enable_keycloak
+  keycloak_hostname = module.keycloak.keycloak_hostname
+  keycloak_realm    = module.keycloak_config.keycloak_realm_id
 
   depends_on = [module.harbor]
 }
@@ -103,7 +109,7 @@ module "sdm" {
   harbor_image_repo = "harbor.${module.toolchain.namespace}.${module.eks.cluster_id}.${var.root_zone_name}"
   ecr_image_repo    = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.region}.amazonaws.com"
 
-  operator_slack_service_account_annotations   = {
+  operator_slack_service_account_annotations = {
     "eks.amazonaws.com/role-arn" = aws_iam_role.operator_slack_service_account.arn
   }
   operator_jenkins_service_account_annotations = {
@@ -134,10 +140,10 @@ module "sdm" {
 }
 
 module "dashboard" {
-  source                           = "../../modules/lead/dashboard"
-  enabled                          = var.enable_dashboard
-  namespace                        = module.toolchain.namespace
-  dashboard_version                = var.dashboard_version
+  source            = "../../modules/lead/dashboard"
+  enabled           = var.enable_dashboard
+  namespace         = module.toolchain.namespace
+  dashboard_version = var.dashboard_version
 }
 
 module "lab_partner" {
@@ -175,8 +181,8 @@ module "prometheus-operator" {
 module "sonarqube" {
   source = "../../modules/tools/sonarqube"
 
-  enable_sonarqube            = var.enable_sonarqube
-  namespace                   = module.toolchain.namespace
+  enable_sonarqube = var.enable_sonarqube
+  namespace        = module.toolchain.namespace
 }
 
 module "kube_resource_report" {

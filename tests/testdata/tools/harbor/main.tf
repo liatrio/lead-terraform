@@ -13,7 +13,8 @@ provider "helm" {
 module "harbor" {
   source                       = "../../../../modules/tools/harbor"
   enable                       = true
-  toolchain_namespace          = var.toolchain_namespace
+  namespace                    = var.namespace
+  admin_password               = var.admin_password
   cluster                      = var.cluster
   root_zone_name               = var.root_zone_name
   harbor_registry_disk_size    = "1Gi"
