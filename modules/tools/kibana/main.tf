@@ -18,14 +18,3 @@ resource "helm_release" "kibana" {
     })
   ]
 }
-
-// Keycloak Gatekeeper config
-
-//data "kubernetes_secret" "keycloak_admin_credential" {
-//  count = var.enable_keycloak ? 1 : 0
-//
-//  metadata {
-//    name      = var.keycloak_admin_credential_secret
-//    namespace = var.toolchain_namespace
-//  }
-//}

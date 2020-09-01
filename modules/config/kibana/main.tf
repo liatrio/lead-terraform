@@ -1,11 +1,3 @@
-//provider "keycloak" {
-//  client_id     = "admin-cli"
-//  username      = var.enable_keycloak ? data.kubernetes_secret.keycloak_admin_credential[0].data.username : "username"
-//  password      = var.enable_keycloak ? data.kubernetes_secret.keycloak_admin_credential[0].data.password : "password"
-//  url           = "https://${var.keycloak_hostname}"
-//  initial_login = false
-//}
-
 resource "keycloak_openid_client" "kibana_client" {
   count                 = var.enable_keycloak ? 1 : 0
   realm_id              = var.keycloak_realm

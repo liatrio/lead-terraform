@@ -9,7 +9,7 @@ output "keycloak_hostname" {
 }
 
 output "harbor_hostname" {
-  value = "TBD"
+  value = module.harbor.hostname
 }
 
 output "kibana_hostname" {

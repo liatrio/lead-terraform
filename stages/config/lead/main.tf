@@ -35,3 +35,9 @@ provider "keycloak" {
   client_timeout = 15
 }
 
+provider "harbor" {
+  url      = var.harbor_hostname
+  username = "admin"
+  password = data.vault_generic_secret.harbor.data["admin-password"]
+}
+
