@@ -102,8 +102,6 @@ module "jenkins_wildcard" {
 
   issuer_name = var.issuer_name
   issuer_kind = var.issuer_kind
-
-  certificate_crd = var.crd_waiter
 }
 
 module "jenkins_ingress" {
@@ -154,8 +152,6 @@ module "toolchain_wildcard" {
 
   issuer_name = var.issuer_name
   issuer_kind = var.issuer_kind
-
-  certificate_crd = var.crd_waiter
 }
 
 module "toolchain_ingress" {

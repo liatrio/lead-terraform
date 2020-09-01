@@ -28,7 +28,6 @@ module "istio_system" {
   source              = "../../../modules/common/istio"
   enabled             = var.enable_istio
   namespace           = "istio-system"
-  crd_waiter          = null_resource.istio_init_delay.id
   cluster_domain      = "${var.cluster_name}.${var.root_zone_name}"
   toolchain_namespace = var.toolchain_namespace
   issuer_name         = module.cluster_issuer.issuer_name
@@ -41,4 +40,8 @@ module "istio_system" {
   jaeger_elasticsearch_host     = module.elasticsearch.elasticsearch_host
   jaeger_elasticsearch_username = module.elasticsearch.elasticsearch_username
   jaeger_elasticsearch_password = module.elasticsearch.elasticsearch_password
+
+  depends_on = [
+    null_resource.istio_init_delay
+  ]
 }

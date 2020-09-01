@@ -1,5 +1,4 @@
 variable "namespace" {}
-variable "crd_waiter" {}
 variable "toolchain_namespace" {}
 variable "cluster_domain" {}
 

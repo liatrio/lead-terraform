@@ -49,11 +49,6 @@ resource "helm_release" "istio" {
   wait       = true
   version    = "1.4.8"
 
-  set {
-    name  = "crd_waiter"
-    value = var.crd_waiter
-  }
-
   values = [
     templatefile("${path.module}/istio-values.tpl", {
       domain             = "${var.toolchain_namespace}.${var.cluster_domain}"
@@ -145,8 +140,6 @@ module "staging_app_wildcard" {
 
   issuer_name = var.issuer_name
   issuer_kind = var.issuer_kind
-
-  certificate_crd = var.crd_waiter
 }
 
 module "prod_app_wildcard" {
@@ -159,8 +152,6 @@ module "prod_app_wildcard" {
 
   issuer_name = var.issuer_name
   issuer_kind = var.issuer_kind
-
-  certificate_crd = var.crd_waiter
 }
 
 resource "helm_release" "app_gateway" {
