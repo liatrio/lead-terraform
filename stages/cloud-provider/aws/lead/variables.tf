@@ -16,32 +16,21 @@ variable "key_name" {
   description = "Key name for workers, setting to empty string disables remote access"
 }
 
-variable "preemptible_instance_types" {
-  type    = list
-  default = [
-    "m5.xlarge",
-    "c5.xlarge",
-    "m4.xlarge",
-    "c4.xlarge",
-    "t3.xlarge",
-    "r5.xlarge"
-  ]
-  description = "List of allowed instance types when allocating AWS spot instances"
-}
-
-variable "preemptible_asg_min_size" {
+variable "asg_min_size" {
   default = "1"
-  description = "Minimum autoscaling group size provsioned with AWS spot instances"
 }
 
-variable "preemptible_asg_desired_capacity" {
+variable "asg_desired_capacity" {
   default = "1"
-  description = "Desired autoscaling group size provisioned with AWS spot instances"
 }
 
-variable "preemptible_asg_max_size" {
+variable "asg_max_size" {
   default = "5"
-  description = "Maximum autoscaling group size provisioned with AWS spot instances"
+}
+
+variable "instance_types" {
+  type    = list(string)
+  default = ["m5.xlarge", "c5.xlarge", "m4.xlarge", "c4.xlarge", "t3.xlarge", "r5.xlarge"]
 }
 
 variable "essential_instance_type" {

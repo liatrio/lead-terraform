@@ -1,9 +1,17 @@
-output "cluster_id" {
+output "cluster_name" {
   value = module.eks.cluster_id
+}
+
+output "root_zone_name" {
+  value = var.root_zone_name
 }
 
 output "essential_taint_key" {
   value = var.essential_taint_key
+}
+
+output "elb_security_group_id" {
+  value = module.eks.aws_security_group_elb.id
 }
 
 output "eks_openid_connect_provider_arn" {
