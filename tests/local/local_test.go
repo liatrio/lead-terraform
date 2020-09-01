@@ -102,8 +102,9 @@ func testModules(t *testing.T) {
 	t.Run("KubeJanitor", common.KubeJanitorTest)
 	t.Run("MetricsServer", common.MetricsServerTest)
 	t.Run("PrometheusOperator", common.TestPrometheusOperator)
-	t.Run("SonarQube", common.SonarQubeTest);
-  t.Run("Keycloak", common.TestKeycloak)
+	t.Run("SonarQube", common.SonarQubeTest)
+	t.Run("Keycloak", common.TestKeycloak)
+	t.Run("Harbor", common.TestHarbor)
 }
 
 func testLeadDashboard(t *testing.T) {
