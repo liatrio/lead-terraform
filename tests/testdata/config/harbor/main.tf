@@ -11,9 +11,9 @@ provider "helm" {
 }
 
 provider "harbor" {
-  url      = "http://${var.harbor_hostname}"
+  url      = "http://${var.hostname}"
   username = "admin"
-  password = var.harbor_admin_password
+  password = var.admin_password
 }
 
 // keycloak resources are disabled in this test but we need a provider with minimal config to keep TF happy

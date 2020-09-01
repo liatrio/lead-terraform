@@ -39,7 +39,7 @@ func TestHarbor(t *testing.T) {
 			tm.SetTerraformVar("kube_config_path", kubeconfig)
 			tm.SetTerraformVar("namespace", tm.GetStringGlobal("namespace"))
 			tm.SetTerraformVar("admin_password", testHarbor.GetTerraformVar("admin_password"))
-			tm.SetTerraformVar("harbor_hostname", "localhost:8080")
+			tm.SetTerraformVar("hostname", "localhost:8080")
 			harborPortForward = exec.Command("kubectl", "port-forward", "-n", "toolchain", "svc/harbor-harbor-core", "8080:80")
 			err := harborPortForward.Start()
 			if err != nil {
