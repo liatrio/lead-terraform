@@ -1,6 +1,5 @@
 variable "namespace" {}
 variable "issuer_type" {}
-variable "crd_waiter" {}
 
 variable "issuer_name" {
   default = "lead-namespace-issuer"
