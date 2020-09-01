@@ -13,7 +13,7 @@ output "harbor_hostname" {
 }
 
 output "kibana_hostname" {
-  value = "kibana.${var.toolchain_namespace}.${var.cluster}.${var.root_zone_name}"
+  value = "kibana.${var.toolchain_namespace}.${var.cluster_name}.${var.root_zone_name}"
 }
 
 output "aws_region" {

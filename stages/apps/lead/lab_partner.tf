@@ -6,7 +6,7 @@ module "lab_partner" {
   source                      = "../../../modules/tools/lab-partner"
   enable_lab_partner          = var.enable_lab_partner
   root_zone_name              = var.root_zone_name
-  cluster                     = var.cluster
+  cluster                     = var.cluster_name
   namespace                   = var.toolchain_namespace
   slack_bot_token             = data.vault_generic_secret.lab_partner.data["slack-bot-user-oauth-access-token"]
   slack_client_signing_secret = data.vault_generic_secret.lab_partner.data["slack-signing-secret"]

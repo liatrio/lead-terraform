@@ -4,7 +4,7 @@ module "elasticsearch_namespace" {
   namespace   = "elasticsearch"
   annotations = {
     name    = "elasticsearch"
-    cluster = var.cluster
+    cluster = var.cluster_name
   }
 }
 

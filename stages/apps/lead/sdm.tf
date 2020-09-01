@@ -5,7 +5,7 @@ data "vault_generic_secret" "sparky" {
 module "sdm" {
   source                      = "../../../modules/lead/sdm"
   root_zone_name              = var.root_zone_name
-  cluster                     = var.cluster
+  cluster                     = var.cluster_name
   namespace                   = var.toolchain_namespace
   system_namespace            = var.system_namespace
   sdm_version                 = var.sdm_version
@@ -20,7 +20,7 @@ module "sdm" {
   sqs_url                     = var.enable_aws_code_services ? var.codeservices_sqs_url : ""
   toolchain_image_repo        = var.toolchain_image_repo
 
-  harbor_image_repo = "harbor.${var.toolchain_namespace}.${var.cluster}.${var.root_zone_name}"
+  harbor_image_repo = "harbor.${var.toolchain_namespace}.${var.cluster_name}.${var.root_zone_name}"
   ecr_image_repo    = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.region}.amazonaws.com"
 
   operator_slack_service_account_annotations   = {

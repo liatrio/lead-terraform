@@ -3,7 +3,7 @@ module "system_namespace" {
   namespace   = var.system_namespace
   annotations = {
     name    = var.system_namespace
-    cluster = var.cluster
+    cluster = var.cluster_name
   }
   labels      = {
     "openpolicyagent.org/webhook" = "ignore"
@@ -27,7 +27,7 @@ module "external_dns" {
     "eks.amazonaws.com/role-arn" = var.external_dns_service_account_arn
   }
   domain_filters              = [
-    "${var.cluster}.${var.root_zone_name}"
+    "${var.cluster_name}.${var.root_zone_name}"
   ]
   namespace                   = module.system_namespace.name
 }
@@ -68,7 +68,7 @@ module "metrics_server" {
 module "cluster_autoscaler" {
   source = "../../../modules/tools/cluster-autoscaler"
 
-  cluster                                = var.cluster
+  cluster                                = var.cluster_name
   region                                 = var.region
   cluster_autoscaler_service_account_arn = var.cert_manager_service_account_arn
   enable_autoscaler_scale_down           = var.enable_autoscaler_scale_down

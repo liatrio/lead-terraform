@@ -1,8 +1,7 @@
 variable "root_zone_name" {
 }
 
-variable "cluster" {
-  default = "lead"
+variable "cluster_name" {
 }
 
 variable "cluster_zone_id" {
@@ -25,6 +24,13 @@ variable "region" {
 
 variable "key_name" {
   default = ""
+}
+
+variable "image_whitelist" {
+  default = ".*"
+}
+
+variable "elb_security_group_id" {
 }
 
 variable "essential_taint_key" {
@@ -105,7 +111,7 @@ variable "prometheus_slack_channel" {
 
 locals {
   tags = {
-    "Cluster" = var.cluster
+    "Cluster" = var.cluster_name
   }
 }
 
