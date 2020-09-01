@@ -19,6 +19,4 @@ resource "helm_release" "certificates" {
   wait      = true
 
   values = [data.template_file.certificate_values.rendered]
-
-  depends_on = [var.certificate_crd]
 }
