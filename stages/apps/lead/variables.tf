@@ -181,3 +181,15 @@ variable "codeservices_pipeline_role" {
 
 variable "codeservices_codebuild_security_group_id" {
 }
+
+variable "vault_aws_access_key_id" {
+}
+
+variable "vault_aws_secret_access_key" {
+}
+
+variable "vault_dynamodb_table_name" {
+}
+
+variable "vault_kms_key_id" {
+}
