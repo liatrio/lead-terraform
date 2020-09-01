@@ -1,7 +1,0 @@
-harbor:
-  username:
-  password:
-  hostname:
-keycloak:
-  hostname:
-  secret:

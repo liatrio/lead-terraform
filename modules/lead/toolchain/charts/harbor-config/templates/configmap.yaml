@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: harbor-config-scripts
-  labels:
-    managed-by: Terraform
-data:
-  config.sh: |
-    {{ .Files.Get "files/config.sh" | nindent 4 }}

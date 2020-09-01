@@ -47,26 +47,11 @@ variable "enable_sonarqube" {
   default = true
 }
 
-variable "enable_harbor" {
-  default = true
-}
-
-variable "harbor_admin_password" {
-}
-
 variable "enable_rode" {
   default = true
 }
 
 variable "crd_waiter" {
-}
-
-variable "harbor_registry_disk_size" {
-  default = "200Gi"
-}
-
-variable "harbor_chartmuseum_disk_size" {
-  default = "100Gi"
 }
 
 variable "k8s_storage_class" {}

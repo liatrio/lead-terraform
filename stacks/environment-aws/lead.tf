@@ -32,13 +32,11 @@ module "toolchain" {
   artifactory_license   = data.vault_generic_secret.artifactory.data["license"]
   keycloak_hostname     = module.keycloak.keycloak_hostname
   keycloak_realm_id     = module.keycloak_config.keycloak_realm_id
-  harbor_admin_password = data.vault_generic_secret.harbor.data["admin-password"]
   enable_istio          = var.enable_istio
   enable_artifactory    = var.enable_artifactory
   enable_gitlab         = var.enable_gitlab
-  enable_keycloak       = false
-  enable_sonarqube      = false
-  enable_harbor         = false
+  enable_keycloak       = var.enable_keycloak
+  enable_sonarqube      = var.enable_sonarqube
   enable_rode           = var.enable_rode
   issuer_name           = module.cluster_issuer.issuer_name
   issuer_kind           = module.cluster_issuer.issuer_kind
