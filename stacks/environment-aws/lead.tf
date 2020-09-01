@@ -42,8 +42,6 @@ module "toolchain" {
   issuer_kind           = module.cluster_issuer.issuer_kind
   crd_waiter            = module.cert_manager.crd_waiter
   k8s_storage_class     = var.k8s_storage_class
-
-  rode_service_account_arn = aws_iam_role.rode_service_account.arn
 }
 
 module "harbor" {
@@ -217,4 +215,14 @@ module "keycloak_config" {
   depends_on = [
     module.keycloak
   ]
+}
+
+module "rode" {
+  source = "../../modules/tools/rode"
+
+  enable_rode              = var.enable_rode
+  namespace                = var.toolchain_namespace
+  rode_service_account_arn = aws_iam_role.rode_service_account.arn
+  cluster                  = module.eks.cluster_id
+  root_zone_name           = var.root_zone_name
 }

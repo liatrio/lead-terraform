@@ -88,6 +88,10 @@ variable "enable_rode" {
   default = true
 }
 
+variable "localstack_enabled" {
+  default = false
+}
+
 variable "uptime" {
   default = "always"
 }

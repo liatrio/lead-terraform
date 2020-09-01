@@ -47,13 +47,7 @@ variable "enable_sonarqube" {
   default = true
 }
 
-variable "enable_rode" {
-  default = true
-}
-
 variable "crd_waiter" {
 }
 
 variable "k8s_storage_class" {}
-
-variable "rode_service_account_arn" {}
