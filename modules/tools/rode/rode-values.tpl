@@ -10,7 +10,7 @@ rbac:
     eks.amazonaws.com/role-arn: ${iam_arn}
 
 localstack:
-  enabled: false
+  enabled: ${localstack_enabled}
 
 resources:
   limits:
