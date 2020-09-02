@@ -1,5 +1,6 @@
 provider "azurerm" {
-  version = "=2.20.0"
+  version                    = "=2.20.0"
+  skip_provider_registration = true
   features {}
 }
 
@@ -22,7 +23,7 @@ resource "azurerm_subnet" "internal" {
   name                 = "internal"
   resource_group_name  = var.resource_group
   virtual_network_name = azurerm_virtual_network.main.name
-  address_prefixes       = ["10.0.2.0/24"]
+  address_prefixes     = ["10.0.2.0/24"]
 }
 
 resource "azurerm_network_interface" "main" {
