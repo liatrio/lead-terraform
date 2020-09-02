@@ -8,7 +8,6 @@ module "ca_issuer" {
   name             = "elasticstack"
   namespace        = var.namespace
   common_name      = var.root_zone_name
-  cert-manager-crd = var.cert_manager_crd_waiter
 }
 
 module "elasticsearch_certificate" {
@@ -18,7 +17,6 @@ module "elasticsearch_certificate" {
   namespace       = var.namespace
   domain          = "elasticsearch-master.${var.namespace}.svc"
   issuer_name     = module.ca_issuer.name
-  certificate_crd = var.cert_manager_crd_waiter
   wait_for_cert   = true
 }
 

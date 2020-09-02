@@ -15,7 +15,6 @@ data "template_file" "issuer_values" {
     gcp_dns_project                     = var.gcp_dns_project
     gcp_dns_service_account_secret_name = var.gcp_dns_service_account_secret_name
     gcp_dns_service_account_secret_key  = var.gcp_dns_service_account_secret_key
-    crd_waiter                          = var.crd_waiter # this enforces a dependency on the cert-manager CRDs
     ca_secret                           = var.ca_secret
   }
 }

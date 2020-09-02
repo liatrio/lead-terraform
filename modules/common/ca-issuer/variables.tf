@@ -6,11 +6,6 @@ variable "namespace" {
   description = "Kubernetes namespace to install CA issuer into"
 }
 
-variable "cert-manager-crd" {
-  description = "Cert Manager CRD dependency"
-}
-
-
 variable "common_name" {
   description = "Common name of CA certificate"
 }

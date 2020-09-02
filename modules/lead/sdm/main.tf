@@ -23,7 +23,6 @@ data "template_file" "operator_toolchain_values" {
     jenkins_image_version  = var.product_vars["jenkins_image_version"]
     toolchain_image_repo   = var.product_vars["toolchain_image_repo"]
     enable_harbor          = var.product_vars["enable_harbor"]
-    enable_artifactory     = var.product_vars["enable_artifactory"]
 
     aws_environment             = var.product_vars["aws_environment"]
     s3_bucket                   = var.product_vars["s3_bucket"]

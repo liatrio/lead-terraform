@@ -54,5 +54,4 @@ module "cert-issuer" {
   issuer_name = "ca-issuer-${var.name}"
   issuer_type = "ca"
   ca_secret   = "ca-issuer-${var.name}"
-  crd_waiter  = var.cert-manager-crd
 }
