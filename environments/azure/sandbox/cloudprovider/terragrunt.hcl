@@ -7,6 +7,5 @@ include {
 }
 
 inputs = {
-  rg_name                 = "rg-????"
-  location                = "???"
-  }
+  resource_group = "lead"
+}
