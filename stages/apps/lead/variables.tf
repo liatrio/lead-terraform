@@ -32,6 +32,7 @@ variable "image_whitelist" {
 }
 
 variable "elb_security_group_id" {
+  default = ""
 }
 
 variable "essential_taint_key" {
@@ -165,55 +166,73 @@ variable "enable_lab_partner" {
 }
 
 variable "external_dns_service_account_arn" {
+  default = ""
 }
 
 variable "cert_manager_service_account_arn" {
+  default = ""
 }
 
 variable "cluster_autoscaler_service_account_arn" {
+  default = ""
 }
 
 variable "workspace_role_name" {
+  default = ""
 }
 
 variable "codeservices_sqs_url" {
+  default = ""
 }
 
 variable "operator_slack_service_account_arn" {
+  default = ""
 }
 
 variable "operator_jenkins_service_account_arn" {
+  default = ""
 }
 
 variable "product_operator_service_account_arn" {
+  default = ""
 }
 
 variable "rode_service_account_arn" {
+  default = ""
 }
 
 variable "codeservices_event_mapper_service_account_arn" {
+  default = ""
 }
 
 variable "codeservices_s3_bucket" {
+  default = ""
 }
 
 variable "codeservices_codebuild_role" {
+  default = ""
 }
 
 variable "codeservices_pipeline_role" {
+  default = ""
 }
 
 variable "codeservices_codebuild_security_group_id" {
+  default = ""
 }
 
 variable "vault_aws_access_key_id" {
+  default = ""
 }
 
 variable "vault_aws_secret_access_key" {
+  default = ""
 }
 
 variable "vault_dynamodb_table_name" {
+  default = ""
 }
 
 variable "vault_kms_key_id" {
+  default = ""
 }
