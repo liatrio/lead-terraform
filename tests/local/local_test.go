@@ -81,7 +81,6 @@ func TestSetup(t *testing.T) {
 			tm.SetTerraformVar("cluster_domain", "tests.lead-terraform.liatr.io")
 			tm.SetTerraformVar("issuer_kind", "Issuer")
 			tm.SetTerraformVar("issuer_name", "test-issuer")
-			tm.SetTerraformVar("crd_waiter", "NA")
 			tm.SetTerraformVar("ingress_controller_type", "ClusterIP")
 		},
 	}
