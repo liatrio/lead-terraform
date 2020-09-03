@@ -1,5 +1,4 @@
 variable "namespace" {}
-variable "enabled" {}
 variable "extra_values" {
   default = ""
 }

@@ -93,6 +93,10 @@ variable "enable_kube_downscaler" {
   default = true
 }
 
+variable "enable_k8s_spot_termination_handler_enabled" {
+  default = true
+}
+
 variable "enable_cluster_issuer" {
   default = true
 }

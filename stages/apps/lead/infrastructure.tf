@@ -50,6 +50,7 @@ module "kube_downscaler" {
 
 module "k8s_spot_termination_handler" {
   source = "../../../modules/tools/k8s-spot-termination-handler"
+  count               = var.k8s_spot_termination_handler_enabled ? 1 : 0
 }
 
 module "kube_janitor" {
@@ -69,7 +70,7 @@ module "metrics_server" {
 module "cluster_autoscaler" {
   source = "../../../modules/tools/cluster-autoscaler"
 
-  enabled                                = var.enable_cluster_autoscaler
+  count                                  = var.enable_cluster_autoscaler ? 1 : 0
   cluster                                = var.cluster_name
   region                                 = var.region
   cluster_autoscaler_service_account_arn = var.cluster_autoscaler_service_account_arn
