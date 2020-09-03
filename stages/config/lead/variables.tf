@@ -14,6 +14,8 @@ variable "vault_address" {
 
 variable "enable_keycloak" {}
 
+variable "enable_harbor" {}
+
 variable "keycloak_hostname" {
     description = "Keycloak instance url provided by app stage"
 }
