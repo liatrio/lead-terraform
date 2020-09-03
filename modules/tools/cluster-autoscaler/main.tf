@@ -4,6 +4,7 @@ data "helm_repository" "stable" {
 }
 
 data "template_file" "cluster_autoscaler" {
+  count = var.enabled ? 1 : 0
   template = file("${path.module}/cluster-autoscaler-values.tpl")
 
   vars = {
@@ -15,6 +16,8 @@ data "template_file" "cluster_autoscaler" {
 }
 
 resource "helm_release" "cluster_autoscaler" {
+  count = var.enabled ? 1 : 0
+
   name       = "cluster-autoscaler"
   namespace  = var.namespace
   repository = data.helm_repository.stable.metadata[0].name

@@ -83,6 +83,10 @@ variable "enable_dashboard" {
   default = true
 }
 
+variable "enable_cluster_autoscaler" {
+  default = true
+}
+
 variable "enable_autoscaler_scale_down" {
   default = true
 }

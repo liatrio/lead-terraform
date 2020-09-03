@@ -68,6 +68,7 @@ module "metrics_server" {
 module "cluster_autoscaler" {
   source = "../../../modules/tools/cluster-autoscaler"
 
+  enabled                                = var.enable_cluster_autoscaler
   cluster                                = var.cluster_name
   region                                 = var.region
   cluster_autoscaler_service_account_arn = var.cluster_autoscaler_service_account_arn
