@@ -152,6 +152,9 @@ variable "external_dns_service_account_arn" {
 variable "cert_manager_service_account_arn" {
 }
 
+variable "cluster_autoscaler_service_account_arn" {
+}
+
 variable "workspace_role_name" {
 }
 
