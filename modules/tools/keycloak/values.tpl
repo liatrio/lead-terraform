@@ -36,8 +36,10 @@ ingress:
     ingress.kubernetes.io/proxy-read-timeout: "600"
     ingress.kubernetes.io/proxy-send-timeout: "600"
     nginx.ingress.kubernetes.io/proxy-body-size: "0"
-  hosts:
-  - ${ingress_hostname}
+  rules:
+  - host: ${ingress_hostname}
+    paths:
+      - /
   tls:
   - hosts:
     - ${ingress_hostname}
