@@ -20,7 +20,7 @@ data "template_file" "essential_toleration" {
 module "external_dns" {
   source = "../../../modules/tools/external-dns"
 
-  enabled                     = var.enable_external_dns ? 1 : 0
+  enabled                     = var.enable_external_dns
   istio_enabled               = true
   dns_provider                = "aws"
   service_account_annotations = {
