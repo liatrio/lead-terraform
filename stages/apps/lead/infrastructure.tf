@@ -41,6 +41,7 @@ module "cert_manager" {
 module "kube_downscaler" {
   source = "../../../modules/tools/kube-downscaler"
 
+  count               = var.kube_downscaler_enabled ? 1 : 0
   namespace           = module.system_namespace.name
   uptime              = var.uptime
   excluded_namespaces = var.downscaler_exclude_namespaces

@@ -6,6 +6,7 @@ variable "cluster_name" {
 
 variable "cluster_zone_id" {
   description = "Cluster zone id provided by cloud-provider stage"
+  default = ""
 }
 
 variable "aws_environment" {}
@@ -34,6 +35,7 @@ variable "elb_security_group_id" {
 }
 
 variable "essential_taint_key" {
+  default = ""
 }
 variable "opa_failure_policy" {
   default = "Fail"
@@ -84,6 +86,10 @@ variable "enable_dashboard" {
 }
 
 variable "enable_cluster_autoscaler" {
+  default = true
+}
+
+variable "enable_kube_downscaler" {
   default = true
 }
 
