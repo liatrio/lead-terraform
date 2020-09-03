@@ -70,7 +70,7 @@ module "cluster_autoscaler" {
 
   cluster                                = var.cluster_name
   region                                 = var.region
-  cluster_autoscaler_service_account_arn = var.cert_manager_service_account_arn
+  cluster_autoscaler_service_account_arn = var.cluster_autoscaler_service_account_arn
   enable_autoscaler_scale_down           = var.enable_autoscaler_scale_down
   namespace                              = module.system_namespace.name
   extra_values                           = data.template_file.essential_toleration.rendered
