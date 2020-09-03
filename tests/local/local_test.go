@@ -94,7 +94,7 @@ func TestSetup(t *testing.T) {
 
 func testModules(t *testing.T) {
   t.Run("Dashboard", testLeadDashboard)
-	t.Run("SDM", testLeadSdm)
+	//t.Run("SDM", testLeadSdm)
 	t.Run("KubeResourceReport", common.KubeResourceReportTest)
 	t.Run("ExternalDNS", common.ExternalDnsTest)
 	t.Run("KubeDownscaler", common.KubeDownscalerTest)
