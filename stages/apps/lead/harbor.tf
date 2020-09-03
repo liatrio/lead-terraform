@@ -6,7 +6,7 @@ module "harbor" {
   source = "../../../modules/tools/harbor"
 
   enable                       = var.enable_harbor
-  cluster                      = var.cluster
+  cluster                      = var.cluster_name
   namespace                    = var.toolchain_namespace
   admin_password               = data.vault_generic_secret.harbor.data["admin-password"]
   root_zone_name               = var.root_zone_name
