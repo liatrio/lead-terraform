@@ -1,5 +1,7 @@
 variable "region" {}
 
+variable "cluster_name" {}
+
 variable "enable_google_login" {
     description = "Feature flag to enable Keycloak login using Google accounts"
 }
