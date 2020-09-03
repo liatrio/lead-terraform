@@ -4,5 +4,5 @@ output "keycloak_hostname" {
 }
 
 output "keycloak_admin_credential_secret" {
-  value = kubernetes_secret.keycloak_admin.metadata[0].name
+  value = kubernetes_secret.keycloak_credentials.metadata[0].name
 }
