@@ -1,5 +1,5 @@
 terraform {
-    source = "../../../../stacks/environment-azure"
+    source = "../../../../stages/cloud-provider/azure/lead"
 }
 
 include {
