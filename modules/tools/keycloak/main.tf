@@ -13,8 +13,6 @@ resource "kubernetes_secret" "keycloak_credentials" {
   data = {
     admin_username = "keycloak"
     admin_password = var.keycloak_admin_password
-    db_username = "keycloak"
-    db_password = var.postgres_password
   }
 }
 
