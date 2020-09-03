@@ -39,6 +39,10 @@ output "cert_manager_service_account_arn" {
   value = module.cert_manager_iam.cert_manager_service_account_arn
 }
 
+output "cluster_autoscaler_service_account_arn" {
+  value = module.cluster_autoscaler_iam.cluster_autoscaler_service_account_arn
+}
+
 output "codeservices_sqs_url" {
   value = module.codeservices.sqs_url
 }
