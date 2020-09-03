@@ -1,6 +1,7 @@
 module "vault" {
   source = "../../../modules/tools/vault-less-secure"
 
+  count                       = var.enable_vault ? 1 : 0
   namespace                   = var.toolchain_namespace
   region                      = var.region
   vault_dynamodb_table_name   = var.vault_dynamodb_table_name

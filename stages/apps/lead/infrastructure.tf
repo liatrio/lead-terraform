@@ -20,7 +20,7 @@ data "template_file" "essential_toleration" {
 module "external_dns" {
   source = "../../../modules/tools/external-dns"
 
-  enabled                     = true
+  enabled                     = var.enable_external_dns ? 1 : 0
   istio_enabled               = true
   dns_provider                = "aws"
   service_account_annotations = {
@@ -41,7 +41,7 @@ module "cert_manager" {
 module "kube_downscaler" {
   source = "../../../modules/tools/kube-downscaler"
 
-  count               = var.kube_downscaler_enabled ? 1 : 0
+  count               = var.enable_kube_downscaler ? 1 : 0
   namespace           = module.system_namespace.name
   uptime              = var.uptime
   excluded_namespaces = var.downscaler_exclude_namespaces
@@ -50,7 +50,7 @@ module "kube_downscaler" {
 
 module "k8s_spot_termination_handler" {
   source = "../../../modules/tools/k8s-spot-termination-handler"
-  count               = var.k8s_spot_termination_handler_enabled ? 1 : 0
+  count               = var.enable_k8s_spot_termination_handler ? 1 : 0
 }
 
 module "kube_janitor" {
