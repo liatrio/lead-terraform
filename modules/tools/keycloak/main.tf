@@ -3,16 +3,16 @@ data "helm_repository" "codecentric" {
   url  = "https://codecentric.github.io/helm-charts"
 }
 
-resource "kubernetes_secret" "keycloak_admin" {
+resource "kubernetes_secret" "keycloak_credentials" {
   metadata {
-    name      = "keycloak-admin-credential"
+    name      = "keycloak-credentials"
     namespace = var.namespace
   }
   type = "Opaque"
 
   data = {
-    username = "keycloak"
-    password = var.keycloak_admin_password
+    admin_username = "keycloak"
+    admin_password = var.keycloak_admin_password
   }
 }
 
@@ -23,7 +23,7 @@ resource "helm_release" "keycloak" {
   name       = "keycloak"
   namespace  = var.namespace
   chart      = "keycloak"
-  version    = "5.0.1"
+  version    = "9.0.5"
   timeout    = 1200
 
   values = [
@@ -31,6 +31,7 @@ resource "helm_release" "keycloak" {
       ssl_redirect     = var.root_zone_name == "localhost" ? false : true
       cluster_domain   = "${var.cluster}.${var.root_zone_name}"
       ingress_hostname = "keycloak.${var.namespace}.${var.cluster}.${var.root_zone_name}"
+      keycloak_secret  = kubernetes_secret.keycloak_credentials.metadata[0].name
     })
   ]
 

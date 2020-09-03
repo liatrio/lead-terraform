@@ -1,14 +1,14 @@
-data "helm_repository" "stable" {
-  name = "stable"
-  url  = "https://kubernetes-charts.storage.googleapis.com"
+data "helm_repository" "bitnami" {
+  name = "bitnami"
+  url  = "https://charts.bitnami.com/bitnami"
 }
 
 resource "helm_release" "metrics" {
   name       = "metrics-server"
   namespace  = var.namespace
-  repository = data.helm_repository.stable.metadata[0].name
+  repository = data.helm_repository.bitnami.metadata[0].name
   chart      = "metrics-server"
-  version    = "2.0.2"
+  version    = "4.2.2"
   timeout    = 600
   wait       = true
 

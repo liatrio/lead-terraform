@@ -16,5 +16,4 @@ module "cert_issuer" {
   issuer_kind = var.issuer_kind
   issuer_name = var.issuer_name
   issuer_type = var.issuer_type
-  crd_waiter  = var.crd_waiter
 }

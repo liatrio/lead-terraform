@@ -14,8 +14,6 @@ variable "issuer_name" {}
 
 variable "issuer_kind" {}
 
-variable "crd_waiter" {}
-
 variable "ingress_controller_type" {
   default = "LoadBalancer"
 }

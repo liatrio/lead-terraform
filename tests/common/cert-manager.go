@@ -58,7 +58,6 @@ func DestroyCertManager(tm *TestModule) {
 func SelfSignedIssuerSetup(t *TestModule) {
 	t.SetTerraformVar("issuer_type", "selfSigned")
 	t.SetTerraformVar("issuer_name", "testSelfSigned")
-	t.SetTerraformVar("crd_waiter", "NA")
 }
 
 func SelfSignedIssuerRun(t *TestModule) {
@@ -72,7 +71,6 @@ func SelfSignedIssuerTeardown(t *TestModule) {
 func CreateSelfSignedIssuer(t *testing.T, terraformOptions *terraform.Options) {
 	terraformOptions.Vars["issuer_type"] = "selfSigned"
 	terraformOptions.Vars["issuer_name"] = "testSelfSigned"
-	terraformOptions.Vars["crd_waiter"] = "NA"
 	terraform.InitAndApply(t, terraformOptions)
 }
 
@@ -83,7 +81,6 @@ func DestroySelfSignedIssuer(t *testing.T, terraformOptions *terraform.Options) 
 func CreateAcmeIssuer(t *testing.T, terraformOptions *terraform.Options) {
 	terraformOptions.Vars["issuer_type"] = "acme"
 	terraformOptions.Vars["issuer_name"] = "testAcme"
-	terraformOptions.Vars["crd_waiter"] = "NA"
 	terraform.InitAndApply(t, terraformOptions)
 }
 

@@ -20,8 +20,7 @@ module "harbor" {
   harbor_registry_disk_size    = "1Gi"
   harbor_chartmuseum_disk_size = "1Gi"
   k8s_storage_class            = var.k8s_storage_class
-  issuer_name                  = var.issuer_kind
-  issuer_kind                  = var.issuer_name
-  crd_waiter                   = true
+  issuer_kind                  = var.issuer_kind
+  issuer_name                  = var.issuer_name
   protect_pvc_resources        = false
 }

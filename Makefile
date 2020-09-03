@@ -64,7 +64,7 @@ endif
 	git push origin $(NEW_VERSION)
 
 test:
-	cd tests && go test liatr.io/lead-terraform/tests/local -timeout 90m -v --count=1
+	cd tests && go test liatr.io/lead-terraform/tests/local -timeout 90m -v --count=1 -parallel 3
 
 test-aws:
 	cd tests && go test liatr.io/lead-terraform/tests/aws -timeout 90m -v --count=1

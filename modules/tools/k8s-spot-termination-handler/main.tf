@@ -7,7 +7,7 @@ resource "helm_release" "k8s_spot_termination_handler" {
   count      = var.enabled ? 1 : 0
   repository = data.helm_repository.stable.metadata[0].name
   chart      = "k8s-spot-termination-handler"
-  version    = "1.4.3"
+  version    = "1.4.9"
   namespace  = var.namespace
   name       = "k8s-spot-termination-handler"
   timeout    = 600
