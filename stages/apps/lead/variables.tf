@@ -87,6 +87,10 @@ variable "enable_cluster_autoscaler" {
   default = true
 }
 
+variable "enable_cluster_issuer" {
+  default = true
+}
+
 variable "enable_autoscaler_scale_down" {
   default = true
 }

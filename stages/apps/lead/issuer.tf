@@ -17,6 +17,8 @@ resource "kubernetes_cluster_role" "cert_manager_cluster_role" {
 
 module "cluster_issuer" {
   source        = "../../../modules/common/cert-issuer"
+
+  count         = var.cluster_issuer_enabled ? 1 : 0
   namespace     = var.toolchain_namespace
   issuer_name   = "letsencrypt-dns"
   issuer_kind   = "ClusterIssuer"
@@ -37,7 +39,7 @@ module "cluster_issuer" {
 module "staging_cluster_issuer" {
   source        = "../../../modules/common/cert-issuer"
   namespace     = var.toolchain_namespace
-  issuer_name   = "staging-letsencrypt-dns"
+  issuer_name   = var.cert_issuer_type == "selfSigned" ? "staging-self-signed" : "staging-letsencrypt-dns"
   issuer_kind   = "ClusterIssuer"
   issuer_type   = var.cert_issuer_type
   issuer_server = "https://acme-staging-v02.api.letsencrypt.org/directory"
