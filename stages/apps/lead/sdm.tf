@@ -4,6 +4,8 @@ data "vault_generic_secret" "sparky" {
 
 module "sdm" {
   source                      = "../../../modules/lead/sdm"
+
+  count                       = var.enable_sdm ? 1 : 0
   root_zone_name              = var.root_zone_name
   cluster                     = var.cluster_name
   namespace                   = var.toolchain_namespace

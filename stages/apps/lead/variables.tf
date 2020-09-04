@@ -66,7 +66,7 @@ variable "enable_keycloak" {
   default = true
 }
 
-variable "enable_operators" {
+variable "enable_sdm" {
   default = true
 }
 
