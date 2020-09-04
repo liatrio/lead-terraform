@@ -1,3 +1,7 @@
-output "subnet_id" {
-    value = azurerm_subnet.internal.id
+output "cluster_name" {
+  value = var.cluster_name
+}
+
+output "resource_group_name" {
+  value = var.resource_group_name
 }
