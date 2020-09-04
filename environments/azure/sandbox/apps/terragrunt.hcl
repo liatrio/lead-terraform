@@ -1,5 +1,5 @@
 terraform {
-    source = "../../../../stages/apps/azure-example"
+  source = "../../../../stages/apps/azure-example"
 }
 
 include {
@@ -7,10 +7,10 @@ include {
 }
 
 dependency "kubernetes_cluster" {
-    config_path = "../cloud-provider"
+  config_path = "../cloud-provider"
 }
 
 inputs = {
-    resource_group_name = dependency.kubernetes_cluster.outputs.resource_group_name
-    cluster_name = dependency.kubernetes_cluster.outputs.cluster_name
+  resource_group_name = dependency.kubernetes_cluster.outputs.resource_group_name
+  cluster_name        = dependency.kubernetes_cluster.outputs.cluster_name
 }
