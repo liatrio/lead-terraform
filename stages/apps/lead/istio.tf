@@ -37,9 +37,9 @@ module "istio_system" {
   k8s_storage_class     = var.k8s_storage_class
 
   ingress_class                 = module.toolchain_ingress.toolchain_ingress_class
-  jaeger_elasticsearch_host     = module.elasticsearch.elasticsearch_host
-  jaeger_elasticsearch_username = module.elasticsearch.elasticsearch_username
-  jaeger_elasticsearch_password = module.elasticsearch.elasticsearch_password
+  jaeger_elasticsearch_host     = var.enable_elasticstack ? module.elasticsearch.elasticsearch_host : ""
+  jaeger_elasticsearch_username = var.enable_elasticstack ? module.elasticsearch.elasticsearch_username : ""
+  jaeger_elasticsearch_password = var.enable_elasticstack ? module.elasticsearch.elasticsearch_password : ""
 
   depends_on = [
     null_resource.istio_init_delay

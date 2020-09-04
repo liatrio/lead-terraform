@@ -86,6 +86,10 @@ variable "enable_vault" {
   default = true
 }
 
+variable "enable_elasticstack" {
+  default = true
+}
+
 variable "enable_dashboard" {
   default = true
 }

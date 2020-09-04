@@ -1,6 +1,7 @@
 module "elasticsearch_namespace" {
   source = "../../../modules/common/namespace"
 
+  count       = var.enable_elasticstack ? 1 : 0
   namespace   = "elasticsearch"
   annotations = {
     name    = "elasticsearch"
@@ -11,7 +12,8 @@ module "elasticsearch_namespace" {
 module "elasticsearch" {
   source = "../../../modules/tools/elasticsearch"
 
-  namespace               = module.elasticsearch_namespace.name
+  count                   = var.enable_elasticstack ? 1 : 0
+  namespace               = var.enable_elasticstack ? module.elasticsearch_namespace.name : null
   root_zone_name          = var.root_zone_name
   disk_size               = "50Gi"
 
@@ -23,18 +25,17 @@ module "elasticsearch" {
 module "kibana" {
   source = "../../../modules/tools/kibana"
 
-  namespace                              = module.elasticsearch_namespace.name
-  elasticsearch_credentials_secret_name  = module.elasticsearch.elasticsearch_credentials_secret_name
-  elasticsearch_certificates_secret_name = module.elasticsearch.elasticsearch_certificates_secret_name
-
-  // keycloak configuration for gatekeeper
-  enable_keycloak                  = var.enable_keycloak
+  count                                  = var.enable_elasticstack ? 1 : 0
+  namespace                              = var.enable_elasticstack ? module.elasticsearch_namespace.name : null
+  elasticsearch_credentials_secret_name  = var.enable_elasticstack ? module.elasticsearch.elasticsearch_credentials_secret_name : null
+  elasticsearch_certificates_secret_name = var.enable_elasticstack ? module.elasticsearch.elasticsearch_certificates_secret_name : null
 }
 
 module "fluent_bit" {
   source = "../../../modules/tools/fluent-bit"
 
-  namespace                              = module.elasticsearch_namespace.name
-  elasticsearch_credentials_secret_name  = module.elasticsearch.elasticsearch_credentials_secret_name
-  elasticsearch_username                 = module.elasticsearch.elasticsearch_username
+  count                                  = var.enable_elasticstack ? 1 : 0
+  namespace                              = var.enable_elasticstack ? module.elasticsearch_namespace.name : null
+  elasticsearch_credentials_secret_name  = var.enable_elasticstack ? module.elasticsearch.elasticsearch_credentials_secret_name : null
+  elasticsearch_username                 = var.enable_elasticstack ? module.elasticsearch.elasticsearch_username : null
 }
