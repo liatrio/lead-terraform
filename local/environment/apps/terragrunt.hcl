@@ -14,7 +14,8 @@ inputs = {
   enable_k8s_spot_termination_handler         = false
   enable_istio                                = false
 
-  cert_issuer_type = "selfSigned"
+  cert_issuer_type                = "selfSigned"
+  ingress_external_traffic_policy = "Local"
 
   enable_keycloak          = false
   enable_harbor            = false

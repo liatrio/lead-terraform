@@ -17,7 +17,7 @@ module "toolchain_ingress" {
   issuer_name                     = module.cluster_issuer.issuer_name
   issuer_kind                     = module.cluster_issuer.issuer_kind
   ingress_controller_type         = "LoadBalancer"
-  ingress_external_traffic_policy = "Local"
+  ingress_external_traffic_policy = var.ingress_external_traffic_policy
 
   depends_on = [
     module.cert_manager
