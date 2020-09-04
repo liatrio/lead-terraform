@@ -244,3 +244,7 @@ variable "vault_dynamodb_table_name" {
 variable "vault_kms_key_id" {
   default = ""
 }
+
+variable "ingress_external_traffic_policy" {
+  default = ""
+}
