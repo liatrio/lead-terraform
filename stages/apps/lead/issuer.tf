@@ -19,7 +19,7 @@ module "cluster_issuer" {
   source        = "../../../modules/common/cert-issuer"
 
   namespace     = var.toolchain_namespace
-  issuer_name   = "letsencrypt-dns"
+  issuer_name   = var.cert_issuer_type == "selfSigned" ? "self-signed" : "letsencrypt-dns"
   issuer_kind   = "ClusterIssuer"
   issuer_type   = var.cert_issuer_type
   issuer_server = "https://acme-v02.api.letsencrypt.org/directory"
