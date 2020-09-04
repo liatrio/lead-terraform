@@ -16,6 +16,7 @@ resource "helm_release" "istio_init" {
 
 # Give the CRD a chance to settle
 resource "null_resource" "istio_init_delay" {
+  count               = var.enable_istio ? 1 : 0
   provisioner "local-exec" {
     command = "sleep 15"
   }
@@ -26,7 +27,8 @@ resource "null_resource" "istio_init_delay" {
 
 module "istio_system" {
   source              = "../../../modules/common/istio"
-  enabled             = var.enable_istio
+
+  count               = var.enable_istio ? 1 : 0
   namespace           = "istio-system"
   cluster_domain      = "${var.cluster_name}.${var.root_zone_name}"
   toolchain_namespace = var.toolchain_namespace
