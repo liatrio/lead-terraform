@@ -1,12 +1,19 @@
+provider "aws" {
+  version = "2.53"
+  region  = var.region
+}
+
+data "aws_caller_identity" "current" {}
+
 provider "kubernetes" {
-  config_context = var.cluster
+  config_context = var.cluster_name
 }
 
 provider "helm" {
   version         = "1.1.1"
 
   kubernetes {
-    config_context = var.cluster
+    config_context = var.cluster_name
   }
 }
 

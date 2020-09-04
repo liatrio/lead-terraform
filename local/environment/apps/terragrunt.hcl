@@ -11,13 +11,17 @@ inputs = {
   # Toolchain config
   enable_cluster_autoscaler                   = false
   enable_kube_downscaler                      = false
-  enable_k8s_spot_termination_handler_enabled = false
+  enable_k8s_spot_termination_handler         = false
   enable_istio                                = false
+
+  cert_issuer_type = "selfSigned"
 
   enable_keycloak          = false
   enable_harbor            = false
   enable_rode              = false
   enable_vault             = false
+  enable_elasticstack      = false
+  enable_sdm               = false
   enable_test_user         = false
   enable_aws_code_services = false
 
