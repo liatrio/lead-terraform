@@ -18,7 +18,6 @@ resource "kubernetes_cluster_role" "cert_manager_cluster_role" {
 module "cluster_issuer" {
   source        = "../../../modules/common/cert-issuer"
 
-  count         = var.cluster_issuer_enabled ? 1 : 0
   namespace     = var.toolchain_namespace
   issuer_name   = "letsencrypt-dns"
   issuer_kind   = "ClusterIssuer"

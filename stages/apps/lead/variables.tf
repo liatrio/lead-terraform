@@ -82,6 +82,10 @@ variable "enable_rode" {
   default = true
 }
 
+variable "enable_vault" {
+  default = true
+}
+
 variable "enable_dashboard" {
   default = true
 }
@@ -95,10 +99,6 @@ variable "enable_kube_downscaler" {
 }
 
 variable "enable_k8s_spot_termination_handler" {
-  default = true
-}
-
-variable "enable_cluster_issuer" {
   default = true
 }
 

@@ -10,7 +10,6 @@ inputs = {
 
   # Toolchain config
   enable_cluster_autoscaler                   = false
-  enable_cluster_issuer                       = false
   enable_kube_downscaler                      = false
   enable_k8s_spot_termination_handler_enabled = false
   enable_istio                                = false
@@ -41,5 +40,5 @@ inputs = {
 }
 
 terraform {
-  source = "github.com/liatrio/lead-terraform//stages/apps/lead"
+  source = "../../..//stages/apps/lead"
 }

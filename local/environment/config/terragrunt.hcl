@@ -26,5 +26,5 @@ inputs = {
 }
 
 terraform {
-  source = "github.com/liatrio/lead-terraform//stages/config/lead"
+  source = "../../..//stages/config/lead"
 }
