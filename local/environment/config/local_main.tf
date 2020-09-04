@@ -32,3 +32,19 @@ provider "vault" {
     }
   }
 }
+
+provider "keycloak" {
+  client_id      = "admin-cli"
+  username       = "keycloak"
+  password       = data.vault_generic_secret.keycloak.data["admin-password"]
+  url            = "https://${var.keycloak_hostname}"
+  initial_login  = false
+  client_timeout = 15
+}
+
+provider "harbor" {
+  url      = "https://${var.harbor_hostname}"
+  username = "admin"
+  password = data.vault_generic_secret.harbor.data["admin-password"]
+}
+
