@@ -33,7 +33,7 @@ module "istio_system" {
   issuer_name         = module.cluster_issuer.issuer_name
   issuer_kind         = module.cluster_issuer.issuer_kind
 
-  flagger_event_webhook = "${module.sdm.slack_operator_in_cluster_url}/canary-events"
+  flagger_event_webhook = var.enable_sdm ? "${module.sdm.slack_operator_in_cluster_url}/canary-events" : ""
   k8s_storage_class     = var.k8s_storage_class
 
   ingress_class                 = module.toolchain_ingress.toolchain_ingress_class
