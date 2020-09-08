@@ -1,5 +1,5 @@
 
-data "kubernetes_secret" "keycloak-credentials" {
+data "kubernetes_secret" "keycloak_credentials" {
   provider = kubernetes.toolchain
 
   metadata {
@@ -20,8 +20,8 @@ data "kubernetes_secret" "keycloak_toolchain_realm" {
 provider "keycloak" {
   client_id = "admin-cli"
   // trick provider into not caring if username/password don't exist
-  username      = var.enable_keycloak ? data.kubernetes_secret.keycloak-credentials.data.admin_username : "username"
-  password      = var.enable_keycloak ? data.kubernetes_secret.keycloak-credentials.data.admin_password : "password"
+  username      = var.enable_keycloak ? data.kubernetes_secret.keycloak_credentials.data.admin_username : "username"
+  password      = var.enable_keycloak ? data.kubernetes_secret.keycloak_credentials.data.admin_password : "password"
   url           = "${local.protocol}://keycloak.toolchain.${var.cluster_domain}"
   initial_login = false
 }
