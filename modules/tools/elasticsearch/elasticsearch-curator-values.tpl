@@ -12,15 +12,10 @@ configMaps:
           ignore_empty_list: True
         filters:
         - filtertype: age
-          source: name
+          source: creation_date
           direction: older
-          timestring: '%Y.%m.%d'
           unit: days
           unit_count: ${days_until_index_expires}
-          field:
-          stats_result:
-          epoch:
-          exclude: False
   config_yml: |-
     ---
     client:
