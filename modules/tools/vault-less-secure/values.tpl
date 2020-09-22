@@ -26,5 +26,13 @@ server:
       ${vault_config}
   ha:
     enabled: false
+  resources:
+    requests:
+      memory: 64Mi
+      cpu: 50m
+    limits:
+      memory: 512Mi
+      cpu: 250m
+
 ui:
   enabled: true

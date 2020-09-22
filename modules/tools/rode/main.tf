@@ -1,5 +1,4 @@
 resource "helm_release" "rode" {
-  count      = var.enable_rode ? 1 : 0
   repository = "https://harbor.toolchain.lead.prod.liatr.io/chartrepo/public"
   timeout    = 120
   name       = "rode"
