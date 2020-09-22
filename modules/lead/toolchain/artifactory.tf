@@ -105,11 +105,6 @@ resource "random_string" "artifactory_db_password" {
   special = false
 }
 
-data "helm_repository" "jfrog" {
-  name = "jfrog"
-  url  = "https://charts.jfrog.io"
-}
-
 data "template_file" "artifactory_values" {
   count    = var.enable_artifactory ? 1 : 0
   template = file("${path.module}/artifactory-values.tpl")
@@ -123,7 +118,7 @@ data "template_file" "artifactory_values" {
 resource "helm_release" "artifactory" {
   count      = var.enable_artifactory ? 1 : 0
   depends_on = [kubernetes_config_map.artifactory_config]
-  repository = data.helm_repository.jfrog.metadata[0].name
+  repository = "https://charts.jfrog.io"
   name       = "artifactory"
   namespace  = module.toolchain_namespace.name
   chart      = "artifactory"

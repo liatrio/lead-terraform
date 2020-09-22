@@ -37,16 +37,11 @@ resource "kubernetes_secret" "elasticsearch_credentials" {
   }
 }
 
-data "helm_repository" "elastic" {
-  name = "elastic"
-  url  = "https://helm.elastic.co"
-}
-
 resource "helm_release" "elasticsearch" {
   name       = "elasticsearch"
   namespace  = var.namespace
-  chart      = "elastic/elasticsearch"
-  repository = data.helm_repository.elastic.name
+  chart      = "elasticsearch"
+  repository = "https://helm.elastic.co"
   version    = "7.6.2"
   wait       = true
 
@@ -62,16 +57,11 @@ resource "helm_release" "elasticsearch" {
   ]
 }
 
-data "helm_repository" "stable" {
-  name = "stable"
-  url  = "https://kubernetes-charts.storage.googleapis.com"
-}
-
 resource "helm_release" "elasticsearch_curator" {
   name       = "elasticsearch-curator"
   namespace  = var.namespace
-  chart      = "stable/elasticsearch-curator"
-  repository = data.helm_repository.stable.name
+  chart      = "elasticsearch-curator"
+  repository = "https://kubernetes-charts.storage.googleapis.com"
   version    = "2.1.5"
   wait       = true
 

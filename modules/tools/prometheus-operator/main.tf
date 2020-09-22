@@ -4,15 +4,10 @@ resource "random_password" "password" {
   override_special = "_%@"
 }
 
-data "helm_repository" "stable" {
-  name = "stable"
-  url  = "https://kubernetes-charts.storage.googleapis.com"
-}
-
 resource "helm_release" "prometheus_operator" {
   name       = "prometheus-operator"
   namespace  = var.namespace
-  repository = data.helm_repository.stable.name
+  repository = "https://kubernetes-charts.storage.googleapis.com"
   chart      = "prometheus-operator"
   version    = "8.3.3"
   timeout    = 600

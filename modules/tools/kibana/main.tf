@@ -1,13 +1,8 @@
-data "helm_repository" "elastic" {
-  name = "elastic"
-  url  = "https://helm.elastic.co"
-}
-
 resource "helm_release" "kibana" {
   name       = "kibana"
   namespace  = var.namespace
-  chart      = "elastic/kibana"
-  repository = data.helm_repository.elastic.name
+  chart      = "kibana"
+  repository = "https://helm.elastic.co"
   version    = "7.6.2"
   wait       = true
 

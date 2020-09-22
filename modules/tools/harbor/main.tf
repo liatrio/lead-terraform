@@ -99,11 +99,6 @@ resource "helm_release" "harbor_certificates" {
   }
 }
 
-data "helm_repository" "harbor" {
-  name = "harbor"
-  url  = "https://helm.goharbor.io"
-}
-
 data "template_file" "harbor_values" {
   template = file("${path.module}/harbor-values.tpl")
 
@@ -123,7 +118,7 @@ data "template_file" "harbor_values" {
 
 resource "helm_release" "harbor" {
   count      = var.enable ? 1 : 0
-  repository = data.helm_repository.harbor.metadata[0].name
+  repository = "https://helm.goharbor.io"
   name       = "harbor"
   namespace  = var.namespace
   chart      = "harbor"

@@ -16,16 +16,11 @@ resource "kubernetes_secret" "elasticsearch_password" {
   }
 }
 
-data "helm_repository" "jaegertracing" {
-  name = "jaegertracing"
-  url  = "https://jaegertracing.github.io/helm-charts"
-}
-
 resource "helm_release" "jeager" {
   name       = "jaeger"
   namespace  = var.namespace
-  chart      = "jaegertracing/jaeger"
-  repository = data.helm_repository.jaegertracing.name
+  chart      = "jaeger"
+  repository = "https://jaegertracing.github.io/helm-charts"
   version    = "0.27.3"
   wait       = true
 
