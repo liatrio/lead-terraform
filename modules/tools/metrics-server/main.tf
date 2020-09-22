@@ -12,10 +12,9 @@ resource "helm_release" "metrics" {
   timeout    = 600
   wait       = true
 
-  set {
-    name = "apiService.create"
-    value = "true"
-  }
-
-  values = var.extra_values != "" ? [var.extra_values] : null
+  values = [
+    templatefile("${path.module}/values.tpl", {
+      extra_values  = var.extra_values
+    })
+  ]
 }
