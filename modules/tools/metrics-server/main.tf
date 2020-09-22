@@ -8,17 +8,13 @@ resource "helm_release" "metrics" {
   namespace  = var.namespace
   repository = data.helm_repository.bitnami.metadata[0].name
   chart      = "metrics-server"
-  version    = "4.2.2"
+  version    = "4.3.2"
   timeout    = 600
   wait       = true
 
   set {
-    name  = "args[0]"
-    value = "--kubelet-insecure-tls"
-  }
-  set {
-    name  = "args[1]"
-    value = "--kubelet-preferred-address-types=InternalIP"
+    name = "apiService.create"
+    value = "true"
   }
 
   values = var.extra_values != "" ? [var.extra_values] : null
