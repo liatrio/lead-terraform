@@ -4,6 +4,7 @@ resource "helm_release" "rode" {
   name       = "rode"
   chart      = "rode"
   namespace  = var.namespace
+  version    = "0.4.0"
 
   values    = [
     templatefile("${path.module}/rode-values.tpl", {
