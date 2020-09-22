@@ -10,6 +10,7 @@ terraform {
     }
     helm = {
       source = "hashicorp/helm"
+      version = "1.3.0"
     }
     keycloak = {
       source = "mrparkers/keycloak"

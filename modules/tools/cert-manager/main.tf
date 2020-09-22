@@ -1,15 +1,8 @@
-# Cert manager repo
-data "helm_repository" "cert_manager" {
-  name = "jetstack"
-  url  = "https://charts.jetstack.io"
-}
-
-# Application gateway / ingress wiring components
 resource "helm_release" "cert_manager" {
   name       = "cert-manager"
   namespace  = var.namespace
   chart      = "jetstack/cert-manager"
-  repository = data.helm_repository.cert_manager.name
+  repository = "https://charts.jetstack.io"
   timeout    = 120
   version    = "v0.16.1"
   wait       = true

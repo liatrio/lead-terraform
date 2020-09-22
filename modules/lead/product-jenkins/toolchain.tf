@@ -54,16 +54,11 @@ module "toolchain_namespace" {
   }
 }
 
-data "helm_repository" "stable" {
-  name = "stable"
-  url  = "https://kubernetes-charts.storage.googleapis.com"
-}
-
 resource "helm_release" "jenkins" {
   provider = helm.toolchain
   name       = "jenkins"
   chart      = "stable/jenkins"
-  repository = data.helm_repository.stable.metadata[0].name
+  repository = "https://kubernetes-charts.storage.googleapis.com"
   namespace  = module.toolchain_namespace.name
   timeout    = "600"
   version    = "1.6.0"

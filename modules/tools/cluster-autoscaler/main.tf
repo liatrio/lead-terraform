@@ -1,8 +1,3 @@
-data "helm_repository" "stable" {
-  name = "stable"
-  url  = "https://kubernetes-charts.storage.googleapis.com"
-}
-
 data "template_file" "cluster_autoscaler" {
   template = file("${path.module}/cluster-autoscaler-values.tpl")
 
@@ -17,7 +12,7 @@ data "template_file" "cluster_autoscaler" {
 resource "helm_release" "cluster_autoscaler" {
   name       = "cluster-autoscaler"
   namespace  = var.namespace
-  repository = data.helm_repository.stable.metadata[0].name
+  repository = "https://kubernetes-charts.storage.googleapis.com"
   chart      = "cluster-autoscaler"
   timeout    = 600
   wait       = true

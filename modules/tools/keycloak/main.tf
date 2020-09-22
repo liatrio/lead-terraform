@@ -1,8 +1,3 @@
-data "helm_repository" "codecentric" {
-  name = "codecentric"
-  url  = "https://codecentric.github.io/helm-charts"
-}
-
 resource "kubernetes_secret" "keycloak_credentials" {
   metadata {
     name      = "keycloak-credentials"
@@ -19,7 +14,7 @@ resource "kubernetes_secret" "keycloak_credentials" {
 resource "helm_release" "keycloak" {
   count      = var.enable_keycloak ? 1 : 0
 
-  repository = data.helm_repository.codecentric.name
+  repository = "https://codecentric.github.io/helm-charts"
   name       = "keycloak"
   namespace  = var.namespace
   chart      = "keycloak"

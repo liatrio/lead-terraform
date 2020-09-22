@@ -7,14 +7,9 @@ data "template_file" "sonarqube_values" {
   template = file("${path.module}/sonarqube-values.tpl")
 }
 
-data "helm_repository" "stable" {
-  name = "sonarqube"
-  url = "https://oteemo.github.io/charts"
-}
-
 resource "helm_release" "sonarqube" {
   count      = var.enable_sonarqube ? 1 : 0
-  repository = data.helm_repository.stable.name
+  repository = "https://oteemo.github.io/charts"
   name       = "sonarqube"
   namespace  = var.namespace
   chart      = "sonarqube"
