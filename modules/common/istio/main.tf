@@ -34,14 +34,9 @@ resource "kubernetes_secret" "kiali_dashboard_secret" {
   }
 }
 
-data "helm_repository" "istio" {
-  name = "istio.io"
-  url  = "https://storage.googleapis.com/istio-release/releases/1.4.8/charts/"
-}
-
 resource "helm_release" "istio" {
   count      = var.enabled ? 1 : 0
-  repository = data.helm_repository.istio.metadata[0].name
+  repository = "https://storage.googleapis.com/istio-release/releases/1.4.8/charts/"
   chart      = "istio"
   namespace  = module.istio_namespace.name
   name       = module.istio_namespace.name

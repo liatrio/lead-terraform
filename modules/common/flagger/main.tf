@@ -17,12 +17,6 @@ resource "null_resource" "flagger_crd_delay" {
   depends_on = [helm_release.flagger_crds]
 }
 
-data "helm_repository" "flagger" {
-  count = var.enable ? 1 : 0
-  name  = "flagger.app"
-  url   = "https://flagger.app"
-}
-
 data "template_file" "flagger_values" {
   template = file("${path.module}/flagger-values.tpl")
 
@@ -36,7 +30,7 @@ data "template_file" "flagger_values" {
 
 resource "helm_release" "flagger" {
   count      = var.enable ? 1 : 0
-  repository = data.helm_repository.flagger[0].metadata[0].name
+  repository = "https://flagger.app"
   chart      = "flagger"
   namespace  = var.namespace
   name       = "flagger"

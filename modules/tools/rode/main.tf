@@ -1,11 +1,6 @@
-data "helm_repository" "liatrio_harbor" {
-  name = "liatrio-harbor"
-  url  =  "https://harbor.toolchain.lead.prod.liatr.io/chartrepo/public"
-}
-
 resource "helm_release" "rode" {
   count      = var.enable_rode ? 1 : 0
-  repository = data.helm_repository.liatrio_harbor.metadata[0].name
+  repository = "https://harbor.toolchain.lead.prod.liatr.io/chartrepo/public"
   timeout    = 120
   name       = "rode"
   chart      = "rode"

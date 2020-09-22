@@ -1,13 +1,8 @@
-data "helm_repository" "stable" {
-  name = "stable"
-  url  = "https://kubernetes-charts.storage.googleapis.com"
-}
-
 resource "helm_release" "fluent_bit" {
   name       = "fluent-bit"
   namespace  = var.namespace
-  chart      = "stable/fluent-bit"
-  repository = data.helm_repository.stable.name
+  chart      = "fluent-bit"
+  repository = "https://kubernetes-charts.storage.googleapis.com"
   version    = "2.8.13"
   wait       = true
 

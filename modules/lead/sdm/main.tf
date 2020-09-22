@@ -1,8 +1,3 @@
-data "helm_repository" "liatrio" {
-  name = "liatrio"
-  url  = "https://liatrio-helm.s3.us-east-1.amazonaws.com/charts"
-}
-
 data "template_file" "operator_toolchain_values" {
   template = file("${path.module}/operator-toolchain-values.tpl")
 
@@ -56,7 +51,7 @@ data "template_file" "operator_toolchain_values" {
 
 resource "helm_release" "operator_toolchain" {
   count      = var.enable_operators ? 1 : 0
-  repository = data.helm_repository.liatrio.metadata[0].name
+  repository = "https://liatrio-helm.s3.us-east-1.amazonaws.com/charts"
   timeout    = 120
   name       = "operator-toolchain"
   chart      = "operator-toolchain"

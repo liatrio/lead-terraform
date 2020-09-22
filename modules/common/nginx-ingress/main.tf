@@ -12,14 +12,9 @@ data "template_file" "nginx_ingress_values" {
   }
 }
 
-data "helm_repository" "stable" {
-  name = "stable"
-  url  = "https://kubernetes-charts.storage.googleapis.com"
-}
-
 resource "helm_release" "nginx_ingress" {
   count      = var.enabled ? 1 : 0
-  repository = data.helm_repository.stable.metadata.0.name
+  repository = "https://kubernetes-charts.storage.googleapis.com"
   chart      = "nginx-ingress"
   version    = "1.33.5"
   namespace  = var.namespace

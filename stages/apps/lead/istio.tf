@@ -1,11 +1,6 @@
-data "helm_repository" "istio" {
-  name = "istio.io"
-  url  = "https://storage.googleapis.com/istio-release/releases/1.4.8/charts/"
-}
-
 resource "helm_release" "istio_init" {
   count      = var.enable_istio ? 1 : 0
-  repository = data.helm_repository.istio.metadata[0].name
+  repository = "https://storage.googleapis.com/istio-release/releases/1.4.8/charts/"
   chart      = "istio-init"
   namespace  = module.system_namespace.name
   name       = "istio-init"

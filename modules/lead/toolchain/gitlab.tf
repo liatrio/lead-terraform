@@ -1,11 +1,5 @@
-data "helm_repository" "gitlab" {
-  count = var.enable_gitlab ? 1 : 0 
-  name  = "gitlab"
-  url   = "https://charts.gitlab.io/"
-}
-
 data "template_file" "gitlab_values" {
-  count    = var.enable_gitlab ? 1 : 0 
+  count    = var.enable_gitlab ? 1 : 0
   template = file("${path.module}/gitlab-values.tpl")
 
   vars = {
@@ -15,12 +9,12 @@ data "template_file" "gitlab_values" {
 }
 
 data "external" "keycloak_realm_certificate" {
-  count      = var.enable_gitlab && var.enable_keycloak ? 1 : 0 
+  count      = var.enable_gitlab && var.enable_keycloak ? 1 : 0
   program    = ["sh", "${path.module}/scripts/get_keycloak_realm_certificate.sh", "${local.protocol}://keycloak.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}/auth/realms/${module.toolchain_namespace.name}/protocol/saml/descriptor"]
 }
 
 resource "kubernetes_secret" "gitlab_keycloak_saml_config" {
-  count = var.enable_gitlab && var.enable_keycloak ? 1 : 0 
+  count = var.enable_gitlab && var.enable_keycloak ? 1 : 0
   metadata {
     name      = "gitlab-keycloak-saml"
     namespace = module.toolchain_namespace.name
@@ -52,9 +46,9 @@ EOF
 }
 
 resource "helm_release" "gitlab" {
-  count      = var.enable_gitlab ? 1 : 0 
+  count      = var.enable_gitlab ? 1 : 0
   depends_on = [kubernetes_secret.gitlab_keycloak_saml_config]
-  repository = data.helm_repository.gitlab[0].metadata[0].name
+  repository = "https://charts.gitlab.io/"
   name       = "gitlab"
   namespace  = module.toolchain_namespace.name
   chart      = "gitlab"
@@ -176,7 +170,7 @@ resource "keycloak_saml_user_property_protocol_mapper" "gitlab_saml_user_propert
 #   can_create_group = false
 #   is_external      = false
 # }
-# 
+#
 
 # psql query to create/get PAT for jenkins user with scope 'api', no way to do this with tf/api
 

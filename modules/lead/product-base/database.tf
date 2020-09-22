@@ -10,16 +10,11 @@ module "database_namespace" {
     "opa.lead.liatrio/ingress-whitelist" = "*.${var.product_name}-db.${var.cluster_domain}"
     "opa.lead.liatrio/image-whitelist"   = var.image_whitelist
   }
-  
+
   providers = {
     helm       = helm.system
     kubernetes = kubernetes.system
   }
-}
-
-data "helm_repository" "bitnami" {
-  name  = "bitnami"
-  url   = "https://charts.bitnami.com/bitnami"
 }
 
 data "template_file" "mongo_values" {
@@ -30,7 +25,7 @@ resource "helm_release" "mongodb" {
   provider   = helm.system
   name       = "mongodb"
   namespace  = module.database_namespace.name
-  repository = data.helm_repository.bitnami.name
+  repository = "https://charts.bitnami.com/bitnami"
   chart      = "bitnami/mongodb"
   version    = "7.14.8"
   timeout    = 600
