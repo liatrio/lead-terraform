@@ -84,11 +84,11 @@ output "codeservices_codebuild_security_group_id" {
 }
 
 output "vault_aws_access_key_id" {
-  value = aws_iam_access_key.vault-test.id
+  value = aws_iam_access_key.vault_key.id
 }
 
 output "vault_aws_secret_access_key" {
-  value = aws_iam_access_key.vault-test.secret
+  value = aws_iam_access_key.vault_key.secret
 }
 
 output "vault_dynamodb_table_name" {

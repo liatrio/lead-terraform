@@ -20,12 +20,12 @@ resource "aws_kms_key" "vault_seal_key" {
   description = "KMS key used by Vault for sealing / unsealing"
 }
 
-resource "aws_iam_user" "vault-test" {
-  name = "vault-test"
+resource "aws_iam_user" "vault_user" {
+  name = "${var.cluster_name}-vault"
 }
 
 resource "aws_iam_user_policy" "vault" {
-  user   = aws_iam_user.vault-test.name
+  user   = aws_iam_user.vault_user.name
   policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -77,6 +77,6 @@ resource "aws_iam_user_policy" "vault" {
 EOF
 }
 
-resource "aws_iam_access_key" "vault-test" {
-  user = aws_iam_user.vault-test.name
+resource "aws_iam_access_key" "vault_key" {
+  user = aws_iam_user.vault_user.name
 }
