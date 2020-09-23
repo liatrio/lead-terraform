@@ -50,6 +50,8 @@ product:
         product_image_repo: ${harbor_image_repo}
         region: ${region}
         toolchain_image_repo: ${toolchain_image_repo}
+        vault_namespace: ${vault_namespace}
+        vault_root_token_secret: ${vault_root_token_secret}
       defaultJobEnvVariables:
         CLUSTER: ${cluster}
     %{ endif }

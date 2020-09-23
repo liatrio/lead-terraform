@@ -26,6 +26,9 @@ data "template_file" "operator_toolchain_values" {
     codebuild_user              = var.product_vars["codebuild_user"]
     codebuild_security_group_id = var.product_vars["codebuild_security_group_id"]
 
+    vault_namespace         = var.product_vars["vault_namespace"]
+    vault_root_token_secret = var.product_vars["vault_root_token_secret"]
+
     image_repository = var.toolchain_image_repo
 
     remote_state_config = var.remote_state_config
