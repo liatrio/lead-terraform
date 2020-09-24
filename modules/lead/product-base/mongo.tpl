@@ -1,1 +1,1 @@
-usePassword: false
+mongodbRootPassword: "${mongodbRootPassword}"

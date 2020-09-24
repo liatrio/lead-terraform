@@ -1,3 +1,7 @@
+locals {
+  vault_mongodb_production_role = "${var.product_name}-production"
+}
+
 module "production_namespace" {
   source    = "../../common/namespace"
   namespace = "${var.product_name}-production"
@@ -125,4 +129,44 @@ resource "kubernetes_role" "ci_production_role" {
     resources  = ["canaries", "canaries/status"]
     verbs      = ["*"]
   }
+}
+
+resource "vault_database_secret_backend_role" "mongodb_production_role" {
+  backend = "mongodb"
+  creation_statements = [
+    jsonencode({
+      db = "admin"
+      roles = [
+        {
+          role = "readWrite"
+          db   = "production"
+        }
+      ]
+    })
+  ]
+
+  db_name = vault_database_secret_backend_connection.mongodb.name
+  name    = local.vault_mongodb_production_role
+
+  default_ttl = 600
+  max_ttl     = 600
+}
+
+resource "vault_kubernetes_auth_backend_role" "vault_auth_role" {
+  backend = "/kubernetes"
+  bound_service_account_names = [
+    "*"
+  ]
+  bound_service_account_namespaces = [
+    "${var.product_name}-production"
+  ]
+
+  role_name = "${var.product_name}-production"
+
+  token_ttl     = 300
+  token_max_ttl = 300
+  token_policies = [
+    vault_policy.mongodb_credentials_policy.name,
+    "default"
+  ]
 }
