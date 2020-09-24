@@ -152,7 +152,7 @@ resource "vault_database_secret_backend_role" "mongodb_production_role" {
   max_ttl     = 600
 }
 
-resource "vault_kubernetes_auth_backend_role" "vault_auth_role" {
+resource "vault_kubernetes_auth_backend_role" "k8s_auth_role_production" {
   backend = "/kubernetes"
   bound_service_account_names = [
     "*"
