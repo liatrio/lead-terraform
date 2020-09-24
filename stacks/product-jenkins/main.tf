@@ -1,4 +1,3 @@
-
 terraform {
   backend "s3" {}
 }
@@ -68,19 +67,21 @@ provider "helm" {
 }
 
 module "product_jenkins" {
-  source                 = "../../modules/lead/product-jenkins"
-  cluster_domain         = var.cluster_domain
-  product_name           = var.product_name
-  image_whitelist        = var.image_whitelist
-  enable_keycloak        = var.enable_keycloak
-  enable_istio           = var.enable_istio
-  enable_harbor          = var.enable_harbor
-  enable_artifactory     = var.enable_artifactory
-  builder_images_version = var.builder_images_version
-  jenkins_image_version  = var.jenkins_image_version
-  toolchain_image_repo   = var.toolchain_image_repo
-  product_image_repo     = var.product_image_repo
-  pipelines              = var.pipelines
+  source                  = "../../modules/lead/product-jenkins"
+  cluster_domain          = var.cluster_domain
+  product_name            = var.product_name
+  image_whitelist         = var.image_whitelist
+  enable_keycloak         = var.enable_keycloak
+  enable_istio            = var.enable_istio
+  enable_harbor           = var.enable_harbor
+  enable_artifactory      = var.enable_artifactory
+  builder_images_version  = var.builder_images_version
+  jenkins_image_version   = var.jenkins_image_version
+  toolchain_image_repo    = var.toolchain_image_repo
+  product_image_repo      = var.product_image_repo
+  pipelines               = var.pipelines
+  vault_namespace         = var.vault_namespace
+  vault_root_token_secret = var.vault_root_token_secret
 
   providers = {
     kubernetes.toolchain  = kubernetes.toolchain

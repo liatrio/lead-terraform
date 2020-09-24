@@ -56,3 +56,6 @@ variable "pipelines" {
     org  = string
   }))
 }
+
+variable "vault_namespace" {}
+variable "vault_root_token_secret" {}
