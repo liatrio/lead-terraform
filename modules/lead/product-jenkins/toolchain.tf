@@ -57,7 +57,7 @@ module "toolchain_namespace" {
 resource "helm_release" "jenkins" {
   provider = helm.toolchain
   name       = "jenkins"
-  chart      = "stable/jenkins"
+  chart      = "jenkins"
   repository = "https://kubernetes-charts.storage.googleapis.com"
   namespace  = module.toolchain_namespace.name
   timeout    = "600"
