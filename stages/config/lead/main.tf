@@ -37,6 +37,7 @@ provider "helm" {
 }
 
 provider "vault" {
+  alias   = "main"
   address = var.vault_address
 
   auth_login {

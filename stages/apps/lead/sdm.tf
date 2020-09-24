@@ -49,5 +49,8 @@ module "sdm" {
     codebuild_user              = var.enable_aws_code_services ? "codebuild" : ""
     codebuild_security_group_id = var.codeservices_codebuild_security_group_id
     aws_environment             = var.aws_environment
+
+    vault_namespace         = module.vault.vault_namespace
+    vault_root_token_secret = module.vault.vault_root_token_secret
   }
 }

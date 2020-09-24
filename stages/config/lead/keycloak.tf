@@ -1,5 +1,6 @@
 data "vault_generic_secret" "keycloak" {
-  path = "lead/aws/${data.aws_caller_identity.current.account_id}/keycloak"
+  provider = vault.main
+  path     = "lead/aws/${data.aws_caller_identity.current.account_id}/keycloak"
 }
 
 module "keycloak_config" {
