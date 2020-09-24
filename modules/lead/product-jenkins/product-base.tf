@@ -4,6 +4,9 @@ module "product_base" {
   product_name    = var.product_name
   image_whitelist = var.image_whitelist
 
+  vault_namespace         = var.vault_namespace
+  vault_root_token_secret = var.vault_root_token_secret
+
   providers = {
     helm.staging          = helm.staging
     kubernetes.staging    = kubernetes.staging
