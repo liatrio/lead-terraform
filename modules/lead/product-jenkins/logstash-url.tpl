@@ -12,6 +12,8 @@ jenkins:
           value: "${stagingNamespace}"
         - key: "productionNamespace"
           value: "${productionNamespace}"
+        - key: "databaseNamespace"
+          value: "${databaseNamespace}"
         - key: "stagingDomain"
           value: "staging.${appDomain}"
         - key: "productionDomain"
