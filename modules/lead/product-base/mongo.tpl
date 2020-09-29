@@ -1,1 +1,3 @@
-mongodbRootPassword: "${mongodbRootPassword}"
+auth:
+  rootPassword: "${mongodbRootPassword}"
+useStatefulSet: true
