@@ -21,6 +21,7 @@ data "template_file" "jenkins_values" {
     slack_team                   = "liatrio"
     stagingNamespace             = module.product_base.staging_namespace
     productionNamespace          = module.product_base.production_namespace
+    databaseNamespace            = module.product_base.database_namespace
     appDomain                    = "apps.${var.cluster_domain}"
     builder_images_version       = var.builder_images_version
     allow_anonymous_read         = var.enable_keycloak ? "false" : "true"
@@ -57,7 +58,7 @@ module "toolchain_namespace" {
 resource "helm_release" "jenkins" {
   provider = helm.toolchain
   name       = "jenkins"
-  chart      = "stable/jenkins"
+  chart      = "jenkins"
   repository = "https://kubernetes-charts.storage.googleapis.com"
   namespace  = module.toolchain_namespace.name
   timeout    = "600"

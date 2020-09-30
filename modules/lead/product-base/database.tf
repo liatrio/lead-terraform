@@ -1,7 +1,7 @@
 module "database_namespace" {
-  source    = "../../common/namespace"
-  namespace = "${var.product_name}-db"
-  labels = {
+  source      = "../../common/namespace"
+  namespace   = "${var.product_name}-db"
+  labels      = {
     "istio-injection"                        = "enabled"
     "appmesh.k8s.aws/sidecarInjectorWebhook" = "enabled"
   }
@@ -17,8 +17,9 @@ module "database_namespace" {
   }
 }
 
-data "template_file" "mongo_values" {
-  template = file("${path.module}/mongo.tpl")
+resource "random_password" "mongodb_root_password" {
+  length  = 8
+  special = false
 }
 
 resource "helm_release" "mongodb" {
@@ -26,10 +27,14 @@ resource "helm_release" "mongodb" {
   name       = "mongodb"
   namespace  = module.database_namespace.name
   repository = "https://charts.bitnami.com/bitnami"
-  chart      = "bitnami/mongodb"
-  version    = "7.14.8"
+  chart      = "mongodb"
+  version    = "8.3.2"
   timeout    = 600
   wait       = true
 
-  values = [data.template_file.mongo_values.rendered]
+  values = [
+    templatefile("${path.module}/mongo.tpl", {
+      mongodbRootPassword = random_password.mongodb_root_password.result
+    })
+  ]
 }
