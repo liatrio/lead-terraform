@@ -1,4 +1,3 @@
-
 terraform {
   backend "local" {}
 }
@@ -10,8 +9,8 @@ provider "kubernetes" {
 }
 
 provider "helm" {
-  alias           = "staging"
-  version         = "1.1.1"
+  alias   = "staging"
+  version = "1.1.1"
 
   kubernetes {
     load_config_file = var.load_config_file
@@ -19,47 +18,34 @@ provider "helm" {
   }
 }
 
-provider "kubernetes" {
-  alias            = "production"
-  load_config_file = var.load_config_file
-  config_context   = var.config_context
-}
-
-provider "helm" {
-  alias           = "production"
-  version         = "1.1.1"
-
-  kubernetes {
-    load_config_file = var.load_config_file
-    config_context   = var.config_context
+module "staging_namespace" {
+  source      = "../../modules/common/namespace"
+  namespace   = "${var.product_name}-staging"
+  labels      = {
+    "istio-injection"                        = "enabled"
+    "appmesh.k8s.aws/sidecarInjectorWebhook" = "enabled"
   }
-}
-
-module "product_base" {
-  source                  = "../../modules/lead/product-base"
-
-  providers = {
-    kubernetes.staging    = kubernetes.staging
-    helm.staging          = helm.staging
-    kubernetes.production = kubernetes.production
-    helm.production       = helm.production
+  annotations = {
+    name                                 = "${var.product_name}-staging"
+    "opa.lead.liatrio/ingress-whitelist" = "*.${var.product_name}-staging.${var.cluster_domain}"
+    "opa.lead.liatrio/image-whitelist"   = var.image_whitelist
   }
-
-  cluster_domain  = var.cluster_domain
-  image_whitelist = var.image_whitelist
-  product_name    = var.product_name
+  providers   = {
+    helm       = helm.staging
+    kubernetes = kubernetes.staging
+  }
 }
 
 resource "kubernetes_pod" "nginx" {
-  provider = "kubernetes.production"
+  provider = kubernetes.staging
 
   metadata {
-    name = "nginx"
-    namespace = module.product_base.production_namespace
+    name      = "nginx"
+    namespace = module.staging_namespace.name
   }
   spec {
     container {
-      name = "nginx"
+      name  = "nginx"
       image = "nginx:latest"
     }
   }
