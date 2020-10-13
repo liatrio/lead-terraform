@@ -37,7 +37,7 @@ module "staging_namespace" {
 }
 
 resource "kubernetes_pod" "nginx" {
-  provider = "kubernetes.staging"
+  provider = kubernetes.staging
 
   metadata {
     name      = "nginx"
