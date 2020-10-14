@@ -10,11 +10,8 @@ module "system_namespace" {
   }
 }
 
-data "template_file" "essential_toleration" {
-  template = file("${path.module}/essential-toleration.tpl")
-  vars     = {
-    essential_taint_key = var.essential_taint_key
-  }
+module "essential_toleration_values" {
+  source = "../../../modules/affinity/essential-toleration-values"
 }
 
 module "external_dns" {
@@ -44,7 +41,6 @@ module "kube_downscaler" {
   namespace           = module.system_namespace.name
   uptime              = var.uptime
   excluded_namespaces = var.downscaler_exclude_namespaces
-  extra_values        = data.template_file.essential_toleration.rendered
 }
 
 module "k8s_spot_termination_handler" {
@@ -55,14 +51,13 @@ module "kube_janitor" {
   source = "../../../modules/tools/kube-janitor"
 
   namespace    = module.system_namespace.name
-  extra_values = data.template_file.essential_toleration.rendered
 }
 
 module "metrics_server" {
   source = "../../../modules/tools/metrics-server"
 
   namespace    = module.system_namespace.name
-  extra_values = data.template_file.essential_toleration.rendered
+  extra_values = module.essential_toleration_values.values
 }
 
 module "cluster_autoscaler" {
@@ -73,7 +68,7 @@ module "cluster_autoscaler" {
   cluster_autoscaler_service_account_arn = var.cluster_autoscaler_service_account_arn
   enable_autoscaler_scale_down           = var.enable_autoscaler_scale_down
   namespace                              = module.system_namespace.name
-  extra_values                           = data.template_file.essential_toleration.rendered
+  extra_values                           = module.essential_toleration_values.values
 }
 
 module "opa" {
@@ -81,5 +76,5 @@ module "opa" {
   source             = "../../../modules/common/opa"
   namespace          = module.system_namespace.name
   opa_failure_policy = var.opa_failure_policy
-  external_values    = data.template_file.essential_toleration.rendered
+  external_values    = module.essential_toleration_values.values
 }

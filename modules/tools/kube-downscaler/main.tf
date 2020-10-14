@@ -6,11 +6,10 @@ resource "helm_release" "kube_downscaler" {
   chart      = "kube-downscaler"
   version    = "0.1.0"
   timeout    = 900
-  values     = compact([
+  values     = [
     templatefile("${path.module}/values.tpl", {
       excluded_namespaces = length(var.excluded_namespaces) > 0 ? join(",", var.excluded_namespaces) : ""
       uptime              = var.uptime
-    }),
-    var.extra_values
-  ])
+    })
+  ]
 }
