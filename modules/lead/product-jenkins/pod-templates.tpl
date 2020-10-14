@@ -290,6 +290,7 @@ jenkins:
               apiVersion: v1
               kind: Pod
               spec:
+                ${essential_tolerations}
                 containers:
                 - name: jnlp
                   resources:
