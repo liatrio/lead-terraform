@@ -5,6 +5,8 @@ resource "random_password" "jenkins_admin_password" {
 
 module "essential_tolerations" {
   source = "../../affinity/essential-toleration-values"
+
+  node_affinity_mode = "preferred"
 }
 
 data "template_file" "jenkins_values" {
