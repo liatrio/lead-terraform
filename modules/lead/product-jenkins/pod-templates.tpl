@@ -194,6 +194,43 @@ jenkins:
                       cpu: 1
                       memory: 256Mi
             yamlMergeStrategy: "merge"
+          - name: "lead-toolchain-gradle"
+            label: "lead-toolchain-gradle"
+            nodeUsageMode: NORMAL
+            containers:
+              - name: "gradle"
+                image: "${toolchain_image_repo}/builder-image-gradle:${builder_images_version}"
+                alwaysPullImage: false
+                workingDir: "/home/jenkins/agent"
+                command: "/bin/sh -c"
+                args: "cat"
+                ttyEnabled: true
+                resourceRequestCpu: 100m
+                resourceLimitCpu: 500m
+                resourceRequestMemory: 256Mi
+                resourceLimitMemory: 1024Mi
+            slaveConnectTimeout: 100
+            volumes:
+              - secretVolume:
+                  mountPath: "/root/.m2"
+                  secretName: "jenkins-artifactory-maven-settings"
+              - emptyDirVolume:
+                  mountPath: "/root/.m2/repository"
+                  memory: false
+            yaml: |-
+              apiVersion: v1
+              kind: Pod
+              spec:
+                containers:
+                - name: jnlp
+                  resources:
+                    requests:
+                      cpu: 200m
+                      memory: 128Mi
+                    limits:
+                      cpu: 1
+                      memory: 256Mi
+            yamlMergeStrategy: "merge"
           - name: "lead-toolchain-gitops"
             label: "lead-toolchain-gitops"
             nodeUsageMode: NORMAL
