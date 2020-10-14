@@ -1,10 +1,10 @@
 affinity:
   nodeAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
+    ${node_affinity_mode}DuringSchedulingIgnoredDuringExecution:
       nodeSelectorTerms:
       - matchExpressions:
         - key: "kubernetes.io/lifecycle"
-          operator: "NotIn" 
+          operator: "NotIn"
           values:
           - preemptible
 tolerations:
