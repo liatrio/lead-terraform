@@ -1,6 +1,6 @@
 affinity:
   nodeAffinity:
-    ${node_affinity_mode}DuringSchedulingIgnoredDuringExecution:
+    requiredDuringSchedulingIgnoredDuringExecution:
       nodeSelectorTerms:
       - matchExpressions:
         - key: "kubernetes.io/lifecycle"
