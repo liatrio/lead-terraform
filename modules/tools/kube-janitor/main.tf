@@ -7,8 +7,6 @@ resource "helm_release" "kube-janitor" {
   timeout    = 600
   wait       = true
 
-  values     = var.extra_values != "" ? [var.extra_values] : null
-
   set {
     name  = "image.tag"
     value = "v0.2.1"

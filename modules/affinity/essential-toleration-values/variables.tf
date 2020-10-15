@@ -1,1 +1,3 @@
-variable "essential_taint_key" {}
+variable "essential_taint_key" {
+  default = "EssentialOnly"
+}

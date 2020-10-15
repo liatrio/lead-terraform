@@ -4,7 +4,7 @@ affinity:
       nodeSelectorTerms:
       - matchExpressions:
         - key: "kubernetes.io/lifecycle"
-          operator: "NotIn" 
+          operator: "NotIn"
           values:
           - preemptible
 tolerations:

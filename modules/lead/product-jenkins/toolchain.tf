@@ -3,6 +3,10 @@ resource "random_password" "jenkins_admin_password" {
   special = false
 }
 
+module "essential_tolerations" {
+  source = "../../affinity/essential-toleration-values"
+}
+
 data "template_file" "jenkins_values" {
   template = file("${path.module}/jenkins-values.tpl")
 
@@ -353,7 +357,9 @@ resource "kubernetes_config_map" "jcasc_pod_templates_configmap" {
     }
   }
   data = {
-    "pod-templates.yaml" = templatefile("${path.module}/pod-templates.tpl", data.template_file.jenkins_values.vars)
+    "pod-templates.yaml" = templatefile("${path.module}/pod-templates.tpl", merge(data.template_file.jenkins_values.vars, {
+      essential_tolerations = indent(16, module.essential_tolerations.values)
+    }))
   }
 }
 

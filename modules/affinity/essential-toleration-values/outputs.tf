@@ -1,3 +1,5 @@
 output "values" {
-  value = data.template_file.essential_toleration.rendered
+  value = templatefile("${path.module}/essential-toleration.tpl", {
+    essential_taint_key = var.essential_taint_key
+  })
 }

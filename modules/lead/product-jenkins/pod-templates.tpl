@@ -45,6 +45,7 @@ jenkins:
               apiVersion: v1
               kind: Pod
               spec:
+                ${essential_tolerations}
                 containers:
                 - name: jnlp
                   resources:
@@ -58,10 +59,6 @@ jenkins:
           - name: "lead-toolchain-aws"
             label: "lead-toolchain-aws"
             nodeUsageMode: NORMAL
-            yaml: |-
-              spec:
-                securityContext:
-                  fsGroup: 1000
             containers:
               - name: "aws"
                 image: "${toolchain_image_repo}/builder-image-aws:${builder_images_version}"
@@ -79,6 +76,9 @@ jenkins:
               apiVersion: v1
               kind: Pod
               spec:
+                ${essential_tolerations}
+                securityContext:
+                  fsGroup: 1000
                 containers:
                 - name: jnlp
                   resources:
@@ -92,10 +92,6 @@ jenkins:
           - name: "lead-toolchain-terraform"
             label: "lead-toolchain-terraform"
             nodeUsageMode: NORMAL
-            yaml: |-
-              spec:
-                securityContext:
-                  fsGroup: 1000
             containers:
               - name: "terraform"
                 image: "${toolchain_image_repo}/builder-image-terraform:${builder_images_version}"
@@ -113,6 +109,9 @@ jenkins:
               apiVersion: v1
               kind: Pod
               spec:
+                ${essential_tolerations}
+                securityContext:
+                  fsGroup: 1000
                 containers:
                 - name: jnlp
                   resources:
@@ -126,10 +125,6 @@ jenkins:
           - name: "lead-toolchain-terratest"
             label: "lead-toolchain-terratest"
             nodeUsageMode: NORMAL
-            yaml: |-
-              spec:
-                securityContext:
-                  fsGroup: 1000
             containers:
               - name: "terratest"
                 image: "${toolchain_image_repo}/builder-image-terratest:${builder_images_version}"
@@ -147,6 +142,9 @@ jenkins:
               apiVersion: v1
               kind: Pod
               spec:
+                ${essential_tolerations}
+                securityContext:
+                  fsGroup: 1000
                 containers:
                 - name: jnlp
                   resources:
@@ -184,6 +182,7 @@ jenkins:
               apiVersion: v1
               kind: Pod
               spec:
+                ${essential_tolerations}
                 containers:
                 - name: jnlp
                   resources:
@@ -221,6 +220,7 @@ jenkins:
               apiVersion: v1
               kind: Pod
               spec:
+                ${essential_tolerations}
                 containers:
                 - name: jnlp
                   resources:
@@ -260,6 +260,7 @@ jenkins:
               apiVersion: v1
               kind: Pod
               spec:
+                ${essential_tolerations}
                 containers:
                 - name: jnlp
                   resources:
@@ -289,6 +290,7 @@ jenkins:
               apiVersion: v1
               kind: Pod
               spec:
+                ${essential_tolerations}
                 containers:
                 - name: jnlp
                   resources:
