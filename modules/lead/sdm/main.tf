@@ -13,7 +13,7 @@ data "template_file" "operator_toolchain_values" {
     product_version             = var.product_version
     workspace_role              = var.workspace_role_name
     region                      = var.region
-    essential_toleration_values = indent(6, module.essential_toleration.values)
+    essential_toleration_values = module.essential_toleration.values
 
     harbor_image_repo = var.harbor_image_repo
     ecr_image_repo    = var.ecr_image_repo

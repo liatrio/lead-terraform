@@ -11,7 +11,7 @@ product:
       repository: ${image_repository}/converge-image
       tag: ${sdm_version}
     additionalPodValues:
-      ${essential_toleration_values}
+      ${indent(6, essential_toleration_values)}
   %{ if remote_state_config != "" }
   remoteStateConfig: |
     ${indent(4, remote_state_config)}
