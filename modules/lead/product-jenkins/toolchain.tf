@@ -358,7 +358,7 @@ resource "kubernetes_config_map" "jcasc_pod_templates_configmap" {
   }
   data = {
     "pod-templates.yaml" = templatefile("${path.module}/pod-templates.tpl", merge(data.template_file.jenkins_values.vars, {
-      essential_tolerations = indent(16, module.essential_tolerations.values)
+      essential_tolerations = module.essential_tolerations.values
     }))
   }
 }

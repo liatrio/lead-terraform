@@ -45,7 +45,7 @@ jenkins:
               apiVersion: v1
               kind: Pod
               spec:
-                ${essential_tolerations}
+                ${indent(16, essential_tolerations)}
                 containers:
                 - name: jnlp
                   resources:
@@ -76,7 +76,7 @@ jenkins:
               apiVersion: v1
               kind: Pod
               spec:
-                ${essential_tolerations}
+                ${indent(16, essential_tolerations)}
                 securityContext:
                   fsGroup: 1000
                 containers:
@@ -109,7 +109,7 @@ jenkins:
               apiVersion: v1
               kind: Pod
               spec:
-                ${essential_tolerations}
+                ${indent(16, essential_tolerations)}
                 securityContext:
                   fsGroup: 1000
                 containers:
@@ -142,7 +142,7 @@ jenkins:
               apiVersion: v1
               kind: Pod
               spec:
-                ${essential_tolerations}
+                ${indent(16, essential_tolerations)}
                 securityContext:
                   fsGroup: 1000
                 containers:
@@ -179,7 +179,7 @@ jenkins:
               apiVersion: v1
               kind: Pod
               spec:
-                ${essential_tolerations}
+                ${indent(16, essential_tolerations)}
                 containers:
                 - name: jnlp
                   resources:
@@ -214,7 +214,7 @@ jenkins:
               apiVersion: v1
               kind: Pod
               spec:
-                ${essential_tolerations}
+                ${indent(16, essential_tolerations)}
                 containers:
                 - name: jnlp
                   resources:
@@ -254,7 +254,7 @@ jenkins:
               apiVersion: v1
               kind: Pod
               spec:
-                ${essential_tolerations}
+                ${indent(16, essential_tolerations)}
                 containers:
                 - name: jnlp
                   resources:
@@ -284,7 +284,7 @@ jenkins:
               apiVersion: v1
               kind: Pod
               spec:
-                ${essential_tolerations}
+                ${indent(16, essential_tolerations)}
                 containers:
                 - name: jnlp
                   resources:

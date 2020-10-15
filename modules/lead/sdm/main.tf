@@ -1,14 +1,19 @@
+module "essential_toleration" {
+  source = "../../affinity/essential-toleration-values"
+}
+
 data "template_file" "operator_toolchain_values" {
   template = file("${path.module}/operator-toolchain-values.tpl")
 
   vars = {
-    sdm_version     = var.sdm_version
-    cluster         = var.cluster
-    namespace       = var.namespace
-    cluster_domain  = "${var.cluster}.${var.root_zone_name}"
-    product_version = var.product_version
-    workspace_role  = var.workspace_role_name
-    region          = var.region
+    sdm_version                 = var.sdm_version
+    cluster                     = var.cluster
+    namespace                   = var.namespace
+    cluster_domain              = "${var.cluster}.${var.root_zone_name}"
+    product_version             = var.product_version
+    workspace_role              = var.workspace_role_name
+    region                      = var.region
+    essential_toleration_values = module.essential_toleration.values
 
     harbor_image_repo = var.harbor_image_repo
     ecr_image_repo    = var.ecr_image_repo
