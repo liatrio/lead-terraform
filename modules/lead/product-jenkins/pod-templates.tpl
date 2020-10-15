@@ -172,9 +172,6 @@ jenkins:
                 resourceLimitMemory: 1024Mi
             slaveConnectTimeout: 100
             volumes:
-              - secretVolume:
-                  mountPath: "/root/.m2"
-                  secretName: "jenkins-artifactory-maven-settings"
               - emptyDirVolume:
                   mountPath: "/root/.m2/repository"
                   memory: false
@@ -210,9 +207,6 @@ jenkins:
                 resourceLimitMemory: 1024Mi
             slaveConnectTimeout: 100
             volumes:
-              - secretVolume:
-                  mountPath: "/root/.m2"
-                  secretName: "jenkins-artifactory-maven-settings"
               - emptyDirVolume:
                   mountPath: "/root/.m2/repository"
                   memory: false
