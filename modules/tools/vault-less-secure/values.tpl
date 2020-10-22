@@ -28,11 +28,11 @@ server:
     enabled: false
   resources:
     requests:
-      memory: 64Mi
-      cpu: 50m
+      memory: 128Mi
+      cpu: 64m
     limits:
-      memory: 512Mi
-      cpu: 250m
+      memory: 256Mi
+      cpu: 512m
 
 ui:
   enabled: true

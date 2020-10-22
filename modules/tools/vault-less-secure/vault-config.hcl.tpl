@@ -11,6 +11,8 @@ storage "dynamodb" {
   ha_enabled = "false"
   table      = "${dynamodb_table_name}"
 
+  max_parallel = "20"
+
   access_key = "${aws_access_key_id}"
   secret_key = "${aws_secret_access_key}"
 }
