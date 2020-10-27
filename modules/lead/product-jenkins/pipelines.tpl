@@ -6,9 +6,10 @@
             periodic(1)
         }
         branchSources {
-            git {
+            github {
                 id('https://www.github.com/${pipeline.org}/${pipeline.repo}.git')
-                remote('https://www.github.com/${pipeline.org}/${pipeline.repo}.git')
+                repoOwner('${pipeline.org}')
+                repository('${pipeline.repo}')
                 excludes('solution*')
             }
         }

@@ -300,7 +300,7 @@ resource "kubernetes_config_map" "jcasc_pipelines_configmap" {
     }
   }
   data = {
-    "jobs.yaml" = trim(replace(jsonencode(replace(templatefile("${path.module}/pipelines.tpl", {pipelines=var.pipelines}), "/,]}$/", "]}")), "/\\\\\"/", "\""), "\"")
+    "jobs.yaml" = trim(replace(jsonencode(replace(trimspace(templatefile("${path.module}/pipelines.tpl", {pipelines=var.pipelines})), "/,]}$/", "]}")), "/\\\\\"/", "\""), "\"")
   }
 }
 
