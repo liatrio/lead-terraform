@@ -5,7 +5,8 @@ global:
     domain: ${gitlab_fqdn}
   ingress:
     class: nginx
-    tls: "true"
+    tls: 
+      enabled: true
 
 certmanager:
   install: false
