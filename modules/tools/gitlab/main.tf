@@ -1,10 +1,17 @@
+module "gitlab_namespace" {
+  source = "../../common/namespace"
+
+  namespace = "gitlab"
+}
+
 resource "helm_release" "gitlab" {
   count = var.enable_gitlab ? 1 : 0
 
   name       = "gitlab"
   repository = "https://charts.gitlab.io/"
   chart      = "gitlab"
-  namespace  = var.namespace
+  namespace  = module.gitlab_namespace.name
+  wait       = true
 
   values = [
     templatefile("${path.module}/gitlab-values.tpl", {
