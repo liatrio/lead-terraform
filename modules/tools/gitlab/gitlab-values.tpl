@@ -18,4 +18,4 @@ nginx-ingress:
   enabled: false
 
 gitlab-runner:
-  install: true
+  install: false
