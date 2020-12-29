@@ -1,4 +1,6 @@
 resource "helm_release" "gitlab" {
+  count = var.enable_gitlab ? 1 : 0
+
   name       = "gitlab"
   repository = "https://charts.gitlab.io/"
   chart      = "gitlab"
