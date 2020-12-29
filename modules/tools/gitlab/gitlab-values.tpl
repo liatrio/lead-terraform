@@ -16,3 +16,6 @@ certmanager-issuer:
 
 nginx-ingress:
   enabled: false
+
+gitlab-runner:
+  install: true

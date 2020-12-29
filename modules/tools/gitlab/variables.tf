@@ -8,11 +8,12 @@ variable "certmanager_issuer_email" {
   default     = "no@example.com"
 }
 
-variable "root_domain" {
-  description = "domain name for GitLab"
-}
-
 variable "namespace" {
   description = "namespace to install GitLab helm chart"
   default     = "gitlab"
 }
+
+variable "root_domain" {
+  description = "domain name for GitLab"
+}
+
