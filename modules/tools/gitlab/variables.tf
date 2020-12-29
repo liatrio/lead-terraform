@@ -8,7 +8,7 @@ variable "certmanager_issuer_email" {
   default     = "no@example.com"
 }
 
-variable "gitlab_domain_name" {
+variable "root_domain" {
   description = "domain name for GitLab"
 }
 

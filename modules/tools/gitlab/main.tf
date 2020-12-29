@@ -8,7 +8,7 @@ resource "helm_release" "gitlab" {
 
   values = [
     template_file("${path.module}/gitlab-values.tpl", {
-      gitlab_fqdn              = "gitlab.${var.gitlab_domain}"
+      gitlab_fqdn              = "gitlab.${var.root_domain}"
       certmanager_issuer_email = var.certmanager_issuer_email
     })
   ]
