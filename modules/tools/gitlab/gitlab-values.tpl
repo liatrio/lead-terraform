@@ -11,7 +11,7 @@ global:
 certmanager:
   install: false
 
-certmanager-issues:
+certmanager-issuer:
   email: ${certmanager_issuer_email}
 
 nginx-ingress:
