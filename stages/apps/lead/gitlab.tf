@@ -1,5 +1,5 @@
 module "gitlab" {
-  source = "../../../modules/tools/sonarqube"
+  source = "../../../modules/tools/gitlab"
 
   enable_gitlab = var.enable_gitlab
 }
