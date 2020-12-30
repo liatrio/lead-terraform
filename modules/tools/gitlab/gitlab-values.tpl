@@ -9,7 +9,14 @@ global:
       certmanager.k8s.io/issuer: letsencrypt-dns
     tls: 
       enabled: true
-
+  webservice:
+    resources:
+      requests:
+        cpu: 300m
+        memory: 1.5G
+      limits:
+        cpu: 1
+        memory: 2G
 certmanager:
   install: false
 
