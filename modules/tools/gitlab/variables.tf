@@ -12,3 +12,10 @@ variable "root_domain" {
   description = "domain name for GitLab"
 }
 
+variable "ingress_class" {
+  default = "toolchain-nginx"
+}
+
+variable "cert_issuer" {
+  default = "letsencrypt-dns"
+}

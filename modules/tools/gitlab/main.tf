@@ -1,7 +1,7 @@
 module "gitlab_namespace" {
   source = "../../common/namespace"
 
-  resource_limit_cpu = "1"
+  resource_limit_cpu    = "1"
   resource_limit_memory = "4G"
 
   namespace = "gitlab"
@@ -20,6 +20,8 @@ resource "helm_release" "gitlab" {
   values = [
     templatefile("${path.module}/gitlab-values.tpl", {
       gitlab_fqdn              = "toolchain.${var.root_domain}"
+      ingress_class            = var.ingress
+      cert_issuer              = var.cert_issuer
       certmanager_issuer_email = var.certmanager_issuer_email
     })
   ]

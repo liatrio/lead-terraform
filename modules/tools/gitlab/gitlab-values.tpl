@@ -4,9 +4,9 @@ global:
   hosts:
     domain: ${gitlab_fqdn}
   ingress:
-    class: toolchain-nginx
+    class: ${ingress_class}
     annotations:
-      certmanager.k8s.io/issuer: letsencrypt-dns
+      certmanager.k8s.io/issuer: ${cert_issuer}
     tls: 
       enabled: true
 certmanager:
