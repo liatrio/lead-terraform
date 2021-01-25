@@ -87,6 +87,10 @@ variable "enable_autoscaler_scale_down" {
   default = true
 }
 
+variable "enable_gitlab" {
+  default = false
+}
+
 variable "uptime" {
   default = "Mon-Fri 05:00-19:00 America/Los_Angeles"
 }
