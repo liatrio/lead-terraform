@@ -17,10 +17,6 @@ variable "config_context" {
   default = ""
 }
 
-variable "load_config_file" {
-  default = false
-}
-
 variable "enable_istio" {
   default = true
 }

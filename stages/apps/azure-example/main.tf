@@ -16,7 +16,6 @@ provider "kubernetes" {
   host                   = data.azurerm_kubernetes_cluster.fqdn
   cluster_ca_certificate = base64decode(data.azurerm_kubernetes_cluster.cluster_ca_certificate)
   token                  = data.azurerm_kubernetes_cluster.password
-  load_config_file       = false
 }
 
 provider "helm" {
@@ -26,6 +25,5 @@ provider "helm" {
     host                   = data.azurerm_kubernetes_cluster.fqdn
     cluster_ca_certificate = base64decode(data.azurerm_kubernetes_cluster.cluster_ca_certificate)
     token                  = data.azurerm_kubernetes_cluster.password
-    load_config_file       = false
   }
 }

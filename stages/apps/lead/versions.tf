@@ -3,6 +3,7 @@ terraform {
   required_providers {
     external = {
       source = "hashicorp/external"
+      version = "~> 2.0.0"
     }
     harbor = {
       source = "liatrio/harbor"
@@ -18,15 +19,19 @@ terraform {
     }
     kubernetes = {
       source = "hashicorp/kubernetes"
+      version = "~> 2.0.1"
     }
     null = {
       source = "hashicorp/null"
+      version = "~> 3.0.0"
     }
     random = {
       source = "hashicorp/random"
+      version = "~> 3.0.1"
     }
     template = {
       source = "hashicorp/template"
+      version = "~> 2.2.0"
     }
   }
 }

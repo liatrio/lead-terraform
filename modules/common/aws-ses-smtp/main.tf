@@ -3,7 +3,7 @@ data "aws_caller_identity" "current" {
 
 resource "random_pet" "ses_smtp" {
   keepers = {
-    name = "${var.name}"
+    name = var.name
   }
 }
 

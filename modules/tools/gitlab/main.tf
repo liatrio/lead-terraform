@@ -8,8 +8,6 @@ module "gitlab_namespace" {
 }
 
 resource "helm_release" "gitlab" {
-  count = var.enable_gitlab ? 1 : 0
-
   name       = "gitlab"
   repository = "https://charts.gitlab.io/"
   chart      = "gitlab"
@@ -20,7 +18,7 @@ resource "helm_release" "gitlab" {
   values = [
     templatefile("${path.module}/gitlab-values.tpl", {
       gitlab_fqdn              = "toolchain.${var.root_domain}"
-      ingress_class            = var.ingress
+      ingress_class            = var.ingress_class
       cert_issuer              = var.cert_issuer
       certmanager_issuer_email = var.certmanager_issuer_email
     })

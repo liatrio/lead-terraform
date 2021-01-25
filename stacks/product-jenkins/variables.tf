@@ -16,10 +16,6 @@ variable "config_context" {
   default = ""
 }
 
-variable "load_config_file" {
-  default = false
-}
-
 variable "essential_taint_key" {
   default = "EssentialOnly"
 }
