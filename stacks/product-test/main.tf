@@ -4,7 +4,6 @@ terraform {
 
 provider "kubernetes" {
   alias            = "staging"
-  load_config_file = var.load_config_file
   config_context   = var.config_context
 }
 
@@ -13,7 +12,6 @@ provider "helm" {
   version = "1.1.1"
 
   kubernetes {
-    load_config_file = var.load_config_file
     config_context   = var.config_context
   }
 }

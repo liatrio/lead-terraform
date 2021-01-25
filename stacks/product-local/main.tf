@@ -4,7 +4,6 @@ terraform {
 
 provider "kubernetes" {
   alias            = "toolchain"
-  load_config_file = var.load_config_file
   config_context   = var.config_context
 }
 
@@ -13,14 +12,12 @@ provider "helm" {
   alias           = "toolchain"
 
   kubernetes {
-    load_config_file = var.load_config_file
     config_context   = var.config_context
   }
 }
 
 provider "kubernetes" {
   alias            = "staging"
-  load_config_file = var.load_config_file
   config_context   = var.config_context
 }
 
@@ -29,14 +26,12 @@ provider "helm" {
   alias           = "staging"
 
   kubernetes {
-    load_config_file = var.load_config_file
     config_context   = var.config_context
   }
 }
 
 provider "kubernetes" {
   alias            = "production"
-  load_config_file = var.load_config_file
   config_context   = var.config_context
 }
 
@@ -45,14 +40,12 @@ provider "helm" {
   alias           = "production"
 
   kubernetes {
-    load_config_file = var.load_config_file
     config_context   = var.config_context
   }
 }
 
 provider "kubernetes" {
   alias            = "system"
-  load_config_file = var.load_config_file
   config_context   = var.config_context
 }
 
@@ -61,7 +54,6 @@ provider "helm" {
   alias           = "system"
 
   kubernetes {
-    load_config_file = var.load_config_file
     config_context   = var.config_context
   }
 }

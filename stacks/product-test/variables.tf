@@ -17,6 +17,3 @@ variable "config_context" {
   default = ""
 }
 
-variable "load_config_file" {
-  default = false
-}

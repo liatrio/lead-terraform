@@ -20,7 +20,6 @@ inputs = {
   product_name = "local"
   issuer_type = "selfSigned"
   ingress_controller_type = "NodePort"
-  load_config_file = true
   config_context = "docker-for-desktop"
   cluster_domain = "docker-for-desktop.localhost"
   builder_images_version = "v1.0.15-9-g28caba1"
