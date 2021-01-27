@@ -43,8 +43,8 @@ module "kube_downscaler" {
   excluded_namespaces = var.downscaler_exclude_namespaces
 }
 
-module "k8s_spot_termination_handler" {
-  source = "../../../modules/tools/k8s-spot-termination-handler"
+module "aws-node-termination-handler" {
+  source = "../../../modules/tools/aws-node-termination-handler"
 }
 
 module "kube_janitor" {
