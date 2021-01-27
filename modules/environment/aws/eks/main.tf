@@ -33,7 +33,6 @@ EOF
   codebuild_roles = var.enable_aws_code_services ? [
     {
       rolearn  = var.codebuild_role
-
       username = "codebuild"
       groups   = ["system:authenticated"]
     }
@@ -142,8 +141,8 @@ module "eks" {
   kubeconfig_aws_authenticator_additional_args = var.kubeconfig_aws_authenticator_additional_args
   enable_irsa                                  = false
 
-  cluster_endpoint_private_access = true
-  cluster_endpoint_public_access  = var.enable_public_endpoint
+  cluster_endpoint_private_access                = true
+  cluster_endpoint_public_access                 = var.enable_public_endpoint
   cluster_create_endpoint_private_access_sg_rule = true
   cluster_endpoint_private_access_cidrs = [
     "10.1.32.0/20",                  // internal VPN cidr
@@ -157,8 +156,8 @@ module "eks" {
   workers_group_defaults = {
     tags = [
       {
-        "key" = "kubernetes.io/cluster-autoscaler/enabled"
-        "value" = "true"
+        "key"                 = "kubernetes.io/cluster-autoscaler/enabled"
+        "value"               = "true"
         "propagate_at_launch" = true
       }
     ]
