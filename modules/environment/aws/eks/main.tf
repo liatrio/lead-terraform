@@ -128,7 +128,7 @@ resource "aws_security_group" "elb" {
 
 module "eks" {
   source                                       = "terraform-aws-modules/eks/aws"
-  version                                      = "11.0.0"
+  version                                      = "13.2.1"
   cluster_version                              = var.cluster_version
   cluster_name                                 = var.cluster
   subnets                                      = sort(data.aws_subnet_ids.eks_masters.ids)
@@ -144,6 +144,7 @@ module "eks" {
 
   cluster_endpoint_private_access = true
   cluster_endpoint_public_access  = var.enable_public_endpoint
+  cluster_create_endpoint_private_access_sg_rule = true
   cluster_endpoint_private_access_cidrs = [
     "10.1.32.0/20",                  // internal VPN cidr
     data.aws_vpc.lead_vpc.cidr_block // anything running within the lead VPC, such as codebuild projects
@@ -178,7 +179,7 @@ module "eks" {
       protect_from_scale_in  = var.protect_from_scale_in
       enabled_metrics        = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]
       pre_userdata           = local.ssm_init
-      kubelet_extra_args     = "--node-labels=kubernetes.io/lifecycle=essential --register-with-taints=${var.essential_taint_key}=true:NoSchedule"
+      kubelet_extra_args     = "--node-labels=node.kubernetes.io/lifecycle=essential --register-with-taints=${var.essential_taint_key}=true:NoSchedule"
       root_volume_size       = var.root_volume_size
     }
   ]
@@ -198,7 +199,7 @@ module "eks" {
       protect_from_scale_in                    = var.protect_from_scale_in
       enabled_metrics                          = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]
       pre_userdata                             = local.ssm_init
-      kubelet_extra_args                       = "--node-labels=kubernetes.io/lifecycle=preemptible"
+      kubelet_extra_args                       = "--node-labels=node.kubernetes.io/lifecycle=preemptible"
       on_demand_base_capacity                  = 0
       on_demand_percentage_above_base_capacity = var.on_demand_percentage
       root_volume_size                         = var.root_volume_size
@@ -217,7 +218,7 @@ module "eks" {
       protect_from_scale_in                    = var.protect_from_scale_in
       enabled_metrics                          = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]
       pre_userdata                             = local.ssm_init
-      kubelet_extra_args                       = "--node-labels=kubernetes.io/lifecycle=preemptible"
+      kubelet_extra_args                       = "--node-labels=node.kubernetes.io/lifecycle=preemptible"
       on_demand_base_capacity                  = 0
       on_demand_percentage_above_base_capacity = var.on_demand_percentage
       root_volume_size                         = var.root_volume_size
@@ -236,7 +237,7 @@ module "eks" {
       protect_from_scale_in                    = var.protect_from_scale_in
       enabled_metrics                          = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]
       pre_userdata                             = local.ssm_init
-      kubelet_extra_args                       = "--node-labels=kubernetes.io/lifecycle=preemptible"
+      kubelet_extra_args                       = "--node-labels=node.kubernetes.io/lifecycle=preemptible"
       on_demand_base_capacity                  = 0
       on_demand_percentage_above_base_capacity = var.on_demand_percentage
       root_volume_size                         = var.root_volume_size

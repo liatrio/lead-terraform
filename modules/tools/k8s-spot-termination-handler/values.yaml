@@ -1,5 +1,5 @@
 nodeSelector:
-  kubernetes.io/lifecycle: preemptible
+  node.kubernetes.io/lifecycle: preemptible
 resources:
   limits:
     cpu: 100m
