@@ -3,58 +3,55 @@ terraform {
 }
 
 provider "kubernetes" {
-  alias            = "toolchain"
-  config_context   = var.config_context
+  alias          = "toolchain"
+  config_context = var.config_context
 }
 
 provider "helm" {
-  alias   = "toolchain"
-  version = "1.1.1"
+  alias = "toolchain"
+
 
   kubernetes {
-    config_context   = var.config_context
+    config_context = var.config_context
   }
 }
 
 provider "kubernetes" {
-  alias            = "staging"
-  config_context   = var.config_context
+  alias          = "staging"
+  config_context = var.config_context
 }
 
 provider "helm" {
-  alias   = "staging"
-  version = "1.1.1"
+  alias = "staging"
 
   kubernetes {
-    config_context   = var.config_context
+    config_context = var.config_context
   }
 }
 
 provider "kubernetes" {
-  alias            = "production"
-  config_context   = var.config_context
+  alias          = "production"
+  config_context = var.config_context
 }
 
 provider "helm" {
-  alias   = "production"
-  version = "1.1.1"
+  alias = "production"
 
   kubernetes {
-    config_context   = var.config_context
+    config_context = var.config_context
   }
 }
 
 provider "kubernetes" {
-  alias            = "system"
-  config_context   = var.config_context
+  alias          = "system"
+  config_context = var.config_context
 }
 
 provider "helm" {
-  alias   = "system"
-  version = "1.1.1"
+  alias = "system"
 
   kubernetes {
-    config_context   = var.config_context
+    config_context = var.config_context
   }
 }
 
