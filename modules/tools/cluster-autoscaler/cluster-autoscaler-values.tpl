@@ -1,7 +1,8 @@
 rbac:
   create: true
-  serviceAccountAnnotations:
-    "eks.amazonaws.com/role-arn": ${iam_arn}
+  serviceAccount:
+    annotations: 
+      "eks.amazonaws.com/role-arn": ${iam_arn}
 
 sslCertPath: /etc/ssl/certs/ca-bundle.crt
 
