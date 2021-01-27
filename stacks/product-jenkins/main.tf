@@ -4,8 +4,8 @@ terraform {
 
 provider "kubernetes" {
   alias            = "toolchain"
-  config_context   = var.config_context
-  token            = file("/var/run/secrets/kubernetes.io/serviceaccount/token")
+  # config_context   = var.config_context
+  # token            = file("/var/run/secrets/kubernetes.io/serviceaccount/token")
 }
 
 provider "helm" {
@@ -13,53 +13,53 @@ provider "helm" {
   
 
   kubernetes {
-    config_context   = var.config_context
-    token            = file("/var/run/secrets/kubernetes.io/serviceaccount/token")
+    # config_context   = var.config_context
+    # token            = file("/var/run/secrets/kubernetes.io/serviceaccount/token")
   }
 }
 
 provider "kubernetes" {
   alias            = "staging"
-  config_context   = var.config_context
-  token            = file("/var/run/secrets/kubernetes.io/serviceaccount/token")
+  # config_context   = var.config_context
+  # token            = file("/var/run/secrets/kubernetes.io/serviceaccount/token")
 }
 
 provider "helm" {
   alias   = "staging"
 
   kubernetes {
-    config_context   = var.config_context
-    token            = file("/var/run/secrets/kubernetes.io/serviceaccount/token")
+    # config_context   = var.config_context
+    # token            = file("/var/run/secrets/kubernetes.io/serviceaccount/token")
   }
 }
 
 provider "kubernetes" {
   alias            = "production"
-  config_context   = var.config_context
-  token            = file("/var/run/secrets/kubernetes.io/serviceaccount/token")
+  # config_context   = var.config_context
+  # token            = file("/var/run/secrets/kubernetes.io/serviceaccount/token")
 }
 
 provider "helm" {
   alias   = "production"
 
   kubernetes {
-    config_context   = var.config_context
-    token            = file("/var/run/secrets/kubernetes.io/serviceaccount/token")
+    # config_context   = var.config_context
+    # token            = file("/var/run/secrets/kubernetes.io/serviceaccount/token")
   }
 }
 
 provider "kubernetes" {
   alias            = "system"
-  config_context   = var.config_context
-  token            = file("/var/run/secrets/kubernetes.io/serviceaccount/token")
+  # config_context   = var.config_context
+  # token            = file("/var/run/secrets/kubernetes.io/serviceaccount/token")
 }
 
 provider "helm" {
   alias   = "system"
 
   kubernetes {
-    config_context   = var.config_context
-    token            = file("/var/run/secrets/kubernetes.io/serviceaccount/token")
+    # config_context   = var.config_context
+    # token            = file("/var/run/secrets/kubernetes.io/serviceaccount/token")
   }
 }
 
