@@ -25,7 +25,6 @@ data "aws_subnet_ids" "eks_workers" {
 resource "aws_s3_bucket" "code_services_bucket" {
   count  = var.enable_aws_code_services ? 1 : 0
   bucket = "code-services-${var.account_id}-${var.cluster}"
-  region = var.region
   versioning {
     enabled = true
   }
