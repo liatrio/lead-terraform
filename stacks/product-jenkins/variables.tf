@@ -13,7 +13,7 @@ variable "image_whitelist" {
 }
 
 variable "config_context" {
-  default = ""
+  default = null
 }
 
 variable "essential_taint_key" {
