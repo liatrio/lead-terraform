@@ -3,7 +3,7 @@ affinity:
     requiredDuringSchedulingIgnoredDuringExecution:
       nodeSelectorTerms:
       - matchExpressions:
-        - key: "kubernetes.io/lifecycle"
+        - key: "node.kubernetes.io/lifecycle"
           operator: "NotIn"
           values:
           - preemptible
