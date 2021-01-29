@@ -11,8 +11,9 @@ data "template_file" "cluster_autoscaler" {
 
 resource "helm_release" "cluster_autoscaler" {
   name       = "cluster-autoscaler"
+  chart      = "cluster-autoscaler"
   namespace  = var.namespace
-  chart      = "${path.module}/charts"
+  repository = "https://kubernetes.github.io/autoscaler"
   timeout    = 600
   wait       = true
   version    = "9.4.0"
