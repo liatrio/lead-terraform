@@ -41,3 +41,9 @@ module "cert_manager_iam" {
   openid_connect_provider_arn = module.eks.aws_iam_openid_connect_provider.arn
   openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider.url
 }
+
+module "docker_registry_iam" {
+  source = "../../../../modules/environment/aws/iam/docker-registry"
+
+  cluster                     = module.eks.cluster_id
+}
