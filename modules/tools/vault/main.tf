@@ -8,8 +8,6 @@ module "vault_tls_certificate" {
 
   issuer_name = var.cert_issuer_name
   issuer_kind = var.cert_issuer_kind
-
-  certificate_crd = var.cert_crd_waiter
 }
 
 resource "helm_release" "vault" {

@@ -65,3 +65,13 @@ variable "additional_mapped_roles" {
 
   default = []
 }
+
+variable "vault_dynamodb_table_name" {}
+variable "system_namespace" {}
+
+variable "cluster_domain" {
+  default = "services.liatr.io"
+}
+variable "internal_cluster_domain" {
+  default = "internal.services.liatr.io"
+}

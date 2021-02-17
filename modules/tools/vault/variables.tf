@@ -4,7 +4,6 @@ variable "vault_dynamodb_table_name" {}
 variable "vault_hostname" {}
 variable "cert_issuer_name" {}
 variable "cert_issuer_kind" {}
-variable "cert_crd_waiter" {}
 variable "vault_aws_access_key_id" {}
 variable "vault_aws_secret_access_key" {}
 variable "vault_kms_key_id" {}
