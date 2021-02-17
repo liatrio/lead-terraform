@@ -13,11 +13,11 @@ data "aws_route53_zone" "private_internal_services_liatr_io" {
 }
 
 data "aws_route53_zone" "public_internal_services_liatr_io" {
-  name         = "${var.internal_cluster_domain}."
+  name = "${var.internal_cluster_domain}."
 }
 
 data "aws_route53_zone" "services_liatr_io" {
-  name         = "${var.cluster_domain}."
+  name = "${var.cluster_domain}."
 }
 
 module "external_dns_iam" {
@@ -45,5 +45,5 @@ module "cert_manager_iam" {
 module "docker_registry_iam" {
   source = "../../../../modules/environment/aws/iam/docker-registry"
 
-  cluster                     = module.eks.cluster_id
+  cluster = module.eks.cluster_id
 }
