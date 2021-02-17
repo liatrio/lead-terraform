@@ -18,7 +18,7 @@ module "cluster_autoscaler" {
 
   cluster                                = var.eks_cluster_id
   region                                 = var.region
-  cluster_autoscaler_service_account_arn = module.cluster_autoscaler_iam.cluster_autoscaler_service_account_arn
+  cluster_autoscaler_service_account_arn = var.cluster_autoscaler_service_account_arn
   enable_autoscaler_scale_down           = var.enable_autoscaler_scale_down
   namespace                              = module.system_namespace.name
   extra_values                           = module.essential_node_toleration_values.values
@@ -31,7 +31,7 @@ module "external_dns" {
   istio_enabled               = false
   dns_provider                = "aws"
   service_account_annotations = {
-    "eks.amazonaws.com/role-arn" = module.external_dns_iam.external_dns_service_account_arn
+    "eks.amazonaws.com/role-arn" = var.external_dns_service_account_arn
   }
   domain_filters              = [
     var.cluster_domain,
@@ -45,7 +45,7 @@ module "external_dns" {
 module "cert_manager" {
   source                                = "../../../modules/tools/cert-manager"
   namespace                             = module.system_namespace.name
-  cert_manager_service_account_role_arn = module.cert_manager_iam.cert_manager_service_account_arn
+  cert_manager_service_account_role_arn = var.cert_manager_service_account_arn
 }
 
 module "kube_downscaler" {
@@ -57,16 +57,14 @@ module "kube_downscaler" {
     "kube-system",
     module.vault_namespace.name
   ]
-  extra_values        = module.essential_node_toleration_values.values
 }
 
-module "k8s_spot_termination_handler" {
-  source = "../../../modules/tools/k8s-spot-termination-handler"
+module "aws_node_termination_handler" {
+  source = "../../../modules/tools/aws-node-termination-handler"
 }
 
 module "kube_janitor" {
   source = "../../../modules/tools/kube-janitor"
 
   namespace    = module.system_namespace.name
-  extra_values = module.essential_node_toleration_values.values
 }

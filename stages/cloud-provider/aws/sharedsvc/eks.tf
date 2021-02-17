@@ -1,5 +1,5 @@
 module "eks" {
-  source                           = "../../../modules/environment/aws/eks"
+  source                           = "../../../../modules/environment/aws/eks"
   region                           = var.region
   cluster                          = var.cluster_name
   cluster_version                  = var.cluster_version
