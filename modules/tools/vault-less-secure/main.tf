@@ -39,4 +39,8 @@ resource "kubernetes_secret" "vault_root_token" {
   data = {
     token = module.vault_operator_init.stdout
   }
+
+  lifecycle {
+    ignore_changes = [data]
+  }
 }
