@@ -40,3 +40,16 @@ output "external_dns_service_account_arn" {
 output "cert_manager_service_account_arn" {
   value = module.cert_manager_iam.cert_manager_service_account_arn
 }
+
+output "docker_registry_aws_access_key_id" {
+  value = module.docker_registry_iam.docker_registry_aws_access_key_id
+}
+
+output "docker_registry_aws_secret_access_key" {
+  value     = module.docker_registry_iam.docker_registry_aws_secret_access_key
+  sensitive = true
+}
+
+output "docker_registry_s3_bucket_name" {
+  value     = module.docker_registry_iam.docker_registry_s3_bucket_name
+}
