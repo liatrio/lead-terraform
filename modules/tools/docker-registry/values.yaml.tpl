@@ -1,3 +1,5 @@
+replicaCount: ${min_replicas}
+
 storage: s3
 secrets:
   s3:
@@ -36,3 +38,10 @@ configData:
       threshold: 3
   proxy:
     remoteurl: https://registry-1.docker.io
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 200m
+    memory: 256Mi

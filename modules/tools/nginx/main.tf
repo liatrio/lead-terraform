@@ -1,5 +1,6 @@
 locals {
   name = var.name == "" ? "ingress-nginx" : "ingress-nginx-${var.name}"
+  min_replicas = 2
 }
 
 resource "helm_release" "nginx" {
@@ -17,6 +18,7 @@ resource "helm_release" "nginx" {
       service_type                    = var.service_type
       ingress_class                   = var.ingress_class
       ingress_external_traffic_policy = var.ingress_external_traffic_policy
+      min_replicas                    = local.min_replicas
     })
   ]
 }
