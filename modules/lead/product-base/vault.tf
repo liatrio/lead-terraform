@@ -21,7 +21,7 @@ resource "vault_database_secret_backend_connection" "mongodb" {
   }
 
   depends_on = [
-    helm_release.mongodb
+    null_resource.mongodb_wait
   ]
 }
 
