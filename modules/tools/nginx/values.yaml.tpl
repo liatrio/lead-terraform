@@ -1,4 +1,5 @@
 controller:
+  replicaCount: ${min_replicas}
   kind: Deployment
   service:
     type: ${service_type}
@@ -16,6 +17,7 @@ controller:
     enabled: true
     targetCPUUtilizationPercentage: 70
     targetMemoryUtilizationPercentage: 85
+    minReplicas: ${min_replicas}
   livenessProbe:
     timeoutSeconds: 10
   readinessProbe:

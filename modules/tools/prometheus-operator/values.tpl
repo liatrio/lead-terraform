@@ -2,7 +2,9 @@ grafana:
   ingress:
     enabled: true
     annotations:
-      kubernetes.io/ingress.class: "toolchain-nginx"
+      %{ if ingress_class != "" }
+      kubernetes.io/ingress.class: ${ingress_class}
+      %{ endif }
       nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     tls:
     - hosts:
@@ -104,7 +106,7 @@ prometheus:
           value: "70"
 
 alertmanager:
-  enabled: true
+  enabled: ${enable_alertmanager}
   alertmanagerSpec:
     storage:
       volumeClaimTemplate:

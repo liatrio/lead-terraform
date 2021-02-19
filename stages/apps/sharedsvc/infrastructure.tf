@@ -68,3 +68,14 @@ module "kube_janitor" {
 
   namespace    = module.system_namespace.name
 }
+
+module "essential_toleration_values" {
+  source = "../../../modules/affinity/essential-toleration-values"
+}
+
+module "metrics_server" {
+  source = "../../../modules/tools/metrics-server"
+
+  namespace    = module.system_namespace.name
+  extra_values = module.essential_toleration_values.values
+}
