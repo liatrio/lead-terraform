@@ -81,4 +81,8 @@ resource "kubernetes_job" "wait_for_db" {
   }
 
   wait_for_completion = true
+
+  timeouts {
+    create = "5m"
+  }
 }
