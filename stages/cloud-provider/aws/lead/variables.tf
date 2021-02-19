@@ -98,3 +98,7 @@ locals {
     "Cluster" = var.cluster_name
   }
 }
+
+variable "docker_registry_mirror" {
+  default = ""
+}

@@ -1,5 +1,5 @@
 module "eks" {
-  source                           = "../../../../modules/environment/aws/eks"
+  source = "../../../../modules/environment/aws/eks"
 
   region                           = var.region
   cluster                          = var.cluster_name
@@ -18,6 +18,7 @@ module "eks" {
   enable_aws_code_services         = var.enable_aws_code_services
   codebuild_role                   = var.enable_aws_code_services ? module.codeservices.codebuild_role : ""
   vpc_name                         = var.vpc_name
+  docker_registry_mirror           = var.docker_registry_mirror
 
   // TODO: remove the following policy from the worker node role once terraform is bumped
   //       to version that includes fix for: https://github.com/hashicorp/terraform/issues/22992

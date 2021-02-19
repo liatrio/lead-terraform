@@ -2,10 +2,14 @@ data "aws_caller_identity" "current" {
 }
 
 locals {
-  ssm_init = <<EOF
+  userdata = <<EOF
 yum install -y amazon-ssm-agent
 systemctl start amazon-ssm-agent
 systemctl enable amazon-ssm-agent
+
+echo '{"registry-mirrors": [${ var.docker_registry_mirror != "" ? format("\"%s\"", var.docker_registry_mirror) : ""}]}' | cat /etc/docker/daemon.json - | jq -s '.[0] * .[1]' > /tmp/daemon.json
+mv /tmp/daemon.json /etc/docker/daemon.json
+systemctl reload docker
 EOF
 
   tags = {
@@ -84,6 +88,7 @@ resource "aws_security_group" "worker" {
 
     cidr_blocks = [
       data.aws_vpc.lead_vpc.cidr_block,
+      #"10.1.32.0/20", # internal VPN
     ]
   }
   ingress {
@@ -177,7 +182,7 @@ module "eks" {
       autoscaling_enabled    = true
       protect_from_scale_in  = var.protect_from_scale_in
       enabled_metrics        = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]
-      pre_userdata           = local.ssm_init
+      pre_userdata           = local.userdata
       kubelet_extra_args     = "--node-labels=node.kubernetes.io/lifecycle=essential --register-with-taints=${var.essential_taint_key}=true:NoSchedule"
       root_volume_size       = var.root_volume_size
     }
@@ -197,7 +202,7 @@ module "eks" {
       autoscaling_enabled                      = true
       protect_from_scale_in                    = var.protect_from_scale_in
       enabled_metrics                          = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]
-      pre_userdata                             = local.ssm_init
+      pre_userdata                             = local.userdata
       kubelet_extra_args                       = "--node-labels=node.kubernetes.io/lifecycle=preemptible"
       on_demand_base_capacity                  = 0
       on_demand_percentage_above_base_capacity = var.on_demand_percentage
@@ -216,7 +221,7 @@ module "eks" {
       autoscaling_enabled                      = true
       protect_from_scale_in                    = var.protect_from_scale_in
       enabled_metrics                          = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]
-      pre_userdata                             = local.ssm_init
+      pre_userdata                             = local.userdata
       kubelet_extra_args                       = "--node-labels=node.kubernetes.io/lifecycle=preemptible"
       on_demand_base_capacity                  = 0
       on_demand_percentage_above_base_capacity = var.on_demand_percentage
@@ -235,7 +240,7 @@ module "eks" {
       autoscaling_enabled                      = true
       protect_from_scale_in                    = var.protect_from_scale_in
       enabled_metrics                          = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]
-      pre_userdata                             = local.ssm_init
+      pre_userdata                             = local.userdata
       kubelet_extra_args                       = "--node-labels=node.kubernetes.io/lifecycle=preemptible"
       on_demand_base_capacity                  = 0
       on_demand_percentage_above_base_capacity = var.on_demand_percentage
