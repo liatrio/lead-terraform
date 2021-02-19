@@ -54,14 +54,14 @@ resource "kubernetes_job" "wait_for_db" {
     namespace  = module.database_namespace.name
 
     annotations = {
-      sidecar.istio.io/inject: "false"
+      "sidecar.istio.io/inject" = "false"
     }
   }
   spec {
     template {
       metadata {
         annotations = {
-          sidecar.istio.io/inject: "false"
+          "sidecar.istio.io/inject" = "false"
         }
       }
       spec {
