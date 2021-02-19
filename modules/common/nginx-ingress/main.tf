@@ -14,7 +14,7 @@ data "template_file" "nginx_ingress_values" {
 
 resource "helm_release" "nginx_ingress" {
   count      = var.enabled ? 1 : 0
-  repository = "https://kubernetes-charts.storage.googleapis.com"
+  repository = "https://charts.helm.sh/stable"
   chart      = "nginx-ingress"
   version    = "1.33.5"
   namespace  = var.namespace
