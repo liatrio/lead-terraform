@@ -36,8 +36,9 @@ resource "kubernetes_horizontal_pod_autoscaler" "docker_registry" {
     min_replicas = local.min_replicas
 
     scale_target_ref {
-      kind = "Deployment"
-      name = helm_release.docker_registry.name
+      api_version = "apps/v1"
+      kind        = "Deployment"
+      name        = helm_release.docker_registry.name
     }
 
     target_cpu_utilization_percentage = 60
