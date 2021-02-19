@@ -52,10 +52,18 @@ resource "kubernetes_job" "wait_for_db" {
   metadata {
     name = "wait-for-db"
     namespace  = module.database_namespace.name
+
+    annotations = {
+      sidecar.istio.io/inject: "false"
+    }
   }
   spec {
     template {
-      metadata {}
+      metadata {
+        annotations = {
+          sidecar.istio.io/inject: "false"
+        }
+      }
       spec {
         container {
           name    = "mongodb"
