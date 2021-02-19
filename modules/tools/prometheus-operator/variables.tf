@@ -1,6 +1,14 @@
-variable "prometheus_slack_webhook_url" {}
+variable "prometheus_slack_webhook_url" {
+  default = ""
+}
 
-variable "prometheus_slack_channel" {}
+variable "prometheus_slack_channel" {
+  default = ""
+}
+
+variable "ingress_class" {
+  default = ""
+}
 
 variable "namespace" {}
 
