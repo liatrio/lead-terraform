@@ -43,7 +43,7 @@ resource "helm_release" "mongodb" {
 locals {
   ready = <<EOF
 until mongo mongodb:27017 --disableImplicitSessions --eval 'db.serverStatus()'; do
-  sleep 1
+  sleep 3
 done
 EOF
 }
@@ -85,4 +85,8 @@ resource "kubernetes_job" "wait_for_db" {
   timeouts {
     create = "5m"
   }
+
+  depends_on = [
+    helm_release.mongodb
+  ]
 }
