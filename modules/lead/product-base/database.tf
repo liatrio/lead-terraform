@@ -39,14 +39,15 @@ resource "helm_release" "mongodb" {
   ]
 }
 
+# wait for db to be ready
 locals {
   ready = <<EOF
-while
-mongo --disableImplicitSessions --eval 'db.hello().isWritablePrimary || db.hello().secondary' | grep -q 'true'
+until mongo mongodb:27017 --disableImplicitSessions --eval 'db.serverStatus()'; do
+  sleep 1
+done
 EOF
 }
 
-# wait for db to be ready
 resource "kubernetes_job" "wait_for_db" {
   metadata {
     name = "wait_for_db"
@@ -60,15 +61,16 @@ resource "kubernetes_job" "wait_for_db" {
           name    = "mongodb"
           image   = "bitnami/mongodb:4.2.9-debian-10-r0"
           command = [
-            "bash", 
-            "-c", 
+            "bash",
+            "-c",
             local.ready,
           ]
         }
         restart_policy = "Never"
       }
     }
-    backoff_limit = 4
+    backoff_limit = 5
   }
+
   wait_for_completion = true
 }

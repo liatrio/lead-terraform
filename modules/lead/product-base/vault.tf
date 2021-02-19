@@ -21,7 +21,7 @@ resource "vault_database_secret_backend_connection" "mongodb" {
   }
 
   depends_on = [
-    null_resource.mongodb_wait
+    kubernetes_job.wait_for_db
   ]
 }
 
