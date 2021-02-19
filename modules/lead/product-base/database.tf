@@ -38,11 +38,3 @@ resource "helm_release" "mongodb" {
     })
   ]
 }
-
-# wait for db to be ready
-resource "null_resource" "mongodb_wait" {
-  provisioner "local-exec" {
-    command = "sleep 5"
-  }
-  depends_on = [helm_release.mongodb]
-}

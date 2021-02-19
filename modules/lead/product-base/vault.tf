@@ -20,9 +20,7 @@ resource "vault_database_secret_backend_connection" "mongodb" {
     connection_url = "mongodb://{{username}}:{{password}}@mongodb.${var.product_name}-db.svc.cluster.local/admin"
   }
 
-  depends_on = [
-    null_resource.mongodb_wait
-  ]
+  verify_connection = false
 }
 
 // vault policy for getting credentials for database
