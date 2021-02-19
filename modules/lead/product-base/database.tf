@@ -39,10 +39,36 @@ resource "helm_release" "mongodb" {
   ]
 }
 
+locals {
+  ready = <<EOF
+while
+mongo --disableImplicitSessions --eval 'db.hello().isWritablePrimary || db.hello().secondary' | grep -q 'true'
+EOF
+}
+
 # wait for db to be ready
-resource "null_resource" "mongodb_wait" {
-  provisioner "local-exec" {
-    command = "sleep 15"
+resource "kubernetes_job" "wait_for_db" {
+  metadata {
+    name = "wait_for_db"
+    namespace  = module.database_namespace.name
   }
-  depends_on = [helm_release.mongodb]
+  spec {
+    template {
+      metadata {}
+      spec {
+        container {
+          name    = "mongodb"
+          image   = "bitnami/mongodb:4.2.9-debian-10-r0"
+          command = [
+            "bash", 
+            "-c", 
+            local.ready,
+          ]
+        }
+        restart_policy = "Never"
+      }
+    }
+    backoff_limit = 4
+  }
+  wait_for_completion = true
 }
