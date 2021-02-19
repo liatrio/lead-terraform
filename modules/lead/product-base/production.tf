@@ -45,7 +45,7 @@ resource "kubernetes_role" "default_production_role" {
     verbs      = ["get", "list", "watch"]
   }
   rule {
-    api_groups = ["extensions"]
+    api_groups = ["extensions", "apps"]
     resources  = ["deployments"]
     verbs      = ["get", "list", "watch"]
   }
