@@ -61,7 +61,7 @@ resource "helm_release" "elasticsearch_curator" {
   name       = "elasticsearch-curator"
   namespace  = var.namespace
   chart      = "elasticsearch-curator"
-  repository = "https://kubernetes-charts.storage.googleapis.com"
+  repository = "https://charts.helm.sh/stable"
   version    = "2.1.5"
   wait       = true
 

@@ -7,7 +7,7 @@ resource "random_password" "password" {
 resource "helm_release" "prometheus_operator" {
   name       = "prometheus-operator"
   namespace  = var.namespace
-  repository = "https://kubernetes-charts.storage.googleapis.com"
+  repository = "https://charts.helm.sh/stable"
   chart      = "prometheus-operator"
   version    = "8.3.3"
   timeout    = 600
