@@ -50,7 +50,7 @@ EOF
 
 resource "kubernetes_job" "wait_for_db" {
   metadata {
-    name = "wait_for_db"
+    name = "wait-for-db"
     namespace  = module.database_namespace.name
   }
   spec {
