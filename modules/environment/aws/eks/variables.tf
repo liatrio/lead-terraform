@@ -84,3 +84,7 @@ variable "codebuild_role" {
 variable "root_volume_size" {
   default = 50
 }
+
+variable "docker_registry_mirror" {
+  default = ""
+}
