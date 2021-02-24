@@ -13,6 +13,45 @@ jenkins:
         maxRequestsPerHostStr: 32
         waitForPodSec: 600
         templates:
+          - name: "minimal"
+            label: "minimal"
+            nodeUsageMode: NORMAL
+            containers:
+              - name: "agent"
+                image: "alpine"
+                alwaysPullImage: false
+                workingDir: "/home/jenkins/agent"
+                command: "/bin/sh -c"
+                args: "cat"
+                ttyEnabled: true
+                resourceRequestCpu: 50m
+                resourceLimitCpu: 500m
+                resourceRequestMemory: 64Mi
+                resourceLimitMemory: 128Mi
+            volumes:
+              - hostPathVolume:
+                  hostPath: "/var/run/docker.sock"
+                  mountPath: "/var/run/docker.sock"
+              - secretVolume:
+                  mountPath: "/root/.docker"
+                  secretName: "${jenkins-repository-dockercfg}"
+            slaveConnectTimeout: 100
+            serviceAccount: "jenkins"
+            yaml: |-
+              apiVersion: v1
+              kind: Pod
+              spec:
+                ${indent(16, essential_tolerations)}
+                containers:
+                - name: jnlp
+                  resources:
+                    requests:
+                      cpu: 50m
+                      memory: 128Mi
+                    limits:
+                      cpu: 500m
+                      memory: 256Mi
+            yamlMergeStrategy: "merge"
           - name: "lead-toolchain-skaffold"
             label: "lead-toolchain-skaffold"
             nodeUsageMode: NORMAL
