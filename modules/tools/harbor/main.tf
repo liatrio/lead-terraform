@@ -122,7 +122,7 @@ resource "helm_release" "harbor" {
   name       = "harbor"
   namespace  = var.namespace
   chart      = "harbor"
-  version    = "1.4.6"
+  version    = "1.5.3"
 
   values = [
     data.template_file.harbor_values.rendered
