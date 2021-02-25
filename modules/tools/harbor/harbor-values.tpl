@@ -53,7 +53,7 @@ logLevel: info
 portal:
   image:
     repository: goharbor/harbor-portal
-    tag: v2.0.6
+    tag: v2.2.0
   replicas: 1
   resources:
    requests:
@@ -71,7 +71,7 @@ portal:
 core:
   image:
     repository: goharbor/harbor-core
-    tag: v2.0.6
+    tag: v2.2.0
   replicas: 1
   ## Liveness probe values
   livenessProbe:
@@ -91,7 +91,7 @@ core:
 jobservice:
   image:
     repository: goharbor/harbor-jobservice
-    tag: v2.0.6
+    tag: v2.2.0
   replicas: 1
   maxJobWorkers: 10
   # The logger for jobs: "file", "database" or "stdout"
@@ -113,7 +113,7 @@ registry:
   registry:
     image:
       repository: goharbor/registry-photon
-      tag: v2.0.6
+      tag: v2.2.0
     resources:
       requests:
         memory: 256Mi
@@ -124,7 +124,7 @@ registry:
   controller:
     image:
       repository: goharbor/harbor-registryctl
-      tag: v2.0.6
+      tag: v2.2.0
 
     resources:
       requests:
@@ -150,7 +150,7 @@ chartmuseum:
   absoluteUrl: false
   image:
     repository: goharbor/chartmuseum-photon
-    tag: v2.0.6
+    tag: v2.2.0
   replicas: 1
   resources:
     requests:
@@ -169,7 +169,7 @@ trivy:
   enabled: true
   image:
     repository: goharbor/trivy-adapter-photon
-    tag: v2.0.6
+    tag: v2.2.0
   resources:
     requests:
       memory: 512Mi
@@ -184,7 +184,7 @@ notary:
   server:
     image:
       repository: goharbor/notary-server-photon
-      tag: v2.0.6
+      tag: v2.2.0
     replicas: 1
     resources:
       requests:
@@ -196,7 +196,7 @@ notary:
   signer:
     image:
       repository: goharbor/notary-signer-photon
-      tag: v2.0.6
+      tag: v2.2.0
     replicas: 1
     resources:
       requests:
@@ -225,7 +225,7 @@ database:
   internal:
     image:
       repository: goharbor/harbor-db
-      tag: v1.10.0
+      tag: v2.2.0
     initContainerImage:
       repository: busybox
       tag: latest
@@ -256,7 +256,7 @@ redis:
   internal:
     image:
       repository: goharbor/redis-photon
-      tag: v1.10.0
+      tag: v2.2.0
     resources:
       requests:
         memory: 256Mi
