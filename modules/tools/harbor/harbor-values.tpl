@@ -46,7 +46,7 @@ persistence:
       rootdirectory: /storage
 
 updateStrategy:
-  type: RollingUpdate
+  type: Recreate
 
 logLevel: info
 
