@@ -2,8 +2,10 @@ expose:
   type: ingress
   tls:
     enabled: true
-    secretName: harbor-tls
-    notarySecretName: notary-tls
+    certSource: secret
+    secret:  
+      secretName: harbor-tls
+      notarySecretName: notary-tls
   ingress:
     hosts:
       core: ${harbor_ingress_hostname}
