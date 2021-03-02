@@ -27,3 +27,7 @@ variable protect_pvc_resources {
 }
 
 variable admin_password {}
+
+variable db_existing_claim {
+  default = ""
+}

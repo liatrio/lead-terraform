@@ -113,6 +113,7 @@ data "template_file" "harbor_values" {
     redis_pvc_size      = "10Gi"
 
     storage_class = var.k8s_storage_class
+    db_existing_claim = var.db_existing_claim
   }
 }
 
