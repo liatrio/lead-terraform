@@ -15,7 +15,3 @@ variable enable_keycloak {
 variable keycloak_hostname {}
 
 variable keycloak_realm {}
-
-variable db_existing_claim {
-  default = ""
-}

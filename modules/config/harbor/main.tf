@@ -34,11 +34,6 @@ resource "helm_release" "harbor_config" {
     value = "admin"
   }
 
-  set {
-    name = "persistence.persistentVolumeClaim.database.existingClaim"
-    value = var.existing_claim
-  }
-
   set_sensitive {
     name  = "harbor.password"
     value = var.admin_password
