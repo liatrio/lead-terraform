@@ -112,8 +112,9 @@ data "template_file" "harbor_values" {
     database_pvc_size   = "10Gi"
     redis_pvc_size      = "10Gi"
 
-    storage_class = var.k8s_storage_class
+    storage_class     = var.k8s_storage_class
     db_existing_claim = var.db_existing_claim
+    img_tag           = "v2.1.3"
   }
 }
 
