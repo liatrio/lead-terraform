@@ -7,7 +7,7 @@ terraform {
     }
     harbor = {
       source = "liatrio/harbor"
-      version = "= 0.3.2"
+      version = "= 0.3.3"
     }
     kubernetes = {
       source = "hashicorp/kubernetes"

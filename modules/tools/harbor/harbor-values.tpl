@@ -167,6 +167,9 @@ chartmuseum:
   ## Additional deployment annotations
   podAnnotations: {}
 
+clair:
+  enabled: false
+
 trivy:
   enabled: true
   image:
