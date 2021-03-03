@@ -56,9 +56,10 @@ resource "helm_release" "harbor_config" {
 }
 
 resource "harbor_project" "liatrio_project" {
-  count  = var.enable ? 1 : 0
-  name   = "liatrio"
-  public = true
+  count     = var.enable ? 1 : 0
+  name      = "liatrio"
+  public    = true
+  auto_scan = false
 }
 
 resource "harbor_robot_account" "liatrio_project_robot_account" {

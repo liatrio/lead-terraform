@@ -1,17 +1,17 @@
-variable enable {
+variable "enable" {
   default = true
 }
 
-variable namespace {}
+variable "namespace" {}
 
-variable hostname {}
+variable "hostname" {}
 
-variable admin_password {}
+variable "admin_password" {}
 
-variable enable_keycloak {
+variable "enable_keycloak" {
   default = true
 }
 
-variable keycloak_hostname {}
+variable "keycloak_hostname" {}
 
-variable keycloak_realm {}
+variable "keycloak_realm" {}

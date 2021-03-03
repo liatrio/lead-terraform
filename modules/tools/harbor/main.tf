@@ -56,6 +56,16 @@ resource "helm_release" "harbor_volumes" {
   }
 
   set {
+    name = "components.database.size"
+    value = var.harbor_database_disk_size
+  }
+
+  set {
+    name = "components.database.protectPvcResource"
+    value = var.protect_pvc_resources
+  }
+
+  set {
     name  = "storageClassName"
     value = var.k8s_storage_class
   }
@@ -112,7 +122,8 @@ data "template_file" "harbor_values" {
     database_pvc_size   = "10Gi"
     redis_pvc_size      = "10Gi"
 
-    storage_class = var.k8s_storage_class
+    storage_class     = var.k8s_storage_class
+    img_tag           = "v2.1.3"
   }
 }
 
@@ -122,7 +133,7 @@ resource "helm_release" "harbor" {
   name       = "harbor"
   namespace  = var.namespace
   chart      = "harbor"
-  version    = "1.3.0"
+  version    = "1.5.3"
 
   values = [
     data.template_file.harbor_values.rendered

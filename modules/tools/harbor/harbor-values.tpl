@@ -2,8 +2,10 @@ expose:
   type: ingress
   tls:
     enabled: true
-    secretName: harbor-tls
-    notarySecretName: notary-tls
+    certSource: secret
+    secret:  
+      secretName: harbor-tls
+      notarySecretName: notary-tls
   ingress:
     hosts:
       core: ${harbor_ingress_hostname}
@@ -33,9 +35,9 @@ persistence:
       accessMode: ReadWriteOnce
       size: ${jobservice_pvc_size}
     database:
-      storageClass: ${storage_class}
+      existingClaim: harbor-database
       accessMode: ReadWriteOnce
-      size: ${database_pvc_size}
+
     redis:
       storageClass: ${storage_class}
       accessMode: ReadWriteOnce
@@ -46,14 +48,14 @@ persistence:
       rootdirectory: /storage
 
 updateStrategy:
-  type: RollingUpdate
+  type: Recreate
 
 logLevel: info
 
 portal:
   image:
     repository: goharbor/harbor-portal
-    tag: v1.10.0
+    tag: ${img_tag}
   replicas: 1
   resources:
    requests:
@@ -71,7 +73,7 @@ portal:
 core:
   image:
     repository: goharbor/harbor-core
-    tag: v1.10.0
+    tag: ${img_tag}
   replicas: 1
   ## Liveness probe values
   livenessProbe:
@@ -91,7 +93,7 @@ core:
 jobservice:
   image:
     repository: goharbor/harbor-jobservice
-    tag: v1.10.0
+    tag: ${img_tag}
   replicas: 1
   maxJobWorkers: 10
   # The logger for jobs: "file", "database" or "stdout"
@@ -113,8 +115,7 @@ registry:
   registry:
     image:
       repository: goharbor/registry-photon
-      tag: v2.7.1-patch-2819-2553-v1.10.0
-
+      tag: ${img_tag}
     resources:
       requests:
         memory: 256Mi
@@ -125,7 +126,7 @@ registry:
   controller:
     image:
       repository: goharbor/harbor-registryctl
-      tag: v1.10.0
+      tag: ${img_tag}
 
     resources:
       requests:
@@ -151,7 +152,7 @@ chartmuseum:
   absoluteUrl: false
   image:
     repository: goharbor/chartmuseum-photon
-    tag: v0.9.0-v1.10.0
+    tag: ${img_tag}
   replicas: 1
   resources:
     requests:
@@ -167,45 +168,28 @@ chartmuseum:
   podAnnotations: {}
 
 clair:
+  enabled: false
+
+trivy:
   enabled: true
-  clair:
-    image:
-      repository: goharbor/clair-photon
-      tag: v2.1.1-v1.10.0
-    resources:
-      requests:
-        memory: 512Mi
-        cpu: 200m
-      limits:
-        memory: 2048Mi
-        cpu: 600m
-  adapter:
-    image:
-      repository: goharbor/clair-adapter-photon
-      tag: dev
-    resources:
-      requests:
-        memory: 64Mi
-        cpu: 10m
-      limits:
-        memory: 128Mi
-        cpu: 50m
+  image:
+    repository: goharbor/trivy-adapter-photon
+    tag: ${img_tag}
+  resources:
+    requests:
+      memory: 512Mi
+      cpu: 200m
+    limits:
+      memory: 2048Mi
+      cpu: 600m
   replicas: 1
-  # The interval of clair updaters, the unit is hour, set to 0 to
-  # disable the updaters
-  updatersInterval: 12
-  nodeSelector: {}
-  tolerations: []
-  affinity: {}
-  ## Additional deployment annotations
-  podAnnotations: {}
 
 notary:
   enabled: true
   server:
     image:
       repository: goharbor/notary-server-photon
-      tag: v0.6.1-v1.10.0
+      tag: ${img_tag}
     replicas: 1
     resources:
       requests:
@@ -217,7 +201,7 @@ notary:
   signer:
     image:
       repository: goharbor/notary-signer-photon
-      tag: v0.6.1-v1.10.0
+      tag: ${img_tag}
     replicas: 1
     resources:
       requests:
@@ -246,7 +230,7 @@ database:
   internal:
     image:
       repository: goharbor/harbor-db
-      tag: v1.10.0
+      tag: ${img_tag}
     initContainerImage:
       repository: busybox
       tag: latest
@@ -277,7 +261,7 @@ redis:
   internal:
     image:
       repository: goharbor/redis-photon
-      tag: v1.10.0
+      tag: ${img_tag}
     resources:
       requests:
         memory: 256Mi

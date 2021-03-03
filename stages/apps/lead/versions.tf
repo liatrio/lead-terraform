@@ -7,11 +7,11 @@ terraform {
     }
     harbor = {
       source = "liatrio/harbor"
-      version = "= 0.2.0-pre"
+      version = "= 0.3.3"
     }
     helm = {
       source = "hashicorp/helm"
-      version = "1.3.0"
+      version = "2.0.2"
     }
     keycloak = {
       source = "mrparkers/keycloak"
