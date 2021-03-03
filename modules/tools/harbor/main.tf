@@ -56,13 +56,18 @@ resource "helm_release" "harbor_volumes" {
   }
 
   set {
-    name  = "storageClassName"
-    value = var.k8s_storage_class
+    name = "components.database.size"
+    value = var.harbor_database_disk_size
   }
 
   set {
-    name = "components.database.size"
-    value = var.harbor_database_disk_size
+    name = "components.database.protectPvcResource"
+    value = var.protect_pvc_resources
+  }
+
+  set {
+    name  = "storageClassName"
+    value = var.k8s_storage_class
   }
 }
 
