@@ -59,6 +59,11 @@ resource "helm_release" "harbor_volumes" {
     name  = "storageClassName"
     value = var.k8s_storage_class
   }
+
+  set {
+    name = "components.database.size"
+    value = var.harbor_database_disk_size
+  }
 }
 
 resource "helm_release" "harbor_certificates" {
@@ -113,7 +118,6 @@ data "template_file" "harbor_values" {
     redis_pvc_size      = "10Gi"
 
     storage_class     = var.k8s_storage_class
-    db_existing_claim = var.db_existing_claim
     img_tag           = "v2.1.3"
   }
 }
