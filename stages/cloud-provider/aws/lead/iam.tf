@@ -270,7 +270,8 @@ resource "aws_iam_policy" "product_operator_main" {
       "s3:DeleteObject"
     ],
     "Resource": [
-      "arn:aws:s3:::lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${var.cluster_name}.liatr.io"
+      "arn:aws:s3:::lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${var.cluster_name}.liatr.io",
+      "arn:aws:s3:::lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${var.cluster_name}.liatr.io/*"
     ]
   },
   {
