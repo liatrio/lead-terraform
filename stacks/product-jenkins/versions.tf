@@ -10,5 +10,19 @@ terraform {
       source  = "hashicorp/helm"
       version = "2.0.2"
     }
+
+    harbor = {
+      source  = "liatrio/harbor"
+      version = "= 0.3.3"
+    }
+
+    keycloak = {
+      source  = "mrparkers/keycloak"
+      version = "= 2.0.0-rc.0"
+    }
+
+    template = {
+      source  = "hashicorp/template"
+    }
   }
 }
