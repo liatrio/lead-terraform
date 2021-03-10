@@ -20,8 +20,9 @@ resource "null_resource" "istio_init_delay" {
 }
 
 module "istio_system" {
+  count = var.enable_istio ? 1 : 0
+
   source              = "../../../modules/common/istio"
-  enabled             = var.enable_istio
   namespace           = "istio-system"
   cluster_domain      = "${var.cluster_name}.${var.root_zone_name}"
   toolchain_namespace = var.toolchain_namespace
