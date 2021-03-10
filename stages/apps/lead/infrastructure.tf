@@ -18,7 +18,7 @@ module "external_dns" {
   source = "../../../modules/tools/external-dns"
 
   enabled                     = true
-  istio_enabled               = true
+  istio_enabled               = var.enable_istio
   dns_provider                = "aws"
   service_account_annotations = {
     "eks.amazonaws.com/role-arn" = var.external_dns_service_account_arn
