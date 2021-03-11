@@ -1,7 +1,9 @@
 mysql:
+  enabled: false
+
+externalDB:
   enabled: true
-  mysqlUser: mattermost
-  mysqlDatabase: mattermost
+  externalDriverType: postgres
 
 ingress:
   enabled: true

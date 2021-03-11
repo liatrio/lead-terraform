@@ -1,6 +1,5 @@
 module "istio_namespace" {
   source    = "../namespace"
-  enabled   = var.enabled
   namespace = var.namespace
   annotations = {
     name = var.namespace
@@ -9,14 +8,11 @@ module "istio_namespace" {
 }
 
 resource "random_string" "kiali_admin_password" {
-  count   = var.enabled ? 1 : 0
   length  = 10
   special = false
 }
 
 resource "kubernetes_secret" "kiali_dashboard_secret" {
-  count = var.enabled ? 1 : 0
-
   metadata {
     name      = "kiali"
     namespace = module.istio_namespace.name
@@ -30,12 +26,11 @@ resource "kubernetes_secret" "kiali_dashboard_secret" {
 
   data = {
     "username"   = var.kiali_username
-    "passphrase" = random_string.kiali_admin_password[0].result
+    "passphrase" = random_string.kiali_admin_password.result
   }
 }
 
 resource "helm_release" "istio" {
-  count      = var.enabled ? 1 : 0
   repository = "https://storage.googleapis.com/istio-release/releases/1.4.8/charts/"
   chart      = "istio"
   namespace  = module.istio_namespace.name
@@ -59,13 +54,11 @@ resource "helm_release" "istio" {
 
 module "istio_flagger" {
   source        = "../../common/flagger"
-  enable        = var.enabled
-  namespace     = var.enabled ? helm_release.istio[0].metadata[0].namespace : ""
+  namespace     = helm_release.istio.metadata[0].namespace
   event_webhook = var.flagger_event_webhook
 }
 
 resource "kubernetes_horizontal_pod_autoscaler" "kiali_autoscaler" {
-  count = var.enabled ? 1 : 0
   metadata {
     name      = "kiali"
     namespace = module.istio_namespace.name
@@ -83,7 +76,6 @@ resource "kubernetes_horizontal_pod_autoscaler" "kiali_autoscaler" {
 }
 
 resource "helm_release" "kiali" {
-  count      = var.enabled ? 1 : 0
   chart      = "${path.module}/charts/kiali"
   namespace  = module.istio_namespace.name
   name       = "kiali"
@@ -131,7 +123,6 @@ module "staging_app_wildcard" {
   name      = "staging-app-wildcard"
   namespace = module.istio_namespace.name
   domain    = "staging.apps.${var.cluster_domain}"
-  enabled   = var.enabled
 
   issuer_name = var.issuer_name
   issuer_kind = var.issuer_kind
@@ -143,14 +134,12 @@ module "prod_app_wildcard" {
   name      = "prod-app-wildcard"
   namespace = module.istio_namespace.name
   domain    = "prod.apps.${var.cluster_domain}"
-  enabled   = var.enabled
 
   issuer_name = var.issuer_name
   issuer_kind = var.issuer_kind
 }
 
 resource "helm_release" "app_gateway" {
-  count      = var.enabled ? 1 : 0
   chart      = "${path.module}/charts/gateway"
   namespace  = module.istio_namespace.name
   name       = "app-gateway"
