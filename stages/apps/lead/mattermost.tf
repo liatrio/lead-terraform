@@ -5,4 +5,5 @@ module "mattermost" {
 
   mattermost_hostname = "mattermost.${module.toolchain_namespace.name}.${var.cluster_name}.${var.root_zone_name}"
   namespace           = module.toolchain_namespace.name
+  ingress_class       = module.toolchain_ingress.toolchain_ingress_class
 }

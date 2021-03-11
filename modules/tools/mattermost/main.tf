@@ -49,6 +49,7 @@ resource "helm_release" "mattermost" {
   values = [
     templatefile("${path.module}/mattermost-values.yaml.tpl", {
       mattermost_hostname = var.mattermost_hostname
+      ingress_class       = var.ingress_class
     })
   ]
 
