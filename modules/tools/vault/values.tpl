@@ -25,5 +25,13 @@ server:
     enabled: true
     config: |
       ${vault_config}
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 128Mi
+
 ui:
   enabled: true

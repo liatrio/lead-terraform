@@ -5,6 +5,7 @@ locals {
   sandbox_aws_account    = "774051255656"
   sharedsvc_aws_account  = "265560927720"
   remote_k8s_aws_account = "210831435012"
+  rtx_aws_account        = "702109968614"
 }
 
 resource "vault_auth_backend" "aws" {
@@ -45,6 +46,7 @@ resource "vault_aws_auth_backend_role" "aws_admin" {
     local.prod_aws_account,
     local.sandbox_aws_account,
     local.remote_k8s_aws_account,
+    local.rtx_aws_account,
   ])
   resolve_aws_unique_ids   = false
   token_policies           = [
@@ -61,6 +63,7 @@ resource "vault_aws_auth_backend_role" "aws_developer" {
     local.prod_aws_account,
     local.sandbox_aws_account,
     local.remote_k8s_aws_account,
+    local.rtx_aws_account,
   ])
   resolve_aws_unique_ids   = false
   token_policies           = [
