@@ -8,7 +8,6 @@ provider "kubernetes" {
 }
 
 provider "aws" {
-  version = "2.53"
   region  = var.region
 
   skip_metadata_api_check = true
@@ -16,7 +15,6 @@ provider "aws" {
 
 provider "helm" {
   alias   = "staging"
-  version = "1.1.1"
 
   kubernetes {
     config_context   = var.config_context
@@ -30,7 +28,6 @@ provider "kubernetes" {
 
 provider "helm" {
   alias   = "production"
-  version = "1.1.1"
 
   kubernetes {
     config_context   = var.config_context

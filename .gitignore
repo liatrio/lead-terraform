@@ -16,3 +16,4 @@ secrets/*
 # Homerbew package lock
 Brewfile.lock.json
 backend.tf
+.terraform.lock.hcl
