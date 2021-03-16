@@ -95,6 +95,10 @@ variable "enable_mattermost" {
   default = false
 }
 
+variable "enable_github_runners" {
+  default = false
+}
+
 variable "uptime" {
   default = "Mon-Fri 05:00-19:00 America/Los_Angeles"
 }
@@ -206,4 +210,10 @@ variable "vault_dynamodb_table_name" {
 }
 
 variable "vault_kms_key_id" {
+}
+
+variable platform_name {
+  description = "Cloud platform the config is being deployed to (aws/azure/gcs)"
+  type = string
+  default = "aws"
 }
