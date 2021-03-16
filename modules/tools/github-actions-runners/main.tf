@@ -25,7 +25,7 @@ resource helm_release github_runners {
   name       = var.deployment_name
   repository = "https://summerwind.github.io/actions-runner-controller"
   chart      = "actions-runner-controller"
-  version    = var.chart_version
+  version    = "0.9.0"
   namespace  = module.github_runners_namespace.name
   wait       = true
 

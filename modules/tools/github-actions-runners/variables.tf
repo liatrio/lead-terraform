@@ -4,11 +4,6 @@ variable deployment_name {
   description = "Used with auth_secret to create the full secret name"
 }
 
-variable chart_version {
-  type = string
-  default = "0.9.0"
-}
-
 
 variable auth_secret_name {
   type = string

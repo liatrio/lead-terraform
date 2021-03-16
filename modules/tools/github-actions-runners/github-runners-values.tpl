@@ -9,4 +9,3 @@ autoscaling:
   minReplicas: ${runner_autoscaling_min_replicas}
   maxReplicas: ${runner_autoscaling_max_replicas}
   targetCPUUtilizationPercentage: ${runner_autoscaling_cpu_util}
-  
