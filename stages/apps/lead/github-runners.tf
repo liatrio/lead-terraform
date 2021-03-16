@@ -12,4 +12,6 @@ module github_runners {
   github_app_id = data.vault_generic_secret.github_runner_app.0.data["github_app_id"]
   github_app_installation_id = data.vault_generic_secret.github_runner_app.0.data["github_app_installation_id"]
   github_app_private_key = data.vault_generic_secret.github_runner_app.0.data["github_app_private_key"]
+
+  depends_on = [module.cert_manager]
 }
