@@ -5,7 +5,7 @@ data vault_generic_secret github_runner_app {
 }
 
 module github_runners {
-  count = var.enable_github_runners == true ? 1 : 0
+  count = var.enable_github_runners ? 1 : 0
 
   source = "../../../modules/tools/github-actions-runners"
 
