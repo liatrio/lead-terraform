@@ -19,13 +19,6 @@ init validate clean: $(PLANS)
 $(PLANS):
 	$(MAKE) -C $@ $(MAKECMDGOALS)
 
-cleanz:
-	@find . -type d -name ".terragrunt-cache" -prune -exec rm -rf {} \;
-	@find . -type d -name ".terraform" -prune -exec rm -rf {} \;
-	@find . -type d -name ".test-data" -prune -exec rm -rf {} \;
-	@find . -type f -name "terraform.tfstate" -prune -exec rm {} \;
-	@find . -type f -name "terraform.tfstate.backup" -prune -exec rm {} \;
-
 promote:
 	@echo "VERSION:$(VERSION) IS_SNAPSHOT:$(IS_SNAPSHOT) LATEST_VERSION:$(LATEST_VERSION)"
 ifeq (false,$(IS_SNAPSHOT))
