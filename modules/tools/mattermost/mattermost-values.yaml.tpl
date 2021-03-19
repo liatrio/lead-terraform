@@ -15,6 +15,8 @@ ingress:
   annotations:
     kubernetes.io/ingress.class: "toolchain-nginx"
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    # set max body size for plugin uploading
+    nginx.ingress.kubernetes.io/proxy-body-size: 32m
 
 persistence:
   data:
