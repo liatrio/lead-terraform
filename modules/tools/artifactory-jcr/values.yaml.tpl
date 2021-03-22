@@ -3,7 +3,6 @@ artifactory:
     admin:
       ip: "*"
       username: "admin"
-      password: ${jcr_admin_password}
 
   ingress:
     enabled: ${ingress_enabled}

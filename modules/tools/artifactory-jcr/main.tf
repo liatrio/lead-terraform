@@ -14,9 +14,13 @@ resource "helm_release" "artifactory_jcr" {
     templatefile("${path.module}/values.yaml.tpl", {
       ingress_enabled = true
       artifactory_jcr_hostname = var.hostname
-      jcr_admin_password = var.jcr_admin_password
     })
   ]
+
+  set_sensitive {
+    name = "artifactory.artifactory.admin.password"
+    value = var.jcr_admin_password
+  }
 
   set_sensitive {
     name  = "postgresql.postgresqlPassword"
