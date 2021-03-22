@@ -15,7 +15,11 @@ resource "helm_release" "artifactory_jcr" {
       ingress_enabled = true
       artifactory_jcr_hostname = var.hostname
       jcr_admin_password = var.jcr_admin_password
-      postgres_admin_password = data.random_password.postgres_admin_password.result
     })
   ]
+
+  set_sensitive {
+    name  = "postgresql.postgresqlPassword"
+    value = data.random_password.postgres_admin_password.result
+  }
 }

@@ -19,4 +19,3 @@ artifactory:
   postgresql:
     enabled: true
     postgresqlUsername: "artifactory"
-    postgresqlPassword: ${postgres_admin_password}
