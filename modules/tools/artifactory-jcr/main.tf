@@ -20,6 +20,6 @@ resource "helm_release" "artifactory_jcr" {
 
   set_sensitive {
     name  = "postgresql.postgresqlPassword"
-    value = data.random_password.postgres_admin_password.result
+    value = random_password.postgres_admin_password.result
   }
 }
