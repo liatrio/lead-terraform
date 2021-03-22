@@ -1,22 +1,29 @@
 data vault_generic_secret github_runner_app {
-  count = var.enable_github_runners ? 1 : 0
+  for_each = var.github_runner_controllers
 
-  path = "${var.cluster_name}/${var.platform_name}/${data.aws_caller_identity.current.account_id}/github-runner-app-sandbox"
+  path = "${var.cluster_name}/${var.platform_name}/${data.aws_caller_identity.current.account_id}/${each.value.vault_name}"
 }
 
 module github_runner_controller {
-  count = var.enable_github_runners ? 1 : 0
+  for_each = var.github_runner_controllers
 
   source = "../../../modules/tools/github-actions-runner-controller"
 
-  github_app_id = data.vault_generic_secret.github_runner_app.0.data["github_app_id"]
-  github_app_installation_id = data.vault_generic_secret.github_runner_app.0.data["github_app_installation_id"]
-  github_app_private_key = data.vault_generic_secret.github_runner_app.0.data["github_app_private_key"]
+  namespace = each.value.namespace
+
+  github_app_id = data.vault_generic_secret.github_runner_app[each.key].data["github_app_id"]
+  github_app_installation_id = data.vault_generic_secret.github_runner_app[each.key].data["github_app_installation_id"]
+  github_app_private_key = data.vault_generic_secret.github_runner_app[each.key].data["github_app_private_key"]
 
   depends_on = [module.cert_manager]
 }
 
 module github_runners {
+  for_each = var.github_runners
+
   source = "../../../modules/tools/github-actions-runners"
-  
+  github_org = each.value.github_org
+  namespace = each.value.namespace
+
+  depends_on = [module.github_runner_controller]
 }

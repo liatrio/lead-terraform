@@ -217,3 +217,24 @@ variable platform_name {
   type = string
   default = "aws"
 }
+
+# example_value = {
+#   rode = {
+#     vault_name: "github-runner-app-sandbox"
+#     namespace: "roderunners"
+#   }
+# }
+variable github_runner_controllers {
+  default = {}
+}
+
+# example_value = {
+#   rode = {
+#     github_org: "rode"
+#     namespace: "roderunners"
+#     labels: ["roderunners"]
+#   }
+# }
+variable github_runners {
+  default = {}
+}

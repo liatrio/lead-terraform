@@ -1,0 +1,20 @@
+apiVersion: actions.summerwind.dev/v1alpha1
+kind: RunnerDeployment
+metadata:
+  name: {{ include "github-actions-runners.serviceAccountName" . }}
+spec:
+  replicas: 2
+  template:
+    spec:
+      # dockerdContainerResources:
+      #   limits:
+      #     cpu: "2"
+      #     memory: 4Gi
+      #   requests:
+      #     cpu: "1"
+      #     memory: 2Gi
+      labels:
+        - roderunners
+      organization: rode
+      serviceAccountName: {{ include "github-actions-runners.serviceAccountName" . }}
+      automountServiceAccountToken: true
