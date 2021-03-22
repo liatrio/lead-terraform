@@ -4,6 +4,10 @@ variable deployment_name {
   description = "Used with auth_secret to create the full secret name"
 }
 
+variable namespace {
+  description = "Namespace to deploy the controller to"
+}
+
 
 variable auth_secret_name {
   type = string

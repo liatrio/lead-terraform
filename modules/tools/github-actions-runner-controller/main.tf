@@ -5,7 +5,7 @@ locals {
 module github_runner_controller_namespace {
   source = "../../common/namespace"
 
-  namespace = "github-actions-runner-controller"
+  namespace = var.namespace
 }
 
 resource kubernetes_secret github_app {
