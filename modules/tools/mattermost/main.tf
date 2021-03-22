@@ -61,3 +61,106 @@ resource "helm_release" "mattermost" {
     helm_release.postgresql,
   ]
 }
+
+data "vault_generic_secret" "mattermost" {
+  path = var.mattermost_vault_path
+}
+
+resource "kubernetes_service_account" "sparky" {
+  metadata {
+    name      = "sparky-mattermost"
+    namespace = var.namespace
+  }
+}
+
+resource "kubernetes_role" "sparky_mattermost" {
+  metadata {
+    name      = "sparky-mattermost"
+    namespace = var.namespace
+  }
+  rule {
+    api_groups = [
+      "sdm.liatr.io"
+    ]
+    resources  = [
+      "products",
+      "producttypes"
+    ]
+    verbs      = [
+      "*"
+    ]
+  }
+}
+
+resource "kubernetes_role_binding" "sparky_mattermost" {
+  metadata {
+    name      = "sparky-mattermost"
+    namespace = var.namespace
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "Role"
+    name      = kubernetes_role.sparky_mattermost.metadata[0].name
+  }
+  subject {
+    kind      = "ServiceAccount"
+    name      = kubernetes_service_account.sparky.metadata[0].name
+    namespace = var.namespace
+  }
+}
+
+resource "kubernetes_cluster_role" "sparky_mattermost" {
+  metadata {
+    name = "sparky-mattermost"
+  }
+  rule {
+    api_groups = [
+      "sdm.liatr.io"
+    ]
+    resources  = [
+      "builds"
+    ]
+    verbs      = [
+      "*"
+    ]
+  }
+}
+
+resource "kubernetes_cluster_role_binding" "sparky_mattermost" {
+  metadata {
+    name = "sparky-mattermost"
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = kubernetes_cluster_role.sparky_mattermost.metadata[0].name
+  }
+  subject {
+    kind      = "ServiceAccount"
+    name      = kubernetes_service_account.sparky.metadata[0].name
+    namespace = var.namespace
+  }
+}
+
+resource "helm_release" "sparky_mattermost" {
+  name       = "sparky"
+  repository = "https://liatrio-helm.s3.us-east-1.amazonaws.com/charts"
+  chart      = "sparky-mattermost"
+
+  namespace = var.namespace
+  version   = var.sparky_version
+
+  values = [
+    templatefile("${path.module}/sparky-values.yaml.tpl", {
+      namespace            = var.namespace
+      toolchain_image_repo = var.toolchain_image_repo
+      sparky_version       = var.sparky_version
+      service_account      = kubernetes_service_account.sparky.metadata[0].name
+    })
+  ]
+
+  set_sensitive {
+    name  = "bot.password"
+    value = data.vault_generic_secret.mattermost.data["bot-password"]
+  }
+}
