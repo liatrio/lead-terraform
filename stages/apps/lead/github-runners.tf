@@ -4,14 +4,19 @@ data vault_generic_secret github_runner_app {
   path = "${var.cluster_name}/${var.platform_name}/${data.aws_caller_identity.current.account_id}/github-runner-app-sandbox"
 }
 
-module github_runners {
+module github_runner_controller {
   count = var.enable_github_runners ? 1 : 0
 
-  source = "../../../modules/tools/github-actions-runners"
+  source = "../../../modules/tools/github-actions-runner-controller"
 
   github_app_id = data.vault_generic_secret.github_runner_app.0.data["github_app_id"]
   github_app_installation_id = data.vault_generic_secret.github_runner_app.0.data["github_app_installation_id"]
   github_app_private_key = data.vault_generic_secret.github_runner_app.0.data["github_app_private_key"]
 
   depends_on = [module.cert_manager]
+}
+
+module github_runners {
+  source = "../../../modules/tools/github-actions-runners"
+  
 }
