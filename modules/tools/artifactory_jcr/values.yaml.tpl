@@ -51,7 +51,7 @@ artifactory:
   ## Ingress
   ## See full list of supported Ingress options and documentation in artifactory chart: https://github.com/jfrog/charts/tree/master/stable/artifactory
   ingress:
-    enabled: true
+    enabled: false
     hosts:
     - ${artifactory_jcr_hostname}
     tls:
@@ -75,3 +75,8 @@ artifactory:
   ## specify custom database details here or leave empty and Artifactory will use embedded derby.
   ## See full list of database options and documentation in artifactory chart: https://github.com/jfrog/charts/tree/master/stable/artifactory
   # database:
+
+  admin:
+    ip: "*"
+    username: "admin"
+    password: ${jcr_admin_credentials}
