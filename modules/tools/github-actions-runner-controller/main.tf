@@ -2,16 +2,16 @@ locals {
   auth_secret_full_name = "${var.deployment_name}-${var.auth_secret_name}"
 }
 
-module github_runners_namespace {
+module github_runner_controller_namespace {
   source = "../../common/namespace"
 
-  namespace = "github-runners"
+  namespace = "github-actions-runner-controller"
 }
 
 resource kubernetes_secret github_app {
   metadata {
     name      = local.auth_secret_full_name
-    namespace = module.github_runners_namespace.name
+    namespace = module.github_runner_controller_namespace.name
   }
 
   data = {
@@ -21,12 +21,12 @@ resource kubernetes_secret github_app {
   }
 }
 
-resource helm_release github_runners {
+resource helm_release github_runner_controller {
   name       = var.deployment_name
   repository = "https://summerwind.github.io/actions-runner-controller"
   chart      = "actions-runner-controller"
   version    = "0.9.0"
-  namespace  = module.github_runners_namespace.name
+  namespace  = module.github_runner_controller_namespace.name
   wait       = true
 
   values = [
