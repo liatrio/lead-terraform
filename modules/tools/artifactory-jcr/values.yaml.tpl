@@ -18,3 +18,10 @@ artifactory:
   postgresql:
     enabled: true
     postgresqlUsername: "artifactory"
+    resources:
+      limits:
+        memory: 256Mi
+        cpu: 250m
+      requests:
+        memory: 64Mi
+        cpu: 64m
