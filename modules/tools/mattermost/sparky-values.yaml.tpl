@@ -9,6 +9,10 @@ serviceAccount:
 bot:
   email: sparky@liatr.io
 
+kubernetes:
+  productType: product-jenkins
+  productNamespace: ${namespace}
+
 mattermost:
   url: "http://mattermost-team-edition.${namespace}.svc.cluster.local:8065"
   websocketUrl: "ws://mattermost-team-edition.${namespace}.svc.cluster.local:8065"
