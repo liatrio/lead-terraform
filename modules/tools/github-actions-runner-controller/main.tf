@@ -30,7 +30,7 @@ resource helm_release github_runners {
   wait       = true
 
   values = [
-    templatefile("${path.module}/github-runners-values.tpl", {
+    templatefile("${path.module}/runner-controller-values.tpl", {
       secret_name: local.auth_secret_full_name
       controller_replica_count = var.controller_replica_count
       runner_autoscaling_enabled: var.runner_autoscaling_enabled
