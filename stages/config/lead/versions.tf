@@ -9,6 +9,10 @@ terraform {
       source = "liatrio/harbor"
       version = "= 0.3.3"
     }
+    artifactory = {
+      source  = "registry.terraform.io/jfrog/artifactory"
+      version = "2.0.0"
+    }
     kubernetes = {
       source = "hashicorp/kubernetes"
       version = "~> 2.0.1"
