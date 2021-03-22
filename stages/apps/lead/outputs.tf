@@ -12,6 +12,10 @@ output "harbor_hostname" {
   value = module.harbor.hostname
 }
 
+output "artifactory_jcr_hostname" {
+  value = module.artifactory_jcr.hostname
+}
+
 output "kibana_hostname" {
   value = "kibana.${var.toolchain_namespace}.${var.cluster_name}.${var.root_zone_name}"
 }

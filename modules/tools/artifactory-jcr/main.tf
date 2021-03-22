@@ -1,12 +1,8 @@
-provider "kubernetes" {
-  config_path = "~/.kube/config"
-  config_context = "docker-desktop"
+resource "random_password" "postgres_admin_password" {
+  length  = 16
+  special = false
 }
-provider "helm" {
-  kubernetes {
-    config_path = "~/.kube/config"
-  }
-}
+
 resource "helm_release" "artifactory_jcr" {
   repository = "https://repo.chartcenter.io"
   name       = "jfrog-container-registry"
@@ -16,10 +12,10 @@ resource "helm_release" "artifactory_jcr" {
 
   values = [
     templatefile("${path.module}/values.yaml.tpl", {
-      artifactory_jcr_hostname = var.artifactory_jcr_hostname
+      ingress_enabled = true
+      artifactory_jcr_hostname = var.hostname
       jcr_admin_password = var.jcr_admin_password
-      ingress_enabled = false
-      postgres_admin_password = var.postgres_admin_password
+      postgres_admin_password = data.random_password.postgres_admin_password.result
     })
   ]
 }
