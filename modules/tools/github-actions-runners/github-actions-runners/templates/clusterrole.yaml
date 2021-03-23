@@ -1,7 +1,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ .Values.github_org }}-runners
+  name: {{ .Release.name }}
 rules:
   - apiGroups: ["", "apps", "networking.k8s.io", "extensions", "policy"]
     resources: ["deployments", "services", "configmaps", "secrets", "ingresses", "poddisruptionbudgets", "statefulsets", "namespaces"]
