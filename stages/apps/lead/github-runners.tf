@@ -24,6 +24,7 @@ module github_runners {
   source = "../../../modules/tools/github-actions-runners"
   github_org = each.value.github_org
   namespace = each.value.namespace
+  runner_labels = each.value.runner_labels
 
   depends_on = [module.github_runner_controller]
 }

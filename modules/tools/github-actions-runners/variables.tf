@@ -10,7 +10,7 @@ variable release_name {
 
 variable runner_labels {
   type = list(string)
-  default = ["roderunners"]
+  default = []
   description = "List of Github labels to apply to the runners"
 }
 

@@ -1,9 +1,16 @@
-runnerDeployment:
-  replicas: 2
-  labels:
-    - roderunners
-  automountServiceAccountToken: true
+initialReplicas: 1
+minReplicas: 1
+maxReplicas: 3
+scaleAmount: 1
+scaleDuration: "10m"
 
+#dockerdContainerResources:
+#  limits:
+#    cpu: "2"
+#    memory: 4Gi
+#  requests:
+#    cpu: "1"
+#    memory: 2Gi
 
 serviceAccount:
   # Specifies whether a service account should be created
