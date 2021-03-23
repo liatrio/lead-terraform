@@ -4,6 +4,19 @@ artifactory:
       ip: "*"
       username: "admin"
 
+    configMapName: artifactory-eula-config
+
+    resources:
+      requests:
+        memory: "1Gi"
+        cpu: "500m"
+      limits:
+        memory: "4Gi"
+        cpu: "1"
+        
+  nginx:
+    enabled: false
+
   ingress:
     enabled: ${ingress_enabled}
     hosts:
@@ -14,14 +27,6 @@ artifactory:
     annotations:
       kubernetes.io/ingress.class: "toolchain-nginx"
       nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-
-  resources:
-    requests:
-      memory: "1Gi"
-      cpu: "500m"
-    limits:
-      memory: "4Gi"
-      cpu: "1"
       
   postgresql:
     enabled: true
@@ -33,3 +38,4 @@ artifactory:
       requests:
         memory: 64Mi
         cpu: 64m
+        

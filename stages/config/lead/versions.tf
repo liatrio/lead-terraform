@@ -10,8 +10,8 @@ terraform {
       version = "= 0.3.3"
     }
     artifactory = {
-      source  = "registry.terraform.io/jfrog/artifactory"
-      version = "2.0.0"
+      source  = "jfrog/artifactory"
+      version = "~> 2.2.5"
     }
     kubernetes = {
       source = "hashicorp/kubernetes"
