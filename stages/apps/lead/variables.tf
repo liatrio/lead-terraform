@@ -263,3 +263,15 @@ variable "github_runners" {
 variable "jenkins_pipeline_source" {
   default = "git"
 }
+
+variable "velero_namespace" {
+}
+
+variable "velero_bucket_name" {
+}
+
+variable "velero_aws_access_key_id" {
+}
+
+variable "velero_aws_secret_access_key" {
+}
