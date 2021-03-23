@@ -3,7 +3,7 @@ locals {
 }
 
 resource helm_release github_runners {
-  name      = var.release_name
+  name      = local.release_name
   chart     = "${path.module}/github-actions-runners"
   namespace = var.namespace
   wait      = true
