@@ -1,6 +1,7 @@
 locals {
-  auth_secret_full_name = "${var.deployment_name}-${var.auth_secret_name}"
   ingress_hostname = "${var.github_org}-webhook.${var.namespace}.${var.cluster_domain}"
+  release_name = var.release_name != "" ? var.release_name : "${var.github_org}-runner-controller"
+  auth_secret_full_name = "${local.release_name}-${var.auth_secret_name}"
 }
 
 module github_runner_controller_namespace {
@@ -23,7 +24,7 @@ resource kubernetes_secret github_app {
 }
 
 resource helm_release github_runner_controller {
-  name       = var.deployment_name
+  name       = var.release_name
   repository = "https://summerwind.github.io/actions-runner-controller"
   chart      = "actions-runner-controller"
   version    = "0.9.0"

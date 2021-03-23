@@ -1,6 +1,5 @@
-variable deployment_name {
+variable release_name {
   type = string
-  default = "actions-runner-controller"
   description = "Used with auth_secret to create the full secret name"
 }
 
