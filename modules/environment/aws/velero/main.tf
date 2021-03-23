@@ -1,6 +1,6 @@
 resource "aws_s3_bucket" "velero" {
   count  = var.enable_velero ? 1 : 0
-  bucket = "velero-${var.account_id}-${var.cluster}"
+  bucket = "velero-${var.account_id}-${var.cluster_name}"
   acl    = "private"
 }
 
@@ -59,6 +59,6 @@ EOF
 
 resource "aws_iam_access_key" "velero" {
   count  = var.enable_velero ? 1 : 0
-  user    = aws_iam_user.velero.name
+  user    = aws_iam_user.velero.0.name
 }
 
