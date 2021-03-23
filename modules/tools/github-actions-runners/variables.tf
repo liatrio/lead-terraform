@@ -5,6 +5,7 @@ variable namespace {
 variable release_name {
   type = string
   description = "Name of the release for the RunnerDeployments"
+  default = ""
 }
 
 variable runner_labels {
