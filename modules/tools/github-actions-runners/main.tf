@@ -11,7 +11,7 @@ resource helm_release github_runners {
   values = [
     templatefile("${path.module}/runner-values.tpl", {
       github_org    = var.github_org
-      runner_labels = yamlencode(length(var.runner_labels) > 0 ? {runner_labels: var.runner_labels} : {})
+      runner_labels = yamlencode(length(var.runner_labels) > 0 ? {labels: var.runner_labels} : {})
     })
   ]
 }

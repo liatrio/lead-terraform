@@ -7,10 +7,7 @@ spec:
   template:
     spec:
       {{- if .Values.runner_labels -}}
-      labels:
-        {{- with .Values.runner_labels -}}
-        - {{ . }}
-        {{- end }}
+      {{ .Values.runner_labels }}
       {{- end }}
       {{- if .Values.dockerdContainerResources -}}
       {{ toYaml .Values.dockerdContainerResources }}
