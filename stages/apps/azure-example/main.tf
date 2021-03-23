@@ -3,7 +3,6 @@ terraform {
 }
 
 provider "azurerm" {
-  version                    = "=2.20.0"
   features {}
 }
 
@@ -19,8 +18,6 @@ provider "kubernetes" {
 }
 
 provider "helm" {
-  version = "1.1.1"
-
   kubernetes {
     host                   = data.azurerm_kubernetes_cluster.fqdn
     cluster_ca_certificate = base64decode(data.azurerm_kubernetes_cluster.cluster_ca_certificate)

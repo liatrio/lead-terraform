@@ -99,6 +99,10 @@ variable "enable_github_runners" {
   default = false
 }
 
+variable "sparky_mattermost_version" {
+  default = "v0.1.0"
+}
+
 variable "uptime" {
   default = "Mon-Fri 05:00-19:00 America/Los_Angeles"
 }

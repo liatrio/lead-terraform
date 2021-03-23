@@ -9,7 +9,6 @@ provider "kubernetes" {
 
 provider "helm" {
   alias   = "staging"
-  version = "1.1.1"
 
   kubernetes {
     config_context   = var.config_context
