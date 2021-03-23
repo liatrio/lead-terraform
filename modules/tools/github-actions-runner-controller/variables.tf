@@ -1,7 +1,7 @@
 variable release_name {
-  type = string
+  type        = string
   description = "Used with auth_secret to create the full secret name"
-  default = ""
+  default     = ""
 }
 
 variable namespace {
@@ -9,14 +9,14 @@ variable namespace {
 }
 
 variable cluster_domain {
-  type = string
+  type        = string
   description = "Base domain for ingress"
 }
 
 
 variable auth_secret_name {
-  type = string
-  default = "controller-manager"
+  type        = string
+  default     = "controller-manager"
   description = "Used with deployment_name to create the full secret name"
 }
 
@@ -36,29 +36,29 @@ variable github_org {
 }
 
 variable controller_replica_count {
-  type = number
-  default = 1
+  type        = number
+  default     = 1
   description = "How many actions runner controller instances to deploy"
 }
 
 
 variable runner_autoscaling_enabled {
-  type = bool
+  type    = bool
   default = false
 }
 
 variable runner_autoscaling_min_replicas {
-  type = number
+  type    = number
   default = 1
 }
 
 variable runner_autoscaling_max_replicas {
-  type = number
+  type    = number
   default = 10
 }
 
 variable runner_autoscaling_cpu_util {
-  type = number
-  default = 80
+  type        = number
+  default     = 80
   description = "CPU utilization percent at which to trigger a scale up"
 }
