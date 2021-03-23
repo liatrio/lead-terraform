@@ -24,7 +24,7 @@ resource kubernetes_secret github_app {
 }
 
 resource helm_release github_runner_controller {
-  name       = var.release_name
+  name       = local.release_name
   repository = "https://summerwind.github.io/actions-runner-controller"
   chart      = "actions-runner-controller"
   version    = "0.9.0"
