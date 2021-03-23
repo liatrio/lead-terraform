@@ -11,7 +11,7 @@ autoscaling:
   targetCPUUtilizationPercentage: ${runner_autoscaling_cpu_util}
 
 githubWebhookServer:
-  enabled: true
+  enabled: false
   ingress:
     hostName: ${ingress_hostname}
     annotations:
