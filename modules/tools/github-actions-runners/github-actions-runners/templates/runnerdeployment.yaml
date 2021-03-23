@@ -10,6 +10,7 @@ spec:
       labels:
         {{- with .Values.runner_labels -}}
         - {{ . }}
+        {{- end }}
       {{- end }}
       {{- if .Values.dockerdContainerResources -}}
       {{ toYaml .Values.dockerdContainerResources }}
