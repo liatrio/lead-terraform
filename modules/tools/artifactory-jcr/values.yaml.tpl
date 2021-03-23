@@ -15,6 +15,14 @@ artifactory:
       kubernetes.io/ingress.class: "toolchain-nginx"
       nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
 
+  resources:
+    requests:
+      memory: "1Gi"
+      cpu: "500m"
+    limits:
+      memory: "4Gi"
+      cpu: "1"
+      
   postgresql:
     enabled: true
     postgresqlUsername: "artifactory"
