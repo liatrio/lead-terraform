@@ -1,7 +1,7 @@
 apiVersion: actions.summerwind.dev/v1alpha1
 kind: RunnerDeployment
 metadata:
-  name: {{ .Values.github_org }}
+  name: {{ .Values.github_org }}-runners
 spec:
   replicas: {{ .Values.initialReplicas }}
   template:
