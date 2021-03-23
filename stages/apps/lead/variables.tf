@@ -219,22 +219,24 @@ variable platform_name {
 }
 
 # example_value = {
-#   rode = {
+#   rode: {
 #     vault_name: "github-runner-app-sandbox"
 #     namespace: "roderunners"
 #   }
 # }
 variable github_runner_controllers {
+  type = map(any)
   default = {}
 }
 
 # example_value = {
-#   rode = {
+#   rode: {
 #     github_org: "rode"
 #     namespace: "roderunners"
 #     labels: ["roderunners"]
 #   }
 # }
 variable github_runners {
+  type = map(any)
   default = {}
 }
