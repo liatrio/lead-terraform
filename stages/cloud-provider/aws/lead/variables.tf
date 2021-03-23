@@ -106,3 +106,6 @@ variable "docker_registry_mirror" {
 variable "velero_user" {
   default = "velero"
 }
+
+variable "enable_velero" {
+}
