@@ -12,7 +12,7 @@ resource "aws_iam_user" "velero" {
 resource "aws_iam_user_policy" "velero" {
   count  = var.enable_velero ? 1 : 0
   name = var.velero_user
-  user = aws_iam_user.velero.name
+  user = aws_iam_user.velero.0.name
 
   policy = <<EOF
 {
@@ -40,7 +40,7 @@ resource "aws_iam_user_policy" "velero" {
                 "s3:ListMultipartUploadParts"
             ],
             "Resource": [
-                "arn:aws:s3:::${aws_s3_bucket.velero.bucket}/*"
+                "arn:aws:s3:::${aws_s3_bucket.velero.0.bucket}/*"
             ]
         },
         {
@@ -49,7 +49,7 @@ resource "aws_iam_user_policy" "velero" {
                 "s3:ListBucket"
             ],
             "Resource": [
-                "arn:aws:s3:::${aws_s3_bucket.velero.bucket}"
+                "arn:aws:s3:::${aws_s3_bucket.velero.0.bucket}"
             ]
         }
     ]
