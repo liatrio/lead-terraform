@@ -1,5 +1,6 @@
 locals {
   auth_secret_full_name = "${var.deployment_name}-${var.auth_secret_name}"
+  ingress_hostname = "${var.github_org}-webhook.${var.namespace}.${var.cluster_domain}"
 }
 
 module github_runner_controller_namespace {
@@ -37,7 +38,7 @@ resource helm_release github_runner_controller {
       runner_autoscaling_min_replicas: var.runner_autoscaling_min_replicas
       runner_autoscaling_max_replicas: var.runner_autoscaling_max_replicas
       runner_autoscaling_cpu_util: var.runner_autoscaling_cpu_util
-
+      ingress_hostname: local.ingress_hostname
     })
   ]
 

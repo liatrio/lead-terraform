@@ -8,6 +8,11 @@ variable namespace {
   description = "Namespace to deploy the controller to"
 }
 
+variable cluster_domain {
+  type = string
+  description = "Base domain for ingress"
+}
+
 
 variable auth_secret_name {
   type = string
@@ -26,6 +31,9 @@ variable github_app_private_key {
   type = string
 }
 
+variable github_org {
+  type = string
+}
 
 variable controller_replica_count {
   type = number
