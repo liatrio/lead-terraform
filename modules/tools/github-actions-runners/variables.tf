@@ -4,7 +4,6 @@ variable namespace {
 
 variable release_name {
   type = string
-  default = "github-actions-runners"
   description = "Name of the release for the RunnerDeployments"
 }
 

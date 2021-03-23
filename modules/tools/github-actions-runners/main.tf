@@ -1,4 +1,8 @@
-resource helm_release github_runner_controller {
+locals {
+  release_name = var.release_name != "" ? var.release_name : "${var.github_org}-runners"
+}
+
+resource helm_release github_runners {
   name      = var.release_name
   chart     = "${path.module}/github-actions-runners"
   namespace = var.namespace
