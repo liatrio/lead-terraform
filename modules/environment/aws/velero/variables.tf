@@ -1,0 +1,1 @@
+variable "velero_user" {}

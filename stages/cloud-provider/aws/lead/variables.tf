@@ -103,3 +103,6 @@ variable "docker_registry_mirror" {
   default = ""
 }
 
+variable "velero_user" {
+  default = "velero"
+}
