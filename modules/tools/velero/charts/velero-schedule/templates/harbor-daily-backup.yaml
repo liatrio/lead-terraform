@@ -37,6 +37,6 @@ spec:
                 command:
                   - bash
                   - -c
-                  - eval export PGPASSWORD=$POSTGRES_PASSWORD; psql -U $POSTGRES_USER -c "CHECKPOINT"
+                  - eval export PGPASSWORD=$POSTGRES_PASSWORD; psql -U postgres -c "CHECKPOINT"
                 onError: Fail
                 timeout: 30s
