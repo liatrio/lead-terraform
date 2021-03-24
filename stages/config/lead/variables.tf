@@ -32,7 +32,7 @@ variable "harbor_hostname" {
 
 variable "artifactory_jcr_hostname" {
   description = "Artifactory hostname provided by app stage"
-  default = "artifactory-jcr"
+  default = ""
 }
 
 variable "kibana_hostname" {
