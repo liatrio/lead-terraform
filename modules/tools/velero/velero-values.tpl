@@ -20,13 +20,6 @@ initContainers:
      volumeMounts:
        - mountPath: /target
          name: plugins
-  
-credentials:
-  secretContents:
-    cloud: |
-      [default]
-      aws_access_key_id=${velero_accesskey_id}
-      aws_secret_access_key=${velero_accesskey_secret}
 
 serviceAccount:
   server:
