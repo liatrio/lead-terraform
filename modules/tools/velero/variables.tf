@@ -1,4 +1,3 @@
-variable "enable_velero" {}
 variable "bucket_name" {}
 variable "region" {}
 variable "cluster_name" {}
