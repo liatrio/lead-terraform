@@ -1,12 +1,8 @@
-resource "random_password" "robot_password" {
-  length           = 16
-  special          = true
-  override_special = "_%@"
-}
-
-resource "artifactory_user" "robot" {
-  count      = var.enable_artifactory ? 1 : 0
-  name       = "robot-${var.product_name}" 
-  email      = "robot-${var.product_name}@liatrio.com"
-  password   = data.random_password.robot_password.result
+data "kubernetes_secret" "artifactory_jcr_credentials" {
+  count    = var.enable_artifactory_jcr ? 1 : 0
+  provider = kubernetes.toolchain
+  metadata {
+    name      = "artifactory_jcr_credentials"
+    namespace = "toolchain"
+  }
 }

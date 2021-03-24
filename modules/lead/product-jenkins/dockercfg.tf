@@ -1,6 +1,6 @@
 locals {
-  artifactory_user = length(data.kubernetes_secret.jenkins_artifactory_credential) == 1 ? data.kubernetes_secret.jenkins_artifactory_credential[0].data.username : ""
-  artifactory_pass = length(data.kubernetes_secret.jenkins_artifactory_credential) == 1 ? data.kubernetes_secret.jenkins_artifactory_credential[0].data.password : ""
+  artifactory_user = length(data.kubernetes_secret.artifactory_jcr_credentials) == 1 ? data.kubernetes_secret.artifactory_jcr_credentials[0].data.username : ""
+  artifactory_pass = length(data.kubernetes_secret.artifactory_jcr_credentials) == 1 ? data.kubernetes_secret.artifactory_jcr_credentials[0].data.password : ""
   harbor_pass      = var.enable_harbor ? harbor_robot_account.robot[0].token : ""
 }
 
@@ -9,7 +9,7 @@ data "template_file" "dockercfg" {
 
   vars = {
     email           = "jenkins@liatr.io"
-    artifactory_url = "https://artifactory.toolchain.${var.cluster_domain}/docker-registry/${var.product_name}"
+    artifactory_url = "https://artifactory-jcr.toolchain.${var.cluster_domain}/general-docker"
     artifactory_auth = base64encode(
       "${local.artifactory_user}:${local.artifactory_pass}",
     )
