@@ -25,9 +25,9 @@ resource "helm_release" "velero" {
   set_sensitive {
     name = "credentials.secretContents.cloud"
     value = <<EOF
-      [default]
-      aws_access_key_id=${var.velero_aws_access_key_id}
-      aws_secret_access_key=${var.velero_aws_secret_access_key}
+[default]
+aws_access_key_id=${var.velero_aws_access_key_id}
+aws_secret_access_key=${var.velero_aws_secret_access_key}
 EOF
   }
 }
