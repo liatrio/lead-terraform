@@ -7,7 +7,8 @@ serviceAccount:
   name: ${service_account}
 
 bot:
-  email: sparky@liatr.io
+  email: ${bot_email}
+  username: ${bot_username}
 
 kubernetes:
   productType: product-jenkins

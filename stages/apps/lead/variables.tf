@@ -99,6 +99,13 @@ variable "sparky_mattermost_version" {
   default = "v0.1.0"
 }
 
+variable "mattermost_bot_email" {
+  default = "sparky@liatr.io"
+}
+variable "mattermost_bot_username" {
+  default = "sparky"
+}
+
 variable "uptime" {
   default = "Mon-Fri 05:00-19:00 America/Los_Angeles"
 }

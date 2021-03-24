@@ -156,6 +156,8 @@ resource "helm_release" "sparky_mattermost" {
       toolchain_image_repo = var.toolchain_image_repo
       sparky_version       = var.sparky_version
       service_account      = kubernetes_service_account.sparky.metadata[0].name
+      bot_email            = var.bot_email
+      bot_username         = var.bot_username
     })
   ]
 
