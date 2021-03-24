@@ -18,17 +18,17 @@ Backup schedules can be created using the Velero "Schedule" API type and describ
 
 Performing a one-time backup prior to a maintenance activity can be done via Velero CLI or by creating a YAML manifest.
 
-eg) aws-vault exec sand -- velero backup create
+eg) velero backup create <backup name> --snapshot-volumes=true --include-namespaces <namespace>
 
 # Checking backup status
 
+eg) velero get backups
+eg) velero backup describe <backup name>
+eg) velero backup logs <backup name>
 
 # Performing Restores
 
-eg) aws-vault exec sand -- velero create restore --from-backup harbor-daily-backup
+eg) velero create restore --from-schedule <backup schedule name>
+eg) velero create restore --from-backup <backup name>
+eg) velero create restore --from-backup <backup name> --namespace <original namespace>:<restore namespace>
 
-eg) aws-vault exec sand -- velero create restore --from-backup harbor-onetime-backup
-
-eg) aws-vault exec sand -- velero create restore --from-backup harbor-onetime-backup --namespace orig:new
-
-# TODO
