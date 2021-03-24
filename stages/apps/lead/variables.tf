@@ -75,6 +75,10 @@ variable "enable_harbor" {
   default = true
 }
 
+variable "enable_artifactory_jcr" {
+  default = false
+}
+
 variable "enable_rode" {
   default = true
 }
