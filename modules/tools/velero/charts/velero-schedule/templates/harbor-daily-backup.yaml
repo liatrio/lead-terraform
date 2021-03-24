@@ -1,0 +1,42 @@
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: harbor-daily-backup
+  namespace: velero
+spec:
+  schedule: 0 1 * * *
+  template:
+    includedNamespaces:
+    - 'toolchain'
+    includedResources:
+    - '*'
+    snapshotVolumes: true
+    storageLocation: default
+    volumeSnapshotLocations:
+      - aws-s3
+    ttl: 72h0m0s
+    labelSelector:
+      matchLabels:
+        app: harbor
+    hooks:
+      resources:
+        -
+          name: harbor-postgresql-hook
+          includedNamespaces:
+          - 'toolchain'
+          includedResources:
+          - pods
+          labelSelector:
+            matchLabels:
+              app: harbor
+              component: database
+          pre:
+            -
+              exec:
+                container: database
+                command:
+                  - bash
+                  - -c
+                  - eval export PGPASSWORD=$POSTGRES_PASSWORD; psql -U $POSTGRES_USER -c "CHECKPOINT"
+                onError: Fail
+                timeout: 30s

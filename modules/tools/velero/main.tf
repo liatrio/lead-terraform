@@ -24,3 +24,14 @@ resource "helm_release" "velero" {
     })
   ]
 }
+
+resource "helm_release" "velero_schedule" {
+  name = "velero-schedule"
+  chart      = "${path.module}/charts/velero-schedule"
+  namespace  = module.velero_namespace.name
+  version    = "0.1.0"
+
+  depends_on = [
+    helm_release.velero,
+  ]
+}

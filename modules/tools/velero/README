@@ -1,1 +1,34 @@
-# WIP
+# Introduction
+
+Velero (https://velero.io/) is an open source solution for performing backup in K8s clusters. Velero (formerly known as Heptio Arc) is now owned by VMware.
+
+Velero backs up objects in a K8s namespace and can also backup cluster-scoped objects (PVs) associated to those namespace objects.
+
+Velero use a volume snapshotter plugin (eg. AES EBS, Azure Disk, vSphere Volume) to snapshot persistent volumes during backup operations. 
+
+If you need an application-consistent backup, Velero supports pre- and post- hooks to put databases or other workloads in an consistent state before a snapshot is tokane.
+
+You can interact with Velero using CLI ('brew install velero') or via API objects in K8s. 
+
+# Creating a Backup Schedule
+
+Backup schedules can be created using the Velero "Schedule" API type and described in a cron format. We will use a Helm chart to contain all Schedule API resources.
+
+# Performing One-time backups
+
+Performing a one-time backup prior to a maintenance activity can be done via Velero CLI or by creating a YAML manifest.
+
+eg) aws-vault exec sand -- velero backup create
+
+# Checking backup status
+
+
+# Performing Restores
+
+eg) aws-vault exec sand -- velero create restore --from-backup harbor-daily-backup
+
+eg) aws-vault exec sand -- velero create restore --from-backup harbor-onetime-backup
+
+eg) aws-vault exec sand -- velero create restore --from-backup harbor-onetime-backup --namespace orig:new
+
+# TODO
