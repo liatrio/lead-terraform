@@ -5,18 +5,18 @@ resource "aws_s3_bucket" "velero" {
 
   lifecycle {
     prevent_destroy = true
-    }
+  }
 }
 
 resource "aws_iam_user" "velero" {
-  count  = var.enable_velero ? 1 : 0
-  name = var.velero_user
+  count = var.enable_velero ? 1 : 0
+  name  = var.velero_user
 }
 
 resource "aws_iam_user_policy" "velero" {
-  count  = var.enable_velero ? 1 : 0
-  name = var.velero_user
-  user = aws_iam_user.velero.0.name
+  count = var.enable_velero ? 1 : 0
+  name  = var.velero_user
+  user  = aws_iam_user.velero.0.name
 
   policy = <<EOF
 {
@@ -62,7 +62,7 @@ EOF
 }
 
 resource "aws_iam_access_key" "velero" {
-  count  = var.enable_velero ? 1 : 0
-  user    = aws_iam_user.velero.0.name
+  count = var.enable_velero ? 1 : 0
+  user  = aws_iam_user.velero.0.name
 }
 
