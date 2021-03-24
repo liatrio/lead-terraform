@@ -265,6 +265,7 @@ variable "jenkins_pipeline_source" {
 }
 
 variable "velero_namespace" {
+  default = "velero"
 }
 
 variable "velero_bucket_name" {
