@@ -1,6 +1,6 @@
 # Introduction
 
-Velero (https://velero.io/) is an open source solution for performing backup in K8s clusters. Velero (formerly known as Heptio Arc) is now owned by VMware.
+Velero (https://velero.io/) is an open source solution for performing backup in K8s clusters. Velero (formerly known as Heptio ArK) is now owned by VMware.
 
 Velero backs up objects in a K8s namespace and can also backup cluster-scoped objects (PVs) associated to those namespace objects.
 
