@@ -18,7 +18,9 @@ variable "enable_keycloak" {}
 
 variable "enable_harbor" {}
 
-variable "enable_artifactory_jcr" {}
+variable "enable_artifactory_jcr" {
+  default = false
+}
 
 variable "keycloak_hostname" {
   description = "Keycloak hostname provided by app stage"
@@ -30,6 +32,7 @@ variable "harbor_hostname" {
 
 variable "artifactory_jcr_hostname" {
   description = "Artifactory hostname provided by app stage"
+  default = "artifactory-jcr"
 }
 
 variable "kibana_hostname" {
