@@ -108,4 +108,5 @@ variable "velero_user" {
 }
 
 variable "enable_velero" {
+  default = false
 }
