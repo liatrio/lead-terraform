@@ -8,9 +8,20 @@ resource "kubernetes_config_map" "artifactory_eula_config" {
     name      = "artifactory-eula-config"
     namespace = var.namespace
   }
-
   data = {
     "artifactory.config.import.yml" = file("${path.module}/artifactory_config.yaml")
+  }
+}
+
+resource "kubernetes_secret" "artifactory_jcr_credentials" {
+  metadata {
+    name      = "artifactory-jcr-credentials"
+    namespace = var.namespace
+  }
+
+  data = {
+    username = "admin"
+    password = var.jcr_admin_password
   }
 }
 
@@ -30,7 +41,7 @@ resource "helm_release" "artifactory_jcr" {
 
   set_sensitive {
     name  = "artifactory.artifactory.admin.password"
-    value = var.jcr_admin_password
+    value = kubernetes_secret.artifactory_jcr_credentials.data.password
   }
 
   set_sensitive {
