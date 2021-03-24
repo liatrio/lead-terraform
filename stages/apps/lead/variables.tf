@@ -276,3 +276,7 @@ variable "velero_aws_access_key_id" {
 
 variable "velero_aws_secret_access_key" {
 }
+
+variable "enable_velero" {
+  default = true
+}
