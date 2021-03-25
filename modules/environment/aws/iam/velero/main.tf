@@ -1,19 +1,30 @@
-resource "aws_s3_bucket" "velero" {
-  bucket = "velero-${var.account_id}-${var.cluster_name}"
-  acl    = "private"
+resource "aws_iam_role" "velero_service_account" {
+  name = "${var.cluster}_velero_service_account"
 
-  lifecycle {
-    prevent_destroy = true
-  }
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "${var.openid_connect_provider_arn}"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "${replace(var.openid_connect_provider_url, "https://", "")}:sub": "system:serviceaccount:${var.namespace}:velero"
+        }
+      }
+    }
+  ]
+}
+EOF
 }
 
-resource "aws_iam_user" "velero" {
-  name  = var.velero_user
-}
-
-resource "aws_iam_user_policy" "velero" {
-  name  = var.velero_user
-  user  = aws_iam_user.velero.0.name
+resource "aws_iam_role_policy" "velero" {
+  name = "${var.cluster}-velero"
+  role = aws_iam_role.velero_service_account.name
 
   policy = <<EOF
 {
@@ -41,7 +52,7 @@ resource "aws_iam_user_policy" "velero" {
                 "s3:ListMultipartUploadParts"
             ],
             "Resource": [
-                "arn:aws:s3:::${aws_s3_bucket.velero.0.bucket}/*"
+                "arn:aws:s3:::${var.velero_bucket_name}/*"
             ]
         },
         {
@@ -50,15 +61,10 @@ resource "aws_iam_user_policy" "velero" {
                 "s3:ListBucket"
             ],
             "Resource": [
-                "arn:aws:s3:::${aws_s3_bucket.velero.0.bucket}"
+                "arn:aws:s3:::${var.velero_bucket_name}"
             ]
         }
     ]
 }
 EOF
 }
-
-resource "aws_iam_access_key" "velero" {
-  user  = aws_iam_user.velero.0.name
-}
-

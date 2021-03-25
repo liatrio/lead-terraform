@@ -110,3 +110,7 @@ variable "velero_user" {
 variable "enable_velero" {
   default = false
 }
+
+variable "velero_namespace" {
+  default = "velero"
+}

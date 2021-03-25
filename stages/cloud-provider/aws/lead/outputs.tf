@@ -114,3 +114,7 @@ output "velero_aws_secret_access_key" {
 output "velero_aws_access_key_id" {
   value = module.velero.velero_aws_access_key_id
 }
+
+output "velero_service_account_arn" {
+  value = module.velero_iam.velero_service_account_arn
+}

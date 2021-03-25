@@ -28,6 +28,17 @@ module "cluster_autoscaler_iam" {
   openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider.url
 }
 
+module "velero_iam" {
+  count = var.enable_velero ? 1 : 0
+  source = "../../../../modules/environment/aws/iam/velero"
+  
+  cluster                     = var.cluster_name
+  namespace                   = var.velero_namespace
+  velero_bucket_name          = module.velero.velero_bucket_name
+  openid_connect_provider_arn = module.eks.aws_iam_openid_connect_provider.arn
+  openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider.url
+}
+
 resource "aws_iam_role" "rode_service_account" {
   name = "${var.cluster_name}_rode_service_account"
 
