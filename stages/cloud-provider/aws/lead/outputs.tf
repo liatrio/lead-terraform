@@ -104,17 +104,9 @@ output "vault_kms_key_id" {
 }
 
 output "velero_bucket_name" {
-  value = module.velero.velero_bucket_name
-}
-
-output "velero_aws_secret_access_key" {
-  value = module.velero.velero_aws_secret_access_key
-}
-
-output "velero_aws_access_key_id" {
-  value = module.velero.velero_aws_access_key_id
+  value = module.velero[0].velero_bucket_name
 }
 
 output "velero_service_account_arn" {
-  value = module.velero_iam.velero_service_account_arn
+  value = module.velero_iam[0].velero_service_account_arn
 }

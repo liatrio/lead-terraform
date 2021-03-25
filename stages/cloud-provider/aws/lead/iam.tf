@@ -34,7 +34,7 @@ module "velero_iam" {
   
   cluster                     = var.cluster_name
   namespace                   = var.velero_namespace
-  velero_bucket_name          = module.velero.velero_bucket_name
+  velero_bucket_name          = module.velero[0].velero_bucket_name
   openid_connect_provider_arn = module.eks.aws_iam_openid_connect_provider.arn
   openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider.url
 }

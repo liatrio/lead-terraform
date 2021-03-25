@@ -16,20 +16,12 @@ resource "helm_release" "velero" {
 
   values = [
     templatefile("${path.module}/velero-values.tpl", {
-      bucket_name             = var.bucket_name
-      region                  = var.region
-      cluster_name            = var.cluster_name
+      bucket_name                = var.bucket_name
+      region                     = var.region
+      cluster_name               = var.cluster_name
+      velero_service_account_arn = var.velero_service_account_arn
     })
   ]
-
-  set_sensitive {
-    name = "credentials.secretContents.cloud"
-    value = <<EOF
-[default]
-aws_access_key_id=${var.velero_aws_access_key_id}
-aws_secret_access_key=${var.velero_aws_secret_access_key}
-EOF
-  }
 }
 
 resource "helm_release" "velero_schedule" {

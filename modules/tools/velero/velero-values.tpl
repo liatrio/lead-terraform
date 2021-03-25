@@ -25,4 +25,8 @@ serviceAccount:
   server:
     create: true
     name: velero
-    annotations:
+    annotations: 
+      eks.amazonaws.com/role-arn: "${velero_service_account_arn}"
+
+securityContext:
+  fsGroup: 65534

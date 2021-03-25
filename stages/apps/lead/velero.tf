@@ -6,6 +6,5 @@ module "velero" {
   namespace                    = var.velero_namespace
   bucket_name                  = var.velero_bucket_name
   region                       = var.region
-  velero_aws_access_key_id     = var.velero_aws_access_key_id
-  velero_aws_secret_access_key = var.velero_aws_secret_access_key
+  velero_service_account_arn   = var.velero_service_account_arn
 }
