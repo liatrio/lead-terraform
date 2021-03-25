@@ -1,6 +1,0 @@
-apiVersion: v2
-name: velero-schedule
-description: A Helm chart for creating Velero backup schedules
-type: application
-version: 0.1.0
-appVersion: "1.5.3"

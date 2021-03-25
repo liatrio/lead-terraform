@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "velero-schedule.name" -}}
+{{- define "velero-schedule-flywheel-production.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "velero-schedule.fullname" -}}
+{{- define "velero-schedule-flywheel-production.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,16 +26,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "velero-schedule.chart" -}}
+{{- define "velero-schedule-flywheel-production.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "velero-schedule.labels" -}}
-helm.sh/chart: {{ include "velero-schedule.chart" . }}
-{{ include "velero-schedule.selectorLabels" . }}
+{{- define "velero-schedule-flywheel-production.labels" -}}
+helm.sh/chart: {{ include "velero-schedule-flywheel-production.chart" . }}
+{{ include "velero-schedule-flywheel-production.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -45,7 +45,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "velero-schedule.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "velero-schedule.name" . }}
+{{- define "velero-schedule-flywheel-production.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "velero-schedule-flywheel-production.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}

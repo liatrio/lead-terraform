@@ -1,0 +1,6 @@
+apiVersion: v2
+name: velero-schedule-toolchain
+description: A Helm chart for creating Velero backup schedules in toolchain namespace
+type: application
+version: 0.1.0
+appVersion: "1.5.3"

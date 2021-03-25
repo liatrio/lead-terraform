@@ -277,3 +277,7 @@ variable "velero_service_account_arn" {
 variable "enable_velero" {
   default = true
 }
+
+variable "velero_enabled_namespaces" {
+  type = list(string)
+}
