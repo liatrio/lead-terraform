@@ -124,6 +124,19 @@ resource "kubernetes_cluster_role" "sparky_mattermost" {
       "*"
     ]
   }
+  rule {
+    api_groups = [
+      ""
+    ]
+    resources  = [
+      "events"
+    ]
+    verbs      = [
+      "get",
+      "watch",
+      "list"
+    ]
+  }
 }
 
 resource "kubernetes_cluster_role_binding" "sparky_mattermost" {
