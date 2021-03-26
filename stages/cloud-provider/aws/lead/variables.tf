@@ -102,3 +102,15 @@ locals {
 variable "docker_registry_mirror" {
   default = ""
 }
+
+variable "enable_azure_sentinel" {
+  default = false
+}
+
+variable "azure_sentinel_aws_account_id" {
+  default = ""
+}
+
+variable "azure_sentinel_external_id" {
+  default = ""
+}

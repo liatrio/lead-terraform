@@ -98,3 +98,7 @@ output "vault_dynamodb_table_name" {
 output "vault_kms_key_id" {
   value = aws_kms_key.vault_seal_key.key_id
 }
+
+output "azure_sentinel_role_arn" {
+  value = var.enable_azure_sentinel ? module.azure_sentinel[0].iam_role_arn : ""
+}
