@@ -16,6 +16,10 @@ variable "config_context" {
   default = null
 }
 
+variable "config_path" {
+  default = "~/.kube/config"
+}
+
 variable "essential_taint_key" {
   default = "EssentialOnly"
 }
@@ -55,3 +59,4 @@ variable "pipelines" {
 
 variable "vault_namespace" {}
 variable "vault_root_token_secret" {}
+variable "vault_path_url" {}
