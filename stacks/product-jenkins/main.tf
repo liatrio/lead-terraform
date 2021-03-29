@@ -71,6 +71,7 @@ module "product_jenkins" {
   pipelines               = var.pipelines
   vault_namespace         = var.vault_namespace
   vault_root_token_secret = var.vault_root_token_secret
+  jenkins_pipeline_source = var.jenkins_pipeline_source
 
   providers = {
     kubernetes.toolchain  = kubernetes.toolchain

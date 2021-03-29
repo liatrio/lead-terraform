@@ -55,3 +55,4 @@ variable "pipelines" {
 
 variable "vault_namespace" {}
 variable "vault_root_token_secret" {}
+variable "jenkins_pipeline_source" {}

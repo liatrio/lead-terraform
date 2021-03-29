@@ -1,7 +1,3 @@
-locals {
-
-}
-
 module "essential_toleration" {
   source = "../../affinity/essential-toleration-values"
 }

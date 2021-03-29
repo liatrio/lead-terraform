@@ -38,12 +38,13 @@ module "sdm" {
   }
 
   product_vars = {
-    enable_keycloak        = var.enable_keycloak
-    builder_images_version = var.builder_images_version
-    jenkins_image_version  = var.jenkins_image_version
-    toolchain_image_repo   = var.toolchain_image_repo
-    enable_harbor          = var.enable_harbor
-    enable_artifactory_jcr = var.enable_artifactory_jcr
+    enable_keycloak         = var.enable_keycloak
+    builder_images_version  = var.builder_images_version
+    jenkins_image_version   = var.jenkins_image_version
+    jenkins_pipeline_source = var.jenkins_pipeline_source
+    toolchain_image_repo    = var.toolchain_image_repo
+    enable_harbor           = var.enable_harbor
+    enable_artifactory_jcr  = var.enable_artifactory_jcr
 
     s3_bucket                   = var.enable_aws_code_services ? var.codeservices_s3_bucket : ""
     codebuild_role              = var.enable_aws_code_services ? var.codeservices_codebuild_role : ""
