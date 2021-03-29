@@ -48,9 +48,9 @@ product:
         cluster_domain: ${cluster_domain}
         enable_harbor: "${enable_harbor}"
         enable_keycloak: "${enable_keycloak}"
-        enable_artifactory: "false"
+        enable_artifactory_jcr: "${enable_artifactory_jcr}"
         jenkins_image_version: ${jenkins_image_version}
-        product_image_repo: ${harbor_image_repo}
+        product_image_repo: ${product_image_repo}
         region: ${region}
         toolchain_image_repo: ${toolchain_image_repo}
         vault_namespace: ${vault_namespace}

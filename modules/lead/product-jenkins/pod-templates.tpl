@@ -71,6 +71,9 @@ jenkins:
               - envVar:
                   key: "SKAFFOLD_DEFAULT_REPO"
                   value: "${product_image_repo}/${product_name}"
+              - envVar:
+                  key: "DOCKER_DEFAULT_REPO"
+                  value: "${product_image_repo}/${product_name}"
             volumes:
               - hostPathVolume:
                   hostPath: "/var/run/docker.sock"

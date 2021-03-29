@@ -20,8 +20,9 @@ module "sdm" {
   sqs_url                     = var.enable_aws_code_services ? var.codeservices_sqs_url : ""
   toolchain_image_repo        = var.toolchain_image_repo
 
-  harbor_image_repo = "harbor.${var.toolchain_namespace}.${var.cluster_name}.${var.root_zone_name}"
-  ecr_image_repo    = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.region}.amazonaws.com"
+  artifactory_image_repo = var.enable_artifactory_jcr ? "${module.artifactory_jcr[0].hostname}/general-docker": ""
+  harbor_image_repo      = var.enable_harbor ? "harbor.${var.toolchain_namespace}.${var.cluster_name}.${var.root_zone_name}": ""
+  ecr_image_repo         = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.region}.amazonaws.com"
 
   operator_slack_service_account_annotations   = {
     "eks.amazonaws.com/role-arn" = var.operator_slack_service_account_arn
@@ -42,6 +43,7 @@ module "sdm" {
     jenkins_image_version  = var.jenkins_image_version
     toolchain_image_repo   = var.toolchain_image_repo
     enable_harbor          = var.enable_harbor
+    enable_artifactory_jcr = var.enable_artifactory_jcr
 
     s3_bucket                   = var.enable_aws_code_services ? var.codeservices_s3_bucket : ""
     codebuild_role              = var.enable_aws_code_services ? var.codeservices_codebuild_role : ""

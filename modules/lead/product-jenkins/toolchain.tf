@@ -382,10 +382,10 @@ resource "kubernetes_config_map" "jcasc_slack_config_configmap" {
   }
 }
 
-resource "kubernetes_config_map" "jcasc_logstash_url_configmap" {
+resource "kubernetes_config_map" "jcasc_env_configmap" {
   provider = kubernetes.toolchain
   metadata {
-    name      = "jenkins-jenkins-config-logstash-url"
+    name      = "jenkins-jenkins-config-env"
     namespace = module.toolchain_namespace.name
 
     labels = {
@@ -398,7 +398,7 @@ resource "kubernetes_config_map" "jcasc_logstash_url_configmap" {
     }
   }
   data = {
-    "logstash-url.yaml" = templatefile("${path.module}/logstash-url.tpl", data.template_file.jenkins_values.vars)
+    "env.yaml" = templatefile("${path.module}/jenkins-env.tpl", data.template_file.jenkins_values.vars)
   }
 }
 
