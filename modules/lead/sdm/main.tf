@@ -18,12 +18,13 @@ data "template_file" "operator_toolchain_values" {
     product_image_repo = coalesce(var.harbor_image_repo, var.artifactory_image_repo)
     ecr_image_repo     = var.ecr_image_repo
 
-    enable_keycloak        = var.product_vars["enable_keycloak"]
-    builder_images_version = var.product_vars["builder_images_version"]
-    jenkins_image_version  = var.product_vars["jenkins_image_version"]
-    toolchain_image_repo   = var.product_vars["toolchain_image_repo"]
-    enable_harbor          = var.product_vars["enable_harbor"]
-    enable_artifactory_jcr = var.product_vars["enable_artifactory_jcr"]
+    enable_keycloak         = var.product_vars["enable_keycloak"]
+    builder_images_version  = var.product_vars["builder_images_version"]
+    jenkins_image_version   = var.product_vars["jenkins_image_version"]
+    toolchain_image_repo    = var.product_vars["toolchain_image_repo"]
+    enable_harbor           = var.product_vars["enable_harbor"]
+    enable_artifactory_jcr  = var.product_vars["enable_artifactory_jcr"]
+    jenkins_pipeline_source = var.product_vars["jenkins_pipeline_source"]
 
     aws_environment             = var.product_vars["aws_environment"]
     s3_bucket                   = var.product_vars["s3_bucket"]

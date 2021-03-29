@@ -51,6 +51,7 @@ product:
         enable_artifactory_jcr: "${enable_artifactory_jcr}"
         jenkins_image_version: ${jenkins_image_version}
         product_image_repo: ${product_image_repo}
+        jenkins_pipeline_source: ${jenkins_pipeline_source}
         region: ${region}
         toolchain_image_repo: ${toolchain_image_repo}
         vault_namespace: ${vault_namespace}
