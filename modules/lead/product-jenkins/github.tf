@@ -80,7 +80,7 @@ resource "kubernetes_config_map" "jcasc_github_plugin" {
   }
   data = {
     "github-plugin.yaml" = templatefile("${path.module}/github.tpl", {
-      secret_name = kubernetes_secret.github_token[0].metadata[0].name
+      secret_name = kubernetes_secret.github[0].metadata[0].name
     })
   }
 }
