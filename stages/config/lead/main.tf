@@ -4,7 +4,6 @@ terraform {
 }
 
 provider "aws" {
-  version = "2.53"
   region  = var.region
 }
 
@@ -68,3 +67,8 @@ provider "harbor" {
   password = data.vault_generic_secret.harbor.data["admin-password"]
 }
 
+provider "artifactory" {
+  url      = "https://${var.artifactory_jcr_hostname}"
+  username = "admin"
+  password = data.vault_generic_secret.artifactory_jcr.data["admin-password"]
+}

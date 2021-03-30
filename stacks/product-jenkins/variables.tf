@@ -36,7 +36,7 @@ variable "enable_harbor" {
   default = true
 }
 
-variable "enable_artifactory" {
+variable "enable_artifactory_jcr" {
   default = true
 }
 

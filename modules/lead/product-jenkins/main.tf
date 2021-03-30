@@ -45,5 +45,5 @@ data "kubernetes_secret" "harbor_admin_creds" {
 provider "harbor" {
   url      = "https://harbor.${var.toolchain_namespace}.${var.cluster_domain}"
   username = "admin"
-  password = data.kubernetes_secret.harbor_admin_creds.data.HARBOR_ADMIN_PASSWORD
+  password = var.enable_harbor ? data.kubernetes_secret.harbor_admin_creds.data.HARBOR_ADMIN_PASSWORD : ""
 }

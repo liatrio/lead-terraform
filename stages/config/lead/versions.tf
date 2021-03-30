@@ -9,6 +9,10 @@ terraform {
       source = "liatrio/harbor"
       version = "= 0.3.3"
     }
+    artifactory = {
+      source  = "jfrog/artifactory"
+      version = "~> 2.2.5"
+    }
     kubernetes = {
       source = "hashicorp/kubernetes"
       version = "~> 2.0.1"
@@ -36,6 +40,10 @@ terraform {
     vault = {
       source = "hashicorp/vault"
       version = "~> 2.18.0"
+    }
+    aws = {
+      source = "hashicorp/aws"
+        version = "2.53"
     }
   }
 }
