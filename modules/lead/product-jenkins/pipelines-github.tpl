@@ -10,6 +10,7 @@
                 id('https://www.github.com/${pipeline.org}/${pipeline.repo}.git')
                 repoOwner('${pipeline.org}')
                 repository('${pipeline.repo}')
+                credentialsId('${github_credentials_id}')
                 excludes('solution*')
             }
         }
