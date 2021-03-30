@@ -34,7 +34,7 @@ resource "kubernetes_secret" "github" {
   type = "Opaque"
   data = {
     username = data.kubernetes_secret.github_creds[0].data["username"]
-    password = data.kubernetes_secret.github_creds[0].data
+    password = data.kubernetes_secret.github_creds[0].data["password"]
   }
 }
 
