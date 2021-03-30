@@ -34,6 +34,6 @@ variable "pipelines" {
 
 variable "vault_namespace" {}
 variable "vault_root_token_secret" {}
-variable "vault_path_url" {
-  default = ""
+variable "vault_adress" {
+  default = "http://vault.${var.vault_namespace}.svc.cluster.local"
 }

@@ -32,7 +32,7 @@ data "kubernetes_secret" "vault_root_token" {
 }
 
 provider "vault" {
-  address         = var.vault_path_url != "" ? var.vault_path_url : "http://vault.${var.vault_namespace}.svc.cluster.local"
+  address         = var.vault_address != "" ? var.vault_address : "http://vault.${var.vault_namespace}.svc.cluster.local"
   skip_tls_verify = true
   token           = data.kubernetes_secret.vault_root_token.data["token"]
 }
