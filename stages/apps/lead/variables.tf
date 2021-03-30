@@ -222,3 +222,7 @@ variable "vault_dynamodb_table_name" {
 
 variable "vault_kms_key_id" {
 }
+
+variable "jenkins_pipeline_source" {
+  default = "git"
+}
