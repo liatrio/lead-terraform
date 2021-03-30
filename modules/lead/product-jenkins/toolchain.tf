@@ -328,7 +328,7 @@ resource "kubernetes_config_map" "jcasc_pipelines_configmap" {
   data     = {
     "jobs.yaml" = trim(replace(jsonencode(replace(trimspace(templatefile("${path.module}/pipelines-${var.jenkins_pipeline_source}.tpl", {
       pipelines             = var.pipelines
-      github_credentials_id = var.jenkins_pipeline_source == "github" ? kubernetes_secret.github_token[0].metadata[0].name : ""
+      github_credentials_id = var.jenkins_pipeline_source == "github" ? kubernetes_secret.github[0].metadata[0].name : ""
     })), "/,]}$/", "]}")), "/\\\\\"/", "\""), "\"")
   }
 }
