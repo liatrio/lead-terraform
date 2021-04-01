@@ -70,5 +70,5 @@ provider "harbor" {
 provider "artifactory" {
   url      = "https://${var.artifactory_jcr_hostname}"
   username = "admin"
-  password = data.vault_generic_secret.artifactory_jcr.data["admin-password"]
+  password = var.enable_artifactory_jcr ? data.vault_generic_secret.artifactory_jcr[0].data["admin-password"] : "disabled"
 }
