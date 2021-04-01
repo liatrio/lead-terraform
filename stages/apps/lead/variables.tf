@@ -99,6 +99,10 @@ variable "enable_mattermost" {
   default = false
 }
 
+variable "enable_kibana_ingress" {
+  default = false
+}
+
 variable "sparky_mattermost_version" {
   default = "v0.1.0"
 }
