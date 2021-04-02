@@ -137,6 +137,20 @@ resource "kubernetes_cluster_role" "sparky_mattermost" {
       "list"
     ]
   }
+  rule {
+    api_groups = [
+      "extensions",
+      "networking.k8s.io"
+    ]
+    resources  = [
+      "ingresses"
+    ]
+    verbs      = [
+      "get",
+      "list",
+      "watch"
+    ]
+  }
 }
 
 resource "kubernetes_cluster_role_binding" "sparky_mattermost" {
