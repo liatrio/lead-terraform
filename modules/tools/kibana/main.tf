@@ -10,6 +10,8 @@ resource "helm_release" "kibana" {
     templatefile("${path.module}/kibana-values.tpl", {
       elasticsearch_credentials_secret_name  = var.elasticsearch_credentials_secret_name
       elasticsearch_certificates_secret_name = var.elasticsearch_certificates_secret_name
+      enable_ingress                         = var.enable_ingress
+      kibana_hostname                        = var.kibana_hostname
     })
   ]
 }

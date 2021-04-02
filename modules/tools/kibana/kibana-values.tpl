@@ -23,3 +23,13 @@ secretMounts:
   - name: ${elasticsearch_certificates_secret_name}
     secretName: ${elasticsearch_certificates_secret_name}
     path: /usr/share/kibana/config/certs
+
+ingress:
+  enabled: ${enable_ingress}
+  annotations:
+    kubernetes.io/ingress.class: toolchain-nginx
+  hosts:
+    - ${kibana_hostname}
+  tls:
+    - hosts:
+        - ${kibana_hostname}
