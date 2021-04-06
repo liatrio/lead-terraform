@@ -6,12 +6,13 @@ spec:
   replicas: {{ .Values.initialReplicas }}
   template:
     spec:
-      {{- if .Values.runner_labels -}}
-      {{ .Values.runner_labels }}
+      labels:
+        {{- toYaml .Values.labels | nindent 8 }}
+      {{- with .Values.dockerdContainerResources }}
+      dockerdContainerResources:
+        {{- toYaml . | nindent 8 }}        
       {{- end }}
-      {{- if .Values.dockerdContainerResources -}}
-      {{ toYaml .Values.dockerdContainerResources }}
-      {{- end }}
-      organization: {{ .Values.github_org }}
+      organization: {{ .Values.githubOrg }}
       serviceAccountName: {{ include "github-actions-runners.serviceAccountName" . }}
       automountServiceAccountToken: true
+      image: {{ .Values.image }}

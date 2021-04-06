@@ -3,8 +3,11 @@ minReplicas: 1
 maxReplicas: 3
 scaleAmount: 1
 scaleDuration: "10m"
+githubOrg: 
+labels: []
+image:
 
-#dockerdContainerResources:
+dockerdContainerResources: {}
 #  limits:
 #    cpu: "2"
 #    memory: 4Gi

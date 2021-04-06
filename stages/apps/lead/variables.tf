@@ -237,6 +237,7 @@ variable github_runner_controllers {
 #   rode: {
 #     github_org: "rode"
 #     namespace: "roderunners"
+#     image: "node"
 #     labels: ["roderunners"]
 #   }
 # }

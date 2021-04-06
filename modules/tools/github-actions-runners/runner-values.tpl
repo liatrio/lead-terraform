@@ -1,3 +1,4 @@
-github_org: ${github_org}
-${runner_labels}
-
+githubOrg: ${github_org}
+image: ${image}
+labels:
+${indent( 2, yamlencode( labels ) )}
