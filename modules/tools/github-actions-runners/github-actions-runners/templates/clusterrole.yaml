@@ -4,5 +4,5 @@ metadata:
   name: {{ .Release.Name }}
 rules:
   - apiGroups: ["", "apps", "networking.k8s.io", "extensions", "policy"]
-    resources: ["deployments", "services", "configmaps", "secrets", "ingresses", "poddisruptionbudgets", "statefulsets", "namespaces"]
+    resources: ["deployments", "services", "configmaps", "secrets", "ingresses", "poddisruptionbudgets", "statefulsets", "namespaces", "serviceaccounts", "roles", "rolebindings"]
     verbs: ["create", "get", "watch", "list", "patch", "update", "delete"]
