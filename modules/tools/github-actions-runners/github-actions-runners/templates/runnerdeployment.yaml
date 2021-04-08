@@ -18,5 +18,7 @@ spec:
       {{- end }}
       organization: {{ .Values.githubOrg }}
       serviceAccountName: {{ include "github-actions-runners.serviceAccountName" . }}
+      securityContext:
+        fsGroup: 1447
       automountServiceAccountToken: true
       image: {{ .Values.image }}
