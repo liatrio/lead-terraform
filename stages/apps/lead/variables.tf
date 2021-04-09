@@ -98,10 +98,6 @@ variable "enable_gitlab" {
 variable "enable_mattermost" {
   default = false
 }
-
-variable "enable_github_runners" {
-  default = false
-}
   
 variable "enable_kibana_ingress" {
   default = false
