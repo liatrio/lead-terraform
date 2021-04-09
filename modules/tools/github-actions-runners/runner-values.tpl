@@ -1,7 +1,10 @@
 githubOrg: ${github_org}
 image: ${image}
 labels:
-${indent( 2, yamlencode( labels ) )}
+  ${indent( 2, yamlencode( labels ) )}
+serviceAccount:
+  annotations:
+    ${indent( 4, yamlencode( runner_annotations ) ) }
 resources:
   requests:
     cpu: 150m

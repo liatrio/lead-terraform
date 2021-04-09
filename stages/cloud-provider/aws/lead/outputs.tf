@@ -27,7 +27,7 @@ output "workspace_iam_role_name" {
 }
 
 output "cluster_zone_id" {
-  value = aws_route53_zone.cluster_zone.zone_id
+  value       = aws_route53_zone.cluster_zone.zone_id
   description = "Route53 zone id for EKS cluster; passed as input to app stage"
 }
 
@@ -57,6 +57,10 @@ output "operator_jenkins_service_account_arn" {
 
 output "product_operator_service_account_arn" {
   value = aws_iam_role.product_operator_service_account.arn
+}
+
+output "github_runners_service_account_arn" {
+  value = module.github-runners-s3.github_runners_service_account_arn
 }
 
 output "rode_service_account_arn" {

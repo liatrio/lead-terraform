@@ -28,6 +28,9 @@ module "github_runners" {
   namespace  = each.value.namespace
   image      = each.value.image
   labels     = each.value.labels
+  github_runners_service_account_annotations = {
+    "eks.amazonaws.com/role-arn" = var.github_runners_service_account_arn
+  }
 
   depends_on = [module.github_runner_controller]
 }

@@ -177,6 +177,9 @@ variable "workspace_role_name" {
 variable "codeservices_sqs_url" {
 }
 
+variable "github_runners_service_account_arn" {
+}
+
 variable "operator_slack_service_account_arn" {
 }
 
@@ -216,10 +219,10 @@ variable "vault_dynamodb_table_name" {
 variable "vault_kms_key_id" {
 }
 
-variable platform_name {
+variable "platform_name" {
   description = "Cloud platform the config is being deployed to (aws/azure/gcs)"
-  type = string
-  default = "aws"
+  type        = string
+  default     = "aws"
 }
 
 # example_value = {
@@ -228,8 +231,8 @@ variable platform_name {
 #     namespace: "roderunners"
 #   }
 # }
-variable github_runner_controllers {
-  type = map(any)
+variable "github_runner_controllers" {
+  type    = map(any)
   default = {}
 }
 
@@ -241,7 +244,7 @@ variable github_runner_controllers {
 #     labels: ["roderunners"]
 #   }
 # }
-variable github_runners {
-  type = map(any)
+variable "github_runners" {
+  type    = map(any)
   default = {}
 }

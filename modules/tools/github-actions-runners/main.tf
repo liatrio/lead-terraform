@@ -10,9 +10,10 @@ resource "helm_release" "github_runners" {
 
   values = [
     templatefile("${path.module}/runner-values.tpl", {
-      github_org = var.github_org
-      image      = var.image
-      labels     = var.labels
+      github_org         = var.github_org
+      image              = var.image
+      labels             = var.labels
+      runner_annotations = var.github_runners_service_account_annotations
     })
   ]
 }
