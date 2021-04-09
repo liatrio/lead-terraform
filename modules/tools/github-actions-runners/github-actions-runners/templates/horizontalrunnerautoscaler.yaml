@@ -1,0 +1,16 @@
+# apiVersion: actions.summerwind.dev/v1alpha1
+# kind: HorizontalRunnerAutoscaler
+# metadata:
+#   name: {{ .Release.Name }}
+# spec:
+#   scaleTargetRef:
+#     name: {{ .Release.Name }}
+#   minReplicas: {{ .Values.minReplicas }}
+#   maxReplicas: {{ .Values.maxReplicas}}
+#   scaleUpTriggers:
+#     - githubEvent:
+#         checkRun:
+#           types: [ "created" ]
+#           status: "queued"
+#       amount: {{ .Values.scaleAmount }}
+#       duration: {{ .Values.scaleDuration }}

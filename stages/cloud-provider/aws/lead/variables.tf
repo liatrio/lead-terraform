@@ -7,12 +7,12 @@ variable "cluster_name" {
 }
 
 variable "region" {
-  default = "us-east-1"
+  default     = "us-east-1"
   description = "AWS Region to use for resource creation and reference"
 }
 
 variable "key_name" {
-  default = ""
+  default     = ""
   description = "Key name for workers, setting to empty string disables remote access"
 }
 
@@ -34,32 +34,32 @@ variable "instance_types" {
 }
 
 variable "essential_instance_type" {
-  default = "t3.large"
+  default     = "t3.large"
   description = "Allowed type of essential EC2 workers"
 }
 
 variable "essential_asg_min_size" {
-  default = "1"
+  default     = "1"
   description = "Minimum autoscaling group size provsioned with AWS EC2 instances"
 }
 
 variable "essential_asg_desired_capacity" {
-  default = "1"
+  default     = "1"
   description = "Desired autoscaling group size provsioned with AWS EC2 instances"
 }
 
 variable "essential_asg_max_size" {
-  default = "5"
+  default     = "5"
   description = "Maximum autoscaling group size provsioned with AWS EC2 instances"
 }
 
 variable "essential_taint_key" {
-  default = "EssentialOnly"
+  default     = "EssentialOnly"
   description = "String used to taint EKS nodes to prevent scheduling of non-essential pods"
 }
 
 variable "on_demand_percentage" {
-  default = "0"
+  default     = "0"
   description = "Percentage on nodes will be on-demand instances; If not set, all nodes will be spot instances"
 }
 
@@ -72,13 +72,13 @@ variable "vpc_name" {
 }
 
 variable "additional_mapped_roles" {
-  type    = list(object({
+  type = list(object({
     rolearn  = string
     username = string
     groups   = list(string)
   }))
 
-  default = []
+  default     = []
   description = "Additional IAM roles to be added to added to the aws-auth configmap"
 }
 
@@ -102,3 +102,4 @@ locals {
 variable "docker_registry_mirror" {
   default = ""
 }
+
