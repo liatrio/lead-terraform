@@ -21,8 +21,8 @@ variable "enable_keycloak" {
 variable "enable_harbor" {
   default = false
 }
-variable "enable_artifactory" {
-  default = true
+variable "enable_artifactory_jcr" {
+  default = false
 }
 variable "pipelines" {
   type = map(object({
@@ -34,3 +34,6 @@ variable "pipelines" {
 
 variable "vault_namespace" {}
 variable "vault_root_token_secret" {}
+variable "jenkins_pipeline_source" {
+  default = "git"
+}

@@ -82,4 +82,5 @@ variable "aws_event_mapper_service_account_annotations" {
 
 variable "toolchain_image_repo" {}
 variable "harbor_image_repo" {}
+variable "artifactory_image_repo" {}
 variable "ecr_image_repo" {}

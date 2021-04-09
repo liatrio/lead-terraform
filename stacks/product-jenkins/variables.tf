@@ -32,7 +32,7 @@ variable "enable_harbor" {
   default = true
 }
 
-variable "enable_artifactory" {
+variable "enable_artifactory_jcr" {
   default = true
 }
 
@@ -55,3 +55,4 @@ variable "pipelines" {
 
 variable "vault_namespace" {}
 variable "vault_root_token_secret" {}
+variable "jenkins_pipeline_source" {}

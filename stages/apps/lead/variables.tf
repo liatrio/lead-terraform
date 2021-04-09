@@ -75,6 +75,10 @@ variable "enable_harbor" {
   default = true
 }
 
+variable "enable_artifactory_jcr" {
+  default = false
+}
+
 variable "enable_rode" {
   default = true
 }
@@ -98,9 +102,20 @@ variable "enable_mattermost" {
 variable "enable_github_runners" {
   default = false
 }
+  
+variable "enable_kibana_ingress" {
+  default = false
+}
 
 variable "sparky_mattermost_version" {
   default = "v0.1.0"
+}
+
+variable "mattermost_bot_email" {
+  default = "sparky@liatr.io"
+}
+variable "mattermost_bot_username" {
+  default = "sparky"
 }
 
 variable "uptime" {
@@ -247,4 +262,8 @@ variable "github_runner_controllers" {
 variable "github_runners" {
   type    = map(any)
   default = {}
+}
+    
+variable "jenkins_pipeline_source" {
+  default = "git"
 }

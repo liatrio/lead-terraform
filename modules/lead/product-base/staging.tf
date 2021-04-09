@@ -119,6 +119,12 @@ resource "kubernetes_role" "ci_staging_role" {
   }
 
   rule {
+    api_groups = ["networking.k8s.io"]
+    resources  = ["ingresses"]
+    verbs      = ["list", "watch", "create", "patch", "get", "delete", "update"]
+  }
+
+  rule {
     api_groups = ["autoscaling"]
     resources  = ["horizontalpodautoscalers"]
     verbs      = ["*"]

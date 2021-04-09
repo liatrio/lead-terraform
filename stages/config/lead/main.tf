@@ -66,4 +66,3 @@ provider "harbor" {
   username = "admin"
   password = data.vault_generic_secret.harbor.data["admin-password"]
 }
-
