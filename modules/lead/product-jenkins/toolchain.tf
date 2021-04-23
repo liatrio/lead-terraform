@@ -226,7 +226,7 @@ resource "kubernetes_cluster_role_binding" "jenkins_kubernetes_credentials" {
     name = "${module.toolchain_namespace.name}-jenkins-kubernetes-credentials"
 
     labels = {
-      "app.kubernetes.io/name"       = "jenkins"
+      "app.kubernetes.io/name"       = "jenkinss"
       "app.kubernetes.io/instance"   = "jenkins"
       "app.kubernetes.io/component"  = "jenkins-master"
       "app.kubernetes.io/managed-by" = "Terraform"
