@@ -17,6 +17,7 @@ variable "config_context" {
 }
 
 variable "config_path" {
+  default = null
 }
 
 variable "essential_taint_key" {
