@@ -17,7 +17,6 @@ variable "config_context" {
 }
 
 variable "config_path" {
-  default = "~/.kube/config"
 }
 
 variable "essential_taint_key" {
