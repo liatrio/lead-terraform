@@ -1,0 +1,24 @@
+apiVersion: actions.summerwind.dev/v1alpha1
+kind: RunnerDeployment
+metadata:
+  name: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.initialReplicas }}
+  template:
+    spec:
+      labels:
+        {{- toYaml .Values.labels | nindent 8 }}
+      {{- with .Values.resources }}
+      resources:
+        {{- toYaml . | nindent 8 }}        
+      {{- end }}
+      {{- with .Values.dockerdContainerResources }}
+      dockerdContainerResources:
+        {{- toYaml . | nindent 8 }}        
+      {{- end }}
+      organization: {{ .Values.githubOrg }}
+      serviceAccountName: {{ include "github-actions-runners.serviceAccountName" . }}
+      securityContext:
+        fsGroup: 1447
+      automountServiceAccountToken: true
+      image: {{ .Values.image }}

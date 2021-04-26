@@ -38,14 +38,14 @@ data "template_file" "jenkins_values" {
     # keycloak_url must be accessible from both inside and outside the cluster.
     # For local environment, you'll need to add this line to your hosts file...
     # [YOUR_HOST_INTERNAL_IP_NOT_127.0.0.1]   keycloak.toolchain.docker-for-desktop.localhost
-    keycloak_url = "${local.protocol}://keycloak.toolchain.${var.cluster_domain}/auth"
+    keycloak_url   = "${local.protocol}://keycloak.toolchain.${var.cluster_domain}/auth"
   }
 }
 
 module "toolchain_namespace" {
-  source    = "../../common/namespace"
-  namespace = "${var.product_name}-toolchain"
-  annotations = {
+  source               = "../../common/namespace"
+  namespace            = "${var.product_name}-toolchain"
+  annotations          = {
     name                                 = "${var.product_name}-toolchain"
     "opa.lead.liatrio/ingress-whitelist" = "*.${var.product_name}-toolchain.${var.cluster_domain}"
     "opa.lead.liatrio/image-whitelist"   = var.image_whitelist
@@ -60,7 +60,7 @@ module "toolchain_namespace" {
 }
 
 resource "helm_release" "jenkins" {
-  provider = helm.toolchain
+  provider   = helm.toolchain
   name       = "jenkins"
   chart      = "jenkins"
   repository = "https://charts.jenkins.io"
@@ -73,7 +73,8 @@ resource "helm_release" "jenkins" {
     value = random_password.jenkins_admin_password.result
   }
 
-  values = [data.template_file.jenkins_values.rendered]
+  values = [
+    data.template_file.jenkins_values.rendered]
 }
 
 // Create Jenkins service account
@@ -120,19 +121,39 @@ resource "kubernetes_role" "jenkins_kubernetes_credentials" {
   }
 
   rule {
-    api_groups = [""]
-    resources  = ["secrets"]
-    verbs      = ["get", "watch", "list"]
+    api_groups = [
+      ""]
+    resources  = [
+      "secrets"]
+    verbs      = [
+      "get",
+      "watch",
+      "list"]
   }
   rule {
-    api_groups = ["stable.liatr.io", "sdm.liatr.io"]
-    resources  = ["builds"]
-    verbs      = ["create", "update", "patch", "get", "watch", "list"]
+    api_groups = [
+      "stable.liatr.io",
+      "sdm.liatr.io"]
+    resources  = [
+      "builds"]
+    verbs      = [
+      "create",
+      "update",
+      "patch",
+      "get",
+      "watch",
+      "list"]
   }
   rule {
-    api_groups = [""]
-    resources  = ["events"]
-    verbs      = ["create", "get", "watch", "list"]
+    api_groups = [
+      ""]
+    resources  = [
+      "events"]
+    verbs      = [
+      "create",
+      "get",
+      "watch",
+      "list"]
   }
 }
 
@@ -188,9 +209,14 @@ resource "kubernetes_cluster_role" "jenkins_kubernetes_credentials" {
   }
 
   rule {
-    api_groups = ["apiextensions.k8s.io"]
-    resources  = ["customresourcedefinitions"]
-    verbs      = ["create", "get", "list"]
+    api_groups = [
+      "apiextensions.k8s.io"]
+    resources  = [
+      "customresourcedefinitions"]
+    verbs      = [
+      "create",
+      "get",
+      "list"]
   }
 }
 
@@ -296,11 +322,14 @@ resource "kubernetes_config_map" "jcasc_pipelines_configmap" {
     namespace = module.toolchain_namespace.name
 
     labels = {
-      "jenkins-jenkins-config"       = "true"
+      "jenkins-jenkins-config" = "true"
     }
   }
-  data = {
-    "jobs.yaml" = trim(replace(jsonencode(replace(trimspace(templatefile("${path.module}/pipelines.tpl", {pipelines=var.pipelines})), "/,]}$/", "]}")), "/\\\\\"/", "\""), "\"")
+  data     = {
+    "jobs.yaml" = trim(replace(jsonencode(replace(trimspace(templatefile("${path.module}/pipelines-${var.jenkins_pipeline_source}.tpl", {
+      pipelines             = var.pipelines
+      github_credentials_id = var.jenkins_pipeline_source == "github" ? kubernetes_secret.github[0].metadata[0].name : ""
+    })), "/,]}$/", "]}")), "/\\\\\"/", "\""), "\"")
   }
 }
 
@@ -318,7 +347,7 @@ resource "kubernetes_config_map" "jcasc_shared_libraries_configmap" {
       "jenkins-jenkins-config"       = "true"
     }
   }
-  data = {
+  data     = {
     "shared-libraries.yaml" = templatefile("${path.module}/shared-libraries.tpl", {})
   }
 }
@@ -337,7 +366,7 @@ resource "kubernetes_config_map" "jcasc_security_configmap" {
       "jenkins-jenkins-config"       = "true"
     }
   }
-  data = {
+  data     = {
     "shared-libraries.yaml" = templatefile("${path.module}/security-config.tpl", data.template_file.jenkins_values.vars)
   }
 }
@@ -356,7 +385,7 @@ resource "kubernetes_config_map" "jcasc_pod_templates_configmap" {
       "jenkins-jenkins-config"       = "true"
     }
   }
-  data = {
+  data     = {
     "pod-templates.yaml" = templatefile("${path.module}/pod-templates.tpl", merge(data.template_file.jenkins_values.vars, {
       essential_tolerations = module.essential_tolerations.values
     }))
@@ -377,15 +406,15 @@ resource "kubernetes_config_map" "jcasc_slack_config_configmap" {
       "jenkins-jenkins-config"       = "true"
     }
   }
-  data = {
+  data     = {
     "slack-config.yaml" = templatefile("${path.module}/slack-config.tpl", data.template_file.jenkins_values.vars)
   }
 }
 
-resource "kubernetes_config_map" "jcasc_logstash_url_configmap" {
+resource "kubernetes_config_map" "jcasc_env_configmap" {
   provider = kubernetes.toolchain
   metadata {
-    name      = "jenkins-jenkins-config-logstash-url"
+    name      = "jenkins-jenkins-config-env"
     namespace = module.toolchain_namespace.name
 
     labels = {
@@ -397,8 +426,8 @@ resource "kubernetes_config_map" "jcasc_logstash_url_configmap" {
       "jenkins-jenkins-config"       = "true"
     }
   }
-  data = {
-    "logstash-url.yaml" = templatefile("${path.module}/logstash-url.tpl", data.template_file.jenkins_values.vars)
+  data     = {
+    "env.yaml" = templatefile("${path.module}/jenkins-env.tpl", data.template_file.jenkins_values.vars)
   }
 }
 
@@ -416,7 +445,7 @@ resource "kubernetes_config_map" "jcasc_keycloak_config_configmap" {
       "jenkins-jenkins-config"       = "true"
     }
   }
-  data = {
+  data     = {
     "keycloak-config.yaml" = templatefile("${path.module}/keycloak-config.tpl", data.template_file.jenkins_values.vars)
   }
 }
@@ -435,7 +464,7 @@ resource "kubernetes_config_map" "jcasc_master_node_configmap" {
       "jenkins-jenkins-config"       = "true"
     }
   }
-  data = {
+  data     = {
     "master-node.yaml" = templatefile("${path.module}/master-node.tpl", {})
   }
 }

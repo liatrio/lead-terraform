@@ -13,6 +13,7 @@ bot:
 kubernetes:
   productType: product-jenkins
   productNamespace: ${namespace}
+  buildBranchFilter: "main"
 
 mattermost:
   url: "http://mattermost-team-edition.${namespace}.svc.cluster.local:8065"

@@ -98,6 +98,10 @@ variable "enable_gitlab" {
 variable "enable_mattermost" {
   default = false
 }
+  
+variable "enable_kibana_ingress" {
+  default = false
+}
 
 variable "sparky_mattermost_version" {
   default = "v0.1.0"
@@ -184,6 +188,9 @@ variable "workspace_role_name" {
 variable "codeservices_sqs_url" {
 }
 
+variable "github_runners_service_account_arn" {
+}
+
 variable "operator_slack_service_account_arn" {
 }
 
@@ -221,4 +228,38 @@ variable "vault_dynamodb_table_name" {
 }
 
 variable "vault_kms_key_id" {
+}
+
+variable "platform_name" {
+  description = "Cloud platform the config is being deployed to (aws/azure/gcs)"
+  type        = string
+  default     = "aws"
+}
+
+# example_value = {
+#   rode: {
+#     vault_name: "github-runner-app-sandbox"
+#     namespace: "roderunners"
+#   }
+# }
+variable "github_runner_controllers" {
+  type    = map(any)
+  default = {}
+}
+
+# example_value = {
+#   rode: {
+#     github_org: "rode"
+#     namespace: "roderunners"
+#     image: "node"
+#     labels: ["roderunners"]
+#   }
+# }
+variable "github_runners" {
+  type    = map(any)
+  default = {}
+}
+    
+variable "jenkins_pipeline_source" {
+  default = "git"
 }

@@ -32,8 +32,8 @@ module "staging_app_nginx" {
 module "prod_app_nginx" {
   source = "../../tools/nginx"
 
-  name                = "prod-app"
-  ingress_class       = "prod-app-nginx"
+  name                = "production-app"
+  ingress_class       = "production-app-nginx"
   namespace           = var.namespace
   default_certificate = "${var.namespace}/${module.prod_app_wildcard.cert_secret_name}"
 }
