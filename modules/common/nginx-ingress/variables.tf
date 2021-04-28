@@ -17,3 +17,7 @@ variable "cluster_wide" {
 variable "default_certificate" {
   default = ""
 }
+variable "service_annotaitons" {
+  type = map(string)
+  default =  {}
+}

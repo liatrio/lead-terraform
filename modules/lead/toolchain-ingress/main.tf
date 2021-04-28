@@ -165,3 +165,56 @@ module "toolchain_ingress" {
   cluster_wide                    = true
   default_certificate             = "${var.namespace}/${module.toolchain_wildcard.cert_secret_name}"
 }
+
+// Ingress controller for internal access
+
+resource "kubernetes_service_account" "internal_nginx_ingress_service_account" {
+  metadata {
+    name      = "internal-nginx-ingress"
+    namespace =  var.namespace
+  }
+  automount_service_account_token = true
+}
+
+resource "kubernetes_cluster_role_binding" "internal_nginx_ingress_role_binding" {
+  metadata {
+    name      = "internal-nginx-ingress-binding"
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = kubernetes_cluster_role.nginx_ingress_cluster_role.metadata[0].name
+  }
+  subject {
+    kind      = "ServiceAccount"
+    name      = kubernetes_service_account.internal_nginx_ingress_service_account.metadata[0].name
+    namespace = kubernetes_service_account.internal_nginx_ingress_service_account.metadata[0].namespace
+  }
+}
+
+module "internal_wildcard" {
+  source = "../../common/certificates"
+
+  name      = "internal-wildcard"
+  namespace = var.namespace
+  domain    = "internal.${var.cluster_domain}"
+  enabled   = true
+
+  issuer_name = var.issuer_name
+  issuer_kind = var.issuer_kind
+}
+
+module "internal_ingress" {
+  source                          = "../../common/nginx-ingress"
+  namespace                       = var.namespace
+  name                            = "internal"
+  ingress_controller_type         = var.ingress_controller_type
+  ingress_external_traffic_policy = var.ingress_external_traffic_policy
+  ingress_class                   = "internal-nginx"
+  service_annotaitons = {
+    "service.beta.kubernetes.io/aws-load-balancer-internal": "0.0.0.0/0"
+  }
+  service_account                 = kubernetes_service_account.internal_nginx_ingress_service_account.metadata[0].name
+  cluster_wide                    = true
+  default_certificate             = "${var.namespace}/${module.internal_wildcard.cert_secret_name}"
+}

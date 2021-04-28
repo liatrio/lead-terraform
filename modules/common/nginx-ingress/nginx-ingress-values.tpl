@@ -24,6 +24,9 @@ controller:
   service:
     type: ${ingress_controller_type}
     externalTrafficPolicy: ${ingress_external_traffic_policy}
+    annotations:
+      ${indent( 6, yamlencode( service_annotations ) ) }
+
   resources:
     requests:
       cpu: 300m
