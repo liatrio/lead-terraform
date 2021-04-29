@@ -204,6 +204,7 @@ module "internal_wildcard" {
   issuer_kind = var.issuer_kind
 }
 
+// Ingress for strictly allowing only Internal VPN traffic
 module "internal_ingress" {
   source                          = "../../common/nginx-ingress"
   namespace                       = var.namespace
@@ -212,7 +213,7 @@ module "internal_ingress" {
   ingress_external_traffic_policy = var.ingress_external_traffic_policy
   ingress_class                   = "internal-nginx"
   service_annotaitons = {
-    "service.beta.kubernetes.io/aws-load-balancer-internal": "0.0.0.0/0"
+    "service.beta.kubernetes.io/aws-load-balancer-internal": "10.1.32.0/20" # Internal VPN Subnet
   }
   service_account                 = kubernetes_service_account.internal_nginx_ingress_service_account.metadata[0].name
   cluster_wide                    = true
