@@ -26,7 +26,8 @@ controller:
     externalTrafficPolicy: ${ingress_external_traffic_policy}
     annotations:
       ${indent( 6, yamlencode( service_annotations ) ) }
-
+    loadBalancerSourceRanges:
+      ${indent( 6, yamlencode( service_load_balancer_source_ranges ) ) }
   resources:
     requests:
       cpu: 300m

@@ -8,15 +8,15 @@ resource "helm_release" "nginx_ingress" {
   timeout    = 600
 
   values = [
-    templatefile("${path.module}/nginx-ingress-values.tpl",{
-      ingress_controller_type         = var.ingress_controller_type
-      ingress_class                   = var.ingress_class
-      ingress_external_traffic_policy = var.ingress_external_traffic_policy
-      service_account                 = var.service_account
-      service_annotations             = var.service_annotaitons
-      cluster_wide                    = var.cluster_wide
-      default_certificate             = var.default_certificate
-
+    templatefile("${path.module}/nginx-ingress-values.tpl", {
+      ingress_controller_type             = var.ingress_controller_type
+      ingress_class                       = var.ingress_class
+      ingress_external_traffic_policy     = var.ingress_external_traffic_policy
+      service_account                     = var.service_account
+      service_annotations                 = var.service_annotaitons
+      service_load_balancer_source_ranges = var.service_load_balancer_source_ranges
+      cluster_wide                        = var.cluster_wide
+      default_certificate                 = var.default_certificate
     })
   ]
 }
