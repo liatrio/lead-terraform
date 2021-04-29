@@ -212,7 +212,7 @@ module "internal_ingress" {
   ingress_controller_type         = var.ingress_controller_type
   ingress_external_traffic_policy = var.ingress_external_traffic_policy
   ingress_class                   = "internal-nginx"
-  service_annotaitons = {
+  service_annotations = {
     "service.beta.kubernetes.io/aws-load-balancer-internal": true
   }
   service_load_balancer_source_ranges = ["10.1.32.0/20"]

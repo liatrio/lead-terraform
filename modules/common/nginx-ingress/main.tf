@@ -13,7 +13,7 @@ resource "helm_release" "nginx_ingress" {
       ingress_class                       = var.ingress_class
       ingress_external_traffic_policy     = var.ingress_external_traffic_policy
       service_account                     = var.service_account
-      service_annotations                 = var.service_annotaitons
+      service_annotations                 = var.service_annotations
       service_load_balancer_source_ranges = var.service_load_balancer_source_ranges
       cluster_wide                        = var.cluster_wide
       default_certificate                 = var.default_certificate
