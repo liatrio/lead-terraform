@@ -1,3 +1,6 @@
+locals {
+  vault_address = var.vault_external ? "https://vault.${var.vault_namespace}.${var.cluster_domain}" : "http://vault.${var.vault_namespace}.svc.cluster.local"
+}
 provider "kubernetes" {
   alias = "staging"
 }
@@ -32,7 +35,7 @@ data "kubernetes_secret" "vault_root_token" {
 }
 
 provider "vault" {
-  address         = "http://vault.${var.vault_namespace}.svc.cluster.local"
+  address         = local.vault_address
   skip_tls_verify = true
   token           = data.kubernetes_secret.vault_root_token.data["token"]
 }

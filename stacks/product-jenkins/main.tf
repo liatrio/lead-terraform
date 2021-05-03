@@ -5,6 +5,7 @@ terraform {
 provider "kubernetes" {
   alias          = "toolchain"
   config_context = var.config_context
+  config_path    = var.config_path
 }
 
 provider "helm" {
@@ -13,12 +14,14 @@ provider "helm" {
 
   kubernetes {
     config_context = var.config_context
+    config_path    = var.config_path
   }
 }
 
 provider "kubernetes" {
   alias          = "staging"
   config_context = var.config_context
+  config_path    = var.config_path
 }
 
 provider "helm" {
@@ -26,12 +29,14 @@ provider "helm" {
 
   kubernetes {
     config_context = var.config_context
+    config_path    = var.config_path
   }
 }
 
 provider "kubernetes" {
   alias          = "production"
   config_context = var.config_context
+  config_path    = var.config_path
 }
 
 provider "helm" {
@@ -39,12 +44,14 @@ provider "helm" {
 
   kubernetes {
     config_context = var.config_context
+    config_path    = var.config_path
   }
 }
 
 provider "kubernetes" {
   alias          = "system"
   config_context = var.config_context
+  config_path    = var.config_path
 }
 
 provider "helm" {
@@ -52,6 +59,7 @@ provider "helm" {
 
   kubernetes {
     config_context = var.config_context
+    config_path    = var.config_path
   }
 }
 
@@ -71,6 +79,7 @@ module "product_jenkins" {
   pipelines               = var.pipelines
   vault_namespace         = var.vault_namespace
   vault_root_token_secret = var.vault_root_token_secret
+  vault_external          = var.vault_external
   jenkins_pipeline_source = var.jenkins_pipeline_source
 
   providers = {
