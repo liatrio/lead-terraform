@@ -103,3 +103,8 @@ variable "docker_registry_mirror" {
   default = ""
 }
 
+variable "github_runner_service_accounts" {
+  description = "a list of service accounts to apply IRSA trust policy to. each service account should be in the format `namespace:name`"
+  type        = list(string)
+  default     = []
+}
