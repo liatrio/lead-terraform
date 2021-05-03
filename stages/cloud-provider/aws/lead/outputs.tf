@@ -102,3 +102,11 @@ output "vault_dynamodb_table_name" {
 output "vault_kms_key_id" {
   value = aws_kms_key.vault_seal_key.key_id
 }
+
+output "velero_bucket_name" {
+  value = module.velero[0].velero_bucket_name
+}
+
+output "velero_service_account_arn" {
+  value = module.velero_iam[0].velero_service_account_arn
+}

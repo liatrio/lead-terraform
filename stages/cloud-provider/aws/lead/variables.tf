@@ -103,3 +103,10 @@ variable "docker_registry_mirror" {
   default = ""
 }
 
+variable "enable_velero" {
+  default = false
+}
+
+variable "velero_namespace" {
+  default = "velero"
+}
