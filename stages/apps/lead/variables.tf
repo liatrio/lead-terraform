@@ -98,7 +98,7 @@ variable "enable_gitlab" {
 variable "enable_mattermost" {
   default = false
 }
-  
+
 variable "enable_kibana_ingress" {
   default = false
 }
@@ -259,7 +259,7 @@ variable "github_runners" {
   type    = map(any)
   default = {}
 }
-    
+
 variable "jenkins_pipeline_source" {
   default = "git"
 }
@@ -269,15 +269,18 @@ variable "velero_namespace" {
 }
 
 variable "velero_bucket_name" {
+  default = ""
 }
 
 variable "velero_service_account_arn" {
+  default = ""
 }
 
 variable "enable_velero" {
-  default = true
+  default = false
 }
 
 variable "velero_enabled_namespaces" {
   type = list(string)
+  default = []
 }
