@@ -25,8 +25,8 @@ resource "aws_iam_role" "github_runners_service_account" {
       },
       "Action": "sts:AssumeRoleWithWebIdentity",
       "Condition": {
-        "StringEquals": {
-          "${replace(var.aws_iam_openid_connect_provider.url, "https://", "")}:sub": "system:serviceaccount:${var.service_account}"
+        "ForAnyValue:StringEquals": {
+          "${replace(var.aws_iam_openid_connect_provider.url, "https://", "")}:sub": ${jsonencode(formatlist("system:serviceaccount:%s", var.service_accounts))}
         }
       }
     }
