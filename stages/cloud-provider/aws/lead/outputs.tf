@@ -104,9 +104,9 @@ output "vault_kms_key_id" {
 }
 
 output "velero_bucket_name" {
-  value = module.velero[0].velero_bucket_name
+  value = var.enable_velero ? module.velero[0].velero_bucket_name : ""
 }
 
 output "velero_service_account_arn" {
-  value = module.velero_iam[0].velero_service_account_arn
+  value = var.enable_velero ? module.velero_iam[0].velero_service_account_arn : ""
 }
