@@ -108,3 +108,11 @@ variable "github_runner_service_accounts" {
   type        = list(string)
   default     = []
 }
+
+variable "enable_velero" {
+  default = false
+}
+
+variable "velero_namespace" {
+  default = "velero"
+}
