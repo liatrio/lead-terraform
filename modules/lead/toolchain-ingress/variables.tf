@@ -13,3 +13,7 @@ variable "ingress_controller_type" {
 variable "ingress_external_traffic_policy" {
   default = ""
 }
+
+variable "internal_ingress_source_ranges" {
+  type    = list(string)
+}
