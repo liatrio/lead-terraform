@@ -215,7 +215,7 @@ module "internal_ingress" {
   service_annotations = {
     "service.beta.kubernetes.io/aws-load-balancer-internal": true
   }
-  service_load_balancer_source_ranges = ["10.1.32.0/20"]
+  service_load_balancer_source_ranges = var.internal_ingress_source_ranges
   service_account                     = kubernetes_service_account.internal_nginx_ingress_service_account.metadata[0].name
   cluster_wide                        = true
   default_certificate                 = "${var.namespace}/${module.internal_wildcard.cert_secret_name}"

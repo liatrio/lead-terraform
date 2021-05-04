@@ -284,3 +284,7 @@ variable "velero_enabled_namespaces" {
   type = list(string)
   default = []
 }
+
+variable "vpn_cidr" {
+  default = "10.1.32.0/20"
+}
