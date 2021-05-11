@@ -9,7 +9,7 @@ rules:
   - apiGroups: ["apps"]
     resources: ["deployments", "statefulsets", "replicasets"]
     verbs: ["*"]
-  - apiGroups: ["networking.k8s.io"]
+  - apiGroups: ["networking.k8s.io", "extensions"]
     resources: ["ingresses"]
     verbs: ["*"]
   - apiGroups: ["policy"]
