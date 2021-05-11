@@ -18,4 +18,6 @@ rules:
   - apiGroups: ["rbac.authorization.k8s.io"]
     resources: ["roles", "rolebindings", "clusterroles", "clusterrolebindings"]
     verbs: ["*"]
-
+  - apiGroups: ["batch"]
+    resources: ["jobs"]
+    verbs: ["*"]
