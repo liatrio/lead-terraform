@@ -215,6 +215,9 @@ module "internal_ingress" {
   service_annotations = {
     "service.beta.kubernetes.io/aws-load-balancer-internal": true
   }
+  deployment_annotations = {
+    "downscaler/downtime-replicas": "1"
+  }
   service_load_balancer_source_ranges = var.internal_ingress_source_ranges
   service_account                     = kubernetes_service_account.internal_nginx_ingress_service_account.metadata[0].name
   cluster_wide                        = true

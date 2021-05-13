@@ -15,6 +15,7 @@ resource "helm_release" "nginx_ingress" {
       service_account                     = var.service_account
       service_annotations                 = var.service_annotations
       service_load_balancer_source_ranges = var.service_load_balancer_source_ranges
+      deployment_annotations              = var.deployment_annotations
       cluster_wide                        = var.cluster_wide
       default_certificate                 = var.default_certificate
     })
