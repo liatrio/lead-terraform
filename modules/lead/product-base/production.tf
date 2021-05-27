@@ -135,6 +135,12 @@ resource "kubernetes_role" "ci_production_role" {
     resources  = ["canaries", "canaries/status"]
     verbs      = ["*"]
   }
+
+  rule {
+    api_groups = ["cert-manager.io"]
+    resources  = ["certificates", "issuers"]
+    verbs      = ["*"]
+  }
 }
 
 resource "vault_database_secret_backend_role" "mongodb_production_role" {
