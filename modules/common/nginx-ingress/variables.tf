@@ -26,3 +26,7 @@ variable "service_load_balancer_source_ranges" {
   type    = list(string)
   default = []
 }
+
+variable "deployment_annotations" {
+  default = []
+}

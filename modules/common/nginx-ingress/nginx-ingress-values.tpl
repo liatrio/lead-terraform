@@ -24,10 +24,14 @@ controller:
   service:
     type: ${ingress_controller_type}
     externalTrafficPolicy: ${ingress_external_traffic_policy}
+    %{ if length(service_annotations) != 0 }
     annotations:
-      ${indent( 6, yamlencode( service_annotations ) ) }
+      ${indent(6, yamlencode(service_annotations))}
+    %{ endif }
+    %{ if length(service_load_balancer_source_ranges) != 0 }
     loadBalancerSourceRanges:
-      ${indent( 6, yamlencode( service_load_balancer_source_ranges ) ) }
+      ${indent(6, yamlencode(service_load_balancer_source_ranges))}
+    %{ endif }
   resources:
     requests:
       cpu: 300m
@@ -35,6 +39,10 @@ controller:
     limits:
       cpu: 750m
       memory: 512Mi
+  %{ if length(deployment_annotations) != 0 }
+  deploymentAnnotations:
+    ${indent(4, yamlencode(deployment_annotations))}
+  %{ endif }
 defaultBackend:
   resources:
     requests:
