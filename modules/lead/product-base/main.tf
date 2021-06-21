@@ -1,5 +1,5 @@
 locals {
-  vault_address = var.vault_external ? "https://vault.${var.vault_namespace}.${var.cluster_domain}" : "http://vault.${var.vault_namespace}.svc.cluster.local"
+  vault_address = var.vault_external ? "https://vault.${var.vault_namespace}.${var.cluster_domain}" : "http://vault.${var.vault_namespace}.svc.cluster.local:8200"
 }
 provider "kubernetes" {
   alias = "staging"
