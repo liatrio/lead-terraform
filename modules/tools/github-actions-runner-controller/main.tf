@@ -25,7 +25,7 @@ resource kubernetes_secret github_app {
 
 resource helm_release github_runner_controller {
   name       = local.release_name
-  repository = "https://github.com/actions-runner-controller/actions-runner-controller"
+  repository = "https://github.com/actions-runner-controller"
   chart      = "actions-runner-controller"
   version    = "0.12.6"
   namespace  = module.github_runner_controller_namespace.name
