@@ -11,12 +11,13 @@ autoscaling:
   targetCPUUtilizationPercentage: ${runner_autoscaling_cpu_util}
 
 githubWebhookServer:
-  enabled: false
+  enabled: true
+  syncPeriod: 1m
   ingress:
+    enabled: true
     hostName: ${ingress_hostname}
     annotations:
-      kubernetes.io/ingress.class: "toolchain-nginx"
-      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      ${indent( 4, yamlencode( github_webhook_annotations ) ) }
     tls:
     - hosts:
       - ${ingress_hostname}
