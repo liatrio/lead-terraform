@@ -14,10 +14,10 @@ githubWebhookServer:
   enabled: true
   syncPeriod: 1m
   ingress:
-    enabled: true
-    hostName: ${ingress_hostname}
-    annotations:
-      ${indent( 4, yamlencode( github_webhook_annotations ) ) }
-    tls:
-    - hosts:
-      - ${ingress_hostname}
+    enabled: false
+#    hostName: ${ingress_hostname}
+#    annotations:
+#      ${indent( 4, yamlencode( github_webhook_annotations ) ) }
+#    tls:
+#    - hosts:
+#      - ${ingress_hostname}
