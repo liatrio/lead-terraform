@@ -35,6 +35,12 @@ variable github_org {
   type = string
 }
 
+variable github_webhook_annotations {
+  type = map(string)
+  description = "Annotations for githubWebhookServer Ingress"
+  default = {}
+}
+
 variable controller_replica_count {
   type        = number
   default     = 1
@@ -62,3 +68,4 @@ variable runner_autoscaling_cpu_util {
   default     = 80
   description = "CPU utilization percent at which to trigger a scale up"
 }
+
