@@ -20,5 +20,6 @@ githubWebhookServer:
       ${indent( 4, yamlencode( github_webhook_annotations ) ) }
     hosts:
       - host: ${ingress_hostname}
-        paths: ["/"]
+        paths:
+          - "/"
     tls: []
