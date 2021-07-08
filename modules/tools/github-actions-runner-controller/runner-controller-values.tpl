@@ -22,4 +22,6 @@ githubWebhookServer:
       - host: ${ingress_hostname}
         paths:
         - path: "/"
-    tls: []
+    tls:
+    - hosts:
+      - ${ingress_hostname}
