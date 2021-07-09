@@ -3,7 +3,7 @@ kind: RunnerDeployment
 metadata:
   name: {{ .Release.Name }}
 spec:
-  replicas: {{ .Values.initialReplicas }}
+#  replicas: {{ .Values.initialReplicas }}
   template:
     spec:
       labels:

@@ -34,7 +34,7 @@ resource helm_release github_runner_controller {
   values = [
     templatefile("${path.module}/runner-controller-values.tpl", {
       secret_name: local.auth_secret_full_name
-      controller_replica_count = var.controller_replica_count
+      controller_replica_count: var.controller_replica_count
       runner_autoscaling_enabled: var.runner_autoscaling_enabled
       runner_autoscaling_min_replicas: var.runner_autoscaling_min_replicas
       runner_autoscaling_max_replicas: var.runner_autoscaling_max_replicas

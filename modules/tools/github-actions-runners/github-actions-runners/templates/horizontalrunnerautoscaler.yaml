@@ -1,16 +1,22 @@
-# apiVersion: actions.summerwind.dev/v1alpha1
-# kind: HorizontalRunnerAutoscaler
-# metadata:
-#   name: {{ .Release.Name }}
-# spec:
-#   scaleTargetRef:
-#     name: {{ .Release.Name }}
-#   minReplicas: {{ .Values.minReplicas }}
-#   maxReplicas: {{ .Values.maxReplicas}}
-#   scaleUpTriggers:
-#     - githubEvent:
-#         checkRun:
-#           types: [ "created" ]
-#           status: "queued"
-#       amount: {{ .Values.scaleAmount }}
-#       duration: {{ .Values.scaleDuration }}
+apiVersion: actions.summerwind.dev/v1alpha1
+kind: HorizontalRunnerAutoscaler
+metadata:
+  name: {{ .Release.Name }}
+spec:
+  scaleTargetRef:
+    name: {{ .Release.Name }}
+  minReplicas: {{ .Values.minReplicas }}
+  maxReplicas: {{ .Values.maxReplicas}}
+  scaleUpTriggers:
+    - githubEvent:
+        checkRun:
+          types: [ "created" ]
+          status: "queued"
+      amount: {{ .Values.scaleAmount }}
+      duration: {{ .Values.scaleDuration }}
+  metrics:
+  - type: PercentageRunnersBusy
+    scaleUpThreshold: '0.75'    # The percentage of busy runners at which the number of desired runners are re-evaluated to scale up
+    scaleDownThreshold: '0.3'   # The percentage of busy runners at which the number of desired runners are re-evaluated to scale down
+    ScaleUpAdjustment: '2'      # The scale up runner count added to desired count
+    ScaleDownAdjustment: '1'    # The scale down runner count subtracted from the desired count  
