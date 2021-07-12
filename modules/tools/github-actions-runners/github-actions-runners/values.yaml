@@ -1,4 +1,4 @@
-initialReplicas: 1
+initialReplicas: 0
 minReplicas: 1
 maxReplicas: 3
 scaleAmount: 1
