@@ -25,21 +25,22 @@ resource kubernetes_secret github_app {
 
 resource helm_release github_runner_controller {
   name       = local.release_name
-  repository = "https://summerwind.github.io/actions-runner-controller"
+  repository = "https://actions-runner-controller.github.io/actions-runner-controller"
   chart      = "actions-runner-controller"
-  version    = "0.10.5"
+  version    = "0.12.6"
   namespace  = module.github_runner_controller_namespace.name
   wait       = true
 
   values = [
     templatefile("${path.module}/runner-controller-values.tpl", {
       secret_name: local.auth_secret_full_name
-      controller_replica_count = var.controller_replica_count
+      controller_replica_count: var.controller_replica_count
       runner_autoscaling_enabled: var.runner_autoscaling_enabled
       runner_autoscaling_min_replicas: var.runner_autoscaling_min_replicas
       runner_autoscaling_max_replicas: var.runner_autoscaling_max_replicas
       runner_autoscaling_cpu_util: var.runner_autoscaling_cpu_util
       ingress_hostname: local.ingress_hostname
+      github_webhook_annotations: var.github_webhook_annotations
     })
   ]
 
