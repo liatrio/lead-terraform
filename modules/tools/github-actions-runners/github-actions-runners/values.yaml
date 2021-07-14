@@ -1,5 +1,5 @@
 initialReplicas: 0
-minReplicas: 1
+minReplicas: 0
 maxReplicas: 3
 scaleAmount: 1
 scaleDuration: "10m"
