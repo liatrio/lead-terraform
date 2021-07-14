@@ -10,6 +10,10 @@ autoscaling:
   maxReplicas: ${runner_autoscaling_max_replicas}
   targetCPUUtilizationPercentage: ${runner_autoscaling_cpu_util}
 
+scope:
+  singleNamespace: true
+  watchNamespace: ""
+
 githubWebhookServer:
   enabled: true
   syncPeriod: 1m
