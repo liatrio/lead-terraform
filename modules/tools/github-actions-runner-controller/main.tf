@@ -46,10 +46,6 @@ resource "helm_release" "github_runner_controller" {
     templatefile("${path.module}/runner-controller-values.tpl", {
       secret_name : local.auth_secret_full_name
       controller_replica_count : var.controller_replica_count
-      runner_autoscaling_enabled : var.runner_autoscaling_enabled
-      runner_autoscaling_min_replicas : var.runner_autoscaling_min_replicas
-      runner_autoscaling_max_replicas : var.runner_autoscaling_max_replicas
-      runner_autoscaling_cpu_util : var.runner_autoscaling_cpu_util
       ingress_hostname : local.ingress_hostname
       github_webhook_annotations : var.github_webhook_annotations
     })

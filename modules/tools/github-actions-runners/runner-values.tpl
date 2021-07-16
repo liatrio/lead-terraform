@@ -19,3 +19,8 @@ dockerdContainerResources:
   limits:
     cpu: 500m 
     memory: 512Mi
+horizontalRunnerAutoscaler:
+  minReplicas: ${autoscaler_min_replicas}
+  maxReplicas: ${autoscaler_max_replicas}
+  scaleAmount: ${autoscaler_scale_amount}
+  scaleDuration: ${autoscaler_scale_duration}

@@ -30,3 +30,23 @@ variable "github_runners_service_account_annotations" {
   description = "Annotations to mount to Github Runner Service Account"
   default     = {}
 }
+
+variable "runner_autoscaler_min_replicas" {
+  type    = number
+  default = 1
+}
+
+variable "runner_autoscaler_max_replicas" {
+  type    = number
+  default = 10
+}
+
+variable "runner_autoscaler_scale_ammount" {
+  type    = number
+  default = 1
+}
+
+variable "runner_autoscaler_scale_duration" {
+  type    = string
+  default = "5m"
+}

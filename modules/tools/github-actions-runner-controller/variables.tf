@@ -51,26 +51,3 @@ variable "controller_replica_count" {
   default     = 1
   description = "How many actions runner controller instances to deploy"
 }
-
-
-variable "runner_autoscaling_enabled" {
-  type    = bool
-  default = false
-}
-
-variable "runner_autoscaling_min_replicas" {
-  type    = number
-  default = 1
-}
-
-variable "runner_autoscaling_max_replicas" {
-  type    = number
-  default = 10
-}
-
-variable "runner_autoscaling_cpu_util" {
-  type        = number
-  default     = 80
-  description = "CPU utilization percent at which to trigger a scale up"
-}
-
