@@ -38,7 +38,7 @@ resource "helm_release" "github_runner_controller" {
   name       = local.release_name
   repository = "https://actions-runner-controller.github.io/actions-runner-controller"
   chart      = "actions-runner-controller"
-  version    = "0.12.6"
+  version    = "0.12.7"
   namespace  = module.github_runner_controller_namespace.name
   wait       = true
 
