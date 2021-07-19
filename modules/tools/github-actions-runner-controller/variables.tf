@@ -8,12 +8,6 @@ variable "namespace" {
   description = "Namespace to deploy the controller to"
 }
 
-variable "cluster_domain" {
-  type        = string
-  description = "Base domain for ingress"
-}
-
-
 variable "auth_secret_name" {
   type        = string
   default     = "controller-manager"
@@ -44,6 +38,11 @@ variable "github_webhook_annotations" {
 variable "github_webhook_secret_token" {
   description = "Secret token sent by GitHub webhook"
   type        = string
+}
+
+variable "ingress_domain" {
+  default = "cluster.local"
+  type = string
 }
 
 variable "controller_replica_count" {
