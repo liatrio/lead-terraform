@@ -10,10 +10,14 @@ resource "helm_release" "github_runners" {
 
   values = [
     templatefile("${path.module}/runner-values.tpl", {
-      github_org         = var.github_org
-      image              = var.image
-      labels             = var.labels
-      runner_annotations = var.github_runners_service_account_annotations
+      github_org                = var.github_org
+      image                     = var.image
+      labels                    = var.labels
+      runner_annotations        = var.github_runners_service_account_annotations
+      autoscaler_min_replicas   = var.runner_autoscaler_min_replicas
+      autoscaler_max_replicas   = var.runner_autoscaler_max_replicas
+      autoscaler_scale_amount   = var.runner_autoscaler_scale_ammount
+      autoscaler_scale_duration = var.runner_autoscaler_scale_duration
     })
   ]
 }
