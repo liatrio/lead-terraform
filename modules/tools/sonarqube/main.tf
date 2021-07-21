@@ -13,7 +13,7 @@ resource "helm_release" "sonarqube" {
   name       = "sonarqube"
   namespace  = var.namespace
   chart      = "sonarqube"
-  version    = "6.6.0"
+  version    = "9.6.3"
   timeout    = 1200
   wait       = true
 
