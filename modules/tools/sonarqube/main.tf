@@ -17,19 +17,14 @@ resource "helm_release" "sonarqube" {
   timeout    = 1200
   wait       = true
 
-  set {
-    name  = "ingress.enabled"
-    value = "false"
-  }
-
-  set {
-    name  = "service.type"
-    value = "ClusterIP"
-  }
-
   set_sensitive {
     name  = "postgresql.postgresPassword"
     value = random_string.sonarqube_db_password.result
+  }
+
+  set_sensitive {
+    name  = "account.adminPassword"
+    value = var.admin_password
   }
 
   values = [data.template_file.sonarqube_values.rendered]

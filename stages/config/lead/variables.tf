@@ -22,6 +22,10 @@ variable "enable_artifactory_jcr" {
   default = false
 }
 
+variable "enable_sonarqube" {
+  default = false
+}
+
 variable "keycloak_hostname" {
   description = "Keycloak hostname provided by app stage"
 }
