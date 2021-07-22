@@ -3,10 +3,6 @@ resource "random_string" "sonarqube_db_password" {
   special = false
 }
 
-data "template_file" "sonarqube_values" {
-  template = file("${path.module}/sonarqube-values.tpl")
-}
-
 resource "helm_release" "sonarqube" {
   count      = var.enable_sonarqube ? 1 : 0
   repository = "https://oteemo.github.io/charts"
@@ -27,7 +23,13 @@ resource "helm_release" "sonarqube" {
     value = var.admin_password
   }
 
-  values = [data.template_file.sonarqube_values.rendered]
+  values = [
+    templatefile("${path.module}/sonarqube-values.tpl", {
+      ingress_enabled     = var.ingress_enabled
+      ingress_hostname    = var.ingress_hostname
+      ingress_annotations = var.ingress_annotations
+    })
+  ]
 }
 
 resource "kubernetes_secret" "jenkins_sonar" {
