@@ -31,27 +31,3 @@ resource "helm_release" "sonarqube" {
     })
   ]
 }
-
-resource "kubernetes_secret" "jenkins_sonar" {
-  metadata {
-    name      = "jenkins-sonarqube-credential"
-    namespace = var.namespace
-
-    labels = {
-      "app.kubernetes.io/name"       = "jenkins"
-      "app.kubernetes.io/instance"   = "jenkins"
-      "app.kubernetes.io/component"  = "jenkins-master"
-      "app.kubernetes.io/managed-by" = "Terraform"
-      "jenkins.io/credentials-type"  = "usernamePassword"
-    }
-  }
-
-  type = "Opaque"
-
-  data = {
-    #    username = "jenkins"
-    #    password = "${random_string.sonar_jenkins_password.result}"
-    username = "admin"
-    password = "admin"
-  }
-}
