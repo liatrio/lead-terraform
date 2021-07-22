@@ -27,3 +27,7 @@ variable "ingress_hostname" {
 
 variable "namespace" {}
 
+variable "postgres_password" {
+  type      = string
+  sensitive = true
+}

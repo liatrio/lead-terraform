@@ -1,8 +1,3 @@
-resource "random_string" "sonarqube_db_password" {
-  length  = 10
-  special = false
-}
-
 resource "helm_release" "sonarqube" {
   count      = var.enable_sonarqube ? 1 : 0
   repository = "https://oteemo.github.io/charts"
@@ -15,7 +10,7 @@ resource "helm_release" "sonarqube" {
 
   set_sensitive {
     name  = "postgresql.postgresPassword"
-    value = random_string.sonarqube_db_password.result
+    value = var.postgres_password
   }
 
   set_sensitive {
