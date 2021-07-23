@@ -4,8 +4,8 @@ data "vault_generic_secret" "sonarqube" {
 
 module "sonarqube" {
   source = "../../../modules/tools/sonarqube"
+  count  = var.enable_sonarqube ? 1 : 0
 
-  enable_sonarqube  = var.enable_sonarqube
   admin_password    = data.vault_generic_secret.sonarqube.data["admin_password"]
   postgres_password = data.vault_generic_secret.sonarqube.data["postgres_password"]
   namespace         = var.toolchain_namespace

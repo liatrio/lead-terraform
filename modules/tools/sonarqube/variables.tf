@@ -3,10 +3,6 @@ variable "admin_password" {
   sensitive = true
 }
 
-variable "enable_sonarqube" {
-  default = true
-}
-
 variable "force_authentication" {
   default     = true
   description = "Require authentication. Set to false to enable anoymouse access."

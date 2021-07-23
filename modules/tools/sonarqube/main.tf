@@ -1,5 +1,4 @@
 resource "helm_release" "sonarqube" {
-  count      = var.enable_sonarqube ? 1 : 0
   repository = "https://oteemo.github.io/charts"
   name       = "sonarqube"
   namespace  = var.namespace
