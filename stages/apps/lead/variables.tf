@@ -68,7 +68,7 @@ variable "enable_operators" {
 }
 
 variable "enable_sonarqube" {
-  default = true
+  default = false
 }
 
 variable "enable_harbor" {
@@ -80,7 +80,7 @@ variable "enable_artifactory_jcr" {
 }
 
 variable "enable_rode" {
-  default = true
+  default = false
 }
 
 variable "enable_dashboard" {

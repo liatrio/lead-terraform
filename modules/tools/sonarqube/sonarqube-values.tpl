@@ -1,3 +1,12 @@
+sonarProperties:
+  sonar.forceAuthentication: ${ force_authentication }
+ingress:
+  enabled: ${ ingress_enabled }
+  hosts:
+    - name: ${ ingress_hostname }
+      path: "/"
+  annotations:
+    ${indent( 4, yamlencode( ingress_annotations ) ) }
 resources:
   requests:
     cpu: 50m
