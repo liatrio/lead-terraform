@@ -1,5 +1,5 @@
 sonarProperties:
-  sonar.forceAuthentication: true
+  sonar.forceAuthentication: ${ force_authentication }
 ingress:
   enabled: ${ ingress_enabled }
   hosts:

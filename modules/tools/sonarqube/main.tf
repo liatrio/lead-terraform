@@ -19,9 +19,10 @@ resource "helm_release" "sonarqube" {
 
   values = [
     templatefile("${path.module}/sonarqube-values.tpl", {
-      ingress_enabled     = var.ingress_enabled
-      ingress_hostname    = var.ingress_hostname
-      ingress_annotations = var.ingress_annotations
+      ingress_enabled      = var.ingress_enabled
+      ingress_hostname     = var.ingress_hostname
+      ingress_annotations  = var.ingress_annotations
+      force_authentication = var.force_authentication
     })
   ]
 }

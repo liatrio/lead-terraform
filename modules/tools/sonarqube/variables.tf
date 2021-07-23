@@ -5,7 +5,7 @@ variable "admin_password" {
 
 variable "force_authentication" {
   default     = true
-  description = "Require authentication. Set to false to enable anoymouse access."
+  description = "Require authentication. Set to false to enable anonymous access."
 }
 
 variable "ingress_annotations" {
