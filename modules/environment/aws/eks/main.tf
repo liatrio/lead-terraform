@@ -132,7 +132,7 @@ resource "aws_security_group" "elb" {
 
 module "eks" {
   source                                       = "terraform-aws-modules/eks/aws"
-  version                                      = "13.2.1"
+  version                                      = "17.1.0"
   cluster_version                              = var.cluster_version
   cluster_name                                 = var.cluster
   subnets                                      = sort(data.aws_subnet_ids.eks_masters.ids)
