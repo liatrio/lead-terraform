@@ -93,6 +93,7 @@ output "vault_aws_access_key_id" {
 
 output "vault_aws_secret_access_key" {
   value = aws_iam_access_key.vault_key.secret
+  sensitive = true
 }
 
 output "vault_dynamodb_table_name" {

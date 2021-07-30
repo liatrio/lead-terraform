@@ -9,7 +9,7 @@ systemctl enable amazon-ssm-agent
 
 echo '{"registry-mirrors": [${ var.docker_registry_mirror != "" ? format("\"%s\"", var.docker_registry_mirror) : ""}]}' | cat /etc/docker/daemon.json - | jq -s '.[0] * .[1]' > /tmp/daemon.json
 mv /tmp/daemon.json /etc/docker/daemon.json
-systemctl reload docker
+systemctl restart docker
 EOF
 
   tags = {
@@ -132,7 +132,7 @@ resource "aws_security_group" "elb" {
 
 module "eks" {
   source                                       = "terraform-aws-modules/eks/aws"
-  version                                      = "17.1.0"
+  version                                      = "16.2.0"
   cluster_version                              = var.cluster_version
   cluster_name                                 = var.cluster
   subnets                                      = sort(data.aws_subnet_ids.eks_masters.ids)
