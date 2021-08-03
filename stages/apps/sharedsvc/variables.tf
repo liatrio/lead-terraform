@@ -48,3 +48,7 @@ variable "docker_registry_s3_bucket_name" {}
 variable "dashboard_version" {
   default = "v2.0.1-11-g444016b"
 }
+
+variable "vault_address" {}
+
+variable "iam_caller_identity_headers" {}
