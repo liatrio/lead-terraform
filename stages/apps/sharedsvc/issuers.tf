@@ -25,10 +25,10 @@ module "internal_services_cluster_issuer" {
   ]
 }
 
-module "internal_services_cluster_issuer_external" {
+module "external_services_cluster_issuer" {
   source        = "../../../modules/common/cert-issuer"
   namespace     = module.system_namespace.name
-  issuer_name   = "letsencrypt-dns"
+  issuer_name   = "letsencrypt-dns-external"
   issuer_kind   = "ClusterIssuer"
   issuer_type   = "acme"
   issuer_server = "https://acme-v02.api.letsencrypt.org/directory"

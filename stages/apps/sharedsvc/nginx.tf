@@ -27,8 +27,8 @@ module "wildcard_external" {
   domain    = var.cluster_domain
   enabled   = true
 
-  issuer_name = module.internal_services_cluster_issuer_external.issuer_name
-  issuer_kind = module.internal_services_cluster_issuer_external.issuer_kind
+  issuer_name = module.external_services_cluster_issuer.issuer_name
+  issuer_kind = module.external_services_cluster_issuer.issuer_kind
 }
 
 module "nginx" {
@@ -36,6 +36,7 @@ module "nginx" {
   default_certificate = "${module.nginx_ingress_namespace.name}/${module.wildcard.cert_secret_name}"
   internal            = true
   namespace           = module.nginx_ingress_namespace.name
+  name                = "internal"
 }
 
 module "nginx_external" {
@@ -44,4 +45,5 @@ module "nginx_external" {
   internal            = false
   namespace           = module.nginx_ingress_namespace.name
   ingress_class       = "nginx-external"
+  name                = "external"
 }
