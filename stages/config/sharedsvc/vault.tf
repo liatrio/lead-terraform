@@ -47,6 +47,7 @@ resource "vault_aws_auth_backend_role" "aws_admin" {
     local.sandbox_aws_account,
     local.remote_k8s_aws_account,
     local.rtx_aws_account,
+    local.sharedsvc_aws_account,
   ])
   resolve_aws_unique_ids   = false
   token_policies           = [
@@ -64,6 +65,7 @@ resource "vault_aws_auth_backend_role" "aws_developer" {
     local.sandbox_aws_account,
     local.remote_k8s_aws_account,
     local.rtx_aws_account,
+    local.sharedsvc_aws_account,
   ])
   resolve_aws_unique_ids   = false
   token_policies           = [
