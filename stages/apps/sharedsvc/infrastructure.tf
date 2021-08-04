@@ -34,7 +34,6 @@ module "external_dns" {
     "eks.amazonaws.com/role-arn" = var.external_dns_service_account_arn
   }
   domain_filters              = [
-    var.cluster_domain,
     var.internal_cluster_domain
   ]
   namespace                   = module.system_namespace.name
@@ -50,7 +49,7 @@ module "external_dns_public" {
   istio_enabled               = false
   dns_provider                = "aws"
   service_account_annotations = {
-    "eks.amazonaws.com/role-arn" = var.external_dns_service_account_arn
+    "eks.amazonaws.com/role-arn" = var.external_dns_public_service_account_arn
   }
   domain_filters              = [
     var.cluster_domain
@@ -58,6 +57,7 @@ module "external_dns_public" {
   namespace                   = module.system_namespace.name
   aws_zone_type               = "public"
   watch_services              = true
+  exclude_domains             = [var.internal_cluster_domain]
 }
 
 module "cert_manager" {

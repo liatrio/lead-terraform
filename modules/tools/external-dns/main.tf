@@ -2,27 +2,28 @@ resource "helm_release" "external_dns" {
   count      = var.enabled ? 1 : 0
   repository = "https://charts.bitnami.com/bitnami"
   chart      = "external-dns"
-  version    = "2.21.1"
+  version    = "5.2.3"
   namespace  = var.namespace
   name       = var.release_name
   timeout    = 600
 
   values = [
     templatefile("${path.module}/values.tpl", {
-      aws_zone_type  = var.aws_zone_type
-      dns_provider   = var.dns_provider
-      domain_filters = yamlencode(var.domain_filters)
-      istio_enabled  = var.istio_enabled
-      watch_services = var.watch_services
+      aws_zone_type   = var.aws_zone_type
+      dns_provider    = var.dns_provider
+      domain_filters  = yamlencode(var.domain_filters)
+      istio_enabled   = var.istio_enabled
+      watch_services  = var.watch_services
+      exclude_domains = var.exclude_domains
     })
   ]
 
   set {
-    name  = "rbac.serviceAccountName"
+    name  = "serviceAccount.name"
     value = kubernetes_service_account.external_dns_service_account[0].metadata[0].name
   }
   set {
-    name  = "rbac.serviceAccountCreate"
+    name  = "serviceAccount.create"
     value = "false"
   }
   set {

@@ -39,6 +39,7 @@ variable "vault_kms_key_id" {
 
 variable "cluster_autoscaler_service_account_arn" {}
 variable "external_dns_service_account_arn" {}
+variable "external_dns_public_service_account_arn" {}
 variable "cert_manager_service_account_arn" {}
 
 variable "docker_registry_aws_access_key_id" {}
