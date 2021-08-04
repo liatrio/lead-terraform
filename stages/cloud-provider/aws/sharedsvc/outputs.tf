@@ -37,6 +37,11 @@ output "cluster_autoscaler_service_account_arn" {
 output "external_dns_service_account_arn" {
   value = module.external_dns_iam.external_dns_service_account_arn
 }
+
+output "external_dns_public_service_account_arn" {
+  value = module.external_dns_iam_public.external_dns_service_account_arn
+}
+
 output "cert_manager_service_account_arn" {
   value = module.cert_manager_iam.cert_manager_service_account_arn
 }
