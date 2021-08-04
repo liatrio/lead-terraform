@@ -42,6 +42,24 @@ module "external_dns" {
   watch_services              = true
 }
 
+module "external_dns_public" {
+  source = "../../../modules/tools/external-dns"
+
+  enabled                     = true
+  release_name                = "external-dns-public"
+  istio_enabled               = false
+  dns_provider                = "aws"
+  service_account_annotations = {
+    "eks.amazonaws.com/role-arn" = var.external_dns_service_account_arn
+  }
+  domain_filters              = [
+    var.cluster_domain
+  ]
+  namespace                   = module.system_namespace.name
+  aws_zone_type               = "public"
+  watch_services              = true
+}
+
 module "cert_manager" {
   source                                = "../../../modules/tools/cert-manager"
   namespace                             = module.system_namespace.name
@@ -66,7 +84,7 @@ module "aws_node_termination_handler" {
 module "kube_janitor" {
   source = "../../../modules/tools/kube-janitor"
 
-  namespace    = module.system_namespace.name
+  namespace = module.system_namespace.name
 }
 
 module "essential_toleration_values" {
