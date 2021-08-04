@@ -38,7 +38,7 @@ resource "helm_release" "external_dns" {
 resource "kubernetes_service_account" "external_dns_service_account" {
   count                           = var.enabled ? 1 : 0
   metadata {
-    name        = "external-dns"
+    name        = var.release_name
     namespace   = var.namespace
     annotations = var.service_account_annotations
   }
@@ -48,7 +48,7 @@ resource "kubernetes_service_account" "external_dns_service_account" {
 resource "kubernetes_cluster_role" "external_dns_role" {
   count = var.enabled ? 1 : 0
   metadata {
-    name = "external-dns-manager"
+    name = "${var.release_name}-manager"
   }
   rule {
     api_groups = [
@@ -99,7 +99,7 @@ resource "kubernetes_cluster_role" "external_dns_role" {
 resource "kubernetes_cluster_role_binding" "external_dns_role_binding" {
   count = var.enabled ? 1 : 0
   metadata {
-    name = "external-dns-binding"
+    name = "${var.release_name}-binding"
   }
   role_ref {
     api_group = "rbac.authorization.k8s.io"
