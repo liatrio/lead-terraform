@@ -4,7 +4,7 @@ resource "helm_release" "external_dns" {
   chart      = "external-dns"
   version    = "2.21.1"
   namespace  = var.namespace
-  name       = "external-dns"
+  name       = var.release_name
   timeout    = 600
 
   values = [
