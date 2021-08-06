@@ -37,7 +37,7 @@ server:
 
   extraContainers:
     - name: vault-init
-      image: harbor.parker.gg/library/vault-init:v1
+      image: ghcr.io/liatrio/vault-init:v0.3
       env:
         - name: K8S_SECRET_NAME
           value: ${vault_credentials_secret_name}
