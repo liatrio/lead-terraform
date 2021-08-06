@@ -12,15 +12,9 @@ storage "dynamodb" {
   table      = "${dynamodb_table_name}"
 
   max_parallel = "20"
-
-  access_key = "${aws_access_key_id}"
-  secret_key = "${aws_secret_access_key}"
 }
 
 seal "awskms" {
   region     = "${region}"
-  access_key = "${aws_access_key_id}"
-  secret_key = "${aws_secret_access_key}"
-
   kms_key_id = "${kms_key_id}"
 }
