@@ -34,3 +34,12 @@ variable "namespace" {
 variable "aws_zone_type" {
   default = "public"
 }
+
+variable "release_name" {
+  default = "external-dns"
+}
+
+variable "exclude_domains" {
+  type = list(string)
+  default = []
+}

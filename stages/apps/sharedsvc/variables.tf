@@ -39,6 +39,7 @@ variable "vault_kms_key_id" {
 
 variable "cluster_autoscaler_service_account_arn" {}
 variable "external_dns_service_account_arn" {}
+variable "external_dns_public_service_account_arn" {}
 variable "cert_manager_service_account_arn" {}
 
 variable "docker_registry_aws_access_key_id" {}
@@ -48,3 +49,9 @@ variable "docker_registry_s3_bucket_name" {}
 variable "dashboard_version" {
   default = "v2.0.1-11-g444016b"
 }
+
+variable "vault_address" {
+  default = "https://vault.internal.services.liatr.io"
+}
+
+variable "iam_caller_identity_headers" {}
