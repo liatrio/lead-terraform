@@ -41,7 +41,7 @@ module "nginx" {
 
 module "nginx_external" {
   source              = "../../../modules/tools/nginx"
-  default_certificate = "${module.nginx_ingress_namespace.name}/${module.wildcard.cert_secret_name}"
+  default_certificate = "${module.nginx_ingress_namespace.name}/${module.wildcard_external.cert_secret_name}"
   internal            = false
   namespace           = module.nginx_ingress_namespace.name
   ingress_class       = "nginx-external"
