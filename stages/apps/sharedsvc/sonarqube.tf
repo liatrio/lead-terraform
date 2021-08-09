@@ -1,5 +1,3 @@
-data "aws_caller_identity" "current" {}
-
 data "vault_generic_secret" "sonarqube" {
   path = "lead/aws/${data.aws_caller_identity.current.account_id}/sonarqube"
 }
