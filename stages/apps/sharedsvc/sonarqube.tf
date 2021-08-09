@@ -16,7 +16,7 @@ module "sonarqube" {
   ingress_enabled   = true
   ingress_hostname  = "sonarqube.${var.cluster_domain}"
   ingress_annotations = {
-    "kubernetes.io/ingress.class" : "nginx-external"
+    "kubernetes.io/ingress.class" : module.nginx_external.ingress_class
   }
 }
 

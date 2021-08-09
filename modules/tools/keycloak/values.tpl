@@ -25,7 +25,7 @@ extraEnv: |
 ingress:
   enabled: true
   annotations:
-    kubernetes.io/ingress.class: "toolchain-nginx"
+    kubernetes.io/ingress.class: "${ingress_class}"
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
     nginx.ingress.kubernetes.io/configuration-snippet: |

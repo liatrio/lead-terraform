@@ -14,4 +14,5 @@ module "keycloak" {
   cluster_domain          = var.cluster_domain
   postgres_password       = data.vault_generic_secret.keycloak.data["postgres-password"]
   keycloak_admin_password = data.vault_generic_secret.keycloak.data["admin-password"]
+  ingress_class           = module.nginx_external.ingress_class
 }

@@ -21,6 +21,7 @@ resource "helm_release" "keycloak" {
 
   values = [
     templatefile("${path.module}/values.tpl", {
+      ingress_class    = var.ingress_class
       ingress_hostname = "keycloak.${var.cluster_domain}"
       keycloak_secret  = kubernetes_secret.keycloak_credentials.metadata[0].name
     })
