@@ -9,7 +9,7 @@ systemctl enable amazon-ssm-agent
 
 echo '{"registry-mirrors": [${ var.docker_registry_mirror != "" ? format("\"%s\"", var.docker_registry_mirror) : ""}]}' | cat /etc/docker/daemon.json - | jq -s '.[0] * .[1]' > /tmp/daemon.json
 mv /tmp/daemon.json /etc/docker/daemon.json
-systemctl restart docker
+systemctl reload docker
 EOF
 
   tags = {
