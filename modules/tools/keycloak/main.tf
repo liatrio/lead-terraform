@@ -12,8 +12,6 @@ resource "kubernetes_secret" "keycloak_credentials" {
 }
 
 resource "helm_release" "keycloak" {
-  count      = var.enable_keycloak ? 1 : 0
-
   repository = "https://codecentric.github.io/helm-charts"
   name       = "keycloak"
   namespace  = var.namespace
@@ -23,9 +21,7 @@ resource "helm_release" "keycloak" {
 
   values = [
     templatefile("${path.module}/values.tpl", {
-      ssl_redirect     = var.root_zone_name == "localhost" ? false : true
-      cluster_domain   = "${var.cluster}.${var.root_zone_name}"
-      ingress_hostname = "keycloak.${var.namespace}.${var.cluster}.${var.root_zone_name}"
+      ingress_hostname = "keycloak.${var.cluster_domain}"
       keycloak_secret  = kubernetes_secret.keycloak_credentials.metadata[0].name
     })
   ]
