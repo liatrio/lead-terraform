@@ -1,5 +1,9 @@
 sonarProperties:
   sonar.forceAuthentication: ${ force_authentication }
+  sonar.core.serverBaseURL: "https://${ ingress_hostname }"
+plugins:
+  install:
+  - "https://github.com/vaulttec/sonar-auth-oidc/releases/download/v2.0.0/sonar-auth-oidc-plugin-2.0.0.jar"
 ingress:
   enabled: ${ ingress_enabled }
   hosts:
