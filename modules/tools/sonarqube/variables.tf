@@ -27,3 +27,24 @@ variable "postgres_password" {
   type      = string
   sensitive = true
 }
+
+variable "enable_keycloak" {
+  type = bool
+  default = false
+}
+
+variable "keycloak_issuer_uri" {
+  type = string
+  default = ""
+}
+
+variable "keycloak_client_id" {
+  type = string
+  default = ""
+}
+
+variable "keycloak_client_secret" {
+  type = string
+  sensitive = true
+  default = ""
+}
