@@ -4,6 +4,7 @@ data "vault_generic_secret" "sonarqube" {
 
 locals {
   sonar_keycloak_client_id = "sonarqube"
+  sonarqube_hostname = "sonarqube.${var.cluster_domain}"
 }
 
 
@@ -19,7 +20,7 @@ module "sonarqube" {
   postgres_password = data.vault_generic_secret.sonarqube.data["postgres"]
   namespace         = module.sonarqube_namespace.name
   ingress_enabled   = true
-  ingress_hostname  = "sonarqube.${var.cluster_domain}"
+  ingress_hostname  = local.sonarqube_hostname
   ingress_annotations = {
     "kubernetes.io/ingress.class" : module.nginx_external.ingress_class
   }

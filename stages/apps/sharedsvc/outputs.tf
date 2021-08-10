@@ -2,8 +2,20 @@ output "vault_hostname" {
   value = local.vault_hostname
 }
 
+output "sonarqube_hostname" {
+  value = local.sonarqube_hostname
+}
+
+output "keycloak_namespace" {
+  value = module.keycloak_namespace.name
+}
+
 output "keycloak_realm" {
   value = local.keycloak_realm
+}
+
+output "sonar_keycloak_client_id" {
+  value = local.sonar_keycloak_client_id
 }
 
 output "keycloak_issuer_uri" {

@@ -14,3 +14,4 @@ module "keycloak_config" {
   enable_test_user                       = var.enable_test_user
   test_user_password                     = var.enable_test_user ? data.vault_generic_secret.keycloak.data["test-user-password"] : ""
 }
+
