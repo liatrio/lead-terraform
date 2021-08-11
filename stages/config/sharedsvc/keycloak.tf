@@ -17,7 +17,6 @@ resource "keycloak_realm" "sharedsvc" {
 
   registration_allowed           = false
   registration_email_as_username = false
-  reset_password_allowed         = true
   remember_me                    = true
   verify_email                   = true
   login_with_email_allowed       = true
