@@ -27,6 +27,5 @@ provider "keycloak" {
   username       = "keycloak"
   password       = data.vault_generic_secret.keycloak.data["admin-password"]
   url            = "https://${var.keycloak_hostname}"
-  initial_login  = false
   client_timeout = 15
 }
