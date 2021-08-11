@@ -35,7 +35,7 @@ variable "pipelines" {
 variable "vault_namespace" {}
 variable "vault_root_token_secret" {}
 variable "vault_external" {
-  default = false 
+  default = false
 }
 variable "jenkins_pipeline_source" {
   default = "git"

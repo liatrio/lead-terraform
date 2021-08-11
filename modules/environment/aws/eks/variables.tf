@@ -17,7 +17,7 @@ variable "key_name" {
 }
 
 variable "preemptible_instance_types" {
-  type = list
+  type = list(any)
 }
 
 variable "preemptible_asg_min_size" {}

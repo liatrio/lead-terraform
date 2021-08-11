@@ -2,27 +2,28 @@ resource "helm_release" "external_dns" {
   count      = var.enabled ? 1 : 0
   repository = "https://charts.bitnami.com/bitnami"
   chart      = "external-dns"
-  version    = "2.21.1"
+  version    = "5.2.3"
   namespace  = var.namespace
-  name       = "external-dns"
+  name       = var.release_name
   timeout    = 600
 
   values = [
     templatefile("${path.module}/values.tpl", {
-      aws_zone_type  = var.aws_zone_type
-      dns_provider   = var.dns_provider
-      domain_filters = yamlencode(var.domain_filters)
-      istio_enabled  = var.istio_enabled
-      watch_services = var.watch_services
+      aws_zone_type   = var.aws_zone_type
+      dns_provider    = var.dns_provider
+      domain_filters  = yamlencode(var.domain_filters)
+      istio_enabled   = var.istio_enabled
+      watch_services  = var.watch_services
+      exclude_domains = var.exclude_domains
     })
   ]
 
   set {
-    name  = "rbac.serviceAccountName"
+    name  = "serviceAccount.name"
     value = kubernetes_service_account.external_dns_service_account[0].metadata[0].name
   }
   set {
-    name  = "rbac.serviceAccountCreate"
+    name  = "serviceAccount.create"
     value = "false"
   }
   set {
@@ -36,9 +37,9 @@ resource "helm_release" "external_dns" {
 }
 
 resource "kubernetes_service_account" "external_dns_service_account" {
-  count                           = var.enabled ? 1 : 0
+  count = var.enabled ? 1 : 0
   metadata {
-    name        = "external-dns"
+    name        = var.release_name
     namespace   = var.namespace
     annotations = var.service_account_annotations
   }
@@ -48,18 +49,18 @@ resource "kubernetes_service_account" "external_dns_service_account" {
 resource "kubernetes_cluster_role" "external_dns_role" {
   count = var.enabled ? 1 : 0
   metadata {
-    name = "external-dns-manager"
+    name = "${var.release_name}-manager"
   }
   rule {
     api_groups = [
       ""
     ]
-    resources  = [
+    resources = [
       "services",
       "pods",
       "nodes"
     ]
-    verbs      = [
+    verbs = [
       "get",
       "list",
       "watch"
@@ -71,10 +72,10 @@ resource "kubernetes_cluster_role" "external_dns_role" {
       "extensions",
       "networking.k8s.io"
     ]
-    resources  = [
+    resources = [
       "ingresses"
     ]
-    verbs      = [
+    verbs = [
       "get",
       "list",
       "watch"
@@ -85,10 +86,10 @@ resource "kubernetes_cluster_role" "external_dns_role" {
     api_groups = [
       "networking.istio.io"
     ]
-    resources  = [
+    resources = [
       "gateways"
     ]
-    verbs      = [
+    verbs = [
       "get",
       "list",
       "watch"
@@ -99,7 +100,7 @@ resource "kubernetes_cluster_role" "external_dns_role" {
 resource "kubernetes_cluster_role_binding" "external_dns_role_binding" {
   count = var.enabled ? 1 : 0
   metadata {
-    name = "external-dns-binding"
+    name = "${var.release_name}-binding"
   }
   role_ref {
     api_group = "rbac.authorization.k8s.io"

@@ -9,7 +9,7 @@ resource "helm_release" "metrics" {
 
   values = [
     templatefile("${path.module}/values.tpl", {
-      extra_values  = var.extra_values
+      extra_values = var.extra_values
     })
   ]
 }

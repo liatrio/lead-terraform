@@ -11,7 +11,7 @@ provider "helm" {
 }
 
 module "dashboard" {
-  source                           = "../../../../modules/lead/dashboard"
+  source = "../../../../modules/lead/dashboard"
 
   enabled           = true
   namespace         = var.namespace

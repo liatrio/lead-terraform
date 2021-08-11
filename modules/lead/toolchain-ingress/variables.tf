@@ -15,5 +15,5 @@ variable "ingress_external_traffic_policy" {
 }
 
 variable "internal_ingress_source_ranges" {
-  type    = list(string)
+  type = list(string)
 }

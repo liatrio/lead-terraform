@@ -1,6 +1,6 @@
 resource "vault_mount" "gpg" {
-  path        = "/gpg"
-  type        = "kv"
+  path = "/gpg"
+  type = "kv"
 
   options = {
     version = "2"

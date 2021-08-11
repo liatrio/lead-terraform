@@ -13,7 +13,7 @@ provider "kubernetes" {
 }
 
 provider "helm" {
-  version         = "1.1.1"
+  version = "1.1.1"
 
   kubernetes {
     config_context = var.cluster

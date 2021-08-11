@@ -9,14 +9,14 @@ data "aws_subnet_ids" "eks_workers" {
   vpc_id = data.aws_vpc.lead_vpc.id
 
   filter {
-    name   = "tag:subnet-kind"
+    name = "tag:subnet-kind"
     values = [
       "private"
     ]
   }
 
   filter {
-    name   = "cidr-block"
+    name = "cidr-block"
     values = [
       "*/18"
     ]
@@ -33,9 +33,9 @@ resource "aws_codebuild_project" "codebuild_build" {
 
   environment {
     privileged_mode             = true
-    compute_type = "BUILD_GENERAL1_LARGE"
-    image        = "${var.toolchain_image_repo}/builder-image-skaffold:${var.builder_images_version}"
-    type         = "LINUX_CONTAINER"
+    compute_type                = "BUILD_GENERAL1_LARGE"
+    image                       = "${var.toolchain_image_repo}/builder-image-skaffold:${var.builder_images_version}"
+    type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "SERVICE_ROLE"
 
     environment_variable {
@@ -53,8 +53,8 @@ resource "aws_codebuild_project" "codebuild_build" {
   }
 
   artifacts {
-    type     = var.source_type
-    location = var.s3_bucket
+    type                = var.source_type
+    location            = var.s3_bucket
     artifact_identifier = "build_output"
   }
 
@@ -83,8 +83,8 @@ resource "aws_codebuild_project" "codebuild_build" {
     security_group_ids = [
       var.codebuild_security_group_id
     ]
-    subnets            = sort(data.aws_subnet_ids.eks_workers.ids)
-    vpc_id             = data.aws_vpc.lead_vpc.id
+    subnets = sort(data.aws_subnet_ids.eks_workers.ids)
+    vpc_id  = data.aws_vpc.lead_vpc.id
   }
 }
 
@@ -97,9 +97,9 @@ resource "aws_codebuild_project" "codebuild_staging" {
   service_role  = var.codebuild_role
 
   environment {
-    compute_type = "BUILD_GENERAL1_LARGE"
-    image        = "${var.toolchain_image_repo}/builder-image-skaffold:${var.builder_images_version}"
-    type         = "LINUX_CONTAINER"
+    compute_type                = "BUILD_GENERAL1_LARGE"
+    image                       = "${var.toolchain_image_repo}/builder-image-skaffold:${var.builder_images_version}"
+    type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "SERVICE_ROLE"
 
     environment_variable {
@@ -121,7 +121,7 @@ resource "aws_codebuild_project" "codebuild_staging" {
   }
 
   artifacts {
-    type     = var.source_type
+    type = var.source_type
   }
 
   cache {
@@ -149,8 +149,8 @@ resource "aws_codebuild_project" "codebuild_staging" {
     security_group_ids = [
       var.codebuild_security_group_id
     ]
-    subnets            = sort(data.aws_subnet_ids.eks_workers.ids)
-    vpc_id             = data.aws_vpc.lead_vpc.id
+    subnets = sort(data.aws_subnet_ids.eks_workers.ids)
+    vpc_id  = data.aws_vpc.lead_vpc.id
   }
 }
 
@@ -163,9 +163,9 @@ resource "aws_codebuild_project" "codebuild_production" {
   service_role  = var.codebuild_role
 
   environment {
-    compute_type = "BUILD_GENERAL1_LARGE"
-    image        = "${var.toolchain_image_repo}/builder-image-skaffold:${var.builder_images_version}"
-    type         = "LINUX_CONTAINER"
+    compute_type                = "BUILD_GENERAL1_LARGE"
+    image                       = "${var.toolchain_image_repo}/builder-image-skaffold:${var.builder_images_version}"
+    type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "SERVICE_ROLE"
 
     environment_variable {
@@ -187,7 +187,7 @@ resource "aws_codebuild_project" "codebuild_production" {
   }
 
   artifacts {
-    type     = var.source_type
+    type = var.source_type
   }
 
   cache {
@@ -215,15 +215,15 @@ resource "aws_codebuild_project" "codebuild_production" {
     security_group_ids = [
       var.codebuild_security_group_id
     ]
-    subnets            = sort(data.aws_subnet_ids.eks_workers.ids)
-    vpc_id             = data.aws_vpc.lead_vpc.id
+    subnets = sort(data.aws_subnet_ids.eks_workers.ids)
+    vpc_id  = data.aws_vpc.lead_vpc.id
   }
 }
 
 resource "aws_codepipeline" "codepipeline" {
   for_each = var.pipelines
 
-  name = replace("${var.product_name}-${each.value.repo}", "/^${var.product_name}-${var.product_name}/", var.product_name)
+  name     = replace("${var.product_name}-${each.value.repo}", "/^${var.product_name}-${var.product_name}/", var.product_name)
   role_arn = var.codepipeline_role
 
   artifact_store {
@@ -235,11 +235,11 @@ resource "aws_codepipeline" "codepipeline" {
     name = "Source"
 
     action {
-      name             = "Source"
-      category         = "Source"
-      owner            = "AWS"
-      provider         = "CodeCommit"
-      version          = "1"
+      name     = "Source"
+      category = "Source"
+      owner    = "AWS"
+      provider = "CodeCommit"
+      version  = "1"
       output_artifacts = [
         "source_output"
       ]
@@ -255,17 +255,17 @@ resource "aws_codepipeline" "codepipeline" {
     name = "Build"
 
     action {
-      name             = "Build"
-      category         = "Build"
-      owner            = "AWS"
-      provider         = "CodeBuild"
-      input_artifacts  = [
+      name     = "Build"
+      category = "Build"
+      owner    = "AWS"
+      provider = "CodeBuild"
+      input_artifacts = [
         "source_output"
       ]
       output_artifacts = [
         "build_output"
       ]
-      version          = "1"
+      version = "1"
 
       configuration = {
         ProjectName = aws_codebuild_project.codebuild_build[each.key].id
@@ -277,17 +277,17 @@ resource "aws_codepipeline" "codepipeline" {
     name = "Staging"
 
     action {
-      name            = "Staging"
-      category        = "Build"
-      owner           = "AWS"
-      provider        = "CodeBuild"
+      name     = "Staging"
+      category = "Build"
+      owner    = "AWS"
+      provider = "CodeBuild"
       input_artifacts = [
         "build_output"
       ]
-      version         = "1"
+      version = "1"
 
       configuration = {
-        ProjectName   = aws_codebuild_project.codebuild_staging[each.key].id
+        ProjectName = aws_codebuild_project.codebuild_staging[each.key].id
       }
     }
   }
@@ -308,14 +308,14 @@ resource "aws_codepipeline" "codepipeline" {
     name = "Production"
 
     action {
-      name            = "Production"
-      category        = "Build"
-      owner           = "AWS"
-      provider        = "CodeBuild"
+      name     = "Production"
+      category = "Build"
+      owner    = "AWS"
+      provider = "CodeBuild"
       input_artifacts = [
         "build_output"
       ]
-      version         = "1"
+      version = "1"
 
       configuration = {
         ProjectName = aws_codebuild_project.codebuild_production[each.key].id

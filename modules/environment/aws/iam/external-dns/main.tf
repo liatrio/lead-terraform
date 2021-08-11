@@ -1,5 +1,5 @@
 resource "aws_iam_role" "external_dns_service_account" {
-  name = "${var.cluster}_external_dns_service_account"
+  name = "${var.cluster}-${var.service_account_name}-service-account"
 
   assume_role_policy = <<EOF
 {
@@ -13,7 +13,7 @@ resource "aws_iam_role" "external_dns_service_account" {
       "Action": "sts:AssumeRoleWithWebIdentity",
       "Condition": {
         "StringEquals": {
-          "${replace(var.openid_connect_provider_url, "https://", "")}:sub": "system:serviceaccount:${var.namespace}:external-dns"
+          "${replace(var.openid_connect_provider_url, "https://", "")}:sub": "system:serviceaccount:${var.namespace}:${var.service_account_name}"
         }
       }
     }
@@ -23,7 +23,7 @@ EOF
 }
 
 resource "aws_iam_role_policy" "external_dns" {
-  name = "${var.cluster}-external-dns"
+  name = "${var.cluster}-${var.service_account_name}"
   role = aws_iam_role.external_dns_service_account.name
 
   policy = <<EOF

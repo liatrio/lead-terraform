@@ -20,11 +20,11 @@ module "sdm" {
   sqs_url                     = var.enable_aws_code_services ? var.codeservices_sqs_url : ""
   toolchain_image_repo        = var.toolchain_image_repo
 
-  artifactory_image_repo = var.enable_artifactory_jcr ? "${module.artifactory_jcr[0].hostname}/general-docker": ""
-  harbor_image_repo      = var.enable_harbor ? "harbor.${var.toolchain_namespace}.${var.cluster_name}.${var.root_zone_name}": ""
+  artifactory_image_repo = var.enable_artifactory_jcr ? "${module.artifactory_jcr[0].hostname}/general-docker" : ""
+  harbor_image_repo      = var.enable_harbor ? "harbor.${var.toolchain_namespace}.${var.cluster_name}.${var.root_zone_name}" : ""
   ecr_image_repo         = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.region}.amazonaws.com"
 
-  operator_slack_service_account_annotations   = {
+  operator_slack_service_account_annotations = {
     "eks.amazonaws.com/role-arn" = var.operator_slack_service_account_arn
   }
   operator_jenkins_service_account_annotations = {

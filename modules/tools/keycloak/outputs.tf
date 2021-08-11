@@ -1,6 +1,6 @@
 output "keycloak_hostname" {
-  depends_on  = [helm_release.keycloak]
-  value       = "keycloak.${var.namespace}.${var.cluster}.${var.root_zone_name}"
+  depends_on = [helm_release.keycloak]
+  value      = "keycloak.${var.cluster_domain}"
 }
 
 output "keycloak_admin_credential_secret" {

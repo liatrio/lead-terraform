@@ -11,12 +11,10 @@ provider "helm" {
 }
 
 module "keycloak" {
-  source                       = "../../../../modules/tools/keycloak"
+  source = "../../../../modules/tools/keycloak"
 
-  enable_keycloak              = true
-  namespace                    = var.namespace
-  cluster                      = var.cluster
-  root_zone_name               = var.root_zone_name
-  postgres_password            = var.postgres_password
-  keycloak_admin_password      = var.keycloak_admin_password
+  namespace               = var.namespace
+  cluster_domain          = "${var.cluster}.${var.root_zone_name}"
+  postgres_password       = var.postgres_password
+  keycloak_admin_password = var.keycloak_admin_password
 }

@@ -15,10 +15,10 @@ module "github_runner_controller" {
   github_app_installation_id  = data.vault_generic_secret.github_runner_app[each.key].data["github_app_installation_id"]
   github_app_private_key      = data.vault_generic_secret.github_runner_app[each.key].data["github_app_private_key"]
   github_webhook_secret_token = data.vault_generic_secret.github_runner_app[each.key].data["github_webhook_secret_token"]
-  github_webhook_annotations  = { "kubernetes.io/ingress.class": "toolchain-nginx" }
+  github_webhook_annotations  = { "kubernetes.io/ingress.class" : "toolchain-nginx" }
 
-  github_org                  = each.value.github_org
-  ingress_domain              = "toolchain.${var.cluster_name}.${var.root_zone_name}"
+  github_org     = each.value.github_org
+  ingress_domain = "toolchain.${var.cluster_name}.${var.root_zone_name}"
 
   depends_on = [module.cert_manager]
 }

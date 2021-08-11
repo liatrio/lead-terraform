@@ -3,8 +3,8 @@ locals {
 }
 
 module "docker_registry_namespace" {
-  source      = "../../../modules/common/namespace"
-  namespace   = "docker-registry"
+  source    = "../../../modules/common/namespace"
+  namespace = "docker-registry"
   annotations = {
     name    = "docker-registry"
     cluster = var.eks_cluster_id

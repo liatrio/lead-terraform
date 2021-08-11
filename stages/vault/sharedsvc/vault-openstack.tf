@@ -1,6 +1,6 @@
 resource "vault_mount" "openstack" {
-  path        = "/openstack"
-  type        = "kv"
+  path = "/openstack"
+  type = "kv"
 
   options = {
     version = "2"

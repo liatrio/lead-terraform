@@ -13,5 +13,5 @@ provider "helm" {
 module "kube_janitor" {
   source = "../../../../modules/tools/kube-janitor"
 
-  namespace     = var.namespace
+  namespace = var.namespace
 }
