@@ -3,6 +3,11 @@ data "vault_generic_secret" "keycloak" {
   path     = "lead/aws/${data.aws_caller_identity.current.account_id}/keycloak"
 }
 
+data "vault_generic_secret" "sonarqube" {
+  provider = vault.main
+  path     = "lead/aws/${data.aws_caller_identity.current.account_id}/sonarqube"
+}
+
 module "keycloak_config" {
   source = "../../../modules/config/keycloak"
 
@@ -22,6 +27,10 @@ resource "keycloak_openid_client" "openid_client" {
 
   name                = "sonarqube"
   enabled             = true
+
+  client_secret = data.vault_generic_secret.keycloak.data["INSERT_VAULT_KEY_HERE"]
+
+  standard_flow_enabled = true
 
   access_type         = "CONFIDENTIAL"
   valid_redirect_uris = [
