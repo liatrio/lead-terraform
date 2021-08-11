@@ -11,10 +11,6 @@ locals {
 }
 
 resource "keycloak_realm" "sharedsvc" {
-#  depends_on   = [
-#    null_resource.keycloak_realm_delay
-#  ]
-
   realm        = local.realm
   enabled      = true
   display_name = title(local.realm)
@@ -30,8 +26,8 @@ resource "keycloak_realm" "sharedsvc" {
 
 resource "keycloak_oidc_google_identity_provider" "sharedsvc" {
   realm         = keycloak_realm.sharedsvc.id
-  client_id     = data.vault_generic_secret.keycloak.data["google_client_id"]
-  client_secret = data.vault_generic_secret.keycloak.data["google_client_secret"]
+  client_id     = data.vault_generic_secret.keycloak.data["google-idp-client-id"]
+  client_secret = data.vault_generic_secret.keycloak.data["google-idp-client-secret"]
   trust_email   = true
   hosted_domain = "liatrio.com"
 }
@@ -51,6 +47,4 @@ resource "keycloak_openid_client" "sonarqube" {
   valid_redirect_uris = [
     "https://${var.sonarqube_hostname}/oauth2/callback/oidc"
   ]
-
-  login_theme = "keycloak"
 }
