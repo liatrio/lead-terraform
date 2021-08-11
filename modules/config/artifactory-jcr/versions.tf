@@ -8,7 +8,7 @@ terraform {
       source = "hashicorp/kubernetes"
     }
     artifactory = {
-      source  = "registry.terraform.io/jfrog/artifactory"
+      source = "registry.terraform.io/jfrog/artifactory"
     }
   }
 }

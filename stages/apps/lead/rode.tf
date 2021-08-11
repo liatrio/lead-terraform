@@ -1,7 +1,7 @@
 module "rode" {
   source = "../../../modules/tools/rode"
 
-  count = var.enable_rode ? 1 : 0 
+  count = var.enable_rode ? 1 : 0
 
   enable_rode              = var.enable_rode
   namespace                = var.toolchain_namespace

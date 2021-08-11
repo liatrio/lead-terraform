@@ -1,6 +1,6 @@
 module "system_namespace" {
-  source      = "../../../modules/common/namespace"
-  namespace   = var.system_namespace
+  source    = "../../../modules/common/namespace"
+  namespace = var.system_namespace
   annotations = {
     name    = var.system_namespace
     cluster = var.eks_cluster_id
@@ -27,37 +27,37 @@ module "cluster_autoscaler" {
 module "external_dns" {
   source = "../../../modules/tools/external-dns"
 
-  enabled                     = true
-  istio_enabled               = false
-  dns_provider                = "aws"
+  enabled       = true
+  istio_enabled = false
+  dns_provider  = "aws"
   service_account_annotations = {
     "eks.amazonaws.com/role-arn" = var.external_dns_service_account_arn
   }
-  domain_filters              = [
+  domain_filters = [
     var.internal_cluster_domain
   ]
-  namespace                   = module.system_namespace.name
-  aws_zone_type               = "private"
-  watch_services              = true
+  namespace      = module.system_namespace.name
+  aws_zone_type  = "private"
+  watch_services = true
 }
 
 module "external_dns_public" {
   source = "../../../modules/tools/external-dns"
 
-  enabled                     = true
-  release_name                = "external-dns-public"
-  istio_enabled               = false
-  dns_provider                = "aws"
+  enabled       = true
+  release_name  = "external-dns-public"
+  istio_enabled = false
+  dns_provider  = "aws"
   service_account_annotations = {
     "eks.amazonaws.com/role-arn" = var.external_dns_public_service_account_arn
   }
-  domain_filters              = [
+  domain_filters = [
     var.cluster_domain
   ]
-  namespace                   = module.system_namespace.name
-  aws_zone_type               = "public"
-  watch_services              = true
-  exclude_domains             = [var.internal_cluster_domain]
+  namespace       = module.system_namespace.name
+  aws_zone_type   = "public"
+  watch_services  = true
+  exclude_domains = [var.internal_cluster_domain]
 }
 
 module "cert_manager" {
@@ -69,8 +69,8 @@ module "cert_manager" {
 module "kube_downscaler" {
   source = "../../../modules/tools/kube-downscaler"
 
-  namespace           = module.system_namespace.name
-  uptime              = var.uptime
+  namespace = module.system_namespace.name
+  uptime    = var.uptime
   excluded_namespaces = [
     "kube-system",
     module.vault_namespace.name

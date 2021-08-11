@@ -8,8 +8,8 @@ resource "helm_release" "fluent_bit" {
 
   values = [
     templatefile("${path.module}/values.tpl", {
-      elasticsearch_username                 = var.elasticsearch_username
-      elasticsearch_credentials_secret_name  = var.elasticsearch_credentials_secret_name
+      elasticsearch_username                = var.elasticsearch_username
+      elasticsearch_credentials_secret_name = var.elasticsearch_credentials_secret_name
     })
   ]
 }

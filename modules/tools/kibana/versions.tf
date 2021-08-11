@@ -8,7 +8,7 @@ terraform {
       source = "hashicorp/helm"
     }
     keycloak = {
-      source = "mrparkers/keycloak"
+      source  = "mrparkers/keycloak"
       version = "= 2.0.0-rc.0"
     }
     kubernetes = {

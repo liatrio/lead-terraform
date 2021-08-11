@@ -7,7 +7,7 @@ module "product_base" {
   vault_namespace         = var.vault_namespace
   vault_root_token_secret = var.vault_root_token_secret
   vault_external          = var.vault_external
-  
+
   providers = {
     helm.staging          = helm.staging
     kubernetes.staging    = kubernetes.staging

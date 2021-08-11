@@ -56,12 +56,12 @@ resource "helm_release" "harbor_volumes" {
   }
 
   set {
-    name = "components.database.size"
+    name  = "components.database.size"
     value = var.harbor_database_disk_size
   }
 
   set {
-    name = "components.database.protectPvcResource"
+    name  = "components.database.protectPvcResource"
     value = var.protect_pvc_resources
   }
 
@@ -122,8 +122,8 @@ data "template_file" "harbor_values" {
     database_pvc_size   = "10Gi"
     redis_pvc_size      = "10Gi"
 
-    storage_class     = var.k8s_storage_class
-    img_tag           = "v2.1.3"
+    storage_class = var.k8s_storage_class
+    img_tag       = "v2.1.3"
   }
 }
 

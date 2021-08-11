@@ -6,13 +6,13 @@ resource "helm_release" "rode" {
   namespace  = var.namespace
   version    = "0.4.0"
 
-  values    = [
+  values = [
     templatefile("${path.module}/rode-values.tpl", {
-      iam_arn      = var.rode_service_account_arn
-      grafeas_cert = "grafeas-cert"
-      rode_cert    = "rode-cert"
-      ingress_hostname     = "rode.${var.namespace}.${var.cluster}.${var.root_zone_name}"
-      localstack_enabled   = var.localstack_enabled
+      iam_arn            = var.rode_service_account_arn
+      grafeas_cert       = "grafeas-cert"
+      rode_cert          = "rode-cert"
+      ingress_hostname   = "rode.${var.namespace}.${var.cluster}.${var.root_zone_name}"
+      localstack_enabled = var.localstack_enabled
     })
   ]
 }

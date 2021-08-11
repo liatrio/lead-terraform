@@ -13,8 +13,8 @@ provider "helm" {
 module "kube_downscaler" {
   source = "../../../../modules/tools/kube-downscaler"
 
-  uptime              = var.uptime
-  namespace           = var.namespace
+  uptime    = var.uptime
+  namespace = var.namespace
   excluded_namespaces = [
     var.namespace
   ]

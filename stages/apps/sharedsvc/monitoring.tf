@@ -1,6 +1,6 @@
 module "monitoring_namespace" {
-  source      = "../../../modules/common/namespace"
-  namespace   = "monitoring"
+  source    = "../../../modules/common/namespace"
+  namespace = "monitoring"
   annotations = {
     name    = "monitoring"
     cluster = var.eks_cluster_id

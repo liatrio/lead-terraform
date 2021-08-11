@@ -40,6 +40,6 @@ variable "release_name" {
 }
 
 variable "exclude_domains" {
-  type = list(string)
+  type    = list(string)
   default = []
 }

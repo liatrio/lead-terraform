@@ -3,34 +3,34 @@ terraform {
 }
 
 provider "kubernetes" {
-  alias            = "staging"
-  config_context   = var.config_context
+  alias          = "staging"
+  config_context = var.config_context
 }
 
 provider "aws" {
-  region  = var.region
+  region = var.region
 
   skip_metadata_api_check = true
 }
 
 provider "helm" {
-  alias   = "staging"
+  alias = "staging"
 
   kubernetes {
-    config_context   = var.config_context
+    config_context = var.config_context
   }
 }
 
 provider "kubernetes" {
-  alias            = "production"
-  config_context   = var.config_context
+  alias          = "production"
+  config_context = var.config_context
 }
 
 provider "helm" {
-  alias   = "production"
+  alias = "production"
 
   kubernetes {
-    config_context   = var.config_context
+    config_context = var.config_context
   }
 }
 

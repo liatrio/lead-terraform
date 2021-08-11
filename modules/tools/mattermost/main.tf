@@ -82,11 +82,11 @@ resource "kubernetes_role" "sparky_mattermost" {
     api_groups = [
       "sdm.liatr.io"
     ]
-    resources  = [
+    resources = [
       "products",
       "producttypes"
     ]
-    verbs      = [
+    verbs = [
       "*"
     ]
   }
@@ -117,10 +117,10 @@ resource "kubernetes_cluster_role" "sparky_mattermost" {
     api_groups = [
       "sdm.liatr.io"
     ]
-    resources  = [
+    resources = [
       "builds"
     ]
-    verbs      = [
+    verbs = [
       "*"
     ]
   }
@@ -128,10 +128,10 @@ resource "kubernetes_cluster_role" "sparky_mattermost" {
     api_groups = [
       ""
     ]
-    resources  = [
+    resources = [
       "events"
     ]
-    verbs      = [
+    verbs = [
       "get",
       "watch",
       "list"
@@ -142,10 +142,10 @@ resource "kubernetes_cluster_role" "sparky_mattermost" {
       "extensions",
       "networking.k8s.io"
     ]
-    resources  = [
+    resources = [
       "ingresses"
     ]
-    verbs      = [
+    verbs = [
       "get",
       "list",
       "watch"

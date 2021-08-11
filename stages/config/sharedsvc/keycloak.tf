@@ -1,9 +1,9 @@
 data "vault_generic_secret" "keycloak" {
-  path     = "lead/aws/${data.aws_caller_identity.current.account_id}/keycloak"
+  path = "lead/aws/${data.aws_caller_identity.current.account_id}/keycloak"
 }
 
 data "vault_generic_secret" "sonarqube" {
-  path     = "lead/aws/${data.aws_caller_identity.current.account_id}/sonarqube"
+  path = "lead/aws/${data.aws_caller_identity.current.account_id}/sonarqube"
 }
 
 locals {
@@ -32,17 +32,17 @@ resource "keycloak_oidc_google_identity_provider" "sharedsvc" {
 }
 
 resource "keycloak_openid_client" "sonarqube" {
-  realm_id            = keycloak_realm.sharedsvc.id
-  client_id           = var.sonar_keycloak_client_id
+  realm_id  = keycloak_realm.sharedsvc.id
+  client_id = var.sonar_keycloak_client_id
 
-  name                = "sonarqube"
-  enabled             = true
+  name    = "sonarqube"
+  enabled = true
 
   client_secret = data.vault_generic_secret.sonarqube.data["keycloak_client_secret"]
 
   standard_flow_enabled = true
 
-  access_type         = "CONFIDENTIAL"
+  access_type = "CONFIDENTIAL"
   valid_redirect_uris = [
     "https://${var.sonarqube_hostname}/oauth2/callback/oidc"
   ]

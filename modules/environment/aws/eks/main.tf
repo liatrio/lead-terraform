@@ -7,7 +7,7 @@ yum install -y amazon-ssm-agent
 systemctl start amazon-ssm-agent
 systemctl enable amazon-ssm-agent
 
-echo '{"registry-mirrors": [${ var.docker_registry_mirror != "" ? format("\"%s\"", var.docker_registry_mirror) : ""}]}' | cat /etc/docker/daemon.json - | jq -s '.[0] * .[1]' > /tmp/daemon.json
+echo '{"registry-mirrors": [${var.docker_registry_mirror != "" ? format("\"%s\"", var.docker_registry_mirror) : ""}]}' | cat /etc/docker/daemon.json - | jq -s '.[0] * .[1]' > /tmp/daemon.json
 mv /tmp/daemon.json /etc/docker/daemon.json
 systemctl restart docker
 EOF

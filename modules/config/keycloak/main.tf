@@ -1,6 +1,6 @@
 # Give Keycloak API a chance to become responsive
 resource "null_resource" "keycloak_realm_delay" {
-  count      = var.enable_keycloak ? 1 : 0
+  count = var.enable_keycloak ? 1 : 0
 
   provisioner "local-exec" {
     command = "sleep 15"
@@ -8,8 +8,8 @@ resource "null_resource" "keycloak_realm_delay" {
 }
 
 resource "keycloak_realm" "realm" {
-  count        = var.enable_keycloak ? 1 : 0
-  depends_on   = [
+  count = var.enable_keycloak ? 1 : 0
+  depends_on = [
     null_resource.keycloak_realm_delay
   ]
   realm        = var.namespace
@@ -50,7 +50,7 @@ resource "keycloak_user" "test_user" {
 }
 
 resource "kubernetes_secret" "keycloak_toolchain_realm" {
-  count      = var.enable_keycloak ? 1 : 0
+  count = var.enable_keycloak ? 1 : 0
   depends_on = [
     keycloak_realm.realm
   ]

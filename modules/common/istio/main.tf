@@ -76,11 +76,11 @@ resource "kubernetes_horizontal_pod_autoscaler" "kiali_autoscaler" {
 }
 
 resource "helm_release" "kiali" {
-  chart      = "${path.module}/charts/kiali"
-  namespace  = module.istio_namespace.name
-  name       = "kiali"
-  timeout    = 600
-  wait       = true
+  chart     = "${path.module}/charts/kiali"
+  namespace = module.istio_namespace.name
+  name      = "kiali"
+  timeout   = 600
+  wait      = true
 
   set {
     name  = "domain"
@@ -93,7 +93,7 @@ resource "helm_release" "kiali" {
   }
 
   set {
-    name = "image"
+    name  = "image"
     value = "quay.io/kiali/kiali:v1.9"
   }
 
@@ -140,14 +140,14 @@ module "prod_app_wildcard" {
 }
 
 resource "helm_release" "app_gateway" {
-  chart      = "${path.module}/charts/gateway"
-  namespace  = module.istio_namespace.name
-  name       = "app-gateway"
-  timeout    = 600
-  wait       = true
+  chart     = "${path.module}/charts/gateway"
+  namespace = module.istio_namespace.name
+  name      = "app-gateway"
+  timeout   = 600
+  wait      = true
 
   set {
-    name = "name"
+    name  = "name"
     value = "app"
   }
 
@@ -157,7 +157,7 @@ resource "helm_release" "app_gateway" {
   }
 
   set {
-    name = "staging_tlsSecret"
+    name  = "staging_tlsSecret"
     value = module.staging_app_wildcard.cert_secret_name
   }
 
@@ -167,7 +167,7 @@ resource "helm_release" "app_gateway" {
   }
 
   set {
-    name = "prod_tlsSecret"
+    name  = "prod_tlsSecret"
     value = module.prod_app_wildcard.cert_secret_name
   }
 

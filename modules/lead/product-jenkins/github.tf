@@ -17,9 +17,9 @@ resource "kubernetes_secret" "github" {
   provider = kubernetes.toolchain
 
   metadata {
-    name        = "jenkins-credential-github"
-    namespace   = module.toolchain_namespace.name
-    labels      = {
+    name      = "jenkins-credential-github"
+    namespace = module.toolchain_namespace.name
+    labels = {
       "app.kubernetes.io/name"       = "jenkins"
       "app.kubernetes.io/instance"   = "jenkins"
       "app.kubernetes.io/component"  = "jenkins-master"
@@ -43,9 +43,9 @@ resource "kubernetes_secret" "github_token" {
   provider = kubernetes.toolchain
 
   metadata {
-    name        = "jenkins-credential-github-token"
-    namespace   = module.toolchain_namespace.name
-    labels      = {
+    name      = "jenkins-credential-github-token"
+    namespace = module.toolchain_namespace.name
+    labels = {
       "app.kubernetes.io/name"       = "jenkins"
       "app.kubernetes.io/instance"   = "jenkins"
       "app.kubernetes.io/component"  = "jenkins-master"
@@ -70,7 +70,7 @@ resource "kubernetes_config_map" "jcasc_github_plugin" {
   metadata {
     name      = "jenkins-jenkins-config-github-plugin"
     namespace = module.toolchain_namespace.name
-    labels    = {
+    labels = {
       "app.kubernetes.io/name"       = "jenkins"
       "app.kubernetes.io/instance"   = "jenkins"
       "app.kubernetes.io/component"  = "jenkins-master"

@@ -22,17 +22,17 @@ module "sdm" {
   slack_client_signing_secret = var.slack_client_signing_secret
   enable_aws_event_mapper     = false
   toolchain_image_repo        = "489130170427.dkr.ecr.us-east-1.amazonaws.com"
-  operators                   = [
+  operators = [
     "toolchain",
     "elasticsearch",
     "slack",
     "jenkins"
   ]
-  product_types               = [
+  product_types = [
     "product-jenkins"
   ]
 
-  product_vars      = {
+  product_vars = {
     enable_keycloak        = "TEST"
     builder_images_version = "TEST"
     jenkins_image_version  = "TEST"

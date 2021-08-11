@@ -2,11 +2,11 @@ data "template_file" "certificate_values" {
   template = file("${path.module}/certificate-values.tpl")
 
   vars = {
-    domain = var.domain
-    altname = var.altname
+    domain        = var.domain
+    altname       = var.altname
     wait_for_cert = var.wait_for_cert
-    issuer_name = var.issuer_name
-    issuer_kind = var.issuer_kind
+    issuer_name   = var.issuer_name
+    issuer_kind   = var.issuer_kind
   }
 }
 

@@ -4,7 +4,7 @@ terraform {
 }
 
 provider "aws" {
-  region  = var.region
+  region = var.region
 }
 
 data "aws_eks_cluster" "cluster" {

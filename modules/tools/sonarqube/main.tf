@@ -24,13 +24,13 @@ resource "helm_release" "sonarqube" {
 
   values = [
     templatefile("${path.module}/sonarqube-values.tpl", {
-      ingress_enabled        = var.ingress_enabled
-      ingress_hostname       = var.ingress_hostname
-      ingress_annotations    = var.ingress_annotations
-      force_authentication   = var.force_authentication
-      enable_keycloak        = var.enable_keycloak
-      keycloak_issuer_uri    = var.keycloak_issuer_uri
-      keycloak_client_id     = var.keycloak_client_id
+      ingress_enabled      = var.ingress_enabled
+      ingress_hostname     = var.ingress_hostname
+      ingress_annotations  = var.ingress_annotations
+      force_authentication = var.force_authentication
+      enable_keycloak      = var.enable_keycloak
+      keycloak_issuer_uri  = var.keycloak_issuer_uri
+      keycloak_client_id   = var.keycloak_client_id
     })
   ]
 }

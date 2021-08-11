@@ -5,19 +5,19 @@ locals {
 module "ca_issuer" {
   source = "../../common/ca-issuer"
 
-  name             = "elasticstack"
-  namespace        = var.namespace
-  common_name      = var.root_zone_name
+  name        = "elasticstack"
+  namespace   = var.namespace
+  common_name = var.root_zone_name
 }
 
 module "elasticsearch_certificate" {
   source = "../../common/certificates"
 
-  name            = "elasticsearch-certs"
-  namespace       = var.namespace
-  domain          = "elasticsearch-master.${var.namespace}.svc"
-  issuer_name     = module.ca_issuer.name
-  wait_for_cert   = true
+  name          = "elasticsearch-certs"
+  namespace     = var.namespace
+  domain        = "elasticsearch-master.${var.namespace}.svc"
+  issuer_name   = module.ca_issuer.name
+  wait_for_cert = true
 }
 
 resource "random_password" "elasticsearch_password" {

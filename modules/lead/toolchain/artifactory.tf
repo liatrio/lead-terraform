@@ -58,7 +58,7 @@ resource "kubernetes_config_map" "artifactory_config" {
 
   data = {
     "artifactory.config.import.xml" = data.template_file.artifactory_config_values[0].rendered
-    "security.import.xml"           = templatefile("${path.module}/artifactory.security.import.xml.tpl", {
+    "security.import.xml" = templatefile("${path.module}/artifactory.security.import.xml.tpl", {
       # To prefix bcrypt strings with 'bcrypt$', we use format here due to escape issues in template.
       jenkins_bcrypt_pass = format(
         "bcrypt$%s",

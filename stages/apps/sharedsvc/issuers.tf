@@ -1,9 +1,9 @@
 data "aws_route53_zone" "public_internal_services_liatr_io" {
-  name         = "${var.internal_cluster_domain}."
+  name = "${var.internal_cluster_domain}."
 }
 
 data "aws_route53_zone" "public_services_liatr_io" {
-  name         = "${var.cluster_domain}."
+  name = "${var.cluster_domain}."
 }
 
 module "internal_services_cluster_issuer" {

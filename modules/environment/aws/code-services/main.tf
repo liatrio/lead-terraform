@@ -8,14 +8,14 @@ data "aws_subnet_ids" "eks_workers" {
   vpc_id = data.aws_vpc.lead_vpc.id
 
   filter {
-    name   = "tag:subnet-kind"
+    name = "tag:subnet-kind"
     values = [
       "private"
     ]
   }
 
   filter {
-    name   = "cidr-block"
+    name = "cidr-block"
     values = [
       "*/18"
     ]
@@ -340,9 +340,9 @@ resource "aws_security_group" "codebuild_security_group" {
   vpc_id = data.aws_vpc.lead_vpc.id
 
   egress {
-    from_port   = 0
-    protocol    = "-1"
-    to_port     = 0
+    from_port = 0
+    protocol  = "-1"
+    to_port   = 0
     cidr_blocks = [
       "0.0.0.0/0"
     ]

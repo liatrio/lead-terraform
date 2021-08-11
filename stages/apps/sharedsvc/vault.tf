@@ -3,8 +3,8 @@ locals {
 }
 
 module "vault_namespace" {
-  source      = "../../../modules/common/namespace"
-  namespace   = "vault"
+  source    = "../../../modules/common/namespace"
+  namespace = "vault"
   annotations = {
     name    = "vault"
     cluster = var.eks_cluster_id

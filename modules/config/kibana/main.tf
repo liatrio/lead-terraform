@@ -28,14 +28,14 @@ resource "helm_release" "gatekeeper" {
   namespace = var.namespace
   chart     = "${path.module}/charts/gatekeeper"
   wait      = true
-  values    = [
+  values = [
     templatefile("${path.module}/gatekeeper-values.tpl", {
-      port          = 3000
-      client_id     = keycloak_openid_client.kibana_client[0].client_id
-      client_secret = keycloak_openid_client.kibana_client[0].client_secret
-      discovery_url = "https://${var.keycloak_hostname}/auth/realms/${var.keycloak_realm}"
-      upstream_port = 5601
-      upstream_host = "kibana-kibana"
+      port            = 3000
+      client_id       = keycloak_openid_client.kibana_client[0].client_id
+      client_secret   = keycloak_openid_client.kibana_client[0].client_secret
+      discovery_url   = "https://${var.keycloak_hostname}/auth/realms/${var.keycloak_realm}"
+      upstream_port   = 5601
+      upstream_host   = "kibana-kibana"
       kibana_hostname = var.kibana_hostname
     })
   ]

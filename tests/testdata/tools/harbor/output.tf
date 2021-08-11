@@ -1,3 +1,3 @@
-output hostname {
+output "hostname" {
   value = module.harbor.hostname
 }

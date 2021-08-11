@@ -92,7 +92,7 @@ output "vault_aws_access_key_id" {
 }
 
 output "vault_aws_secret_access_key" {
-  value = aws_iam_access_key.vault_key.secret
+  value     = aws_iam_access_key.vault_key.secret
   sensitive = true
 }
 

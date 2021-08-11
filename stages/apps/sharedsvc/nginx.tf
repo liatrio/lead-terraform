@@ -1,6 +1,6 @@
 module "nginx_ingress_namespace" {
-  source      = "../../../modules/common/namespace"
-  namespace   = "nginx-ingress"
+  source    = "../../../modules/common/namespace"
+  namespace = "nginx-ingress"
   annotations = {
     name    = "nginx-ingress"
     cluster = var.eks_cluster_id

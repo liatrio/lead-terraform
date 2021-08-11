@@ -4,13 +4,13 @@ data "vault_generic_secret" "sonarqube" {
 
 locals {
   sonar_keycloak_client_id = "sonarqube"
-  sonarqube_hostname = "sonarqube.${var.cluster_domain}"
+  sonarqube_hostname       = "sonarqube.${var.cluster_domain}"
 }
 
 
 module "sonarqube_namespace" {
-  source      = "../../../modules/common/namespace"
-  namespace   = "sonarqube"
+  source    = "../../../modules/common/namespace"
+  namespace = "sonarqube"
 }
 
 module "sonarqube" {

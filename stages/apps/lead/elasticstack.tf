@@ -1,7 +1,7 @@
 module "elasticsearch_namespace" {
   source = "../../../modules/common/namespace"
 
-  namespace   = "elasticsearch"
+  namespace = "elasticsearch"
   annotations = {
     name    = "elasticsearch"
     cluster = var.cluster_name

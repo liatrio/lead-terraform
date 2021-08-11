@@ -13,7 +13,7 @@ variable "enabled" {
 
 variable "issuer_name" {
   description = "Name of issuer to use to generate certificate"
-  default = "letsencrypt-dns"
+  default     = "letsencrypt-dns"
 }
 
 variable "issuer_kind" {

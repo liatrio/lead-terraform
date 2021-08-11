@@ -13,8 +13,8 @@ provider "helm" {
 module "external_dns" {
   source = "../../../../modules/tools/external-dns"
 
-  enabled       = true
+  enabled        = true
   domain_filters = var.domain_filters
-  namespace     = var.namespace
-  istio_enabled = var.istio_enabled
+  namespace      = var.namespace
+  istio_enabled  = var.istio_enabled
 }
