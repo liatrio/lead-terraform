@@ -2,9 +2,9 @@ data "vault_generic_secret" "keycloak" {
   path     = "lead/aws/${data.aws_caller_identity.current.account_id}/keycloak"
 }
 
-#data "vault_generic_secret" "sonarqube" {
-#  path     = "lead/aws/${data.aws_caller_identity.current.account_id}/sonarqube"
-#}
+data "vault_generic_secret" "sonarqube" {
+  path     = "lead/aws/${data.aws_caller_identity.current.account_id}/sonarqube"
+}
 
 locals {
   realm = "liatrio"
@@ -43,7 +43,7 @@ resource "keycloak_openid_client" "sonarqube" {
   name                = "sonarqube"
   enabled             = true
 
-  client_secret = data.vault_generic_secret.keycloak.data["sonar_client_secret"]
+  client_secret = data.vault_generic_secret.sonarqube.data["keycloak_client_secret"]
 
   standard_flow_enabled = true
 
