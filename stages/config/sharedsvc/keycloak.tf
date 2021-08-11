@@ -2,31 +2,48 @@ data "vault_generic_secret" "keycloak" {
   path     = "lead/aws/${data.aws_caller_identity.current.account_id}/keycloak"
 }
 
-data "vault_generic_secret" "sonarqube" {
-  path     = "lead/aws/${data.aws_caller_identity.current.account_id}/sonarqube"
+#data "vault_generic_secret" "sonarqube" {
+#  path     = "lead/aws/${data.aws_caller_identity.current.account_id}/sonarqube"
+#}
+
+locals {
+  realm = "liatrio"
 }
 
-module "keycloak_config" {
-  source = "../../../modules/config/keycloak"
+resource "keycloak_realm" "sharedsvc" {
+#  depends_on   = [
+#    null_resource.keycloak_realm_delay
+#  ]
 
-  enable_keycloak                        = true
-  namespace                              = var.keycloak_namespace
-  enable_google_login                    = true
-  google_identity_provider_client_id     = data.vault_generic_secret.keycloak.data["google-idp-client-id"]
-  google_identity_provider_client_secret = data.vault_generic_secret.keycloak.data["google-idp-client-secret"]
-  enable_test_user                       = true
-  test_user_password                     = data.vault_generic_secret.keycloak.data["test-user-password"]
+  realm        = local.realm
+  enabled      = true
+  display_name = title(local.realm)
+
+  registration_allowed           = false
+  registration_email_as_username = false
+  reset_password_allowed         = true
+  remember_me                    = true
+  verify_email                   = true
+  login_with_email_allowed       = true
+  duplicate_emails_allowed       = false
 }
 
+resource "keycloak_oidc_google_identity_provider" "sharedsvc" {
+  realm         = keycloak_realm.sharedsvc.id
+  client_id     = data.vault_generic_secret.keycloak.data["google_client_id"]
+  client_secret = data.vault_generic_secret.keycloak.data["google_client_secret"]
+  trust_email   = true
+  hosted_domain = "liatrio.com"
+}
 
-resource "keycloak_openid_client" "openid_client" {
-  realm_id            = module.keycloak_config.keycloak_realm_id
+resource "keycloak_openid_client" "sonarqube" {
+  realm_id            = keycloak_realm.sharedsvc.id
   client_id           = var.sonar_keycloak_client_id
 
   name                = "sonarqube"
   enabled             = true
 
-  client_secret = data.vault_generic_secret.keycloak.data["INSERT_VAULT_KEY_HERE"]
+  client_secret = data.vault_generic_secret.keycloak.data["sonar_client_secret"]
 
   standard_flow_enabled = true
 
