@@ -1,10 +1,8 @@
 data "vault_generic_secret" "keycloak" {
-  provider = vault.main
   path     = "lead/aws/${data.aws_caller_identity.current.account_id}/keycloak"
 }
 
 data "vault_generic_secret" "sonarqube" {
-  provider = vault.main
   path     = "lead/aws/${data.aws_caller_identity.current.account_id}/sonarqube"
 }
 
