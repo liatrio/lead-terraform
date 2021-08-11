@@ -1,6 +1,6 @@
 locals {
   jaeger_zipkin_port = 9411
-  jaeger_query_port = 16686
+  jaeger_query_port  = 16686
 
   jaeger_query_external_hostname = "jaeger.${var.toolchain_namespace}.${var.cluster_domain}"
 }

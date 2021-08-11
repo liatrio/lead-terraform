@@ -42,7 +42,7 @@ variable "github_webhook_secret_token" {
 
 variable "ingress_domain" {
   default = "cluster.local"
-  type = string
+  type    = string
 }
 
 variable "controller_replica_count" {

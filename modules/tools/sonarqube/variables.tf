@@ -29,22 +29,22 @@ variable "postgres_password" {
 }
 
 variable "enable_keycloak" {
-  type = bool
+  type    = bool
   default = false
 }
 
 variable "keycloak_issuer_uri" {
-  type = string
+  type    = string
   default = ""
 }
 
 variable "keycloak_client_id" {
-  type = string
+  type    = string
   default = ""
 }
 
 variable "keycloak_client_secret" {
-  type = string
+  type      = string
   sensitive = true
-  default = ""
+  default   = ""
 }

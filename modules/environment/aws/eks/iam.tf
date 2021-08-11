@@ -97,8 +97,8 @@ resource "aws_iam_role_policy_attachment" "workspace_role_attachment" {
 
 resource "aws_iam_role_policy" "workspace_role_policy" {
   count = var.enable_aws_code_services ? 0 : 1
-  name = "workspace_access"
-  role = aws_iam_role.workspace_role.name
+  name  = "workspace_access"
+  role  = aws_iam_role.workspace_role.name
 
   policy = <<EOF
 {
@@ -139,8 +139,8 @@ EOF
 
 resource "aws_iam_role_policy" "workspace_role_policy_codeservices" {
   count = var.enable_aws_code_services ? 1 : 0
-  name = "workspace_access"
-  role = aws_iam_role.workspace_role.name
+  name  = "workspace_access"
+  role  = aws_iam_role.workspace_role.name
 
   policy = <<EOF
 {

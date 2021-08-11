@@ -21,7 +21,7 @@ resource "helm_release" "vault" {
       vault_tls_secret = module.vault_tls_certificate.cert_secret_name
       vault_hostname   = var.vault_hostname
       vault_version    = "1.4.2"
-      vault_config     = indent(6, templatefile("${path.module}/vault-config.hcl.tpl", {
+      vault_config = indent(6, templatefile("${path.module}/vault-config.hcl.tpl", {
         region                = var.region
         aws_access_key_id     = var.vault_aws_access_key_id
         aws_secret_access_key = var.vault_aws_secret_access_key

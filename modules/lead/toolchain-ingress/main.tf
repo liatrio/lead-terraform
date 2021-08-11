@@ -213,10 +213,10 @@ module "internal_ingress" {
   ingress_external_traffic_policy = var.ingress_external_traffic_policy
   ingress_class                   = "internal-nginx"
   service_annotations = {
-    "service.beta.kubernetes.io/aws-load-balancer-internal": true
+    "service.beta.kubernetes.io/aws-load-balancer-internal" : true
   }
   deployment_annotations = {
-    "downscaler/downtime-replicas": "1"
+    "downscaler/downtime-replicas" : "1"
   }
   service_load_balancer_source_ranges = var.internal_ingress_source_ranges
   service_account                     = kubernetes_service_account.internal_nginx_ingress_service_account.metadata[0].name

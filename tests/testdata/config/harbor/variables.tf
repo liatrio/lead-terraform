@@ -1,7 +1,7 @@
-variable kube_config_path {}
+variable "kube_config_path" {}
 
-variable namespace {}
+variable "namespace" {}
 
-variable hostname {}
+variable "hostname" {}
 
-variable admin_password {}
+variable "admin_password" {}

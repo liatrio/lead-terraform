@@ -3,7 +3,7 @@ data "vault_generic_secret" "keycloak" {
 }
 
 module "keycloak" {
-  count      = var.enable_keycloak ? 1 : 0
+  count  = var.enable_keycloak ? 1 : 0
   source = "../../../modules/tools/keycloak"
 
   namespace               = var.toolchain_namespace

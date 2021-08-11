@@ -11,7 +11,7 @@ variable "key_name" {
 }
 
 variable "preemptible_instance_types" {
-  type    = list
+  type = list(any)
   default = [
     "m5.xlarge",
     "c5.xlarge",
@@ -57,7 +57,7 @@ variable "essential_taint_key" {
 variable "vpc_name" {}
 
 variable "additional_mapped_roles" {
-  type    = list(object({
+  type = list(object({
     rolearn  = string
     username = string
     groups   = list(string)

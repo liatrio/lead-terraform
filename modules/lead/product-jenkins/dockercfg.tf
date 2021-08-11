@@ -8,16 +8,16 @@ data "template_file" "dockercfg" {
   template = file("${path.module}/dockercfg.tpl")
 
   vars = {
-    email            = "jenkins@liatr.io"
-    artifactory_url  = "https://artifactory-jcr.toolchain.${var.cluster_domain}/general-docker"
+    email           = "jenkins@liatr.io"
+    artifactory_url = "https://artifactory-jcr.toolchain.${var.cluster_domain}/general-docker"
     artifactory_auth = base64encode(
-    "${local.artifactory_user}:${local.artifactory_pass}",
+      "${local.artifactory_user}:${local.artifactory_pass}",
     )
-    harbor_url       = "https://harbor.toolchain.${var.cluster_domain}/${var.product_name}"
-    harbor_auth      = base64encode(
-    "robot$imagepusher:${local.harbor_pass}",
+    harbor_url = "https://harbor.toolchain.${var.cluster_domain}/${var.product_name}"
+    harbor_auth = base64encode(
+      "robot$imagepusher:${local.harbor_pass}",
     )
-    enable_harbor    = var.enable_harbor
+    enable_harbor = var.enable_harbor
   }
 }
 

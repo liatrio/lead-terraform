@@ -27,7 +27,7 @@ module "external_dns_iam" {
   namespace                   = var.system_namespace
   openid_connect_provider_arn = module.eks.aws_iam_openid_connect_provider.arn
   openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider.url
-  route53_zone_ids            = [
+  route53_zone_ids = [
     data.aws_route53_zone.private_internal_services_liatr_io.zone_id,
   ]
 }
@@ -39,10 +39,10 @@ module "external_dns_iam_public" {
   namespace                   = var.system_namespace
   openid_connect_provider_arn = module.eks.aws_iam_openid_connect_provider.arn
   openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider.url
-  route53_zone_ids            = [
+  route53_zone_ids = [
     data.aws_route53_zone.services_liatr_io.zone_id
   ]
-  service_account_name        = "external-dns-public"
+  service_account_name = "external-dns-public"
 }
 
 module "cert_manager_iam" {

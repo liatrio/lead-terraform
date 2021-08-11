@@ -8,11 +8,11 @@ data "template_file" "kube_resource_report_values" {
 }
 
 resource "helm_release" "kube_resource_report" {
-  name       = "kube-resource-report"
-  namespace  = var.namespace
-  chart      = "${path.module}/chart/kube-resource-report"
-  timeout    = 600
-  wait       = true
+  name      = "kube-resource-report"
+  namespace = var.namespace
+  chart     = "${path.module}/chart/kube-resource-report"
+  timeout   = 600
+  wait      = true
 
   values = [data.template_file.kube_resource_report_values.rendered]
 }

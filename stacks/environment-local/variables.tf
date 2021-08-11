@@ -129,7 +129,7 @@ variable "k8s_storage_class" {
 }
 
 variable "lead_sdm_operators" {
-  type    = list
+  type    = list(any)
   default = ["toolchain", "elasticsearch", "slack", "product"]
 }
 

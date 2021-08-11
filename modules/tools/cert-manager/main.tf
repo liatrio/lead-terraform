@@ -12,7 +12,7 @@ resource "helm_release" "cert_manager" {
     value = var.namespace
   }
   set {
-    name = "installCRDs"
+    name  = "installCRDs"
     value = true
   }
   set {

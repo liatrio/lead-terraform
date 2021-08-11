@@ -7,7 +7,7 @@ resource "helm_release" "aws-node-termination-handler" {
   name       = "aws-node-termination-handler"
   timeout    = 600
 
-  values     = [
+  values = [
     file("${path.module}/values.yaml")
   ]
 }

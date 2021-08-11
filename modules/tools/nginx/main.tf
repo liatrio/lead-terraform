@@ -1,5 +1,5 @@
 locals {
-  name = var.name == "" ? "ingress-nginx" : "ingress-nginx-${var.name}"
+  name         = var.name == "" ? "ingress-nginx" : "ingress-nginx-${var.name}"
   min_replicas = 2
 }
 

@@ -38,7 +38,7 @@ resource "helm_release" "flagger" {
   wait       = true
   version    = "0.22.0"
 
-  values = [data.template_file.flagger_values.rendered]
+  values     = [data.template_file.flagger_values.rendered]
   depends_on = [null_resource.flagger_crd_delay]
 }
 

@@ -22,7 +22,7 @@ terraform {
     }
 
     template = {
-      source  = "hashicorp/template"
+      source = "hashicorp/template"
     }
   }
 }

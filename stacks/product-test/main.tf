@@ -3,22 +3,22 @@ terraform {
 }
 
 provider "kubernetes" {
-  alias            = "staging"
-  config_context   = var.config_context
+  alias          = "staging"
+  config_context = var.config_context
 }
 
 provider "helm" {
-  alias   = "staging"
+  alias = "staging"
 
   kubernetes {
-    config_context   = var.config_context
+    config_context = var.config_context
   }
 }
 
 module "staging_namespace" {
-  source      = "../../modules/common/namespace"
-  namespace   = "${var.product_name}-staging"
-  labels      = {
+  source    = "../../modules/common/namespace"
+  namespace = "${var.product_name}-staging"
+  labels = {
     "istio-injection"                        = "enabled"
     "appmesh.k8s.aws/sidecarInjectorWebhook" = "enabled"
   }
@@ -27,7 +27,7 @@ module "staging_namespace" {
     "opa.lead.liatrio/ingress-whitelist" = "*.${var.product_name}-staging.${var.cluster_domain}"
     "opa.lead.liatrio/image-whitelist"   = var.image_whitelist
   }
-  providers   = {
+  providers = {
     helm       = helm.staging
     kubernetes = kubernetes.staging
   }

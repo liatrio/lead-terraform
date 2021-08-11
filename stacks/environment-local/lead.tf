@@ -24,22 +24,22 @@ module "infrastructure" {
 }
 
 module "toolchain" {
-  source                          = "../../modules/lead/toolchain"
-  root_zone_name                  = var.root_zone_name
-  cluster                         = var.cluster
-  namespace                       = var.toolchain_namespace
-  image_whitelist                 = var.image_whitelist
-  artifactory_license             = var.artifactory_license
-  keycloak_admin_password         = var.keycloak_admin_password
-  enable_istio                    = var.enable_istio
-  enable_artifactory              = var.enable_artifactory
-  enable_gitlab                   = var.enable_gitlab
-  enable_keycloak                 = var.enable_keycloak
-  enable_harbor                   = var.enable_harbor
-  issuer_name                     = module.staging_cluster_issuer.issuer_name
-  issuer_kind                     = module.staging_cluster_issuer.issuer_kind
-  crd_waiter                      = module.infrastructure.crd_waiter
-  k8s_storage_class               = var.k8s_storage_class
+  source                  = "../../modules/lead/toolchain"
+  root_zone_name          = var.root_zone_name
+  cluster                 = var.cluster
+  namespace               = var.toolchain_namespace
+  image_whitelist         = var.image_whitelist
+  artifactory_license     = var.artifactory_license
+  keycloak_admin_password = var.keycloak_admin_password
+  enable_istio            = var.enable_istio
+  enable_artifactory      = var.enable_artifactory
+  enable_gitlab           = var.enable_gitlab
+  enable_keycloak         = var.enable_keycloak
+  enable_harbor           = var.enable_harbor
+  issuer_name             = module.staging_cluster_issuer.issuer_name
+  issuer_kind             = module.staging_cluster_issuer.issuer_kind
+  crd_waiter              = module.infrastructure.crd_waiter
+  k8s_storage_class       = var.k8s_storage_class
 
   harbor_registry_disk_size    = "200Gi"
   harbor_chartmuseum_disk_size = "100Gi"
@@ -111,8 +111,8 @@ module "prometheus-operator" {
 module "sonarqube" {
   source = "../../modules/tools/sonarqube"
 
-  enable_sonarqube            = var.enable_sonarqube
-  namespace                   = module.toolchain.namespace
+  enable_sonarqube = var.enable_sonarqube
+  namespace        = module.toolchain.namespace
 }
 
 module "kube_resource_report" {
@@ -126,9 +126,9 @@ module "kube_resource_report" {
 module "rode" {
   source = "../../modules/tools/rode"
 
-  enable_rode              = var.enable_rode
-  namespace                = var.toolchain_namespace
-  cluster                  = var.cluster
-  root_zone_name           = var.root_zone_name
-  localstack_enabled       = var.localstack_enabled
+  enable_rode        = var.enable_rode
+  namespace          = var.toolchain_namespace
+  cluster            = var.cluster
+  root_zone_name     = var.root_zone_name
+  localstack_enabled = var.localstack_enabled
 }

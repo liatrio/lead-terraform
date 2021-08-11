@@ -1,7 +1,7 @@
 module "database_namespace" {
-  source      = "../../common/namespace"
-  namespace   = "${var.product_name}-db"
-  labels      = {
+  source    = "../../common/namespace"
+  namespace = "${var.product_name}-db"
+  labels = {
     "istio-injection"                        = "enabled"
     "appmesh.k8s.aws/sidecarInjectorWebhook" = "enabled"
   }

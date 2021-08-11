@@ -1,11 +1,11 @@
 module "system_namespace" {
-  source      = "../../../modules/common/namespace"
-  namespace   = var.system_namespace
+  source    = "../../../modules/common/namespace"
+  namespace = var.system_namespace
   annotations = {
     name    = var.system_namespace
     cluster = var.cluster_name
   }
-  labels      = {
+  labels = {
     "openpolicyagent.org/webhook" = "ignore"
   }
 }
@@ -17,16 +17,16 @@ module "essential_toleration_values" {
 module "external_dns" {
   source = "../../../modules/tools/external-dns"
 
-  enabled                     = true
-  istio_enabled               = var.enable_istio
-  dns_provider                = "aws"
+  enabled       = true
+  istio_enabled = var.enable_istio
+  dns_provider  = "aws"
   service_account_annotations = {
     "eks.amazonaws.com/role-arn" = var.external_dns_service_account_arn
   }
-  domain_filters              = [
+  domain_filters = [
     "${var.cluster_name}.${var.root_zone_name}"
   ]
-  namespace                   = module.system_namespace.name
+  namespace = module.system_namespace.name
 }
 
 module "cert_manager" {
@@ -50,7 +50,7 @@ module "aws-node-termination-handler" {
 module "kube_janitor" {
   source = "../../../modules/tools/kube-janitor"
 
-  namespace    = module.system_namespace.name
+  namespace = module.system_namespace.name
 }
 
 module "metrics_server" {

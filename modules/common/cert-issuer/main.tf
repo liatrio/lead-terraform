@@ -26,5 +26,5 @@ resource "helm_release" "cert_manager_issuers" {
   chart     = "${path.module}/helm/cert-manager-issuers"
   timeout   = 600
   wait      = true
-  values = [data.template_file.issuer_values.rendered]
+  values    = [data.template_file.issuer_values.rendered]
 }

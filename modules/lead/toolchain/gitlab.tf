@@ -9,8 +9,8 @@ data "template_file" "gitlab_values" {
 }
 
 data "external" "keycloak_realm_certificate" {
-  count      = var.enable_gitlab && var.enable_keycloak ? 1 : 0
-  program    = ["sh", "${path.module}/scripts/get_keycloak_realm_certificate.sh", "${local.protocol}://keycloak.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}/auth/realms/${module.toolchain_namespace.name}/protocol/saml/descriptor"]
+  count   = var.enable_gitlab && var.enable_keycloak ? 1 : 0
+  program = ["sh", "${path.module}/scripts/get_keycloak_realm_certificate.sh", "${local.protocol}://keycloak.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}/auth/realms/${module.toolchain_namespace.name}/protocol/saml/descriptor"]
 }
 
 resource "kubernetes_secret" "gitlab_keycloak_saml_config" {
@@ -59,10 +59,10 @@ resource "helm_release" "gitlab" {
 }
 
 resource "keycloak_saml_client" "gitlab_saml_client" {
-  count                   = var.enable_gitlab && var.enable_keycloak ? 1 : 0
-  realm_id                = var.keycloak_realm_id
-  client_id               = "ui.gitlab.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
-  name                    = "Gitlab"
+  count     = var.enable_gitlab && var.enable_keycloak ? 1 : 0
+  realm_id  = var.keycloak_realm_id
+  client_id = "ui.gitlab.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
+  name      = "Gitlab"
 
   sign_documents            = true
   sign_assertions           = true
@@ -70,11 +70,11 @@ resource "keycloak_saml_client" "gitlab_saml_client" {
   full_scope_allowed        = true
   client_signature_required = true
 
-  name_id_format              = "persistent"
-  root_url                    = "${local.protocol}://ui.gitlab.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
-  base_url                    = "/"
-  valid_redirect_uris         = ["${local.protocol}://ui.gitlab.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}/users/auth/saml/callback"]
-  idp_initiated_sso_url_name  = "ui.gitlab.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
+  name_id_format             = "persistent"
+  root_url                   = "${local.protocol}://ui.gitlab.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
+  base_url                   = "/"
+  valid_redirect_uris        = ["${local.protocol}://ui.gitlab.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}/users/auth/saml/callback"]
+  idp_initiated_sso_url_name = "ui.gitlab.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
 
   master_saml_processing_url      = "${local.protocol}://ui.gitlab.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}/users/auth/saml/callback"
   assertion_consumer_post_url     = "${local.protocol}://ui.gitlab.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}/users/auth/saml/callback"
@@ -82,10 +82,10 @@ resource "keycloak_saml_client" "gitlab_saml_client" {
 }
 
 resource "keycloak_saml_user_property_protocol_mapper" "gitlab_saml_user_property_mapper_roles" {
-  count                      = var.enable_gitlab && var.enable_keycloak ? 1 : 0
-  realm_id                   = var.keycloak_realm_id
-  client_id                  = keycloak_saml_client.gitlab_saml_client[0].id
-  name                       = "roles"
+  count     = var.enable_gitlab && var.enable_keycloak ? 1 : 0
+  realm_id  = var.keycloak_realm_id
+  client_id = keycloak_saml_client.gitlab_saml_client[0].id
+  name      = "roles"
 
   user_property              = "roles"
   saml_attribute_name        = "roles"
@@ -94,10 +94,10 @@ resource "keycloak_saml_user_property_protocol_mapper" "gitlab_saml_user_propert
 }
 
 resource "keycloak_saml_user_property_protocol_mapper" "gitlab_saml_user_property_mapper_last_name" {
-  count                      = var.enable_gitlab && var.enable_keycloak ? 1 : 0
-  realm_id                   = var.keycloak_realm_id
-  client_id                  = keycloak_saml_client.gitlab_saml_client[0].id
-  name                       = "last_name"
+  count     = var.enable_gitlab && var.enable_keycloak ? 1 : 0
+  realm_id  = var.keycloak_realm_id
+  client_id = keycloak_saml_client.gitlab_saml_client[0].id
+  name      = "last_name"
 
   user_property              = "lastName"
   saml_attribute_name        = "last_name"
@@ -106,10 +106,10 @@ resource "keycloak_saml_user_property_protocol_mapper" "gitlab_saml_user_propert
 }
 
 resource "keycloak_saml_user_property_protocol_mapper" "gitlab_saml_user_property_mapper_first_name" {
-  count                      = var.enable_gitlab && var.enable_keycloak ? 1 : 0
-  realm_id                   = var.keycloak_realm_id
-  client_id                  = keycloak_saml_client.gitlab_saml_client[0].id
-  name                       = "first_name"
+  count     = var.enable_gitlab && var.enable_keycloak ? 1 : 0
+  realm_id  = var.keycloak_realm_id
+  client_id = keycloak_saml_client.gitlab_saml_client[0].id
+  name      = "first_name"
 
   user_property              = "firstName"
   saml_attribute_name        = "first_name"
@@ -118,10 +118,10 @@ resource "keycloak_saml_user_property_protocol_mapper" "gitlab_saml_user_propert
 }
 
 resource "keycloak_saml_user_property_protocol_mapper" "gitlab_saml_user_property_mapper_email" {
-  count                      = var.enable_gitlab && var.enable_keycloak ? 1 : 0
-  realm_id                   = var.keycloak_realm_id
-  client_id                  = keycloak_saml_client.gitlab_saml_client[0].id
-  name                       = "email"
+  count     = var.enable_gitlab && var.enable_keycloak ? 1 : 0
+  realm_id  = var.keycloak_realm_id
+  client_id = keycloak_saml_client.gitlab_saml_client[0].id
+  name      = "email"
 
   user_property              = "email"
   saml_attribute_name        = "email"
@@ -130,10 +130,10 @@ resource "keycloak_saml_user_property_protocol_mapper" "gitlab_saml_user_propert
 }
 
 resource "keycloak_saml_user_property_protocol_mapper" "gitlab_saml_user_property_mapper_username" {
-  count                      = var.enable_gitlab && var.enable_keycloak ? 1 : 0
-  realm_id                   = var.keycloak_realm_id
-  client_id                  = keycloak_saml_client.gitlab_saml_client[0].id
-  name                       = "username"
+  count     = var.enable_gitlab && var.enable_keycloak ? 1 : 0
+  realm_id  = var.keycloak_realm_id
+  client_id = keycloak_saml_client.gitlab_saml_client[0].id
+  name      = "username"
 
   user_property              = "username"
   saml_attribute_name        = "username"
@@ -146,8 +146,8 @@ resource "keycloak_saml_user_property_protocol_mapper" "gitlab_saml_user_propert
 # Old way of using webhooks is deprecated, but might be only option.  Still unclear.
 
 # psql provider
-  # ARGHHH! https://github.com/terraform-providers/terraform-provider-postgresql/issues/2#issuecomment-369341707
-  # Core issue: https://github.com/hashicorp/terraform/issues/4149
+# ARGHHH! https://github.com/terraform-providers/terraform-provider-postgresql/issues/2#issuecomment-369341707
+# Core issue: https://github.com/hashicorp/terraform/issues/4149
 
 # psql query to create/get PAT for root user, no way to do this with tf/api
 

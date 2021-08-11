@@ -14,7 +14,7 @@ module "external_dns_iam" {
   namespace                   = var.system_namespace
   openid_connect_provider_arn = module.eks.aws_iam_openid_connect_provider.arn
   openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider.url
-  route53_zone_ids            = [
+  route53_zone_ids = [
     aws_route53_zone.cluster_zone.zone_id
   ]
 }
@@ -29,9 +29,9 @@ module "cluster_autoscaler_iam" {
 }
 
 module "velero_iam" {
-  count = var.enable_velero ? 1 : 0
+  count  = var.enable_velero ? 1 : 0
   source = "../../../../modules/environment/aws/iam/velero"
-  
+
   cluster                     = var.cluster_name
   namespace                   = var.velero_namespace
   velero_bucket_name          = module.velero[0].velero_bucket_name
@@ -264,7 +264,7 @@ EOF
 }
 
 resource "aws_iam_policy" "product_operator_main" {
-  name  = "${var.cluster_name}-product-operator-main"
+  name = "${var.cluster_name}-product-operator-main"
 
   policy = <<EOF
 {

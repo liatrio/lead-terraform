@@ -20,7 +20,7 @@ variable "pipelines" {
   type = map(object({
     type = string
     repo = string
-    org = string
+    org  = string
   }))
 }
 

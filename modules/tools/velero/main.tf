@@ -25,7 +25,7 @@ resource "helm_release" "velero" {
 }
 
 resource "helm_release" "velero_schedule_toolchain" {
-  count = contains(var.velero_enabled_namespaces, "toolchain") ? 1 : 0
+  count     = contains(var.velero_enabled_namespaces, "toolchain") ? 1 : 0
   name      = "velero-schedule-toolchain"
   chart     = "${path.module}/charts/velero-schedule-toolchain"
   namespace = module.velero_namespace.name
@@ -37,7 +37,7 @@ resource "helm_release" "velero_schedule_toolchain" {
 }
 
 resource "helm_release" "velero_schedule_flywheel_production" {
-  count = contains(var.velero_enabled_namespaces, "flywheel-production") ? 1 : 0
+  count     = contains(var.velero_enabled_namespaces, "flywheel-production") ? 1 : 0
   name      = "velero-schedule-flywheel-production"
   chart     = "${path.module}/charts/velero-schedule-flywheel-production"
   namespace = module.velero_namespace.name

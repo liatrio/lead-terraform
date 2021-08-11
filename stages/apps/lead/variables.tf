@@ -281,7 +281,7 @@ variable "enable_velero" {
 }
 
 variable "velero_enabled_namespaces" {
-  type = list(string)
+  type    = list(string)
   default = []
 }
 
