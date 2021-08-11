@@ -2,8 +2,6 @@ global:
   tlsDisable: true
 
 server:
-  image:
-    tag: ${vault_version}
   service:
     enabled: true
   ingress:
@@ -33,6 +31,22 @@ server:
     limits:
       memory: 256Mi
       cpu: 512m
+  serviceAccount:
+    create: false
+    name: vault
+
+  extraContainers:
+    - name: vault-init
+      image: ghcr.io/liatrio/vault-init:v0.3
+      env:
+        - name: K8S_SECRET_NAME
+          value: ${vault_credentials_secret_name}
+        - name: KMS_KEY_ID
+          value: ${kms_key_id}
+        - name: KMS_REGION
+          value: ${kms_region}
+        - name: VAULT_ADDR
+          value: http://127.0.0.1:8200
 
 ui:
   enabled: true

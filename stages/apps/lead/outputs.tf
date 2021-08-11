@@ -4,7 +4,7 @@ output "toolchain_namespace" {
 }
 
 output "keycloak_hostname" {
-  value       = module.keycloak.keycloak_hostname
+  value       = module.keycloak[0].keycloak_hostname
   description = "Keycloak instance url to be used by configuration provider"
 }
 

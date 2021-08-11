@@ -15,11 +15,11 @@ terraform {
     }
     keycloak = {
       source  = "mrparkers/keycloak"
-      version = "= 2.3.0"
+      version = "3.2.1"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "~> 2.0.1"
+      version = "2.4.1"
     }
     null = {
       source  = "hashicorp/null"
