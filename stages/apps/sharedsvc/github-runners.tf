@@ -15,7 +15,7 @@ module "github_runner_controller" {
   github_app_installation_id  = data.vault_generic_secret.github_runner_app[each.key].data["github_app_installation_id"]
   github_app_private_key      = data.vault_generic_secret.github_runner_app[each.key].data["github_app_private_key"]
   github_webhook_secret_token = data.vault_generic_secret.github_runner_app[each.key].data["github_webhook_secret_token"]
-  github_webhook_annotations  = { "kubernetes.io/ingress.class": "nginx-external" }
+  github_webhook_annotations  = { "kubernetes.io/ingress.class" : "nginx-external" }
 
   github_org     = each.value.github_org
   ingress_domain = var.cluster_domain

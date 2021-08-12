@@ -1,12 +1,8 @@
 data "aws_caller_identity" "current" {
 }
 
-locals {
-  bucket_name = "github-runners-${data.aws_caller_identity.current.account_id}-${var.cluster_name}.liatr.io"
-}
-
 resource "aws_s3_bucket" "github-runner" {
-  bucket = local.bucket_name
+  bucket = "github-runners-${data.aws_caller_identity.current.account_id}-${var.cluster_name}.liatr.io"
   tags = {
     Name      = "Github Runner States"
     ManagedBy = "Terraform https://github.com/liatrio/lead-terraform"
@@ -53,7 +49,7 @@ resource "aws_iam_policy" "github_runners" {
                 "s3:GetBucketVersioning",
                 "s3:CreateBucket"
      ],
-     "Resource": ["arn:aws:s3:::${local.bucket_name}"]
+     "Resource": ["${aws_s3_bucket.github-runner.arn}"]
    },
    {
      "Effect": "Allow",
@@ -62,7 +58,7 @@ resource "aws_iam_policy" "github_runners" {
                 "s3:GetObject",
                 "s3:DeleteObject"
      ],
-     "Resource": ["arn:aws:s3:::${local.bucket_name}/*"]
+     "Resource": ["${aws_s3_bucket.github-runner.arn}/*"]
    },
    {
      "Effect": "Allow",
