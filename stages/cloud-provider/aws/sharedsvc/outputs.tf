@@ -58,3 +58,7 @@ output "docker_registry_aws_secret_access_key" {
 output "docker_registry_s3_bucket_name" {
   value = module.docker_registry_iam.docker_registry_s3_bucket_name
 }
+
+output "github_runners_service_account_arn" {
+  value = module.github-runners-s3.github_runners_service_account_arn
+}
