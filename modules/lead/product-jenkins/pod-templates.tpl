@@ -24,10 +24,10 @@ jenkins:
                 command: "/bin/sh -c"
                 args: "cat"
                 ttyEnabled: true
-                resourceRequestCpu: 100m
+                resourceRequestCpu: 50m
                 resourceLimitCpu: 500m
-                resourceRequestMemory: 128Mi
-                resourceLimitMemory: 256Mi
+                resourceRequestMemory: 64Mi
+                resourceLimitMemory: 128Mi
             volumes:
               - hostPathVolume:
                   hostPath: "/var/run/docker.sock"
@@ -46,8 +46,8 @@ jenkins:
                 - name: jnlp
                   resources:
                     requests:
-                      cpu: 100m
-                      memory: 256Mi
+                      cpu: 50m
+                      memory: 128Mi
                     limits:
                       cpu: 500m
                       memory: 512Mi
