@@ -46,11 +46,11 @@ jenkins:
                 - name: jnlp
                   resources:
                     requests:
-                      cpu: 50m
-                      memory: 128Mi
+                      cpu: 100m
+                      memory: 256Mi
                     limits:
                       cpu: 500m
-                      memory: 256Mi
+                      memory: 512Mi
             yamlMergeStrategy: "merge"
           - name: "lead-toolchain-skaffold"
             label: "lead-toolchain-skaffold"
