@@ -54,4 +54,31 @@ variable "vault_address" {
   default = "https://vault.internal.services.liatr.io"
 }
 
+variable "github_runners_service_account_arn" {
+}
+
 variable "iam_caller_identity_headers" {}
+
+# example_value = {
+#   rode: {
+#     vault_name: "github-runner-app-sandbox"
+#     namespace: "roderunners"
+#   }
+# }
+variable "github_runner_controllers" {
+  type    = map(any)
+  default = {}
+}
+
+# example_value = {
+#   rode: {
+#     github_org: "rode"
+#     namespace: "roderunners"
+#     image: "node"
+#     labels: ["roderunners"]
+#   }
+# }
+variable "github_runners" {
+  type    = map(any)
+  default = {}
+}

@@ -1,9 +1,9 @@
 resource "aws_dynamodb_table" "vault_dynamodb_storage" {
-  name = "vault.${var.toolchain_namespace}.${var.cluster_name}.${var.root_zone_name}"
-  read_capacity = 25
+  name           = "vault.${var.toolchain_namespace}.${var.cluster_name}.${var.root_zone_name}"
+  read_capacity  = 25
   write_capacity = 25
-  hash_key = "Path"
-  range_key = "Key"
+  hash_key       = "Path"
+  range_key      = "Key"
 
   attribute {
     name = "Path"

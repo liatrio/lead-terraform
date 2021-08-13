@@ -5,12 +5,12 @@ locals {
 module "vault" {
   source = "../../../modules/tools/vault-less-secure"
 
-  namespace                   = module.toolchain_namespace.name
-  region                      = var.region
-  vault_dynamodb_table_name   = var.vault_dynamodb_table_name
-  vault_hostname              = local.lead_vault_hostname
-  vault_service_account_arn   = var.vault_service_account_arn
-  vault_kms_key_id            = var.vault_kms_key_id
+  namespace                 = module.toolchain_namespace.name
+  region                    = var.region
+  vault_dynamodb_table_name = var.vault_dynamodb_table_name
+  vault_hostname            = local.lead_vault_hostname
+  vault_service_account_arn = var.vault_service_account_arn
+  vault_kms_key_id          = var.vault_kms_key_id
 }
 
 resource "kubernetes_service_account" "vault_token_reviewer" {

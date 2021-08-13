@@ -8,7 +8,7 @@ resource "kubernetes_service_account" "vault" {
     namespace = var.namespace
 
     annotations = {
-      "eks.amazonaws.com/role-arn": var.vault_service_account_arn
+      "eks.amazonaws.com/role-arn" : var.vault_service_account_arn
     }
   }
 }
@@ -25,9 +25,9 @@ resource "kubernetes_role" "vault" {
     resource_names = [local.vault_secret_name]
   }
   rule {
-    api_groups     = [""]
-    resources      = ["secrets"]
-    verbs          = ["create"]
+    api_groups = [""]
+    resources  = ["secrets"]
+    verbs      = ["create"]
   }
 }
 
@@ -61,7 +61,7 @@ resource "helm_release" "vault" {
       vault_hostname                = var.vault_hostname
       vault_service_account_arn     = var.vault_service_account_arn
       vault_credentials_secret_name = local.vault_secret_name
-      vault_config                  = indent(6, templatefile("${path.module}/vault-config.hcl.tpl", {
+      vault_config = indent(6, templatefile("${path.module}/vault-config.hcl.tpl", {
         region              = var.region
         dynamodb_table_name = var.vault_dynamodb_table_name
         kms_key_id          = var.vault_kms_key_id
@@ -111,7 +111,7 @@ data "aws_kms_secrets" "vault_credentials" {
 
 resource "kubernetes_secret" "vault_root_token" {
   metadata {
-    name = "vault-root-token"
+    name      = "vault-root-token"
     namespace = var.namespace
   }
 
