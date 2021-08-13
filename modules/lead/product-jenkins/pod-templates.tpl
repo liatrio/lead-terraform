@@ -47,7 +47,7 @@ jenkins:
                   resources:
                     requests:
                       cpu: 50m
-                      memory: 128Mi
+                      memory: 256Mi
                     limits:
                       cpu: 500m
                       memory: 512Mi
