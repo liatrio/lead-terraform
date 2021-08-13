@@ -50,6 +50,8 @@ master:
   containerEnv:
     - name: elasticUrl
       value: http://lead-dashboard-logstash.toolchain.svc.cluster.local:9000
+    - name: JAVA_OPTS
+      value: "-Djenkins.install.runSetupWizard=false"
 
   sidecars:
     configAutoReload:
