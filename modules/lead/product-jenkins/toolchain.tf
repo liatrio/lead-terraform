@@ -436,3 +436,24 @@ resource "kubernetes_config_map" "jcasc_controller_configmap" {
     "controller-node.yaml" = templatefile("${path.module}/controller.tpl", {})
   }
 }
+
+resource "kubernetes_config_map" "jcasc_security_configmap" {
+  provider = kubernetes.toolchain
+  metadata {
+    name      = "jenkins-jenkins-config-security-config"
+    namespace = module.toolchain_namespace.name
+
+    labels = {
+      "app.kubernetes.io/name"       = "jenkins"
+      "app.kubernetes.io/instance"   = "jenkins"
+      "app.kubernetes.io/component"  = "jenkins-controller"
+      "app.kubernetes.io/managed-by" = "Terraform"
+      "jenkins-jenkins-config"       = "true"
+    }
+  }
+  data = {
+    "security-config.yaml" = templatefile("${path.module}/security-config.tpl", {
+      enable_keycloak = var.enable_keycloak
+    })
+  }
+}
