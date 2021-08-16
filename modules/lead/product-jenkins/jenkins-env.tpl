@@ -18,3 +18,5 @@ jenkins:
           value: "staging.${appDomain}"
         - key: "productionDomain"
           value: "prod.${appDomain}"
+        - key: "JAVA_OPTS"
+          value: "-Djenkins.install.runSetupWizard=false"
