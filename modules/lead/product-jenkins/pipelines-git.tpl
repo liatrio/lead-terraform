@@ -10,7 +10,7 @@
                 id('https://www.github.com/${pipeline.org}/${pipeline.repo}.git')
                 remote('https://www.github.com/${pipeline.org}/${pipeline.repo}.git')
                 excludes('solution*')
-                shallowClone()
+                shallow()
             }
         }
         orphanedItemStrategy {
