@@ -7,8 +7,8 @@ persistence:
 
 master:
   installPlugins: false
-  image: "${toolchain_image_repo}/jenkins-image"
-  tag: ${jenkins_image_version}
+  image: harbor.parker.gg/library/jenkins-updated-plugins
+  tag: v2
   ingress:
     enabled: true
     hostName: ${ingress_hostname}
