@@ -26,8 +26,8 @@ jenkins:
                 ttyEnabled: true
                 resourceRequestCpu: 50m
                 resourceLimitCpu: 500m
-                resourceRequestMemory: 64Mi
-                resourceLimitMemory: 128Mi
+                resourceRequestMemory: 128Mi
+                resourceLimitMemory: 256Mi
             volumes:
               - hostPathVolume:
                   hostPath: "/var/run/docker.sock"
