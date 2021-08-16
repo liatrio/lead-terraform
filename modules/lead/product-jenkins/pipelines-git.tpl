@@ -10,9 +10,11 @@
                 id('https://www.github.com/${pipeline.org}/${pipeline.repo}.git')
                 remote('https://www.github.com/${pipeline.org}/${pipeline.repo}.git')
                 excludes('solution*')
-                extensions {
-                    cloneOptions {
-                        shallow()
+                traits {
+                    cloneOptionTrait {
+                        extension {
+                            shallow(true)
+                        }
                     }
                 }
             }
