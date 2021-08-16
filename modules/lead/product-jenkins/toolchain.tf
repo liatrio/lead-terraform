@@ -67,7 +67,7 @@ resource "helm_release" "jenkins" {
       jenkins_image_version = var.jenkins_image_version
       protocol              = local.protocol
       ssl_redirect          = local.protocol == "http" ? false : true
-      ingress_hostname      = "${module.toolchain_namespace.name}.jenkins.${var.cluster_domain}"
+      ingress_hostname      = local.ingress_hostname
       enable_keycloak       = var.enable_keycloak
     })
   ]
@@ -433,7 +433,9 @@ resource "kubernetes_config_map" "jcasc_controller_configmap" {
     }
   }
   data = {
-    "controller-node.yaml" = templatefile("${path.module}/controller.tpl", {})
+    "controller-node.yaml" = templatefile("${path.module}/controller.tpl", {
+      root_url = "${local.protocol}://${local.ingress_hostname}"
+    })
   }
 }
 
