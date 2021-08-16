@@ -12,14 +12,6 @@
                 excludes('solution*')
             }
         }
-        configure {
-            def traitBlock = it / 'sources' / 'data' / 'jenkins.branch.BranchSource' / 'source' / 'traits'
-            traitBlock << 'jenkins.plugins.git.traits.CloneOptionTrait' {
-                extension(class: 'hudson.plugins.git.extensions.impl.CloneOption') {
-                    shallow(true)
-                }
-            }
-        }
         orphanedItemStrategy {
             discardOldItems {
                 numToKeep(20)
