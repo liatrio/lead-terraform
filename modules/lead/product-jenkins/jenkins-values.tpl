@@ -47,12 +47,6 @@ master:
         jenkins:
           systemMessage: Welcome to our CI\CD server.  This Jenkins is configured and managed 'as code' from https://github.com/liatrio/lead-terraform.
 
-  containerEnv:
-    - name: elasticUrl
-      value: http://lead-dashboard-logstash.toolchain.svc.cluster.local:9000
-    - name: JAVA_OPTS
-      value: "-Djenkins.install.runSetupWizard=false"
-
   sidecars:
     configAutoReload:
       enabled: true
