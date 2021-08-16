@@ -68,6 +68,7 @@ resource "helm_release" "jenkins" {
       protocol              = local.protocol
       ssl_redirect          = local.protocol == "http" ? false : true
       ingress_hostname      = "${module.toolchain_namespace.name}.jenkins.${var.cluster_domain}"
+      enable_keycloak       = var.enable_keycloak
     })
   ]
 }
@@ -333,27 +334,6 @@ resource "kubernetes_config_map" "jcasc_shared_libraries_configmap" {
   }
   data = {
     "shared-libraries.yaml" = templatefile("${path.module}/shared-libraries.tpl", {})
-  }
-}
-
-resource "kubernetes_config_map" "jcasc_security_configmap" {
-  provider = kubernetes.toolchain
-  metadata {
-    name      = "jenkins-jenkins-config-security-config"
-    namespace = module.toolchain_namespace.name
-
-    labels = {
-      "app.kubernetes.io/name"       = "jenkins"
-      "app.kubernetes.io/instance"   = "jenkins"
-      "app.kubernetes.io/component"  = "jenkins-controller"
-      "app.kubernetes.io/managed-by" = "Terraform"
-      "jenkins-jenkins-config"       = "true"
-    }
-  }
-  data = {
-    "security-config.yaml" = templatefile("${path.module}/security-config.tpl", {
-      enable_keycloak = var.enable_keycloak
-    })
   }
 }
 
