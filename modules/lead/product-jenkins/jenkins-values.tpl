@@ -1,14 +1,14 @@
 serviceAccount:
   create: false
-  name: jenkins
+  name: ${service_account_name}
 
 persistence:
   enabled: false
 
 master:
   installPlugins: false
-  image: harbor.parker.gg/library/jenkins-updated-plugins
-  tag: v2
+  image: "${toolchain_image_repo}/jenkins-image"
+  tag: ${jenkins_image_version}
   ingress:
     enabled: true
     hostName: ${ingress_hostname}

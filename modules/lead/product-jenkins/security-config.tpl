@@ -1,5 +1,9 @@
 jenkins:
   authorizationStrategy:
     loggedInUsersCanDoAnything:
-      allowAnonymousRead: "${allow_anonymous_read}"
-  ${security_realm}
+      %{~ if enable_keycloak }
+      allowAnonymousRead: "false"
+    securityRealm: keycloak
+      %{~ else }
+      allowAnonymousRead: "true"
+      %{~ endif }

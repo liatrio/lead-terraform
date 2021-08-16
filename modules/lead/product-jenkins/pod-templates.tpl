@@ -34,7 +34,7 @@ jenkins:
                   mountPath: "/var/run/docker.sock"
               - secretVolume:
                   mountPath: "/root/.docker"
-                  secretName: "${jenkins-repository-dockercfg}"
+                  secretName: "${dockercfg_secret_name}"
             slaveConnectTimeout: 100
             serviceAccount: "jenkins"
             yaml: |-
@@ -80,7 +80,7 @@ jenkins:
                   mountPath: "/var/run/docker.sock"
               - secretVolume:
                   mountPath: "/root/.docker"
-                  secretName: "${jenkins-repository-dockercfg}"
+                  secretName: "${dockercfg_secret_name}"
             slaveConnectTimeout: 100
             serviceAccount: "jenkins"
             yaml: |-
