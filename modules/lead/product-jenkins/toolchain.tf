@@ -33,7 +33,7 @@ resource "kubernetes_service_account" "jenkins" {
     labels = {
       "app.kubernetes.io/name"       = "jenkins"
       "app.kubernetes.io/instance"   = "jenkins"
-      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/component"  = "jenkins-controller"
       "app.kubernetes.io/managed-by" = "Terraform"
     }
 
@@ -56,7 +56,7 @@ resource "helm_release" "jenkins" {
   version    = "3.5.11"
 
   set_sensitive {
-    name  = "master.adminPassword"
+    name  = "controller.adminPassword"
     value = random_password.jenkins_admin_password.result
   }
 
@@ -82,7 +82,7 @@ resource "kubernetes_role" "jenkins_kubernetes_credentials" {
     labels = {
       "app.kubernetes.io/name"       = "jenkins"
       "app.kubernetes.io/instance"   = "jenkins"
-      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/component"  = "jenkins-controller"
       "app.kubernetes.io/managed-by" = "Terraform"
     }
 
@@ -148,7 +148,7 @@ resource "kubernetes_role_binding" "jenkins_kubernetes_credentials" {
     labels = {
       "app.kubernetes.io/name"       = "jenkins"
       "app.kubernetes.io/instance"   = "jenkins"
-      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/component"  = "jenkins-controller"
       "app.kubernetes.io/managed-by" = "Terraform"
     }
 
@@ -179,7 +179,7 @@ resource "kubernetes_cluster_role" "jenkins_kubernetes_credentials" {
     labels = {
       "app.kubernetes.io/name"       = "jenkins"
       "app.kubernetes.io/instance"   = "jenkins"
-      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/component"  = "jenkins-controller"
       "app.kubernetes.io/managed-by" = "Terraform"
     }
 
@@ -212,7 +212,7 @@ resource "kubernetes_cluster_role_binding" "jenkins_kubernetes_credentials" {
     labels = {
       "app.kubernetes.io/name"       = "jenkins"
       "app.kubernetes.io/instance"   = "jenkins"
-      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/component"  = "jenkins-controller"
       "app.kubernetes.io/managed-by" = "Terraform"
     }
 
@@ -244,7 +244,7 @@ resource "kubernetes_role_binding" "jenkins_staging_rolebinding" {
     labels = {
       "app.kubernetes.io/name"       = "jenkins"
       "app.kubernetes.io/instance"   = "jenkins"
-      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/component"  = "jenkins-controller"
       "app.kubernetes.io/managed-by" = "Terraform"
     }
 
@@ -276,7 +276,7 @@ resource "kubernetes_role_binding" "jenkins_production_rolebinding" {
     labels = {
       "app.kubernetes.io/name"       = "jenkins"
       "app.kubernetes.io/instance"   = "jenkins"
-      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/component"  = "jenkins-controller"
       "app.kubernetes.io/managed-by" = "Terraform"
     }
 
@@ -326,7 +326,7 @@ resource "kubernetes_config_map" "jcasc_shared_libraries_configmap" {
     labels = {
       "app.kubernetes.io/name"       = "jenkins"
       "app.kubernetes.io/instance"   = "jenkins"
-      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/component"  = "jenkins-controller"
       "app.kubernetes.io/managed-by" = "Terraform"
       "jenkins-jenkins-config"       = "true"
     }
@@ -345,7 +345,7 @@ resource "kubernetes_config_map" "jcasc_security_configmap" {
     labels = {
       "app.kubernetes.io/name"       = "jenkins"
       "app.kubernetes.io/instance"   = "jenkins"
-      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/component"  = "jenkins-controller"
       "app.kubernetes.io/managed-by" = "Terraform"
       "jenkins-jenkins-config"       = "true"
     }
@@ -366,7 +366,7 @@ resource "kubernetes_config_map" "jcasc_pod_templates_configmap" {
     labels = {
       "app.kubernetes.io/name"       = "jenkins"
       "app.kubernetes.io/instance"   = "jenkins"
-      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/component"  = "jenkins-controller"
       "app.kubernetes.io/managed-by" = "Terraform"
       "jenkins-jenkins-config"       = "true"
     }
@@ -393,7 +393,7 @@ resource "kubernetes_config_map" "jcasc_env_configmap" {
     labels = {
       "app.kubernetes.io/name"       = "jenkins"
       "app.kubernetes.io/instance"   = "jenkins"
-      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/component"  = "jenkins-controller"
       "app.kubernetes.io/managed-by" = "Helm"
       "helm.sh/chart"                = "jenkins-1.6.0"
       "jenkins-jenkins-config"       = "true"
@@ -421,7 +421,7 @@ resource "kubernetes_config_map" "jcasc_keycloak_config_configmap" {
     labels = {
       "app.kubernetes.io/name"       = "jenkins"
       "app.kubernetes.io/instance"   = "jenkins"
-      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/component"  = "jenkins-controller"
       "app.kubernetes.io/managed-by" = "Terraform"
       "jenkins-jenkins-config"       = "true"
     }
@@ -438,21 +438,21 @@ resource "kubernetes_config_map" "jcasc_keycloak_config_configmap" {
   }
 }
 
-resource "kubernetes_config_map" "jcasc_master_node_configmap" {
+resource "kubernetes_config_map" "jcasc_controller_configmap" {
   provider = kubernetes.toolchain
   metadata {
-    name      = "jenkins-jenkins-config-master-node"
+    name      = "jenkins-jenkins-config-controller"
     namespace = module.toolchain_namespace.name
 
     labels = {
       "app.kubernetes.io/name"       = "jenkins"
       "app.kubernetes.io/instance"   = "jenkins"
-      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/component"  = "jenkins-controller"
       "app.kubernetes.io/managed-by" = "Terraform"
       "jenkins-jenkins-config"       = "true"
     }
   }
   data = {
-    "master-node.yaml" = templatefile("${path.module}/master-node.tpl", {})
+    "controller-node.yaml" = templatefile("${path.module}/controller.tpl", {})
   }
 }
