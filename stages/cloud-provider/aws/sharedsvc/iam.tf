@@ -54,6 +54,63 @@ module "cert_manager_iam" {
   openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider.url
 }
 
+resource "aws_iam_role" "rode_service_account" {
+  name = "${var.cluster_name}_rode_service_account"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "${module.eks.aws_iam_openid_connect_provider.arn}"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "${replace(module.eks.aws_iam_openid_connect_provider.url, "https://", "")}:sub": "system:serviceaccount:rode:rode"
+        }
+      }
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy" "rode" {
+  name = "${var.cluster_name}-rode"
+  role = aws_iam_role.rode_service_account.name
+
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "sqs:CreateQueue",
+                "sqs:SetQueueAttributes",
+                "sqs:GetQueueUrl",
+                "sqs:GetQueueAttributes",
+                "sqs:ReceiveMessage",
+                "sqs:DeleteMessage"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "events:PutTargets",
+                "events:PutRule"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+EOF
+}
+
 module "docker_registry_iam" {
   source = "../../../../modules/environment/aws/iam/docker-registry"
 
