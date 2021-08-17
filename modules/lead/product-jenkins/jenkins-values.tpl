@@ -7,7 +7,7 @@ persistence:
 
 controller:
   image: harbor.parker.gg/library/jenkins-updated-plugins
-  tag: v6
+  tag: v7
 
   installPlugins: false
 

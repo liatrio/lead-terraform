@@ -20,10 +20,9 @@
                     noTag(true)
                     depth(1)
                     reference()
-                    honorRefspec(false)
+                    honorRefspec(true)
                 }
             }
-            traitBlock << 'jenkins.plugins.git.traits.BranchDiscoveryTrait' {}
         }
         orphanedItemStrategy {
             discardOldItems {
