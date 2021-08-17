@@ -126,9 +126,8 @@ module "kube_resource_report" {
 module "rode" {
   source = "../../modules/tools/rode"
 
-  enable_rode        = var.enable_rode
-  namespace          = var.toolchain_namespace
-  cluster            = var.cluster
-  root_zone_name     = var.root_zone_name
+  namespace                = var.toolchain_namespace
+  ingress_domain           = "${var.cluster}.${var.root_zone_name}"
+  rode_service_account_arn = "TODO: FIX ME"
   localstack_enabled = var.localstack_enabled
 }
