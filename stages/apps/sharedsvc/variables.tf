@@ -25,17 +25,13 @@ variable "uptime" {
   default = "Mon-Fri 05:00-19:00 America/Los_Angeles"
 }
 
-variable "vault_aws_access_key_id" {
-}
+variable "vault_aws_access_key_id" {}
 
-variable "vault_aws_secret_access_key" {
-}
+variable "vault_aws_secret_access_key" {}
 
-variable "vault_dynamodb_table_name" {
-}
+variable "vault_dynamodb_table_name" {}
 
-variable "vault_kms_key_id" {
-}
+variable "vault_kms_key_id" {}
 
 variable "cluster_autoscaler_service_account_arn" {}
 variable "external_dns_service_account_arn" {}
