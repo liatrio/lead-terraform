@@ -23,6 +23,7 @@
                     honorRefspec(true)
                 }
             }
+            traitBlock << 'jenkins.plugins.git.traits.BranchDiscoveryTrait' {}
         }
         orphanedItemStrategy {
             discardOldItems {
