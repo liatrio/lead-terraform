@@ -24,6 +24,9 @@
                 }
             }
             traitBlock << 'jenkins.plugins.git.traits.BranchDiscoveryTrait' {}
+            traitBlock << 'jenkins.plugins.git.traits.WildcardSCMHeadFilterTrait' {
+                excludes('solution*')
+            }
         }
         orphanedItemStrategy {
             discardOldItems {
