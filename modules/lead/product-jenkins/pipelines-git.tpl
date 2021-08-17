@@ -9,7 +9,6 @@
             git {
                 id('https://www.github.com/${pipeline.org}/${pipeline.repo}.git')
                 remote('https://www.github.com/${pipeline.org}/${pipeline.repo}.git')
-                excludes('solution*')
             }
         }
         configure {
@@ -17,7 +16,6 @@
             traitBlock << 'jenkins.plugins.git.traits.CloneOptionTrait' {
                 extension(class: 'hudson.plugins.git.extensions.impl.CloneOption') {
                     shallow(true)
-                    noTag(true)
                     depth(1)
                     reference()
                     honorRefspec(true)
