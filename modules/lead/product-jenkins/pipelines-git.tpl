@@ -24,7 +24,7 @@
                 }
             }
             traitBlock << 'jenkins.plugins.git.traits.BranchDiscoveryTrait' {}
-            traitBlock << 'jenkins.plugins.git.traits.WildcardSCMHeadFilterTrait' {
+            traitBlock << 'jenkins.scm.impl.trait.WildcardSCMHeadFilterTrait' {
                 excludes('solution*')
             }
         }
