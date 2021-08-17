@@ -1,5 +1,7 @@
 replicaCount: ${controller_replica_count}
 
+syncPeriod: 1m
+
 authSecret:
   create: false
   name: ${secret_name}

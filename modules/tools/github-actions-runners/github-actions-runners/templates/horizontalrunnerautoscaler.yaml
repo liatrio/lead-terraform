@@ -7,16 +7,17 @@ spec:
     name: {{ .Release.Name }}
   minReplicas: {{ .Values.horizontalRunnerAutoscaler.minReplicas }}
   maxReplicas: {{ .Values.horizontalRunnerAutoscaler.maxReplicas }}
-  # scaleUpTriggers:
-  #   - githubEvent:
-  #       checkRun:
-  #         types: [ "created" ]
-  #         status: "queued"
-  #     amount: {{ .Values.horizontalRunnerAutoscaler.scaleAmount }}
-  #     duration: {{ .Values.horizontalRunnerAutoscaler.scaleDuration }}
+  scaleDownDelaySecondsAfterScaleOut: 180
+  scaleUpTriggers:
+    - githubEvent:
+        checkRun:
+          types: [ "created" ]
+          status: "queued"
+      amount: {{ .Values.horizontalRunnerAutoscaler.scaleAmount }}
+      duration: {{ .Values.horizontalRunnerAutoscaler.scaleDuration }}
   metrics:
     - type: PercentageRunnersBusy
-      scaleUpThreshold: '0.75'    # The percentage of busy runners at which the number of desired runners are re-evaluated to scale up
-      scaleDownThreshold: '0.3'   # The percentage of busy runners at which the number of desired runners are re-evaluated to scale down
+      scaleUpThreshold: '1.0'    # The percentage of busy runners at which the number of desired runners are re-evaluated to scale up
+      scaleDownThreshold: '0.49'   # The percentage of busy runners at which the number of desired runners are re-evaluated to scale down
       scaleUpAdjustment: {{ .Values.horizontalRunnerAutoscaler.scaleAmount }}
       scaleDownAdjustment: {{ .Values.horizontalRunnerAutoscaler.scaleAmount }}
