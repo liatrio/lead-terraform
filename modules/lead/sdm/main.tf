@@ -100,3 +100,24 @@ EOF
 
   }
 }
+
+resource "kubernetes_secret" "image_pull_secret" {
+  metadata {
+    name = "image-pull-secret"
+    namespace = var.namespace
+  }
+
+  data = {
+    ".dockerconfigjson" = <<DOCKER
+{
+  "auths": {
+    "${var.registry}": {
+      "auth": "${base64encode("${var.github_pat_username}:${var.github_pat}")}"
+    }
+  }
+}
+DOCKER
+  }
+
+  type = "kubernetes.io/dockerconfigjson"
+}

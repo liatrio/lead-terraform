@@ -2,6 +2,10 @@ data "vault_generic_secret" "sparky" {
   path = "lead/aws/${data.aws_caller_identity.current.account_id}/sparky"
 }
 
+data "vault_generic_secret" "github_token" {
+  path = "lead/aws/${data.aws_caller_identity.current.account_id}/github"
+} 
+
 module "sdm" {
   source                      = "../../../modules/lead/sdm"
   root_zone_name              = var.root_zone_name
@@ -12,6 +16,9 @@ module "sdm" {
   product_version             = var.product_version
   slack_bot_token             = data.vault_generic_secret.sparky.data["slack-bot-user-oauth-access-token"]
   slack_client_signing_secret = data.vault_generic_secret.sparky.data["slack-signing-secret"]
+  github_pat                  = data.vault_generic_secret.github_token.data["token"]
+  github_pat_username         = data.vault_generic_secret.github_token.data["username"]
+  registry                    = var.registry
   workspace_role_name         = var.workspace_role_name
   operators                   = var.lead_sdm_operators
   product_types               = var.product_types
@@ -20,8 +27,9 @@ module "sdm" {
   sqs_url                     = var.enable_aws_code_services ? var.codeservices_sqs_url : ""
   toolchain_image_repo        = var.toolchain_image_repo
 
-  artifactory_image_repo = var.enable_artifactory_jcr ? "${module.artifactory_jcr[0].hostname}/general-docker" : ""
-  harbor_image_repo      = var.enable_harbor ? "harbor.${var.toolchain_namespace}.${var.cluster_name}.${var.root_zone_name}" : ""
+
+  artifactory_image_repo = var.enable_artifactory_jcr ? "${module.artifactory_jcr[0].hostname}/general-docker": ""
+  harbor_image_repo      = var.enable_harbor ? "harbor.${var.toolchain_namespace}.${var.cluster_name}.${var.root_zone_name}": ""
   ecr_image_repo         = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.region}.amazonaws.com"
 
   operator_slack_service_account_annotations = {
