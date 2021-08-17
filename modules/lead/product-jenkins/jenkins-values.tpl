@@ -6,8 +6,8 @@ persistence:
   enabled: true
 
 controller:
-  image: harbor.parker.gg/library/jenkins-updated-plugins
-  tag: v7
+  image: "${toolchain_image_repo}/jenkins-image"
+  tag: ${jenkins_image_version}
 
   installPlugins: false
 
