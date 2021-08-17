@@ -47,10 +47,10 @@ jenkins:
                   resources:
                     requests:
                       cpu: 50m
-                      memory: 256Mi
+                      memory: 128Mi
                     limits:
                       cpu: 500m
-                      memory: 512Mi
+                      memory: 256Mi
             yamlMergeStrategy: "merge"
           - name: "lead-toolchain-skaffold"
             label: "lead-toolchain-skaffold"
