@@ -1,25 +1,31 @@
-variable "rode_service_account_arn" {}
+variable "rode_service_account_arn" {} #todo: is this needed?
 
 variable "namespace" {}
 
-variable "ingress_domain" {}
+variable "rode_ingress_hostname" {}
+
+variable "ui_ingress_hostname" {}
 
 variable "ingress_class" {
-  type    = string
   default = "toolchain-nginx"
 }
 
 variable "oidc_issuer_url" {
   description = "Leave blank to disable OIDC"
-  type        = string
   default     = ""
 }
 variable "oidc_issuer_client_id" {
-  type    = string
   default = ""
 }
 variable "oidc_issuer_client_secret" {
-  type      = string
   sensitive = true
   default   = ""
+}
+
+variable "grafeas_elasticsearch_username" {
+  sensitive = true
+}
+
+variable "grafeas_elasticsearch_password" {
+  sensitive = true
 }

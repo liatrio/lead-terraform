@@ -9,12 +9,12 @@ resource "helm_release" "rode" {
 
   set_sensitive {
     name  = "grafeas-elasticsearch.grafeas.elasticsearch.username"
-    value = "grafeas"
+    value = var.grafeas_elasticsearch_username
   }
 
   set_sensitive {
     name  = "grafeas-elasticsearch.grafeas.elasticsearch.password"
-    value = "grafeas-temp"
+    value = var.grafeas_elasticsearch_password
   }
 
   set_sensitive {
@@ -30,8 +30,8 @@ resource "helm_release" "rode" {
   values = [
     templatefile("${path.module}/rode-values.tpl", {
       ingress_enabled     = true
-      ingress_hostname    = "rode.${var.ingress_domain}"
-      ui_ingress_hostname    = "rode-dashboard.${var.ingress_domain}"
+      ingress_hostname    = var.rode_ingress_hostname
+      ui_ingress_hostname = var.ui_ingress_hostname
       ingress_annotations = {
         "kubernetes.io/ingress.class" : var.ingress_class
       }
