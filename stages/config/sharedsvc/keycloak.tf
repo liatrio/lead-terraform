@@ -6,6 +6,10 @@ data "vault_generic_secret" "sonarqube" {
   path = "lead/aws/${data.aws_caller_identity.current.account_id}/sonarqube"
 }
 
+data "vault_generic_secret" "rode" {
+  path = "lead/aws/${data.aws_caller_identity.current.account_id}/rode"
+}
+
 locals {
   realm = "liatrio"
 }
@@ -45,5 +49,25 @@ resource "keycloak_openid_client" "sonarqube" {
   access_type = "CONFIDENTIAL"
   valid_redirect_uris = [
     "https://${var.sonarqube_hostname}/oauth2/callback/oidc"
+  ]
+}
+
+resource "keycloak_openid_client" "rode" {
+  realm_id  = keycloak_realm.sharedsvc.id
+  client_id = var.rode_oidc_client_id
+
+  name    = "rode"
+  enabled = true
+
+  client_secret = data.vault_generic_secret.rode.data["oidc_issuer_client_secret"]
+
+  standard_flow_enabled = true
+
+  access_type = "CONFIDENTIAL"
+  valid_redirect_uris = [
+    "https://${var.rode_hostname}/",
+    "https://${var.rode_hostname}/callback",
+    "https://${var.rode_ui_hostname}/",
+    "https://${var.rode_ui_hostname}/callback"
   ]
 }
