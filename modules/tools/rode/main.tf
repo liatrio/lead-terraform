@@ -23,7 +23,7 @@ resource "helm_release" "rode" {
   }
 
   set_sensitive {
-    name  = "rode-ui.auth.oidc.clientSecret"
+    name  = "rode-ui.rode.auth.oidc.clientSecret"
     value = var.oidc_issuer_client_secret
   }
 

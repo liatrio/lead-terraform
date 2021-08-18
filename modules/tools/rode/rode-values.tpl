@@ -19,6 +19,8 @@ auth:
 ## Rode UI config
 ##
 rode-ui:
+  appUrl: "https://${ui_ingress_hostname}"
+
   ingress:
     enabled: ${ingress_enabled}
     hosts:
@@ -27,6 +29,8 @@ rode-ui:
           - /
     annotations:
       ${indent(4, yamlencode(ingress_annotations))}
-  auth:
-    oidc:
-      ${indent(6, yamlencode(oidc_config))}
+
+  rode:
+    auth:
+      oidc:
+        ${indent(8, yamlencode(oidc_config))}
