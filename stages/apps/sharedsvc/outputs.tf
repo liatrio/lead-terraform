@@ -25,3 +25,15 @@ output "sonar_keycloak_client_id" {
 output "sonarqube_hostname" {
   value = local.sonarqube_hostname
 }
+
+output "rode_oidc_client_id" {
+  value = local.rode_oidc_client_id
+}
+
+output "rode_hostname" {
+  value = local.rode_hostname
+}
+
+output "rode_ui_hostname" {
+  value = local.ui_hostname
+}
