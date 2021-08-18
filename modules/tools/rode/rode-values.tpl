@@ -1,18 +1,32 @@
+##
+## Rode config
+##
+
 ingress:
-  enabled: ${ ingress_enabled }
+  enabled: ${ingress_enabled}
   hosts:
-    - host: ${ ingress_hostname }
+    - host: ${ingress_hostname}
       paths:
         - /
   annotations:
-    ${indent( 4, yamlencode( ingress_annotations ) ) }
+    ${indent(4, yamlencode(ingress_annotations)) }
 
+auth:
+  oidc:
+    ${indent(4, yamlencode(oidc_config))}
+
+##
+## Rode UI config
+##
 rode-ui:
   ingress:
-    enabled: ${ ui_ingress_enabled }
+    enabled: ${ingress_enabled}
     hosts:
-      - host: ${ ui_ingress_hostname }
+      - host: ${ui_ingress_hostname}
         paths:
           - /
     annotations:
-      ${indent( 4, yamlencode( ui_ingress_annotations ) ) }
+      ${indent(4, yamlencode(ingress_annotations))}
+  auth:
+    oidc:
+      ${indent(6, yamlencode(oidc_config))}
