@@ -4,7 +4,18 @@ resource "helm_release" "rode" {
   name       = "rode"
   chart      = "rode"
   namespace  = var.namespace
-  version    = "0.4.0"
+  version    = "0.3.2"
+  wait = true
+
+  set_sensitive {
+    name  = "grafeas-elasticsearch.grafeas.elasticsearch.username"
+    value = "grafeas"
+  }
+
+  set_sensitive {
+    name  = "grafeas-elasticsearch.grafeas.elasticsearch.password"
+    value = "grafeas-temp"
+  }
 
   values = [
     templatefile("${path.module}/rode-values.tpl", {
