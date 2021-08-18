@@ -1,30 +1,16 @@
-grafeas:
-  certificates:
-    name: ${grafeas_cert}
-
-certificates:
-  name: ${rode_cert}
-
-rbac:
-  serviceAccountAnnotations:
-    eks.amazonaws.com/role-arn: ${iam_arn}
-
-localstack:
-  enabled: ${localstack_enabled}
-
-resources:
-  limits:
-    cpu: 50m
-    memory: 200Mi
-  requests:
-    cpu: 10m
-    memory: 100Mi
-
 ingress:
-  enabled: true
+  enabled: ${ ingress_enabled }
+  hosts:
+    - name: ${ ingress_hostname }
+      path: "/"
   annotations:
-    kubernetes.io/ingress.class: "toolchain-nginx"
-  hostName: ${ingress_hostname}
-  tls:
-  - hosts:
-    - ${ingress_hostname}
+    ${indent( 4, yamlencode( ingress_annotations ) ) }
+
+rode-ui:
+  ingress:
+    enabled: ${ ui_ingress_enabled }
+    hosts:
+      - name: ${ ui_ingress_hostname }
+        path: "/"
+    annotations:
+      ${indent( 4, yamlencode( ui_ingress_annotations ) ) }
