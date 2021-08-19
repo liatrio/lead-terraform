@@ -48,7 +48,7 @@ resource "helm_release" "rode-ui" {
   wait       = true
 
   set_sensitive {
-    name  = "auth.oidc.clientSecret"
+    name  = "rode.auth.oidc.clientSecret"
     value = var.oidc_issuer_client_secret
   }
 

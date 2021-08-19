@@ -5,11 +5,11 @@ ingress:
       paths:
         - /
   annotations:
-    ${indent(4, yamlencode(ingress_annotations)) }
+    ${indent(4, yamlencode(ingress_annotations)) ~}
 
 auth:
   oidc:
-    ${indent(4, yamlencode(oidc_config))}
+    ${indent(4, yamlencode(oidc_config)) ~}
 
 rode-ui:
   enabled: false

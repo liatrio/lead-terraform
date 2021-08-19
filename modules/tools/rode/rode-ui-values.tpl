@@ -1,4 +1,4 @@
-appUrl: "https://${ui_ingress_hostname}"
+appUrl: "https://${ingress_hostname}"
 
 ingress:
   enabled: ${ingress_enabled}
@@ -7,9 +7,9 @@ ingress:
       paths:
         - /
   annotations:
-    ${indent(4, yamlencode(ingress_annotations))}
+    ${indent(4, yamlencode(ingress_annotations)) ~}
 
 rode:
   auth:
     oidc:
-      ${indent(8, yamlencode(oidc_config))}
+      ${indent(6, yamlencode(oidc_config))}
