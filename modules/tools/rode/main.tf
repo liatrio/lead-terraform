@@ -19,18 +19,18 @@ resource "helm_release" "rode" {
 
   values = [
     templatefile("${path.module}/rode-values.tpl", {
-      ingress_enabled     = true
-      ingress_hostname    = var.rode_ingress_hostname
+      ingress_enabled  = true
+      ingress_hostname = var.rode_ingress_hostname
       ingress_annotations = {
         "kubernetes.io/ingress.class" : var.ingress_class
       }
 
       oidc_config = {
-        enabled: var.oidc_issuer_url == "" ? false: true,
-        issuer: var.oidc_issuer_url,
-        requiredAudience: var.oidc_issuer_client_id,
-        roleClaimPath: "resource_access.${var.oidc_issuer_client_id}.roles",
-        tlsInsecureSkipVerify: false
+        enabled : var.oidc_issuer_url == "" ? false : true,
+        issuer : var.oidc_issuer_url,
+        requiredAudience : var.oidc_issuer_client_id,
+        roleClaimPath : "resource_access.${var.oidc_issuer_client_id}.roles",
+        tlsInsecureSkipVerify : false
       }
 
       grafeas_image_tag = var.grafeas_image_tag
@@ -56,17 +56,17 @@ resource "helm_release" "rode-ui" {
 
   values = [
     templatefile("${path.module}/rode-ui-values.tpl", {
-      ingress_enabled     = true
-      ingress_hostname    = var.ui_ingress_hostname
+      ingress_enabled  = true
+      ingress_hostname = var.ui_ingress_hostname
       ingress_annotations = {
-        "nginx.ingress.kubernetes.io/proxy-buffer-size": "8k"
+        "nginx.ingress.kubernetes.io/proxy-buffer-size" : "8k"
         "kubernetes.io/ingress.class" : var.ingress_class
       }
 
       oidc_config = {
-        enabled: var.oidc_issuer_url == "" ? false: true,
-        clientId: var.oidc_issuer_client_id
-        issuerUrl: var.oidc_issuer_url
+        enabled : var.oidc_issuer_url == "" ? false : true,
+        clientId : var.oidc_issuer_client_id
+        issuerUrl : var.oidc_issuer_url
       }
     })
   ]

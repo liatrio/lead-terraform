@@ -129,5 +129,5 @@ module "rode" {
   namespace                = var.toolchain_namespace
   ingress_domain           = "${var.cluster}.${var.root_zone_name}"
   rode_service_account_arn = "TODO: FIX ME"
-  localstack_enabled = var.localstack_enabled
+  localstack_enabled       = var.localstack_enabled
 }

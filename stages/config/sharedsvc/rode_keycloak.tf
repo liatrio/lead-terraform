@@ -36,7 +36,7 @@ resource "keycloak_openid_audience_protocol_mapper" "rode_audience" {
 }
 
 resource "keycloak_role" "rode_roles" {
-  for_each  = local.roles
+  for_each = local.roles
 
   realm_id  = keycloak_realm.sharedsvc.id
   client_id = keycloak_openid_client.rode.id
