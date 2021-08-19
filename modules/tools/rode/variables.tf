@@ -4,11 +4,10 @@ variable "namespace" {}
 
 variable "rode_ingress_hostname" {}
 
-variable "rode_ui_enabled" {
-  default = false
+variable "ui_ingress_hostname" {
+  description = "Leave blank to disable rode-ui"
+  default = ""
 }
-
-variable "ui_ingress_hostname" {}
 
 variable "ingress_class" {
   default = "toolchain-nginx"

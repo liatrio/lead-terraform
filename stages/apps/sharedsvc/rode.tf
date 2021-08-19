@@ -19,7 +19,6 @@ module "rode" {
   namespace                = module.rode_namespace.name
   rode_service_account_arn = var.rode_service_account_arn
 
-  rode_ui_enabled       = true
   ingress_class         = module.nginx_external.ingress_class
   ui_ingress_hostname   = local.ui_hostname
   rode_ingress_hostname = local.rode_hostname

@@ -39,7 +39,7 @@ resource "helm_release" "rode" {
 }
 
 resource "helm_release" "rode-ui" {
-  count = var.rode_ui_enabled ? 1 : 0
+  count = var.ui_ingress_hostname == "" ? 0 : 1
 
   repository = "https://rode.github.io/charts"
   timeout    = 600
