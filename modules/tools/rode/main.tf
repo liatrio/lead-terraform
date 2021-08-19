@@ -1,11 +1,11 @@
 resource "helm_release" "rode" {
-  repository = "https://harbor.toolchain.lead.prod.liatr.io/chartrepo/public"
-  timeout    = 120
+  repository = "https://rode.github.io/charts"
+  timeout    = 600
   name       = "rode"
   chart      = "rode"
   namespace  = var.namespace
   version    = "0.3.2"
-  wait = true
+  wait       = true
 
   set_sensitive {
     name  = "grafeas-elasticsearch.grafeas.elasticsearch.username"
@@ -31,7 +31,6 @@ resource "helm_release" "rode" {
     templatefile("${path.module}/rode-values.tpl", {
       ingress_enabled     = true
       ingress_hostname    = var.rode_ingress_hostname
-      ui_ingress_hostname = var.ui_ingress_hostname
       ingress_annotations = {
         "kubernetes.io/ingress.class" : var.ingress_class
       }
@@ -46,3 +45,36 @@ resource "helm_release" "rode" {
   ]
 }
 
+resource "helm_release" "rode-ui" {
+  count = var.rode_ui_enabled ? 1 : 0
+
+  repository = "https://rode.github.io/charts"
+  timeout    = 600
+  name       = "rode-ui"
+  chart      = "rode-ui"
+  namespace  = var.namespace
+  version    = "0.3.2"
+  wait       = true
+
+  set_sensitive {
+    name  = "auth.oidc.clientSecret"
+    value = var.oidc_issuer_client_secret
+  }
+
+  values = [
+    templatefile("${path.module}/rode-ui-values.tpl", {
+      ingress_enabled     = true
+      ingress_hostname    = var.ui_ingress_hostname
+      ingress_annotations = {
+        "kubernetes.io/ingress.class" : var.ingress_class
+      }
+
+      oidc_config = {
+        enabled: var.oidc_issuer_url == "" ? false: true,
+        clientId: var.oidc_issuer_client_id
+        clientSecret: var.oidc_issuer_client_secret
+        issuerUrl: var.oidc_issuer_url
+      }
+    })
+  ]
+}
