@@ -16,9 +16,9 @@ module "sdm" {
   product_version             = var.product_version
   slack_bot_token             = data.vault_generic_secret.sparky.data["slack-bot-user-oauth-access-token"]
   slack_client_signing_secret = data.vault_generic_secret.sparky.data["slack-signing-secret"]
-  github_pat                  = data.vault_generic_secret.github_token.data["token"]
-  github_pat_username         = data.vault_generic_secret.github_token.data["username"]
-  registry                    = var.registry
+  image_registry_token        = data.vault_generic_secret.github_token.data["token"]
+  image_registry_user         = data.vault_generic_secret.github_token.data["username"]
+  image_registry              = var.sdm_image_registry
   workspace_role_name         = var.workspace_role_name
   operators                   = var.lead_sdm_operators
   product_types               = var.product_types

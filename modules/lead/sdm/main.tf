@@ -101,9 +101,9 @@ EOF
   }
 }
 
-resource "kubernetes_secret" "image_pull_secret" {
+resource "kubernetes_secret" "image_registry_secret" {
   metadata {
-    name = "image-pull-secret"
+    name = "sdm-image-registry-secret"
     namespace = var.namespace
   }
 
@@ -111,8 +111,8 @@ resource "kubernetes_secret" "image_pull_secret" {
     ".dockerconfigjson" = <<DOCKER
 {
   "auths": {
-    "${var.registry}": {
-      "auth": "${base64encode("${var.github_pat_username}:${var.github_pat}")}"
+    "${var.image_registry}": {
+      "auth": "${base64encode("${var.image_registry_user}:${var.image_registry_token}")}"
     }
   }
 }

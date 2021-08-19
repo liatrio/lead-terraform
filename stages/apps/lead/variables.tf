@@ -44,7 +44,7 @@ variable "opa_failure_policy" {
 }
 
 variable "sdm_version" {
-  default = "0.4.0-38-gc65319f"
+  default = "2.0.10-3-g085d794"
 }
 
 variable "product_version" {
@@ -288,4 +288,8 @@ variable "velero_enabled_namespaces" {
 
 variable "vpn_cidr" {
   default = "10.1.32.0/20"
+}
+
+variable "sdm_image_registry"{
+  default = "ghcr.io/liatrio"
 }
