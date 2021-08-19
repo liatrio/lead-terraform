@@ -17,16 +17,6 @@ resource "helm_release" "rode" {
     value = var.grafeas_elasticsearch_password
   }
 
-  set_sensitive {
-    name  = "auth.oidc.clientSecret"
-    value = var.oidc_issuer_client_secret
-  }
-
-  set_sensitive {
-    name  = "rode-ui.rode.auth.oidc.clientSecret"
-    value = var.oidc_issuer_client_secret
-  }
-
   values = [
     templatefile("${path.module}/rode-values.tpl", {
       ingress_enabled     = true
@@ -37,9 +27,10 @@ resource "helm_release" "rode" {
 
       oidc_config = {
         enabled: var.oidc_issuer_url == "" ? false: true,
-        clientId: var.oidc_issuer_client_id
-        clientSecret: var.oidc_issuer_client_secret
-        issuerUrl: var.oidc_issuer_url
+        issuer: var.oidc_issuer_url,
+        requiredAudience: var.oidc_issuer_client_id,
+        roleClaimPath: "resource_access.${var.oidc_issuer_client_id}.roles",
+        tlsInsecureSkipVerify: false
       }
     })
   ]
@@ -72,7 +63,6 @@ resource "helm_release" "rode-ui" {
       oidc_config = {
         enabled: var.oidc_issuer_url == "" ? false: true,
         clientId: var.oidc_issuer_client_id
-        clientSecret: var.oidc_issuer_client_secret
         issuerUrl: var.oidc_issuer_url
       }
     })
