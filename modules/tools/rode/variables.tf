@@ -33,3 +33,7 @@ variable "grafeas_elasticsearch_username" {
 variable "grafeas_elasticsearch_password" {
   sensitive = true
 }
+
+variable "grafeas_image_tag" {
+  default = "v0.8.8"
+}

@@ -14,3 +14,8 @@ auth:
 rode-ui:
   enabled: false
 
+
+grafeas-elasticsearch:
+  image:
+    tag: ${grafeas_image_tag}
+

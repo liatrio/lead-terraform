@@ -32,6 +32,8 @@ resource "helm_release" "rode" {
         roleClaimPath: "resource_access.${var.oidc_issuer_client_id}.roles",
         tlsInsecureSkipVerify: false
       }
+
+      grafeas_image_tag = var.grafeas_image_tag
     })
   ]
 }
@@ -57,6 +59,7 @@ resource "helm_release" "rode-ui" {
       ingress_enabled     = true
       ingress_hostname    = var.ui_ingress_hostname
       ingress_annotations = {
+        "nginx.ingress.kubernetes.io/proxy-buffer-size": "8k"
         "kubernetes.io/ingress.class" : var.ingress_class
       }
 

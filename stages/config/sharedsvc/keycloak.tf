@@ -52,20 +52,4 @@ resource "keycloak_openid_client" "sonarqube" {
   ]
 }
 
-resource "keycloak_openid_client" "rode" {
-  realm_id  = keycloak_realm.sharedsvc.id
-  client_id = var.rode_oidc_client_id
 
-  name    = "rode"
-  enabled = true
-
-  client_secret = data.vault_generic_secret.rode.data["oidc_issuer_client_secret"]
-
-  standard_flow_enabled = true
-
-  access_type = "CONFIDENTIAL"
-  valid_redirect_uris = [
-    "https://${var.rode_ui_hostname}/",
-    "https://${var.rode_ui_hostname}/callback"
-  ]
-}
