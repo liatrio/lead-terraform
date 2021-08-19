@@ -65,8 +65,6 @@ resource "keycloak_openid_client" "rode" {
 
   access_type = "CONFIDENTIAL"
   valid_redirect_uris = [
-    "https://${var.rode_hostname}/",
-    "https://${var.rode_hostname}/callback",
     "https://${var.rode_ui_hostname}/",
     "https://${var.rode_ui_hostname}/callback"
   ]
