@@ -22,9 +22,9 @@ module "rode" {
   ui_ingress_hostname   = local.ui_hostname
   rode_ingress_hostname = local.rode_hostname
 
-  oidc_issuer_url           = local.keycloak_issuer_uri
-  oidc_issuer_client_id     = local.rode_oidc_client_id
-  oidc_issuer_client_secret = data.vault_generic_secret.rode.data["oidc_issuer_client_secret"]
+  oidc_issuer_url    = local.keycloak_issuer_uri
+  oidc_client_id     = local.rode_oidc_client_id
+  oidc_client_secret = data.vault_generic_secret.rode.data["oidc_issuer_client_secret"]
 
   grafeas_elasticsearch_username = data.vault_generic_secret.rode.data["grafeas_elasticsearch_username"]
   grafeas_elasticsearch_password = data.vault_generic_secret.rode.data["grafeas_elasticsearch_password"]

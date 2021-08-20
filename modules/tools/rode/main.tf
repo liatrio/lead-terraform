@@ -27,8 +27,8 @@ resource "helm_release" "rode" {
       oidc_config = {
         enabled : var.oidc_issuer_url != "",
         issuer : var.oidc_issuer_url,
-        requiredAudience : var.oidc_issuer_client_id,
-        roleClaimPath : "resource_access.${var.oidc_issuer_client_id}.roles",
+        requiredAudience : var.oidc_client_id,
+        roleClaimPath : "resource_access.${var.oidc_client_id}.roles",
         tlsInsecureSkipVerify : false
       }
 
@@ -49,7 +49,7 @@ resource "helm_release" "rode_ui" {
 
   set_sensitive {
     name  = "rode.auth.oidc.clientSecret"
-    value = var.oidc_issuer_client_secret
+    value = var.oidc_client_secret
   }
 
   values = [
@@ -63,7 +63,7 @@ resource "helm_release" "rode_ui" {
 
       oidc_config = {
         enabled : var.oidc_issuer_url != "",
-        clientId : var.oidc_issuer_client_id
+        clientId : var.oidc_client_id
         issuerUrl : var.oidc_issuer_url
       }
     })
