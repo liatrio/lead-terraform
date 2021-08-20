@@ -3,7 +3,7 @@ resource "helm_release" "rode" {
   name       = "rode"
   chart      = "rode"
   namespace  = var.namespace
-  version    = "0.3.2"
+  version    = "0.3.3"
   wait       = true
 
   set_sensitive {
@@ -44,7 +44,7 @@ resource "helm_release" "rode_ui" {
   name       = "rode-ui"
   chart      = "rode-ui"
   namespace  = var.namespace
-  version    = "0.3.2"
+  version    = "0.3.3"
   wait       = true
 
   set_sensitive {
