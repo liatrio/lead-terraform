@@ -1,5 +1,3 @@
-variable "rode_service_account_arn" {} #todo: is this needed?
-
 variable "namespace" {}
 
 variable "rode_ingress_hostname" {}
