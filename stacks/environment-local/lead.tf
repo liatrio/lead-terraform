@@ -122,11 +122,3 @@ module "kube_resource_report" {
   cluster        = var.cluster
   root_zone_name = var.root_zone_name
 }
-
-module "rode" {
-  source = "../../modules/tools/rode"
-
-  namespace          = var.toolchain_namespace
-  ingress_domain     = "${var.cluster}.${var.root_zone_name}"
-  localstack_enabled = var.localstack_enabled
-}
