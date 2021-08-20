@@ -25,7 +25,7 @@ resource "helm_release" "rode" {
       }
 
       oidc_config = {
-        enabled : var.oidc_issuer_url == "" ? false : true,
+        enabled : var.oidc_issuer_url != "",
         issuer : var.oidc_issuer_url,
         requiredAudience : var.oidc_issuer_client_id,
         roleClaimPath : "resource_access.${var.oidc_issuer_client_id}.roles",
