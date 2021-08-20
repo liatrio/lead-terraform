@@ -4,7 +4,7 @@ variable "rode_ingress_hostname" {}
 
 variable "ui_ingress_hostname" {
   description = "Leave blank to disable rode-ui"
-  default = ""
+  default     = ""
 }
 
 variable "ingress_class" {

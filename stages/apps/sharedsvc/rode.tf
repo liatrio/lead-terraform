@@ -16,7 +16,7 @@ module "rode_namespace" {
 module "rode" {
   source = "../../../modules/tools/rode"
 
-  namespace                = module.rode_namespace.name
+  namespace = module.rode_namespace.name
 
   ingress_class         = module.nginx_external.ingress_class
   ui_ingress_hostname   = local.ui_hostname

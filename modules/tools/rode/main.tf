@@ -1,6 +1,5 @@
 resource "helm_release" "rode" {
   repository = "https://rode.github.io/charts"
-  timeout    = 600
   name       = "rode"
   chart      = "rode"
   namespace  = var.namespace
@@ -42,7 +41,6 @@ resource "helm_release" "rode_ui" {
   count = var.ui_ingress_hostname == "" ? 0 : 1
 
   repository = "https://rode.github.io/charts"
-  timeout    = 600
   name       = "rode-ui"
   chart      = "rode-ui"
   namespace  = var.namespace
