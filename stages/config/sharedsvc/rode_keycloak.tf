@@ -16,7 +16,7 @@ resource "keycloak_openid_client" "rode" {
   name    = "rode"
   enabled = true
 
-  client_secret = data.vault_generic_secret.rode.data["oidc_issuer_client_secret"]
+  client_secret = data.vault_generic_secret.rode.data["oidc_client_secret"]
 
   standard_flow_enabled = true
 
