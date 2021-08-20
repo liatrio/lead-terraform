@@ -38,7 +38,7 @@ resource "helm_release" "rode" {
   ]
 }
 
-resource "helm_release" "rode-ui" {
+resource "helm_release" "rode_ui" {
   count = var.ui_ingress_hostname == "" ? 0 : 1
 
   repository = "https://rode.github.io/charts"
@@ -64,7 +64,7 @@ resource "helm_release" "rode-ui" {
       }
 
       oidc_config = {
-        enabled : var.oidc_issuer_url == "" ? false : true,
+        enabled : var.oidc_issuer_url != "",
         clientId : var.oidc_issuer_client_id
         issuerUrl : var.oidc_issuer_url
       }
