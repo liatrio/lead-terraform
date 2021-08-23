@@ -25,7 +25,8 @@ resource "helm_release" "rode" {
       ingress_enabled     = true
       ingress_hostname    = var.rode_ingress_hostname
       ingress_annotations = {
-        "kubernetes.io/ingress.class" : var.ingress_class
+        "kubernetes.io/ingress.class" : var.ingress_class,
+        "nginx.ingress.kubernetes.io/force-ssl-redirect": "true",
       }
 
       oidc_config = {
@@ -61,8 +62,9 @@ resource "helm_release" "rode_ui" {
       ingress_enabled     = true
       ingress_hostname    = var.ui_ingress_hostname
       ingress_annotations = {
-        "nginx.ingress.kubernetes.io/proxy-buffer-size" : "8k"
-        "kubernetes.io/ingress.class" : var.ingress_class
+        "nginx.ingress.kubernetes.io/proxy-buffer-size" : "8k",
+        "nginx.ingress.kubernetes.io/force-ssl-redirect": "true",
+        "kubernetes.io/ingress.class" : var.ingress_class,
       }
 
       oidc_config = {
@@ -87,7 +89,8 @@ resource "helm_release" "rode_tfsec_collector" {
       auth_enabled        = local.auth_enabled
       host                = var.tfsec_collector_hostname
       ingress_annotations = {
-        "kubernetes.io/ingress.class" : var.ingress_class
+        "kubernetes.io/ingress.class" : var.ingress_class,
+        "nginx.ingress.kubernetes.io/force-ssl-redirect": "true",
       }
       namespace           = var.namespace
     })
