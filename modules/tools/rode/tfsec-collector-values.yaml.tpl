@@ -11,9 +11,9 @@ rode:
 ingress:
     enabled: true
     annotations:
-      ${indent(4, yamlencode(ingress_annotations)) ~}
+      ${indent(6, yamlencode(ingress_annotations))}
     hosts:
-      - name: ${host}
+      - host: ${host}
         paths:
           - /
 %{~ endif }
