@@ -44,7 +44,7 @@ variable "opa_failure_policy" {
 }
 
 variable "sdm_version" {
-  default = "2.0.10-3-g085d794"
+  default = "2.2.0"
 }
 
 variable "product_version" {
