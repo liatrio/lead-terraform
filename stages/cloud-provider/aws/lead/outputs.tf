@@ -63,10 +63,6 @@ output "github_runners_service_account_arn" {
   value = module.github-runners-s3.github_runners_service_account_arn
 }
 
-output "rode_service_account_arn" {
-  value = aws_iam_role.rode_service_account.arn
-}
-
 output "codeservices_event_mapper_service_account_arn" {
   value = module.codeservices.event_mapper_role_arn
 }

@@ -7,7 +7,6 @@ locals {
   sonarqube_hostname       = "sonarqube.${var.cluster_domain}"
 }
 
-
 module "sonarqube_namespace" {
   source    = "../../../modules/common/namespace"
   namespace = "sonarqube"

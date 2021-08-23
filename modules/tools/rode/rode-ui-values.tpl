@@ -1,3 +1,5 @@
+appUrl: "https://${ingress_hostname}"
+
 ingress:
   enabled: ${ingress_enabled}
   hosts:
@@ -7,15 +9,7 @@ ingress:
   annotations:
     ${indent(4, yamlencode(ingress_annotations)) ~}
 
-auth:
-  oidc:
-    ${indent(4, yamlencode(oidc_config)) ~}
-
-rode-ui:
-  enabled: false
-
-
-grafeas-elasticsearch:
-  image:
-    tag: ${grafeas_image_tag}
-
+rode:
+  auth:
+    oidc:
+      ${indent(6, yamlencode(oidc_config))}
