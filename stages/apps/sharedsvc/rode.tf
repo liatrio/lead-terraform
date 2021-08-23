@@ -20,6 +20,7 @@ module "rode" {
 
   ingress_class         = module.nginx_external.ingress_class
   ui_ingress_hostname   = local.ui_hostname
+  rode_ui_enabled       = true
   rode_ingress_hostname = local.rode_hostname
 
   oidc_issuer_url    = local.keycloak_issuer_uri

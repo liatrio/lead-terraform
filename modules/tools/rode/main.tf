@@ -38,7 +38,7 @@ resource "helm_release" "rode" {
 }
 
 resource "helm_release" "rode_ui" {
-  count = var.ui_ingress_hostname == "" ? 0 : 1
+  count = var.rode_ui_enabled
 
   repository = "https://rode.github.io/charts"
   name       = "rode-ui"
