@@ -1,3 +1,7 @@
+locals {
+  auth_enabled = var.oidc_issuer_url != ""
+}
+
 resource "helm_release" "rode" {
   repository = "https://rode.github.io/charts"
   name       = "rode"
@@ -18,14 +22,14 @@ resource "helm_release" "rode" {
 
   values = [
     templatefile("${path.module}/rode-values.tpl", {
-      ingress_enabled  = true
-      ingress_hostname = var.rode_ingress_hostname
+      ingress_enabled     = true
+      ingress_hostname    = var.rode_ingress_hostname
       ingress_annotations = {
         "kubernetes.io/ingress.class" : var.ingress_class
       }
 
       oidc_config = {
-        enabled : var.oidc_issuer_url != "",
+        enabled : local.auth_enabled,
         issuer : var.oidc_issuer_url,
         requiredAudience : var.oidc_client_id,
         roleClaimPath : "resource_access.${var.oidc_client_id}.roles",
@@ -54,18 +58,42 @@ resource "helm_release" "rode_ui" {
 
   values = [
     templatefile("${path.module}/rode-ui-values.tpl", {
-      ingress_enabled  = true
-      ingress_hostname = var.ui_ingress_hostname
+      ingress_enabled     = true
+      ingress_hostname    = var.ui_ingress_hostname
       ingress_annotations = {
         "nginx.ingress.kubernetes.io/proxy-buffer-size" : "8k"
         "kubernetes.io/ingress.class" : var.ingress_class
       }
 
       oidc_config = {
-        enabled : var.oidc_issuer_url != "",
+        enabled : local.auth_enabled,
         clientId : var.oidc_client_id
         issuerUrl : var.oidc_issuer_url
       }
     })
+  ]
+}
+
+resource "helm_release" "rode_tfsec_collector" {
+  name       = "tfsec-collector"
+  namespace  = var.namespace
+  repository = "https://rode.github.io/charts"
+  chart      = "rode-collector-tfsec"
+  version    = "0.2.1"
+  wait       = true
+
+  values = [
+    templatefile("${path.module}/tfsec-collector-values.yaml.tpl", {
+      auth_enabled        = local.auth_enabled
+      host                = var.tfsec_collector_hostname
+      ingress_annotations = {
+        "kubernetes.io/ingress.class" : var.ingress_class
+      }
+      namespace           = var.namespace
+    })
+  ]
+
+  depends_on = [
+    helm_release.rode,
   ]
 }

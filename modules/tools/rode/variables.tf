@@ -38,3 +38,8 @@ variable "grafeas_elasticsearch_password" {
 variable "grafeas_image_tag" {
   default = "v0.8.8"
 }
+
+variable "tfsec_collector_hostname" {
+  type    = string
+  default = ""
+}
