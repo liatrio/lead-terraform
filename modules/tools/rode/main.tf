@@ -43,7 +43,7 @@ resource "helm_release" "rode" {
 }
 
 resource "helm_release" "rode_ui" {
-  count = var.rode_ui_enabled
+  count = var.rode_ui_enabled ? 1 : 0
 
   repository = "https://rode.github.io/charts"
   name       = "rode-ui"
@@ -74,10 +74,14 @@ resource "helm_release" "rode_ui" {
       }
     })
   ]
+
+  depends_on = [
+    helm_release.rode,
+  ]
 }
 
 resource "helm_release" "rode_tfsec_collector" {
-  name       = "tfsec-collector"
+  name       = "rode-collector-tfsec"
   namespace  = var.namespace
   repository = "https://rode.github.io/charts"
   chart      = "rode-collector-tfsec"
