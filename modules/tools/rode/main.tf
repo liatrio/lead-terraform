@@ -25,7 +25,7 @@ resource "helm_release" "rode" {
       ingress = {
         enabled = true
         http = {
-          host = var.rode_grpc_ingress_hostname
+          host = var.rode_ingress_hostname
           annotations = {
             "kubernetes.io/ingress.class" : var.ingress_class,
             "nginx.ingress.kubernetes.io/force-ssl-redirect": "true",
