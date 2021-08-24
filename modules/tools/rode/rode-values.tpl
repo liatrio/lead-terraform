@@ -1,11 +1,20 @@
 ingress:
-  enabled: ${ingress_enabled}
-  hosts:
-    - host: ${ingress_hostname}
-      paths:
-        - /
-  annotations:
-    ${indent(4, yamlencode(ingress_annotations)) ~}
+  http:
+    enabled: ${ingress.enabled}
+    hosts:
+      - host: ${ingress.http.host}
+        paths:
+          - /
+    annotations:
+      ${indent(6, yamlencode(ingress.http.annotations)) ~}
+  grpc:
+    enabled: ${ingress.enabled}
+    hosts:
+      - host: ${ingress.grpc.host}
+        paths:
+          - /
+    annotations:
+      ${indent(6, yamlencode(ingress.grpc.annotations)) ~}
 
 auth:
   oidc:

@@ -2,6 +2,8 @@ variable "namespace" {}
 
 variable "rode_ingress_hostname" {}
 
+variable "rode_grpc_ingress_hostname" {}
+
 variable "rode_ui_enabled" {
   default = false
 }
