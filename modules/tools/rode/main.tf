@@ -29,6 +29,7 @@ resource "helm_release" "rode" {
           annotations = {
             "kubernetes.io/ingress.class" : var.ingress_class,
             "nginx.ingress.kubernetes.io/force-ssl-redirect": "true",
+            "kubernetes.io/ingress.class" : var.ingress_class,
           }
         }
         grpc = {
@@ -36,6 +37,7 @@ resource "helm_release" "rode" {
           annotations = {
             "nginx.ingress.kubernetes.io/backend-protocol": "GRPC",
             "nginx.ingress.kubernetes.io/force-ssl-redirect": "true",
+            "kubernetes.io/ingress.class" : var.ingress_class,
           }
         }
       }
