@@ -29,6 +29,8 @@ grafana:
     requests:
       cpu: 100m
       memory: 128Mi
+  plugins:
+    - grafana-timestream-datasource
 
 kube-state-metrics:
   podAnnotations:
