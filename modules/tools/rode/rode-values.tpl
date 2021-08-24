@@ -6,7 +6,7 @@ ingress:
         paths:
           - /
     annotations:
-      ${indent(6, yamlencode(ingress.http.annotations)) ~}
+      ${indent(6, yamlencode(ingress.http.annotations))}
   grpc:
     enabled: ${ingress.enabled}
     hosts:
