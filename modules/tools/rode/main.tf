@@ -29,7 +29,6 @@ resource "helm_release" "rode" {
           annotations = {
             "kubernetes.io/ingress.class" : var.ingress_class,
             "nginx.ingress.kubernetes.io/force-ssl-redirect": "true",
-            "kubernetes.io/ingress.class" : var.ingress_class,
           }
         }
         grpc = {
