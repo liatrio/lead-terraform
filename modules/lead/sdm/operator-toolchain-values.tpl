@@ -3,6 +3,8 @@ cluster_domain: ${cluster_domain}
 product_version: "${product_version}"
 product:
   enabled: ${operator_product_enabled}
+  imagePullSecrets:
+    - name: ${image_pull_secret}
   image:
     repository: ${image_repository}/operator-product
     tag: ${sdm_version}
@@ -68,6 +70,10 @@ aws-event-mapper:
   sqsUrl: ${sqs_url}
   rbac:
     serviceAccountAnnotations: ${aws_event_mapper_service_account_annotations}
+
+operatorsGlobal:
+  imagePullSecrets:
+    - name: ${image_pull_secret}
 
 operators:
   toolchain:

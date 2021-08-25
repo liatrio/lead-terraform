@@ -2,6 +2,27 @@ module "essential_toleration" {
   source = "../../affinity/essential-toleration-values"
 }
 
+resource "kubernetes_secret" "image_registry_secret" {
+  metadata {
+    name      = "sdm-image-registry-secret"
+    namespace = var.namespace
+  }
+
+  data = {
+    ".dockerconfigjson" = <<EOF
+{
+  "auths": {
+    "${var.image_registry}": {
+      "auth": "${base64encode("${var.image_registry_user}:${var.image_registry_token}")}"
+    }
+  }
+}
+EOF
+  }
+
+  type = "kubernetes.io/dockerconfigjson"
+}
+
 data "template_file" "operator_toolchain_values" {
   template = file("${path.module}/operator-toolchain-values.tpl")
 
@@ -36,7 +57,8 @@ data "template_file" "operator_toolchain_values" {
     vault_namespace         = var.product_vars["vault_namespace"]
     vault_root_token_secret = var.product_vars["vault_root_token_secret"]
 
-    image_repository = var.toolchain_image_repo
+    image_repository  = var.toolchain_image_repo
+    image_pull_secret = kubernetes_secret.image_registry_secret.metadata[0].name
 
     remote_state_config = var.remote_state_config
 
@@ -99,25 +121,4 @@ botToken=${var.slack_bot_token}
 EOF
 
   }
-}
-
-resource "kubernetes_secret" "image_registry_secret" {
-  metadata {
-    name      = "sdm-image-registry-secret"
-    namespace = var.namespace
-  }
-
-  data = {
-    ".dockerconfigjson" = <<EOF
-{
-  "auths": {
-    "${var.image_registry}": {
-      "auth": "${base64encode("${var.image_registry_user}:${var.image_registry_token}")}"
-    }
-  }
-}
-EOF
-  }
-
-  type = "kubernetes.io/dockerconfigjson"
 }
