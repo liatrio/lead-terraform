@@ -20,7 +20,7 @@ resource "keycloak_openid_client" "rode" {
 
   standard_flow_enabled = true
 
-  access_type         = "CONFIDENTIAL"
+  access_type = "CONFIDENTIAL"
   valid_redirect_uris = [
     "https://${var.rode_ui_hostname}/",
     "https://${var.rode_ui_hostname}/callback"
@@ -63,9 +63,9 @@ resource "keycloak_group_roles" "rode_group_roles" {
 
 locals {
   rode_service_accounts = {
-    terraform: {role: "PolicyAdministrator", client_secret: "terraform_client_secret"}
-    collector: {role: "Collector", client_secret: "collector_client_secret"}
-    enforcer: {role: "Enforcer", client_secret: "enforcer_client_secret"}
+    terraform : { role : "PolicyAdministrator", client_secret : "terraform_client_secret" }
+    collector : { role : "Collector", client_secret : "collector_client_secret" }
+    enforcer : { role : "Enforcer", client_secret : "enforcer_client_secret" }
   }
 }
 

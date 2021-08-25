@@ -28,14 +28,14 @@ resource "helm_release" "rode" {
           host = var.rode_ingress_hostname
           annotations = {
             "kubernetes.io/ingress.class" : var.ingress_class,
-            "nginx.ingress.kubernetes.io/force-ssl-redirect": "true",
+            "nginx.ingress.kubernetes.io/force-ssl-redirect" : "true",
           }
         }
         grpc = {
           host = var.rode_grpc_ingress_hostname
           annotations = {
-            "nginx.ingress.kubernetes.io/backend-protocol": "GRPC",
-            "nginx.ingress.kubernetes.io/force-ssl-redirect": "true",
+            "nginx.ingress.kubernetes.io/backend-protocol" : "GRPC",
+            "nginx.ingress.kubernetes.io/force-ssl-redirect" : "true",
             "kubernetes.io/ingress.class" : var.ingress_class,
           }
         }
@@ -71,11 +71,11 @@ resource "helm_release" "rode_ui" {
 
   values = [
     templatefile("${path.module}/rode-ui-values.tpl", {
-      ingress_enabled     = true
-      ingress_hostname    = var.ui_ingress_hostname
+      ingress_enabled  = true
+      ingress_hostname = var.ui_ingress_hostname
       ingress_annotations = {
         "nginx.ingress.kubernetes.io/proxy-buffer-size" : "8k",
-        "nginx.ingress.kubernetes.io/force-ssl-redirect": "true",
+        "nginx.ingress.kubernetes.io/force-ssl-redirect" : "true",
         "kubernetes.io/ingress.class" : var.ingress_class,
       }
 
@@ -102,13 +102,13 @@ resource "helm_release" "rode_tfsec_collector" {
 
   values = [
     templatefile("${path.module}/tfsec-collector-values.yaml.tpl", {
-      auth_enabled        = local.auth_enabled
-      host                = var.tfsec_collector_hostname
+      auth_enabled = local.auth_enabled
+      host         = var.tfsec_collector_hostname
       ingress_annotations = {
         "kubernetes.io/ingress.class" : var.ingress_class,
-        "nginx.ingress.kubernetes.io/force-ssl-redirect": "true",
+        "nginx.ingress.kubernetes.io/force-ssl-redirect" : "true",
       }
-      namespace           = var.namespace
+      namespace = var.namespace
     })
   ]
 
