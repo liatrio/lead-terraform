@@ -20,7 +20,7 @@ resource "keycloak_openid_client" "rode" {
 
   standard_flow_enabled = true
 
-  access_type = "CONFIDENTIAL"
+  access_type         = "CONFIDENTIAL"
   valid_redirect_uris = [
     "https://${var.rode_ui_hostname}/",
     "https://${var.rode_ui_hostname}/callback"
@@ -61,28 +61,42 @@ resource "keycloak_group_roles" "rode_group_roles" {
   ]
 }
 
-resource "keycloak_openid_client" "rode_terraform" {
+locals {
+  rode_service_accounts = {
+    terraform: {role: "PolicyAdministrator", client_secret: "terraform_client_secret"}
+    collector: {role: "Collector", client_secret: "collector_client_secret"}
+    enforcer: {role: "Enforcer", client_secret: "enforcer_client_secret"}
+  }
+}
+
+resource "keycloak_openid_client" "rode_service_account" {
+  for_each = local.rode_service_accounts
+
   realm_id  = keycloak_realm.sharedsvc.id
-  client_id = "rode-terraform"
-  name      = "Rode Terraform"
+  client_id = "rode-${each.key}"
+  name      = "Rode ${title(each.key)}"
   enabled   = true
 
-  client_secret            = data.vault_generic_secret.rode.data["terraform_client_secret"]
+  client_secret            = data.vault_generic_secret.rode.data[each.value.client_secret]
   service_accounts_enabled = true
   access_type              = "CONFIDENTIAL"
 }
 
-resource "keycloak_openid_audience_protocol_mapper" "rode_terraform_audience" {
+resource "keycloak_openid_audience_protocol_mapper" "rode_service_account" {
+  for_each = local.rode_service_accounts
+
   realm_id  = keycloak_realm.sharedsvc.id
-  client_id = keycloak_openid_client.rode_terraform.id
-  name      = "rode-terraform-audience-mapper"
+  client_id = keycloak_openid_client.rode_service_account[each.key].id
+  name      = "rode-${each.key}-audience-mapper"
 
   included_client_audience = keycloak_openid_client.rode.client_id
 }
 
-resource "keycloak_openid_client_service_account_role" "rode_terraform_service_account_role" {
+resource "keycloak_openid_client_service_account_role" "rode_service_account" {
+  for_each = local.rode_service_accounts
+
   realm_id                = keycloak_realm.sharedsvc.id
-  service_account_user_id = keycloak_openid_client.rode_terraform.service_account_user_id
+  service_account_user_id = keycloak_openid_client.rode_service_account[each.key].service_account_user_id
   client_id               = keycloak_openid_client.rode.id
-  role                    = keycloak_role.rode_roles["PolicyAdministrator"].name
+  role                    = keycloak_role.rode_roles[each.value.role].name
 }
