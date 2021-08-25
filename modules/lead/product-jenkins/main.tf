@@ -1,5 +1,6 @@
 locals {
   protocol = var.cluster_domain == "docker-for-desktop.localhost" ? "http" : "https"
+  ingress_hostname = "${module.toolchain_namespace.name}.jenkins.${var.cluster_domain}"
 }
 
 provider "kubernetes" {
