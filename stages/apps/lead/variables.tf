@@ -290,6 +290,6 @@ variable "vpn_cidr" {
   default = "10.1.32.0/20"
 }
 
-variable "sdm_image_registry"{
+variable "sdm_image_registry" {
   default = "ghcr.io/liatrio"
 }

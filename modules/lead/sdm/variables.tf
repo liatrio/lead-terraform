@@ -80,13 +80,13 @@ variable "aws_event_mapper_service_account_annotations" {
   default = {}
 }
 
-variable "image_registry"{
-  
-}
-variable "image_registry_token"{
+variable "image_registry" {
 
 }
-variable "image_registry_user"{
+variable "image_registry_token" {
+
+}
+variable "image_registry_user" {
 
 }
 

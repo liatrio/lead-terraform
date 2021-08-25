@@ -103,7 +103,7 @@ EOF
 
 resource "kubernetes_secret" "image_registry_secret" {
   metadata {
-    name = "sdm-image-registry-secret"
+    name      = "sdm-image-registry-secret"
     namespace = var.namespace
   }
 
