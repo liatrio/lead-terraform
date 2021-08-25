@@ -3,15 +3,17 @@ cluster_domain: ${cluster_domain}
 product_version: "${product_version}"
 product:
   enabled: ${operator_product_enabled}
-  imagePullSecrets:
-    - name: ${image_pull_secret}
   image:
     repository: ${image_repository}/operator-product
     tag: ${sdm_version}
+    pullSecrets:  
+      - name: ${image_pull_secret}
   converge:
     image:
       repository: ${image_repository}/converge-image
       tag: ${sdm_version}
+      pullSecrets:  
+        - name: ${image_pull_secret}
     additionalPodValues:
       ${indent(6, essential_toleration_values)}
   %{ if remote_state_config != "" }
