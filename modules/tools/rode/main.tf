@@ -25,7 +25,7 @@ resource "helm_release" "rode" {
   }
 
   values = [
-    templatefile("${path.module}/rode-values.tpl", {
+    templatefile("${path.module}/rode-values.yaml.tpl", {
       ingress = {
         enabled = true
         http    = {
@@ -69,7 +69,7 @@ resource "helm_release" "rode_ui" {
   }
 
   values = [
-    templatefile("${path.module}/rode-ui-values.tpl", {
+    templatefile("${path.module}/rode-ui-values.yaml.tpl", {
       ingress_enabled     = true
       ingress_hostname    = var.ui_ingress_hostname
       ingress_annotations = merge(local.ingress_annotations, {
