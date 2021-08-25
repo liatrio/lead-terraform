@@ -7,7 +7,7 @@ resource "helm_release" "rode" {
   name       = "rode"
   chart      = "rode"
   namespace  = var.namespace
-  version    = "0.3.3"
+  version    = "0.4.0"
   wait       = true
 
   set_sensitive {
@@ -22,11 +22,23 @@ resource "helm_release" "rode" {
 
   values = [
     templatefile("${path.module}/rode-values.tpl", {
-      ingress_enabled     = true
-      ingress_hostname    = var.rode_ingress_hostname
-      ingress_annotations = {
-        "kubernetes.io/ingress.class" : var.ingress_class,
-        "nginx.ingress.kubernetes.io/force-ssl-redirect": "true",
+      ingress = {
+        enabled = true
+        http = {
+          host = var.rode_ingress_hostname
+          annotations = {
+            "kubernetes.io/ingress.class" : var.ingress_class,
+            "nginx.ingress.kubernetes.io/force-ssl-redirect": "true",
+          }
+        }
+        grpc = {
+          host = var.rode_grpc_ingress_hostname
+          annotations = {
+            "nginx.ingress.kubernetes.io/backend-protocol": "GRPC",
+            "nginx.ingress.kubernetes.io/force-ssl-redirect": "true",
+            "kubernetes.io/ingress.class" : var.ingress_class,
+          }
+        }
       }
 
       oidc_config = {

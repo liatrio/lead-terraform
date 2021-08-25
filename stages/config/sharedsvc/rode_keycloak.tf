@@ -60,3 +60,29 @@ resource "keycloak_group_roles" "rode_group_roles" {
     keycloak_role.rode_roles[each.key].id,
   ]
 }
+
+resource "keycloak_openid_client" "rode_terraform" {
+  realm_id  = keycloak_realm.sharedsvc.id
+  client_id = "rode-terraform"
+  name      = "Rode Terraform"
+  enabled   = true
+
+  client_secret            = data.vault_generic_secret.rode.data["terraform_client_secret"]
+  service_accounts_enabled = true
+  access_type              = "CONFIDENTIAL"
+}
+
+resource "keycloak_openid_audience_protocol_mapper" "rode_terraform_audience" {
+  realm_id  = keycloak_realm.sharedsvc.id
+  client_id = keycloak_openid_client.rode_terraform.id
+  name      = "rode-terraform-audience-mapper"
+
+  included_client_audience = keycloak_openid_client.rode.client_id
+}
+
+resource "keycloak_openid_client_service_account_role" "rode_terraform_service_account_role" {
+  realm_id                = keycloak_realm.sharedsvc.id
+  service_account_user_id = keycloak_openid_client.rode_terraform.service_account_user_id
+  client_id               = keycloak_openid_client.rode.id
+  role                    = keycloak_role.rode_roles["PolicyAdministrator"].name
+}
