@@ -108,7 +108,7 @@ resource "kubernetes_secret" "image_registry_secret" {
   }
 
   data = {
-    ".dockerconfigjson" = <<DOCKER
+    ".dockerconfigjson" = <<EOF
 {
   "auths": {
     "${var.image_registry}": {
@@ -116,7 +116,7 @@ resource "kubernetes_secret" "image_registry_secret" {
     }
   }
 }
-DOCKER
+EOF
   }
 
   type = "kubernetes.io/dockerconfigjson"

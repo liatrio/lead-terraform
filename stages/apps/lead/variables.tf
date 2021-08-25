@@ -1,7 +1,3 @@
-variable "registry" {
-  default = "ghcr.io/liatrio"
-}
-
 variable "root_zone_name" {
 }
 
