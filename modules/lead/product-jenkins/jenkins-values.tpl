@@ -1,14 +1,18 @@
 serviceAccount:
   create: false
-  name: jenkins
+  name: ${service_account_name}
 
 persistence:
-  enabled: false
+  enabled: true
 
-master:
-  installPlugins: false
+controller:
   image: "${toolchain_image_repo}/jenkins-image"
   tag: ${jenkins_image_version}
+
+  installPlugins: false
+
+  serviceType: ClusterIP
+  jenkinsUrlProtocol: ${protocol}
   ingress:
     enabled: true
     hostName: ${ingress_hostname}
@@ -24,12 +28,15 @@ master:
     tls:
     - hosts:
       - ${ingress_hostname}
-  jenkinsUrlProtocol: ${protocol}
-  serviceType: ClusterIP
-  healthProbeLivenessFailureThreshold: 5
-  healthProbeReadinessFailureThreshold: 12
-  healthProbeLivenessInitialDelay: 60
-  healthProbeReadinessInitialDelay: 30
+
+  probes:
+    livenessProbe:
+      failureThreshold: 5
+      initialDelaySeconds: 60
+    readinessProbe:
+      failureThreshold: 12
+      initialDelaySeconds: 30
+
   resources:
     requests:
       cpu: 250m
@@ -39,22 +46,16 @@ master:
       memory: 2Gi
 
   JCasC:
+    defaultConfig: false
     enabled: true
-    pluginVersion: 1.19
-    supportPluginVersion: 1.19
     configScripts:
       welcome-message: |
         jenkins:
           systemMessage: Welcome to our CI\CD server.  This Jenkins is configured and managed 'as code' from https://github.com/liatrio/lead-terraform.
 
-  containerEnv:
-    - name: elasticUrl
-      value: http://lead-dashboard-logstash.toolchain.svc.cluster.local:9000
-
   sidecars:
     configAutoReload:
       enabled: true
-      label: jenkins_config
       resources:
         requests:
           cpu: 100m

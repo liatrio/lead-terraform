@@ -6,6 +6,10 @@ data "vault_generic_secret" "sonarqube" {
   path = "lead/aws/${data.aws_caller_identity.current.account_id}/sonarqube"
 }
 
+data "vault_generic_secret" "rode" {
+  path = "lead/aws/${data.aws_caller_identity.current.account_id}/rode"
+}
+
 locals {
   realm = "liatrio"
 }
@@ -47,3 +51,5 @@ resource "keycloak_openid_client" "sonarqube" {
     "https://${var.sonarqube_hostname}/oauth2/callback/oidc"
   ]
 }
+
+

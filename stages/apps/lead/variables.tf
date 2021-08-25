@@ -200,9 +200,6 @@ variable "operator_jenkins_service_account_arn" {
 variable "product_operator_service_account_arn" {
 }
 
-variable "rode_service_account_arn" {
-}
-
 variable "codeservices_event_mapper_service_account_arn" {
 }
 
