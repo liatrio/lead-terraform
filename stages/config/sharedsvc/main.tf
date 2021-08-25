@@ -29,3 +29,10 @@ provider "keycloak" {
   url            = "https://${var.keycloak_hostname}"
   client_timeout = 15
 }
+
+provider "sonarqube" {
+  host                     = "https://${var.sonarqube_hostname}"
+  user                     = "admin"
+  pass                     = data.vault_generic_secret.sonarqube.data["admin"]
+  installed_version        = "8.5"
+}

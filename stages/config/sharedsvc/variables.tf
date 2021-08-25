@@ -13,3 +13,5 @@ variable "rode_oidc_client_id" {}
 variable "rode_hostname" {}
 
 variable "rode_ui_hostname" {}
+
+variable "sonarqube_collector_url" {}

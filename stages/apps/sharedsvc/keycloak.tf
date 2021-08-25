@@ -5,6 +5,7 @@ data "vault_generic_secret" "keycloak" {
 locals {
   keycloak_realm      = "liatrio"
   keycloak_issuer_uri = "https://${module.keycloak.keycloak_hostname}/auth/realms/${local.keycloak_realm}"
+  keycloak_token_uri  = "https://${module.keycloak.keycloak_hostname}/auth/realms/${local.keycloak_realm}/protocol/openid-connect/token"
 }
 
 module "keycloak_namespace" {
