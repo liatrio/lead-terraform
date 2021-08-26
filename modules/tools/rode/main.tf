@@ -116,14 +116,25 @@ resource "helm_release" "rode_build_collector" {
   namespace  = var.namespace
   repository = "https://rode.github.io/charts"
   chart      = "rode-collector-build"
-  version    = "0.3.1"
+  version    = "0.4.0"
   wait       = true
 
   values = [
     templatefile("${path.module}/build-collector-values.yaml.tpl", {
+      ingress = {
+        enabled = true
+        http    = {
+          host        = var.build_collector_hostname
+          annotations = local.ingress_annotations,
+        }
+        grpc    = {
+          host        = var.build_collector_grpc_hostname
+          annotations = merge(local.ingress_annotations, {
+            "nginx.ingress.kubernetes.io/backend-protocol": "GRPC",
+          })
+        }
+      }
       auth_enabled        = local.auth_enabled
-      host                = var.build_collector_hostname
-      ingress_annotations = local.ingress_annotations
       namespace           = var.namespace
     })
   ]
