@@ -7,6 +7,7 @@ locals {
   rode_hostname            = "rode.${var.cluster_domain}"
   rode_grpc_hostname       = "rode-grpc.${var.cluster_domain}"
   ui_hostname              = "rode-dashboard.${var.cluster_domain}"
+  build_collector_hostname = "build-collector.${var.cluster_domain}"
   tfsec_collector_hostname = "tfsec-collector.${var.cluster_domain}"
 }
 
@@ -28,6 +29,7 @@ module "rode" {
   rode_ui_enabled            = true
   rode_ingress_hostname      = local.rode_hostname
   rode_grpc_ingress_hostname = local.rode_grpc_hostname
+  build_collector_hostname   = local.build_collector_hostname
   tfsec_collector_hostname   = local.tfsec_collector_hostname
 
   oidc_issuer_url    = local.keycloak_issuer_uri
