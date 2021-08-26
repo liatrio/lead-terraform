@@ -6,13 +6,13 @@ product:
   image:
     repository: ${image_repository}/operator-product
     tag: ${sdm_version}
-    pullSecrets:  
+    pullSecrets:
       - name: ${image_pull_secret}
   converge:
     image:
       repository: ${image_repository}/converge-image
       tag: ${sdm_version}
-      pullSecrets:  
+      pullSecrets:
         - name: ${image_pull_secret}
     additionalPodValues:
       ${indent(6, essential_toleration_values)}
@@ -72,6 +72,8 @@ aws-event-mapper:
   sqsUrl: ${sqs_url}
   rbac:
     serviceAccountAnnotations: ${aws_event_mapper_service_account_annotations}
+  imagePullSecrets:
+    - name: ${image_pull_secret}
 
 operatorsGlobal:
   imagePullSecrets:
