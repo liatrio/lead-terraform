@@ -6,13 +6,20 @@ rode:
     proxy:
       enabled: ${auth_enabled}
 
-%{~ if host != "" }
 ingress:
-  enabled: true
-  hosts:
-    - host: ${host}
-      paths:
-        - /
-  annotations:
-    ${indent(4, yamlencode(ingress_annotations))}
-%{~ endif }
+  http:
+    enabled: ${ingress.enabled}
+    hosts:
+      - host: ${ingress.http.host}
+        paths:
+          - /
+    annotations:
+      ${indent(6, yamlencode(ingress.http.annotations))}
+  grpc:
+    enabled: ${ingress.enabled}
+    hosts:
+      - host: ${ingress.grpc.host}
+        paths:
+          - /
+    annotations:
+      ${indent(6, yamlencode(ingress.grpc.annotations)) ~}
