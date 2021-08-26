@@ -31,7 +31,7 @@ module "rode" {
   rode_ingress_hostname         = local.rode_hostname
   rode_grpc_ingress_hostname    = local.rode_grpc_hostname
   build_collector_hostname      = local.build_collector_hostname
-  build_collector_grcp_hostname = local.build_collector_grpc_hostname
+  build_collector_grpc_hostname = local.build_collector_grpc_hostname
   tfsec_collector_hostname      = local.tfsec_collector_hostname
 
   oidc_issuer_url    = local.keycloak_issuer_uri
