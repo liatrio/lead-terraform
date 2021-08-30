@@ -45,3 +45,13 @@ variable "tfsec_collector_hostname" {
   type    = string
   default = ""
 }
+
+variable "build_collector_hostname" {
+  type    = string
+  default = ""
+}
+
+variable "build_collector_grpc_hostname" {
+  type    = string
+  default = ""
+}

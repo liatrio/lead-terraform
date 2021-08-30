@@ -21,8 +21,8 @@ module "sdm" {
   slack_bot_token             = var.slack_bot_token
   slack_client_signing_secret = var.slack_client_signing_secret
   enable_aws_event_mapper     = false
-  toolchain_image_repo        = "489130170427.dkr.ecr.us-east-1.amazonaws.com"
-  operators = [
+  image_repository            = "ghcr.io/liatrio"
+  operators                   = [
     "toolchain",
     "elasticsearch",
     "slack",

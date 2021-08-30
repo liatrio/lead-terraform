@@ -8,7 +8,8 @@ resource "vault_database_secret_backend_connection" "mongodb" {
   name    = "${var.product_name}-mongodb"
 
   allowed_roles = [
-    local.vault_mongodb_staging_role
+    local.vault_mongodb_staging_role,
+    local.vault_mongodb_production_role,
   ]
 
   data = {
