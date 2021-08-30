@@ -1,12 +1,10 @@
-variable "enable" {
-  default = true
-}
+variable "harbor_ingress_hostname" {}
+
+variable "notary_ingress_hostname" {}
 
 variable "namespace" {}
 
-variable "cluster" {}
-
-variable "root_zone_name" {}
+variable "ingress_annotations" {}
 
 variable "harbor_registry_disk_size" {
   default = "200Gi"

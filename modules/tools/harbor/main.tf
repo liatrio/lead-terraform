@@ -1,6 +1,6 @@
 locals {
-  harbor_hostname = "harbor.${var.namespace}.${var.cluster}.${var.root_zone_name}"
-  notary_hostname = "notary.${var.namespace}.${var.cluster}.${var.root_zone_name}"
+  harbor_hostname = var.harbor_ingress_hostname
+  notary_hostname = var.notary_ingress_hostname
 }
 
 resource "random_string" "harbor_db_password" {
@@ -29,7 +29,6 @@ resource "random_string" "harbor_registry_secret" {
 }
 
 resource "helm_release" "harbor_volumes" {
-  count     = var.enable ? 1 : 0
   chart     = "${path.module}/charts/harbor-volumes"
   name      = "harbor-volumes"
   namespace = var.namespace
@@ -72,7 +71,6 @@ resource "helm_release" "harbor_volumes" {
 }
 
 resource "helm_release" "harbor_certificates" {
-  count     = var.enable ? 1 : 0
   chart     = "${path.module}/charts/harbor-certificates"
   name      = "harbor-certificates"
   namespace = var.namespace
@@ -116,8 +114,6 @@ data "template_file" "harbor_values" {
     harbor_ingress_hostname = local.harbor_hostname
     notary_ingress_hostname = local.notary_hostname
 
-    ssl_redirect = var.root_zone_name == "localhost" ? false : true
-
     jobservice_pvc_size = "10Gi"
     database_pvc_size   = "10Gi"
     redis_pvc_size      = "10Gi"
@@ -128,7 +124,6 @@ data "template_file" "harbor_values" {
 }
 
 resource "helm_release" "harbor" {
-  count      = var.enable ? 1 : 0
   repository = "https://helm.goharbor.io"
   name       = "harbor"
   namespace  = var.namespace
