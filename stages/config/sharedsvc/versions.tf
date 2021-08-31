@@ -5,5 +5,9 @@ terraform {
       source  = "mrparkers/keycloak"
       version = "= 3.3.0"
     }
+    harbor = {
+      source  = "liatrio/harbor"
+      version = "= 0.3.3"
+    }
   }
 }

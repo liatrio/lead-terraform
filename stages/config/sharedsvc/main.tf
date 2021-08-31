@@ -29,3 +29,9 @@ provider "keycloak" {
   url            = "https://${var.keycloak_hostname}"
   client_timeout = 15
 }
+
+provider "harbor" {
+  url      = "https://${var.harbor_hostname}"
+  username = "admin"
+  password = data.vault_generic_secret.harbor.data["admin-password"]
+}
