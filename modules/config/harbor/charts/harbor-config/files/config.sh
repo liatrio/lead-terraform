@@ -19,7 +19,7 @@ configureOidcPayload=$(jq -n "{
     auth_mode: \"oidc_auth\",
     oidc_client_id: \"harbor\",
     oidc_client_secret: \"${KEYCLOAK_CLIENT_SECRET}\",
-    oidc_endpoint: \"https://${KEYCLOAK_HOSTNAME}/auth/realms/toolchain\",
+    oidc_endpoint: \"https://${KEYCLOAK_HOSTNAME}/auth/realms/${KEYCLOAK_REALM}\",
     oidc_groups_claim: \"groups\",
     oidc_name: \"keycloak\",
     oidc_scope: \"openid,email,profile\",
