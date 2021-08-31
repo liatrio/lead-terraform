@@ -1,6 +1,6 @@
- data "vault_generic_secret" "harbor" {
-   path     = "lead/aws/${data.aws_caller_identity.current.account_id}/harbor"
- }
+data "vault_generic_secret" "harbor" {
+  path = "lead/aws/${data.aws_caller_identity.current.account_id}/harbor"
+}
 
 module "harbor_config" {
   source = "../../../modules/config/harbor"
