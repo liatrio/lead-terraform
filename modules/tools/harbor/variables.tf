@@ -4,7 +4,10 @@ variable "notary_ingress_hostname" {}
 
 variable "namespace" {}
 
-variable "ingress_annotations" {}
+variable "ingress_annotations" {
+  type    = map(string)
+  default = {}
+}
 
 variable "harbor_registry_disk_size" {
   default = "200Gi"

@@ -107,22 +107,6 @@ resource "helm_release" "harbor_certificates" {
   }
 }
 
-data "template_file" "harbor_values" {
-  template = file("${path.module}/harbor-values.tpl")
-
-  vars = {
-    harbor_ingress_hostname = local.harbor_hostname
-    notary_ingress_hostname = local.notary_hostname
-
-    jobservice_pvc_size = "10Gi"
-    database_pvc_size   = "10Gi"
-    redis_pvc_size      = "10Gi"
-
-    storage_class = var.k8s_storage_class
-    img_tag       = "v2.1.3"
-  }
-}
-
 resource "helm_release" "harbor" {
   repository = "https://helm.goharbor.io"
   name       = "harbor"
@@ -131,7 +115,16 @@ resource "helm_release" "harbor" {
   version    = "1.5.3"
 
   values = [
-    data.template_file.harbor_values.rendered
+    templatefile("${path.module}/harbor-values.tpl", {
+      harbor_ingress_hostname = local.harbor_hostname
+      notary_ingress_hostname = local.notary_hostname
+      ingress_annotations     = var.ingress_annotations
+      jobservice_pvc_size     = "10Gi"
+      database_pvc_size       = "10Gi"
+      redis_pvc_size          = "10Gi"
+      storage_class           = var.k8s_storage_class
+      img_tag                 = "v2.1.3"
+    })
   ]
 
   set_sensitive {
