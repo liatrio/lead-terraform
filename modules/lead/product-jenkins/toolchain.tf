@@ -413,7 +413,7 @@ resource "kubernetes_config_map" "jcasc_keycloak_config_configmap" {
       # keycloak_url must be accessible from both inside and outside the cluster.
       # For local environment, you'll need to add this line to your hosts file...
       # [YOUR_HOST_INTERNAL_IP_NOT_127.0.0.1]   keycloak.toolchain.docker-for-desktop.localhost
-      keycloak_url     = "${local.protocol}://keycloak.toolchain.${var.cluster_domain}/auth"
+      keycloak_url = "${local.protocol}://keycloak.toolchain.${var.cluster_domain}/auth"
     })
   }
 }

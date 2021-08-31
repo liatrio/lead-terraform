@@ -13,8 +13,8 @@ locals {
 }
 
 module "rode_namespace" {
-  source      = "../../../modules/common/namespace"
-  namespace   = "rode"
+  source    = "../../../modules/common/namespace"
+  namespace = "rode"
   annotations = {
     "downscaler/exclude" = "true"
   }
