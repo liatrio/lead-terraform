@@ -18,6 +18,14 @@ output "keycloak_hostname" {
   value = module.keycloak.keycloak_hostname
 }
 
+output "harbor_hostname" {
+  value = module.harbor.hostname
+}
+
+output "harbor_namespace" {
+  value = module.harbor_namespace.name
+}
+
 output "sonar_keycloak_client_id" {
   value = local.sonar_keycloak_client_id
 }

@@ -51,5 +51,3 @@ resource "keycloak_openid_client" "sonarqube" {
     "https://${var.sonarqube_hostname}/oauth2/callback/oidc"
   ]
 }
-
-
