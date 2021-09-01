@@ -9,7 +9,7 @@ output "keycloak_hostname" {
 }
 
 output "harbor_hostname" {
-  value = module.harbor.hostname
+  value = module.harbor[0].hostname
 }
 
 output "artifactory_jcr_hostname" {
