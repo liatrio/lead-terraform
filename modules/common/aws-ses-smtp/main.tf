@@ -16,6 +16,7 @@ resource "aws_iam_access_key" "ses_smtp" {
   user = aws_iam_user.ses_smtp.name
 }
 
+#tfsec:ignore:aws-iam-no-policy-wildcards
 resource "aws_iam_user_policy" "ses_smtp_send" {
   name = "AllowSendingEmail"
   user = aws_iam_user.ses_smtp.name

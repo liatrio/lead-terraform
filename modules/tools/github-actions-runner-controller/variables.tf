@@ -8,6 +8,7 @@ variable "namespace" {
   description = "Namespace to deploy the controller to"
 }
 
+#tfsec:ignore:general-secrets-sensitive-in-variable
 variable "auth_secret_name" {
   type        = string
   default     = "controller-manager"

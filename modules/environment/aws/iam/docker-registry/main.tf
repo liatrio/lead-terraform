@@ -1,3 +1,7 @@
+#tfsec:ignore:aws-s3-enable-bucket-logging
+#tfsec:ignore:aws-s3-specify-public-access-block
+#tfsec:ignore:aws-s3-enable-bucket-encryption
+#tfsec:ignore:aws-s3-enable-versioning
 resource "aws_s3_bucket" "docker_registry" {
   bucket = "docker-registry-storage-${var.cluster}"
 }

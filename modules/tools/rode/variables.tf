@@ -28,6 +28,8 @@ variable "oidc_token_url" {
 variable "oidc_client_id" {
   default = ""
 }
+
+#tfsec:ignore:general-secrets-sensitive-in-variable
 variable "oidc_client_secret" {
   sensitive = true
   default   = ""

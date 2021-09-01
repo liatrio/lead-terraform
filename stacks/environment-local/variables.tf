@@ -40,6 +40,7 @@ variable "slack_bot_token" {
 variable "slack_client_signing_secret" {
 }
 
+#tfsec:ignore:general-secrets-sensitive-in-variable
 variable "keycloak_admin_password" {
   default = "keycloak"
 }

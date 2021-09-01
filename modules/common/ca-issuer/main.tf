@@ -46,6 +46,7 @@ resource "kubernetes_secret" "ca" {
   }
 }
 
+#tfsec:ignore:general-secrets-sensitive-in-attribute
 module "cert-issuer" {
   source  = "../cert-issuer"
   enabled = var.enabled
