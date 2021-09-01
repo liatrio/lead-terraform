@@ -2,7 +2,9 @@ variable "namespace" {}
 
 variable "postgres_password" {}
 
-variable "keycloak_admin_password" {}
+variable "keycloak_admin_password" {
+  sensitive = true
+}
 
 variable "cluster_domain" {}
 

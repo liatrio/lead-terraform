@@ -1,0 +1,46 @@
+name: 'Terraform Validate'
+
+on:
+  pull_request:
+
+jobs:
+  terraform_format:
+    name: 'Terraform Format'
+    runs-on: ubuntu-latest
+    #environment: production
+
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+#       with:
+#         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+    # Checks that all Terraform configuration files adhere to a canonical format
+    - name: Terraform Format
+      run: terraform fmt -check -recursive
+
+    - name: Run tfsec with reviewdog
+      uses: reviewdog/action-tfsec@v1.11.0
+      if: ${{ always() }}
+      with:
+        github_token: ${{ secrets.github_token }}
+        fail_on_error: "true"
+        filter_mode: "nofilter"
+
+    - name: Run tflint with reviewdog
+      uses: reviewdog/action-tflint@v1.13.0
+      if: ${{ always() }}
+      with:
+        github_token: ${{ secrets.github_token }}
+        fail_on_error: "true"
+        filter_mode: "nofilter"
