@@ -143,7 +143,7 @@ resource "helm_release" "rode_collector_harbor" {
   namespace  = var.namespace
   chart      = "rode-collector-harbor"
   repository = "https://rode.github.io/charts"
-  version    = "0.2.1"
+  version    = "0.2.0"
   wait       = true
 
   set_sensitive {
