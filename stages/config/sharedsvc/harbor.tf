@@ -9,6 +9,13 @@ module "harbor_config" {
   hostname          = var.harbor_hostname
   admin_password    = data.vault_generic_secret.harbor.data["admin-password"]
   enable_keycloak   = true
+  autoscan_images   = true
   keycloak_hostname = var.keycloak_hostname
   keycloak_realm    = keycloak_realm.sharedsvc.id
+  webhooks = {
+    "rode" : {
+      "event_types" : ["SCANNING_COMPLETED", "SCANNING_FAILED"],
+      "webhook_url" : var.harbor_collector_url,
+    }
+  }
 }
