@@ -3,7 +3,7 @@ expose:
   tls:
     enabled: true
     certSource: secret
-    secret:  
+    secret:
       secretName: harbor-tls
       notarySecretName: notary-tls
   ingress:
@@ -12,9 +12,7 @@ expose:
       notary: ${notary_ingress_hostname}
     controller: default
     annotations:
-      kubernetes.io/ingress.class: "toolchain-nginx"
-      nginx.ingress.kubernetes.io/force-ssl-redirect: "${ssl_redirect}"
-      nginx.ingress.kubernetes.io/proxy-body-size: "0"
+      ${indent( 6, yamlencode( ingress_annotations ) ) }
 
 externalURL: https://${harbor_ingress_hostname}
 
@@ -122,7 +120,7 @@ registry:
         cpu: 100m
       limits:
         memory: 512Mi
-        cpu: 600m
+        cpu: 1000m
   controller:
     image:
       repository: goharbor/harbor-registryctl
@@ -147,7 +145,7 @@ registry:
     enabled: false
 
 chartmuseum:
-  enabled: true
+  enabled: false
   # Harbor defaults ChartMuseum to returning relative urls, if you want using absolute url you should enable it by change the following value to 'true'
   absoluteUrl: false
   image:
@@ -185,7 +183,7 @@ trivy:
   replicas: 1
 
 notary:
-  enabled: true
+  enabled: false
   server:
     image:
       repository: goharbor/notary-server-photon
@@ -237,7 +235,7 @@ database:
     resources:
       requests:
         memory: 256Mi
-        cpu: 25m
+        cpu: 50m
       limits:
         memory: 512Mi
         cpu: 350m

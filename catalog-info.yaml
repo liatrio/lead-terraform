@@ -1,0 +1,15 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: lead-terraform
+  description: This repository contains the Terraform automation to manage LEAD environments.
+  annotations:
+    github.com/project-slug: 'liatrio/lead-terraform'
+  tags:
+    - terraform
+    - terragrunt
+    - aws
+spec:
+  type: library
+  lifecycle: production
+  owner: liatrio

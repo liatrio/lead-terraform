@@ -22,7 +22,7 @@ resource "kubernetes_secret" "github" {
     labels = {
       "app.kubernetes.io/name"       = "jenkins"
       "app.kubernetes.io/instance"   = "jenkins"
-      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/component"  = "jenkins-controller"
       "app.kubernetes.io/managed-by" = "Terraform"
       "jenkins.io/credentials-type"  = "usernamePassword"
     }
@@ -48,7 +48,7 @@ resource "kubernetes_secret" "github_token" {
     labels = {
       "app.kubernetes.io/name"       = "jenkins"
       "app.kubernetes.io/instance"   = "jenkins"
-      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/component"  = "jenkins-controller"
       "app.kubernetes.io/managed-by" = "Terraform"
       "jenkins.io/credentials-type"  = "secretText"
     }
@@ -73,7 +73,7 @@ resource "kubernetes_config_map" "jcasc_github_plugin" {
     labels = {
       "app.kubernetes.io/name"       = "jenkins"
       "app.kubernetes.io/instance"   = "jenkins"
-      "app.kubernetes.io/component"  = "jenkins-master"
+      "app.kubernetes.io/component"  = "jenkins-controller"
       "app.kubernetes.io/managed-by" = "Terraform"
       "jenkins-jenkins-config"       = "true"
     }

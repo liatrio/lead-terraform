@@ -2,6 +2,8 @@ variable "namespace" {}
 
 variable "rode_ingress_hostname" {}
 
+variable "rode_grpc_ingress_hostname" {}
+
 variable "rode_ui_enabled" {
   default = false
 }
@@ -44,6 +46,16 @@ variable "grafeas_image_tag" {
 }
 
 variable "tfsec_collector_hostname" {
+  type    = string
+  default = ""
+}
+
+variable "build_collector_hostname" {
+  type    = string
+  default = ""
+}
+
+variable "build_collector_grpc_hostname" {
   type    = string
   default = ""
 }

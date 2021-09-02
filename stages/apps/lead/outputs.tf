@@ -4,12 +4,12 @@ output "toolchain_namespace" {
 }
 
 output "keycloak_hostname" {
-  value       = module.keycloak[0].keycloak_hostname
+  value       = var.enable_keycloak ? module.keycloak[0].keycloak_hostname : ""
   description = "Keycloak instance url to be used by configuration provider"
 }
 
 output "harbor_hostname" {
-  value = module.harbor.hostname
+  value = module.harbor[0].hostname
 }
 
 output "artifactory_jcr_hostname" {

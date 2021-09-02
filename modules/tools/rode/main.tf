@@ -1,5 +1,9 @@
 locals {
-  auth_enabled = var.oidc_issuer_url != ""
+  auth_enabled        = var.oidc_issuer_url != ""
+  ingress_annotations = {
+    "kubernetes.io/ingress.class" : var.ingress_class,
+    "nginx.ingress.kubernetes.io/force-ssl-redirect" : "true",
+  }
 }
 
 resource "helm_release" "rode" {
@@ -7,7 +11,7 @@ resource "helm_release" "rode" {
   name       = "rode"
   chart      = "rode"
   namespace  = var.namespace
-  version    = "0.3.3"
+  version    = "0.4.0"
   wait       = true
 
   set_sensitive {
@@ -21,12 +25,19 @@ resource "helm_release" "rode" {
   }
 
   values = [
-    templatefile("${path.module}/rode-values.tpl", {
-      ingress_enabled     = true
-      ingress_hostname    = var.rode_ingress_hostname
-      ingress_annotations = {
-        "kubernetes.io/ingress.class" : var.ingress_class,
-        "nginx.ingress.kubernetes.io/force-ssl-redirect": "true",
+    templatefile("${path.module}/rode-values.yaml.tpl", {
+      ingress = {
+        enabled = true
+        http    = {
+          host        = var.rode_ingress_hostname
+          annotations = local.ingress_annotations,
+        }
+        grpc    = {
+          host        = var.rode_grpc_ingress_hostname
+          annotations = merge(local.ingress_annotations, {
+            "nginx.ingress.kubernetes.io/backend-protocol" : "GRPC",
+          })
+        }
       }
 
       oidc_config = {
@@ -58,14 +69,12 @@ resource "helm_release" "rode_ui" {
   }
 
   values = [
-    templatefile("${path.module}/rode-ui-values.tpl", {
+    templatefile("${path.module}/rode-ui-values.yaml.tpl", {
       ingress_enabled     = true
       ingress_hostname    = var.ui_ingress_hostname
-      ingress_annotations = {
+      ingress_annotations = merge(local.ingress_annotations, {
         "nginx.ingress.kubernetes.io/proxy-buffer-size" : "8k",
-        "nginx.ingress.kubernetes.io/force-ssl-redirect": "true",
-        "kubernetes.io/ingress.class" : var.ingress_class,
-      }
+      })
 
       oidc_config = {
         enabled : local.auth_enabled,
@@ -92,10 +101,7 @@ resource "helm_release" "rode_tfsec_collector" {
     templatefile("${path.module}/tfsec-collector-values.yaml.tpl", {
       auth_enabled        = local.auth_enabled
       host                = var.tfsec_collector_hostname
-      ingress_annotations = {
-        "kubernetes.io/ingress.class" : var.ingress_class,
-        "nginx.ingress.kubernetes.io/force-ssl-redirect": "true",
-      }
+      ingress_annotations = local.ingress_annotations
       namespace           = var.namespace
     })
   ]
@@ -118,12 +124,44 @@ resource "helm_release" "rode_sonarqube_collector" {
     value = var.oidc_client_secret
   }
 
-  values = [
+  values     = [
     templatefile("${path.module}/tfsec-collector-values.yaml.tpl", {
-      oidc_auth_enabled   = var.oidc_token_url != ""
-      oidc_client_id      = var.oidc_issuer_url
-      oidc_token_url      = var.oidc_token_url
-      namespace           = var.namespace
+      oidc_auth_enabled = var.oidc_token_url != ""
+      oidc_client_id    = var.oidc_issuer_url
+      oidc_token_url    = var.oidc_token_url
+      namespace         = var.namespace
+    })
+  ]
+  depends_on = [
+    helm_release.rode,
+  ]
+}
+
+resource "helm_release" "rode_build_collector" {
+  name       = "rode-collector-build"
+  namespace  = var.namespace
+  repository = "https://rode.github.io/charts"
+  chart      = "rode-collector-build"
+  version    = "0.4.0"
+  wait       = true
+
+  values = [
+    templatefile("${path.module}/build-collector-values.yaml.tpl", {
+      ingress      = {
+        enabled = true
+        http    = {
+          host        = var.build_collector_hostname
+          annotations = local.ingress_annotations,
+        }
+        grpc    = {
+          host        = var.build_collector_grpc_hostname
+          annotations = merge(local.ingress_annotations, {
+            "nginx.ingress.kubernetes.io/backend-protocol" : "GRPC",
+          })
+        }
+      }
+      auth_enabled = local.auth_enabled
+      namespace    = var.namespace
     })
   ]
 

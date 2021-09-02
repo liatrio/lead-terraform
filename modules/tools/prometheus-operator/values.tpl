@@ -18,7 +18,7 @@ grafana:
       org_role: Viewer
   image:
     repository: grafana/grafana
-    tag: 6.5.1-ubuntu
+    tag: 8.1.2-ubuntu
     pullPolicy: IfNotPresent
   service:
     portName: http
@@ -29,6 +29,8 @@ grafana:
     requests:
       cpu: 100m
       memory: 128Mi
+  plugins:
+    - grafana-timestream-datasource
 
 kube-state-metrics:
   podAnnotations:

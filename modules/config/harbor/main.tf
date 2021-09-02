@@ -1,5 +1,5 @@
 resource "keycloak_openid_client" "harbor_client" {
-  count     = var.enable && var.enable_keycloak ? 1 : 0
+  count     = var.enable_keycloak ? 1 : 0
   realm_id  = var.keycloak_realm
   client_id = "harbor"
   name      = "harbor"
@@ -14,7 +14,7 @@ resource "keycloak_openid_client" "harbor_client" {
 }
 
 resource "keycloak_openid_group_membership_protocol_mapper" "harbor_group_membership_mapper" {
-  count     = var.enable && var.enable_keycloak ? 1 : 0
+  count     = var.enable_keycloak ? 1 : 0
   realm_id  = keycloak_openid_client.harbor_client[0].realm_id
   client_id = keycloak_openid_client.harbor_client[0].id
   name      = "harbor-group-membership-mapper"
@@ -23,7 +23,7 @@ resource "keycloak_openid_group_membership_protocol_mapper" "harbor_group_member
 }
 
 resource "helm_release" "harbor_config" {
-  count     = var.enable && var.enable_keycloak ? 1 : 0
+  count     = var.enable_keycloak ? 1 : 0
   chart     = "${path.module}/charts/harbor-config"
   name      = "harbor-config"
   namespace = var.namespace
@@ -53,19 +53,22 @@ resource "helm_release" "harbor_config" {
     name  = "keycloak.secret"
     value = keycloak_openid_client.harbor_client[0].client_secret
   }
+
+  set {
+    name  = "keycloak.realm"
+    value = var.keycloak_realm
+  }
 }
 
 resource "harbor_project" "liatrio_project" {
-  count     = var.enable ? 1 : 0
   name      = "liatrio"
   public    = true
   auto_scan = false
 }
 
 resource "harbor_robot_account" "liatrio_project_robot_account" {
-  count      = var.enable ? 1 : 0
   name       = "robot$imagepusher"
-  project_id = harbor_project.liatrio_project[0].id
+  project_id = harbor_project.liatrio_project.id
   access {
     resource = "image"
     action   = "pull"
@@ -78,7 +81,6 @@ resource "harbor_robot_account" "liatrio_project_robot_account" {
 }
 
 resource "kubernetes_secret" "liatrio_project_robot_account_credentials" {
-  count = var.enable ? 1 : 0
   metadata {
     name      = "liatrio-harbor-project-robot-account-credentials"
     namespace = var.namespace
@@ -86,7 +88,7 @@ resource "kubernetes_secret" "liatrio_project_robot_account_credentials" {
   type = "Opaque"
 
   data = {
-    username = harbor_robot_account.liatrio_project_robot_account[0].name
-    password = harbor_robot_account.liatrio_project_robot_account[0].token
+    username = harbor_robot_account.liatrio_project_robot_account.name
+    password = harbor_robot_account.liatrio_project_robot_account.token
   }
 }

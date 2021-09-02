@@ -4,9 +4,9 @@ data "vault_generic_secret" "harbor" {
 }
 
 module "harbor_config" {
+  count  = var.enable_harbor ? 1 : 0
   source = "../../../modules/config/harbor"
 
-  enable            = var.enable_harbor
   namespace         = var.toolchain_namespace
   hostname          = var.harbor_hostname
   admin_password    = data.vault_generic_secret.harbor.data["admin-password"]
