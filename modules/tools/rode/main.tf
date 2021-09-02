@@ -121,17 +121,18 @@ resource "helm_release" "rode_sonarqube_collector" {
 
   set_sensitive {
     name  = "rode.auth.oidc.clientSecret"
-    value = var.oidc_client_secret
+    value = var.collector_client_secret
   }
 
   values = [
     templatefile("${path.module}/sonar-collector-values.yaml.tpl", {
       oidc_auth_enabled = var.oidc_token_url != ""
-      oidc_client_id    = var.oidc_issuer_url
+      oidc_client_id    = var.collector_client_id
       oidc_token_url    = var.oidc_token_url
       namespace         = var.namespace
     })
   ]
+
   depends_on = [
     helm_release.rode,
   ]
