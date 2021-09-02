@@ -55,6 +55,13 @@ provider "keycloak" {
   client_timeout = 15
 }
 
+provider "sonarqube" {
+  host              = "https://${var.sonarqube_hostname}"
+  user              = "admin"
+  pass              = data.vault_generic_secret.sonarqube.data["admin"]
+  installed_version = "8.5"
+}
+
 provider "harbor" {
   url      = "https://${var.harbor_hostname}"
   username = "admin"

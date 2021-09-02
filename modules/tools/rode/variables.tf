@@ -21,6 +21,10 @@ variable "oidc_issuer_url" {
   description = "Leave blank to disable OIDC"
   default     = ""
 }
+variable "oidc_token_url" {
+  description = "Leave blank to disable OIDC"
+  default     = ""
+}
 variable "oidc_client_id" {
   default = ""
 }
@@ -54,4 +58,13 @@ variable "build_collector_hostname" {
 variable "build_collector_grpc_hostname" {
   type    = string
   default = ""
+}
+
+variable "collector_client_id" {
+  type = string
+}
+
+variable "collector_client_secret" {
+  type      = string
+  sensitive = true
 }

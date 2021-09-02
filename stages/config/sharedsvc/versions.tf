@@ -5,6 +5,10 @@ terraform {
       source  = "mrparkers/keycloak"
       version = "= 3.3.0"
     }
+    sonarqube = {
+      source  = "jdamata/sonarqube"
+      version = "0.0.7"
+    }
     harbor = {
       source  = "liatrio/harbor"
       version = "= 0.3.3"

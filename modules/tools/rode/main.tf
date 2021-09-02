@@ -111,6 +111,33 @@ resource "helm_release" "rode_tfsec_collector" {
   ]
 }
 
+resource "helm_release" "rode_sonarqube_collector" {
+  name       = "rode-collector-sonarqube"
+  namespace  = var.namespace
+  repository = "https://rode.github.io/charts"
+  chart      = "rode-collector-sonarqube"
+  version    = "0.1.0"
+  wait       = true
+
+  set_sensitive {
+    name  = "rode.auth.oidc.clientSecret"
+    value = var.collector_client_secret
+  }
+
+  values = [
+    templatefile("${path.module}/sonar-collector-values.yaml.tpl", {
+      oidc_auth_enabled = local.auth_enabled
+      oidc_client_id    = var.collector_client_id
+      oidc_token_url    = var.oidc_token_url
+      namespace         = var.namespace
+    })
+  ]
+
+  depends_on = [
+    helm_release.rode,
+  ]
+}
+
 resource "helm_release" "rode_build_collector" {
   name       = "rode-collector-build"
   namespace  = var.namespace
