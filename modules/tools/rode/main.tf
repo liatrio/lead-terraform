@@ -1,8 +1,8 @@
 locals {
-  auth_enabled        = var.oidc_issuer_url != ""
+  auth_enabled = var.oidc_issuer_url != ""
   ingress_annotations = {
     "kubernetes.io/ingress.class" : var.ingress_class,
-    "nginx.ingress.kubernetes.io/force-ssl-redirect": "true",
+    "nginx.ingress.kubernetes.io/force-ssl-redirect" : "true",
   }
 }
 
@@ -28,14 +28,14 @@ resource "helm_release" "rode" {
     templatefile("${path.module}/rode-values.yaml.tpl", {
       ingress = {
         enabled = true
-        http    = {
+        http = {
           host        = var.rode_ingress_hostname
           annotations = local.ingress_annotations,
         }
-        grpc    = {
-          host        = var.rode_grpc_ingress_hostname
+        grpc = {
+          host = var.rode_grpc_ingress_hostname
           annotations = merge(local.ingress_annotations, {
-            "nginx.ingress.kubernetes.io/backend-protocol": "GRPC",
+            "nginx.ingress.kubernetes.io/backend-protocol" : "GRPC",
           })
         }
       }
@@ -70,8 +70,8 @@ resource "helm_release" "rode_ui" {
 
   values = [
     templatefile("${path.module}/rode-ui-values.yaml.tpl", {
-      ingress_enabled     = true
-      ingress_hostname    = var.ui_ingress_hostname
+      ingress_enabled  = true
+      ingress_hostname = var.ui_ingress_hostname
       ingress_annotations = merge(local.ingress_annotations, {
         "nginx.ingress.kubernetes.io/proxy-buffer-size" : "8k",
       })
@@ -123,19 +123,19 @@ resource "helm_release" "rode_build_collector" {
     templatefile("${path.module}/build-collector-values.yaml.tpl", {
       ingress = {
         enabled = true
-        http    = {
+        http = {
           host        = var.build_collector_hostname
           annotations = local.ingress_annotations,
         }
-        grpc    = {
-          host        = var.build_collector_grpc_hostname
+        grpc = {
+          host = var.build_collector_grpc_hostname
           annotations = merge(local.ingress_annotations, {
-            "nginx.ingress.kubernetes.io/backend-protocol": "GRPC",
+            "nginx.ingress.kubernetes.io/backend-protocol" : "GRPC",
           })
         }
       }
-      auth_enabled        = local.auth_enabled
-      namespace           = var.namespace
+      auth_enabled = local.auth_enabled
+      namespace    = var.namespace
     })
   ]
 

@@ -12,9 +12,7 @@ expose:
       notary: ${notary_ingress_hostname}
     controller: default
     annotations:
-      kubernetes.io/ingress.class: "toolchain-nginx"
-      nginx.ingress.kubernetes.io/force-ssl-redirect: "${ssl_redirect}"
-      nginx.ingress.kubernetes.io/proxy-body-size: "0"
+      ${indent( 6, yamlencode( ingress_annotations ) ) }
 
 externalURL: https://${harbor_ingress_hostname}
 

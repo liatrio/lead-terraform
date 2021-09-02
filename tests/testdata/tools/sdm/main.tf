@@ -22,7 +22,7 @@ module "sdm" {
   slack_client_signing_secret = var.slack_client_signing_secret
   enable_aws_event_mapper     = false
   image_repository            = "ghcr.io/liatrio"
-  operators                   = [
+  operators = [
     "toolchain",
     "elasticsearch",
     "slack",

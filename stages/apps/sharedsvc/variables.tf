@@ -78,3 +78,7 @@ variable "github_runners" {
   type    = map(any)
   default = {}
 }
+
+variable "k8s_storage_class" {
+  default = "gp2"
+}

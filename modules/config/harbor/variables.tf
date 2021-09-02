@@ -1,7 +1,3 @@
-variable "enable" {
-  default = true
-}
-
 variable "namespace" {}
 
 variable "hostname" {}

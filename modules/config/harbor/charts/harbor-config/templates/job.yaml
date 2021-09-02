@@ -27,6 +27,8 @@ spec:
               value: {{ .Values.keycloak.hostname }}
             - name: KEYCLOAK_CLIENT_SECRET
               value: {{ .Values.keycloak.secret }}
+            - name: KEYCLOAK_REALM
+              value: {{ .Values.keycloak.realm }}
       volumes:
         - name: scripts
           configMap:
