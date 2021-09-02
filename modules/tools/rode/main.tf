@@ -126,7 +126,7 @@ resource "helm_release" "rode_sonarqube_collector" {
 
   values = [
     templatefile("${path.module}/sonar-collector-values.yaml.tpl", {
-      oidc_auth_enabled = var.oidc_token_url != ""
+      oidc_auth_enabled = local.auth_enabled
       oidc_client_id    = var.collector_client_id
       oidc_token_url    = var.oidc_token_url
       namespace         = var.namespace
