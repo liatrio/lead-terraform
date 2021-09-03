@@ -138,6 +138,30 @@ resource "helm_release" "rode_sonarqube_collector" {
   ]
 }
 
+resource "helm_release" "rode_collector_harbor" {
+  name       = "rode-collector-harbor"
+  namespace  = var.namespace
+  chart      = "rode-collector-harbor"
+  repository = "https://rode.github.io/charts"
+  version    = "0.2.0"
+  wait       = true
+
+  set_sensitive {
+    name  = "rode.auth.oidc.clientSecret"
+    value = var.collector_client_secret
+  }
+
+  values = [
+    templatefile("${path.module}/harbor-collector-values.yaml.tpl", {
+      namespace         = var.namespace
+      harbor_url        = var.harbor_url
+      oidc_auth_enabled = local.auth_enabled
+      oidc_client_id    = var.collector_client_id
+      oidc_token_url    = var.oidc_token_url
+    })
+  ]
+}
+
 resource "helm_release" "rode_build_collector" {
   name       = "rode-collector-build"
   namespace  = var.namespace

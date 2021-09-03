@@ -21,3 +21,5 @@ variable "rode_hostname" {}
 variable "rode_ui_hostname" {}
 
 variable "sonarqube_collector_url" {}
+
+variable "harbor_collector_url" {}

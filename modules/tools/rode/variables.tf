@@ -68,3 +68,7 @@ variable "collector_client_secret" {
   type      = string
   sensitive = true
 }
+
+variable "harbor_url" {
+  type = string
+}

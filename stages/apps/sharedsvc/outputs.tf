@@ -38,6 +38,10 @@ output "sonarqube_collector_url" {
   value = "http://rode-collector-sonarqube.${module.rode_namespace.name}.svc.cluster.local/webhook/event"
 }
 
+output "harbor_collector_url" {
+  value = "http://rode-collector-harbor.${module.rode_namespace.name}.svc.cluster.local/webhook/event"
+}
+
 output "rode_oidc_client_id" {
   value = local.rode_oidc_client_id
 }

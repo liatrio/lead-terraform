@@ -33,6 +33,7 @@ module "rode" {
   build_collector_hostname      = local.build_collector_hostname
   build_collector_grpc_hostname = local.build_collector_grpc_hostname
   tfsec_collector_hostname      = local.tfsec_collector_hostname
+  harbor_url                    = "https://${local.harbor_hostname}"
 
   oidc_issuer_url    = local.keycloak_issuer_uri
   oidc_token_url     = local.keycloak_token_uri

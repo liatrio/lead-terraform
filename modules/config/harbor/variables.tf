@@ -11,3 +11,12 @@ variable "enable_keycloak" {
 variable "keycloak_hostname" {}
 
 variable "keycloak_realm" {}
+
+variable "autoscan_images" {
+  default = false
+}
+
+variable "webhooks" {
+  type    = map(any)
+  default = {}
+}

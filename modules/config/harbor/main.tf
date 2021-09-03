@@ -63,7 +63,7 @@ resource "helm_release" "harbor_config" {
 resource "harbor_project" "liatrio_project" {
   name      = "liatrio"
   public    = true
-  auto_scan = false
+  auto_scan = var.autoscan_images
 }
 
 resource "harbor_robot_account" "liatrio_project_robot_account" {
@@ -90,5 +90,17 @@ resource "kubernetes_secret" "liatrio_project_robot_account_credentials" {
   data = {
     username = harbor_robot_account.liatrio_project_robot_account.name
     password = harbor_robot_account.liatrio_project_robot_account.token
+  }
+}
+
+resource "harbor_webhook" "webhook" {
+  for_each = var.webhooks
+
+  project_id  = harbor_project.liatrio_project.id
+  name        = title(each.key)
+  event_types = each.value.event_types
+  target {
+    type    = "http"
+    address = each.value.webhook_url
   }
 }
