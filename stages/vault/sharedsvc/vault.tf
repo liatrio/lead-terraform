@@ -2,6 +2,7 @@
 
 locals {
   prod_aws_account       = "489130170427"
+  non_prod_aws_account   = "281127131043"
   sandbox_aws_account    = "774051255656"
   sharedsvc_aws_account  = "265560927720"
   remote_k8s_aws_account = "210831435012"
@@ -44,6 +45,7 @@ resource "vault_aws_auth_backend_role" "aws_admin" {
   auth_type = "iam"
   bound_iam_principal_arns = formatlist("arn:aws:iam::%s:role/Administrator", [
     local.prod_aws_account,
+    local.non_prod_aws_account,
     local.sandbox_aws_account,
     local.remote_k8s_aws_account,
     local.rtx_aws_account,
@@ -62,6 +64,7 @@ resource "vault_aws_auth_backend_role" "aws_developer" {
   auth_type = "iam"
   bound_iam_principal_arns = formatlist("arn:aws:iam::%s:role/Developer", [
     local.prod_aws_account,
+    local.non_prod_aws_account,
     local.sandbox_aws_account,
     local.remote_k8s_aws_account,
     local.rtx_aws_account,
