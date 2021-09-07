@@ -7,6 +7,8 @@ locals {
   sharedsvc_aws_account  = "265560927720"
   remote_k8s_aws_account = "210831435012"
   rtx_aws_account        = "702109968614"
+
+  vault_token_ttl_thirty_minutes = 60 * 30
 }
 
 resource "vault_auth_backend" "aws" {
@@ -24,6 +26,9 @@ resource "vault_aws_auth_backend_role" "vault_admin" {
   token_policies = [
     vault_policy.vault_admin.name
   ]
+
+  token_ttl     = local.vault_token_ttl_thirty_minutes
+  token_max_ttl = local.vault_token_ttl_thirty_minutes
 }
 
 resource "vault_aws_auth_backend_role" "gpg_aws_admin" {
@@ -37,6 +42,9 @@ resource "vault_aws_auth_backend_role" "gpg_aws_admin" {
   token_policies = [
     vault_policy.gpg_aws_admin.name
   ]
+
+  token_ttl     = local.vault_token_ttl_thirty_minutes
+  token_max_ttl = local.vault_token_ttl_thirty_minutes
 }
 
 resource "vault_aws_auth_backend_role" "aws_admin" {
@@ -56,6 +64,9 @@ resource "vault_aws_auth_backend_role" "aws_admin" {
     vault_policy.lead_aws_admin.name,
     vault_policy.openstack_aws_admin.name
   ]
+
+  token_ttl     = local.vault_token_ttl_thirty_minutes
+  token_max_ttl = local.vault_token_ttl_thirty_minutes
 }
 
 resource "vault_aws_auth_backend_role" "aws_developer" {
@@ -74,4 +85,7 @@ resource "vault_aws_auth_backend_role" "aws_developer" {
   token_policies = [
     vault_policy.lead_aws_developer.name
   ]
+
+  token_ttl     = local.vault_token_ttl_thirty_minutes
+  token_max_ttl = local.vault_token_ttl_thirty_minutes
 }
