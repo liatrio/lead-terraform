@@ -7,8 +7,8 @@ module "monitoring_namespace" {
   }
 }
 
-module "prometheus_operator" {
-  source = "../../../modules/tools/prometheus-operator"
+module "kube_prometheus_stack" {
+  source = "../../../modules/tools/kube-prometheus-stack"
 
   namespace        = module.monitoring_namespace.name
   grafana_hostname = "grafana.${var.internal_cluster_domain}"

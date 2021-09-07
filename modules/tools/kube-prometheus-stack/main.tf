@@ -8,8 +8,8 @@ resource "random_password" "password" {
   override_special = "_%@"
 }
 
-resource "helm_release" "prometheus_operator" {
-  name       = "prometheus-operator"
+resource "helm_release" "kube_prometheus_stack" {
+  name       = "kube-prometheus-stack"
   namespace  = var.namespace
   repository = "https://prometheus-community.github.io/helm-charts"
   chart      = "kube-prometheus-stack"

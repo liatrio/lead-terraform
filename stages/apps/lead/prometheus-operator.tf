@@ -2,8 +2,8 @@ data "vault_generic_secret" "prometheus" {
   path = "lead/aws/${data.aws_caller_identity.current.account_id}/prometheus"
 }
 
-module "prometheus-operator" {
-  source = "../../../modules/tools/prometheus-operator"
+module "kube_prometheus_stack" {
+  source = "../../../modules/tools/kube-prometheus-stack"
 
   namespace                    = var.toolchain_namespace
   grafana_hostname             = "grafana.${var.toolchain_namespace}.${var.cluster_name}.${var.root_zone_name}"

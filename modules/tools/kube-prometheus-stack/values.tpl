@@ -69,8 +69,6 @@ prometheusOperator:
       memory: 100Mi
   configReloaderCpu: 100m
   configReloaderMemory: 25Mi
-  admissionWebhooks:
-    enabled: false
 prometheus:
   prometheusSpec:
     storageSpec:
@@ -103,6 +101,8 @@ alertmanager:
           resources:
             requests:
               storage: 1Gi
+    alertmanagerConfigSelector: {}
+    alertmanagerConfigNamespaceSelector: {}
   config:
     global:
       resolve_timeout: 5m
