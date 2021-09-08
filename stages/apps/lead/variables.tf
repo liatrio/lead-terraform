@@ -18,6 +18,10 @@ variable "toolchain_namespace" {
   default = "toolchain"
 }
 
+variable "monitoring_namespace" {
+  default = "monitoring"
+}
+
 variable "region" {
   default = "us-east-1"
 }
