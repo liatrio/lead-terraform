@@ -11,8 +11,8 @@ func TestPrometheusOperator(t *testing.T) {
 	// Prometheus Operator
 	testPrometheusOperator := TestModule{
 		GoTest:       t,
-		Name:         "prometheus-operator",
-		TerraformDir: "../testdata/tools/prometheus-operator",
+		Name:         "kube_prometheus_stack",
+		TerraformDir: "../testdata/tools/kube-prometheus-stack",
 		Setup: func(tm *TestModule) {
 			tm.SetTerraformVar("kube_config_path", kubeconfig)
 			tm.SetTerraformVar("namespace", tm.GetStringGlobal("namespace"))

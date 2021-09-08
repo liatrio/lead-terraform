@@ -99,8 +99,8 @@ module "lab_partner" {
   lab_partner_version         = var.lab_partner_version
 }
 
-module "prometheus-operator" {
-  source = "../../modules/tools/prometheus-operator"
+module "kube_prometheus_stack" {
+  source = "../../modules/tools/kube-prometheus-stack"
 
   namespace                    = module.toolchain.namespace
   grafana_hostname             = "grafana.${module.toolchain.namespace}.${var.cluster}.${var.root_zone_name}"

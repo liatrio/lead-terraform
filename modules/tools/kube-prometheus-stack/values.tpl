@@ -45,21 +45,6 @@ kube-state-metrics:
   service:
     annotations:
       prometheus.io/scrape: "false"
-server:
-  deploymentAnnotations:
-    downscaler/exclude: "true"
-  resources:
-    requests:
-      cpu: 200m
-      memory: 2Gi
-    limits:
-      cpu: 500m
-      memory: 4Gi
-nodeExporter:
-  #priorityClassName: system-node-critical
-  tolerations:
-  - key: EssentialOnly
-    operator: "Exists"
 prometheus-node-exporter:
   service:
     annotations:
@@ -71,6 +56,9 @@ prometheus-node-exporter:
     limits:
       cpu: 500m
       memory: 100Mi
+  tolerations:
+  - key: EssentialOnly
+    operator: "Exists"
 prometheusOperator:
   resources:
     limits:
@@ -81,10 +69,6 @@ prometheusOperator:
       memory: 100Mi
   configReloaderCpu: 100m
   configReloaderMemory: 25Mi
-  admissionWebhooks:
-    enabled: false
-  tlsProxy:
-    enabled: false
 prometheus:
   prometheusSpec:
     storageSpec:
@@ -117,6 +101,8 @@ alertmanager:
           resources:
             requests:
               storage: 1Gi
+    alertmanagerConfigSelector: {}
+    alertmanagerConfigNamespaceSelector: {}
   config:
     global:
       resolve_timeout: 5m

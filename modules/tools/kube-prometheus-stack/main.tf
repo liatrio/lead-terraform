@@ -8,12 +8,12 @@ resource "random_password" "password" {
   override_special = "_%@"
 }
 
-resource "helm_release" "prometheus_operator" {
-  name       = "prometheus-operator"
+resource "helm_release" "kube_prometheus_stack" {
+  name       = "kube-prometheus-stack"
   namespace  = var.namespace
-  repository = "https://charts.helm.sh/stable"
-  chart      = "prometheus-operator"
-  version    = "8.3.3"
+  repository = "https://prometheus-community.github.io/helm-charts"
+  chart      = "kube-prometheus-stack"
+  version    = "18.0.3"
   timeout    = 600
   wait       = true
 
