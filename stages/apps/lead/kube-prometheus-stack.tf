@@ -20,3 +20,11 @@ module "kube_prometheus_stack" {
   prometheus_slack_channel     = var.prometheus_slack_channel
   ingress_class                = "toolchain-nginx"
 }
+
+module "dashboard" {
+  source = "../../../modules/lead/dashboard"
+
+  enabled           = var.enable_dashboard
+  namespace         = module.monitoring_namespace.name
+  dashboard_version = var.dashboard_version
+}
