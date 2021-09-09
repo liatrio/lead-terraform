@@ -6,8 +6,8 @@ variable "prometheus_slack_channel" {
   default = ""
 }
 
-variable "ingress_class" {
-  default = ""
+variable "ingress_annotations" {
+  type = map(string)
 }
 
 variable "namespace" {}

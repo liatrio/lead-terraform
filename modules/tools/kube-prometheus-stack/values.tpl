@@ -2,10 +2,7 @@ grafana:
   ingress:
     enabled: true
     annotations:
-      %{ if ingress_class != "" }
-      kubernetes.io/ingress.class: ${ingress_class}
-      %{ endif }
-      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      ${indent( 6, yamlencode( ingress_annotations ) ) }
     tls:
     - hosts:
       - ${grafana_hostname}
