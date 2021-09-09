@@ -7,7 +7,7 @@ module "monitoring_namespace" {
   namespace = var.monitoring_namespace
   annotations = {
     name    = var.monitoring_namespace
-    cluster = var.cluster_name
+    cluster = var.eks_cluster_id
   }
 }
 
@@ -24,7 +24,7 @@ module "kube_prometheus_stack" {
 module "dashboard" {
   source = "../../../modules/lead/dashboard"
 
-  enabled           = var.enable_dashboard
+  enabled           = true
   namespace         = module.monitoring_namespace.name
   dashboard_version = var.dashboard_version
 }
