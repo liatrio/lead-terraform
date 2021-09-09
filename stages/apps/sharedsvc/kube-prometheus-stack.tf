@@ -6,8 +6,8 @@ module "monitoring_namespace" {
   source    = "../../../modules/common/namespace"
   namespace = var.monitoring_namespace
   annotations = {
-    name                                         = var.monitoring_namespace
-    cluster                                      = var.cluster_name
+    name    = var.monitoring_namespace
+    cluster = var.eks_cluster_id
   }
 }
 
@@ -15,7 +15,7 @@ module "kube_prometheus_stack" {
   source = "../../../modules/tools/kube-prometheus-stack"
 
   namespace                    = module.monitoring_namespace.name
-  grafana_hostname             = "grafana.${var.toolchain_namespace}.${var.cluster_name}.${var.root_zone_name}"
+  grafana_hostname             = "grafana.${var.internal_cluster_domain}"
   prometheus_slack_webhook_url = data.vault_generic_secret.prometheus.data["slack-webhook-url"]
   prometheus_slack_channel     = var.prometheus_slack_channel
   ingress_annotations          = local.common_ingress_annotations
@@ -24,7 +24,7 @@ module "kube_prometheus_stack" {
 module "dashboard" {
   source = "../../../modules/lead/dashboard"
 
-  enabled           = var.enable_dashboard
+  enabled           = true
   namespace         = module.monitoring_namespace.name
   dashboard_version = var.dashboard_version
 }

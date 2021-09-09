@@ -25,6 +25,9 @@ variable "monitoring_namespace" {
   default = "monitoring"
 }
 
+variable "prometheus_slack_channel" {
+}
+
 variable "uptime" {
   default = "Mon-Fri 05:00-19:00 America/Los_Angeles"
 }
