@@ -6,6 +6,9 @@ variable "eks_cluster_id" {}
 variable "eks_openid_connect_provider_url" {}
 variable "eks_openid_connect_provider_arn" {}
 
+variable "cluster_name" {
+}
+
 variable "cluster_domain" {
   default = "services.liatr.io"
 }
@@ -19,10 +22,17 @@ variable "enable_autoscaler_scale_down" {
   default = true
 }
 
+variable "enable_dashboard" {
+  default = true
+}
+
 variable "system_namespace" {}
 
 variable "monitoring_namespace" {
   default = "monitoring"
+}
+
+variable "prometheus_slack_channel" {
 }
 
 variable "uptime" {
@@ -45,6 +55,8 @@ variable "cert_manager_service_account_arn" {}
 variable "docker_registry_aws_access_key_id" {}
 variable "docker_registry_aws_secret_access_key" {}
 variable "docker_registry_s3_bucket_name" {}
+
+
 
 variable "dashboard_version" {
   default = "v2.0.1-11-g444016b"
