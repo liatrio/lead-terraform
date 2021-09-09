@@ -21,6 +21,10 @@ variable "enable_autoscaler_scale_down" {
 
 variable "system_namespace" {}
 
+variable "monitoring_namespace" {
+  default = "monitoring"
+}
+
 variable "uptime" {
   default = "Mon-Fri 05:00-19:00 America/Los_Angeles"
 }
