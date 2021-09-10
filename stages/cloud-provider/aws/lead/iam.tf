@@ -3,8 +3,8 @@ module "cert_manager_iam" {
 
   cluster                     = var.cluster_name
   namespace                   = var.system_namespace
-  openid_connect_provider_arn = module.eks.aws_iam_openid_connect_provider.arn
-  openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider.url
+  openid_connect_provider_arn = module.eks.aws_iam_openid_connect_provider_arn
+  openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider_url
 }
 
 module "external_dns_iam" {
@@ -12,8 +12,8 @@ module "external_dns_iam" {
 
   cluster                     = var.cluster_name
   namespace                   = var.system_namespace
-  openid_connect_provider_arn = module.eks.aws_iam_openid_connect_provider.arn
-  openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider.url
+  openid_connect_provider_arn = module.eks.aws_iam_openid_connect_provider_arn
+  openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider_url
   route53_zone_ids = [
     aws_route53_zone.cluster_zone.zone_id
   ]
@@ -24,8 +24,8 @@ module "cluster_autoscaler_iam" {
 
   cluster                     = var.cluster_name
   namespace                   = var.system_namespace
-  openid_connect_provider_arn = module.eks.aws_iam_openid_connect_provider.arn
-  openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider.url
+  openid_connect_provider_arn = module.eks.aws_iam_openid_connect_provider_arn
+  openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider_url
 }
 
 module "velero_iam" {
@@ -35,8 +35,8 @@ module "velero_iam" {
   cluster                     = var.cluster_name
   namespace                   = var.velero_namespace
   velero_bucket_name          = module.velero[0].velero_bucket_name
-  openid_connect_provider_arn = module.eks.aws_iam_openid_connect_provider.arn
-  openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider.url
+  openid_connect_provider_arn = module.eks.aws_iam_openid_connect_provider_arn
+  openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider_url
 }
 
 resource "aws_iam_role" "operator_slack_service_account" {
@@ -49,12 +49,12 @@ resource "aws_iam_role" "operator_slack_service_account" {
     {
       "Effect": "Allow",
       "Principal": {
-        "Federated": "${module.eks.aws_iam_openid_connect_provider.arn}"
+        "Federated": "${module.eks.aws_iam_openid_connect_provider_arn}"
       },
       "Action": "sts:AssumeRoleWithWebIdentity",
       "Condition": {
         "StringEquals": {
-          "${replace(module.eks.aws_iam_openid_connect_provider.url, "https://", "")}:sub": "system:serviceaccount:${var.toolchain_namespace}:operator-slack"
+          "${replace(module.eks.aws_iam_openid_connect_provider_url, "https://", "")}:sub": "system:serviceaccount:${var.toolchain_namespace}:operator-slack"
         }
       }
     }
@@ -121,12 +121,12 @@ resource "aws_iam_role" "operator_jenkins_service_account" {
     {
       "Effect": "Allow",
       "Principal": {
-        "Federated": "${module.eks.aws_iam_openid_connect_provider.arn}"
+        "Federated": "${module.eks.aws_iam_openid_connect_provider_arn}"
       },
       "Action": "sts:AssumeRoleWithWebIdentity",
       "Condition": {
         "StringEquals": {
-          "${replace(module.eks.aws_iam_openid_connect_provider.url, "https://", "")}:sub": "system:serviceaccount:${var.toolchain_namespace}:operator-jenkins"
+          "${replace(module.eks.aws_iam_openid_connect_provider_url, "https://", "")}:sub": "system:serviceaccount:${var.toolchain_namespace}:operator-jenkins"
         }
       }
     }
@@ -192,12 +192,12 @@ resource "aws_iam_role" "product_operator_service_account" {
     {
       "Effect": "Allow",
       "Principal": {
-        "Federated": "${module.eks.aws_iam_openid_connect_provider.arn}"
+        "Federated": "${module.eks.aws_iam_openid_connect_provider_arn}"
       },
       "Action": "sts:AssumeRoleWithWebIdentity",
       "Condition": {
         "StringEquals": {
-          "${replace(module.eks.aws_iam_openid_connect_provider.url, "https://", "")}:sub": "system:serviceaccount:${var.toolchain_namespace}:operator-product"
+          "${replace(module.eks.aws_iam_openid_connect_provider_url, "https://", "")}:sub": "system:serviceaccount:${var.toolchain_namespace}:operator-product"
         }
       }
     }

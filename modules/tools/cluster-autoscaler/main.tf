@@ -1,14 +1,3 @@
-data "template_file" "cluster_autoscaler" {
-  template = file("${path.module}/cluster-autoscaler-values.tpl")
-
-  vars = {
-    cluster            = var.cluster
-    region             = var.region
-    scale_down_enabled = var.enable_autoscaler_scale_down
-    iam_arn            = var.cluster_autoscaler_service_account_arn
-  }
-}
-
 resource "helm_release" "cluster_autoscaler" {
   name       = "cluster-autoscaler"
   chart      = "cluster-autoscaler"
@@ -16,10 +5,15 @@ resource "helm_release" "cluster_autoscaler" {
   repository = "https://kubernetes.github.io/autoscaler"
   timeout    = 600
   wait       = true
-  version    = "9.4.0"
+  version    = "9.10.7"
 
   values = [
-    data.template_file.cluster_autoscaler.rendered,
+    templatefile("${path.module}/cluster-autoscaler-values.tpl", {
+      cluster            = var.cluster
+      region             = var.region
+      scale_down_enabled = var.enable_autoscaler_scale_down
+      iam_arn            = var.cluster_autoscaler_service_account_arn
+    }),
     var.extra_values != "" ? var.extra_values : null
   ]
 }

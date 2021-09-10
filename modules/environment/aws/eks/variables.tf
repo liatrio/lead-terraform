@@ -88,3 +88,11 @@ variable "root_volume_size" {
 variable "docker_registry_mirror" {
   default = ""
 }
+
+variable "internal_vpn_subnet" {
+  default = "10.1.32.0/20"
+}
+
+variable "enable_ssh_access" {
+  default = false
+}

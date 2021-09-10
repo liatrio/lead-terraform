@@ -30,12 +30,12 @@ resource "aws_iam_role" "vault_service_account" {
     {
       "Effect": "Allow",
       "Principal": {
-        "Federated": "${module.eks.aws_iam_openid_connect_provider.arn}"
+        "Federated": "${module.eks.aws_iam_openid_connect_provider_arn}"
       },
       "Action": "sts:AssumeRoleWithWebIdentity",
       "Condition": {
         "StringEquals": {
-          "${replace(module.eks.aws_iam_openid_connect_provider.url, "https://", "")}:sub": "system:serviceaccount:${var.toolchain_namespace}:vault"
+          "${replace(module.eks.aws_iam_openid_connect_provider_url, "https://", "")}:sub": "system:serviceaccount:${var.toolchain_namespace}:vault"
         }
       }
     }
