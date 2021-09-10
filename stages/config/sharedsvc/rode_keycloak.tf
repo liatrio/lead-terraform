@@ -61,6 +61,14 @@ resource "keycloak_group_roles" "rode_group_roles" {
   ]
 }
 
+resource "keycloak_default_groups" "rode_default_group" {
+  realm_id = keycloak_realm.sharedsvc.id
+
+  group_ids = [
+    keycloak_group.rode_groups["ApplicationDeveloper"].id
+  ]
+}
+
 locals {
   rode_service_accounts = {
     terraform : { role : "PolicyAdministrator", client_secret : "terraform_client_secret" }
