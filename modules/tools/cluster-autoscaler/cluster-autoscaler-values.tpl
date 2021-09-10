@@ -1,3 +1,5 @@
+replicaCount: 2
+
 image:
   repository: k8s.gcr.io/autoscaling/cluster-autoscaler
   tag: v1.21.0
