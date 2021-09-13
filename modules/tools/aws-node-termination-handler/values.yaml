@@ -1,2 +1,2 @@
 nodeSelector:
-  node.kubernetes.io/lifecycle: preemptible
+  node.liatr.io/lifecycle: preemptible
