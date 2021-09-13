@@ -1,7 +1,13 @@
+replicaCount: 2
+
+image:
+  repository: k8s.gcr.io/autoscaling/cluster-autoscaler
+  tag: v1.21.0
+
 rbac:
   create: true
   serviceAccount:
-    annotations: 
+    annotations:
       "eks.amazonaws.com/role-arn": ${iam_arn}
 
 sslCertPath: /etc/ssl/certs/ca-bundle.crt
@@ -13,7 +19,7 @@ autoDiscovery:
   clusterName: ${cluster}
   enabled: true
   tags:
-    - "kubernetes.io/cluster-autoscaler/enabled"
+    - "k8s.io/cluster-autoscaler/enabled"
     - "kubernetes.io/cluster/${cluster}"
 
 extraArgs:

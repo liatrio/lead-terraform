@@ -15,11 +15,11 @@ output "elb_security_group_id" {
 }
 
 output "eks_openid_connect_provider_arn" {
-  value = module.eks.aws_iam_openid_connect_provider.arn
+  value = module.eks.aws_iam_openid_connect_provider_arn
 }
 
 output "eks_openid_connect_provider_url" {
-  value = module.eks.aws_iam_openid_connect_provider.url
+  value = module.eks.aws_iam_openid_connect_provider_url
 }
 
 output "workspace_iam_role_name" {

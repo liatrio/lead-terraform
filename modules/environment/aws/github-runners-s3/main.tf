@@ -21,12 +21,12 @@ resource "aws_iam_role" "github_runners_service_account" {
     {
       "Effect": "Allow",
       "Principal": {
-        "Federated": "${var.aws_iam_openid_connect_provider.arn}"
+        "Federated": "${var.aws_iam_openid_connect_provider_arn}"
       },
       "Action": "sts:AssumeRoleWithWebIdentity",
       "Condition": {
         "ForAnyValue:StringEquals": {
-          "${replace(var.aws_iam_openid_connect_provider.url, "https://", "")}:sub": ${jsonencode(formatlist("system:serviceaccount:%s", var.service_accounts))}
+          "${replace(var.aws_iam_openid_connect_provider_url, "https://", "")}:sub": ${jsonencode(formatlist("system:serviceaccount:%s", var.service_accounts))}
         }
       }
     }

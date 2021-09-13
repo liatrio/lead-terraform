@@ -1,2 +1,10 @@
 nodeSelector:
-  node.kubernetes.io/lifecycle: preemptible
+  node.liatr.io/lifecycle: preemptible
+
+resources:
+  requests:
+    memory: "32Mi"
+    cpu: "10m"
+  limits:
+    memory: "64Mi"
+    cpu: "50m"

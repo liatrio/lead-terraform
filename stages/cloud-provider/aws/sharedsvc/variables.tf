@@ -81,3 +81,7 @@ variable "github_runner_service_accounts" {
   type        = list(string)
   default     = []
 }
+
+variable "enable_eks_ssh_access" {
+  default = false
+}

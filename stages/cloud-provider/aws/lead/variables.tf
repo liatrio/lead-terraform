@@ -30,7 +30,7 @@ variable "asg_max_size" {
 
 variable "instance_types" {
   type    = list(string)
-  default = ["m5.xlarge", "c5.xlarge", "m4.xlarge", "c4.xlarge", "t3.xlarge", "r5.xlarge"]
+  default = ["m5.xlarge", "m4.xlarge", "t3.xlarge", "r5.xlarge"]
 }
 
 variable "essential_instance_type" {
@@ -115,4 +115,8 @@ variable "enable_velero" {
 
 variable "velero_namespace" {
   default = "velero"
+}
+
+variable "enable_eks_ssh_access" {
+  default = false
 }

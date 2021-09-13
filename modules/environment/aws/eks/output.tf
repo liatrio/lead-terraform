@@ -2,8 +2,12 @@ output "cluster_id" {
   value = module.eks.cluster_id
 }
 
-output "aws_iam_openid_connect_provider" {
-  value = aws_iam_openid_connect_provider.default
+output "aws_iam_openid_connect_provider_arn" {
+  value = module.eks.oidc_provider_arn
+}
+
+output "aws_iam_openid_connect_provider_url" {
+  value = module.eks.cluster_oidc_issuer_url
 }
 
 output "workspace_iam_role" {

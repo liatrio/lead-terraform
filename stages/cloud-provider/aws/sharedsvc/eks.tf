@@ -16,6 +16,7 @@ module "eks" {
   on_demand_percentage             = "0"
   vpc_name                         = var.vpc_name
   additional_mapped_roles          = var.additional_mapped_roles
+  workers_additional_policies      = []
+  enable_ssh_access                = var.enable_eks_ssh_access
 
-  workers_additional_policies = []
 }

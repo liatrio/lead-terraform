@@ -43,42 +43,13 @@ data "aws_iam_policy_document" "cluster_autoscaler" {
       "autoscaling:DescribeAutoScalingInstances",
       "autoscaling:DescribeLaunchConfigurations",
       "autoscaling:DescribeTags",
-      "ec2:DescribeLaunchTemplateVersions",
-    ]
-
-    resources = [
-      "*"
-    ]
-  }
-
-  statement {
-    sid    = "clusterAutoscalerOwn"
-    effect = "Allow"
-
-    actions = [
       "autoscaling:SetDesiredCapacity",
       "autoscaling:TerminateInstanceInAutoScalingGroup",
-      "autoscaling:UpdateAutoScalingGroup",
+      "ec2:DescribeLaunchTemplateVersions"
     ]
 
     resources = [
       "*"
     ]
-
-    condition {
-      test     = "StringEquals"
-      variable = "autoscaling:ResourceTag/kubernetes.io/cluster/${var.cluster}"
-      values = [
-        "owned"
-      ]
-    }
-
-    condition {
-      test     = "StringEquals"
-      variable = "autoscaling:ResourceTag/kubernetes.io/cluster-autoscaler/enabled"
-      values = [
-        "true"
-      ]
-    }
   }
 }

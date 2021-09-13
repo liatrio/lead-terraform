@@ -19,8 +19,5 @@ module "eks" {
   codebuild_role                   = var.enable_aws_code_services ? module.codeservices.codebuild_role : ""
   vpc_name                         = var.vpc_name
   docker_registry_mirror           = var.docker_registry_mirror
-
-  // TODO: remove the following policy from the worker node role once terraform is bumped
-  //       to version that includes fix for: https://github.com/hashicorp/terraform/issues/22992
-  workers_additional_policies = [aws_iam_policy.operator_jenkins.arn]
+  enable_ssh_access                = var.enable_eks_ssh_access
 }

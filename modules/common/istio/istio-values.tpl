@@ -56,6 +56,8 @@ global:
     limits:
       cpu: 100m
       memory: 128Mi
+  defaultPodDisruptionBudget:
+    enabled: false
 
 certmanager:
   enabled: false

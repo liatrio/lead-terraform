@@ -10,6 +10,13 @@ systemctl enable amazon-ssm-agent
 echo '{"registry-mirrors": [${var.docker_registry_mirror != "" ? format("\"%s\"", var.docker_registry_mirror) : ""}]}' | cat /etc/docker/daemon.json - | jq -s '.[0] * .[1]' > /tmp/daemon.json
 mv /tmp/daemon.json /etc/docker/daemon.json
 systemctl restart docker
+
+# this is a dumb hack to enable the docker bridge on managed node groups
+# normally you'd use "bootstrap_extra_args" with regular worker groups in order to specify "--enable-docker-bridge 'true'"
+# however, MNGs don't support this yet without running a custom AMI, which would allow you to invoke the bootstrap script yourself
+# this sed command simply modifies this line of the bootstrap script: https://github.com/awslabs/amazon-eks-ami/blob/d03b2ac370f473ddfd1f2d11d5ba93ecb5c1ec19/files/bootstrap.sh#L114
+# TODO: remove this hack once MNGs support bootstrap_extra_args
+sed -i 's/ENABLE_DOCKER_BRIDGE:.*/ENABLE_DOCKER_BRIDGE:-true}\"/' /etc/eks/bootstrap.sh
 EOF
 
   tags = {
@@ -86,10 +93,7 @@ resource "aws_security_group" "worker" {
     to_port   = 22
     protocol  = "tcp"
 
-    cidr_blocks = [
-      data.aws_vpc.lead_vpc.cidr_block,
-      #"10.1.32.0/20", # internal VPN
-    ]
+    cidr_blocks = concat([data.aws_vpc.lead_vpc.cidr_block], var.enable_ssh_access ? [var.internal_vpn_subnet] : [])
   }
   ingress {
     from_port = 443
@@ -131,122 +135,98 @@ resource "aws_security_group" "elb" {
 }
 
 module "eks" {
-  source                                       = "terraform-aws-modules/eks/aws"
-  version                                      = "16.2.0"
-  cluster_version                              = var.cluster_version
-  cluster_name                                 = var.cluster
-  subnets                                      = sort(data.aws_subnet_ids.eks_masters.ids)
-  tags                                         = local.tags
-  vpc_id                                       = data.aws_vpc.lead_vpc.id
+  source  = "terraform-aws-modules/eks/aws"
+  version = "17.18.0"
+
+  cluster_name    = var.cluster
+  cluster_version = var.cluster_version
+  subnets         = sort(data.aws_subnet_ids.eks_masters.ids)
+  vpc_id          = data.aws_vpc.lead_vpc.id
+
   worker_additional_security_group_ids         = [aws_security_group.worker.id]
   map_roles                                    = concat(local.default_roles, local.codebuild_roles, var.additional_mapped_roles)
   write_kubeconfig                             = var.write_kubeconfig
   permissions_boundary                         = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${aws_iam_policy.workspace_role_boundary.name}"
   manage_worker_iam_resources                  = true
   kubeconfig_aws_authenticator_additional_args = var.kubeconfig_aws_authenticator_additional_args
-  enable_irsa                                  = false
+  enable_irsa                                  = true
 
   cluster_endpoint_private_access                = true
   cluster_endpoint_public_access                 = var.enable_public_endpoint
   cluster_create_endpoint_private_access_sg_rule = true
-  cluster_endpoint_private_access_cidrs = [
-    "10.1.32.0/20",                  // internal VPN cidr
+  cluster_endpoint_private_access_cidrs          = [
+    "10.1.32.0/20", // internal VPN cidr
     data.aws_vpc.lead_vpc.cidr_block // anything running within the lead VPC, such as codebuild projects
   ]
+  cluster_enabled_log_types                      = ["api", "controllerManager", "scheduler"]
 
-  #cluster_enabled_log_types            = ["api","audit","authenticator","controllerManager","scheduler"]
-
-  workers_additional_policies = concat(["arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"], var.workers_additional_policies)
-
-  workers_group_defaults = {
-    tags = [
-      {
-        "key"                 = "kubernetes.io/cluster-autoscaler/enabled"
-        "value"               = "true"
-        "propagate_at_launch" = true
-      }
-    ]
+  tags = {
+    "Cluster" = var.cluster
   }
 
-  worker_groups = [
-    {
-      name                   = "essential0"
-      instance_type          = var.essential_instance_type
-      subnets                = sort(data.aws_subnet_ids.eks_workers.ids)
-      asg_min_size           = var.essential_asg_min_size
-      asg_desired_capacity   = var.essential_asg_desired_capacity
-      asg_max_size           = var.essential_asg_max_size
-      asg_recreate_on_change = true
-      bootstrap_extra_args   = "--enable-docker-bridge 'true'"
-      key_name               = var.key_name
-      autoscaling_enabled    = true
-      protect_from_scale_in  = var.protect_from_scale_in
-      enabled_metrics        = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]
-      pre_userdata           = local.userdata
-      kubelet_extra_args     = "--node-labels=node.kubernetes.io/lifecycle=essential --register-with-taints=${var.essential_taint_key}=true:NoSchedule"
-      root_volume_size       = var.root_volume_size
+  node_groups_defaults = {
+    create_launch_template = true
+    pre_userdata           = local.userdata
+    enable_monitoring      = true
+    key_name               = var.key_name
+    version                = var.cluster_version
+    disk_size              = var.root_volume_size
+    update_config          = {
+      max_unavailable_percentage = 50
     }
-  ]
 
-  worker_groups_launch_template = [
-    {
-      name                                     = "preemptible0"
-      override_instance_types                  = var.preemptible_instance_types
-      subnets                                  = [sort(data.aws_subnet_ids.eks_workers.ids)[0]]
-      asg_min_size                             = var.preemptible_asg_min_size
-      asg_desired_capacity                     = var.preemptible_asg_desired_capacity
-      asg_max_size                             = var.preemptible_asg_max_size
-      asg_recreate_on_change                   = true
-      bootstrap_extra_args                     = "--enable-docker-bridge 'true'"
-      key_name                                 = var.key_name
-      autoscaling_enabled                      = true
-      protect_from_scale_in                    = var.protect_from_scale_in
-      enabled_metrics                          = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]
-      pre_userdata                             = local.userdata
-      kubelet_extra_args                       = "--node-labels=node.kubernetes.io/lifecycle=preemptible"
-      on_demand_base_capacity                  = 0
-      on_demand_percentage_above_base_capacity = var.on_demand_percentage
-      root_volume_size                         = var.root_volume_size
-    },
-    {
-      name                                     = "preemptible1"
-      override_instance_types                  = var.preemptible_instance_types
-      subnets                                  = [sort(data.aws_subnet_ids.eks_workers.ids)[1]]
-      asg_min_size                             = var.preemptible_asg_min_size
-      asg_desired_capacity                     = var.preemptible_asg_desired_capacity
-      asg_max_size                             = var.preemptible_asg_max_size
-      asg_recreate_on_change                   = true
-      bootstrap_extra_args                     = "--enable-docker-bridge 'true'"
-      key_name                                 = var.key_name
-      autoscaling_enabled                      = true
-      protect_from_scale_in                    = var.protect_from_scale_in
-      enabled_metrics                          = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]
-      pre_userdata                             = local.userdata
-      kubelet_extra_args                       = "--node-labels=node.kubernetes.io/lifecycle=preemptible"
-      on_demand_base_capacity                  = 0
-      on_demand_percentage_above_base_capacity = var.on_demand_percentage
-      root_volume_size                         = var.root_volume_size
-    },
-    {
-      name                                     = "preemptible2"
-      override_instance_types                  = var.preemptible_instance_types
-      subnets                                  = [sort(data.aws_subnet_ids.eks_workers.ids)[2]]
-      asg_min_size                             = var.preemptible_asg_min_size
-      asg_desired_capacity                     = var.preemptible_asg_desired_capacity
-      asg_max_size                             = var.preemptible_asg_max_size
-      asg_recreate_on_change                   = true
-      bootstrap_extra_args                     = "--enable-docker-bridge 'true'"
-      key_name                                 = var.key_name
-      autoscaling_enabled                      = true
-      protect_from_scale_in                    = var.protect_from_scale_in
-      enabled_metrics                          = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]
-      pre_userdata                             = local.userdata
-      kubelet_extra_args                       = "--node-labels=node.kubernetes.io/lifecycle=preemptible"
-      on_demand_base_capacity                  = 0
-      on_demand_percentage_above_base_capacity = var.on_demand_percentage
-      root_volume_size                         = var.root_volume_size
-    },
-  ]
+    # the values below are the defaults for preemptible nodes, which will only be overridden by the essential node group
+    capacity_type    = "SPOT"
+    desired_capacity = var.preemptible_asg_desired_capacity
+    min_capacity     = var.preemptible_asg_min_size
+    max_capacity     = var.preemptible_asg_max_size
+    instance_types   = var.preemptible_instance_types
+  }
+
+  node_groups = {
+    "essential"    = {
+      name_prefix = "${var.cluster}-essential"
+      subnets     = sort(data.aws_subnet_ids.eks_workers.ids)
+      k8s_labels  = {
+        "node.liatr.io/lifecycle" = "essential"
+      }
+
+      taints = [
+        {
+          key    = var.essential_taint_key
+          value  = "true"
+          effect = "NO_SCHEDULE"
+        }
+      ]
+
+      capacity_type    = "ON_DEMAND"
+      desired_capacity = var.essential_asg_desired_capacity
+      min_capacity     = var.essential_asg_min_size
+      max_capacity     = var.essential_asg_max_size
+      instance_types   = [var.essential_instance_type]
+    }
+    "preemptible0" = {
+      name_prefix = "${var.cluster}-preemptible0"
+      subnets     = [sort(data.aws_subnet_ids.eks_workers.ids)[0]]
+      k8s_labels  = {
+        "node.liatr.io/lifecycle" = "preemptible"
+      }
+    }
+    "preemptible1" = {
+      name_prefix = "${var.cluster}-preemptible1"
+      subnets     = [sort(data.aws_subnet_ids.eks_workers.ids)[1]]
+      k8s_labels  = {
+        "node.liatr.io/lifecycle" = "preemptible"
+      }
+    }
+    "preemptible2" = {
+      name_prefix = "${var.cluster}-preemptible2"
+      subnets     = [sort(data.aws_subnet_ids.eks_workers.ids)[2]]
+      k8s_labels  = {
+        "node.liatr.io/lifecycle" = "preemptible"
+      }
+    }
+  }
 }
 
 resource "aws_s3_bucket" "tfstates" {
