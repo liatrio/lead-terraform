@@ -3,7 +3,7 @@ terraform {
   required_providers {
     keycloak = {
       source  = "mrparkers/keycloak"
-      version = "= 3.3.0"
+      version = "3.3.0"
     }
     sonarqube = {
       source  = "jdamata/sonarqube"
@@ -11,7 +11,7 @@ terraform {
     }
     harbor = {
       source  = "liatrio/harbor"
-      version = "= 0.3.3"
+      version = "0.4.0"
     }
     helm = {
       source  = "hashicorp/helm"

@@ -6,14 +6,14 @@ terraform {
     }
     harbor = {
       source  = "liatrio/harbor"
-      version = "= 0.3.3"
+      version = "= 0.4.0"
     }
     helm = {
       source = "hashicorp/helm"
     }
     keycloak = {
       source  = "mrparkers/keycloak"
-      version = "= 2.0.0-rc.0"
+      version = "3.3.0"
     }
     kubernetes = {
       source = "hashicorp/kubernetes"

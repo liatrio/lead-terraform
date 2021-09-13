@@ -7,7 +7,7 @@ terraform {
     }
     harbor = {
       source  = "liatrio/harbor"
-      version = "= 0.3.3"
+      version = "0.4.0"
     }
     artifactory = {
       source  = "jfrog/artifactory"
@@ -23,7 +23,7 @@ terraform {
     }
     keycloak = {
       source  = "mrparkers/keycloak"
-      version = "= 3.3.0"
+      version = "3.3.0"
     }
     template = {
       source  = "hashicorp/template"
