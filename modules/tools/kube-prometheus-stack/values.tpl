@@ -104,41 +104,27 @@ alertmanager:
     global:
       resolve_timeout: 5m
     route:
+      receiver: 'slack'
       group_by: ['namespace', 'pod']
       group_wait: 30s
       group_interval: 5m
-      repeat_interval: 1h
+      repeat_interval: 5m
       routes:
       - match:
           alertname: Watchdog
-        receiver: "null"
+        receiver: "slack"
       - match:
           alertname: KubeControllerManagerDown
         receiver: "null"
       - match:
           alertname: KubeSchedulerDown
         receiver: "null"
-      - match:
-          alertname: KubeletTooManyPods
-        receiver: "null"
-      - match:
-          alertname: KubeVersionMismatch
-        receiver: "null"
-      - match:
-          namespace: ""
-        receiver: slack
-      - match:
-          namespace: toolchain
-        receiver: slack
-      - match:
-          namespace: lead-system
-        receiver: slack
-      - match:
-          namespace: istio-system
-        receiver: slack
-      - match:
-          namespace: elasticsearch
-        receiver: slack
+      #- match:
+      #    alertname: KubeletTooManyPods
+      #  receiver: "null"
+      #- match:
+      #    alertname: KubeVersionMismatch
+      #  receiver: "null"
     templates:
     - /etc/alertmanager/config/template*.tmpl
     receivers:
@@ -152,7 +138,7 @@ alertmanager:
         text: |-
           {{ range .Alerts }}
             *Alert:* {{ .Labels.alertname }} - `{{ .Labels.severity }}`
-            *Description:* {{ .Annotations.message }}
+            *Description:* {{ .Annotations.description }}
             *Details:*
             {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
             {{ end }}
