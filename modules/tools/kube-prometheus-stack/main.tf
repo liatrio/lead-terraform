@@ -32,3 +32,36 @@ resource "helm_release" "kube_prometheus_stack" {
     })
   ]
 }
+
+resource "kubernetes_manifest" "kube_prometheus_harbor_monitor" {
+  manifest = {
+    apiVersion = "monitoring.coreos.com/v1"
+    kind       = "ServiceMonitor"
+    metadata = {
+      name      = "kube-prometheus-stack-harbor"
+      namespace = var.namespace
+      labels = {
+        app     = "kube-prometheus-stack-harbor"
+        release = "kube-prometheus-stack"
+      }
+    }
+    spec = {
+      selector = {
+        matchLabels = {
+          app     = "harbor"
+          release = "harbor"
+        }
+      }
+      endpoints = [{
+        port = "metrics"
+      }]
+      namespaceSelector = {
+        any = "false"
+        matchNames = [
+          "toolchain",
+          "harbor"
+        ]
+      }
+    }
+  }
+}

@@ -124,6 +124,7 @@ resource "helm_release" "harbor" {
       redis_pvc_size          = "10Gi"
       storage_class           = var.k8s_storage_class
       img_tag                 = "v2.1.3"
+      metrics_enabled         = var.metrics_enabled
     })
   ]
 
