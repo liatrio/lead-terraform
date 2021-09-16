@@ -125,6 +125,9 @@ alertmanager:
           alertname: KubeVersionMismatch
         receiver: "null"
       - match:
+          alertname: KubeCPUOvercommit
+        receiver: "null"
+      - match:
           namespace: ""
         receiver: slack
       - match:
