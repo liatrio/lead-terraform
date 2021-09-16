@@ -18,5 +18,4 @@ module "eks" {
   additional_mapped_roles          = var.additional_mapped_roles
   workers_additional_policies      = []
   enable_ssh_access                = var.enable_eks_ssh_access
-
 }
