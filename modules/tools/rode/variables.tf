@@ -61,7 +61,7 @@ variable "image_scanner_collector_hostname" {
 }
 
 variable "image_pull_secrets" {
-  type = list(string)
+  type    = list(string)
   default = []
 }
 

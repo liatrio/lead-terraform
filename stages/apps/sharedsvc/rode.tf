@@ -29,15 +29,17 @@ resource "kubernetes_secret" "acr_image_pull_secret" {
   }
 
   data = {
-    ".dockercfg" = jsonencode({
-      "azuredemoshared.azurecr.io" = {
-        "username" = "azuredemoshared"
-        "password" = data.vault_generic_secret.rode.data["acr_image_pull_secret"]
+    ".dockerconfigjson" = jsonencode({
+      auths = {
+        "azuredemoshared.azurecr.io" = {
+          "username" = "azuredemoshared"
+          "password" = data.vault_generic_secret.rode.data["acr_image_pull_secret"]
+        }
       }
     })
   }
 
-  type = "kubernetes.io/dockercfg"
+  type = "kubernetes.io/dockerconfigjson"
 }
 
 module "rode" {
