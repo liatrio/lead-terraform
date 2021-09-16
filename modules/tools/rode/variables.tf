@@ -60,6 +60,11 @@ variable "image_scanner_collector_hostname" {
   default = ""
 }
 
+variable "image_pull_secrets" {
+  type = list(string)
+  default = []
+}
+
 variable "build_collector_grpc_hostname" {
   type    = string
   default = ""

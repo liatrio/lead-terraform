@@ -125,6 +125,7 @@ resource "helm_release" "rode_image_scanner_collector" {
       host                = var.image_scanner_collector_hostname
       ingress_annotations = local.ingress_annotations
       namespace           = var.namespace
+      image_pull_secrets  = var.image_pull_secrets
     })
   ]
 
