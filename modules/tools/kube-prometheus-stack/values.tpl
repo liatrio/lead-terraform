@@ -133,7 +133,7 @@ alertmanager:
       slack_configs:
       - api_url: ${prometheus_slack_webhook_url}
         channel: ${prometheus_slack_channel}
-        color: '{{ template "alert_severity_color" . }}'
+        color: '{{ range .Alerts }}{{ if eq .Status "firing" }}{{ if eq .Labels.severity "warning" }}#FFFF00{{ else if eq .Labels.severity "critical" }}#FF0000{{ else }}#439FE0{{ end }}{{ else }}#00FF00{{ end }}{{ end }}'
         send_resolved: true
         title: '[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] Monitoring Event Notification'
         text: |-
@@ -155,22 +155,7 @@ alertmanager:
   templateFiles:
     template_1.tmpl: |-
       {{ define "__single_message_title" }}{{ range .Alerts.Firing }}{{ .Labels.alertname }} @ {{ .Annotations.identifier }}{{ end }}{{ range .Alerts.Resolved }}{{ .Labels.alertname }} @ {{ .Annotations.identifier }}{{ end }}{{ end }}
-      {{ define "custom_title" }}[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ if or (and (eq (len .Alerts.Firing) 1) (eq (len .Alerts.Resolved) 0)) (and (eq (len .Alerts.Firing) 0) (eq (len .Alerts.Resolved) 1)) }}{{ template "__single_message_title" . }}{{ end }}{{ end }}   
-      
-      {{ define "alert_severity_color" }}
-        {{ if eq .Status "firing" }}
-          {{ if eq .Labels.severity "warning" }} 
-            warning
-          {{ else if eq .Labels.severity "critical" }} 
-            danger
-          {{ else }} 
-            #439FE0 
-          {{ end }}
-        {{ else }} 
-          good 
-        {{ end }}
-      {{ end }}
-
+      {{ define "custom_title" }}[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ if or (and (eq (len .Alerts.Firing) 1) (eq (len .Alerts.Resolved) 0)) (and (eq (len .Alerts.Firing) 0) (eq (len .Alerts.Resolved) 1)) }}{{ template "__single_message_title" . }}{{ end }}{{ end }}  
       {{ define "custom_slack_message" }}
       {{ if or (and (eq (len .Alerts.Firing) 1) (eq (len .Alerts.Resolved) 0)) (and (eq (len .Alerts.Firing) 0) (eq (len .Alerts.Resolved) 1)) }}
       {{ range .Alerts.Firing }}{{ .Annotations.description }}{{ end }}{{ range .Alerts.Resolved }}{{ .Annotations.description }}{{ end }}
@@ -185,3 +170,6 @@ alertmanager:
       {{ end }}{{ end }}
       {{ end }}
       {{ end }}
+
+
+
