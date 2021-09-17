@@ -116,16 +116,16 @@ resource "helm_release" "rode_image_scanner_collector" {
   namespace  = var.namespace
   repository = "https://rode.github.io/charts"
   chart      = "rode-collector-image-scanner"
-  version    = "0.1.0"
+  version    = "0.1.1"
   wait       = true
 
   values = [
     templatefile("${path.module}/image-scanner-collector-values.yaml.tpl", {
-      auth_enabled        = local.auth_enabled
-      host                = var.image_scanner_collector_hostname
-      ingress_annotations = local.ingress_annotations
-      namespace           = var.namespace
-      image_pull_secrets  = var.image_pull_secrets
+      auth_enabled         = local.auth_enabled
+      host                 = var.image_scanner_collector_hostname
+      ingress_annotations  = local.ingress_annotations
+      namespace            = var.namespace
+      docker_config_secret = var.docker_config_secret
     })
   ]
 

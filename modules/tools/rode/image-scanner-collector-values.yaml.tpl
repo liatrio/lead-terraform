@@ -6,11 +6,8 @@ rode:
     proxy:
       enabled: ${auth_enabled}
 
-%{~ if length(image_pull_secrets) != 0 }
-imagePullSecrets:
-%{ for secret in image_pull_secrets ~}
-  - name: ${ secret }
-%{ endfor ~}
+%{~ if docker_config_secret != "" }
+dockerConfigSecret: ${docker_config_secret}
 %{~ endif }
 
 %{~ if host != "" }

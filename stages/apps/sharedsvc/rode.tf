@@ -22,9 +22,9 @@ module "rode_namespace" {
 }
 
 # Additional secrets can be created to support other registries
-resource "kubernetes_secret" "acr_image_pull_secret" {
+resource "kubernetes_secret" "image_scanner_docker_config" {
   metadata {
-    name      = "acr-image-pull-secret"
+    name      = "image-scanner-collector-docker-config"
     namespace = module.rode_namespace.name
   }
 
@@ -56,7 +56,7 @@ module "rode" {
   build_collector_grpc_hostname    = local.build_collector_grpc_hostname
   tfsec_collector_hostname         = local.tfsec_collector_hostname
   image_scanner_collector_hostname = local.image_scanner_collector_hostname
-  image_pull_secrets               = [kubernetes_secret.acr_image_pull_secret.metadata.0.name]
+  docker_config_secret             = kubernetes_secret.image_scanner_docker_config.metadata.0.name
   harbor_url                       = "https://${local.harbor_hostname}"
 
   oidc_issuer_url    = local.keycloak_issuer_uri
