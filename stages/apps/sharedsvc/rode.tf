@@ -21,13 +21,13 @@ module "rode_namespace" {
   }
 }
 
-# Additional secrets can be created to support other registries
 resource "kubernetes_secret" "image_scanner_docker_config" {
   metadata {
     name      = "image-scanner-collector-docker-config"
     namespace = module.rode_namespace.name
   }
 
+  # Additional entries under auths can be created to support other registries
   data = {
     ".dockerconfigjson" = jsonencode({
       auths = {
