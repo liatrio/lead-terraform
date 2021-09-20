@@ -85,3 +85,12 @@ variable "github_runner_service_accounts" {
 variable "enable_eks_ssh_access" {
   default = false
 }
+
+variable "atlantis_roles" {
+  type        = list(string)
+  default     = []
+}
+
+variable "atlantis_namespace" {
+  default = "atlantis"
+}

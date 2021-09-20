@@ -89,3 +89,5 @@ variable "github_runners" {
 variable "k8s_storage_class" {
   default = "gp2"
 }
+
+variable "atlantis_service_account_arn" {}
