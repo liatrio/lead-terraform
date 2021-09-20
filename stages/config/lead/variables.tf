@@ -58,9 +58,5 @@ variable "lead_vault_root_token_kubernetes_secret_name" {
   description = "The name of the Kubernetes Secret that contains the root token for Vault"
 }
 
-variable "iam_caller_identity_headers" {
-  description = "IAM caller identity headers provided as an input to the stage"
-}
-
 variable "toolchain_namespace" {
 }
