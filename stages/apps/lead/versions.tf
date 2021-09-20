@@ -33,5 +33,9 @@ terraform {
       source  = "hashicorp/template"
       version = "~> 2.2.0"
     }
+    vault = {
+      source  = "hashicorp/vault"
+      version = ">= 2.24.0"
+    }
   }
 }
