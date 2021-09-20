@@ -13,6 +13,9 @@ variable "enable_test_user" {
 variable "vault_address" {
   description = "Shared-services Vault instance url"
 }
+variable "vault_role" {
+  default = "aws-admin"
+}
 
 variable "enable_keycloak" {}
 

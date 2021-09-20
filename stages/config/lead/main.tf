@@ -43,7 +43,7 @@ provider "vault" {
     path = "auth/aws/login"
 
     parameters = {
-      role                    = "aws-admin"
+      role                    = var.vault_role
       iam_http_request_method = "POST"
       iam_request_url         = base64encode("https://sts.amazonaws.com/")
       iam_request_body        = base64encode("Action=GetCallerIdentity&Version=2011-06-15")
