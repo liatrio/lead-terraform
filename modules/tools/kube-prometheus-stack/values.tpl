@@ -112,7 +112,7 @@ alertmanager:
       routes:
       - match:
           alertname: Watchdog
-        receiver: "slack"
+        receiver: "null"
       - match:
           alertname: KubeControllerManagerDown
         receiver: "null"
@@ -133,17 +133,18 @@ alertmanager:
       slack_configs:
       - api_url: ${prometheus_slack_webhook_url}
         channel: ${prometheus_slack_channel}
-        color: '{{ range .Alerts }}{{ if eq .Status "firing" }}{{ if eq .Labels.severity "warning" }}#FFFF00{{ else if eq .Labels.severity "critical" }}#FF0000{{ else }}#439FE0{{ end }}{{ else }}#00FF00{{ end }}{{ end }}'
+        color: '{{ range .Alerts }}{{ if eq .Status "firing" }}{{ if eq .Labels.severity "warning" }}#FFAA00{{ else if eq .Labels.severity "critical" }}#FF5100{{ else}}#00C1DB{{ end }}{{ else }}#24AE1D{{ end }}{{ end }}'
         send_resolved: true
         title: '[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] Monitoring Event Notification'
         text: |-
           {{ range .Alerts }}
-            *Alert:* {{ .Labels.alertname }} - `{{ .Labels.severity }}`
+            {{ if (and (eq .Labels.severity "critical") (ne .Status "resolved")) }} <!here> {{ end }}{{ if eq .Status "firing" }}{{ if eq .Labels.severity "warning" }} :warning: {{ else if eq .Labels.severity "critical" }} :super_dumpster_fire: {{ else }} :information_source: {{ end }}{{ else }} :white_check_mark: {{ end }} *Alert:* {{ .Labels.alertname }} - `{{ .Labels.severity }}`
             *Description:* {{ .Annotations.description }}
             *Details:*
             {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
             {{ end }}
           {{ end }}
+
     - name: 'slack-receiver' # Not in use but if we want to configure additional templates we can
       slack_configs:
       - api_url: ${prometheus_slack_webhook_url}
@@ -170,6 +171,4 @@ alertmanager:
       {{ end }}{{ end }}
       {{ end }}
       {{ end }}
-
-
 
