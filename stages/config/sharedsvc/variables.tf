@@ -1,6 +1,8 @@
 variable "vault_address" {}
 
-variable "iam_caller_identity_headers" {}
+variable "vault_role" {
+  default = "aws-admin"
+}
 
 variable "eks_cluster_id" {}
 

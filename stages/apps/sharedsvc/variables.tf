@@ -57,10 +57,11 @@ variable "vault_address" {
   default = "https://vault.internal.services.liatr.io"
 }
 
-variable "github_runners_service_account_arn" {
+variable "vault_role" {
+  default = "aws-admin"
 }
 
-variable "iam_caller_identity_headers" {}
+variable "github_runners_service_account_arn" {}
 
 # example_value = {
 #   rode: {

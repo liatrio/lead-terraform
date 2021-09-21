@@ -1,6 +1,8 @@
 variable "vault_address" {}
 
-variable "iam_caller_identity_headers" {}
+variable "vault_role" {
+  default = "vault-admin"
+}
 
 variable "region" {
   default = "us-east-1"
