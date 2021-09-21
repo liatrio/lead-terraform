@@ -119,12 +119,30 @@ alertmanager:
       - match:
           alertname: KubeSchedulerDown
         receiver: "null"
-      #- match:
-      #    alertname: KubeletTooManyPods
-      #  receiver: "null"
-      #- match:
-      #    alertname: KubeVersionMismatch
-      #  receiver: "null"
+      - match:
+          alertname: KubeletTooManyPods
+        receiver: "null"
+      - match:
+          alertname: KubeVersionMismatch
+        receiver: "null"
+      - match:
+          alertname: KubeCPUOvercommit
+        receiver: "null"
+      - match:
+          namespace: ""
+        receiver: slack
+      - match:
+          namespace: toolchain
+        receiver: slack
+      - match:
+          namespace: lead-system
+        receiver: slack
+      - match:
+          namespace: istio-system
+        receiver: slack
+      - match:
+          namespace: elasticsearch
+        receiver: slack
     templates:
     - /etc/alertmanager/config/template*.tmpl
     receivers:

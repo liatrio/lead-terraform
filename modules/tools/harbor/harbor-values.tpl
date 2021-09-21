@@ -269,3 +269,18 @@ redis:
     affinity: {}
   ## Additional deployment annotations
   podAnnotations: {}
+
+metrics:
+  enabled: ${metrics_enabled}
+  core:
+    path: /metrics
+    port: 8001
+  registry:
+    path: /metrics
+    port: 8001
+  jobservice:
+    path: /metrics
+    port: 8001
+  exporter:
+    path: /metrics
+    port: 8001

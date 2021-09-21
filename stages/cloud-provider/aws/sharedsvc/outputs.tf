@@ -7,11 +7,11 @@ output "essential_taint_key" {
 }
 
 output "eks_openid_connect_provider_arn" {
-  value = module.eks.aws_iam_openid_connect_provider.arn
+  value = module.eks.aws_iam_openid_connect_provider_arn
 }
 
 output "eks_openid_connect_provider_url" {
-  value = module.eks.aws_iam_openid_connect_provider.url
+  value = module.eks.aws_iam_openid_connect_provider_url
 }
 
 output "vault_aws_access_key_id" {
