@@ -6,8 +6,8 @@ module "monitoring_namespace" {
   source    = "../../../modules/common/namespace"
   namespace = var.monitoring_namespace
   annotations = {
-    name                                         = var.monitoring_namespace
-    cluster                                      = var.cluster_name
+    name    = var.monitoring_namespace
+    cluster = var.cluster_name
   }
 }
 
