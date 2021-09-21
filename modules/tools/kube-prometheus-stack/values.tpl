@@ -90,6 +90,13 @@ prometheus:
 
 alertmanager:
   enabled: ${enable_alertmanager}
+  ingress:
+    enabled: true
+    path: /
+    annotations: 
+      ${indent( 6, yamlencode( ingress_annotations ) ) }
+    hosts:
+      - ${alertmanager_hostname}
   alertmanagerSpec:
     storage:
       volumeClaimTemplate:

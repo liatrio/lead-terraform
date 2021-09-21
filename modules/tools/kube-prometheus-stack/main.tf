@@ -28,6 +28,7 @@ resource "helm_release" "kube_prometheus_stack" {
       prometheus_slack_webhook_url = var.prometheus_slack_webhook_url
       prometheus_slack_channel     = var.prometheus_slack_channel
       grafana_hostname             = var.grafana_hostname
+      alertmanager_hostname        = var.alertmanager_hostname
       ingress_annotations          = var.ingress_annotations
     })
   ]

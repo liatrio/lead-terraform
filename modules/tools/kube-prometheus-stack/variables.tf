@@ -13,3 +13,5 @@ variable "ingress_annotations" {
 variable "namespace" {}
 
 variable "grafana_hostname" {}
+
+variable "alertmanager_hostname" {}
