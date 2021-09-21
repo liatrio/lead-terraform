@@ -124,7 +124,7 @@ variable "uptime" {
 
 variable "downscaler_exclude_namespaces" {
   type    = list(string)
-  default = ["kube-system"]
+  default = ["kube-system", "monitoring"]
 }
 variable "builder_images_version" {
   default = "v1.0.15-7-g2465aa8"
