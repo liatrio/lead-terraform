@@ -33,6 +33,9 @@ provider "kubernetes" {
     args        = ["eks", "get-token", "--cluster-name", var.cluster_name]
     command     = "aws"
   }
+  experiments {
+    manifest_resource = true
+  }
 }
 
 provider "helm" {
