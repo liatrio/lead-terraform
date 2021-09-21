@@ -108,7 +108,7 @@ alertmanager:
       group_by: ['namespace', 'pod']
       group_wait: 30s
       group_interval: 5m
-      repeat_interval: 5m
+      repeat_interval: 1h
       routes:
       - match:
           alertname: Watchdog
