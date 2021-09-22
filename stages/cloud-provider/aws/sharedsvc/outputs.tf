@@ -62,3 +62,7 @@ output "docker_registry_s3_bucket_name" {
 output "github_runners_service_account_arn" {
   value = module.github-runners-s3.github_runners_service_account_arn
 }
+
+output "atlantis_service_account_arn" {
+  value = aws_iam_role.atlantis_service_account.arn
+}

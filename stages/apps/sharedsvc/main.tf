@@ -29,6 +29,10 @@ provider "kubernetes" {
     args        = ["eks", "get-token", "--cluster-name", var.eks_cluster_id]
     command     = "aws"
   }
+
+  experiments {
+    manifest_resource = true
+  }
 }
 
 provider "helm" {
@@ -47,14 +51,11 @@ provider "vault" {
   address = var.vault_address
 
   auth_login {
-    path = "auth/aws/login"
+    path   = "auth/aws/login"
+    method = "aws"
 
     parameters = {
-      role                    = "aws-admin"
-      iam_http_request_method = "POST"
-      iam_request_url         = base64encode("https://sts.amazonaws.com/")
-      iam_request_body        = base64encode("Action=GetCallerIdentity&Version=2011-06-15")
-      iam_request_headers     = var.iam_caller_identity_headers
+      role = var.vault_role
     }
   }
 }

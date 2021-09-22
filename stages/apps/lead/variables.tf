@@ -166,9 +166,10 @@ variable "product_types" {
   type = list(string)
 }
 
-variable "iam_caller_identity_headers" {}
-
 variable "vault_address" {}
+variable "vault_role" {
+  default = "aws-admin"
+}
 
 variable "lab_partner_version" {
 }

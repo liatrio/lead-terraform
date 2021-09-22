@@ -154,10 +154,11 @@ module "eks" {
   cluster_endpoint_private_access                = true
   cluster_endpoint_public_access                 = var.enable_public_endpoint
   cluster_create_endpoint_private_access_sg_rule = true
-  cluster_endpoint_private_access_cidrs = [
-    "10.1.32.0/20",                  // internal VPN cidr
+  cluster_endpoint_private_access_cidrs = distinct([
+    var.internal_vpn_subnet,
+    var.shared_svc_subnet,
     data.aws_vpc.lead_vpc.cidr_block // anything running within the lead VPC, such as codebuild projects
-  ]
+  ])
   cluster_enabled_log_types = ["api", "controllerManager", "scheduler"]
 
   tags = {

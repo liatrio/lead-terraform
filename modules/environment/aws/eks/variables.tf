@@ -93,6 +93,10 @@ variable "internal_vpn_subnet" {
   default = "10.1.32.0/20"
 }
 
+variable "shared_svc_subnet" {
+  default = "10.2.0.0/16"
+}
+
 variable "enable_ssh_access" {
   default = false
 }
