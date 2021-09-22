@@ -161,6 +161,7 @@ alertmanager:
         color: '{{ range .Alerts }}{{ if eq .Status "firing" }}{{ if eq .Labels.severity "warning" }}#FFAA00{{ else if eq .Labels.severity "critical" }}#FF5100{{ else}}#00C1DB{{ end }}{{ else }}#24AE1D{{ end }}{{ end }}'
         send_resolved: true
         title: '[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] Monitoring Event Notification'
+        title_link: 'https://${alertmanager_hostname}'
         text: |-
           {{ range .Alerts }}
             {{ if (and (eq .Labels.severity "critical") (ne .Status "resolved")) }} <!here> {{ end }}{{ if eq .Status "firing" }}{{ if eq .Labels.severity "warning" }} :warning: {{ else if eq .Labels.severity "critical" }} :super_dumpster_fire: {{ else }} :information_source: {{ end }}{{ else }} :white_check_mark: {{ end }} *Alert:* {{ .Labels.alertname }} - `{{ .Labels.severity }}`

@@ -290,11 +290,3 @@ variable "vpn_cidr" {
 variable "sdm_image_registry" {
   default = "ghcr.io/liatrio"
 }
-
-variable "alertmanager_receiver" {
-  default = "slack"
-}
-
-variable "alertmanager_port" {
-  default = "9093"
-}
