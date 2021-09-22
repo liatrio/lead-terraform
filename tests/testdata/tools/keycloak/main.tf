@@ -10,7 +10,6 @@ provider "helm" {
   }
 }
 
-#tfsec:ignore:general-secrets-sensitive-in-attribute
 module "keycloak" {
   source = "../../../../modules/tools/keycloak"
 

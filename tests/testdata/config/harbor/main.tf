@@ -16,7 +16,6 @@ provider "harbor" {
   password = var.admin_password
 }
 
-#tfsec:ignore:general-secrets-sensitive-in-attribute
 // keycloak resources are disabled in this test but we need a provider with minimal config to keep TF happy
 provider "keycloak" {
   client_id     = "admin-cli"

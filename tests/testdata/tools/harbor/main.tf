@@ -10,7 +10,6 @@ provider "helm" {
   }
 }
 
-#tfsec:ignore:general-secrets-sensitive-in-attribute
 module "harbor" {
   source                       = "../../../../modules/tools/harbor"
   enable                       = true

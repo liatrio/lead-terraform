@@ -23,7 +23,6 @@ module "infrastructure" {
   external_dns_chart_values = data.template_file.external_dns_values.rendered
 }
 
-#tfsec:ignore:general-secrets-sensitive-in-attribute
 module "toolchain" {
   source                  = "../../modules/lead/toolchain"
   root_zone_name          = var.root_zone_name

@@ -41,12 +41,10 @@ variable "gcp_dns_project" {
   default = ""
 }
 
-#tfsec:ignore:general-secrets-sensitive-in-variable
 variable "gcp_dns_service_account_secret_name" {
   default = ""
 }
 
-#tfsec:ignore:general-secrets-sensitive-in-variable
 variable "gcp_dns_service_account_secret_key" {
   default = ""
 }
@@ -55,7 +53,6 @@ variable "enabled" {
   default = true
 }
 
-#tfsec:ignore:general-secrets-sensitive-in-variable
 variable "ca_secret" {
   default = "ca-certificate"
 }
