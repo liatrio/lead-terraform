@@ -23,13 +23,10 @@ module "atlantis" {
   github_webhook_secret = data.vault_generic_secret.atlantis.data["webhook_secret"]
   namespace             = module.atlantis_namespace.name
   role_arn              = var.atlantis_service_account_arn
-  ingress_hostname      = "atlantis.${var.cluster_domain}"
-  ingress_annotations   = {
-    "kubernetes.io/ingress.class": module.nginx_external.ingress_class
-    "nginx.ingress.kubernetes.io/configuration-snippet": <<EOF
-location /apply/lock {
-  deny all;
-}
-EOF
-  }
+
+  ingress_public_hostname  = "atlantis.${var.cluster_domain}"
+  ingress_private_hostname = "atlantis.${var.internal_cluster_domain}"
+
+  ingress_public_class  = module.nginx_external.ingress_class
+  ingress_private_class = module.nginx.ingress_class
 }
