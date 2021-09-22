@@ -2,7 +2,7 @@ grafana:
   ingress:
     enabled: true
     annotations:
-      ${indent( 6, yamlencode( ingress_annotations ) ) }
+      ${indent( 6, yamlencode( grafana_ingress_annotations ) ) }
     tls:
     - hosts:
       - ${grafana_hostname}
@@ -60,13 +60,15 @@ prometheusOperator:
   resources:
     limits:
       cpu: 500m
-      memory: 300Mi
+      memory: 800Mi
     requests:
       cpu: 100m
       memory: 100Mi
   configReloaderCpu: 100m
   configReloaderMemory: 25Mi
 prometheus:
+  annotations:
+    downscaler/exclude: "true"
   prometheusSpec:
     storageSpec:
       volumeClaimTemplate:
@@ -90,6 +92,13 @@ prometheus:
 
 alertmanager:
   enabled: ${enable_alertmanager}
+  ingress:
+    enabled: true
+    path: /
+    annotations: 
+      ${indent( 6, yamlencode( alertmanager_ingress_annotations ) ) }
+    hosts:
+      - ${alertmanager_hostname}
   alertmanagerSpec:
     storage:
       volumeClaimTemplate:
@@ -128,21 +137,6 @@ alertmanager:
       - match:
           alertname: KubeCPUOvercommit
         receiver: "null"
-      - match:
-          namespace: ""
-        receiver: slack
-      - match:
-          namespace: toolchain
-        receiver: slack
-      - match:
-          namespace: lead-system
-        receiver: slack
-      - match:
-          namespace: istio-system
-        receiver: slack
-      - match:
-          namespace: elasticsearch
-        receiver: slack
     templates:
     - /etc/alertmanager/config/template*.tmpl
     receivers:
@@ -154,6 +148,7 @@ alertmanager:
         color: '{{ range .Alerts }}{{ if eq .Status "firing" }}{{ if eq .Labels.severity "warning" }}#FFAA00{{ else if eq .Labels.severity "critical" }}#FF5100{{ else}}#00C1DB{{ end }}{{ else }}#24AE1D{{ end }}{{ end }}'
         send_resolved: true
         title: '[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] Monitoring Event Notification'
+        title_link: 'https://${alertmanager_hostname}'
         text: |-
           {{ range .Alerts }}
             {{ if (and (eq .Labels.severity "critical") (ne .Status "resolved")) }} <!here> {{ end }}{{ if eq .Status "firing" }}{{ if eq .Labels.severity "warning" }} :warning: {{ else if eq .Labels.severity "critical" }} :super_dumpster_fire: {{ else }} :information_source: {{ end }}{{ else }} :white_check_mark: {{ end }} *Alert:* {{ .Labels.alertname }} - `{{ .Labels.severity }}`

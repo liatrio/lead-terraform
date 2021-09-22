@@ -154,11 +154,11 @@ module "eks" {
   cluster_endpoint_private_access                = true
   cluster_endpoint_public_access                 = var.enable_public_endpoint
   cluster_create_endpoint_private_access_sg_rule = true
-  cluster_endpoint_private_access_cidrs          = [
-    "10.1.32.0/20", // internal VPN cidr
+  cluster_endpoint_private_access_cidrs = [
+    "10.1.32.0/20",                  // internal VPN cidr
     data.aws_vpc.lead_vpc.cidr_block // anything running within the lead VPC, such as codebuild projects
   ]
-  cluster_enabled_log_types                      = ["api", "controllerManager", "scheduler"]
+  cluster_enabled_log_types = ["api", "controllerManager", "scheduler"]
 
   tags = {
     "Cluster" = var.cluster
@@ -171,7 +171,7 @@ module "eks" {
     key_name               = var.key_name
     version                = var.cluster_version
     disk_size              = var.root_volume_size
-    update_config          = {
+    update_config = {
       max_unavailable_percentage = 50
     }
 
@@ -184,10 +184,10 @@ module "eks" {
   }
 
   node_groups = {
-    "essential"    = {
+    "essential" = {
       name_prefix = "${var.cluster}-essential"
       subnets     = sort(data.aws_subnet_ids.eks_workers.ids)
-      k8s_labels  = {
+      k8s_labels = {
         "node.liatr.io/lifecycle" = "essential"
       }
 
@@ -208,21 +208,21 @@ module "eks" {
     "preemptible0" = {
       name_prefix = "${var.cluster}-preemptible0"
       subnets     = [sort(data.aws_subnet_ids.eks_workers.ids)[0]]
-      k8s_labels  = {
+      k8s_labels = {
         "node.liatr.io/lifecycle" = "preemptible"
       }
     }
     "preemptible1" = {
       name_prefix = "${var.cluster}-preemptible1"
       subnets     = [sort(data.aws_subnet_ids.eks_workers.ids)[1]]
-      k8s_labels  = {
+      k8s_labels = {
         "node.liatr.io/lifecycle" = "preemptible"
       }
     }
     "preemptible2" = {
       name_prefix = "${var.cluster}-preemptible2"
       subnets     = [sort(data.aws_subnet_ids.eks_workers.ids)[2]]
-      k8s_labels  = {
+      k8s_labels = {
         "node.liatr.io/lifecycle" = "preemptible"
       }
     }
