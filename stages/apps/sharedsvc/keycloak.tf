@@ -2,6 +2,7 @@ data "vault_generic_secret" "keycloak" {
   path = "lead/aws/${data.aws_caller_identity.current.account_id}/keycloak"
 }
 
+#tfsec:ignore:general-secrets-sensitive-in-local
 locals {
   keycloak_realm      = "liatrio"
   keycloak_issuer_uri = "https://${module.keycloak.keycloak_hostname}/auth/realms/${local.keycloak_realm}"

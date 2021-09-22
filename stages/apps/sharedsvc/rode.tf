@@ -42,6 +42,7 @@ resource "kubernetes_secret" "image_scanner_docker_config" {
   type = "kubernetes.io/dockerconfigjson"
 }
 
+#tfsec:ignore:general-secrets-sensitive-in-variable
 module "rode" {
   source = "../../../modules/tools/rode"
 
