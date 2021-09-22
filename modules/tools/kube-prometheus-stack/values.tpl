@@ -2,7 +2,7 @@ grafana:
   ingress:
     enabled: true
     annotations:
-      ${indent( 6, yamlencode( ingress_annotations ) ) }
+      ${indent( 6, yamlencode( grafana_ingress_annotations ) ) }
     tls:
     - hosts:
       - ${grafana_hostname}
@@ -94,7 +94,7 @@ alertmanager:
     enabled: true
     path: /
     annotations: 
-      ${indent( 6, yamlencode( ingress_annotations ) ) }
+      ${indent( 6, yamlencode( alertmanager_ingress_annotations ) ) }
     hosts:
       - ${alertmanager_hostname}
   alertmanagerSpec:
@@ -135,21 +135,21 @@ alertmanager:
       - match:
           alertname: KubeCPUOvercommit
         receiver: "null"
-      - match:
-          namespace: ""
-        receiver: slack
-      - match:
-          namespace: toolchain
-        receiver: slack
-      - match:
-          namespace: lead-system
-        receiver: slack
-      - match:
-          namespace: istio-system
-        receiver: slack
-      - match:
-          namespace: elasticsearch
-        receiver: slack
+     # - match:
+     #     namespace: ""
+     #   receiver: slack
+     # - match:
+     #   namespace: toolchain
+     #   receiver: slack
+     # - match:
+     #     namespace: lead-system
+     #   receiver: slack
+     # - match:
+     #     namespace: istio-system
+     #   receiver: slack
+     # - match:
+     #     namespace: elasticsearch
+     #   receiver: slack
     templates:
     - /etc/alertmanager/config/template*.tmpl
     receivers:

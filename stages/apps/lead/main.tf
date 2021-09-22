@@ -29,6 +29,9 @@ locals {
     "nginx.ingress.kubernetes.io/proxy-body-size" : "0"
     "kubernetes.io/ingress.class" : "internal-nginx"
   }
+
+  common_ingress_hostname   = "toolchain.${var.cluster_name}.${var.root_zone_name}"
+  internal_ingress_hostname = "internal.${var.cluster_name}.${var.root_zone_name}"
 }
 
 provider "kubernetes" {
