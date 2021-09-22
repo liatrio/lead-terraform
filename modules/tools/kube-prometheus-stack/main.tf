@@ -24,12 +24,12 @@ resource "helm_release" "kube_prometheus_stack" {
 
   values = [
     templatefile("${path.module}/values.tpl", {
-      enable_alertmanager          = local.enable_alertmanager
-      prometheus_slack_webhook_url = var.prometheus_slack_webhook_url
-      prometheus_slack_channel     = var.prometheus_slack_channel
-      grafana_hostname             = var.grafana_hostname
-      alertmanager_hostname        = var.alertmanager_hostname
-      grafana_ingress_annotations  = var.grafana_ingress_annotations
+      enable_alertmanager              = local.enable_alertmanager
+      prometheus_slack_webhook_url     = var.prometheus_slack_webhook_url
+      prometheus_slack_channel         = var.prometheus_slack_channel
+      grafana_hostname                 = var.grafana_hostname
+      alertmanager_hostname            = var.alertmanager_hostname
+      grafana_ingress_annotations      = var.grafana_ingress_annotations
       alertmanager_ingress_annotations = var.alertmanager_ingress_annotations
     })
   ]

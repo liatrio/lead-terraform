@@ -67,6 +67,8 @@ prometheusOperator:
   configReloaderCpu: 100m
   configReloaderMemory: 25Mi
 prometheus:
+  annotations:
+    downscaler/exclude: "true"
   prometheusSpec:
     storageSpec:
       volumeClaimTemplate:
@@ -135,21 +137,6 @@ alertmanager:
       - match:
           alertname: KubeCPUOvercommit
         receiver: "null"
-     # - match:
-     #     namespace: ""
-     #   receiver: slack
-     # - match:
-     #   namespace: toolchain
-     #   receiver: slack
-     # - match:
-     #     namespace: lead-system
-     #   receiver: slack
-     # - match:
-     #     namespace: istio-system
-     #   receiver: slack
-     # - match:
-     #     namespace: elasticsearch
-     #   receiver: slack
     templates:
     - /etc/alertmanager/config/template*.tmpl
     receivers:
