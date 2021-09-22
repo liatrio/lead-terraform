@@ -1,4 +1,3 @@
-#tfsec:ignore:general-secrets-sensitive-in-local
 locals {
   vault_secret_name = "vault-credentials"
 }

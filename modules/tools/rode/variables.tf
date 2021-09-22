@@ -21,7 +21,7 @@ variable "oidc_issuer_url" {
   description = "Leave blank to disable OIDC"
   default     = ""
 }
-#tfsec:ignore:general-secrets-sensitive-in-variable
+
 variable "oidc_token_url" {
   description = "Leave blank to disable OIDC"
   default     = ""
@@ -30,7 +30,6 @@ variable "oidc_client_id" {
   default = ""
 }
 
-#tfsec:ignore:general-secrets-sensitive-in-variable
 variable "oidc_client_secret" {
   sensitive = true
   default   = ""
@@ -63,7 +62,6 @@ variable "image_scanner_collector_hostname" {
   default = ""
 }
 
-#tfsec:ignore:general-secrets-sensitive-in-variable
 variable "docker_config_secret" {
   type    = string
   default = ""

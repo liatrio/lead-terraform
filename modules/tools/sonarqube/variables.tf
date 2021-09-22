@@ -43,7 +43,6 @@ variable "keycloak_client_id" {
   default = ""
 }
 
-#tfsec:ignore:general-secrets-sensitive-in-variable
 variable "keycloak_client_secret" {
   type      = string
   sensitive = true

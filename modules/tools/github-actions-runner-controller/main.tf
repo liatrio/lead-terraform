@@ -1,4 +1,3 @@
-#tfsec:ignore:general-secrets-sensitive-in-local
 locals {
   ingress_hostname      = "${var.github_org}-webhook.${var.ingress_domain}"
   release_name          = var.release_name != "" ? var.release_name : "${var.github_org}-runner-controller"
