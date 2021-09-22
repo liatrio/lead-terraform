@@ -1,6 +1,6 @@
 module "atlantis_namespace" {
-  source      = "../../../modules/common/namespace"
-  namespace   = "atlantis"
+  source    = "../../../modules/common/namespace"
+  namespace = "atlantis"
   annotations = {
     name    = "atlantis"
     cluster = var.eks_cluster_id

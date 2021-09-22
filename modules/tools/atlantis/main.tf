@@ -32,10 +32,10 @@ resource "helm_release" "atlantis" {
 
 resource "kubernetes_ingress" "public_events_webhook" {
   metadata {
-    name        = "atlantis-public-events-webhook"
-    namespace   = helm_release.atlantis.namespace
+    name      = "atlantis-public-events-webhook"
+    namespace = helm_release.atlantis.namespace
     annotations = {
-      "kubernetes.io/ingress.class": var.ingress_public_class
+      "kubernetes.io/ingress.class" : var.ingress_public_class
     }
   }
   spec {
