@@ -6,8 +6,8 @@ service:
   type: ClusterIP
 
 image:
-  repository: harbor.parker.gg/library/atlantis
-  tag: v3
+  repository: ghcr.io/liatrio/atlantis-image
+  tag: v2.5.0
   pullPolicy: IfNotPresent
 
 resources:
