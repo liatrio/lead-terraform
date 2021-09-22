@@ -111,6 +111,29 @@ resource "helm_release" "rode_tfsec_collector" {
   ]
 }
 
+resource "helm_release" "rode_image_scanner_collector" {
+  name       = "rode-collector-image-scanner"
+  namespace  = var.namespace
+  repository = "https://rode.github.io/charts"
+  chart      = "rode-collector-image-scanner"
+  version    = "0.1.1"
+  wait       = true
+
+  values = [
+    templatefile("${path.module}/image-scanner-collector-values.yaml.tpl", {
+      auth_enabled         = local.auth_enabled
+      host                 = var.image_scanner_collector_hostname
+      ingress_annotations  = local.ingress_annotations
+      namespace            = var.namespace
+      docker_config_secret = var.docker_config_secret
+    })
+  ]
+
+  depends_on = [
+    helm_release.rode,
+  ]
+}
+
 resource "helm_release" "rode_sonarqube_collector" {
   name       = "rode-collector-sonarqube"
   namespace  = var.namespace
