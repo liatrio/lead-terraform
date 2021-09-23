@@ -18,7 +18,7 @@ module "kube_prometheus_stack" {
   grafana_hostname             = "grafana.${var.internal_cluster_domain}"
   prometheus_slack_webhook_url = data.vault_generic_secret.prometheus.data["slack-webhook-url"]
   prometheus_slack_channel     = var.prometheus_slack_channel
-  ingress_annotations          = local.common_ingress_annotations
+  ingress_annotations          = local.external_ingress_annotations
 }
 
 module "dashboard" {
