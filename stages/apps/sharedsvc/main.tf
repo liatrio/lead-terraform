@@ -14,7 +14,7 @@ data "aws_eks_cluster" "cluster" {
 data "aws_caller_identity" "current" {}
 
 locals {
-  common_ingress_annotations = {
+  external_ingress_annotations = {
     "nginx.ingress.kubernetes.io/force-ssl-redirect" : true
     "nginx.ingress.kubernetes.io/proxy-body-size" : "0"
     "kubernetes.io/ingress.class" : module.nginx_external.ingress_class
