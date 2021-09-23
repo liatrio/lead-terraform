@@ -1,3 +1,5 @@
+#tfsec:ignore:aws-dynamodb-enable-recovery
+#tfsec:ignore:aws-dynamodb-table-customer-key
 resource "aws_dynamodb_table" "vault_dynamodb_storage" {
   name           = var.vault_dynamodb_table_name
   read_capacity  = 25
@@ -16,6 +18,7 @@ resource "aws_dynamodb_table" "vault_dynamodb_storage" {
   }
 }
 
+#tfsec:ignore:aws-kms-auto-rotate-keys
 resource "aws_kms_key" "vault_seal_key" {
   description = "KMS key used by Vault for sealing / unsealing"
 }

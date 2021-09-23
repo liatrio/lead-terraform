@@ -1,6 +1,10 @@
 data "aws_caller_identity" "current" {
 }
 
+#tfsec:ignore:aws-s3-enable-versioning
+#tfsec:ignore:aws-s3-enable-bucket-logging
+#tfsec:ignore:aws-s3-specify-public-access-block
+#tfsec:ignore:aws-s3-enable-bucket-encryption
 resource "aws_s3_bucket" "github-runner" {
   bucket = "github-runners-${data.aws_caller_identity.current.account_id}-${var.cluster_name}.liatr.io"
   tags = {

@@ -22,6 +22,7 @@ resource "aws_iam_role" "velero_service_account" {
 EOF
 }
 
+#tfsec:ignore:aws-iam-no-policy-wildcards
 resource "aws_iam_role_policy" "velero" {
   name = "${var.cluster}-velero"
   role = aws_iam_role.velero_service_account.name

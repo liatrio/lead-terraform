@@ -21,6 +21,7 @@ variable "oidc_issuer_url" {
   description = "Leave blank to disable OIDC"
   default     = ""
 }
+
 variable "oidc_token_url" {
   description = "Leave blank to disable OIDC"
   default     = ""
@@ -28,6 +29,7 @@ variable "oidc_token_url" {
 variable "oidc_client_id" {
   default = ""
 }
+
 variable "oidc_client_secret" {
   sensitive = true
   default   = ""

@@ -84,6 +84,7 @@ data "aws_subnet_ids" "eks_workers" {
   }
 }
 
+#tfsec:ignore:aws-vpc-add-description-to-security-group
 resource "aws_security_group" "worker" {
   name_prefix = "${var.cluster}-worker"
   vpc_id      = data.aws_vpc.lead_vpc.id
@@ -104,6 +105,8 @@ resource "aws_security_group" "worker" {
   }
 }
 
+#tfsec:ignore:aws-vpc-no-public-ingress-sg
+#tfsec:ignore:aws-vpc-add-description-to-security-group
 resource "aws_security_group" "elb" {
   name_prefix = "${var.cluster}-ingress-elb"
   vpc_id      = data.aws_vpc.lead_vpc.id
@@ -230,6 +233,7 @@ module "eks" {
   }
 }
 
+#tfsec:ignore:aws-s3-specify-public-access-block
 resource "aws_s3_bucket" "tfstates" {
   bucket = "lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${var.cluster}.liatr.io"
   acl    = "log-delivery-write"

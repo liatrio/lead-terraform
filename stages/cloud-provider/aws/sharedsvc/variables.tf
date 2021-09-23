@@ -87,8 +87,8 @@ variable "enable_eks_ssh_access" {
 }
 
 variable "atlantis_roles" {
-  type        = list(string)
-  default     = []
+  type    = list(string)
+  default = []
 }
 
 variable "atlantis_namespace" {
