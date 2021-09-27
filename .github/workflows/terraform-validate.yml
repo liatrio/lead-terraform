@@ -7,7 +7,7 @@ on:
 jobs:
 
   # phase 1
-  provide_stages_json:
+  discover_stages:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -25,7 +25,7 @@ jobs:
       - id: set-matrix
         env:
           STAGE: ${{ matrix.stages }}
-        run: echo "::set-output name=matrix::$(find $STAGE -name main.tf| sed 's:[^/]*$::'| jq -R -s -c 'split("\n")'| jq 'map(select(length > 0))')"
+        run: echo "::set-output name=matrix::$(find $STAGE -name main.tf| sed 's:[^/]*$::'| jq -R -s -c 'split("\n")')"
     # here, we save the result of this 1st phase to the "outputs"
     outputs:
         matrix: ${{ steps.set-matrix.outputs.matrix }}
@@ -36,12 +36,12 @@ jobs:
   terraform_validate:
     name: "Terraform Validation"
     runs-on: ubuntu-latest
-    # this means, wait for the "provide_stages_json" phase 1 to finish
-    needs: provide_stages_json
+    # this means, wait for the "discover_stages" phase 1 to finish
+    needs: discover_stages
     strategy:
         # ↓ create dynamic matrix from the json
         matrix:
-            validate: ${{ fromJson(needs.provide_stages_json.outputs.matrix) }}
+            validate: ${{ fromJson(needs.discover_stages.outputs.matrix) }}
     defaults:
       run:
         shell: bash
