@@ -19,6 +19,12 @@ locals {
     "nginx.ingress.kubernetes.io/proxy-body-size" : "0"
     "kubernetes.io/ingress.class" : module.nginx_external.ingress_class
   }
+
+  internal_ingress_annotations = {
+    "nginx.ingress.kubernetes.io/force-ssl-redirect" : true
+    "nginx.ingress.kubernetes.io/proxy-body-size" : "0"
+    "kubernetes.io/ingress.class" : module.nginx.ingress_class
+  }
 }
 
 provider "kubernetes" {
