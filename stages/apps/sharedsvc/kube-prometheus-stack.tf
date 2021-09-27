@@ -3,8 +3,8 @@ data "vault_generic_secret" "prometheus" {
 }
 
 module "monitoring_namespace" {
-  source      = "../../../modules/common/namespace"
-  namespace   = var.monitoring_namespace
+  source    = "../../../modules/common/namespace"
+  namespace = var.monitoring_namespace
   annotations = {
     name    = var.monitoring_namespace
     cluster = var.eks_cluster_id
