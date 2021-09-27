@@ -60,7 +60,7 @@ resource "helm_release" "rode_ui" {
   name       = "rode-ui"
   chart      = "rode-ui"
   namespace  = var.namespace
-  version    = "0.3.3"
+  version    = "0.3.4"
   wait       = true
 
   set_sensitive {
@@ -116,7 +116,7 @@ resource "helm_release" "rode_image_scanner_collector" {
   namespace  = var.namespace
   repository = "https://rode.github.io/charts"
   chart      = "rode-collector-image-scanner"
-  version    = "0.1.1"
+  version    = "0.1.2"
   wait       = true
 
   values = [
