@@ -189,3 +189,13 @@ alertmanager:
       {{ end }}
       {{ end }}
 
+      {{ define "__alert_silence_link" -}}
+      {{ .ExternalURL }}/#/silences/new?filter=%7B
+      {{- range .CommonLabels.SortedPairs -}}
+          {{- if ne .Name "alertname" -}}
+              {{- .Name }}%3D"{{- .Value -}}"%2C%20
+          {{- end -}}
+      {{- end -}}
+      alertname%3D"{{ .CommonLabels.alertname }}"%7D
+      {{- end }}
+
