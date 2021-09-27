@@ -8,25 +8,32 @@ jobs:
 
   # phase 1
   provide_stages_json:
-      runs-on: ubuntu-latest
-      strategy:
-        matrix:
-          stages:
-          - stages/apps
-          - stages/cloud-provider
-          - stages/config
-          - stages/vault
-      steps:
-          # here we create the json, we need the "id:" so we can use it in "outputs" below
-          -
-              id: set-matrix
-              env:
-                STAGE: ${{ matrix.stages }}
-              run: find $STAGE -name main.tf| sed 's:[^/]*$::'| jq -R -s -c 'split("\n")'| jq 'map(select(length > 0))'
-      # here, we save the result of this 1st phase to the "outputs"
-      outputs:
-          matrix: ${{ steps.set-matrix.outputs.matrix }}
-  
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        stages:
+        - stages/apps
+        - stages/cloud-provider
+        - stages/config
+        - stages/vault
+    steps:
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      # here we create the json, we need the "id:" so we can use it in "outputs" below
+      - id: set-matrix
+        env:
+          STAGE: ${{ matrix.stages }}
+        run: find $STAGE -name main.tf| sed 's:[^/]*$::'| jq -R -s -c 'split("\n")'| jq 'map(select(length > 0))'
+    # here, we save the result of this 1st phase to the "outputs"
+    outputs:
+        matrix: ${{ steps.set-matrix.outputs.matrix }}
+
   # phase 2, use it in a matrix
   terraform_format:
     name: "Terraform Format and Validation"
