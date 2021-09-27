@@ -60,7 +60,7 @@ resource "helm_release" "rode_ui" {
   name       = "rode-ui"
   chart      = "rode-ui"
   namespace  = var.namespace
-  version    = "0.3.3"
+  version    = "0.3.4"
   wait       = true
 
   set_sensitive {
