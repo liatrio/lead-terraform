@@ -25,7 +25,8 @@ jobs:
       - id: set-matrix
         env:
           STAGE: ${{ matrix.stages }}
-        run: echo "::set-output name=matrix::$(find $STAGE -name main.tf| sed 's:[^/]*$::'| jq -R -s -c 'split("\n")')"
+#        run: echo "::set-output name=matrix::$(find $STAGE -name main.tf| sed 's:[^/]*$::'| jq -R -s -c 'split("\n")')"
+        run: echo "::set-output name=matrix::["stages/apps/sharedsvc/","stages/apps/azure-example/","stages/apps/lead/"]"
     # here, we save the result of this 1st phase to the "outputs"
     outputs:
         matrix: ${{ steps.set-matrix.outputs.matrix }}
@@ -41,8 +42,7 @@ jobs:
     strategy:
         # ↓ create dynamic matrix from the json
         matrix:
-#          validate: ${{ fromJson(needs.discover_stages.outputs.matrix) }}
-          validate: ${{ fromJson(["stages/apps/sharedsvc/","stages/apps/azure-example/","stages/apps/lead/"])}}
+          validate: ${{ fromJson(needs.discover_stages.outputs.matrix) }}
     defaults:
       run:
         shell: bash
