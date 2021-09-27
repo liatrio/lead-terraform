@@ -14,11 +14,13 @@ module "monitoring_namespace" {
 module "kube_prometheus_stack" {
   source = "../../../modules/tools/kube-prometheus-stack"
 
-  namespace                    = module.monitoring_namespace.name
-  grafana_hostname             = "grafana.${var.internal_cluster_domain}"
-  prometheus_slack_webhook_url = data.vault_generic_secret.prometheus.data["slack-webhook-url"]
-  prometheus_slack_channel     = var.prometheus_slack_channel
-  ingress_annotations          = local.external_ingress_annotations
+  namespace                        = module.monitoring_namespace.name
+  grafana_hostname                 = "grafana.${var.internal_cluster_domain}"
+  alertmanager_hostname            = "alertmanager.${var.internal_cluster_domain}"
+  prometheus_slack_webhook_url     = data.vault_generic_secret.prometheus.data["slack-webhook-url"]
+  prometheus_slack_channel         = var.prometheus_slack_channel
+  grafana_ingress_annotations      = local.internal_ingress_annotations
+  alertmanager_ingress_annotations = local.internal_ingress_annotations
 }
 
 module "dashboard" {

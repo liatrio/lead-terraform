@@ -21,4 +21,3 @@ resource "helm_release" "github_runners" {
     })
   ]
 }
-
