@@ -42,7 +42,7 @@ jobs:
         # ↓ create dynamic matrix from the json
         matrix:
 #          validate: ${{ fromJson(needs.discover_stages.outputs.matrix) }}
-          validate: ${{ fromJSON(["stages/apps/sharedsvc/","stages/apps/azure-example/","stages/apps/lead/"])}}
+          validate: ${{ fromJson(["stages/apps/sharedsvc/","stages/apps/azure-example/","stages/apps/lead/"])}}
     defaults:
       run:
         shell: bash
