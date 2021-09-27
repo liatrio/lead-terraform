@@ -41,7 +41,8 @@ jobs:
     strategy:
         # ↓ create dynamic matrix from the json
         matrix:
-            validate: ${{ fromJson(needs.discover_stages.outputs.matrix) }}
+#          validate: ${{ fromJson(needs.discover_stages.outputs.matrix) }}
+          validate: ${{ fromJSON(["stages/apps/sharedsvc/","stages/apps/azure-example/","stages/apps/lead/"])}}
     defaults:
       run:
         shell: bash
@@ -60,8 +61,6 @@ jobs:
         env:
           FOLDER: ${{ matrix.validate }}
         run: cd $FOLDER && terraform init -backend=false && terraform validate
-
-
 
   terraform_format:
     name: "Terraform Format"
