@@ -25,7 +25,7 @@ jobs:
       - id: set-matrix
         env:
           STAGE: ${{ matrix.stages }}
-        run: find $STAGE -name main.tf| sed 's:[^/]*$::'| jq -R -s -c 'split("\n")'| jq 'map(select(length > 0))'
+        run: echo "::set-output name=matrix::$(find $STAGE -name main.tf| sed 's:[^/]*$::'| jq -R -s -c 'split("\n")'| jq 'map(select(length > 0))')"
     # here, we save the result of this 1st phase to the "outputs"
     outputs:
         matrix: ${{ steps.set-matrix.outputs.matrix }}
