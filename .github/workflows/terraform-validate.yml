@@ -5,10 +5,38 @@ on:
   push:
 
 jobs:
-  terraform_format:
-    name: "Terraform Format"
-    runs-on: ubuntu-latest
 
+  # phase 1
+  provide_stages_json:
+      runs-on: ubuntu-latest
+      strategy:
+        matrix:
+          stages:
+          - stages/apps
+          - stages/cloud-provider
+          - stages/config
+          - stages/vault
+      steps:
+          # here we create the json, we need the "id:" so we can use it in "outputs" below
+          -
+              id: set-matrix
+              env:
+                STAGE: ${{ matrix.stages }}
+              run: find $STAGE -name main.tf| sed 's:[^/]*$::'| jq -R -s -c 'split("\n")'| jq 'map(select(length > 0))'
+      # here, we save the result of this 1st phase to the "outputs"
+      outputs:
+          matrix: ${{ steps.set-matrix.outputs.matrix }}
+  
+  # phase 2, use it in a matrix
+  terraform_format:
+    name: "Terraform Format and Validation"
+    runs-on: ubuntu-latest
+    # this means, wait for the "provide_stages_json" phase 1 to finish
+    needs: provide_stages_json
+    strategy:
+        # ↓ create dynamic matrix from the json
+        matrix:
+            validate: ${{ fromJson(needs.provide_stages_json.outputs.matrix) }}
     defaults:
       run:
         shell: bash
@@ -28,7 +56,9 @@ jobs:
 
       # Checks that all Terraform configuration is syntactically valid and internally consistent, regardless of any provided variables or existing state. 
       - name: Terraform Validate
-        run: terraform init -backend=false && terraform validate
+        env:
+          FOLDER: ${{ matrix.validate }}
+        run: cd $FOLDER && terraform init -backend=false && terraform validate
 
       - name: Run tfsec with reviewdog
         uses: reviewdog/action-tfsec@v1.11.0
