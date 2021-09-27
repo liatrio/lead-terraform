@@ -149,6 +149,10 @@ alertmanager:
         send_resolved: true
         title: '[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] Monitoring Event Notification'
         title_link: 'https://${alertmanager_hostname}'
+        actions: 
+          - type: button
+            text: 'Silence :hear_no_evil:'
+            url: '{{ template "__alert_silence_link" . }}'
         text: |-
           {{ range .Alerts }}
             {{ if (and (eq .Labels.severity "critical") (ne .Status "resolved")) }} <!here> {{ end }}{{ if eq .Status "firing" }}{{ if eq .Labels.severity "warning" }} :warning: {{ else if eq .Labels.severity "critical" }} :super_dumpster_fire: {{ else }} :information_source: {{ end }}{{ else }} :white_check_mark: {{ end }} *Alert:* {{ .Labels.alertname }} - `{{ .Labels.severity }}`
