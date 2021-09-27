@@ -116,7 +116,7 @@ resource "helm_release" "rode_image_scanner_collector" {
   namespace  = var.namespace
   repository = "https://rode.github.io/charts"
   chart      = "rode-collector-image-scanner"
-  version    = "0.1.1"
+  version    = "0.1.2"
   wait       = true
 
   values = [
