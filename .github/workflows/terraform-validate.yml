@@ -26,6 +26,10 @@ jobs:
       - name: Terraform Format
         run: terraform fmt -check -recursive
 
+      # Checks that all Terraform configuration is syntactically valid and internally consistent, regardless of any provided variables or existing state. 
+      - name: Terraform Validate
+        run: terraform init -backend=false && terraform validate
+
       - name: Run tfsec with reviewdog
         uses: reviewdog/action-tfsec@v1.11.0
         if: ${{ always() }}
