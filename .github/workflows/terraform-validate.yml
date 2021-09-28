@@ -10,13 +10,6 @@ jobs:
   discover_stages:
     name: Discover
     runs-on: ubuntu-latest
-    # strategy:
-    #   matrix:
-    #     stages:
-    #     - stages/apps
-    #     - stages/cloud-provider
-    #     - stages/config
-    #     - stages/vault
     steps:
       # Checkout the repository to the GitHub Actions runner
       - name: Checkout
@@ -28,11 +21,10 @@ jobs:
         #   STAGE: ${{ matrix.stages }}
         run: echo "::set-output name=matrix::$(find stages -name main.tf | sed 's:[^/]*$::' | jq -R -s -c 'split("\n")' | jq -c 'map(select(length > 0))' )"
         #run: echo "::set-output name=matrix::[\"stages/apps/sharedsvc/\",\"stages/apps/azure-example/\",\"stages/apps/lead/\"]"
+
     # here, we save the result of this 1st phase to the "outputs"
     outputs:
         matrix: ${{ steps.set-matrix.outputs.matrix }}
-
-
 
 # phase 2, use it in a matrix
   terraform_validate:
