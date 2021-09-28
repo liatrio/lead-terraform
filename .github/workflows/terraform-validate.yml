@@ -8,6 +8,7 @@ jobs:
 
   # phase 1
   discover_stages:
+    name: Discover
     runs-on: ubuntu-latest
     # strategy:
     #   matrix:
@@ -35,7 +36,7 @@ jobs:
 
 # phase 2, use it in a matrix
   terraform_validate:
-    name: "TF Validate"
+    name: "Validate"
     runs-on: ubuntu-latest
     # this means, wait for the "discover_stages" phase 1 to finish
     needs: discover_stages
