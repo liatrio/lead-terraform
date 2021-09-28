@@ -1,14 +1,62 @@
-name: "Terraform Validate"
+name: "Terraform Code Quality"
 
 on:
   pull_request:
   push:
 
 jobs:
-  terraform_format:
-    name: "Terraform Format"
-    runs-on: ubuntu-latest
 
+  # phase 1
+  discover_stages:
+    name: Discover
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # here we create the json, we need the "id:" so we can use it in "outputs" below
+      - id: set-matrix
+
+        # find main.tf files in stages folder, trim to path, store as array, remove any empty.
+        run: echo "::set-output name=matrix::$(find stages -name main.tf | sed 's:[^/]*$::' | jq -R -s -c 'split("\n")' | jq -c 'map(select(length > 0))' )"
+
+    # here, we save the result of this 1st phase to the "outputs"
+    outputs:
+        matrix: ${{ steps.set-matrix.outputs.matrix }}
+
+# phase 2, use it in a matrix
+  terraform_validate:
+    name: "Validate"
+    runs-on: ubuntu-latest
+    # this means, wait for the "discover_stages" phase 1 to finish
+    needs: discover_stages
+    strategy:
+        # ↓ create dynamic matrix from the json
+        matrix:
+          validate: ${{ fromJson(needs.discover_stages.outputs.matrix) }}
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+      - name: Setup
+        uses: hashicorp/setup-terraform@v1
+
+      # Checks that all Terraform configuration is syntactically valid and internally consistent, regardless of any provided variables or existing state. 
+      - name: Validate
+        env:
+          FOLDER: ${{ matrix.validate }}
+        run: cd $FOLDER && terraform init -backend=false && terraform validate
+
+  terraform_format:
+    name: "Format"
+    runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash
