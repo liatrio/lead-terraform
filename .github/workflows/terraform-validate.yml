@@ -1,4 +1,4 @@
-name: "Terraform Validate"
+name: "Terraform Code Quality"
 
 on:
   pull_request:
