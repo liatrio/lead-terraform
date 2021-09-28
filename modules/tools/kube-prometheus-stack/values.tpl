@@ -137,6 +137,9 @@ alertmanager:
       - match:
           alertname: KubeCPUOvercommit
         receiver: "null"
+       - match:
+          alertname: KubeMemOvercommit
+        receiver: "null"
     templates:
     - /etc/alertmanager/config/template*.tmpl
     receivers:
