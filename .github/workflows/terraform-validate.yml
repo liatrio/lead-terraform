@@ -35,7 +35,7 @@ jobs:
 
 # phase 2, use it in a matrix
   terraform_validate:
-    name: "Terraform Validation"
+    name: "TF Validate"
     runs-on: ubuntu-latest
     # this means, wait for the "discover_stages" phase 1 to finish
     needs: discover_stages
@@ -53,17 +53,17 @@ jobs:
         uses: actions/checkout@v2
 
       # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
-      - name: Setup Terraform
+      - name: Setup
         uses: hashicorp/setup-terraform@v1
 
       # Checks that all Terraform configuration is syntactically valid and internally consistent, regardless of any provided variables or existing state. 
-      - name: Terraform Validate
+      - name: Validate
         env:
           FOLDER: ${{ matrix.validate }}
         run: cd $FOLDER && terraform init -backend=false && terraform validate
 
   terraform_format:
-    name: "Terraform Format"
+    name: "Format"
     runs-on: ubuntu-latest
     defaults:
       run:
