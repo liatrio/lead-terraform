@@ -3,6 +3,7 @@ resource "helm_release" "litmus_chaos" {
   name       = "litmus"
   chart      = "litmus"
   version    = "2.1.1"
+  namespace  = var.litmus_namespace
   timeout    = 600
   wait       = true
 
