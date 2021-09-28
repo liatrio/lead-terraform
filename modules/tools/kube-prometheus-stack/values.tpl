@@ -140,6 +140,11 @@ alertmanager:
        - match:
           alertname: KubeMemOvercommit
         receiver: "null"
+      # Ignoring target down alert because of an issue with aws 
+      # issue: https://github.com/aws/containers-roadmap/issues/657
+      - match: 
+          alertname: TargetDown
+        receiver: "null"
     templates:
     - /etc/alertmanager/config/template*.tmpl
     receivers:
