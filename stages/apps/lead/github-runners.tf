@@ -26,11 +26,13 @@ module "github_runner_controller" {
 module "github_runners" {
   for_each = var.github_runners
 
-  source     = "../../../modules/tools/github-actions-runners"
-  github_org = each.value.github_org
-  namespace  = each.value.namespace
-  image      = each.value.image
-  labels     = each.value.labels
+  source      = "../../../modules/tools/github-actions-runners"
+  github_org  = each.value.github_org
+  github_repo = each.value.github_repo
+  namespace   = each.value.namespace
+  image       = each.value.image
+  labels      = each.value.labels
+
   github_runners_service_account_annotations = {
     "eks.amazonaws.com/role-arn" = var.github_runners_service_account_arn
   }
