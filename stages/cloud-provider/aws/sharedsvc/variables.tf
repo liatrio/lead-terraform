@@ -98,3 +98,7 @@ variable "atlantis_namespace" {
 variable "github_runners_namespace" {
   default = "github-runners-liatrio"
 }
+
+variable "docker_registry_mirror" {
+  default = ""
+}
