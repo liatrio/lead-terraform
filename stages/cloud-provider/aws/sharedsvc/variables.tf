@@ -86,11 +86,15 @@ variable "enable_eks_ssh_access" {
   default = false
 }
 
-variable "atlantis_roles" {
+variable "lead_environments_pipeline_roles" {
   type    = list(string)
   default = []
 }
 
 variable "atlantis_namespace" {
   default = "atlantis"
+}
+
+variable "github_runners_namespace" {
+  default = "github-runners-liatrio"
 }
