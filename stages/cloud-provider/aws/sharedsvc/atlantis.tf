@@ -27,7 +27,7 @@ data "aws_iam_policy_document" "atlantis_role_assume_role_policy" {
     sid     = "AtlantisAssumeRole"
     actions = ["sts:AssumeRole"]
 
-    resources = var.atlantis_roles
+    resources = var.lead_environments_pipeline_roles
   }
 }
 
