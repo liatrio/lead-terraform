@@ -1,5 +1,6 @@
 initialReplicas: 0
-githubOrg: 
+githubOrg:
+githubRepo:
 labels: []
 image:
 

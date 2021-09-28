@@ -9,13 +9,17 @@ spec:
         {{- toYaml .Values.labels | nindent 8 }}
       {{- with .Values.resources }}
       resources:
-        {{- toYaml . | nindent 8 }}        
+        {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.dockerdContainerResources }}
       dockerdContainerResources:
-        {{- toYaml . | nindent 8 }}        
+        {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- if .Values.githubOrg }}
       organization: {{ .Values.githubOrg }}
+      {{- else if .Values.githubRepo }}
+      repository: {{ .Values.githubRepo }}
+      {{- end }}
       serviceAccountName: {{ include "github-actions-runners.serviceAccountName" . }}
       securityContext:
         fsGroup: 1447
