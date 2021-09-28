@@ -20,7 +20,6 @@ jobs:
 
         # find main.tf files in stages folder, trim to path, store as array, remove any empty.
         run: echo "::set-output name=matrix::$(find stages -name main.tf | sed 's:[^/]*$::' | jq -R -s -c 'split("\n")' | jq -c 'map(select(length > 0))' )"
-        #run: echo "::set-output name=matrix::[\"stages/apps/sharedsvc/\",\"stages/apps/azure-example/\",\"stages/apps/lead/\"]"
 
     # here, we save the result of this 1st phase to the "outputs"
     outputs:
