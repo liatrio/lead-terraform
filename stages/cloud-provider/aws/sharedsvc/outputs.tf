@@ -63,6 +63,10 @@ output "github_runners_service_account_arn" {
   value = module.github-runners-s3.github_runners_service_account_arn
 }
 
+output "lead_pipelines_service_account_arn" {
+  value = aws_iam_role.lead_pipelines_service_account.arn
+}
+
 output "atlantis_service_account_arn" {
   value = aws_iam_role.atlantis_service_account.arn
 }

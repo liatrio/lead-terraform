@@ -2,12 +2,6 @@ variable "namespace" {
   type = string
 }
 
-variable "release_name" {
-  type        = string
-  description = "Name of the release for the RunnerDeployments"
-  default     = ""
-}
-
 variable "image" {
   type        = string
   default     = ""
@@ -23,6 +17,11 @@ variable "labels" {
 variable "github_org" {
   type        = string
   description = "Github organization to register the runners to"
+}
+
+variable "github_repo" {
+  type        = string
+  description = "Github repository to register the runners to"
 }
 
 variable "github_runners_service_account_annotations" {
