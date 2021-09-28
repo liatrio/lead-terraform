@@ -25,8 +25,8 @@ jobs:
       - id: set-matrix
         # env:
         #   STAGE: ${{ matrix.stages }}
-        run: echo "::set-output name=matrix::$(find stages -name main.tf | sed 's:[^/]*$::' | jq -R -s -c 'split("\n")' | jq -c 'map(select(length > 0))' )"
-        #run: echo "::set-output name=matrix::[\"stages/apps/sharedsvc/\",\"stages/apps/azure-example/\",\"stages/apps/lead/\"]"
+        run: echo "::set-output name=matrix::$(find $STAGE -name main.tf | sed 's:[^/]*$::' | jq -R -s -c 'split("\n")')"
+        #run: echo "::set-output name=matrix::$(find stages -name main.tf | sed 's:[^/]*$::' | jq -R -s -c 'split("\n")' | jq -c 'map(select(length > 0))' )"
         #run: echo "::set-output name=matrix::[\"stages/apps/sharedsvc/\",\"stages/apps/azure-example/\",\"stages/apps/lead/\"]"
     # here, we save the result of this 1st phase to the "outputs"
     outputs:
