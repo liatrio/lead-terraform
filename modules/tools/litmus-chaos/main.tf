@@ -15,3 +15,13 @@ resource "helm_release" "litmus_chaos" {
   ]
 }
 
+resource "helm_release" "litmus_kubernetes_chaos_experiments" {
+  repository = "https://litmuschaos.github.io/litmus-helm/"
+  name       = "litmus-kubernetes-chaos-experimentes"
+  chart      = "kubernetes-chaos"
+  version    = "2.1.0"
+  namespace  = var.litmus_namespace
+  timeout    = 600
+  wait       = true
+}
+
