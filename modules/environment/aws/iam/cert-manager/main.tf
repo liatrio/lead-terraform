@@ -38,7 +38,10 @@ resource "aws_iam_role_policy" "cert_manager" {
     },
     {
         "Effect": "Allow",
-        "Action": "route53:ChangeResourceRecordSets",
+        "Action":  [
+          "route53:ChangeResourceRecordSets",
+          "route53:ListResourceRecordSets"
+        ],
         "Resource": "arn:aws:route53:::hostedzone/*"
     },
     {
