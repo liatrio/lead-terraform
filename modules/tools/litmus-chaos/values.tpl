@@ -6,4 +6,4 @@ ingress:
     name: ${litmus_hostname}
     paths:
       frontend: /
-      backend: /backend/
+      backend: /backend/(.*)

@@ -14,4 +14,3 @@ module "litmus_chaos" {
   litmus_hostname            = "litmus.${local.internal_ingress_hostname}"
   litmus_ingress_annotations = local.internal_ingress_annotations
 }
-
