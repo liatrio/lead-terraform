@@ -1,9 +1,9 @@
 module "litmus_namespace" {
   source    = "../../../modules/common/namespace"
 
-  namespace = var.litmus_namespace
+  namespace = module.litmus_namespace.name
   annotations = {
-    name    = var.litmus_namespace
+    name    = module.litmus_namespace.name
     cluster = var.cluster_name
   }
 }

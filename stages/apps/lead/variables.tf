@@ -291,7 +291,3 @@ variable "vpn_cidr" {
 variable "sdm_image_registry" {
   default = "ghcr.io/liatrio"
 }
-
-variable "litmus_namespace" {
-  default = "litmus"
-}
