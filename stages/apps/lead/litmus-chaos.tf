@@ -1,9 +1,9 @@
 module "litmus_namespace" {
   source    = "../../../modules/common/namespace"
 
-  namespace = module.litmus_namespace.name
+  namespace = var.litmus_namespace
   annotations = {
-    name    = module.litmus_namespace.name
+    name    = var.litmus_namespace
     cluster = var.cluster_name
   }
 }
@@ -11,6 +11,7 @@ module "litmus_namespace" {
 module "litmus_chaos" {
   source = "../../../modules/tools/litmus-chaos"
 
+  litmus_namespace = module.litmus_namespace.name
   litmus_hostname            = "litmus.${local.internal_ingress_hostname}"
   litmus_ingress_annotations = local.internal_ingress_annotations
 }
