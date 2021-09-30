@@ -11,7 +11,6 @@ resource "helm_release" "litmus_chaos" {
     templatefile("${path.module}/values.tpl", {
       litmus_hostname            = var.litmus_hostname
       litmus_ingress_annotations = var.litmus_ingress_annotations
-      litmus_ingress_class       = var.ingress_class
     })
   ]
 }
