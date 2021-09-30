@@ -22,6 +22,10 @@ variable "monitoring_namespace" {
   default = "monitoring"
 }
 
+variable "litmus_namespace" {
+  default = "litmus"
+}
+
 variable "region" {
   default = "us-east-1"
 }
