@@ -13,6 +13,10 @@ resource "helm_release" "litmus_chaos" {
       litmus_ingress_annotations = var.litmus_ingress_annotations
     })
   ]
+  set {
+    name  = "env"
+    value = {"INGRESS" = "true"} 
+  }
 }
 
 resource "helm_release" "litmus_kubernetes_chaos_experiments" {
