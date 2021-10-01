@@ -26,6 +26,10 @@ variable "litmus_namespace" {
   default = "litmus"
 }
 
+variable "chaos_mesh_namespace" {
+  default = "chaos-mesh"
+}
+
 variable "region" {
   default = "us-east-1"
 }
