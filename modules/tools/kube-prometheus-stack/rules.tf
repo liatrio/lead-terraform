@@ -43,6 +43,9 @@ resource "kubernetes_manifest" "prometheus_rule_kube_cluster-at-max-nodes" {
       ]
     }
   }
+  depends_on = [
+    helm_release.kube_prometheus_stack
+  ]
 }
 
 resource "kubernetes_manifest" "prometheus_rule_kube_oom-kill" {
@@ -90,4 +93,7 @@ resource "kubernetes_manifest" "prometheus_rule_kube_oom-kill" {
       ]
     }
   }
+  depends_on = [
+    helm_release.kube_prometheus_stack
+  ]
 }
