@@ -18,11 +18,6 @@ resource "helm_release" "sonarqube" {
   }
 
   set_sensitive {
-    name  = "account.currentAdminPassword"
-    value = "admin"
-  }
-
-  set_sensitive {
     name  = "sonarProperties.sonar\\.auth\\.oidc\\.clientSecret\\.secured"
     value = var.keycloak_client_secret
   }
