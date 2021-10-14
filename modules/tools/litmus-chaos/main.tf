@@ -13,10 +13,6 @@ resource "helm_release" "litmus_chaos" {
       litmus_ingress_annotations = var.litmus_ingress_annotations
     })
   ]
-  set {
-    name  = "env"
-    value = { "INGRESS" = "true" }
-  }
 }
 
 resource "helm_release" "litmus_kubernetes_chaos_experiments" {
@@ -28,48 +24,3 @@ resource "helm_release" "litmus_kubernetes_chaos_experiments" {
   timeout    = 600
   wait       = true
 }
-
-# resource "kubernetes_service_account" "litmus_service_account" {
-#   metadata {
-#     name = "chaos-sa"
-#     namespace = var.litmus_namespace
-#     labels = {
-#        name = "chaos-sa-label"
-#     }
-#   }
-# }
-
-# resource "kubernetes_role" "litmus_role" {
-#   metadata {
-#     name = "chaos-sa"
-#     namespace = var.litmus_namespace
-#     labels = {
-#        name = "chaos-sa"
-#     }
-#   }
-#   rule {
-#     api_groups     = ["","litmuschaos.io","batch","apps"]
-#     resources      = ["pods","deployments","pods/log","events","jobs","chaosengines","chaosexperiments","chaosresults"]
-#     verbs          = ["create","list","get","patch","update","delete","deletecollection"]
-#   }
-# }
-
-# resource "kubernetes_role_binding" "litmus_role_binding" {
-#   metadata {
-#     name = "chaos-sa"
-#     namespace = var.litmus_namespace
-#     labels = {
-#        name = "chaos-sa-label"
-#     }
-#   }
-#   role_ref {
-#     api_group = "rbac.authorization.k8s.io"
-#     kind      = "Role"
-#     name      = "chaos-sa"
-#   }
-#   subject {
-#     kind      = "ServiceAccount"
-#     name      = "chaos-sa"
-#     namespace = var.litmus_namespace
-#   }
-# }
