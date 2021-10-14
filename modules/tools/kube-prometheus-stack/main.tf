@@ -9,9 +9,9 @@ resource "random_password" "password" {
 }
 
 resource "helm_release" "kube_prometheus_stack" {
+  repository = "https://prometheus-community.github.io/helm-charts"
   name       = "kube-prometheus-stack"
   namespace  = var.namespace
-  repository = "https://prometheus-community.github.io/helm-charts"
   chart      = "kube-prometheus-stack"
   version    = "18.0.3"
   timeout    = 600
