@@ -43,9 +43,9 @@ resource "kubernetes_cluster_role_binding" "chaos_mesh_role_binding" {
     name = "bind-cluster-manager"
   }
   subject {
-    kind = "ServiceAccount"
+    kind      = "ServiceAccount"
     namespace = var.chaos_mesh_namespace
-    name = "account-cluster-manager"
+    name      = "account-cluster-manager"
   }
   role_ref {
     kind      = "ClusterRole"

@@ -18,7 +18,7 @@ resource "helm_release" "sonarqube" {
   }
 
   set_sensitive {
-    name = "account.currentAdminPassword"
+    name  = "account.currentAdminPassword"
     value = "admin"
   }
 
