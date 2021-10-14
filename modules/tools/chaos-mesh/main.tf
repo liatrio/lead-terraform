@@ -18,7 +18,7 @@ resource "helm_release" "chaos_mesh" {
 resource "kubernetes_service_account" "chaos_mesh_service_account" {
   metadata {
     name      = "account-cluster-manager"
-    namespace = "default"
+    namespace = var.chaos_mesh_namespace
   }
 }
 
@@ -38,12 +38,13 @@ resource "kubernetes_cluster_role" "chaos_mesh_role" {
   }
 }
 
-resource "kubernetes_cluster_role_binding" "litmus_role_binding" {
+resource "kubernetes_cluster_role_binding" "chaos_mesh_role_binding" {
   metadata {
     name = "bind-cluster-manager"
   }
   subject {
     kind = "ServiceAccount"
+    namespace = var.chaos_mesh_namespace
     name = "account-cluster-manager"
   }
   role_ref {
