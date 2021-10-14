@@ -115,6 +115,14 @@ variable "enable_kibana_ingress" {
   default = false
 }
 
+variable "enable_litmus" {
+  default = false
+}
+
+variable "enable_chaos_mesh" {
+  default = false
+}
+
 variable "sparky_mattermost_version" {
   default = "v0.1.0"
 }

@@ -15,7 +15,7 @@ resource "helm_release" "litmus_chaos" {
   ]
   set {
     name  = "env"
-    value = {"INGRESS" = "true"} 
+    value = { "INGRESS" = "true" }
   }
 }
 

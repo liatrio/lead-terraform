@@ -17,7 +17,7 @@ resource "helm_release" "chaos_mesh" {
 
 resource "kubernetes_service_account" "chaos_mesh_service_account" {
   metadata {
-    name = "account-cluster-manager"
+    name      = "account-cluster-manager"
     namespace = "default"
   }
 }
@@ -27,14 +27,14 @@ resource "kubernetes_cluster_role" "chaos_mesh_role" {
     name = "role-cluster-manager"
   }
   rule {
-    api_groups     = [""]
-    resources      = ["pods", "namespaces"]
-    verbs          = ["get", "watch", "list"]
+    api_groups = [""]
+    resources  = ["pods", "namespaces"]
+    verbs      = ["get", "watch", "list"]
   }
   rule {
-    api_groups      = ["chaos-mesh.org"]
-    resources      = [ "*" ]
-    verbs          = ["get", "list", "watch", "create", "delete", "patch", "update"]
+    api_groups = ["chaos-mesh.org"]
+    resources  = ["*"]
+    verbs      = ["get", "list", "watch", "create", "delete", "patch", "update"]
   }
 }
 
@@ -43,8 +43,8 @@ resource "kubernetes_cluster_role_binding" "litmus_role_binding" {
     name = "bind-cluster-manager"
   }
   subject {
-    kind      = "ServiceAccount"
-    name      = "account-cluster-manager"
+    kind = "ServiceAccount"
+    name = "account-cluster-manager"
   }
   role_ref {
     kind      = "ClusterRole"
