@@ -137,7 +137,7 @@ alertmanager:
       - match:
           alertname: KubeCPUOvercommit
         receiver: "null"
-       - match:
+      - match:
           alertname: KubeMemOvercommit
         receiver: "null"
     templates:

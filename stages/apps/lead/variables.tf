@@ -22,6 +22,14 @@ variable "monitoring_namespace" {
   default = "monitoring"
 }
 
+variable "litmus_namespace" {
+  default = "litmus"
+}
+
+variable "chaos_mesh_namespace" {
+  default = "chaos-mesh"
+}
+
 variable "region" {
   default = "us-east-1"
 }
@@ -104,6 +112,14 @@ variable "enable_mattermost" {
 }
 
 variable "enable_kibana_ingress" {
+  default = false
+}
+
+variable "enable_litmus" {
+  default = false
+}
+
+variable "enable_chaos_mesh" {
   default = false
 }
 
