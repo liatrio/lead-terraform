@@ -7,7 +7,7 @@ data "aws_caller_identity" "current" {
 #tfsec:ignore:aws-s3-enable-bucket-encryption
 resource "aws_s3_bucket" "github-runner" {
   bucket = "github-runners-${data.aws_caller_identity.current.account_id}-${var.name}.liatr.io"
-  tags = {
+  tags   = {
     Name      = "Github Runner States"
     ManagedBy = "Terraform https://github.com/liatrio/lead-terraform"
     Cluster   = var.name
@@ -16,7 +16,8 @@ resource "aws_s3_bucket" "github-runner" {
 
 
 resource "aws_iam_role" "github_runners_service_account" {
-  name = "${var.name}_github_runners_service_account"
+  count = var.iam_role_name == "" ? 1 : 0
+  name  = "${var.name}_github_runners_service_account"
 
   assume_role_policy = <<EOF
 {
@@ -82,6 +83,12 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "github_runners" {
-  role       = aws_iam_role.github_runners_service_account.name
+  role       = var.iam_role_name == "" ? aws_iam_role.github_runners_service_account[0].name : var.iam_role_name
   policy_arn = aws_iam_policy.github_runners.arn
+}
+
+// this is needed in order to provide the role arn as an output when this module does not create the IAM role
+data "aws_iam_role" "iam_role" {
+  count = var.iam_role_name == "" ? 0 : 1
+  name  = var.iam_role_name
 }
