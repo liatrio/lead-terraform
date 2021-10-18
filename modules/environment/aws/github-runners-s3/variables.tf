@@ -4,7 +4,7 @@ variable "name" {
 }
 
 variable "iam_role_name" {
-  default = ""
+  default     = ""
   description = "When set, the new IAM policy for the s3 bucket will be tied to the provided role. When not set, a new role will be created"
 }
 
