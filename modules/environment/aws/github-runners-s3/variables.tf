@@ -1,5 +1,5 @@
-variable "cluster_name" {
-  description = "Cluster name"
+variable "name" {
+  description = "Name of runners"
   default     = "lead"
 }
 

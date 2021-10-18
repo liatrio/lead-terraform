@@ -6,17 +6,17 @@ data "aws_caller_identity" "current" {
 #tfsec:ignore:aws-s3-specify-public-access-block
 #tfsec:ignore:aws-s3-enable-bucket-encryption
 resource "aws_s3_bucket" "github-runner" {
-  bucket = "github-runners-${data.aws_caller_identity.current.account_id}-${var.cluster_name}.liatr.io"
+  bucket = "github-runners-${data.aws_caller_identity.current.account_id}-${var.name}.liatr.io"
   tags = {
     Name      = "Github Runner States"
     ManagedBy = "Terraform https://github.com/liatrio/lead-terraform"
-    Cluster   = var.cluster_name
+    Cluster   = var.name
   }
 }
 
 
 resource "aws_iam_role" "github_runners_service_account" {
-  name = "${var.cluster_name}_github_runners_service_account"
+  name = "${var.name}_github_runners_service_account"
 
   assume_role_policy = <<EOF
 {
@@ -40,7 +40,7 @@ EOF
 }
 
 resource "aws_iam_policy" "github_runners" {
-  name = "${var.cluster_name}-github-runners"
+  name = "${var.name}-github-runners"
 
   policy = <<EOF
 {
@@ -74,7 +74,7 @@ resource "aws_iam_policy" "github_runners" {
                 "dynamodb:CreateTable",
                 "dynamodb:TagResource"
      ],
-     "Resource": ["arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/github-runners-${var.cluster_name}"]
+     "Resource": ["arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/github-runners-${var.name}"]
    }
  ]
 }
