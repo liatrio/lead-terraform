@@ -46,3 +46,12 @@ resource "aws_iam_role_policy" "lead_pipeines" {
 
   policy = data.aws_iam_policy_document.lead_pipelines_role_assume_role_policy.json
 }
+
+module "lead_pipelines_s3" {
+  source = "../../../../modules/environment/aws/github-runners-s3"
+
+  name                                = "lead-pipelines"
+  iam_role_name                       = aws_iam_role.lead_pipelines_service_account.name
+  aws_iam_openid_connect_provider_arn = module.eks.aws_iam_openid_connect_provider_arn
+  aws_iam_openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider_url
+}
