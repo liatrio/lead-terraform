@@ -10,7 +10,6 @@ resource "helm_release" "litmus_chaos" {
   values = [
     templatefile("${path.module}/values.tpl", {
       litmus_hostname            = var.litmus_hostname
-      litmus_ingress_annotations = var.litmus_ingress_annotations
     })
   ]
 }

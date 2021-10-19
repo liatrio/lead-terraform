@@ -16,7 +16,6 @@ module "litmus_chaos" {
 
   litmus_namespace           = module.litmus_namespace[0].name
   litmus_hostname            = "litmus.${local.internal_ingress_hostname}"
-  litmus_ingress_annotations = local.litmus_internal_ingress_annotations
 }
 
 # Chaos Mesh

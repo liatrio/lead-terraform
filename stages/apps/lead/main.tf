@@ -29,11 +29,6 @@ locals {
     "nginx.ingress.kubernetes.io/proxy-body-size" : "0"
     "kubernetes.io/ingress.class" : "internal-nginx"
   }
-  litmus_internal_ingress_annotations = {
-    "nginx.ingress.kubernetes.io/force-ssl-redirect" : false
-    "nginx.ingress.kubernetes.io/proxy-body-size" : "0"
-    "kubernetes.io/ingress.class" : "internal-nginx"
-  }
 
   external_ingress_hostname = "toolchain.${var.cluster_name}.${var.root_zone_name}"
   internal_ingress_hostname = "internal.${var.cluster_name}.${var.root_zone_name}"

@@ -1,7 +1,9 @@
 ingress:
   enabled: true
   annotations:
-    ${indent( 4, yamlencode( litmus_ingress_annotations ) ) }
+    "nginx.ingress.kubernetes.io/force-ssl-redirect" : false
+    "nginx.ingress.kubernetes.io/proxy-body-size" : "0"
+    "kubernetes.io/ingress.class" : "internal-nginx"
   host:
     name: ${litmus_hostname}
     paths:
