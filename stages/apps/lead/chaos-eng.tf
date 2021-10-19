@@ -14,8 +14,8 @@ module "litmus_chaos" {
   count  = var.enable_litmus ? 1 : 0
   source = "../../../modules/tools/litmus-chaos"
 
-  litmus_namespace           = module.litmus_namespace[0].name
-  litmus_hostname            = "litmus.${local.internal_ingress_hostname}"
+  litmus_namespace = module.litmus_namespace[0].name
+  litmus_hostname  = "litmus.${local.internal_ingress_hostname}"
 }
 
 # Chaos Mesh
