@@ -1,0 +1,25 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'modules/**'
+      - 'stacks/**'
+      - 'stages/**'
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Release
+        id: release
+        uses: liatrio/github-actions/conventional-release@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
