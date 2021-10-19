@@ -8,6 +8,8 @@ on:
       - 'modules/**'
       - 'stacks/**'
       - 'stages/**'
+      - '.releaserc.yaml'
+      - '.github/workflows/release.yml'
   workflow_dispatch:
 
 jobs:
