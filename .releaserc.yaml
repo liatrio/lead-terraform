@@ -1,0 +1,10 @@
+branches:
+  - master
+repositoryUrl: 'git@github.com:liatrio/lead-terraform.git'
+preset: conventionalcommits
+plugins:
+  - '@semantic-release/commit-analyzer'
+  - '@semantic-release/release-notes-generator'
+  - path: '@semantic-release/github'
+    failComment: false
+    successComment: false
