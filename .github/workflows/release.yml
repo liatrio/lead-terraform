@@ -15,6 +15,10 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.release.outputs.changed }}
+      previousVersion: ${{ steps.release.outputs.previousVersion }}
+      newVersion: ${{ steps.release.outputs.newVersion }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -25,3 +29,27 @@ jobs:
         uses: liatrio/github-actions/conventional-release@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  update:
+    needs: release
+    runs-on: ubuntu-latest
+    if: needs.release.outputs.changed == 'true'
+    steps:
+      - name: Checkout lead-environments
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          repository: ${{ github.repository_owner }}/lead-environments
+          token: ${{ secrets.GITTY_UP_TOKEN }}
+      - name: Update Version Manifest
+        uses: liatrio/github-actions/gitops-update-yaml@master
+        with:
+          file: aws/liatrio-non-prod/manifest.yml
+          path: .lead_terraform_version
+          value: ${{ needs.release.outputs.newVersion }}
+      - name: Create Pull Request
+        uses: liatrio/github-actions/gitops-gh-pr@master
+        with:
+          repo: ${{ github.repository_owner }}/lead-environments
+          token: ${{ secrets.GITTY_UP_TOKEN }}
+          message: "build: update lead-terraform from ${{ needs.release.outputs.previousVersion }} to ${{ needs.release.outputs.newVersion }}"
