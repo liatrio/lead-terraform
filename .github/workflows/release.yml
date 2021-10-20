@@ -52,4 +52,5 @@ jobs:
         with:
           repo: ${{ github.repository_owner }}/lead-environments
           token: ${{ secrets.GITTY_UP_TOKEN }}
-          message: "build: update lead-terraform from ${{ needs.release.outputs.previousVersion }} to ${{ needs.release.outputs.newVersion }}"
+          commit-prefix: "build"
+          message: "update lead-terraform from ${{ needs.release.outputs.previousVersion }} to ${{ needs.release.outputs.newVersion }}"
