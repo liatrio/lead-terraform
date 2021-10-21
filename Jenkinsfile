@@ -35,7 +35,7 @@ pipeline {
     }
     stage('Test Terraform') {
       when {
-        expression { false } // disable temporarily 
+        expression { false } // disable temporarily
         anyOf {
           branch 'master'
           branch 'PR-*'
@@ -66,8 +66,8 @@ pipeline {
       }
       environment {
         GITOPS_GIT_URL = "https://github.com/liatrio/lead-environments.git"
-        GITOPS_REPO_FILE = "aws/manifest.yml"
-        GITOPS_VALUES = "liatrio_sandbox.product_version=${VERSION}"
+        GITOPS_REPO_FILE = "aws/liatrio-sandbox/manifest.yml"
+        GITOPS_VALUES = "product_version=${VERSION}"
       }
       steps {
         container('gitops') {
