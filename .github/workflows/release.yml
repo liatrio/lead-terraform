@@ -14,7 +14,6 @@ on:
 
 concurrency:
   group: release
-  cancel-in-progress: true
 
 jobs:
   release:
