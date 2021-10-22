@@ -29,3 +29,7 @@ variable "ingress_external_traffic_policy" {
 variable "cluster_wide" {
   default = true
 }
+
+variable "extra_args" {
+  default = {}
+}
