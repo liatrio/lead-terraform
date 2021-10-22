@@ -13,7 +13,7 @@ terraform {
     }
     keycloak = {
       source  = "mrparkers/keycloak"
-      version = "3.3.0"
+      version = "3.5.1"
     }
     kubernetes = {
       source = "hashicorp/kubernetes"
