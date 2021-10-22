@@ -43,7 +43,7 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
           repository: ${{ github.repository_owner }}/lead-environments
-          token: ${{ secrets.GITTY_UP_TOKEN }}
+          token: ${{ secrets.LIATRIO_JENKINS_PAT }}
       - name: Update Version Manifest
         uses: liatrio/github-actions/gitops-update-yaml@master
         with:
@@ -54,6 +54,6 @@ jobs:
         uses: liatrio/github-actions/gitops-gh-pr@master
         with:
           repo: ${{ github.repository_owner }}/lead-environments
-          token: ${{ secrets.GITTY_UP_TOKEN }}
+          token: ${{ secrets.LIATRIO_JENKINS_PAT }}
           commit-prefix: "build"
           message: "update lead-terraform from ${{ needs.release.outputs.previousVersion }} to ${{ needs.release.outputs.newVersion }}"
