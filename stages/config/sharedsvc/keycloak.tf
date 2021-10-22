@@ -51,3 +51,29 @@ resource "keycloak_openid_client" "sonarqube" {
     "https://${var.sonarqube_hostname}/oauth2/callback/oidc"
   ]
 }
+
+resource "keycloak_saml_client" "github_enterprise_cloud" {
+  realm_id  = keycloak_realm.sharedsvc.id
+  client_id = "https://github.com/orgs/liatrio-cloud"
+
+  name    = "github enterprise cloud"
+  enabled = true
+
+  include_authn_statement   = true
+  sign_documents            = true
+  sign_assertions           = true
+  client_signature_required = false
+
+  signature_algorithm = "RSA_SHA256"
+  signature_key_name  = "KEY_ID"
+
+  force_post_binding   = true
+  front_channel_logout = true
+
+  name_id_format = "username"
+
+  valid_redirect_uris = [
+    "https://github.com/orgs/liatrio-cloud/*"
+  ]
+  master_saml_processing_url = "https://github.com/orgs/liatrio-cloud/saml/consume"
+}
