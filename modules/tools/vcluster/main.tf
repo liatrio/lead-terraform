@@ -57,7 +57,7 @@ resource "kubernetes_ingress" "vcluster" {
       http {
         path {
           backend {
-            service_name = helm_release.vcluster.name
+            service_name = "vcluster"
             service_port = 443
           }
           path = "/"
@@ -65,4 +65,8 @@ resource "kubernetes_ingress" "vcluster" {
       }
     }
   }
+
+  depends_on = [
+    module.nginx
+  ]
 }
