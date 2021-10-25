@@ -9,7 +9,7 @@ resource "kubernetes_namespace" "vcluster" {
 }
 
 // we need a dedicated instance of ingress-nginx in order to enable ssl passthrough to the k8s API server.
-// we could technically enable this on an existing instance of ingress-nginx, but there's a noticable performance hit
+// we could technically enable this on an existing instance of ingress-nginx, but there's a noticeable performance hit
 module "nginx" {
   source = "../nginx"
 

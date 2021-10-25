@@ -1,4 +1,4 @@
-sycner:
+syncer:
   extraArgs:
     - --tls-san=${vcluster_hostname}
     - --out-kube-config-server=https://${vcluster_hostname}
