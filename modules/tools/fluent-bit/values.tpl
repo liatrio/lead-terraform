@@ -23,7 +23,7 @@ filter:
 resources:
   limits:
     cpu: 300m
-    memory: 128Mi
+    memory: 100Mi
   requests:
-    cpu: 50m
-    memory: 8Mi
+    cpu: 75m
+    memory: 24Mi

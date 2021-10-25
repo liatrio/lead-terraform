@@ -7,7 +7,7 @@ terraform {
     }
     keycloak = {
       source  = "mrparkers/keycloak"
-      version = "3.3.0"
+      version = "3.5.1"
     }
     helm = {
       source = "hashicorp/helm"
