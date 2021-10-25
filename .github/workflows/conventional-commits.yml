@@ -11,19 +11,6 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: amannn/action-semantic-pull-request@v3.4.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: liatrio/github-actions/conventional-pr-title@master
         with:
-          validateSingleCommit: true
-          types: |
-            feat
-            fix
-            docs
-            style
-            refactor
-            perf
-            test
-            build
-            ci
-            revert
+          token: ${{ secrets.GITHUB_TOKEN }}
