@@ -11,10 +11,11 @@ provider "helm" {
 }
 
 module "ingress" {
-  source                  = "../../../../modules/lead/toolchain-ingress"
-  namespace               = var.namespace
-  issuer_kind             = var.issuer_kind
-  issuer_name             = var.issuer_name
-  cluster_domain          = var.cluster_domain
-  ingress_controller_type = var.ingress_controller_type
+  source                         = "../../../../modules/lead/toolchain-ingress"
+  namespace                      = var.namespace
+  issuer_kind                    = var.issuer_kind
+  issuer_name                    = var.issuer_name
+  cluster_domain                 = var.cluster_domain
+  ingress_controller_type        = var.ingress_controller_type
+  internal_ingress_source_ranges = var.service_load_balancer_source_ranges
 }

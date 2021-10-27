@@ -17,3 +17,7 @@ variable "issuer_kind" {}
 variable "ingress_controller_type" {
   default = "LoadBalancer"
 }
+
+variable "service_load_balancer_source_ranges" {
+  default = []
+}

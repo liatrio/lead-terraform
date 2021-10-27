@@ -76,7 +76,6 @@ func TestSetup(t *testing.T) {
 		TerraformDir: "../testdata/lead/toolchain-ingress",
 		Setup: func(tm *common.TestModule) {
 			tm.SetTerraformVar("kube_config_path", kubeconfig)
-
 			tm.SetTerraformVar("namespace", testNamespace.GetTerraformVar("namespace"))
 			tm.SetTerraformVar("cluster_domain", "tests.lead-terraform.liatr.io")
 			tm.SetTerraformVar("issuer_kind", "Issuer")
@@ -92,7 +91,7 @@ func TestSetup(t *testing.T) {
 }
 
 func testModules(t *testing.T) {
-  t.Run("Dashboard", testLeadDashboard)
+	t.Run("Dashboard", testLeadDashboard)
 	//t.Run("SDM", testLeadSdm)
 	t.Run("KubeResourceReport", common.KubeResourceReportTest)
 	t.Run("ExternalDNS", common.ExternalDnsTest)
