@@ -34,4 +34,6 @@ module "harbor" {
   issuer_kind                  = var.issuer_kind
   issuer_name                  = var.issuer_name
   protect_pvc_resources        = false
+  harbor_ingress_hostname      = "harbor.tests.lead-terraform.liatr.io"
+  notary_ingress_hostname      = "notary.tests.lead-terraform.liatr.io"
 }
