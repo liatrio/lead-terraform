@@ -3,7 +3,7 @@ module liatr.io/lead-terraform/tests
 go 1.17
 
 require (
-	github.com/aws/aws-sdk-go v1.27.1
+	github.com/aws/aws-sdk-go v1.41.11
 	github.com/gruntwork-io/terratest v0.25.1
 	github.com/stretchr/testify v1.5.1
 	k8s.io/api v0.17.3 // indirect
@@ -25,7 +25,7 @@ require (
 	github.com/googleapis/gnostic v0.3.1 // indirect
 	github.com/gruntwork-io/gruntwork-cli v0.5.1 // indirect
 	github.com/imdario/mergo v0.3.7 // indirect
-	github.com/jmespath/go-jmespath v0.0.0-20180206201540-c2b33e8439af // indirect
+	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/json-iterator/go v1.1.8 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
@@ -37,10 +37,10 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/urfave/cli v1.22.1 // indirect
 	golang.org/x/crypto v0.0.0-20200109152110-61a87790db17 // indirect
-	golang.org/x/net v0.0.0-20191209160850-c0dbc17a3553 // indirect
+	golang.org/x/net v0.0.0-20210614182718-04defd469f4e // indirect
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d // indirect
-	golang.org/x/sys v0.0.0-20200107162124-548cf772de50 // indirect
-	golang.org/x/text v0.3.2 // indirect
+	golang.org/x/sys v0.0.0-20210423082822-04245dca01da // indirect
+	golang.org/x/text v0.3.6 // indirect
 	golang.org/x/time v0.0.0-20190308202827-9d24e82272b4 // indirect
 	google.golang.org/appengine v1.6.5 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
