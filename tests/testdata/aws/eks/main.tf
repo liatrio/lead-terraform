@@ -1,6 +1,15 @@
+terraform {
+  required_version = ">= 0.13"
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "2.53"
+    }
+  }
+}
+
 provider "aws" {
-  version = "2.53"
-  region  = var.region
+  region = var.region
 
   assume_role {
     role_arn = var.aws_assume_role_arn

@@ -1,10 +1,29 @@
+terraform {
+  required_version = ">= 0.13"
+  required_providers {
+    helm = {
+      source  = "hashicorp/helm"
+      version = "1.1.1"
+    }
+    kubernetes = {
+      source = "hashicorp/kubernetes"
+    }
+    harbor = {
+      source  = "liatrio/harbor"
+      version = "0.3.3"
+    }
+    keycloak = {
+      source  = "mrparkers/keycloak"
+      version = "3.5.1"
+    }
+  }
+}
+
 provider "kubernetes" {
   config_path = var.kube_config_path
 }
 
 provider "helm" {
-  version = "1.1.1"
-
   kubernetes {
     config_path = var.kube_config_path
   }
