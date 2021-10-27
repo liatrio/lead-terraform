@@ -24,8 +24,11 @@ provider "helm" {
 module "kube_prometheus_stack" {
   source = "../../../../modules/tools/kube-prometheus-stack"
 
-  namespace                    = var.namespace
-  grafana_hostname             = var.grafana_hostname
-  prometheus_slack_webhook_url = var.prometheus_slack_webhook_url
-  prometheus_slack_channel     = var.prometheus_slack_channel
+  namespace                        = var.namespace
+  grafana_hostname                 = var.grafana_hostname
+  prometheus_slack_webhook_url     = var.prometheus_slack_webhook_url
+  prometheus_slack_channel         = var.prometheus_slack_channel
+  alertmanager_hostname            = "alertmanager.tests.lead-terraform.liatr.io"
+  alertmanager_ingress_annotations = {}
+  grafana_ingress_annotations      = {}
 }
