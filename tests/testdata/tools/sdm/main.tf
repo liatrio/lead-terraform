@@ -61,4 +61,10 @@ module "sdm" {
   }
   ecr_image_repo    = "TEST"
   harbor_image_repo = "TEST"
+
+  artifactory_image_repo = "TEST"
+  image_registry         = "TEST"
+  image_registry_token   = "TESt"
+  image_registry_user    = "TEST"
+  toolchain_image_repo   = "TEST"
 }
