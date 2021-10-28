@@ -17,9 +17,8 @@ func SonarQubeTest(t *testing.T) {
 		Setup: func(tm *TestModule) {
 			tm.SetTerraformVar("kube_config_path", kubeconfig)
 			tm.SetTerraformVar("namespace", tm.GetStringGlobal("namespace"))
-			tm.SetTerraformVar("enable_sonarqube", "true");
 		},
 	}
 	defer testSonarQube.TeardownTests()
 	testSonarQube.RunTests()
-} 
+}
