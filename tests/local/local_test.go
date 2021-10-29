@@ -6,7 +6,7 @@ import (
 
 	"github.com/gruntwork-io/terratest/modules/k8s"
 
-	"liatr.io/lead-terraform/tests/common"
+	"github.com/liatrio/lead-terraform/tests/common"
 )
 
 const Namespace = "namespace"

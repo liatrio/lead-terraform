@@ -7,13 +7,13 @@ $(PLANS):
 	$(MAKE) -C $@ $(MAKECMDGOALS)
 
 test:
-	cd tests && go test liatr.io/lead-terraform/tests/local -timeout 90m -v --count=1 -parallel 3
+	cd tests && go test ./local -timeout 90m -v --count=1 -parallel 3
 
 test-aws:
-	cd tests && go test liatr.io/lead-terraform/tests/aws -timeout 90m -v --count=1
+	cd tests && go test ./aws -timeout 90m -v --count=1
 
 test-aws-nodestroy:
-	cd tests && go test liatr.io/lead-terraform/tests/aws -timeout 90m -v --count=1 --destroyCluster=false
+	cd tests && go test ./local -timeout 90m -v --count=1 --destroyCluster=false
 
 package-kube-downscaler:
 	git clone https://github.com/hjacobs/kube-downscaler.git /tmp/kube-downscaler/

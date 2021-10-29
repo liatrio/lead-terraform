@@ -1,4 +1,4 @@
-module liatr.io/lead-terraform/tests
+module github.com/liatrio/lead-terraform
 
 go 1.17
 

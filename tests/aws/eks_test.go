@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"liatr.io/lead-terraform/tests/common"
+	"github.com/liatrio/lead-terraform/tests/common"
 
 	"github.com/gruntwork-io/terratest/modules/random"
 	"testing"

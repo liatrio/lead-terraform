@@ -55,7 +55,7 @@ pipeline {
         }
         container('terratest') {
           dir ("tests") {
-            sh "go test liatr.io/lead-terraform/tests/aws -timeout 60m -v --count=1"
+            sh "go test ./tests/aws -timeout 60m -v --count=1"
           }
         }
       }
