@@ -34,3 +34,9 @@ resource "helm_release" "kube_prometheus_stack" {
     })
   ]
 }
+
+resource "helm_release" "prometheus_resources" {
+  chart = "${path.module}/chart"
+  name = "lead-prometheus-resources"
+  namespace = var.namespace
+}
