@@ -1,7 +1,7 @@
 terraform {
   required_version = ">= 0.13"
   required_providers {
-    helm = {
+    helm       = {
       source  = "hashicorp/helm"
       version = "1.1.1"
     }
@@ -25,8 +25,9 @@ module "harbor" {
   source                       = "../../../../modules/tools/harbor"
   namespace                    = var.namespace
   admin_password               = var.admin_password
-  harbor_registry_disk_size    = "1Gi"
-  harbor_chartmuseum_disk_size = "1Gi"
+  harbor_registry_disk_size    = "10Mi"
+  harbor_chartmuseum_disk_size = "10Mi"
+  harbor_database_disk_size    = "10Mi"
   k8s_storage_class            = var.k8s_storage_class
   issuer_kind                  = var.issuer_kind
   issuer_name                  = var.issuer_name
