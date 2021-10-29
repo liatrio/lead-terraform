@@ -14,12 +14,12 @@ const KubeConfigPath = "kube_config_path"
 
 // TestModule structure for module to test
 type TestModule struct {
-	GoTest *testing.T
-	Name string
-	TerraformDir string
-	Setup testCallback
-	Tests testCallback
-	Teardown testCallback
+	GoTest           *testing.T
+	Name             string
+	TerraformDir     string
+	Setup            testCallback
+	Tests            testCallback
+	Teardown         testCallback
 	terraformOptions *terraform.Options
 }
 
@@ -80,14 +80,14 @@ func (tm *TestModule) GetTerraformOutputMap(name string) map[string]string {
 func (tm *TestModule) RunTests() {
 	path := tm.getDataPath()
 
-	if  test_structure.IsTestDataPresent(tm.GoTest, test_structure.FormatTestDataPath(path, "TerraformOptions.json")) {
+	if test_structure.IsTestDataPresent(tm.GoTest, test_structure.FormatTestDataPath(path, "TerraformOptions.json")) {
 		tm.terraformOptions = tm.GetTerraformOptions()
 	} else {
 		noColor := os.Getenv("TERRATEST_NO_COLOR")
 		tm.terraformOptions = &terraform.Options{
 			TerraformDir: tm.TerraformDir,
-			Vars: map[string]interface{}{},
-			NoColor: noColor == "true",
+			Vars:         map[string]interface{}{},
+			NoColor:      noColor == "true",
 		}
 	}
 

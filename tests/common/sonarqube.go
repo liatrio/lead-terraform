@@ -1,13 +1,12 @@
 package common
 
-import(
+import (
 	"testing"
 )
 
 func SonarQubeTest(t *testing.T) {
 	t.Parallel()
 	kubeconfig := TestModuleGetStringGlobal(t, KubeConfigPath)
-
 
 	// LEAD SONARQUBE
 	testSonarQube := TestModule{
