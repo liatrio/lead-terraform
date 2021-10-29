@@ -22,8 +22,8 @@ provider "helm" {
 }
 
 module "sonarqube" {
-  source           = "../../../../modules/tools/sonarqube"
-  namespace        = var.namespace
+  source            = "../../../../modules/tools/sonarqube"
+  namespace         = var.namespace
   admin_password    = ""
   postgres_password = ""
 }
