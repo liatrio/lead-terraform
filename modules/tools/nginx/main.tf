@@ -1,7 +1,7 @@
 locals {
   name         = var.name == "" ? "ingress-nginx" : "ingress-nginx-${var.name}"
   min_replicas = 2
-  extra_args   = var.default_certificate == "" ? var.extra_args : merge(var.extra_args, {
+  extra_args = var.default_certificate == "" ? var.extra_args : merge(var.extra_args, {
     default-ssl-certificate = var.default_certificate
   })
 }

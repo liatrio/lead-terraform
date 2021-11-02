@@ -16,7 +16,7 @@ module "nginx" {
   name          = "vcluster"
   namespace     = module.vcluster_namespace.name
   ingress_class = local.vcluster_ingress_class
-  extra_args    = {
+  extra_args = {
     "enable-ssl-passthrough" : "true"
   }
 }
