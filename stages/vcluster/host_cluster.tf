@@ -61,8 +61,8 @@ resource "helm_release" "vcluster" {
 
 resource "kubernetes_ingress" "vcluster" {
   metadata {
-    name        = "vcluster"
-    namespace   = kubernetes_namespace.vcluster.metadata[0].name
+    name      = "vcluster"
+    namespace = kubernetes_namespace.vcluster.metadata[0].name
     annotations = {
       "nginx.ingress.kubernetes.io/backend-protocol" = "HTTPS"
       "nginx.ingress.kubernetes.io/ssl-passthrough"  = "true"

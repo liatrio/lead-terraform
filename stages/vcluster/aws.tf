@@ -9,11 +9,11 @@ data "tls_certificate" "vcluster_api_server_cert" {
 }
 
 resource "aws_iam_openid_connect_provider" "vcluster_openid_provider" {
-  client_id_list  = [
+  client_id_list = [
     var.vcluster_apiserver_host
   ]
   thumbprint_list = [
     data.tls_certificate.vcluster_api_server_cert.certificates[0].sha1_fingerprint
   ]
-  url             = "https://${var.vcluster_apiserver_host}"
+  url = "https://${var.vcluster_apiserver_host}"
 }

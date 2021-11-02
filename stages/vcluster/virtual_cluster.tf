@@ -115,10 +115,10 @@ resource "kubernetes_cluster_role" "csr_approver" {
     api_groups = [
       "certificates.k8s.io"
     ]
-    resources  = [
+    resources = [
       "certificatesigningrequests"
     ]
-    verbs      = [
+    verbs = [
       "get",
       "list"
     ]
@@ -128,10 +128,10 @@ resource "kubernetes_cluster_role" "csr_approver" {
     api_groups = [
       "certificates.k8s.io"
     ]
-    resources  = [
+    resources = [
       "certificatesigningrequests/approval"
     ]
-    verbs      = [
+    verbs = [
       "update"
     ]
   }
@@ -209,7 +209,7 @@ resource "kubernetes_job" "approve_csr" {
         volume {
           name = "script"
           config_map {
-            name = kubernetes_config_map.csr_approval_script.metadata[0].name
+            name         = kubernetes_config_map.csr_approval_script.metadata[0].name
             default_mode = "0755"
           }
         }
@@ -218,7 +218,7 @@ resource "kubernetes_job" "approve_csr" {
           image = "bitnami/kubectl:1.21"
 
           env {
-            name  = "NAMESPACE"
+            name = "NAMESPACE"
             value_from {
               field_ref {
                 field_path = "metadata.namespace"
