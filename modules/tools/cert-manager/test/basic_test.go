@@ -32,20 +32,9 @@ func TestCertManager_Basic(t *testing.T) {
 		}
 	})
 
-	defer ts.RunTestStage(t, "destroy_setup", func() {
-		tfDir := ts.LoadString(t, ".", "setup_tfdir")
-		terraformOpts := ts.LoadTerraformOptions(t, tfDir)
+	defer ts.RunTestStage(t, "destroy_terraform", func() {
+		terraformOpts := ts.LoadTerraformOptions(t, ".")
 		terraform.Destroy(t, terraformOpts)
-	})
-
-	defer ts.RunTestStage(t, "destroy_cert_manager", func() {
-		tfDir := ts.LoadString(t, ".", "tfdir")
-		if tfDir == "" {
-			return
-		}
-
-		tfOpts := ts.LoadTerraformOptions(t, tfDir)
-		terraform.Destroy(t, tfOpts)
 	})
 
 	ts.RunTestStage(t, "create_namespace", func() {
@@ -57,59 +46,28 @@ func TestCertManager_Basic(t *testing.T) {
 		k8s.CreateNamespace(t, kubectlOptions, namespace)
 	})
 
-	ts.RunTestStage(t, "setup", func() {
-		namespace := ts.LoadString(t, ".", "namespace")
-		tfdir, err := files.CopyTerraformFolderToTemp("../../../environment/aws/iam/cert-manager", "tf-cert-manager-setup-")
-		if err != nil {
-			t.Errorf("error copying setup module to tmpdir: %s", err)
-		}
-
-		ts.SaveString(t, ".", "setup_tfdir", tfdir)
-		if err = files.CopyFolderContents(path.Join(".", "fixtures", "setup"), tfdir); err != nil {
-			t.Errorf("error copying fixtures to tmpdir: %s", err)
-		}
-
-		setupOpts := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
-			TerraformDir: tfdir,
-			Vars: map[string]interface{}{
-				"namespace": namespace,
-				"cluster": namespace,
-				// TODO: replace with config from vcluster
-				"openid_connect_provider_arn": "arn:aws:iam::1234:oidc-provider/idp.example.com",
-				"openid_connect_provider_url": "https://idp.example.com",
-			},
-		})
-		ts.SaveTerraformOptions(t, tfdir, setupOpts)
-		terraform.InitAndApply(t, setupOpts)
-
-		certManagerServiceAccountArn := terraform.Output(t, setupOpts, "cert_manager_service_account_arn")
-		assert.NotEmpty(t, certManagerServiceAccountArn)
-		ts.SaveString(t, ".", "cert_manager_service_account_arn", certManagerServiceAccountArn)
-	})
-
-	ts.RunTestStage(t, "cert_manager", func() {
+	ts.RunTestStage(t, "terraform", func() {
 		expectedStatus := "deployed"
-		tfdir, err := files.CopyTerraformFolderToTemp("../", "tf-cert-manager-")
+		tfdir, err := files.CopyTerraformFolderToTemp(path.Join(".", "fixtures", "basic"), "tf-cert-manager-")
 		if err != nil {
 			t.Errorf("error copying module to tmpdir: %s", err)
 		}
 
-		ts.SaveString(t, ".", "tfdir", tfdir)
-		if err = files.CopyFolderContents(path.Join(".", "fixtures", "basic"), tfdir); err != nil {
-			t.Errorf("error copying fixtures to tmpdir: %s", err)
-		}
-
 		namespace := ts.LoadString(t, ".", "namespace")
-		roleArn := ts.LoadString(t, ".", "cert_manager_service_account_arn")
 		terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 			TerraformDir: tfdir,
 			Vars: map[string]interface{}{
-				"namespace":                             namespace,
-				"cert_manager_service_account_role_arn": roleArn,
+				"namespace": namespace,
+				"cluster":   namespace,
+				// TODO: use a separate domain for testing
+				"hosted_zone_name": "lead.sandbox.liatr.io.",
+				// TODO: replace with config from vcluster
+				"oidc_provider_arn": "arn:aws:iam::1234:oidc-provider/idp.example.com",
+				"oidc_provider_url": "https://idp.example.com",
 			},
 			NoColor: true,
 		})
-		ts.SaveTerraformOptions(t, tfdir, terraformOptions)
+		ts.SaveTerraformOptions(t, ".", terraformOptions)
 		terraform.InitAndApply(t, terraformOptions)
 
 		actualNamespace := terraform.Output(t, terraformOptions, "namespace")
