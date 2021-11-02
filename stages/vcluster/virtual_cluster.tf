@@ -60,7 +60,7 @@ resource "kubernetes_cluster_role_binding" "oidc_viewer" {
 resource "helm_release" "aws_pod_identity_webhook" {
   provider = helm.vcluster
 
-  chart     = "../aws-pod-identity-webhook"
+  chart     = "${path.module}/aws-pod-identity-webhook"
   name      = "aws-pod-identity-webhook"
   namespace = local.aws_pod_identity_webhook_namespace
   timeout   = 300
@@ -183,7 +183,7 @@ resource "kubernetes_config_map" "csr_approval_script" {
   }
 
   data = {
-    "approve-csr.sh" = file("./approve-csr.sh")
+    "approve-csr.sh" = file("${path.module}/approve-csr.sh")
   }
 
   depends_on = [
