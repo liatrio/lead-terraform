@@ -1,7 +1,22 @@
-module "vcluster" {
-  count  = var.enable_vcluster ? 1 : 0
-  source = "../../../modules/tools/vcluster"
+locals {
+  vcluster_ingress_class = "vcluster"
+}
 
-  vcluster_hostname            = "vcluster.${local.internal_ingress_hostname}"
-  host_cluster_service_ip_cidr = var.k8s_service_ip_cidr
+module "vcluster_namespace" {
+  source = "../../../modules/common/namespace"
+
+  namespace = "vcluster"
+}
+
+// we need a dedicated instance of ingress-nginx in order to enable ssl passthrough to the k8s API server.
+// we could technically enable this on an existing instance of ingress-nginx, but there's a noticable performance hit
+module "nginx" {
+  source = "../../../modules/tools/nginx"
+
+  name          = "vcluster"
+  namespace     = module.vcluster_namespace.name
+  ingress_class = local.vcluster_ingress_class
+  extra_args    = {
+    "enable-ssl-passthrough" : "true"
+  }
 }
