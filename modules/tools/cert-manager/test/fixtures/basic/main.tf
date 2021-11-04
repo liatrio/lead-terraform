@@ -7,7 +7,7 @@ variable "namespace" {
 }
 
 variable "hosted_zone_name" {
-  type    = string
+  type = string
 }
 
 variable "oidc_provider_arn" {
@@ -21,8 +21,8 @@ variable "oidc_provider_url" {
 module "iam" {
   source = "../../../../../environment/aws/iam/cert-manager"
 
-  namespace                   = var.namespace
-  cluster                     = var.cluster
+  namespace = var.namespace
+  cluster   = var.cluster
 
   openid_connect_provider_arn = var.oidc_provider_arn
   openid_connect_provider_url = var.oidc_provider_url
@@ -58,4 +58,23 @@ module "issuer" {
   depends_on = [
     module.cert_manager,
   ]
+}
+
+module "certificate" {
+  source = "../../../../../common/certificates"
+
+  domain        = "${var.namespace}.${var.hosted_zone_name}"
+  name          = var.namespace
+  namespace     = var.namespace
+  issuer_name   = module.issuer.issuer_name
+  issuer_kind   = module.issuer.issuer_kind
+  wait_for_cert = true
+
+  depends_on = [
+    module.cert_manager,
+  ]
+}
+
+output "certificate_secret_name" {
+  value = module.certificate.cert_secret_name
 }
