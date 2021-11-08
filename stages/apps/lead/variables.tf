@@ -304,6 +304,15 @@ variable "vpn_cidr" {
   default = "10.1.32.0/20"
 }
 
+// this will need to be changed if we ever decide to switch CNIs (such as switching to the AWS VPC CNI)
+variable "k8s_service_ip_cidr" {
+  default = "172.20.0.0/16"
+}
+
 variable "sdm_image_registry" {
   default = "ghcr.io/liatrio"
+}
+
+variable "enable_vcluster" {
+  default = false
 }
