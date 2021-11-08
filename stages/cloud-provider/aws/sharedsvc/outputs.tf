@@ -63,8 +63,12 @@ output "github_runners_service_account_arn" {
   value = module.github-runners-s3.github_runners_service_account_arn
 }
 
-output "lead_pipelines_service_account_arn" {
-  value = aws_iam_role.lead_pipelines_service_account.arn
+output "lead_environments_pipeline_service_account_arn" {
+  value = module.lead_environments_pipeline_iam.role_arn
+}
+
+output "lead_terraform_pipeline_service_account_arn" {
+  value = module.lead_terraform_pipeline_iam.role_arn
 }
 
 output "atlantis_service_account_arn" {

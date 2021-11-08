@@ -91,7 +91,7 @@ variable "lead_environments_pipeline_roles" {
   default = []
 }
 
-variable "lead_terraform_test_pipeline_roles" {
+variable "lead_terraform_pipeline_roles" {
   type    = list(string)
   default = []
 }
