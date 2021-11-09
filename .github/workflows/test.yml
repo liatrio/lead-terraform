@@ -10,7 +10,7 @@ on:
 
 env:
   VCLUSTER_VERSION: 0.4.3
-
+  TERRAGRUNT_VERSION: 'v0.31.1'
 
 jobs:
 
