@@ -42,7 +42,7 @@ jobs:
         run: |
           curl -LO https://github.com/gruntwork-io/terragrunt/releases/download/${{env.TERRAGRUNT_VERSION}}/terragrunt_linux_amd64
           chmod +x ./terragrunt_linux_amd64
-          mv ./terragrunt_linux_amd64 /usr/local/bin/terragrunt
+          sudo mv ./terragrunt_linux_amd64 /usr/local/bin/terragrunt
           terragrunt --version
 
       - name: Get Branch Name
@@ -53,7 +53,7 @@ jobs:
         run: |
           curl -LO https://github.com/loft-sh/vcluster/releases/download/v${{env.VCLUSTER_VERSION}}/vcluster-linux-amd64
           chmod +x ./vcluster-linux-amd64
-          mv ./vcluster-linux-amd64 /usr/local/bin/vcluster
+          sudo mv ./vcluster-linux-amd64 /usr/local/bin/vcluster
           vcluster --version
 
       - name: Create vcluster
