@@ -59,7 +59,7 @@ jobs:
 
       - name: Create vcluster
         env:
-          VCLUSTER_NAME: ${{ steps.branch.head_ref_branch }}
+          VCLUSTER_NAME: ${{ steps.branch.current_branch }}
           TERRAGRUNT_IAM_ROLE: ${{ secrets.AWS_LEAD_TERRAFORM_TEST_ROLE }}
         run: |
           cd lead-environments/aws/vcluster
