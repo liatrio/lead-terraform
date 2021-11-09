@@ -40,7 +40,7 @@ jobs:
 
       - name: Setup Terragrunt
         run: |
-          curl -L0 https://github.com/gruntwork-io/terragrunt/releases/download/${{env.TERRAGRUNT_VERSION}}/terragrunt_linux_amd64
+          curl -LO https://github.com/gruntwork-io/terragrunt/releases/download/${{env.TERRAGRUNT_VERSION}}/terragrunt_linux_amd64
           chmod +x ./terragrunt_linux_amd64
           mv ./terragrunt_linux_amd64 /usr/local/bin/terragrunt
           terragrunt --version
