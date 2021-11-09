@@ -18,6 +18,10 @@ variable "oidc_provider_url" {
   type = string
 }
 
+variable "kubeconfig_path" {
+  type = string
+}
+
 module "iam" {
   source = "../../../../../environment/aws/iam/cert-manager"
 
