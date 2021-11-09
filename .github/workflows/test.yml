@@ -22,6 +22,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: liatrio/lead-environments
+          ref: vcluster-stage # TODO: remove this
           path: lead-environments
           token: ${{ secrets.LIATRIO_JENKINS_PAT }}
 
@@ -61,7 +62,6 @@ jobs:
           VCLUSTER_NAME: ${{ steps.branch.head_ref_branch }}
           TERRAGRUNT_IAM_ROLE: ${{ secrets.AWS_LEAD_TERRAFORM_TEST_ROLE }}
         run: |
-          ls -alh
           cd lead-environments/aws/vcluster
           terragrunt apply -auto-approve
 
