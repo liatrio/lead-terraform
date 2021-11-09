@@ -1,0 +1,67 @@
+name: "Terraform Test"
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+
+env:
+  VCLUSTER_VERSION: 0.4.3
+
+
+jobs:
+
+  create_vcluster:
+    name: Create vcluster
+    runs-on: [self-hosted, liatrio-lead-terraform]
+    steps:
+      - name: Checkout lead-environments
+        uses: actions/checkout@v2
+        with:
+          repository: liatrio/lead-environments
+          path: lead-environments
+          token: ${{ secrets.LIATRIO_JENKINS_PAT }}
+
+      # aws cli is needed for authenticating to an EKS cluster via terraform
+      - name: Install AWS CLI
+        run: |
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_wrapper: false
+          terraform_version: 1.0.8
+
+      - name: Setup Terragrunt
+        run: |
+          curl -f -Lo terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/${{env.TERRAGRUNT_VERSION}}/terragrunt_linux_amd64 && \
+          chmod +x ./terragrunt
+          mv ./terragrunt /usr/local/bin
+          terragrunt --version
+
+      - name: Get Branch Name
+        id: branch
+        uses: tj-actions/branch-names@v5
+
+      - name: Download vcluster CLI
+        run: |
+          curl -LO https://github.com/loft-sh/vcluster/releases/download/v${{env.VCLUSTER_VERSION}}/vcluster-linux-amd64
+          chmod +x ./vcluster-linux-amd64
+          mv ./vcluster-linux-amd64 /usr/local/bin/vcluster
+          vcluster --version
+
+      - name: Create vcluster
+        env:
+          VCLUSTER_NAME: ${{ steps.branch.head_ref_branch }}
+          TERRAGRUNT_IAM_ROLE: ${{ secrets.AWS_LEAD_TERRAFORM_TEST_ROLE }}
+        run: |
+          cd lead-environments/aws/vcluster
+          terragrunt apply -auto-approve
+
+
