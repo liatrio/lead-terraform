@@ -61,6 +61,7 @@ jobs:
           VCLUSTER_NAME: ${{ steps.branch.head_ref_branch }}
           TERRAGRUNT_IAM_ROLE: ${{ secrets.AWS_LEAD_TERRAFORM_TEST_ROLE }}
         run: |
+          ls -alh
           cd lead-environments/aws/vcluster
           terragrunt apply -auto-approve
 
