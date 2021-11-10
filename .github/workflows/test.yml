@@ -68,4 +68,13 @@ jobs:
           cd lead-environments/aws/vcluster
           terragrunt apply -auto-approve
 
+      - name: Update Kubeconfig
+        run: |
+          pwd
+          aws sts assume-role --role-arn ${{ secrets.AWS_LEAD_TERRAFORM_TEST_ROLE }} --role-session-name ${{ steps.branch.outputs.head_ref_branch }}-test >> role.json
 
+          export AWS_ACCESS_KEY_ID=$(cat role.json | jq -rc .Credentials.AccessKeyId)
+          export AWS_SECRET_ACCESS_KEY=$(cat role.json | jq -rc .Credentials.SecretAccessKey)
+          export AWS_SESSION_TOKEN=$(cat role.json | jq -rc .Credentials.SessionToken)
+
+          aws sts get-caller-identity
