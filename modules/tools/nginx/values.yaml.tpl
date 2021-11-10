@@ -9,10 +9,10 @@ controller:
     annotations:
       service.beta.kubernetes.io/aws-load-balancer-internal: "true"
     %{ endif }
-  %{ if default_certificate != "" }
+  %{ if length(extra_args) > 0 }
   extraArgs:
-    default-ssl-certificate: ${default_certificate}
-  %{ endif }
+    ${indent(4, yamlencode(extra_args))}
+  %{~ endif ~}
   autoscaling:
     enabled: true
     targetCPUUtilizationPercentage: 70
