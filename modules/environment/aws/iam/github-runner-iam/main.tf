@@ -22,7 +22,7 @@ resource "aws_iam_role" "github_runner_service_account" {
 EOF
 }
 
-data "aws_iam_policy_document" "gitlab_runner_role_assume_role_policy" {
+data "aws_iam_policy_document" "github_runner_role_assume_role_policy" {
   statement {
     sid     = "GithubRunnerAssumeRole"
     actions = ["sts:AssumeRole"]
@@ -35,5 +35,5 @@ resource "aws_iam_role_policy" "github_runners_pipeines" {
   name = "${var.name}-policy"
   role = aws_iam_role.github_runner_service_account.name
 
-  policy = data.aws_iam_policy_document.gitlab_runner_role_assume_role_policy.json
+  policy = data.aws_iam_policy_document.github_runner_role_assume_role_policy.json
 }
