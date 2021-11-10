@@ -75,5 +75,7 @@ jobs:
           export AWS_SECRET_ACCESS_KEY=$(cat role.json | jq -rc .Credentials.SecretAccessKey)
           export AWS_SESSION_TOKEN=$(cat role.json | jq -rc .Credentials.SessionToken)
 
+          aws eks update-kubeconfig --name lead --region us-east-1
+
           vcluster connect vcluster --namespace ${{ steps.vcluster-name.outputs.name }} --server https://${{ steps.vcluster-name.outputs.name }}.toolchain.lead.sandbox.liatr.io
           export KUBECONFIG=$(pwd)/kubeconfig.yaml
