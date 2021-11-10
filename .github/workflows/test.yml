@@ -22,7 +22,6 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: liatrio/lead-environments
-          ref: vcluster-stage # TODO: remove this
           path: lead-environments
           token: ${{ secrets.LIATRIO_JENKINS_PAT }}
 
