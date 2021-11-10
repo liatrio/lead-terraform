@@ -13,10 +13,6 @@ terraform {
       source  = "hashicorp/aws"
       version = "3.63.0"
     }
-    time = {
-      source  = "hashicorp/time"
-      version = "0.7.2"
-    }
     tls = {
       source  = "hashicorp/tls"
       version = "3.1.0"
