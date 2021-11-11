@@ -27,8 +27,6 @@ jobs:
 
       - name: Checkout lead-terraform
         uses: actions/checkout@v2
-        with:
-          path: lead-terraform
 
       # aws cli is needed for authenticating to an EKS cluster via terraform
       - name: Install AWS CLI
@@ -41,6 +39,23 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: '1.17'
+
+      - id: cache-paths
+        run: |
+          echo "::set-output name=build::$(go env GOCACHE)"
+          echo "::set-output name=mod::$(go env GOMODCACHE)"
+
+      - name: Go Build Cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.cache-paths.outputs.build }}
+          key: ${{ runner.os }}-go-build-${{ hashFiles('go.sum') }}
+
+      - name: Go Mod Cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.cache-paths.outputs.mod }}
+          key: ${{ runner.os }}-go-mod-${{ hashFiles('go.sum') }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
@@ -85,6 +100,7 @@ jobs:
           export AWS_ACCESS_KEY_ID=$(cat role.json | jq -rc .Credentials.AccessKeyId)
           export AWS_SECRET_ACCESS_KEY=$(cat role.json | jq -rc .Credentials.SecretAccessKey)
           export AWS_SESSION_TOKEN=$(cat role.json | jq -rc .Credentials.SessionToken)
+          export AWS_REGION=us-east-1
 
           aws eks update-kubeconfig --name lead --region us-east-1
 
@@ -92,8 +108,7 @@ jobs:
           export OIDC_PROVIDER_ARN=$(cat outputs.json | jq -rc .aws_iam_openid_connect_provider_arn.value)
           export OIDC_PROVIDER_URL=$(cat outputs.json | jq -rc .aws_iam_openid_connect_provider_url.value)
 
-          vcluster connect vcluster --namespace ${{ steps.vcluster-name.outputs.name }} --server https://${{ steps.vcluster-name.outputs.name }}.toolchain.lead.sandbox.liatr.io
+          vcluster connect vcluster --namespace $(cat outputs.json | jq -rc .vcluster_namespace.value) --server $(cat outputs.json | jq -rc .vcluster_api_server.value)
           export KUBECONFIG=$(pwd)/kubeconfig.yaml
 
-          cd lead-terraform
           go test -v ./modules/./...
