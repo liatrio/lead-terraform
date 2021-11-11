@@ -72,6 +72,11 @@ jobs:
           sudo mv ./terragrunt_linux_amd64 /usr/local/bin/terragrunt
           terragrunt --version
 
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v1
+        with:
+          version: 'v1.21.6'
+
       - name: Get Branch Name
         id: branch
         uses: tj-actions/branch-names@v5
