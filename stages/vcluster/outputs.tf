@@ -50,3 +50,11 @@ output "aws_iam_openid_connect_provider_arn" {
 output "aws_iam_openid_connect_provider_url" {
   value = aws_iam_openid_connect_provider.vcluster_openid_provider.url
 }
+
+output "vcluster_api_server" {
+  value = "https://${var.vcluster_apiserver_host}"
+}
+
+output "vcluster_namespace" {
+  value = kubernetes_namespace.vcluster.metadata[0].name
+}
