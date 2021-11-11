@@ -27,6 +27,8 @@ jobs:
 
       - name: Checkout lead-terraform
         uses: actions/checkout@v2
+        with:
+          path: lead-terraform
 
       # aws cli is needed for authenticating to an EKS cluster via terraform
       - name: Install AWS CLI
@@ -49,13 +51,13 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ steps.cache-paths.outputs.build }}
-          key: ${{ runner.os }}-go-build-${{ hashFiles('go.sum') }}
+          key: ${{ runner.os }}-go-build-${{ hashFiles('./lead-terraform/go.sum') }}
 
       - name: Go Mod Cache
         uses: actions/cache@v2
         with:
           path: ${{ steps.cache-paths.outputs.mod }}
-          key: ${{ runner.os }}-go-mod-${{ hashFiles('go.sum') }}
+          key: ${{ runner.os }}-go-mod-${{ hashFiles('./lead-terraform/go.sum') }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
@@ -111,4 +113,5 @@ jobs:
           vcluster connect vcluster --namespace $(cat outputs.json | jq -rc .vcluster_namespace.value) --server $(cat outputs.json | jq -rc .vcluster_api_server.value)
           export KUBECONFIG=$(pwd)/kubeconfig.yaml
 
+          cd lead-terraform
           go test -v ./modules/./...
