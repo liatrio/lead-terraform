@@ -1,0 +1,21 @@
+{{ if .Values.service_monitors.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app: kube-prometheus-stack-alertmanager
+    release: kube-prometheus-stack
+  name: kube-prometheus-stack-alertmanager
+spec:
+  endpoints:
+  - path: /metrics
+    port: web
+  namespaceSelector:
+    matchNames:
+    - monitoring
+  selector:
+    matchLabels:
+      app: kube-prometheus-stack-alertmanager
+      release: kube-prometheus-stack
+      self-monitor: "true"
+{{ end }}
