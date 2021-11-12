@@ -52,7 +52,7 @@ func TestCertManager_Basic(t *testing.T) {
 	})
 
 	ts.RunTestStage(t, "create namespace", func() {
-		namespace := fmt.Sprintf("terratest-%s", strings.ToLower(random.UniqueId()))
+		namespace := fmt.Sprintf("test-%s", strings.ToLower(random.UniqueId()))
 		ts.SaveString(t, ".", "namespace", namespace)
 
 		kubectlOptions := k8s.NewKubectlOptions("", "", namespace)

@@ -17,6 +17,9 @@ jobs:
   test:
     name: Test
     runs-on: [self-hosted, liatrio-lead-terraform]
+    concurrency:
+      group: ${{ env.GITHUB_REF }}
+      cancel-in-progress: false
     steps:
       - name: Checkout lead-environments
         uses: actions/checkout@v2
