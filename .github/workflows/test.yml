@@ -2,8 +2,6 @@ name: "Terraform Test"
 
 on:
   pull_request:
-    types:
-      - closed
     branches:
       - master
   push:
