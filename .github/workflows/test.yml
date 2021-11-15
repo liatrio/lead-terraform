@@ -8,10 +8,6 @@ on:
     branches:
       - master
 
-env:
-  VCLUSTER_VERSION: 0.4.3
-  TERRAGRUNT_VERSION: 'v0.31.1'
-
 jobs:
 
   test:
@@ -86,3 +82,10 @@ jobs:
 
           cd lead-terraform
           go test -v ./modules/./...
+
+      - name: Destroy vcluster
+        if: github.ref == 'refs/heads/master'
+        env:
+          VCLUSTER_NAME: ${{ steps.vcluster-name.outputs.name }}
+          TERRAGRUNT_IAM_ROLE: ${{ secrets.AWS_LEAD_TERRAFORM_TEST_ROLE }}
+        run: terragrunt destroy --terragrunt-working-dir ./lead-environments/aws/vcluster -auto-approve
