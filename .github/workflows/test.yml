@@ -2,6 +2,8 @@ name: "Terraform Test"
 
 on:
   pull_request:
+    types:
+      - closed
     branches:
       - master
   push:
@@ -33,18 +35,6 @@ jobs:
         with:
           path: lead-terraform
 
-      # aws cli is needed for authenticating to an EKS cluster via terraform
-      - name: Install AWS CLI
-        run: |
-          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-          unzip awscliv2.zip
-          sudo ./aws/install
-
-      - name: Setup Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: '1.17'
-
       - id: cache-paths
         run: |
           echo "::set-output name=build::$(go env GOCACHE)"
@@ -62,24 +52,6 @@ jobs:
           path: ${{ steps.cache-paths.outputs.mod }}
           key: ${{ runner.os }}-go-mod-${{ hashFiles('./lead-terraform/go.sum') }}
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
-        with:
-          terraform_wrapper: false
-          terraform_version: 1.0.8
-
-      - name: Setup Terragrunt
-        run: |
-          curl -LO https://github.com/gruntwork-io/terragrunt/releases/download/${{env.TERRAGRUNT_VERSION}}/terragrunt_linux_amd64
-          chmod +x ./terragrunt_linux_amd64
-          sudo mv ./terragrunt_linux_amd64 /usr/local/bin/terragrunt
-          terragrunt --version
-
-      - name: Setup kubectl
-        uses: azure/setup-kubectl@v1
-        with:
-          version: 'v1.21.6'
-
       - name: Get Branch Name
         id: branch
         uses: tj-actions/branch-names@v5
@@ -87,13 +59,6 @@ jobs:
       - name: Get vcluster Name
         id: vcluster-name
         run: echo "::set-output name=name::${{ steps.branch.outputs.head_ref_branch }}-vcluster"
-
-      - name: Download vcluster CLI
-        run: |
-          curl -LO https://github.com/loft-sh/vcluster/releases/download/v${{env.VCLUSTER_VERSION}}/vcluster-linux-amd64
-          chmod +x ./vcluster-linux-amd64
-          sudo mv ./vcluster-linux-amd64 /usr/local/bin/vcluster
-          vcluster --version
 
       - name: Create vcluster
         env:
