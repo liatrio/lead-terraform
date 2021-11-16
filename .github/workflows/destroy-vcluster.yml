@@ -30,7 +30,6 @@ jobs:
         run: echo "::set-output name=name::${{ steps.branch.outputs.head_ref_branch }}-vcluster"
 
       - name: Destroy vcluster
-        if: github.ref == 'refs/heads/master'
         env:
           VCLUSTER_NAME: ${{ steps.vcluster-name.outputs.name }}
           TERRAGRUNT_IAM_ROLE: ${{ secrets.AWS_LEAD_TERRAFORM_TEST_ROLE }}
