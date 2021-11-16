@@ -52,7 +52,7 @@ jobs:
 
       - name: Get vcluster Name
         id: vcluster-name
-        run: echo "::set-output name=name::${{ steps.branch.outputs.head_ref_branch }}-vcluster"
+        run: echo "::set-output name=name::${{ steps.branch.outputs.current_branch }}-vcluster"
 
       - name: Create vcluster
         env:
