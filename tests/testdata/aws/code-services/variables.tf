@@ -13,3 +13,5 @@ variable "toolchain_namespace" {}
 variable "openid_connect_provider_arn" {}
 
 variable "openid_connect_provider_url" {}
+
+variable "vpc_name" {}

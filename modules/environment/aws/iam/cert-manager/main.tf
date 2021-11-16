@@ -1,5 +1,9 @@
+data "aws_caller_identity" "current" {}
+
 resource "aws_iam_role" "cert_manager_service_account" {
   name = "${var.cluster}_cert_manager_service_account"
+
+  permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/Developer"
 
   assume_role_policy = <<EOF
 {

@@ -1,6 +1,6 @@
 package common
 
-import(
+import (
 	"github.com/gruntwork-io/terratest/modules/k8s"
 )
 

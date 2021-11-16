@@ -3,8 +3,6 @@ provider "kubernetes" {
 }
 
 provider "helm" {
-  version = "1.1.1"
-
   kubernetes {
     config_path = var.kube_config_path
   }
@@ -27,7 +25,6 @@ provider "keycloak" {
 
 module "harbor" {
   source            = "../../../../modules/config/harbor"
-  enable            = true
   namespace         = var.namespace
   admin_password    = var.admin_password
   hostname          = var.hostname

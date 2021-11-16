@@ -1,10 +1,21 @@
+terraform {
+  required_version = ">= 0.13"
+  required_providers {
+    helm = {
+      source  = "hashicorp/helm"
+      version = "1.1.1"
+    }
+    kubernetes = {
+      source = "hashicorp/kubernetes"
+    }
+  }
+}
+
 provider "kubernetes" {
   config_path = var.kube_config_path
 }
 
 provider "helm" {
-  version = "1.1.1"
-
   kubernetes {
     config_path = var.kube_config_path
   }
@@ -50,4 +61,10 @@ module "sdm" {
   }
   ecr_image_repo    = "TEST"
   harbor_image_repo = "TEST"
+
+  artifactory_image_repo = "TEST"
+  image_registry         = "TEST"
+  image_registry_token   = "TESt"
+  image_registry_user    = "TEST"
+  toolchain_image_repo   = "TEST"
 }

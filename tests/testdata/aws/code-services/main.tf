@@ -1,6 +1,15 @@
+terraform {
+  required_version = ">= 0.13"
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "2.53"
+    }
+  }
+}
+
 provider "aws" {
-  version = "2.53"
-  region  = var.region
+  region = var.region
 
   assume_role {
     role_arn = var.aws_assume_role_arn
@@ -16,7 +25,7 @@ provider "kubernetes" {
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
   exec {
     api_version = "client.authentication.k8s.io/v1alpha1"
-    args        = ["eks", "get-token", "--cluster-name", var.cluster_name]
+    args        = ["eks", "get-token", "--cluster-name", var.cluster]
     command     = "aws"
   }
 }
@@ -33,4 +42,5 @@ module "code_services" {
   openid_connect_provider_url = var.openid_connect_provider_url
   region                      = var.region
   toolchain_namespace         = var.toolchain_namespace
+  vpc_name                    = var.vpc_name
 }

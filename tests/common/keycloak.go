@@ -1,6 +1,6 @@
 package common
 
-import(
+import (
 	"testing"
 )
 

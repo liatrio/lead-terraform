@@ -36,6 +36,7 @@ func CodeServicesTest(t *testing.T) {
 			tm.SetTerraformVar("toolchain_namespace", tm.GetStringGlobal("namespace"))
 			tm.SetTerraformVar("openid_connect_provider_arn", tm.GetStringGlobal("aws_iam_openid_connect_provider_arn"))
 			tm.SetTerraformVar("openid_connect_provider_url", tm.GetStringGlobal("aws_iam_openid_connect_provider_url"))
+			tm.SetTerraformVar("vpc_name", "") // TODO: where to source vpc_name?
 		},
 		Tests: func(tm *TestModule) {
 			// Setup Test
