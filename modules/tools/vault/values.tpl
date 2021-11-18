@@ -30,7 +30,7 @@ server:
       cpu: 50m
       memory: 64Mi
     limits:
-      cpu: 200m
+      cpu: 500m
       memory: 128Mi
 
 ui:
