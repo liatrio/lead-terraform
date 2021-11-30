@@ -125,7 +125,7 @@ resource "null_resource" "wait_for_vcluster" {
   }
 
   provisioner "local-exec" {
-  command = <<EOF
+    command = <<EOF
 until nslookup ${var.vcluster_apiserver_host} &>/dev/null; do
   sleep 10
 done
