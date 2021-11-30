@@ -4,7 +4,7 @@ data "tls_certificate" "vcluster_api_server_cert" {
   verify_chain = false
 
   depends_on = [
-    module.wait_for_vcluster
+    null_resource.wait_for_vcluster
   ]
 }
 

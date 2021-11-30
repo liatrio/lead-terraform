@@ -99,9 +99,32 @@ data "kubernetes_secret" "vcluster_kubeconfig" {
 
 # it's strange to do what is essentially two separate checks to ensure the cluster is up and reachable, but only doing one
 # of the two checks didn't have a 100% success rate when running this locally. using both checks seems to work every time.
-module "wait_for_vcluster" {
-  source = "matti/resource/shell"
+# module "wait_for_vcluster" {
+#   source = "matti/resource/shell"
 
+#   command = <<EOF
+# until nslookup ${var.vcluster_apiserver_host} &>/dev/null; do
+#   sleep 10
+# done
+
+# until curl --output /dev/null --silent -4 --fail --max-time 2 --insecure https://${var.vcluster_apiserver_host}/healthz; do
+#   sleep 10
+# done
+# EOF
+
+#   depends_on = [
+#     helm_release.vcluster,
+#     kubernetes_ingress.vcluster,
+#     data.kubernetes_secret.vcluster_kubeconfig
+#   ]
+# }
+
+resource "null_resource" "wait_for_vcluster" {
+  triggers = {
+    vcluster_apiserver_host = var.vcluster_apiserver_host
+  }
+
+  provisioner "local-exec" {
   command = <<EOF
 until nslookup ${var.vcluster_apiserver_host} &>/dev/null; do
   sleep 10
@@ -111,6 +134,7 @@ until curl --output /dev/null --silent -4 --fail --max-time 2 --insecure https:/
   sleep 10
 done
 EOF
+  }
 
   depends_on = [
     helm_release.vcluster,
