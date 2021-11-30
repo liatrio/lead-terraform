@@ -23,6 +23,7 @@ jobs:
           repository: liatrio/lead-environments
           path: lead-environments
           token: ${{ secrets.LIATRIO_JENKINS_PAT }}
+          ref: vcluster-wait
 
       - name: Checkout lead-terraform
         uses: actions/checkout@v2
