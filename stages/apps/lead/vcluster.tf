@@ -15,11 +15,12 @@ module "vcluster_namespace" {
 // services are synced to the host cluster, so the host cluster needs an ingress controller that these synced ingresses
 // can use.
 module "vcluster_apps_wildcard_cert" {
+  count  = var.enable_vcluster ? 1 : 0
   source = "../../../modules/common/certificates"
 
   name      = "vcluster-apps-wildcard"
   namespace = module.vcluster_namespace[0].name
-  domain    = "vcluster-apps.vcluster.${var.cluster_name}.${var.root_zone_name}"
+  domain    = "apps.vcluster.${var.cluster_name}.${var.root_zone_name}"
 
   issuer_name = module.cluster_issuer.issuer_name
   issuer_kind = module.cluster_issuer.issuer_kind
@@ -32,8 +33,8 @@ module "vcluster_nginx" {
   name                = "vcluster"
   namespace           = module.vcluster_namespace[0].name
   ingress_class       = local.vcluster_ingress_class
-  default_certificate = "${module.vcluster_namespace[0].name}/${module.vcluster_apps_wildcard_cert.cert_secret_name}"
-  extra_args = {
+  default_certificate = "${module.vcluster_namespace[0].name}/${module.vcluster_apps_wildcard_cert[0].cert_secret_name}"
+  extra_args          = {
     "enable-ssl-passthrough" : "true"
   }
 }
