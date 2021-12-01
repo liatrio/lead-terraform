@@ -120,3 +120,7 @@ variable "velero_namespace" {
 variable "enable_eks_ssh_access" {
   default = false
 }
+
+variable "enable_vcluster" {
+  default = false
+}
