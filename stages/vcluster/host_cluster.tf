@@ -119,18 +119,14 @@ data "kubernetes_secret" "vcluster_kubeconfig" {
 #   ]
 # }
 
-resource "null_resource" "wait_for_vcluster" {
+resource "null_resource" "wait_for_vcluster_dns" {
   triggers = {
-    vcluster_apiserver_host = var.vcluster_apiserver_host
+    # vcluster_apiserver_host = var.vcluster_apiserver_host
   }
 
   provisioner "local-exec" {
     command = <<EOF
 until nslookup ${var.vcluster_apiserver_host} &>/dev/null; do
-  sleep 10
-done
-
-until curl --output /dev/null --silent -4 --fail --max-time 2 --insecure https://${var.vcluster_apiserver_host}/healthz; do
   sleep 10
 done
 EOF
@@ -140,5 +136,23 @@ EOF
     helm_release.vcluster,
     kubernetes_ingress.vcluster,
     data.kubernetes_secret.vcluster_kubeconfig
+  ]
+}
+
+resource "null_resource" "wait_for_vcluster_api" {
+  triggers = {
+    # vcluster_apiserver_host = var.vcluster_apiserver_host
+  }
+
+  provisioner "local-exec" {
+    command = <<EOF
+until curl --output /dev/null --silent -4 --fail --max-time 2 --insecure https://${var.vcluster_apiserver_host}/healthz; do
+  sleep 10
+done
+EOF
+  }
+
+  depends_on = [
+    null_resource.wait_for_vcluster_dns
   ]
 }

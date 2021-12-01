@@ -52,7 +52,7 @@ resource "kubernetes_cluster_role_binding" "oidc_viewer" {
   }
 
   depends_on = [
-    null_resource.wait_for_vcluster,
+    null_resource.wait_for_vcluster_api,
     data.kubernetes_secret.vcluster_kubeconfig
   ]
 }
@@ -82,7 +82,7 @@ resource "helm_release" "aws_pod_identity_webhook" {
   }
 
   depends_on = [
-    null_resource.wait_for_vcluster,
+    null_resource.wait_for_vcluster_api,
     data.kubernetes_secret.vcluster_kubeconfig
   ]
 }
