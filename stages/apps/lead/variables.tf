@@ -191,7 +191,7 @@ variable "lab_partner_version" {
 }
 
 variable "enable_lab_partner" {
-  default = true
+  default = false
 }
 
 variable "external_dns_service_account_arn" {
