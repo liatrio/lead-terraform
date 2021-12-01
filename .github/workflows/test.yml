@@ -55,6 +55,9 @@ jobs:
         id: vcluster-name
         run: echo "::set-output name=name::${{ steps.branch.outputs.current_branch }}-vcluster"
 
+      - name: Set vcluster DNS
+        run: echo "34.199.179.85 ${{ steps.vcluster-name.outputs.name }}.toolchain.lead.sandbox.liatr.io" | sudo tee -a /etc/hosts
+
       - name: Create vcluster
         env:
           VCLUSTER_NAME: ${{ steps.vcluster-name.outputs.name }}
