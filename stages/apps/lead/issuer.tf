@@ -1,3 +1,8 @@
+locals {
+  lets_encrypt_production_server = "https://acme-v02.api.letsencrypt.org/directory"
+  lets_encrypt_staging_server    = "https://acme-staging-v02.api.letsencrypt.org/directory"
+}
+
 resource "kubernetes_cluster_role" "cert_manager_cluster_role" {
   metadata {
     name = "cert-manager-cluster-role"
@@ -17,11 +22,11 @@ resource "kubernetes_cluster_role" "cert_manager_cluster_role" {
 
 module "cluster_issuer" {
   source        = "../../../modules/common/cert-issuer"
-  namespace     = var.toolchain_namespace
+  namespace     = module.toolchain_namespace.name
   issuer_name   = "letsencrypt-dns"
   issuer_kind   = "ClusterIssuer"
   issuer_type   = var.cert_issuer_type
-  issuer_server = "https://acme-v02.api.letsencrypt.org/directory"
+  issuer_server = local.lets_encrypt_production_server
 
   acme_solver       = "dns"
   provider_dns_type = "route53"
@@ -36,11 +41,11 @@ module "cluster_issuer" {
 
 module "staging_cluster_issuer" {
   source        = "../../../modules/common/cert-issuer"
-  namespace     = var.toolchain_namespace
+  namespace     = module.toolchain_namespace.name
   issuer_name   = "staging-letsencrypt-dns"
   issuer_kind   = "ClusterIssuer"
   issuer_type   = var.cert_issuer_type
-  issuer_server = "https://acme-staging-v02.api.letsencrypt.org/directory"
+  issuer_server = local.lets_encrypt_staging_server
 
   acme_solver       = "dns"
   provider_dns_type = "route53"
