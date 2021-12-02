@@ -18,8 +18,7 @@ import (
 func TestCertManager_Basic(t *testing.T) {
 	t.Parallel()
 
-	// TODO: use a separate domain for testing
-	testingDnsZone := "lead.sandbox.liatr.io"
+	testingDnsZone := "vcluster.lead.sandbox.liatr.io"
 	oidcProviderArn := common.GetRequiredEnvVar(t, "OIDC_PROVIDER_ARN")
 	oidcProviderUrl := common.GetRequiredEnvVar(t, "OIDC_PROVIDER_URL")
 
