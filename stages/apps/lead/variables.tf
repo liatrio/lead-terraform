@@ -8,6 +8,11 @@ variable "cluster_zone_id" {
   description = "Cluster zone id provided by cloud-provider stage"
 }
 
+variable "vcluster_zone_id" {
+  description = "Zone id for vclusters and vcluster applications provided by cloud-provider stage. Will be empty if vcluster is not enabled"
+  default     = ""
+}
+
 variable "aws_environment" {}
 
 variable "system_namespace" {
