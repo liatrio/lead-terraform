@@ -55,7 +55,7 @@ module "vcluster_nginx" {
   namespace           = module.vcluster_namespace[0].name
   ingress_class       = local.vcluster_ingress_class
   default_certificate = "${module.vcluster_namespace[0].name}/${module.vcluster_apps_wildcard_cert[0].cert_secret_name}"
-  extra_args          = {
+  extra_args = {
     "enable-ssl-passthrough" : "true"
   }
 }
