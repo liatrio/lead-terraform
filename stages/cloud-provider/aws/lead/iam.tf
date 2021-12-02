@@ -14,9 +14,10 @@ module "external_dns_iam" {
   namespace                   = var.system_namespace
   openid_connect_provider_arn = module.eks.aws_iam_openid_connect_provider_arn
   openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider_url
-  route53_zone_ids = [
-    aws_route53_zone.cluster_zone.zone_id
-  ]
+  route53_zone_ids = compact([
+    aws_route53_zone.cluster_zone.zone_id,
+    var.enable_vcluster ? aws_route53_zone.vcluster[0].zone_id : ""
+  ])
 }
 
 module "cluster_autoscaler_iam" {
