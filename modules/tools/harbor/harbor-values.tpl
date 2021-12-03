@@ -2,14 +2,10 @@ expose:
   type: ingress
   tls:
     enabled: true
-    certSource: secret
-    secret:
-      secretName: harbor-tls
-      notarySecretName: notary-tls
+    certSource: none # offloaded to the centrally managed nginx ingress controller that's configured with a wildcard cert
   ingress:
     hosts:
       core: ${harbor_ingress_hostname}
-      notary: ${notary_ingress_hostname}
     controller: default
     annotations:
       ${indent( 6, yamlencode( ingress_annotations ) ) }
@@ -146,24 +142,6 @@ registry:
 
 chartmuseum:
   enabled: false
-  # Harbor defaults ChartMuseum to returning relative urls, if you want using absolute url you should enable it by change the following value to 'true'
-  absoluteUrl: false
-  image:
-    repository: goharbor/chartmuseum-photon
-    tag: ${img_tag}
-  replicas: 1
-  resources:
-    requests:
-      memory: 64Mi
-      cpu: 10m
-    limits:
-      memory: 128Mi
-      cpu: 100m
-  nodeSelector: {}
-  tolerations: []
-  affinity: {}
-  ## Additional deployment annotations
-  podAnnotations: {}
 
 clair:
   enabled: false
@@ -184,42 +162,6 @@ trivy:
 
 notary:
   enabled: false
-  server:
-    image:
-      repository: goharbor/notary-server-photon
-      tag: ${img_tag}
-    replicas: 1
-    resources:
-      requests:
-        memory: 64Mi
-        cpu: 10m
-      limits:
-        memory: 256Mi
-        cpu: 250m
-  signer:
-    image:
-      repository: goharbor/notary-signer-photon
-      tag: ${img_tag}
-    replicas: 1
-    resources:
-      requests:
-        memory: 64Mi
-        cpu: 10m
-      limits:
-        memory: 256Mi
-        cpu: 500m
-  nodeSelector: {}
-  tolerations: []
-  affinity: {}
-  ## Additional deployment annotations
-  podAnnotations: {}
-  # Fill the name of a kubernetes secret if you want to use your own
-  # TLS certificate authority, certificate and private key for notary
-  # communications.
-  # The secret must contain keys named ca.crt, tls.crt and tls.key that
-  # contain the CA, certificate and private key.
-  # They will be generated if not set.
-  secretName: ""
 
 database:
   # if external database is used, set "type" to "external"

@@ -1,6 +1,5 @@
 locals {
   harbor_hostname = var.harbor_ingress_hostname
-  notary_hostname = var.notary_ingress_hostname
 }
 
 resource "random_string" "harbor_db_password" {
@@ -70,60 +69,22 @@ resource "helm_release" "harbor_volumes" {
   }
 }
 
-resource "helm_release" "harbor_certificates" {
-  chart     = "${path.module}/charts/harbor-certificates"
-  name      = "harbor-certificates"
-  namespace = var.namespace
-  wait      = true
-
-  set {
-    name  = "harbor.hostname"
-    value = local.harbor_hostname
-  }
-
-  set {
-    name  = "notary.hostname"
-    value = local.notary_hostname
-  }
-
-  set {
-    name  = "harbor.secret"
-    value = "harbor-tls"
-  }
-
-  set {
-    name  = "notary.secret"
-    value = "notary-tls"
-  }
-
-  set {
-    name  = "issuer.kind"
-    value = var.issuer_kind
-  }
-
-  set {
-    name  = "issuer.name"
-    value = var.issuer_name
-  }
-}
-
 resource "helm_release" "harbor" {
   repository = "https://helm.goharbor.io"
   name       = "harbor"
   namespace  = var.namespace
   chart      = "harbor"
-  version    = "1.5.3"
+  version    = "1.8.0"
 
   values = [
     templatefile("${path.module}/harbor-values.tpl", {
       harbor_ingress_hostname = local.harbor_hostname
-      notary_ingress_hostname = local.notary_hostname
       ingress_annotations     = var.ingress_annotations
       jobservice_pvc_size     = "10Gi"
       database_pvc_size       = "10Gi"
       redis_pvc_size          = "10Gi"
       storage_class           = var.k8s_storage_class
-      img_tag                 = "v2.1.3"
+      img_tag                 = "v2.3.4"
       metrics_enabled         = var.metrics_enabled
     })
   ]
@@ -159,7 +120,6 @@ resource "helm_release" "harbor" {
   }
 
   depends_on = [
-    helm_release.harbor_certificates,
     helm_release.harbor_volumes
   ]
 }

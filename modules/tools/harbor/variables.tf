@@ -1,7 +1,5 @@
 variable "harbor_ingress_hostname" {}
 
-variable "notary_ingress_hostname" {}
-
 variable "namespace" {}
 
 variable "ingress_annotations" {
@@ -22,10 +20,6 @@ variable "harbor_database_disk_size" {
 }
 
 variable "k8s_storage_class" {}
-
-variable "issuer_name" {}
-
-variable "issuer_kind" {}
 
 variable "protect_pvc_resources" {
   default = true
