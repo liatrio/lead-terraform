@@ -15,7 +15,7 @@ grafana:
       org_role: Viewer
   image:
     repository: grafana/grafana
-    tag: 8.1.2-ubuntu
+    tag: 8.3.1-ubuntu
     pullPolicy: IfNotPresent
   service:
     portName: http
@@ -43,6 +43,8 @@ kube-state-metrics:
     annotations:
       prometheus.io/scrape: "false"
 prometheus-node-exporter:
+  annotations:
+    downscaler/exclude: "true"
   service:
     annotations:
       prometheus.io/scrape: "false"
@@ -79,7 +81,7 @@ prometheus:
               storage: 95Gi
     resources:
       requests:
-        cpu: 500m
+        cpu: 1
         memory: 4Gi
       limits:
         cpu: 2
