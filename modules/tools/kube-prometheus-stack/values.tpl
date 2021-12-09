@@ -43,6 +43,8 @@ kube-state-metrics:
     annotations:
       prometheus.io/scrape: "false"
 prometheus-node-exporter:
+  annotations:
+    downscaler/exclude: "true"
   service:
     annotations:
       prometheus.io/scrape: "false"
