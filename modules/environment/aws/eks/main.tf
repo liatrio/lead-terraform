@@ -262,3 +262,11 @@ resource "aws_s3_bucket" "tfstates" {
     Cluster   = var.cluster
   }
 }
+
+resource "aws_eks_addon" "addon" {
+  for_each          = var.cluster_addons
+  cluster_name      = module.eks.cluster_id
+  addon_name        = each.key
+  addon_version     = each.value
+  resolve_conflicts = "OVERWRITE"
+}

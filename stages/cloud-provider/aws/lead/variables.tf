@@ -2,6 +2,12 @@ variable "cluster_version" {
   description = "Kubernetes version running on EKS"
 }
 
+variable "cluster_addons" {
+  description = "EKS addons to install to the cluster"
+  type        = map(string)
+  default     = {}
+}
+
 variable "cluster_name" {
   description = "Name of the cluster as seen in EKS"
 }
