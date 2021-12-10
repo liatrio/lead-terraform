@@ -77,6 +77,11 @@ variable "cluster_version" {
   default = "1.14"
 }
 
+variable "cluster_addons" {
+  type    = map(string)
+  default = {}
+}
+
 variable "codebuild_role" {
   default = ""
 }
