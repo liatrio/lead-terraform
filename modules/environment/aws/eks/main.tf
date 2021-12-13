@@ -3,10 +3,6 @@ data "aws_caller_identity" "current" {
 
 locals {
   userdata = <<EOF
-yum install -y amazon-ssm-agent
-systemctl start amazon-ssm-agent
-systemctl enable amazon-ssm-agent
-
 echo '{"registry-mirrors": [${var.docker_registry_mirror != "" ? format("\"%s\"", var.docker_registry_mirror) : ""}]}' | cat /etc/docker/daemon.json - | jq -s '.[0] * .[1]' > /tmp/daemon.json
 mv /tmp/daemon.json /etc/docker/daemon.json
 systemctl restart docker
@@ -269,4 +265,9 @@ resource "aws_eks_addon" "addon" {
   addon_name        = each.key
   addon_version     = each.value
   resolve_conflicts = "OVERWRITE"
+}
+
+resource "aws_iam_role_policy_attachment" "eks_worker_ssm_policy_attachment" {
+  role       = module.eks.worker_iam_role_name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
