@@ -1,5 +1,11 @@
 variable "cluster_version" {}
 
+variable "cluster_addons" {
+  description = "EKS addons to install to the cluster"
+  type        = map(string)
+  default     = {}
+}
+
 variable "cluster_name" {}
 
 variable "region" {
