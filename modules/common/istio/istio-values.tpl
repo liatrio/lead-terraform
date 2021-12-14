@@ -70,7 +70,7 @@ grafana:
     enabled: true
     image:
       repository: grafana/grafana
-      tag: 6.5.1-ubuntu
+      tag: 8.3.1-ubuntu
     annotations:
       kubernetes.io/ingress.class: ${ingress_class}
       nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
