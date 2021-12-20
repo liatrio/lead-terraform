@@ -15,7 +15,7 @@ data "template_file" "dockercfg" {
     )
     harbor_url = "https://harbor.toolchain.${var.cluster_domain}/${var.product_name}"
     harbor_auth = base64encode(
-      "robot$imagepusher:${local.harbor_pass}",
+      "admin:${data.kubernetes_secret.harbor_admin_creds.data.HARBOR_ADMIN_PASSWORD}",
     )
     enable_harbor = var.enable_harbor
   }
