@@ -17,7 +17,7 @@ resource "aws_iam_role" "cert_manager_service_account" {
       "Action": "sts:AssumeRoleWithWebIdentity",
       "Condition": {
         "StringEquals": {
-          "${replace(var.openid_connect_provider_url, "https://", "")}:sub": "system:serviceaccount:${var.namespace}:cert-manager"
+          "${replace(var.openid_connect_provider_url, "https://", "")}:sub": "system:serviceaccount:${var.namespace}:cert-manager-service-account-that-does-not-exist"
         }
       }
     }
