@@ -3,7 +3,7 @@ resource "helm_release" "kibana" {
   namespace  = var.namespace
   chart      = "kibana"
   repository = "https://helm.elastic.co"
-  version    = "7.6.2"
+  version    = "7.7.0"
   wait       = true
 
   values = [
