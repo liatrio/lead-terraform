@@ -38,7 +38,7 @@ provider "helm" {
 data "kubernetes_secret" "harbor_admin_creds" {
   provider = kubernetes.system
   metadata {
-    name      = "harbor-harbor-core"
+    name      = "harbor-core"
     namespace = var.toolchain_namespace
   }
 }
