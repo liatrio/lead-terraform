@@ -1,13 +1,3 @@
-data "template_file" "gitlab_values" {
-  count    = var.enable_gitlab ? 1 : 0
-  template = file("${path.module}/gitlab-values.tpl")
-
-  vars = {
-    ssl_redirect     = var.root_zone_name == "localhost" ? false : true
-    ingress_hostname = "gitlab.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
-  }
-}
-
 data "external" "keycloak_realm_certificate" {
   count   = var.enable_gitlab && var.enable_keycloak ? 1 : 0
   program = ["sh", "${path.module}/scripts/get_keycloak_realm_certificate.sh", "${local.protocol}://keycloak.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}/auth/realms/${module.toolchain_namespace.name}/protocol/saml/descriptor"]
@@ -55,7 +45,10 @@ resource "helm_release" "gitlab" {
   version    = "2.0.3"
   timeout    = 1200
 
-  values = [data.template_file.gitlab_values[0].rendered]
+  values = [templatefile("${path.module}/gitlab-values.tpl", {
+    ssl_redirect     = var.root_zone_name == "localhost" ? false : true
+    ingress_hostname = "gitlab.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
+  })]
 }
 
 resource "keycloak_saml_client" "gitlab_saml_client" {

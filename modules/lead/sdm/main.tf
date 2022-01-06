@@ -23,64 +23,6 @@ EOF
   type = "kubernetes.io/dockerconfigjson"
 }
 
-data "template_file" "operator_toolchain_values" {
-  template = file("${path.module}/operator-toolchain-values.tpl")
-
-  vars = {
-    sdm_version                 = var.sdm_version
-    cluster                     = var.cluster
-    namespace                   = var.namespace
-    cluster_domain              = "${var.cluster}.${var.root_zone_name}"
-    product_version             = var.product_version
-    workspace_role              = var.workspace_role_name
-    region                      = var.region
-    essential_toleration_values = module.essential_toleration.values
-
-    product_image_repo = coalesce(var.harbor_image_repo, var.artifactory_image_repo)
-    ecr_image_repo     = var.ecr_image_repo
-
-    enable_keycloak         = var.product_vars["enable_keycloak"]
-    builder_images_version  = var.product_vars["builder_images_version"]
-    jenkins_image_version   = var.product_vars["jenkins_image_version"]
-    toolchain_image_repo    = var.product_vars["toolchain_image_repo"]
-    enable_harbor           = var.product_vars["enable_harbor"]
-    enable_artifactory_jcr  = var.product_vars["enable_artifactory_jcr"]
-    jenkins_pipeline_source = var.product_vars["jenkins_pipeline_source"]
-
-    aws_environment             = var.product_vars["aws_environment"]
-    s3_bucket                   = var.product_vars["s3_bucket"]
-    codebuild_role              = var.product_vars["codebuild_role"]
-    codepipeline_role           = var.product_vars["codepipeline_role"]
-    codebuild_user              = var.product_vars["codebuild_user"]
-    codebuild_security_group_id = var.product_vars["codebuild_security_group_id"]
-
-    vault_namespace         = var.product_vars["vault_namespace"]
-    vault_root_token_secret = var.product_vars["vault_root_token_secret"]
-
-    image_repository  = var.toolchain_image_repo
-    image_pull_secret = kubernetes_secret.image_registry_secret.metadata[0].name
-
-    remote_state_config = var.remote_state_config
-
-    enable_aws_event_mapper = var.enable_aws_event_mapper
-    sqs_url                 = var.sqs_url
-
-    operator_toolchain_enabled     = contains(var.operators, "toolchain")
-    operator_elasticsearch_enabled = contains(var.operators, "elasticsearch")
-    operator_slack_enabled         = contains(var.operators, "slack")
-    operator_jenkins_enabled       = contains(var.operators, "jenkins")
-    operator_product_enabled       = contains(var.operators, "product")
-
-    product_type_aws_enabled     = contains(var.product_types, "product-aws")
-    product_type_jenkins_enabled = contains(var.product_types, "product-jenkins")
-
-    slack_service_account_annotations            = jsonencode(var.operator_slack_service_account_annotations)
-    jenkins_service_account_annotations          = jsonencode(var.operator_jenkins_service_account_annotations)
-    product_service_account_annotations          = jsonencode(var.operator_product_service_account_annotations)
-    aws_event_mapper_service_account_annotations = jsonencode(var.aws_event_mapper_service_account_annotations)
-  }
-}
-
 resource "helm_release" "operator_toolchain" {
   count      = var.enable_operators ? 1 : 0
   repository = "https://liatrio-helm.s3.us-east-1.amazonaws.com/charts"
@@ -91,7 +33,59 @@ resource "helm_release" "operator_toolchain" {
   namespace  = var.namespace
 
   values = [
-    data.template_file.operator_toolchain_values.rendered
+    templatefile("${path.module}/operator-toolchain-values.tpl", {
+      sdm_version                 = var.sdm_version
+      cluster                     = var.cluster
+      namespace                   = var.namespace
+      cluster_domain              = "${var.cluster}.${var.root_zone_name}"
+      product_version             = var.product_version
+      workspace_role              = var.workspace_role_name
+      region                      = var.region
+      essential_toleration_values = module.essential_toleration.values
+
+      product_image_repo = coalesce(var.harbor_image_repo, var.artifactory_image_repo)
+      ecr_image_repo     = var.ecr_image_repo
+
+      enable_keycloak         = var.product_vars["enable_keycloak"]
+      builder_images_version  = var.product_vars["builder_images_version"]
+      jenkins_image_version   = var.product_vars["jenkins_image_version"]
+      toolchain_image_repo    = var.product_vars["toolchain_image_repo"]
+      enable_harbor           = var.product_vars["enable_harbor"]
+      enable_artifactory_jcr  = var.product_vars["enable_artifactory_jcr"]
+      jenkins_pipeline_source = var.product_vars["jenkins_pipeline_source"]
+
+      aws_environment             = var.product_vars["aws_environment"]
+      s3_bucket                   = var.product_vars["s3_bucket"]
+      codebuild_role              = var.product_vars["codebuild_role"]
+      codepipeline_role           = var.product_vars["codepipeline_role"]
+      codebuild_user              = var.product_vars["codebuild_user"]
+      codebuild_security_group_id = var.product_vars["codebuild_security_group_id"]
+
+      vault_namespace         = var.product_vars["vault_namespace"]
+      vault_root_token_secret = var.product_vars["vault_root_token_secret"]
+
+      image_repository  = var.toolchain_image_repo
+      image_pull_secret = kubernetes_secret.image_registry_secret.metadata[0].name
+
+      remote_state_config = var.remote_state_config
+
+      enable_aws_event_mapper = var.enable_aws_event_mapper
+      sqs_url                 = var.sqs_url
+
+      operator_toolchain_enabled     = contains(var.operators, "toolchain")
+      operator_elasticsearch_enabled = contains(var.operators, "elasticsearch")
+      operator_slack_enabled         = contains(var.operators, "slack")
+      operator_jenkins_enabled       = contains(var.operators, "jenkins")
+      operator_product_enabled       = contains(var.operators, "product")
+
+      product_type_aws_enabled     = contains(var.product_types, "product-aws")
+      product_type_jenkins_enabled = contains(var.product_types, "product-jenkins")
+
+      slack_service_account_annotations            = jsonencode(var.operator_slack_service_account_annotations)
+      jenkins_service_account_annotations          = jsonencode(var.operator_jenkins_service_account_annotations)
+      product_service_account_annotations          = jsonencode(var.operator_product_service_account_annotations)
+      aws_event_mapper_service_account_annotations = jsonencode(var.aws_event_mapper_service_account_annotations)
+    })
   ]
 }
 

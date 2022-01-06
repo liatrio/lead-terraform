@@ -1,7 +1,11 @@
-data "template_file" "issuer_values" {
-  template = file("${path.module}/issuer-values.tpl")
-
-  vars = {
+resource "helm_release" "cert_manager_issuers" {
+  count     = var.enabled ? 1 : 0
+  name      = "cm-${lower(var.issuer_kind)}-${var.issuer_name}"
+  namespace = var.namespace
+  chart     = "${path.module}/helm/cert-manager-issuers"
+  timeout   = 600
+  wait      = true
+  values = [templatefile("${path.module}/issuer-values.tpl", {
     issuer_name                         = var.issuer_name
     issuer_server                       = var.issuer_server
     issuer_email                        = var.issuer_email
@@ -16,15 +20,5 @@ data "template_file" "issuer_values" {
     gcp_dns_service_account_secret_name = var.gcp_dns_service_account_secret_name
     gcp_dns_service_account_secret_key  = var.gcp_dns_service_account_secret_key
     ca_secret                           = var.ca_secret
-  }
-}
-
-resource "helm_release" "cert_manager_issuers" {
-  count     = var.enabled ? 1 : 0
-  name      = "cm-${lower(var.issuer_kind)}-${var.issuer_name}"
-  namespace = var.namespace
-  chart     = "${path.module}/helm/cert-manager-issuers"
-  timeout   = 600
-  wait      = true
-  values    = [data.template_file.issuer_values.rendered]
+  })]
 }

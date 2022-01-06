@@ -3,7 +3,7 @@ terraform {
   required_providers {
     harbor = {
       source  = "liatrio/harbor"
-      version = "0.4.0"
+      version = "0.5.0"
     }
     keycloak = {
       source  = "mrparkers/keycloak"

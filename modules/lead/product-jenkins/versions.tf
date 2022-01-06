@@ -4,7 +4,7 @@ terraform {
   required_providers {
     harbor = {
       source  = "liatrio/harbor"
-      version = "= 0.4.0"
+      version = "= 0.5.0"
     }
     helm = {
       source = "hashicorp/helm"
@@ -18,9 +18,6 @@ terraform {
     }
     random = {
       source = "hashicorp/random"
-    }
-    template = {
-      source = "hashicorp/template"
     }
   }
 }

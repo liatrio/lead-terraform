@@ -1,11 +1,3 @@
-data "template_file" "external_dns_values" {
-  template = file("${path.module}/external-dns-values.tpl")
-
-  vars = {
-    ns_domain = "${var.cluster}.${var.root_zone_name}"
-  }
-}
-
 resource "random_string" "keycloak_postgres_password" {
   length = 10
 }
@@ -20,7 +12,9 @@ module "infrastructure" {
   opa_failure_policy                  = var.opa_failure_policy
   uptime                              = var.uptime
 
-  external_dns_chart_values = data.template_file.external_dns_values.rendered
+  external_dns_chart_values = templatefile("${path.module}/external-dns-values.tpl", {
+    ns_domain = "${var.cluster}.${var.root_zone_name}"
+  })
 }
 
 module "toolchain" {
