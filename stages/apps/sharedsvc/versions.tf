@@ -25,10 +25,6 @@ terraform {
       source  = "hashicorp/random"
       version = "~> 3.0.1"
     }
-    template = {
-      source  = "hashicorp/template"
-      version = "~> 2.2.0"
-    }
     vault = {
       source  = "hashicorp/vault"
       version = ">= 2.24.0"

@@ -1,14 +1,3 @@
-data "template_file" "opa_values" {
-  count    = var.enable_opa ? 1 : 0
-  template = file("${path.module}/opa-values.tpl")
-
-  vars = {
-    namespace       = var.namespace
-    service_account = kubernetes_service_account.opa_service_account[0].metadata[0].name
-    failure_policy  = var.opa_failure_policy
-  }
-}
-
 resource "helm_release" "opa" {
   count         = var.enable_opa ? 1 : 0
   repository    = "stable"
@@ -19,7 +8,11 @@ resource "helm_release" "opa" {
   timeout       = 900
   recreate_pods = true
 
-  values = [data.template_file.opa_values[0].rendered, var.external_values]
+  values = [templatefile("${path.module}/opa-values.tpl", {
+    namespace       = var.namespace
+    service_account = kubernetes_service_account.opa_service_account[0].metadata[0].name
+    failure_policy  = var.opa_failure_policy
+  }), var.external_values]
 }
 
 resource "kubernetes_config_map" "opa-default-system-main" {

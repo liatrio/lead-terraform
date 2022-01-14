@@ -17,17 +17,6 @@ resource "null_resource" "flagger_crd_delay" {
   depends_on = [helm_release.flagger_crds]
 }
 
-data "template_file" "flagger_values" {
-  template = file("${path.module}/flagger-values.tpl")
-
-  vars = {
-    mesh_provider  = var.mesh_provider
-    metrics_server = var.metrics_url
-    event_webhook  = var.event_webhook
-    crd_create     = false
-  }
-}
-
 resource "helm_release" "flagger" {
   count      = var.enable ? 1 : 0
   repository = "https://flagger.app"
@@ -38,7 +27,12 @@ resource "helm_release" "flagger" {
   wait       = true
   version    = "0.22.0"
 
-  values     = [data.template_file.flagger_values.rendered]
+  values = [templatefile("${path.module}/flagger-values.tpl", {
+    mesh_provider  = var.mesh_provider
+    metrics_server = var.metrics_url
+    event_webhook  = var.event_webhook
+    crd_create     = false
+  })]
   depends_on = [null_resource.flagger_crd_delay]
 }
 

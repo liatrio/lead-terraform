@@ -13,7 +13,7 @@ terraform {
 
     harbor = {
       source  = "liatrio/harbor"
-      version = "0.4.0"
+      version = "0.5.0"
     }
 
     keycloak = {
@@ -21,8 +21,5 @@ terraform {
       version = "3.5.1"
     }
 
-    template = {
-      source = "hashicorp/template"
-    }
   }
 }

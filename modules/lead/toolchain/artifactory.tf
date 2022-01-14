@@ -1,12 +1,3 @@
-data "template_file" "artifactory_config_values" {
-  count    = var.enable_artifactory ? 1 : 0
-  template = file("${path.module}/artifactory.config.import.xml.tpl")
-
-  vars = {
-    server_name = "artifactory.${var.namespace}.${var.cluster}.${var.root_zone_name}"
-  }
-}
-
 resource "kubernetes_secret" "artifactory_admin" {
   count = var.enable_artifactory ? 1 : 0
   metadata {
@@ -57,7 +48,9 @@ resource "kubernetes_config_map" "artifactory_config" {
   }
 
   data = {
-    "artifactory.config.import.xml" = data.template_file.artifactory_config_values[0].rendered
+    "artifactory.config.import.xml" = templatefile("${path.module}/artifactory.config.import.xml.tpl", {
+      server_name = "artifactory.${var.namespace}.${var.cluster}.${var.root_zone_name}"
+    })
     "security.import.xml" = templatefile("${path.module}/artifactory.security.import.xml.tpl", {
       # To prefix bcrypt strings with 'bcrypt$', we use format here due to escape issues in template.
       jenkins_bcrypt_pass = format(
@@ -105,16 +98,6 @@ resource "random_string" "artifactory_db_password" {
   special = false
 }
 
-data "template_file" "artifactory_values" {
-  count    = var.enable_artifactory ? 1 : 0
-  template = file("${path.module}/artifactory-values.tpl")
-
-  vars = {
-    ssl_redirect     = var.root_zone_name == "localhost" ? false : true
-    ingress_hostname = "artifactory.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
-  }
-}
-
 resource "helm_release" "artifactory" {
   count      = var.enable_artifactory ? 1 : 0
   depends_on = [kubernetes_config_map.artifactory_config]
@@ -150,7 +133,10 @@ resource "helm_release" "artifactory" {
     value = random_string.artifactory_db_password[0].result
   }
 
-  values = [data.template_file.artifactory_values[0].rendered]
+  values = [templatefile("${path.module}/artifactory-values.tpl", {
+    ssl_redirect     = var.root_zone_name == "localhost" ? false : true
+    ingress_hostname = "artifactory.${module.toolchain_namespace.name}.${var.cluster}.${var.root_zone_name}"
+  })]
 
   # We would like to ignore changes on artifactory.persistence.size, but currently there's
   # a limitation in Terraform because set members are not individually addressible
