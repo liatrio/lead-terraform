@@ -44,10 +44,16 @@ jobs:
           persist-credentials: false
           repository: ${{ github.repository_owner }}/lead-environments
           token: ${{ secrets.LIATRIO_JENKINS_PAT }}
-      - name: Update Version Manifest
+      - name: Update Version Manifest (nonprod)
         uses: liatrio/github-actions/gitops-update-yaml@master
         with:
           file: aws/liatrio-non-prod/manifest.yml
+          path: .lead_terraform_version
+          value: ${{ needs.release.outputs.newVersion }}
+      - name: Update Version Manifest (sandbox)
+        uses: liatrio/github-actions/gitops-update-yaml@master
+        with:
+          file: aws/liatrio-sandbox/manifest.yml
           path: .lead_terraform_version
           value: ${{ needs.release.outputs.newVersion }}
       - name: Create Pull Request
