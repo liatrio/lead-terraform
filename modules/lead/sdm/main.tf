@@ -81,8 +81,7 @@ resource "helm_release" "operator_toolchain" {
       product_type_aws_enabled     = contains(var.product_types, "product-aws")
       product_type_jenkins_enabled = contains(var.product_types, "product-jenkins")
 
-      slack_service_account_annotations            = jsonencode(var.operator_slack_service_account_annotations)
-      jenkins_service_account_annotations          = jsonencode(var.operator_jenkins_service_account_annotations)
+      slack_service_account_annotations            = jsonencode(var.sparky_service_account_annotations)
       product_service_account_annotations          = jsonencode(var.operator_product_service_account_annotations)
       aws_event_mapper_service_account_annotations = jsonencode(var.aws_event_mapper_service_account_annotations)
     })

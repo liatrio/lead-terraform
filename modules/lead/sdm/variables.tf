@@ -43,12 +43,7 @@ variable "product_types" {
   type = list(string)
 }
 
-variable "operator_slack_service_account_annotations" {
-  type    = map(string)
-  default = {}
-}
-
-variable "operator_jenkins_service_account_annotations" {
+variable "sparky_service_account_annotations" {
   type    = map(string)
   default = {}
 }
