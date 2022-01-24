@@ -75,7 +75,6 @@ resource "helm_release" "operator_toolchain" {
       operator_toolchain_enabled     = contains(var.operators, "toolchain")
       operator_elasticsearch_enabled = contains(var.operators, "elasticsearch")
       operator_slack_enabled         = contains(var.operators, "slack")
-      operator_jenkins_enabled       = contains(var.operators, "jenkins")
       operator_product_enabled       = contains(var.operators, "product")
 
       product_type_aws_enabled     = contains(var.product_types, "product-aws")
