@@ -14,6 +14,11 @@ module "s3_bucket" {
   website = {
     index_document = local.index_document
   }
+
+  block_public_acls       = false
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 }
 
 resource "aws_acm_certificate" "certificate" {
@@ -73,19 +78,6 @@ data "aws_iam_policy_document" "cloudfront_s3_access_policy" {
 resource "aws_s3_bucket_policy" "s3_allow_from_cloudfront" {
   bucket = module.s3_bucket.s3_bucket_id
   policy = data.aws_iam_policy_document.cloudfront_s3_access_policy.json
-}
-
-resource "aws_s3_bucket_public_access_block" "block_public_access" {
-  bucket = module.s3_bucket.s3_bucket_id
-
-  block_public_acls       = false
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
-
-  depends_on = [
-    aws_s3_bucket_policy.s3_allow_from_cloudfront
-  ]
 }
 
 resource "aws_cloudfront_distribution" "cloudfront" {
