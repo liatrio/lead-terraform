@@ -20,3 +20,16 @@ provider "kubernetes" {
     command     = "aws"
   }
 }
+
+data "aws_route53_zone" "private_internal_services_liatr_io" {
+  name         = "${var.internal_cluster_domain}."
+  private_zone = true
+}
+
+data "aws_route53_zone" "public_internal_services_liatr_io" {
+  name = "${var.internal_cluster_domain}."
+}
+
+data "aws_route53_zone" "services_liatr_io" {
+  name = "${var.cluster_domain}."
+}
