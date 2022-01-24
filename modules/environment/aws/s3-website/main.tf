@@ -34,11 +34,11 @@ resource "aws_acm_certificate" "certificate" {
 
 resource "aws_route53_record" "validate_records" {
   for_each = {
-  for dvo in aws_acm_certificate.certificate.domain_validation_options : dvo.domain_name => {
-    name   = dvo.resource_record_name
-    record = dvo.resource_record_value
-    type   = dvo.resource_record_type
-  }
+    for dvo in aws_acm_certificate.certificate.domain_validation_options : dvo.domain_name => {
+      name   = dvo.resource_record_name
+      record = dvo.resource_record_value
+      type   = dvo.resource_record_type
+    }
   }
 
   allow_overwrite = true
@@ -59,15 +59,15 @@ resource "aws_cloudfront_origin_access_identity" "access_identity" {}
 data "aws_iam_policy_document" "cloudfront_s3_access_policy" {
   version = "2012-10-17"
   statement {
-    effect    = "Allow"
+    effect = "Allow"
     resources = [
       "${module.s3_bucket.s3_bucket_arn}/*"
     ]
-    actions   = [
+    actions = [
       "s3:GetObject"
     ]
     principals {
-      type        = "AWS"
+      type = "AWS"
       identifiers = [
         aws_cloudfront_origin_access_identity.access_identity.iam_arn
       ]
@@ -155,12 +155,12 @@ data "aws_iam_policy_document" "deployer_policy" {
 
   version = "2012-10-17"
   statement {
-    effect    = "Allow"
+    effect = "Allow"
     resources = [
       "${module.s3_bucket.s3_bucket_arn}/*",
       module.s3_bucket.s3_bucket_arn
     ]
-    actions   = [
+    actions = [
       "s3:GetObject",
       "s3:CopyObject",
       "s3:HeadObject",
