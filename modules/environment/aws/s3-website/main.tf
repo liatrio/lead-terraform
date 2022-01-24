@@ -80,6 +80,8 @@ resource "aws_s3_bucket_policy" "s3_allow_from_cloudfront" {
   policy = data.aws_iam_policy_document.cloudfront_s3_access_policy.json
 }
 
+#tfsec:ignore:enable-waf
+#tfsec:ignore:enable-logging
 resource "aws_cloudfront_distribution" "cloudfront" {
   enabled = true
 
@@ -119,8 +121,10 @@ resource "aws_cloudfront_distribution" "cloudfront" {
   }
 
   viewer_certificate {
-    acm_certificate_arn = aws_acm_certificate.certificate.arn
-    ssl_support_method  = "sni-only"
+    acm_certificate_arn            = aws_acm_certificate.certificate.arn
+    ssl_support_method             = "sni-only"
+    cloudfront_default_certificate = false
+    minimum_protocol_version       = "TLSv1.2_2021"
   }
 
   tags = var.tags
