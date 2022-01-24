@@ -80,8 +80,8 @@ resource "aws_s3_bucket_policy" "s3_allow_from_cloudfront" {
   policy = data.aws_iam_policy_document.cloudfront_s3_access_policy.json
 }
 
-#tfsec:ignore:enable-waf
-#tfsec:ignore:enable-logging
+#tfsec:ignore:aws-cloudfront-enable-waf
+#tfsec:ignore:aws-cloudfront-enable-logging
 resource "aws_cloudfront_distribution" "cloudfront" {
   enabled = true
 
