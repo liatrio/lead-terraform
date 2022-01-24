@@ -12,8 +12,8 @@ terraform {
     }
 
     harbor = {
-      source  = "liatrio/harbor"
-      version = "0.5.0"
+      source = "BESTSELLER/harbor"
+      version = "3.4.5"
     }
 
     keycloak = {

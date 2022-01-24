@@ -61,22 +61,41 @@ resource "helm_release" "harbor_config" {
 }
 
 resource "harbor_project" "liatrio_project" {
-  name      = "liatrio"
-  public    = true
-  auto_scan = var.autoscan_images
+  name                   = "liatrio"
+  public                 = true
+  vulnerability_scanning = var.autoscan_images
 }
 
 resource "harbor_robot_account" "liatrio_project_robot_account" {
-  name       = "robot$imagepusher"
-  project_id = harbor_project.liatrio_project.id
-  access {
-    resource = "image"
-    action   = "pull"
-  }
-
-  access {
-    resource = "image"
-    action   = "push"
+  name  = "imagepusher"
+  level = "project"
+  permissions {
+    kind      = "project"
+    namespace = harbor_project.liatrio_project.name
+    access {
+      resource = "repository"
+      action   = "pull"
+    }
+    access {
+      resource = "repository"
+      action   = "push"
+    }
+    access {
+      resource = "artifact"
+      action   = "pull"
+    }
+    access {
+      resource = "artifact"
+      action   = "push"
+    }
+    access {
+      resource = "tag"
+      action   = "create"
+    }
+    access {
+      resource = "artifact-label"
+      action   = "create"
+    }
   }
 }
 
@@ -89,18 +108,16 @@ resource "kubernetes_secret" "liatrio_project_robot_account_credentials" {
 
   data = {
     username = harbor_robot_account.liatrio_project_robot_account.name
-    password = harbor_robot_account.liatrio_project_robot_account.token
+    password = harbor_robot_account.liatrio_project_robot_account.secret
   }
 }
 
-resource "harbor_webhook" "webhook" {
+resource "harbor_project_webhook" "webhook" {
   for_each = var.webhooks
 
-  project_id  = harbor_project.liatrio_project.id
-  name        = title(each.key)
-  event_types = each.value.event_types
-  target {
-    type    = "http"
-    address = each.value.webhook_url
-  }
+  name         = title(each.key)
+  project_id   = harbor_project.liatrio_project.id
+  address      = each.value.webhook_url
+  notify_type  = "http"
+  events_types = each.value.events_types
 }
