@@ -10,7 +10,7 @@ terraform {
       version = "0.0.7"
     }
     harbor = {
-      source = "BESTSELLER/harbor"
+      source  = "BESTSELLER/harbor"
       version = "3.4.5"
     }
     helm = {

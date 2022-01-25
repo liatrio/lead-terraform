@@ -6,7 +6,7 @@ terraform {
       version = "~> 2.2.0"
     }
     harbor = {
-      source = "BESTSELLER/harbor"
+      source  = "BESTSELLER/harbor"
       version = "3.4.5"
     }
     artifactory = {

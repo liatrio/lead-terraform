@@ -5,7 +5,7 @@ terraform {
       source = "hashicorp/external"
     }
     harbor = {
-      source = "BESTSELLER/harbor"
+      source  = "BESTSELLER/harbor"
       version = "3.4.5"
     }
     helm = {

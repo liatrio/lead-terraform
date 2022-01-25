@@ -12,7 +12,7 @@ terraform {
     }
 
     harbor = {
-      source = "BESTSELLER/harbor"
+      source  = "BESTSELLER/harbor"
       version = "3.4.5"
     }
 

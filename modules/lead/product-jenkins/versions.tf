@@ -3,7 +3,7 @@ terraform {
   required_version = ">= 0.13"
   required_providers {
     harbor = {
-      source = "BESTSELLER/harbor"
+      source  = "BESTSELLER/harbor"
       version = "3.4.5"
     }
     helm = {
