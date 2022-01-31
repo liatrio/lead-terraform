@@ -55,13 +55,13 @@ jobs:
         run: |
           cd $FOLDER
 
-          terraform init -backend=false
-          terraform validate
-
-          if [ ! -f ".terragrunt.lock.hck" ]; then
-            echo "Terraform lockfile doesn't exist"
+          if [ ! -f ".terragrunt.lock.hcl" ]; then
+            echo "Terraform lockfile doesn't exist in this root module. Please create one using `terraform init -backend=false`"
             exit 1
           fi
+
+          terraform init -backend=false
+          terraform validate
 
   terraform_format:
     name: "Format"
