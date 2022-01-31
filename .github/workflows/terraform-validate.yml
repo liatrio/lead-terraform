@@ -35,6 +35,7 @@ jobs:
         # ↓ create dynamic matrix from the json
         matrix:
           validate: ${{ fromJson(needs.discover_stages.outputs.matrix) }}
+        fail-fast: false
     defaults:
       run:
         shell: bash
