@@ -1,9 +1,3 @@
-.terragrunt-cache/
-.terraform/
-tf.plan
-terraform.tfstate*
-local/*local*.tfvars
-local*.tfvars
 .test-data
 .DS_Store
 .idea
@@ -13,7 +7,14 @@ local*.tfvars
 secrets/*
 !secrets/.gitkeep
 
-# Homerbew package lock
+# Homebrew package lock
 Brewfile.lock.json
+
+# Terraform
 backend.tf
-.terraform.lock.hcl
+.terragrunt-cache/
+.terraform/
+tf.plan
+terraform.tfstate*
+local/*local*.tfvars
+local*.tfvars
