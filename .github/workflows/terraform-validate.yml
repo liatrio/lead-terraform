@@ -48,11 +48,20 @@ jobs:
       - name: Setup
         uses: hashicorp/setup-terraform@v1
 
-      # Checks that all Terraform configuration is syntactically valid and internally consistent, regardless of any provided variables or existing state. 
+      # Checks that all Terraform configuration is syntactically valid and internally consistent, regardless of any provided variables or existing state.
       - name: Validate
         env:
           FOLDER: ${{ matrix.validate }}
-        run: cd $FOLDER && terraform init -backend=false && terraform validate
+        run: |
+          cd $FOLDER
+
+          terraform init -backend=false
+          terraform validate
+
+          if [ ! -f ".terragrunt.lock.hck" ]; then
+            echo "Terraform lockfile doesn't exist"
+            exit 1
+          fi
 
   terraform_format:
     name: "Format"
