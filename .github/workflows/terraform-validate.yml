@@ -52,7 +52,7 @@ jobs:
         run: |
           cd $FOLDER
 
-          if [ ! -f ".terragrunt.lock.hcl" ]; then
+          if [ ! -f ".terraform.lock.hcl" ]; then
             echo "Terraform lockfile doesn't exist in this root module. Please create one using \"terraform init -backend=false\""
             exit 1
           fi
