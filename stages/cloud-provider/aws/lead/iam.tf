@@ -40,8 +40,9 @@ module "velero_iam" {
   openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider_url
 }
 
-resource "aws_iam_role" "operator_slack_service_account" {
-  name = "${var.cluster_name}_operator_slack_service_account"
+# TODO: remove trust policy for operator-slack once it is fully deprecated
+resource "aws_iam_role" "sparky_service_account" {
+  name = "${var.cluster_name}-sparky-service-account"
 
   assume_role_policy = <<EOF
 {
@@ -55,18 +56,24 @@ resource "aws_iam_role" "operator_slack_service_account" {
       "Action": "sts:AssumeRoleWithWebIdentity",
       "Condition": {
         "StringEquals": {
-          "${replace(module.eks.aws_iam_openid_connect_provider_url, "https://", "")}:sub": "system:serviceaccount:${var.toolchain_namespace}:operator-slack"
+          "${replace(module.eks.aws_iam_openid_connect_provider_url, "https://", "")}:sub": [
+            "system:serviceaccount:${var.toolchain_namespace}:operator-slack",
+            "system:serviceaccount:${var.toolchain_namespace}:sparky"
+          ]
         }
       }
     }
   ]
 }
 EOF
+
+  permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/Developer"
+
 }
 
-resource "aws_iam_role_policy" "operator-slack" {
-  name = "${var.cluster_name}-operator-slack"
-  role = aws_iam_role.operator_slack_service_account.name
+resource "aws_iam_role_policy" "sparky" {
+  name = "${var.cluster_name}-sparky"
+  role = aws_iam_role.sparky_service_account.name
 
   policy = <<EOF
 {
@@ -110,77 +117,6 @@ resource "aws_iam_role_policy" "operator-slack" {
   ]
 }
 EOF
-}
-
-resource "aws_iam_role" "operator_jenkins_service_account" {
-  name = "${var.cluster_name}_operator_jenkins_service_account"
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Federated": "${module.eks.aws_iam_openid_connect_provider_arn}"
-      },
-      "Action": "sts:AssumeRoleWithWebIdentity",
-      "Condition": {
-        "StringEquals": {
-          "${replace(module.eks.aws_iam_openid_connect_provider_url, "https://", "")}:sub": "system:serviceaccount:${var.toolchain_namespace}:operator-jenkins"
-        }
-      }
-    }
-  ]
-}
-EOF
-}
-
-resource "aws_iam_policy" "operator_jenkins" {
-  name = "${var.cluster_name}-operator-jenkins"
-
-  policy = <<EOF
-{
- "Version": "2012-10-17",
- "Statement": [
-   {
-     "Effect": "Allow",
-     "Action": [
-                "s3:ListBucket",
-                "s3:GetBucketVersioning",
-                "s3:CreateBucket"
-     ],
-     "Resource": ["arn:aws:s3:::lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${var.cluster_name}.liatr.io"]
-   },
-   {
-     "Effect": "Allow",
-     "Action": [
-                "s3:PutObject",
-                "s3:GetObject",
-                "s3:DeleteObject"
-     ],
-     "Resource": ["arn:aws:s3:::lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${var.cluster_name}.liatr.io/*"]
-   },
-   {
-     "Effect": "Allow",
-     "Action": [
-                "dynamodb:PutItem",
-                "dynamodb:GetItem",
-                "dynamodb:DescribeTable",
-                "dynamodb:DeleteItem",
-                "dynamodb:CreateTable",
-                "dynamodb:TagResource"
-     ],
-     "Resource": ["arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/lead-sdm-operators-${var.cluster_name}"]
-   }
- ]
-}
-EOF
-}
-
-resource "aws_iam_role_policy_attachment" "operator_jenkins" {
-  role       = aws_iam_role.operator_jenkins_service_account.name
-  policy_arn = aws_iam_policy.operator_jenkins.arn
 }
 
 resource "aws_iam_role" "product_operator_service_account" {

@@ -6,8 +6,8 @@ terraform {
       version = "~> 2.2.0"
     }
     harbor = {
-      source  = "liatrio/harbor"
-      version = "0.5.0"
+      source  = "BESTSELLER/harbor"
+      version = "3.4.5"
     }
     artifactory = {
       source  = "jfrog/artifactory"
@@ -35,7 +35,7 @@ terraform {
     }
     vault = {
       source  = "hashicorp/vault"
-      version = ">= 2.24.0"
+      version = "2.24.0"
     }
   }
 }

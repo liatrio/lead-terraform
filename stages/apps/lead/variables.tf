@@ -217,10 +217,7 @@ variable "codeservices_sqs_url" {
 variable "github_runners_service_account_arn" {
 }
 
-variable "operator_slack_service_account_arn" {
-}
-
-variable "operator_jenkins_service_account_arn" {
+variable "sparky_service_account_arn" {
 }
 
 variable "product_operator_service_account_arn" {

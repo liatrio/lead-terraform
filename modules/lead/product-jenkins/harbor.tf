@@ -5,26 +5,43 @@ resource "harbor_project" "project" {
 }
 
 resource "harbor_robot_account" "robot" {
-  count      = var.enable_harbor ? 1 : 0
-  name       = "robot$imagepusher"
-  project_id = harbor_project.project[count.index].id
-  access {
-    resource = "image"
-    action   = "pull"
-  }
-
-  access {
-    resource = "image"
-    action   = "push"
-  }
-
-  access {
-    resource = "helm-chart"
-    action   = "pull"
-  }
-
-  access {
-    resource = "helm-chart"
-    action   = "push"
+  count = var.enable_harbor ? 1 : 0
+  name  = "imagepusher"
+  level = "project"
+  permissions {
+    kind      = "project"
+    namespace = harbor_project.project[count.index].name
+    access {
+      resource = "repository"
+      action   = "pull"
+    }
+    access {
+      resource = "repository"
+      action   = "push"
+    }
+    access {
+      resource = "artifact"
+      action   = "pull"
+    }
+    access {
+      resource = "artifact"
+      action   = "push"
+    }
+    access {
+      resource = "tag"
+      action   = "create"
+    }
+    access {
+      resource = "artifact-label"
+      action   = "create"
+    }
+    access {
+      resource = "helm-chart"
+      action   = "read"
+    }
+    access {
+      resource = "helm-chart-version"
+      action   = "create"
+    }
   }
 }

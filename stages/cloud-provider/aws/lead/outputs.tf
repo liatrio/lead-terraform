@@ -52,12 +52,8 @@ output "codeservices_sqs_url" {
   value = module.codeservices.sqs_url
 }
 
-output "operator_slack_service_account_arn" {
-  value = aws_iam_role.operator_slack_service_account.arn
-}
-
-output "operator_jenkins_service_account_arn" {
-  value = aws_iam_role.operator_jenkins_service_account.arn
+output "sparky_service_account_arn" {
+  value = aws_iam_role.sparky_service_account.arn
 }
 
 output "product_operator_service_account_arn" {

@@ -110,8 +110,3 @@ operators:
       value: ${cluster_domain}
     - name: SUPPORT_IMAGE
       value: ${toolchain_image_repo}/support:${sdm_version}
-  jenkins:
-    enabled: ${operator_jenkins_enabled}
-    image:
-      repository: ${image_repository}/operator-jenkins
-    serviceAccountAnnotations: ${jenkins_service_account_annotations}

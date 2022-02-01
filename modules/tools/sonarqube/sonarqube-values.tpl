@@ -1,3 +1,12 @@
+image:
+  repository: sonarqube
+  tag: 8.9.4-community
+
+# https://community.sonarsource.com/t/sonarqube-sonarcloud-and-the-log4j-vulnerability/54721/39
+env:
+  - name: SONAR_SEARCH_JAVAADDITIONALOPTS
+    value: "-Dlog4j2.formatMsgNoLookups=true"
+
 sonarProperties:
   sonar.forceAuthentication: ${ force_authentication }
   %{~ if enable_keycloak ~}

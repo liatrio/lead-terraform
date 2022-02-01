@@ -14,7 +14,7 @@ module "harbor_config" {
   keycloak_realm    = keycloak_realm.sharedsvc.id
   webhooks = {
     "rode" : {
-      "event_types" : ["SCANNING_COMPLETED", "SCANNING_FAILED"],
+      "events_types" : ["SCANNING_COMPLETED", "SCANNING_FAILED"],
       "webhook_url" : var.harbor_collector_url,
     }
   }

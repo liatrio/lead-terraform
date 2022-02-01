@@ -42,8 +42,9 @@ resource "helm_release" "elasticsearch" {
   namespace  = var.namespace
   chart      = "elasticsearch"
   repository = "https://helm.elastic.co"
-  version    = "7.6.2"
+  version    = "7.7.0"
   wait       = true
+  timeout    = 600
 
   values = [
     templatefile("${path.module}/elasticsearch-values.tpl", {
