@@ -98,10 +98,10 @@ resource "helm_release" "operator_toolchain" {
       product_type_aws_enabled     = contains(var.product_types, "product-aws")
       product_type_jenkins_enabled = contains(var.product_types, "product-jenkins")
 
-      slack_service_account_annotations            = jsonencode({
+      slack_service_account_annotations = jsonencode({
         "eks.amazonaws.com/role-arn" = var.sparky_service_account_arn
       })
-      product_service_account_annotations          = jsonencode({
+      product_service_account_annotations = jsonencode({
         "eks.amazonaws.com/role-arn" = var.product_operator_service_account_arn
       })
       aws_event_mapper_service_account_annotations = jsonencode({
@@ -109,6 +109,31 @@ resource "helm_release" "operator_toolchain" {
       })
     })
   ]
+}
+
+resource "helm_release" "sparky_new" {
+  count      = var.enable_sparky && var.sparky_version != "" ? 1 : 0
+  name       = "sparky"
+  chart      = "sparky"
+  namespace  = var.toolchain_namespace
+  repository = "https://charts.services.liatr.io"
+  version    = trimprefix(var.sparky_version, "v")
+
+  values = [
+    templatefile("${path.module}/sparky-values.yaml.tpl", {
+      image_pull_secret_name = kubernetes_secret.image_registry_secret.metadata[0].name
+    })
+  ]
+
+  set_sensitive {
+    name  = "secrets.appToken"
+    value = data.vault_generic_secret.sparky_new.data["slack-bot-app-token"]
+  }
+
+  set_sensitive {
+    name  = "secrets.oauthAccessToken"
+    value = data.vault_generic_secret.sparky_new.data["slack-bot-user-oauth-access-token"]
+  }
 }
 
 resource "kubernetes_secret" "operator_slack_config" {

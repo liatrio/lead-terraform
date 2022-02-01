@@ -56,6 +56,14 @@ variable "opa_failure_policy" {
   default = "Fail"
 }
 
+variable "enable_sparky" {
+  default = true
+}
+
+variable "sparky_version" {
+  default = ""
+}
+
 variable "sdm_version" {
   default = "v2.3.0"
 }
