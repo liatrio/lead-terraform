@@ -29,7 +29,7 @@ module "istio_system" {
   issuer_name         = module.cluster_issuer.issuer_name
   issuer_kind         = module.cluster_issuer.issuer_kind
 
-  flagger_event_webhook = "${module.sdm.slack_operator_in_cluster_url}/canary-events"
+  flagger_event_webhook = "http://operator-slack.${var.toolchain_namespace}.svc.cluster.local:3000/canary-events"
   k8s_storage_class     = var.k8s_storage_class
 
   ingress_class                 = module.toolchain_ingress.toolchain_ingress_class
@@ -38,6 +38,7 @@ module "istio_system" {
   jaeger_elasticsearch_password = module.elasticsearch.elasticsearch_password
 
   depends_on = [
-    null_resource.istio_init_delay
+    null_resource.istio_init_delay,
+    helm_release.operator_toolchain
   ]
 }
