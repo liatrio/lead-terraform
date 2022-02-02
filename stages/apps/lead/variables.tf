@@ -57,7 +57,7 @@ variable "opa_failure_policy" {
 }
 
 variable "enable_sparky" {
-  default = true
+  default = false
 }
 
 variable "sparky_version" {
