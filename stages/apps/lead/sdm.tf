@@ -111,29 +111,15 @@ resource "helm_release" "operator_toolchain" {
   ]
 }
 
-resource "helm_release" "sparky_new" {
-  count      = var.enable_sparky && var.sparky_version != "" ? 1 : 0
-  name       = "sparky"
-  chart      = "sparky"
-  namespace  = var.toolchain_namespace
-  repository = "https://charts.services.liatr.io"
-  version    = trimprefix(var.sparky_version, "v")
+module "sparky" {
+  source = "../../../modules/lead/sparky"
+  count  = var.enable_sparky && var.sparky_version != "" ? 1 : 0
 
-  values = [
-    templatefile("${path.module}/sparky-values.yaml.tpl", {
-      image_pull_secret_name = kubernetes_secret.image_registry_secret.metadata[0].name
-    })
-  ]
-
-  set_sensitive {
-    name  = "secrets.appToken"
-    value = data.vault_generic_secret.sparky_new.data["slack-bot-app-token"]
-  }
-
-  set_sensitive {
-    name  = "secrets.oauthAccessToken"
-    value = data.vault_generic_secret.sparky_new.data["slack-bot-user-oauth-access-token"]
-  }
+  image_pull_secret_name   = kubernetes_secret.image_registry_secret.metadata[0].name
+  namespace                = module.toolchain_namespace.name
+  slack_app_token          = data.vault_generic_secret.sparky_new.data["slack-bot-app-token"]
+  slack_oauth_access_token = data.vault_generic_secret.sparky_new.data["slack-bot-user-oauth-access-token"]
+  sparky_version           = var.sparky_version
 }
 
 resource "kubernetes_secret" "operator_slack_config" {
