@@ -139,13 +139,13 @@ module "eks" {
 
   cluster_name    = var.cluster
   cluster_version = var.cluster_version
-  subnets         = sort(data.aws_subnet_ids.eks_masters.ids)
+  subnet_ids      = sort(data.aws_subnet_ids.eks_masters.ids)
   vpc_id          = data.aws_vpc.lead_vpc.id
 
-  worker_additional_security_group_ids = [aws_security_group.worker.id]
-  aws_auth_roles                       = concat(local.default_roles, local.codebuild_roles, var.additional_mapped_roles)
-  permissions_boundary                 = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${aws_iam_policy.workspace_role_boundary.name}"
-  enable_irsa                          = true
+  vpc_security_group_ids          = [aws_security_group.worker.id]
+  aws_auth_roles                  = concat(local.default_roles, local.codebuild_roles, var.additional_mapped_roles)
+  iam_role_permissions_boundary   = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${aws_iam_policy.workspace_role_boundary.name}"
+  enable_irsa                     = true
 
   cluster_endpoint_private_access = true
   cluster_endpoint_public_access  = var.enable_public_endpoint
