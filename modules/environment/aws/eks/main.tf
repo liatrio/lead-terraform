@@ -266,6 +266,6 @@ resource "aws_eks_addon" "addon" {
 }
 
 resource "aws_iam_role_policy_attachment" "eks_worker_ssm_policy_attachment" {
-  role       = module.eks.worker_iam_role_name
+  role       = module.eks.eks_managed_node_groups.iam_role_name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
