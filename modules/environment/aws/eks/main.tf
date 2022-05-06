@@ -142,7 +142,6 @@ module "eks" {
   subnet_ids      = sort(data.aws_subnet_ids.eks_masters.ids)
   vpc_id          = data.aws_vpc.lead_vpc.id
 
-  vpc_security_group_ids        = [aws_security_group.worker.id]
   aws_auth_roles                = concat(local.default_roles, local.codebuild_roles, var.additional_mapped_roles)
   iam_role_permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${aws_iam_policy.workspace_role_boundary.name}"
   enable_irsa                   = true
@@ -168,6 +167,7 @@ module "eks" {
         max_unavailable_percentage = 50
       }
 
+      vpc_security_group_ids  = [aws_security_group.worker.id]
       create_launch_template  = true
       pre_bootstrap_user_data = local.userdata
       enable_monitoring       = true
