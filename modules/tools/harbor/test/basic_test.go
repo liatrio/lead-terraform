@@ -2,6 +2,12 @@ package test
 
 import (
 	"fmt"
+	"net/http"
+	"os"
+	"path"
+	"testing"
+	"time"
+
 	"github.com/google/go-containerregistry/pkg/authn"
 	"github.com/google/go-containerregistry/pkg/name"
 	"github.com/google/go-containerregistry/pkg/v1/remote"
@@ -10,10 +16,6 @@ import (
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	"github.com/liatrio/lead-terraform/test/common"
 	"github.com/stretchr/testify/assert"
-	"net/http"
-	"path"
-	"testing"
-	"time"
 )
 
 func TestHarbor_Basic(t *testing.T) {
@@ -30,6 +32,7 @@ func TestHarbor_Basic(t *testing.T) {
 	common.RunTerraform(t, path.Join(".", "fixtures", "basic"), func(k8sOpts *k8s.KubectlOptions) map[string]interface{} {
 		return map[string]interface{}{
 			"namespace":       namespace,
+			"harbor_hostname": fmt.Sprintf("%s.apps.vcluster.lead.%s.liatr.io", namespace, os.Getenv("CURRENT_ACCOUNT")),
 			"kubeconfig_path": k8sOpts.ConfigPath,
 			"admin_password":  adminPassword,
 		}
