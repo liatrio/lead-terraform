@@ -4,10 +4,12 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"fmt"
-	"github.com/liatrio/lead-terraform/test/common"
+	"os"
 	"path"
 	"testing"
 	"time"
+
+	"github.com/liatrio/lead-terraform/test/common"
 
 	"github.com/gruntwork-io/terratest/modules/k8s"
 	"github.com/gruntwork-io/terratest/modules/terraform"
@@ -18,7 +20,7 @@ import (
 func TestCertManager_Basic(t *testing.T) {
 	t.Parallel()
 
-	testingDnsZone := "vcluster.lead.sandbox.liatr.io"
+	testingDnsZone := fmt.Sprintf("vcluster.lead.%s.liatr.io", os.Getenv("CURRENT_ACCOUNT"))
 	oidcProviderArn := common.GetRequiredEnvVar(t, "OIDC_PROVIDER_ARN")
 	oidcProviderUrl := common.GetRequiredEnvVar(t, "OIDC_PROVIDER_URL")
 
