@@ -74,6 +74,7 @@ jobs:
           export AWS_REGION=us-east-1
 
           aws eks update-kubeconfig --name lead --region us-east-1
+          export CURRENT_ACCOUNT="nonprod"
 
           terragrunt output --terragrunt-working-dir ./lead-environments/aws/vcluster -json >> outputs.json
           export OIDC_PROVIDER_ARN=$(cat outputs.json | jq -rc .aws_iam_openid_connect_provider_arn.value)
@@ -81,6 +82,7 @@ jobs:
 
           vcluster connect vcluster --namespace $(cat outputs.json | jq -rc .vcluster_namespace.value) --server $(cat outputs.json | jq -rc .vcluster_api_server.value)
           export KUBECONFIG=$(pwd)/kubeconfig.yaml
+          export 
 
           cd lead-terraform
           go test -v ./modules/./...

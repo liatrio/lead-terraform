@@ -10,10 +10,14 @@ variable "admin_password" {
   type = string
 }
 
+variable "harbor_hostname" {
+  type = string
+}
+
 module "harbor" {
   source = "../../../"
 
-  harbor_ingress_hostname = "${var.namespace}.apps.vcluster.lead.sandbox.liatr.io"
+  harbor_ingress_hostname = var.harbor_hostname
   ingress_annotations = {
     "nginx.ingress.kubernetes.io/force-ssl-redirect" : true
     "nginx.ingress.kubernetes.io/proxy-body-size" : "0"

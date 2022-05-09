@@ -135,59 +135,54 @@ resource "aws_security_group" "elb" {
 
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "17.18.0"
+  version = "18.20.5"
 
   cluster_name    = var.cluster
   cluster_version = var.cluster_version
-  subnets         = sort(data.aws_subnet_ids.eks_masters.ids)
+  subnet_ids      = sort(data.aws_subnet_ids.eks_masters.ids)
   vpc_id          = data.aws_vpc.lead_vpc.id
 
-  worker_additional_security_group_ids         = [aws_security_group.worker.id]
-  map_roles                                    = concat(local.default_roles, local.codebuild_roles, var.additional_mapped_roles)
-  write_kubeconfig                             = var.write_kubeconfig
-  permissions_boundary                         = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${aws_iam_policy.workspace_role_boundary.name}"
-  manage_worker_iam_resources                  = true
-  kubeconfig_aws_authenticator_additional_args = var.kubeconfig_aws_authenticator_additional_args
-  enable_irsa                                  = true
+  aws_auth_roles                = concat(local.default_roles, local.codebuild_roles, var.additional_mapped_roles)
+  iam_role_permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${aws_iam_policy.workspace_role_boundary.name}"
+  enable_irsa                   = true
 
-  cluster_endpoint_private_access                = true
-  cluster_endpoint_public_access                 = var.enable_public_endpoint
-  cluster_create_endpoint_private_access_sg_rule = true
-  cluster_endpoint_private_access_cidrs = distinct([
-    var.internal_vpn_subnet,
-    var.shared_svc_subnet,
-    data.aws_vpc.lead_vpc.cidr_block // anything running within the lead VPC, such as codebuild projects
-  ])
-  cluster_enabled_log_types = ["api", "controllerManager", "scheduler"]
+  cluster_endpoint_private_access = true
+  cluster_endpoint_public_access  = var.enable_public_endpoint
+  cluster_enabled_log_types       = ["api", "controllerManager", "scheduler"]
 
   tags = {
     "Cluster" = var.cluster
   }
 
-  node_groups_defaults = {
-    create_launch_template = true
-    pre_userdata           = local.userdata
-    enable_monitoring      = true
-    key_name               = var.key_name
-    version                = var.cluster_version
-    disk_size              = var.root_volume_size
-    update_config = {
-      max_unavailable_percentage = 50
-    }
+  eks_managed_node_group_defaults = {
+    node_group = {
+      # the values below are the defaults for preemptible nodes, which will only be overridden by the essential node group
+      capacity_type  = "SPOT"
+      desired_size   = var.preemptible_asg_desired_capacity
+      min_size       = var.preemptible_asg_min_size
+      max_size       = var.preemptible_asg_max_size
+      instance_types = var.preemptible_instance_types
 
-    # the values below are the defaults for preemptible nodes, which will only be overridden by the essential node group
-    capacity_type    = "SPOT"
-    desired_capacity = var.preemptible_asg_desired_capacity
-    min_capacity     = var.preemptible_asg_min_size
-    max_capacity     = var.preemptible_asg_max_size
-    instance_types   = var.preemptible_instance_types
+      update_config = {
+        max_unavailable_percentage = 50
+      }
+
+      vpc_security_group_ids  = [aws_security_group.worker.id]
+      create_launch_template  = true
+      pre_bootstrap_user_data = local.userdata
+      enable_monitoring       = true
+      key_name                = var.key_name
+      cluster_version         = var.cluster_version
+      disk_size               = var.root_volume_size
+    }
   }
 
-  node_groups = {
+  eks_managed_node_groups = {
     "essential" = {
-      name_prefix = "${var.cluster}-essential"
-      subnets     = sort(data.aws_subnet_ids.eks_workers.ids)
-      k8s_labels = {
+      name            = "${var.cluster}-essential"
+      use_name_prefix = true
+      subnet_ids      = sort(data.aws_subnet_ids.eks_workers.ids)
+      labels = {
         "node.liatr.io/lifecycle" = "essential"
       }
 
@@ -199,30 +194,33 @@ module "eks" {
         }
       ]
 
-      capacity_type    = "ON_DEMAND"
-      desired_capacity = var.essential_asg_desired_capacity
-      min_capacity     = var.essential_asg_min_size
-      max_capacity     = var.essential_asg_max_size
-      instance_types   = [var.essential_instance_type]
+      capacity_type  = "ON_DEMAND"
+      desired_size   = var.essential_asg_desired_capacity
+      min_size       = var.essential_asg_min_size
+      max_size       = var.essential_asg_max_size
+      instance_types = [var.essential_instance_type]
     }
     "preemptible0" = {
-      name_prefix = "${var.cluster}-preemptible0"
-      subnets     = [sort(data.aws_subnet_ids.eks_workers.ids)[0]]
-      k8s_labels = {
+      name            = "${var.cluster}-preemptible0"
+      use_name_prefix = true
+      subnet_ids      = [sort(data.aws_subnet_ids.eks_workers.ids)[0]]
+      labels = {
         "node.liatr.io/lifecycle" = "preemptible"
       }
     }
     "preemptible1" = {
-      name_prefix = "${var.cluster}-preemptible1"
-      subnets     = [sort(data.aws_subnet_ids.eks_workers.ids)[1]]
-      k8s_labels = {
+      name            = "${var.cluster}-preemptible1"
+      use_name_prefix = true
+      subnet_ids      = [sort(data.aws_subnet_ids.eks_workers.ids)[1]]
+      labels = {
         "node.liatr.io/lifecycle" = "preemptible"
       }
     }
     "preemptible2" = {
-      name_prefix = "${var.cluster}-preemptible2"
-      subnets     = [sort(data.aws_subnet_ids.eks_workers.ids)[2]]
-      k8s_labels = {
+      name            = "${var.cluster}-preemptible2"
+      use_name_prefix = true
+      subnet_ids      = [sort(data.aws_subnet_ids.eks_workers.ids)[2]]
+      labels = {
         "node.liatr.io/lifecycle" = "preemptible"
       }
     }
@@ -268,6 +266,6 @@ resource "aws_eks_addon" "addon" {
 }
 
 resource "aws_iam_role_policy_attachment" "eks_worker_ssm_policy_attachment" {
-  role       = module.eks.worker_iam_role_name
+  role       = module.eks.eks_managed_node_groups.iam_role_name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
