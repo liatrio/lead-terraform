@@ -4,9 +4,12 @@
 #tfsec:ignore:aws-s3-enable-bucket-logging
 resource "aws_s3_bucket" "velero" {
   bucket = "velero-${var.account_id}-${var.cluster_name}"
-  acl    = "private"
-
   lifecycle {
     prevent_destroy = true
   }
+}
+
+resource "aws_s3_bucket_acl" "velero_acl" {
+  bucket = aws_s3_bucket.velero.id
+  acl    = "private"
 }

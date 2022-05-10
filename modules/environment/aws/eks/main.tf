@@ -52,31 +52,35 @@ data "aws_vpc" "lead_vpc" {
   }
 }
 
-data "aws_subnet_ids" "eks_masters" {
-  vpc_id = data.aws_vpc.lead_vpc.id
-
+data "aws_subnets" "eks_masters" {
   filter {
-    name   = "tag:subnet-kind"
-    values = ["private"]
+    name   = "vpc-id"
+    values = [data.aws_vpc.lead_vpc.id]
   }
 
   filter {
     name   = "cidr-block"
     values = ["*/24"]
   }
+
+  tags = {
+    subnet-kind = "private"
+  }
 }
 
-data "aws_subnet_ids" "eks_workers" {
-  vpc_id = data.aws_vpc.lead_vpc.id
-
+data "aws_subnets" "eks_workers" {
   filter {
-    name   = "tag:subnet-kind"
-    values = ["private"]
+    name   = "vpc-id"
+    values = [data.aws_vpc.lead_vpc.id]
   }
 
   filter {
     name   = "cidr-block"
     values = ["*/18"]
+  }
+
+  tags = {
+    subnet-kind = "private"
   }
 }
 
@@ -139,7 +143,7 @@ module "eks" {
 
   cluster_name    = var.cluster
   cluster_version = var.cluster_version
-  subnet_ids      = sort(data.aws_subnet_ids.eks_masters.ids)
+  subnet_ids      = sort(data.aws_subnets.eks_masters.ids)
   vpc_id          = data.aws_vpc.lead_vpc.id
 
   aws_auth_roles                = concat(local.default_roles, local.codebuild_roles, var.additional_mapped_roles)
@@ -181,7 +185,7 @@ module "eks" {
     "essential" = {
       name            = "${var.cluster}-essential"
       use_name_prefix = true
-      subnet_ids      = sort(data.aws_subnet_ids.eks_workers.ids)
+      subnet_ids      = sort(data.aws_subnets.eks_workers.ids)
       labels = {
         "node.liatr.io/lifecycle" = "essential"
       }
@@ -203,7 +207,7 @@ module "eks" {
     "preemptible0" = {
       name            = "${var.cluster}-preemptible0"
       use_name_prefix = true
-      subnet_ids      = [sort(data.aws_subnet_ids.eks_workers.ids)[0]]
+      subnet_ids      = [sort(data.aws_subnets.eks_workers.ids)[0]]
       labels = {
         "node.liatr.io/lifecycle" = "preemptible"
       }
@@ -211,7 +215,7 @@ module "eks" {
     "preemptible1" = {
       name            = "${var.cluster}-preemptible1"
       use_name_prefix = true
-      subnet_ids      = [sort(data.aws_subnet_ids.eks_workers.ids)[1]]
+      subnet_ids      = [sort(data.aws_subnets.eks_workers.ids)[1]]
       labels = {
         "node.liatr.io/lifecycle" = "preemptible"
       }
@@ -219,7 +223,7 @@ module "eks" {
     "preemptible2" = {
       name            = "${var.cluster}-preemptible2"
       use_name_prefix = true
-      subnet_ids      = [sort(data.aws_subnet_ids.eks_workers.ids)[2]]
+      subnet_ids      = [sort(data.aws_subnets.eks_workers.ids)[2]]
       labels = {
         "node.liatr.io/lifecycle" = "preemptible"
       }
@@ -228,32 +232,50 @@ module "eks" {
 }
 
 #tfsec:ignore:aws-s3-specify-public-access-block
+#tfsec:ignore:aws-s3-enable-versioning
+#tfsec:ignore:aws-s3-enable-bucket-encryption
+#tfsec:ignore:aws-s3-enable-bucket-logging
+#---
+# All these are necessary since defining those blocks within
+# the aws_s3_bucket resource is deprecated. Terraform reccomends
+# defining resources referencing the bucket instead.
 resource "aws_s3_bucket" "tfstates" {
   bucket = "lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${var.cluster}.liatr.io"
-  acl    = "log-delivery-write"
-
-  logging {
-    target_bucket = "lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${var.cluster}.liatr.io"
-    target_prefix = "TFStateLogs/"
-  }
-
-  versioning {
-    enabled = true
-  }
-
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        kms_master_key_id = "aws/s3"
-        sse_algorithm     = "aws:kms"
-      }
-    }
-  }
 
   tags = {
     Name      = "SDM Operator Terraform States"
     ManagedBy = "Terraform"
     Cluster   = var.cluster
+  }
+}
+
+resource "aws_s3_bucket_acl" "tfstates_acl" {
+  bucket = aws_s3_bucket.tfstates.id
+  acl    = "log-delivery-write"
+}
+
+resource "aws_s3_bucket_versioning" "tfstates_versioning" {
+  bucket = aws_s3_bucket.tfstates.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_logging" "tfstates_logging" {
+  bucket = aws_s3_bucket.tfstates.id
+
+  target_bucket = "lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${var.cluster}.liatr.io"
+  target_prefix = "TFStateLogs/"
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "tfstates_encryption" {
+  bucket = aws_s3_bucket.tfstates.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = "aws/s3"
+      sse_algorithm     = "aws:kms"
+    }
   }
 }
 

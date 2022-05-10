@@ -10,15 +10,15 @@ data "aws_subnets" "eks_workers" {
     values = [data.aws_vpc.lead_vpc.id]
   }
 
-  tags = {
-    "subnet-kind" = "private"
-  }
-
   filter {
     name = "cidr-block"
     values = [
       "*/18"
     ]
+  }
+
+  tags = {
+    "subnet-kind" = "private"
   }
 }
 
@@ -95,7 +95,7 @@ resource "aws_iam_role_policy" "codebuild_policy" {
       "Resource": "arn:aws:ec2:${var.region}:${var.account_id}:network-interface/*",
       "Condition": {
         "StringEquals": {
-          "ec2:Subnet": ${jsonencode(formatlist("arn:aws:ec2:${var.region}:${var.account_id}:subnet/%s", data.aws_subnet_ids.eks_workers.ids))},
+          "ec2:Subnet": ${jsonencode(formatlist("arn:aws:ec2:${var.region}:${var.account_id}:subnet/%s", data.aws_subnets.eks_workers.ids))},
           "ec2:AuthorizedService": "codebuild.amazonaws.com"
         }
       }
