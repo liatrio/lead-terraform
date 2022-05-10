@@ -2,7 +2,6 @@ module "codeservices" {
   count  = var.enable_aws_code_services ? 1 : 0
   source = "../../../../modules/environment/aws/code-services"
 
-  enable_aws_code_services    = var.enable_aws_code_services
   cluster                     = var.cluster_name
   region                      = var.region
   account_id                  = data.aws_caller_identity.current.account_id
