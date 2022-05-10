@@ -4,14 +4,10 @@ data "aws_vpc" "lead_vpc" {
   }
 }
 
-data "aws_subnet_ids" "eks_workers" {
-  vpc_id = data.aws_vpc.lead_vpc.id
-
+data "aws_subnets" "eks_workers" {
   filter {
-    name = "tag:subnet-kind"
-    values = [
-      "private"
-    ]
+    name   = "vpc-id"
+    values = [data.aws_vpc.lead_vpc.id]
   }
 
   filter {
@@ -20,15 +16,23 @@ data "aws_subnet_ids" "eks_workers" {
       "*/18"
     ]
   }
+
+  tags = {
+    "subnet-kind" = "private"
+  }
 }
 
 resource "aws_s3_bucket" "code_services_bucket" {
   count  = var.enable_aws_code_services ? 1 : 0
   bucket = "code-services-${var.account_id}-${var.cluster}"
-  versioning {
-    enabled = true
-  }
+}
 
+resource "aws_s3_bucket_versioning" "code_services_versioning" {
+  for_each = aws_s3_bucket.code_services_bucket
+  bucket   = each.value.id
+  versioning_configuration {
+    status = "Enabled"
+  }
 }
 
 resource "aws_iam_role" "codebuild_role" {
@@ -91,7 +95,7 @@ resource "aws_iam_role_policy" "codebuild_policy" {
       "Resource": "arn:aws:ec2:${var.region}:${var.account_id}:network-interface/*",
       "Condition": {
         "StringEquals": {
-          "ec2:Subnet": ${jsonencode(formatlist("arn:aws:ec2:${var.region}:${var.account_id}:subnet/%s", data.aws_subnet_ids.eks_workers.ids))},
+          "ec2:Subnet": ${jsonencode(formatlist("arn:aws:ec2:${var.region}:${var.account_id}:subnet/%s", data.aws_subnets.eks_workers.ids))},
           "ec2:AuthorizedService": "codebuild.amazonaws.com"
         }
       }
