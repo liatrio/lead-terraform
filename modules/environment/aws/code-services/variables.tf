@@ -1,4 +1,3 @@
-variable "enable_aws_code_services" {}
 variable "toolchain_namespace" {}
 variable "region" {}
 variable "account_id" {}

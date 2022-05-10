@@ -22,22 +22,23 @@ data "aws_subnets" "eks_workers" {
   }
 }
 
+#tfsec:ignore:aws-s3-specify-public-access-block
+#tfsec:ignore:aws-s3-enable-versioning
+#tfsec:ignore:aws-s3-enable-bucket-encryption
+#tfsec:ignore:aws-s3-enable-bucket-logging
 resource "aws_s3_bucket" "code_services_bucket" {
-  count  = var.enable_aws_code_services ? 1 : 0
   bucket = "code-services-${var.account_id}-${var.cluster}"
 }
 
 resource "aws_s3_bucket_versioning" "code_services_versioning" {
-  for_each = aws_s3_bucket.code_services_bucket
-  bucket   = each.value.id
+  bucket = aws_s3_bucket.code_services_bucket.id
   versioning_configuration {
     status = "Enabled"
   }
 }
 
 resource "aws_iam_role" "codebuild_role" {
-  count = var.enable_aws_code_services ? 1 : 0
-  name  = "codebuild-role-${var.cluster}"
+  name = "codebuild-role-${var.cluster}"
 
   assume_role_policy = <<EOF
 {
@@ -56,8 +57,7 @@ EOF
 }
 
 resource "aws_iam_role_policy" "codebuild_policy" {
-  count = var.enable_aws_code_services ? 1 : 0
-  role  = aws_iam_role.codebuild_role[0].name
+  role = aws_iam_role.codebuild_role.name
 
   policy = <<POLICY
 {
@@ -115,8 +115,8 @@ resource "aws_iam_role_policy" "codebuild_policy" {
         "s3:*"
       ],
       "Resource": [
-        "${aws_s3_bucket.code_services_bucket[0].arn}",
-        "${aws_s3_bucket.code_services_bucket[0].arn}/*"
+        "${aws_s3_bucket.code_services_bucket.arn}",
+        "${aws_s3_bucket.code_services_bucket.arn}/*"
       ]
     },
     {
@@ -150,8 +150,7 @@ POLICY
 }
 
 resource "aws_iam_role" "codepipeline_role" {
-  count = var.enable_aws_code_services ? 1 : 0
-  name  = "codepipeline-role-${var.cluster}"
+  name = "codepipeline-role-${var.cluster}"
 
   assume_role_policy = <<EOF
 {
@@ -170,9 +169,8 @@ EOF
 }
 
 resource "aws_iam_role_policy" "codepipeline_policy" {
-  count = var.enable_aws_code_services ? 1 : 0
-  name  = "codepipeline_policy-${var.cluster}"
-  role  = aws_iam_role.codepipeline_role[0].id
+  name = "codepipeline_policy-${var.cluster}"
+  role = aws_iam_role.codepipeline_role.id
 
   policy = <<EOF
 {
@@ -187,8 +185,8 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
         "s3:PutObject"
       ],
       "Resource": [
-        "${aws_s3_bucket.code_services_bucket[0].arn}",
-        "${aws_s3_bucket.code_services_bucket[0].arn}/*"
+        "${aws_s3_bucket.code_services_bucket.arn}",
+        "${aws_s3_bucket.code_services_bucket.arn}/*"
       ]
     },
 		{
@@ -215,14 +213,13 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
 EOF
 }
 
+#tfsec:ignore:aws-sqs-enable-queue-encryption
 resource "aws_sqs_queue" "code_services_queue" {
-  count                     = var.enable_aws_code_services ? 1 : 0
   name                      = "code_services-${var.account_id}-${var.cluster}"
   message_retention_seconds = 86400
 }
 
 resource "aws_cloudwatch_event_rule" "code_services_event_rule" {
-  count       = var.enable_aws_code_services ? 1 : 0
   name        = "code_services-event-rule-${var.cluster}"
   description = "code_services-event-rule"
 
@@ -236,14 +233,12 @@ PATTERN
 }
 
 resource "aws_cloudwatch_event_target" "code_services_event_target" {
-  count = var.enable_aws_code_services ? 1 : 0
-  rule  = aws_cloudwatch_event_rule.code_services_event_rule[0].name
-  arn   = aws_sqs_queue.code_services_queue[0].arn
+  rule = aws_cloudwatch_event_rule.code_services_event_rule.name
+  arn  = aws_sqs_queue.code_services_queue.arn
 }
 
 resource "aws_sqs_queue_policy" "code_services_queue_policy" {
-  count     = var.enable_aws_code_services ? 1 : 0
-  queue_url = aws_sqs_queue.code_services_queue[0].id
+  queue_url = aws_sqs_queue.code_services_queue.id
 
   policy = <<POLICY
 {
@@ -256,10 +251,10 @@ resource "aws_sqs_queue_policy" "code_services_queue_policy" {
         "Service": "events.amazonaws.com"
       },
       "Action": "sqs:SendMessage",
-      "Resource": "${aws_sqs_queue.code_services_queue[0].arn}",
+      "Resource": "${aws_sqs_queue.code_services_queue.arn}",
       "Condition": {
         "ArnEquals": {
-          "aws:SourceArn": "${aws_cloudwatch_event_rule.code_services_event_rule[0].arn}"
+          "aws:SourceArn": "${aws_cloudwatch_event_rule.code_services_event_rule.arn}"
         }
       }
     }
@@ -269,8 +264,7 @@ POLICY
 }
 
 resource "aws_iam_role" "event_mapper_role" {
-  count = var.enable_aws_code_services ? 1 : 0
-  name  = "${var.cluster}_event_mapper_role"
+  name = "${var.cluster}_event_mapper_role"
 
   assume_role_policy = <<EOF
 {
@@ -296,8 +290,7 @@ EOF
 }
 
 resource "aws_iam_policy" "event_mapper_role_policy" {
-  count = var.enable_aws_code_services ? 1 : 0
-  name  = "${var.cluster}_event_mapper_role_policy"
+  name = "${var.cluster}_event_mapper_role_policy"
 
   policy = <<EOF
 {
@@ -309,7 +302,7 @@ resource "aws_iam_policy" "event_mapper_role_policy" {
         "sqs:DeleteMessage"
       ],
       "Effect": "Allow",
-      "Resource": "${aws_sqs_queue.code_services_queue[0].arn}"
+      "Resource": "${aws_sqs_queue.code_services_queue.arn}"
     },
     {
       "Action": [
@@ -333,13 +326,13 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "event_mapper_role_policy_attachment" {
-  count      = var.enable_aws_code_services ? 1 : 0
-  policy_arn = aws_iam_policy.event_mapper_role_policy[0].arn
-  role       = aws_iam_role.event_mapper_role[0].name
+  policy_arn = aws_iam_policy.event_mapper_role_policy.arn
+  role       = aws_iam_role.event_mapper_role.name
 }
 
+#tfsec:ignore:aws-vpc-add-description-to-security-group
+#tfsec:ignore:aws-vpc-no-public-egress-sg
 resource "aws_security_group" "codebuild_security_group" {
-  count  = var.enable_aws_code_services ? 1 : 0
   name   = "codebuild-egress"
   vpc_id = data.aws_vpc.lead_vpc.id
 

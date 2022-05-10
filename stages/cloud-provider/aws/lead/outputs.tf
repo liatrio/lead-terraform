@@ -49,7 +49,7 @@ output "cluster_autoscaler_service_account_arn" {
 }
 
 output "codeservices_sqs_url" {
-  value = module.codeservices.sqs_url
+  value = module.codeservices[0].sqs_url
 }
 
 output "sparky_service_account_arn" {
@@ -65,23 +65,23 @@ output "github_runners_service_account_arn" {
 }
 
 output "codeservices_event_mapper_service_account_arn" {
-  value = module.codeservices.event_mapper_role_arn
+  value = module.codeservices[0].event_mapper_role_arn
 }
 
 output "codeservices_s3_bucket" {
-  value = module.codeservices.s3_bucket
+  value = module.codeservices[0].s3_bucket
 }
 
 output "codeservices_codebuild_role" {
-  value = module.codeservices.codebuild_role
+  value = module.codeservices[0].codebuild_role
 }
 
 output "codeservices_pipeline_role" {
-  value = module.codeservices.codepipeline_role
+  value = module.codeservices[0].codepipeline_role
 }
 
 output "codeservices_codebuild_security_group_id" {
-  value = module.codeservices.codebuild_security_group_id
+  value = module.codeservices[0].codebuild_security_group_id
 }
 
 output "vault_service_account_arn" {
