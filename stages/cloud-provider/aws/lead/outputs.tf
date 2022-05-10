@@ -49,7 +49,7 @@ output "cluster_autoscaler_service_account_arn" {
 }
 
 output "codeservices_sqs_url" {
-  value = module.codeservices.sqs_url
+  value = module.codeservices[0].sqs_url
 }
 
 output "sparky_service_account_arn" {
