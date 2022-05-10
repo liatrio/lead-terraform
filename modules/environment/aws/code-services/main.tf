@@ -29,7 +29,7 @@ resource "aws_s3_bucket" "code_services_bucket" {
 
 resource "aws_s3_bucket_versioning" "code_services_versioning" {
   count  = var.enable_aws_code_services ? 1 : 0
-  bucket   = aws_s3_bucket.code_services_bucket[0].id
+  bucket = aws_s3_bucket.code_services_bucket[0].id
   versioning_configuration {
     status = "Enabled"
   }
