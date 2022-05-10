@@ -4,15 +4,16 @@ data "aws_vpc" "lead_vpc" {
   }
 }
 
-data "aws_subnet_ids" "eks_workers" {
-  vpc_id = data.aws_vpc.lead_vpc.id
-
+data "aws_subnets" "eks_workers" {
   filter {
-    name = "tag:subnet-kind"
-    values = [
-      "private"
-    ]
+    name = "vpc-id"
+    values = [data.aws_vpc.lead_vpc.id]
   }
+
+  tags = {
+    "subnet-kind" = "private"
+  }
+}
 
   filter {
     name = "cidr-block"
@@ -25,10 +26,15 @@ data "aws_subnet_ids" "eks_workers" {
 resource "aws_s3_bucket" "code_services_bucket" {
   count  = var.enable_aws_code_services ? 1 : 0
   bucket = "code-services-${var.account_id}-${var.cluster}"
-  versioning {
-    enabled = true
-  }
+}
 
+resource "aws_s3_bucket_versioning" "code_services_versioning" {
+  count  = var.enable_aws_code_services ? 1 : 0
+  bucket = aws_s3_bucket.code_services_bucket.id
+
+  versioning_configuration {
+    status = "Enabled"
+  }
 }
 
 resource "aws_iam_role" "codebuild_role" {
