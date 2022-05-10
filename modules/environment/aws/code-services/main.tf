@@ -34,7 +34,7 @@ resource "aws_s3_bucket_versioning" "code_services_versioning" {
 }
 
 resource "aws_iam_role" "codebuild_role" {
-  name  = "codebuild-role-${var.cluster}"
+  name = "codebuild-role-${var.cluster}"
 
   assume_role_policy = <<EOF
 {
@@ -53,7 +53,7 @@ EOF
 }
 
 resource "aws_iam_role_policy" "codebuild_policy" {
-  role  = aws_iam_role.codebuild_role.name
+  role = aws_iam_role.codebuild_role.name
 
   policy = <<POLICY
 {
@@ -146,7 +146,7 @@ POLICY
 }
 
 resource "aws_iam_role" "codepipeline_role" {
-  name  = "codepipeline-role-${var.cluster}"
+  name = "codepipeline-role-${var.cluster}"
 
   assume_role_policy = <<EOF
 {
@@ -165,8 +165,8 @@ EOF
 }
 
 resource "aws_iam_role_policy" "codepipeline_policy" {
-  name  = "codepipeline_policy-${var.cluster}"
-  role  = aws_iam_role.codepipeline_role.id
+  name = "codepipeline_policy-${var.cluster}"
+  role = aws_iam_role.codepipeline_role.id
 
   policy = <<EOF
 {
@@ -228,8 +228,8 @@ PATTERN
 }
 
 resource "aws_cloudwatch_event_target" "code_services_event_target" {
-  rule  = aws_cloudwatch_event_rule.code_services_event_rule.name
-  arn   = aws_sqs_queue.code_services_queue.arn
+  rule = aws_cloudwatch_event_rule.code_services_event_rule.name
+  arn  = aws_sqs_queue.code_services_queue.arn
 }
 
 resource "aws_sqs_queue_policy" "code_services_queue_policy" {
@@ -259,7 +259,7 @@ POLICY
 }
 
 resource "aws_iam_role" "event_mapper_role" {
-  name  = "${var.cluster}_event_mapper_role"
+  name = "${var.cluster}_event_mapper_role"
 
   assume_role_policy = <<EOF
 {
@@ -285,7 +285,7 @@ EOF
 }
 
 resource "aws_iam_policy" "event_mapper_role_policy" {
-  name  = "${var.cluster}_event_mapper_role_policy"
+  name = "${var.cluster}_event_mapper_role_policy"
 
   policy = <<EOF
 {

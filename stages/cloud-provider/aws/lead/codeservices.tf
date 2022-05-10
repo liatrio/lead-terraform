@@ -1,5 +1,5 @@
 module "codeservices" {
-  count = var.enable_aws_code_services ? 1 : 0
+  count  = var.enable_aws_code_services ? 1 : 0
   source = "../../../../modules/environment/aws/code-services"
 
   enable_aws_code_services    = var.enable_aws_code_services
