@@ -240,8 +240,8 @@ resource "aws_iam_policy" "product_operator_aws_code_services" {
       "iam:PassRole"
     ],
     "Resource": [
-      "${module.codeservices.codebuild_role}",
-      "${module.codeservices.codepipeline_role}"
+      "${module.codeservices[0].codebuild_role}",
+      "${module.codeservices[0].codepipeline_role}"
     ]
   },
   {
