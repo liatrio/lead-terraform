@@ -16,8 +16,7 @@ resource "aws_iam_role" "workspace_role" {
 }
 EOF
 
-
-  permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${aws_iam_policy.workspace_role_boundary.name}"
+  permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/Developer"
 }
 
 resource "aws_iam_policy" "workspace_role_boundary" {

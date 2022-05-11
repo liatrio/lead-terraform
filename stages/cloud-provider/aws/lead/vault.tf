@@ -45,6 +45,8 @@ resource "aws_iam_role" "vault_service_account" {
   ]
 }
 EOF
+
+  permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/Developer"
 }
 
 resource "aws_iam_role_policy" "vault" {

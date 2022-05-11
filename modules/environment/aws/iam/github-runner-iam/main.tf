@@ -1,3 +1,6 @@
+data "aws_caller_identity" "current" {
+}
+
 resource "aws_iam_role" "github_runner_service_account" {
   name = "${var.name}-service-account"
 
@@ -20,6 +23,8 @@ resource "aws_iam_role" "github_runner_service_account" {
   ]
 }
 EOF
+
+  permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/Developer"
 }
 
 data "aws_iam_policy_document" "github_runner_role_assume_role_policy" {

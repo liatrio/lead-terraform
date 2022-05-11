@@ -147,7 +147,7 @@ module "eks" {
   vpc_id          = data.aws_vpc.lead_vpc.id
 
   aws_auth_roles                = concat(local.default_roles, local.codebuild_roles, var.additional_mapped_roles)
-  iam_role_permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${aws_iam_policy.workspace_role_boundary.name}"
+  iam_role_permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/Developer"
   enable_irsa                   = true
 
   cluster_endpoint_private_access = true
@@ -198,11 +198,12 @@ module "eks" {
         }
       ]
 
-      capacity_type  = "ON_DEMAND"
-      desired_size   = var.essential_asg_desired_capacity
-      min_size       = var.essential_asg_min_size
-      max_size       = var.essential_asg_max_size
-      instance_types = [var.essential_instance_type]
+      capacity_type                 = "ON_DEMAND"
+      desired_size                  = var.essential_asg_desired_capacity
+      min_size                      = var.essential_asg_min_size
+      max_size                      = var.essential_asg_max_size
+      instance_types                = [var.essential_instance_type]
+      iam_role_permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/Developer"
     }
     "preemptible0" = {
       name            = "${var.cluster}-preemptible0"
@@ -211,6 +212,7 @@ module "eks" {
       labels = {
         "node.liatr.io/lifecycle" = "preemptible"
       }
+      iam_role_permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/Developer"
     }
     "preemptible1" = {
       name            = "${var.cluster}-preemptible1"
@@ -219,6 +221,7 @@ module "eks" {
       labels = {
         "node.liatr.io/lifecycle" = "preemptible"
       }
+      iam_role_permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/Developer"
     }
     "preemptible2" = {
       name            = "${var.cluster}-preemptible2"
@@ -227,6 +230,7 @@ module "eks" {
       labels = {
         "node.liatr.io/lifecycle" = "preemptible"
       }
+      iam_role_permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/Developer"
     }
   }
 }
@@ -285,6 +289,9 @@ resource "aws_eks_addon" "addon" {
   addon_name        = each.key
   addon_version     = each.value
   resolve_conflicts = "OVERWRITE"
+  depends_on = [
+    module.eks
+  ]
 }
 
 resource "aws_iam_role_policy_attachment" "eks_worker_ssm_policy_attachment" {
