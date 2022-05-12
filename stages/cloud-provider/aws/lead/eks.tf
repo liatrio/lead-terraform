@@ -17,7 +17,7 @@ module "eks" {
   essential_taint_key              = var.essential_taint_key
   on_demand_percentage             = var.on_demand_percentage
   enable_aws_code_services         = var.enable_aws_code_services
-  codebuild_role                   = var.enable_aws_code_services ? module.codeservices.codebuild_role : ""
+  codebuild_role                   = var.enable_aws_code_services ? module.codeservices[0].codebuild_role : ""
   vpc_name                         = var.vpc_name
   docker_registry_mirror           = var.docker_registry_mirror
   enable_ssh_access                = var.enable_eks_ssh_access
