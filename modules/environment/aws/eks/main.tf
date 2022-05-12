@@ -152,7 +152,7 @@ module "eks" {
   cluster_additional_security_group_ids = [aws_security_group.worker.id]
   cluster_security_group_additional_rules = {
     ingress_vpc_for_internal_vpn = {
-      description = ""
+      description = "ingress rules for internal vpn"
       protocol    = "tcp"
       from_port   = 443
       to_port     = 443
