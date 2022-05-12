@@ -147,6 +147,21 @@ module "eks" {
   vpc_id          = data.aws_vpc.lead_vpc.id
 
   cluster_additional_security_group_ids = [aws_security_group.worker.id]
+  cluster_security_group_additional_rules = {
+      ingress_vpc_for_internal_vpn = {
+        description = ""
+        protocol = "tcp"
+        from_port = 443
+        to_port = 443
+        type = "ingress"
+        cidr_blocks = [
+          var.internal_vpn_subnet,
+          var.shared_svc_subnet,
+          data.aws_vpc.lead_vpc.cidr_block // anything running within the lead VPC, such as codebuild projects
+        ]
+      }
+    }
+
   aws_auth_roles                = concat(local.default_roles, local.codebuild_roles, var.additional_mapped_roles)
   iam_role_permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/Developer"
   enable_irsa                   = true
