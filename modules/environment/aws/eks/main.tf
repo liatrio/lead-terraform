@@ -146,21 +146,24 @@ module "eks" {
   subnet_ids      = sort(data.aws_subnets.eks_masters.ids)
   vpc_id          = data.aws_vpc.lead_vpc.id
 
+  iam_role_name            = "lead"
+  iam_role_use_name_prefix = true
+
   cluster_additional_security_group_ids = [aws_security_group.worker.id]
   cluster_security_group_additional_rules = {
-      ingress_vpc_for_internal_vpn = {
-        description = ""
-        protocol = "tcp"
-        from_port = 443
-        to_port = 443
-        type = "ingress"
-        cidr_blocks = [
-          var.internal_vpn_subnet,
-          var.shared_svc_subnet,
-          data.aws_vpc.lead_vpc.cidr_block // anything running within the lead VPC, such as codebuild projects
-        ]
-      }
+    ingress_vpc_for_internal_vpn = {
+      description = ""
+      protocol    = "tcp"
+      from_port   = 443
+      to_port     = 443
+      type        = "ingress"
+      cidr_blocks = [
+        var.internal_vpn_subnet,
+        var.shared_svc_subnet,
+        data.aws_vpc.lead_vpc.cidr_block // anything running within the lead VPC, such as codebuild projects
+      ]
     }
+  }
 
   aws_auth_roles                = concat(local.default_roles, local.codebuild_roles, var.additional_mapped_roles)
   iam_role_permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/Developer"
@@ -214,11 +217,11 @@ module "eks" {
         }
       ]
 
-      capacity_type  = "ON_DEMAND"
-      desired_size   = var.essential_asg_desired_capacity
-      min_size       = var.essential_asg_min_size
-      max_size       = var.essential_asg_max_size
-      instance_types = [var.essential_instance_type]
+      capacity_type                 = "ON_DEMAND"
+      desired_size                  = var.essential_asg_desired_capacity
+      min_size                      = var.essential_asg_min_size
+      max_size                      = var.essential_asg_max_size
+      instance_types                = [var.essential_instance_type]
       iam_role_permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/Developer"
     }
     "preemptible0" = {
