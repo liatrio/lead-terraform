@@ -178,26 +178,25 @@ module "eks" {
   }
 
   eks_managed_node_group_defaults = {
-    node_group = {
-      # the values below are the defaults for preemptible nodes, which will only be overridden by the essential node group
-      capacity_type  = "SPOT"
-      desired_size   = var.preemptible_asg_desired_capacity
-      min_size       = var.preemptible_asg_min_size
-      max_size       = var.preemptible_asg_max_size
-      instance_types = var.preemptible_instance_types
+    # the values below are the defaults for preemptible nodes, which will only be overridden by the essential node group
+    capacity_type  = "SPOT"
+    desired_size   = var.preemptible_asg_desired_capacity
+    min_size       = var.preemptible_asg_min_size
+    max_size       = var.preemptible_asg_max_size
+    instance_types = var.preemptible_instance_types
 
-      update_config = {
-        max_unavailable_percentage = 50
-      }
-
-      vpc_security_group_ids  = [aws_security_group.worker.id]
-      create_launch_template  = true
-      pre_bootstrap_user_data = local.userdata
-      enable_monitoring       = true
-      key_name                = var.key_name
-      cluster_version         = var.cluster_version
-      disk_size               = var.root_volume_size
+    update_config = {
+      max_unavailable_percentage = 50
     }
+
+    vpc_security_group_ids  = [aws_security_group.worker.id]
+    create_launch_template  = true
+    pre_bootstrap_user_data = local.userdata
+    enable_monitoring       = true
+    key_name                = var.key_name
+    cluster_version         = var.cluster_version
+    disk_size               = var.root_volume_size
+    iam_role_permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/Developer"
   }
 
   eks_managed_node_groups = {
@@ -222,7 +221,6 @@ module "eks" {
       min_size                      = var.essential_asg_min_size
       max_size                      = var.essential_asg_max_size
       instance_types                = [var.essential_instance_type]
-      iam_role_permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/Developer"
     }
     "preemptible0" = {
       name            = "${var.cluster}-preemptible0"
@@ -231,7 +229,6 @@ module "eks" {
       labels = {
         "node.liatr.io/lifecycle" = "preemptible"
       }
-      iam_role_permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/Developer"
     }
     "preemptible1" = {
       name            = "${var.cluster}-preemptible1"
@@ -240,7 +237,6 @@ module "eks" {
       labels = {
         "node.liatr.io/lifecycle" = "preemptible"
       }
-      iam_role_permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/Developer"
     }
     "preemptible2" = {
       name            = "${var.cluster}-preemptible2"
@@ -249,7 +245,6 @@ module "eks" {
       labels = {
         "node.liatr.io/lifecycle" = "preemptible"
       }
-      iam_role_permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/Developer"
     }
   }
 }
