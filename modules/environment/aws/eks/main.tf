@@ -157,11 +157,31 @@ module "eks" {
       from_port   = 443
       to_port     = 443
       type        = "ingress"
-      cidr_blocks = [
+      cidr_blocks = distinct([
         var.internal_vpn_subnet,
         var.shared_svc_subnet,
         data.aws_vpc.lead_vpc.cidr_block // anything running within the lead VPC, such as codebuild projects
-      ]
+      ])
+    }
+  }
+
+  node_security_group_additional_rules = {
+    ingress_self_all = {
+      description = "Node to node ingress (ephemeral ports)"
+      protocol    = "-1"
+      from_port   = 1025
+      to_port     = 65535
+      type        = "ingress"
+      self        = true
+    }
+    egress_all = {
+      description      = "Node to node egress (ephemeral ports)"
+      protocol         = "-1"
+      from_port        = 1025
+      to_port          = 65535
+      type             = "egress"
+      cidr_blocks      = ["0.0.0.0/0"]
+      ipv6_cidr_blocks = ["::/0"]
     }
   }
 
