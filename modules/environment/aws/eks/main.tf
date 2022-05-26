@@ -189,13 +189,13 @@ module "eks" {
       max_unavailable_percentage = 50
     }
 
-    vpc_security_group_ids  = [aws_security_group.worker.id]
-    create_launch_template  = true
-    pre_bootstrap_user_data = local.userdata
-    enable_monitoring       = true
-    key_name                = var.key_name
-    cluster_version         = var.cluster_version
-    disk_size               = var.root_volume_size
+    vpc_security_group_ids        = [aws_security_group.worker.id]
+    create_launch_template        = true
+    pre_bootstrap_user_data       = local.userdata
+    enable_monitoring             = true
+    key_name                      = var.key_name
+    cluster_version               = var.cluster_version
+    disk_size                     = var.root_volume_size
     iam_role_permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/Developer"
   }
 
@@ -216,11 +216,11 @@ module "eks" {
         }
       ]
 
-      capacity_type                 = "ON_DEMAND"
-      desired_size                  = var.essential_asg_desired_capacity
-      min_size                      = var.essential_asg_min_size
-      max_size                      = var.essential_asg_max_size
-      instance_types                = [var.essential_instance_type]
+      capacity_type  = "ON_DEMAND"
+      desired_size   = var.essential_asg_desired_capacity
+      min_size       = var.essential_asg_min_size
+      max_size       = var.essential_asg_max_size
+      instance_types = [var.essential_instance_type]
     }
     "preemptible0" = {
       name            = "${var.cluster}-preemptible0"
