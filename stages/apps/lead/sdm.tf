@@ -53,7 +53,8 @@ resource "helm_release" "product_operator" {
   namespace  = var.toolchain_namespace
 
   set {
-    replicaCount = 0
+    name = "replicaCount"
+    value = 0
   }
 }
 
