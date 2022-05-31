@@ -45,7 +45,7 @@ EOF
 
 resource "helm_release" "product_operator" {
   repository = "https://charts.services.liatr.io"
-  timeout    = 120
+  timeout    = 240
 
   chart      = "product-operator"
   name       = "product-operator"
