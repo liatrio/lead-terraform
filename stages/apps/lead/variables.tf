@@ -68,6 +68,9 @@ variable "sdm_version" {
   default = "v2.3.0"
 }
 
+# Product operator helm chart version
+variable "product_operator_version" {}
+
 variable "product_version" {
   default = "master"
 }

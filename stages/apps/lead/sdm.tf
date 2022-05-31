@@ -42,6 +42,21 @@ EOF
   type = "kubernetes.io/dockerconfigjson"
 }
 
+
+resource "helm_release" "product_operator" {
+  repository = "https://charts.services.liatr.io"
+  timeout    = 120
+
+  chart      = "product-operator"
+  name       = "product-operator"
+  version    = var.product_operator_version
+  namespace  = var.toolchain_namespace
+
+  set {
+    replicaCount = 0
+  }
+}
+
 resource "helm_release" "operator_toolchain" {
   repository = "https://liatrio-helm.s3.us-east-1.amazonaws.com/charts"
   timeout    = 120
@@ -109,6 +124,8 @@ resource "helm_release" "operator_toolchain" {
       })
     })
   ]
+
+  depends_on = [helm_release.product_operator]
 }
 
 module "sparky" {
