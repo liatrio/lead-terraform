@@ -1,6 +1,6 @@
 locals {
   ingress_hostname      = "${var.github_org}-webhook.${var.ingress_domain}"
-  release_name          = var.release_name != "" ? var.release_name : "${var.github_org}-runner-controller"
+  release_name          = var.release_name != "" ? var.release_name : "${var.github_org}-rc"
   auth_secret_full_name = "${local.release_name}-${var.auth_secret_name}"
 }
 
