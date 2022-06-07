@@ -54,7 +54,7 @@ resource "helm_release" "product_operator" {
 
   set {
     name = "image.pullSecrets[0]"
-    value = [kubernetes_secret.image_registry_secret.metadata[0].name]
+    value = kubernetes_secret.image_registry_secret.metadata[0].name
   }
 }
 
