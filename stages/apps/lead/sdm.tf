@@ -51,19 +51,6 @@ resource "helm_release" "product_operator" {
   name      = "product-operator"
   version   = var.product_operator_version
   namespace = var.toolchain_namespace
-
-  set {
-    name  = "replicaCount"
-    value = 0
-  }
-
-  # If Replicas == 0, you
-  # need to disable the PVC creation
-  # otherwise the helm chart install fails.
-  set {
-    name  = "remoteStateConfig"
-    value = "dummyValueToFixPvcBindingIssue"
-  }
 }
 
 resource "helm_release" "operator_toolchain" {
