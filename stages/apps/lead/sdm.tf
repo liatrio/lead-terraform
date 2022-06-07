@@ -43,15 +43,15 @@ EOF
 }
 
 
-resource "helm_release" "product_operator" {
-  repository = "https://charts.services.liatr.io"
-  timeout    = 240
-
-  chart     = "product-operator"
-  name      = "product-operator"
-  version   = var.product_operator_version
-  namespace = var.toolchain_namespace
-}
+#resource "helm_release" "product_operator" {
+#  repository = "https://charts.services.liatr.io"
+#  timeout    = 240
+#
+#  chart     = "product-operator"
+#  name      = "product-operator"
+#  version   = var.product_operator_version
+#  namespace = var.toolchain_namespace
+#}
 
 resource "helm_release" "operator_toolchain" {
   repository = "https://liatrio-helm.s3.us-east-1.amazonaws.com/charts"
