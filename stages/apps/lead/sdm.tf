@@ -52,15 +52,12 @@ resource "helm_release" "product_operator" {
   version   = var.product_operator_version
   namespace = var.toolchain_namespace
   
-  values = [
-    <<-EOF
-    image:
-      pullSecrets:
-      - ${kubernetes_secret.image_registry_secret.metadata[0].name}
-    brigade-github-app:
-      enabled: true
-    EOF
-  ]
+  set {
+    name = "image.pullSecrets[0]"
+    value = [{
+        name = kubernetes_secret.image_registry_secret.metadata[0].name
+    }]
+  }
 }
 
 resource "helm_release" "operator_toolchain" {
