@@ -121,7 +121,7 @@ resource "helm_release" "operator_toolchain" {
     })
   ]
 
-  depends_on = [helm_release.product_operator]
+  #depends_on = [helm_release.product_operator]
 }
 
 module "sparky" {
