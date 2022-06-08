@@ -52,15 +52,16 @@ resource "helm_release" "product_operator" {
   version   = var.product_operator_version
   namespace = var.toolchain_namespace
 
-  set {
-    name  = "image.pullSecrets[0].name"
-    value = kubernetes_secret.image_registry_secret.metadata[0].name
-  }
-
-  set {
-    name  = "remoteStateConfig"
-    value = file("./terragrunt-product-backend-s3.hcl")
-  }
+   values = [
+    templatefile("${path.module}/product-operator-values.tpl", {
+      product_operator_version    = var.product_operator_version
+      sdm_version                 = var.sdm_version
+      essential_toleration_values = module.essential_toleration.values
+      image_repository            = var.toolchain_image_repo
+      image_pull_secret           = kubernetes_secret.image_registry_secret.metadata[0].name
+      remote_state_config         = file("./terragrunt-product-backend-s3.hcl")
+    })
+  ]
 }
 
 resource "helm_release" "operator_toolchain" {
