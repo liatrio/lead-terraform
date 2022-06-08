@@ -54,7 +54,7 @@ resource "helm_release" "product_operator" {
 
    values = [
     templatefile("${path.module}/product-operator-values.tpl", {
-      product_operator_version    = var.product_operator_version
+      product_operator_version    = trimprefix(var.product_operator_version, "v")
       sdm_version                 = var.sdm_version
       essential_toleration_values = module.essential_toleration.values
       image_repository            = var.toolchain_image_repo
