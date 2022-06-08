@@ -10,8 +10,8 @@ converge:
     pullSecrets:
       - name: ${image_pull_secret}
   additionalPodValues:
-    ${indent(6, essential_toleration_values)}
+    ${indent(4, essential_toleration_values)}
 %{ if remote_state_config != "" }
 remoteStateConfig: |
-  ${indent(4, remote_state_config)}
+  ${indent(2, remote_state_config)}
 %{ endif }
