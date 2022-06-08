@@ -51,7 +51,7 @@ resource "helm_release" "product_operator" {
   name      = "product-operator"
   version   = var.product_operator_version
   namespace = var.toolchain_namespace
-  
+
   set {
     name  = "image.pullSecrets[0].name"
     value = kubernetes_secret.image_registry_secret.metadata[0].name

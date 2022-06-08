@@ -184,6 +184,16 @@ module "eks" {
       type        = "ingress"
       self        = true
     }
+
+    ingress_master_to_node = {
+      description                   = "Allow inbound from Cluster"
+      from_port                     = 1025
+      to_port                       = 65535
+      protocol                      = "tcp"
+      type                          = "ingress"
+      source_cluster_security_group = true
+    }
+
     egress_all = {
       description      = "Node all egress"
       protocol         = "-1"
