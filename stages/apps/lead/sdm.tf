@@ -43,26 +43,26 @@ EOF
 }
 
 
-resource "helm_release" "product_operator" {
-  repository = "https://charts.services.liatr.io"
-  timeout    = 240
-
-  chart     = "product-operator"
-  name      = "product-operator"
-  version   = var.product_operator_version
-  namespace = var.toolchain_namespace
-
-   values = [
-    templatefile("${path.module}/product-operator-values.tpl", {
-      product_operator_version    = trimprefix(var.product_operator_version, "v")
-      sdm_version                 = var.sdm_version
-      essential_toleration_values = module.essential_toleration.values
-      image_repository            = var.toolchain_image_repo
-      image_pull_secret           = kubernetes_secret.image_registry_secret.metadata[0].name
-      remote_state_config         = file("./terragrunt-product-backend-s3.hcl")
-    })
-  ]
-}
+#resource "helm_release" "product_operator" {
+#  repository = "https://charts.services.liatr.io"
+#  timeout    = 240
+#
+#  chart     = "product-operator"
+#  name      = "product-operator"
+#  version   = var.product_operator_version
+#  namespace = var.toolchain_namespace
+#
+#   values = [
+#    templatefile("${path.module}/product-operator-values.tpl", {
+#      product_operator_version    = trimprefix(var.product_operator_version, "v")
+#      sdm_version                 = var.sdm_version
+#      essential_toleration_values = module.essential_toleration.values
+#      image_repository            = var.toolchain_image_repo
+#      image_pull_secret           = kubernetes_secret.image_registry_secret.metadata[0].name
+#      remote_state_config         = file("./terragrunt-product-backend-s3.hcl")
+#    })
+#  ]
+#}
 
 resource "helm_release" "operator_toolchain" {
   repository = "https://liatrio-helm.s3.us-east-1.amazonaws.com/charts"
@@ -132,7 +132,7 @@ resource "helm_release" "operator_toolchain" {
     })
   ]
 
-  depends_on = [helm_release.product_operator]
+  # depends_on = [helm_release.product_operator]
 }
 
 module "sparky" {
