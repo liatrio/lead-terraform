@@ -15,7 +15,9 @@ variable "pipelines" {
 }
 
 variable "source_type" {}
-variable "codebuild_role" {}
+variable "codebuild_role" {
+  default = ""
+}
 variable "codepipeline_role" {}
 variable "s3_bucket" {}
 variable "codebuild_user" {}
