@@ -40,3 +40,23 @@ types:
     defaultJobEnvVariables:
       CLUSTER: ${cluster}
   %{ endif }
+  %{ if product_type_jenkins_enabled }
+  - name: product-jenkins
+    terraformSource: github.com/liatrio/lead-terraform//stacks/product-jenkins
+    defaultProductVersion: ${product_version}
+    defaultProductVariables:
+      builder_images_version: ${builder_images_version}
+      cluster_domain: ${cluster_domain}
+      enable_harbor: "${enable_harbor}"
+      enable_keycloak: "${enable_keycloak}"
+      enable_artifactory_jcr: "${enable_artifactory_jcr}"
+      jenkins_image_version: ${jenkins_image_version}
+      product_image_repo: ${product_image_repo}
+      jenkins_pipeline_source: ${jenkins_pipeline_source}
+      region: ${region}
+      toolchain_image_repo: ${toolchain_image_repo}
+      vault_namespace: ${vault_namespace}
+      vault_root_token_secret: ${vault_root_token_secret}
+    defaultJobEnvVariables:
+      CLUSTER: ${cluster}
+  %{ endif }
