@@ -15,3 +15,28 @@ converge:
 remoteStateConfig: |
   ${indent(2, remote_state_config)}
 %{ endif }
+rbac:
+  serviceAccountAnnotations: ${product_service_account_annotations}
+types:
+  %{ if product_type_aws_enabled }
+  - name: product-aws
+    terraformSource: github.com/liatrio/lead-terraform//stacks/product-aws
+    defaultProductVersion: ${product_version}
+    defaultProductVariables:
+      builder_images_version: ${builder_images_version}
+      cluster_domain: ${cluster_domain}
+      product_image_repo: ${ecr_image_repo}
+      region: ${region}
+      toolchain_image_repo: ${toolchain_image_repo}
+      cluster: ${cluster}
+      aws_environment: ${aws_environment}
+      %{ if code_services_enabled }
+      codebuild_role: ${codebuild_role}
+      codebuild_user: ${codebuild_user}
+      codebuild_security_group_id: ${codebuildc_security_group_id}
+      codepipeline_role: ${codepipeline_role}
+      s3_bucket: ${s3_bucket}
+      %{ endif }
+    defaultJobEnvVariables:
+      CLUSTER: ${cluster}
+  %{ endif }

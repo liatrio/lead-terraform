@@ -20,8 +20,6 @@ product:
   remoteStateConfig: |
     ${indent(4, remote_state_config)}
   %{ endif }
-  rbac:
-    serviceAccountAnnotations: ${product_service_account_annotations}
   types:
     %{ if product_type_aws_enabled }
     - name: product-aws
