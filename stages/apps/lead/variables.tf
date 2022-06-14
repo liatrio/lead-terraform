@@ -192,7 +192,7 @@ variable "lead_sdm_operators" {
 }
 
 variable "enable_aws_code_services" {
-  type = bool
+  type    = bool
   default = false
 }
 
