@@ -33,8 +33,6 @@ variable "product_image_repo" {}
 variable "toolchain_image_repo" {}
 variable "cluster" {}
 variable "aws_environment" {}
-variable "vault_namespace" {}
-variable "vault_root_token_secret" {}
 
 variable "codebuild_role" {
   default = ""

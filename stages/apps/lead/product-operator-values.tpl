@@ -30,8 +30,6 @@ types:
       toolchain_image_repo: ${toolchain_image_repo}
       cluster: ${cluster}
       aws_environment: ${aws_environment}
-      vault_namespace: ${vault_namespace}
-      vault_root_token_secret: ${vault_root_token_secret}
       %{ if code_services_enabled }
       codebuild_role: ${codebuild_role}
       codebuild_user: ${codebuild_user}

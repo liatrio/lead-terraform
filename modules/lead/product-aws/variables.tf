@@ -18,7 +18,9 @@ variable "source_type" {}
 variable "codebuild_role" {
   default = ""
 }
-variable "codepipeline_role" {}
+variable "codepipeline_role" {
+  default = ""
+}
 variable "s3_bucket" {}
 variable "codebuild_user" {}
 variable "builder_images_version" {}
