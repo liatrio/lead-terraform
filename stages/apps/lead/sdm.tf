@@ -70,10 +70,10 @@ resource "helm_release" "product_operator" {
       code_services_enabled        = var.enable_aws_code_services
       codebuild_role               = var.enable_aws_code_services ? var.codeservices_codebuild_role : ""
       codebuild_user               = var.enable_aws_code_services ? "codebuild" : ""
-      codebuildc_security_group_id = var.codeservices_codebuild_security_group_id
       codepipeline_role            = var.enable_aws_code_services ? var.codeservices_pipeline_role : ""
-      aws_environment              = var.aws_environment
       s3_bucket                    = var.enable_aws_code_services ? var.codeservices_s3_bucket : ""
+      codebuildc_security_group_id = var.codeservices_codebuild_security_group_id
+      aws_environment              = var.aws_environment
 
       ecr_image_repo       = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.region}.amazonaws.com"
       toolchain_image_repo = var.toolchain_image_repo

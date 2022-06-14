@@ -27,8 +27,8 @@ resource "helm_release" "mongodb" {
   name       = "mongodb"
   namespace  = module.database_namespace.name
   repository = "https://charts.bitnami.com/bitnami"
-  chart      = "mongodb"
-  version    = "8.3.2"
+  chart      = "bitnami/mongodb"
+  version    = "12.1.19"
   timeout    = 600
   wait       = true
 
