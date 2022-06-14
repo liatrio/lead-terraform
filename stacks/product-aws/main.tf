@@ -52,6 +52,8 @@ module "product-aws" {
   toolchain_image_repo        = var.toolchain_image_repo
   product_image_repo          = var.product_image_repo
   builder_images_version      = var.builder_images_version
+  vault_namespace             = var.vault_namespace
+  vault_root_token_secret     = var.vault_root_token_secret
 
   providers = {
     kubernetes.staging    = kubernetes.staging

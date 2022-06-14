@@ -78,8 +78,12 @@ resource "helm_release" "product_operator" {
       ecr_image_repo              = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.region}.amazonaws.com"
       toolchain_image_repo        = var.toolchain_image_repo
 
+      vault_namespace         = module.vault.vault_namespace
+      vault_root_token_secret = module.vault.vault_root_token_secret
+
       product_type_aws_enabled            = contains(var.product_types, "product-aws")
-      product_version                     = var.product_version
+      # product_version                     = var.product_version
+      product_version                     = "eks-update-fixes"
       product_service_account_annotations = jsonencode({
         "eks.amazonaws.com/role-arn" = var.product_operator_service_account_arn
       })
