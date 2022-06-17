@@ -146,8 +146,66 @@ module "eks" {
   subnet_ids      = sort(data.aws_subnets.eks_masters.ids)
   vpc_id          = data.aws_vpc.lead_vpc.id
 
+  iam_role_name            = "lead"
+  iam_role_use_name_prefix = true
+
+  cluster_additional_security_group_ids = [aws_security_group.worker.id]
+  cluster_security_group_additional_rules = {
+    ingress_vpc_for_internal_vpn = {
+      description = "ingress rules for internal vpn"
+      protocol    = "tcp"
+      from_port   = 443
+      to_port     = 443
+      type        = "ingress"
+      cidr_blocks = distinct([
+        var.internal_vpn_subnet,
+        var.shared_svc_subnet,
+        data.aws_vpc.lead_vpc.cidr_block // anything running within the lead VPC, such as codebuild projects
+      ])
+    }
+    egress_nodes_ephemeral_ports_tcp = {
+      description                = "Egress to Nodes"
+      protocol                   = "tcp"
+      from_port                  = 1025
+      to_port                    = 65535
+      type                       = "egress"
+      source_node_security_group = true
+    }
+  }
+
+  # Extend node-to-node security group rules
+  node_security_group_additional_rules = {
+    ingress_self_all = {
+      description = "Node to node all ports/protocols"
+      protocol    = "-1"
+      from_port   = 0
+      to_port     = 0
+      type        = "ingress"
+      self        = true
+    }
+
+    ingress_master_to_node = {
+      description                   = "Allow inbound from Cluster"
+      from_port                     = 1025
+      to_port                       = 65535
+      protocol                      = "tcp"
+      type                          = "ingress"
+      source_cluster_security_group = true
+    }
+
+    egress_all = {
+      description      = "Node all egress"
+      protocol         = "-1"
+      from_port        = 0
+      to_port          = 0
+      type             = "egress"
+      cidr_blocks      = ["0.0.0.0/0"]
+      ipv6_cidr_blocks = ["::/0"]
+    }
+  }
+
   aws_auth_roles                = concat(local.default_roles, local.codebuild_roles, var.additional_mapped_roles)
-  iam_role_permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${aws_iam_policy.workspace_role_boundary.name}"
+  iam_role_permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/Developer"
   enable_irsa                   = true
 
   cluster_endpoint_private_access = true
@@ -159,26 +217,25 @@ module "eks" {
   }
 
   eks_managed_node_group_defaults = {
-    node_group = {
-      # the values below are the defaults for preemptible nodes, which will only be overridden by the essential node group
-      capacity_type  = "SPOT"
-      desired_size   = var.preemptible_asg_desired_capacity
-      min_size       = var.preemptible_asg_min_size
-      max_size       = var.preemptible_asg_max_size
-      instance_types = var.preemptible_instance_types
+    # the values below are the defaults for preemptible nodes, which will only be overridden by the essential node group
+    capacity_type  = "SPOT"
+    desired_size   = var.preemptible_asg_desired_capacity
+    min_size       = var.preemptible_asg_min_size
+    max_size       = var.preemptible_asg_max_size
+    instance_types = var.preemptible_instance_types
 
-      update_config = {
-        max_unavailable_percentage = 50
-      }
-
-      vpc_security_group_ids  = [aws_security_group.worker.id]
-      create_launch_template  = true
-      pre_bootstrap_user_data = local.userdata
-      enable_monitoring       = true
-      key_name                = var.key_name
-      cluster_version         = var.cluster_version
-      disk_size               = var.root_volume_size
+    update_config = {
+      max_unavailable_percentage = 50
     }
+
+    vpc_security_group_ids        = [aws_security_group.worker.id]
+    create_launch_template        = true
+    pre_bootstrap_user_data       = local.userdata
+    enable_monitoring             = true
+    key_name                      = var.key_name
+    cluster_version               = var.cluster_version
+    disk_size                     = var.root_volume_size
+    iam_role_permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/Developer"
   }
 
   eks_managed_node_groups = {
@@ -285,6 +342,9 @@ resource "aws_eks_addon" "addon" {
   addon_name        = each.key
   addon_version     = each.value
   resolve_conflicts = "OVERWRITE"
+  depends_on = [
+    module.eks
+  ]
 }
 
 resource "aws_iam_role_policy_attachment" "eks_worker_ssm_policy_attachment" {

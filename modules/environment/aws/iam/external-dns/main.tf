@@ -1,3 +1,6 @@
+data "aws_caller_identity" "current" {
+}
+
 resource "aws_iam_role" "external_dns_service_account" {
   name = "${var.cluster}-${var.service_account_name}-service-account"
 
@@ -20,6 +23,8 @@ resource "aws_iam_role" "external_dns_service_account" {
   ]
 }
 EOF
+
+  permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/Developer"
 }
 
 resource "aws_iam_role_policy" "external_dns" {

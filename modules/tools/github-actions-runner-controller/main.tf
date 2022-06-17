@@ -1,6 +1,6 @@
 locals {
   ingress_hostname      = "${var.github_org}-webhook.${var.ingress_domain}"
-  release_name          = var.release_name != "" ? var.release_name : "${var.github_org}-runner-controller"
+  release_name          = var.release_name != "" ? var.release_name : "${var.github_org}-rc"
   auth_secret_full_name = "${local.release_name}-${var.auth_secret_name}"
 }
 
@@ -38,7 +38,7 @@ resource "helm_release" "github_runner_controller" {
   name       = local.release_name
   repository = "https://actions-runner-controller.github.io/actions-runner-controller"
   chart      = "actions-runner-controller"
-  version    = "0.12.7"
+  version    = "0.18.0"
   namespace  = module.github_runner_controller_namespace.name
   wait       = true
 

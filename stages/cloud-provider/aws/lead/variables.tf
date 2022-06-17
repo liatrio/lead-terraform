@@ -70,6 +70,7 @@ variable "on_demand_percentage" {
 }
 
 variable "enable_aws_code_services" {
+  default     = false
   description = "Feature flag for adding a codebuild IAM role to the aws-auth configmap"
 }
 

@@ -42,6 +42,66 @@ EOF
   type = "kubernetes.io/dockerconfigjson"
 }
 
+
+resource "helm_release" "product_operator" {
+  repository = "https://charts.services.liatr.io"
+  timeout    = 240
+
+  chart     = "product-operator"
+  name      = "product-operator"
+  version   = var.product_operator_version
+  namespace = var.toolchain_namespace
+
+  values = [
+    templatefile("${path.module}/product-operator-values.tpl", {
+      product_operator_version = trimprefix(var.product_operator_version, "v")
+      sdm_version              = var.sdm_version
+      cluster                  = var.cluster_name
+      cluster_domain           = "${var.cluster_name}.${var.root_zone_name}"
+      workspace_role           = var.workspace_role_name
+      region                   = var.region
+
+      essential_toleration_values = module.essential_toleration.values
+      image_repository            = var.toolchain_image_repo
+      image_pull_secret           = kubernetes_secret.image_registry_secret.metadata[0].name
+      remote_state_config         = file("./terragrunt-product-backend-s3.hcl")
+      builder_images_version      = var.builder_images_version
+
+      code_services_enabled        = var.enable_aws_code_services
+      codebuild_role               = var.enable_aws_code_services ? var.codeservices_codebuild_role : ""
+      codebuild_user               = var.enable_aws_code_services ? "codebuild" : ""
+      codepipeline_role            = var.enable_aws_code_services ? var.codeservices_pipeline_role : ""
+      s3_bucket                    = var.enable_aws_code_services ? var.codeservices_s3_bucket : ""
+      codebuildc_security_group_id = var.codeservices_codebuild_security_group_id
+      aws_environment              = var.aws_environment
+
+      ecr_image_repo       = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.region}.amazonaws.com"
+      toolchain_image_repo = var.toolchain_image_repo
+
+      vault_namespace         = module.vault.vault_namespace
+      vault_root_token_secret = module.vault.vault_root_token_secret
+
+      product_type_aws_enabled     = contains(var.product_types, "product-aws")
+      product_type_jenkins_enabled = contains(var.product_types, "product-jenkins")
+
+      enable_keycloak         = var.enable_keycloak
+      builder_images_version  = var.builder_images_version
+      jenkins_image_version   = var.jenkins_image_version
+      toolchain_image_repo    = var.toolchain_image_repo
+      enable_harbor           = var.enable_harbor
+      enable_artifactory_jcr  = var.enable_artifactory_jcr
+      jenkins_pipeline_source = var.jenkins_pipeline_source
+      product_image_repo      = local.product_image_repo
+
+      # product_version                     = var.product_version
+      product_version = "eks-update-fixes"
+      product_service_account_annotations = jsonencode({
+        "eks.amazonaws.com/role-arn" = var.product_operator_service_account_arn
+      })
+    })
+  ]
+}
+
 resource "helm_release" "operator_toolchain" {
   repository = "https://liatrio-helm.s3.us-east-1.amazonaws.com/charts"
   timeout    = 120
@@ -101,14 +161,13 @@ resource "helm_release" "operator_toolchain" {
       slack_service_account_annotations = jsonencode({
         "eks.amazonaws.com/role-arn" = var.sparky_service_account_arn
       })
-      product_service_account_annotations = jsonencode({
-        "eks.amazonaws.com/role-arn" = var.product_operator_service_account_arn
-      })
       aws_event_mapper_service_account_annotations = jsonencode({
         "eks.amazonaws.com/role-arn" = var.codeservices_event_mapper_service_account_arn
       })
     })
   ]
+
+  depends_on = [helm_release.product_operator]
 }
 
 module "sparky" {

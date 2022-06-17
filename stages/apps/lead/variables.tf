@@ -68,6 +68,9 @@ variable "sdm_version" {
   default = "v2.3.0"
 }
 
+# Product operator helm chart version
+variable "product_operator_version" {}
+
 variable "product_version" {
   default = "master"
 }
@@ -189,6 +192,8 @@ variable "lead_sdm_operators" {
 }
 
 variable "enable_aws_code_services" {
+  type    = bool
+  default = false
 }
 
 variable "product_types" {

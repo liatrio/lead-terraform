@@ -1,3 +1,6 @@
+data "aws_caller_identity" "current" {
+}
+
 resource "aws_iam_role" "cluster_autoscaler_service_account" {
   name = "${var.cluster}_cluster_autoscaler_service_account"
 
@@ -20,6 +23,8 @@ resource "aws_iam_role" "cluster_autoscaler_service_account" {
   ]
 }
 EOF
+
+  permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/Developer"
 }
 
 resource "aws_iam_role_policy_attachment" "cluster_autoscaler" {
@@ -28,7 +33,7 @@ resource "aws_iam_role_policy_attachment" "cluster_autoscaler" {
 }
 
 resource "aws_iam_policy" "cluster_autoscaler" {
-  name_prefix = "cluster-autoscaler"
+  name_prefix = "lead-cluster-autoscaler"
   description = "EKS cluster-autoscaler policy for cluster ${var.cluster}"
   policy      = data.aws_iam_policy_document.cluster_autoscaler.json
 }

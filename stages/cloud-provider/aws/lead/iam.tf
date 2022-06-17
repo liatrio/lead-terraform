@@ -134,13 +134,15 @@ resource "aws_iam_role" "product_operator_service_account" {
       "Action": "sts:AssumeRoleWithWebIdentity",
       "Condition": {
         "StringEquals": {
-          "${replace(module.eks.aws_iam_openid_connect_provider_url, "https://", "")}:sub": "system:serviceaccount:${var.toolchain_namespace}:operator-product"
+          "${replace(module.eks.aws_iam_openid_connect_provider_url, "https://", "")}:sub": "system:serviceaccount:${var.toolchain_namespace}:product-operator"
         }
       }
     }
   ]
 }
 EOF
+
+  permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/Developer"
 }
 
 resource "aws_iam_policy" "product_operator_main" {

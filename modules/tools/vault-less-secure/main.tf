@@ -105,7 +105,8 @@ data "aws_kms_secrets" "vault_credentials" {
   }
 
   depends_on = [
-    data.kubernetes_secret.vault_credentials
+    data.kubernetes_secret.vault_credentials,
+    time_sleep.wait_for_vault_credentials,
   ]
 }
 

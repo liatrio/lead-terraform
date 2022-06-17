@@ -28,13 +28,24 @@ variable "source_type" {
   default = "CODEPIPELINE"
 }
 
-variable "codebuild_role" {}
-variable "codepipeline_role" {}
-variable "s3_bucket" {}
-variable "codebuild_user" {}
 variable "builder_images_version" {}
 variable "product_image_repo" {}
 variable "toolchain_image_repo" {}
 variable "cluster" {}
-variable "codebuild_security_group_id" {}
 variable "aws_environment" {}
+
+variable "codebuild_role" {
+  default = ""
+}
+variable "codebuild_user" {
+  default = ""
+}
+variable "codebuild_security_group_id" {
+  default = ""
+}
+variable "codepipeline_role" {
+  default = ""
+}
+variable "s3_bucket" {
+  default = ""
+}
