@@ -56,18 +56,23 @@ jobs:
           branch=${{ steps.branch.outputs.current_branch }}
           echo "::set-output name=name::${branch//[^-a-z0-9]/-}-vcluster"
 
+      - name: Get AWS Account Number
+        id: account
+        run: |
+          echo "::set-output name=number::$(cat aws/accounts.json | jq -rc '.[] | select(.name == "${{ matrix.env }}") | .account')"
+
       - name: Create vcluster
         env:
           VCLUSTER_NAME: ${{ steps.vcluster-name.outputs.name }}
-          TERRAGRUNT_IAM_ROLE: ${{ secrets.AWS_LEAD_TERRAFORM_TEST_ROLE }}
+          TERRAGRUNT_IAM_ROLE: "arn:aws:iam::281127131043:role/Developer"
         run: terragrunt apply --terragrunt-working-dir ./lead-environments/aws/vcluster -auto-approve
 
       - name: Run Tests
         env:
           VCLUSTER_NAME: ${{ steps.vcluster-name.outputs.name }}
-          TERRAGRUNT_IAM_ROLE: ${{ secrets.AWS_LEAD_TERRAFORM_TEST_ROLE }}
+          TERRAGRUNT_IAM_ROLE: "arn:aws:iam::281127131043:role/Developer"
         run: |
-          aws sts assume-role --role-arn ${{ secrets.AWS_LEAD_TERRAFORM_TEST_ROLE }} --role-session-name ${{ steps.branch.outputs.current_branch }}-test >> role.json
+          aws sts assume-role --role-arn $TERRAGRUNT_IAM_ROLE --role-session-name ${{ steps.branch.outputs.current_branch }}-test >> role.json
           export AWS_ACCESS_KEY_ID=$(cat role.json | jq -rc .Credentials.AccessKeyId)
           export AWS_SECRET_ACCESS_KEY=$(cat role.json | jq -rc .Credentials.SecretAccessKey)
           export AWS_SESSION_TOKEN=$(cat role.json | jq -rc .Credentials.SessionToken)
@@ -91,5 +96,5 @@ jobs:
         if: github.ref == 'refs/heads/master'
         env:
           VCLUSTER_NAME: ${{ steps.vcluster-name.outputs.name }}
-          TERRAGRUNT_IAM_ROLE: ${{ secrets.AWS_LEAD_TERRAFORM_TEST_ROLE }}
+          TERRAGRUNT_IAM_ROLE: "arn:aws:iam::${{ steps.account.outputs.number }}:role/Developer"
         run: terragrunt destroy --terragrunt-working-dir ./lead-environments/aws/vcluster -auto-approve
