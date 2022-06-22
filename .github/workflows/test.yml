@@ -57,18 +57,20 @@ jobs:
           echo "::set-output name=name::${branch//[^-a-z0-9]/-}-vcluster"
 
       - name: Sleep
+        env:
+          TERRAGRUNT_IAM_ROLE: ${{ secrets.AWS_LEAD_TERRAFORM_TEST_ROLE }}
         run: sleep 1440
 
       - name: Create vcluster
         env:
           VCLUSTER_NAME: ${{ steps.vcluster-name.outputs.name }}
-          TERRAGRUNT_IAM_ROLE: "arn:aws:iam::281127131043:role/Developer"
+          TERRAGRUNT_IAM_ROLE: ${{ secrets.AWS_LEAD_TERRAFORM_TEST_ROLE }}
         run: terragrunt apply --terragrunt-working-dir ./lead-environments/aws/vcluster -auto-approve
 
       - name: Run Tests
         env:
           VCLUSTER_NAME: ${{ steps.vcluster-name.outputs.name }}
-          TERRAGRUNT_IAM_ROLE: "arn:aws:iam::281127131043:role/Developer"
+          TERRAGRUNT_IAM_ROLE: ${{ secrets.AWS_LEAD_TERRAFORM_TEST_ROLE }}
         run: |
           aws sts assume-role --role-arn $TERRAGRUNT_IAM_ROLE --role-session-name ${{ steps.branch.outputs.current_branch }}-test >> role.json
           export AWS_ACCESS_KEY_ID=$(cat role.json | jq -rc .Credentials.AccessKeyId)
