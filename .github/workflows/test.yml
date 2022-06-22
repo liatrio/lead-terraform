@@ -56,15 +56,10 @@ jobs:
           branch=${{ steps.branch.outputs.current_branch }}
           echo "::set-output name=name::${branch//[^-a-z0-9]/-}-vcluster"
 
-      - name: Sleep
-        env:
-          TERRAGRUNT_IAM_ROLE: ${{ secrets.AWS_LEAD_TERRAFORM_TEST_ROLE }}
-        run: sleep 1440
-
       - name: Create vcluster
         env:
           VCLUSTER_NAME: ${{ steps.vcluster-name.outputs.name }}
-          TERRAGRUNT_IAM_ROLE: ${{ secrets.AWS_LEAD_TERRAFORM_TEST_ROLE }}
+          TERRAGRUNT_IAM_ROLE: "arn:aws:iam::265560927720:role/liatrio-lead-terraform-pipeline-service-account"
         run: terragrunt apply --terragrunt-working-dir ./lead-environments/aws/vcluster -auto-approve
 
       - name: Run Tests
