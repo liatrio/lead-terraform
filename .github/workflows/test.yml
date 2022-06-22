@@ -59,7 +59,7 @@ jobs:
       - name: Create vcluster
         env:
           VCLUSTER_NAME: ${{ steps.vcluster-name.outputs.name }}
-          TERRAGRUNT_IAM_ROLE: "arn:aws:iam::265560927720:role/liatrio-lead-terraform-pipeline-service-account"
+          TERRAGRUNT_IAM_ROLE: ${{ secrets.AWS_LEAD_TERRAFORM_TEST_ROLE }}
         run: terragrunt apply --terragrunt-working-dir ./lead-environments/aws/vcluster -auto-approve
 
       - name: Run Tests
@@ -67,7 +67,7 @@ jobs:
           VCLUSTER_NAME: ${{ steps.vcluster-name.outputs.name }}
           TERRAGRUNT_IAM_ROLE: ${{ secrets.AWS_LEAD_TERRAFORM_TEST_ROLE }}
         run: |
-          aws sts assume-role --role-arn $TERRAGRUNT_IAM_ROLE --role-session-name ${{ steps.branch.outputs.current_branch }}-test >> role.json
+          aws sts assume-role --role-arn ${{ secrets.AWS_LEAD_TERRAFORM_TEST_ROLE }} --role-session-name ${{ steps.branch.outputs.current_branch }}-test >> role.json
           export AWS_ACCESS_KEY_ID=$(cat role.json | jq -rc .Credentials.AccessKeyId)
           export AWS_SECRET_ACCESS_KEY=$(cat role.json | jq -rc .Credentials.SecretAccessKey)
           export AWS_SESSION_TOKEN=$(cat role.json | jq -rc .Credentials.SessionToken)
@@ -91,5 +91,5 @@ jobs:
         if: github.ref == 'refs/heads/master'
         env:
           VCLUSTER_NAME: ${{ steps.vcluster-name.outputs.name }}
-          TERRAGRUNT_IAM_ROLE: "arn:aws:iam::${{ steps.account.outputs.number }}:role/Developer"
+          TERRAGRUNT_IAM_ROLE: ${{ secrets.AWS_LEAD_TERRAFORM_TEST_ROLE }}
         run: terragrunt destroy --terragrunt-working-dir ./lead-environments/aws/vcluster -auto-approve

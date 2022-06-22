@@ -204,6 +204,7 @@ module "eks" {
     }
   }
 
+  manage_aws_auth_configmap     = true
   aws_auth_roles                = concat(local.default_roles, local.codebuild_roles, var.additional_mapped_roles)
   iam_role_permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/Developer"
   enable_irsa                   = true
