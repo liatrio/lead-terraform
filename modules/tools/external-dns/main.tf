@@ -2,7 +2,7 @@ resource "helm_release" "external_dns" {
   count      = var.enabled ? 1 : 0
   repository = "https://charts.bitnami.com/bitnami"
   chart      = "external-dns"
-  version    = "5.2.3"
+  version    = "6.5.6"
   namespace  = var.namespace
   name       = var.release_name
   timeout    = 600
@@ -113,4 +113,3 @@ resource "kubernetes_cluster_role_binding" "external_dns_role_binding" {
     namespace = var.namespace
   }
 }
-
