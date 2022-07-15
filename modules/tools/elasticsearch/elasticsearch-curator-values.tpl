@@ -13,8 +13,7 @@ configMaps:
         filters:
         - filtertype: pattern
           kind: regex
-          value: 'actions-[0-9]{4}-[0-9]{2}'
-          exclude: True
+          value: '(jaeger-jaeger-|kubernetes_cluster-).*'
         - filtertype: age
           source: creation_date
           direction: older
