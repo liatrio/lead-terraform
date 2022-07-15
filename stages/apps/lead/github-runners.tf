@@ -39,3 +39,19 @@ module "github_runners" {
 
   depends_on = [module.github_runner_controller]
 }
+
+# Creating a Service Account and calling the service-account-role module to create a cluster-role and cluster-role-binding.
+# This is created for the sharved-svc runners to have the correct permissions on the lead cluster.
+resource "kubernetes_service_account" "github_runner_service_account" {
+  metadata {
+    name = var.github_runners_service_account_name
+  }
+}
+
+module "github_service_account_rbac" {
+  source = "../../../modules/common/service-account-rbac"
+
+  service_account_name = kubernetes_service_account.github_runner_service_account.metadata.name
+  cluster_role_name    = var.github_runners_cluster_role_name
+  rules                = var.github_runners_cluster_role_rules
+}

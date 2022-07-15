@@ -326,3 +326,19 @@ variable "sdm_image_registry" {
 variable "enable_vcluster" {
   default = false
 }
+
+variable "github_runners_service_account_name" {
+  type = string
+}
+
+variable "github_runners_cluster_role_name" {
+  type = string
+}
+
+variable "github_runners_cluster_role_rules" {
+  type = list(object({
+    api_groups = [],
+    resources  = [],
+    verbs      = []
+  }))
+}
