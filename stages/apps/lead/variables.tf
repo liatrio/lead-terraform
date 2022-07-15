@@ -329,10 +329,12 @@ variable "enable_vcluster" {
 
 variable "github_runners_service_account_name" {
   type = string
+  default = "github-runner-application"
 }
 
 variable "github_runners_cluster_role_name" {
   type = string
+  default = "GithubRunnerApplication"
 }
 
 variable "github_runners_cluster_role_rules" {
