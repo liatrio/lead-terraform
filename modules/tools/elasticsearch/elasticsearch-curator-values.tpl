@@ -11,6 +11,10 @@ configMaps:
           disable_action: False
           ignore_empty_list: True
         filters:
+        - filtertype: pattern
+          kind: regex
+          value: 'actions-[0-9]{4}-[0-9]{2}'
+          exclude: True
         - filtertype: age
           source: creation_date
           direction: older
