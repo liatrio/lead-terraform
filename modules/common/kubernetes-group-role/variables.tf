@@ -1,4 +1,4 @@
-variable "service_account_name" {
+variable "group_name" {
   type = string
 }
 
@@ -8,8 +8,8 @@ variable "cluster_role_name" {
 
 variable "rules" {
   type = list(object({
-    api_groups = [],
-    resources  = [],
-    verbs      = []
+    api_groups = list(string),
+    resources  = list(string),
+    verbs      = list(string)
   }))
 }

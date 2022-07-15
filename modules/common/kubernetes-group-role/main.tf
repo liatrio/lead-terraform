@@ -15,18 +15,18 @@ resource "kubernetes_cluster_role" "cluster_role" {
 
 resource "kubernetes_cluster_role_binding" "cluster_role_binding" {
   metadata {
-    name = "${var.cluster_role_name}-${var.service_account_name}"
+    name = "${var.cluster_role_name}-${var.group_name}"
   }
 
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "ClusterRole"
-    name      = kubernetes_cluster_role.cluster_role.metadata.name
+    name      = kubernetes_cluster_role.cluster_role.metadata[0].name
   }
 
   subject {
-    kind      = "ServiceAccount"
-    name      = var.service_account_name
+    kind      = "Group"
+    name      = var.group_name
     api_group = "rbac.authorization.k8s.io"
   }
 }

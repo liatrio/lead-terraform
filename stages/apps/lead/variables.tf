@@ -327,20 +327,20 @@ variable "enable_vcluster" {
   default = false
 }
 
-variable "github_runners_service_account_name" {
-  type = string
+variable "github_runners_group_name" {
+  type    = string
   default = "github-runner-application"
 }
 
 variable "github_runners_cluster_role_name" {
-  type = string
+  type    = string
   default = "GithubRunnerApplication"
 }
 
 variable "github_runners_cluster_role_rules" {
   type = list(object({
-    api_groups = [],
-    resources  = [],
-    verbs      = []
+    api_groups = list(string),
+    resources  = list(string),
+    verbs      = list(string)
   }))
 }
