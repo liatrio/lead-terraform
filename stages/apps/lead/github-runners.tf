@@ -52,8 +52,8 @@ module "backstage_namespace" {
 module "github_group_role" {
   source = "../../../modules/common/kubernetes-group-role"
 
-  group_name        = var.github_runners_group_name
-  namespace         = module.backstage_namespace.name
-  role_name         = var.github_runners_cluster_role_name
-  rules             = var.github_runners_cluster_role_rules
+  group_name = var.github_runners_group_name
+  namespace  = module.backstage_namespace.name
+  role_name  = var.github_runners_cluster_role_name
+  rules      = var.github_runners_cluster_role_rules
 }

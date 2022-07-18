@@ -15,7 +15,7 @@ resource "kubernetes_cluster_role" "cluster_role" {
 
 resource "kubernetes_role_binding" "role_binding" {
   metadata {
-    name = "${var.role_name}-${var.group_name}"
+    name      = "${var.role_name}-${var.group_name}"
     namespace = var.namespace
   }
 
