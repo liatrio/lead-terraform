@@ -2,7 +2,11 @@ variable "group_name" {
   type = string
 }
 
-variable "cluster_role_name" {
+variable "role_name" {
+  type = string
+}
+
+variable "namespace" {
   type = string
 }
 

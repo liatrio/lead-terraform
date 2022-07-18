@@ -1,6 +1,6 @@
 resource "kubernetes_cluster_role" "cluster_role" {
   metadata {
-    name = var.cluster_role_name
+    name = var.role_name
   }
 
   dynamic "rule" {
@@ -13,9 +13,10 @@ resource "kubernetes_cluster_role" "cluster_role" {
   }
 }
 
-resource "kubernetes_cluster_role_binding" "cluster_role_binding" {
+resource "kubernetes_role_binding" "role_binding" {
   metadata {
-    name = "${var.cluster_role_name}-${var.group_name}"
+    name = "${var.role_name}-${var.group_name}"
+    namespace = var.namespace
   }
 
   role_ref {
