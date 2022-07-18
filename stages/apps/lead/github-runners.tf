@@ -40,16 +40,18 @@ module "github_runners" {
   depends_on = [module.github_runner_controller]
 }
 
-# Should probably move this to a better spot
+# TODO (Parker question): Does the namespace need to exist for a role-binding that references that namespace?
 module "backstage_namespace" {
   source = "../../../modules/common/namespace"
 
   namespace = "backstage"
 }
 
+# TODO: Should we be creating the cluster role here and then defining each of the bindings in module calls?
+
 # Calling the module to create a cluster-role and role-binding.
 # This is created for the sharved-svc runners to have the correct permissions on the lead cluster.
-module "github_group_role" {
+module "github_runner_backstage_rules" {
   source = "../../../modules/common/kubernetes-group-role"
 
   group_name = var.github_runners_group_name
