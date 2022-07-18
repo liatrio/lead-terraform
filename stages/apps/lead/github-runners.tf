@@ -40,12 +40,20 @@ module "github_runners" {
   depends_on = [module.github_runner_controller]
 }
 
-# Calling the module to create a cluster-role and cluster-role-binding.
+# Should probably move this to a better spot
+module "backstage_namespace" {
+  source = "../../../modules/common/namespace"
+
+  namespace = "backstage"
+}
+
+# Calling the module to create a cluster-role and role-binding.
 # This is created for the sharved-svc runners to have the correct permissions on the lead cluster.
 module "github_group_role" {
   source = "../../../modules/common/kubernetes-group-role"
 
   group_name        = var.github_runners_group_name
-  cluster_role_name = var.github_runners_cluster_role_name
+  namespace         = module.backstage_namespace.name
+  role_name         = var.github_runners_cluster_role_name
   rules             = var.github_runners_cluster_role_rules
 }
