@@ -11,6 +11,9 @@ configMaps:
           disable_action: False
           ignore_empty_list: True
         filters:
+        - filtertype: pattern
+          kind: regex
+          value: '(jaeger-jaeger-|kubernetes_cluster-).*'
         - filtertype: age
           source: creation_date
           direction: older
