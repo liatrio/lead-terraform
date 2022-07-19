@@ -77,7 +77,18 @@ resource "aws_iam_policy" "github_runners" {
                 "dynamodb:TagResource"
      ],
      "Resource": ["arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/github-runners-${var.cluster_name}"]
-   }
+   },
+   {
+      "Sid": "VisualEditor1",
+        "Effect": "Allow",
+        "Action": [
+            "sts:AssumeRole"
+        ],
+        "Resource": [
+          "arn:aws:iam::489130170427:role/GithubRunnerApplication",
+          "arn:aws:iam::281127131043:role/GithubRunnerApplication"
+        ]
+    }
  ]
 }
 EOF
