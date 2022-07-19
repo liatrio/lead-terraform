@@ -61,7 +61,7 @@ output "product_operator_service_account_arn" {
 }
 
 output "github_runners_service_account_arn" {
-  value = module.github-runners-s3.github_runners_service_account_arn
+  value = module.github-runners.github_runners_service_account_arn
 }
 
 output "codeservices_event_mapper_service_account_arn" {

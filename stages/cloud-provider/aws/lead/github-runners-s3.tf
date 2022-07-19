@@ -1,5 +1,5 @@
-module "github-runners-s3" {
-  source = "../../../../modules/environment/aws/github-runners-s3"
+module "github-runners" {
+  source = "../../../../modules/environment/aws/github-runners"
 
   cluster_name                        = var.cluster_name
   aws_iam_openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider_url
