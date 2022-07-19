@@ -326,3 +326,18 @@ variable "sdm_image_registry" {
 variable "enable_vcluster" {
   default = false
 }
+
+variable "github_runners_group_name" {
+  type    = string
+  default = "github-runner-application"
+}
+
+variable "github_runners_cluster_role_name" {
+  type    = string
+  default = "github-runner-application"
+}
+
+variable "github_runners_namespaces" {
+  type    = list(string)
+  default = []
+}

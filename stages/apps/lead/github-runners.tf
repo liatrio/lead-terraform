@@ -39,3 +39,52 @@ module "github_runners" {
 
   depends_on = [module.github_runner_controller]
 }
+
+# Create a generic cluster role that the github runners can assume in lead
+resource "kubernetes_cluster_role" "cluster_role" {
+  metadata {
+    name = var.github_runners_cluster_role_name
+  }
+
+  rule {
+    api_groups = [""]
+    resources  = ["secrets", "configmaps", "persistentvolumes", "persistentvolumeclaims", "services"]
+    verbs      = ["*"]
+  }
+
+  rule {
+    api_groups = ["networking.k8s.io", "extensions"]
+    resources  = ["ingresses"]
+    verbs      = ["*"]
+  }
+
+  rule {
+    api_groups = ["apps"]
+    resources  = ["deployments", "replicasets", "statefulsets"]
+    verbs      = ["*"]
+  }
+
+  rule {
+    api_groups = ["batch"]
+    resources  = ["jobs"]
+    verbs      = ["*"]
+  }
+
+  rule {
+    api_groups = ["autoscaling"]
+    resources  = ["horizontalpodautoscalers"]
+    verbs      = ["*"]
+  }
+}
+
+# Calling the module to create a role-binding.
+# This is created for the sharved-svc runners to have the correct permissions on the lead cluster.
+module "github_runner_binding" {
+  source = "../../../modules/common/kubernetes-group-role"
+
+  for_each = toset(var.github_runners_namespaces)
+
+  group_name = var.github_runners_group_name
+  namespace  = each.value
+  role_name  = kubernetes_cluster_role.cluster_role.metadata[0].name
+}

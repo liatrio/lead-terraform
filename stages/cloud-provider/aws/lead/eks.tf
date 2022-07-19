@@ -21,4 +21,5 @@ module "eks" {
   vpc_name                         = var.vpc_name
   docker_registry_mirror           = var.docker_registry_mirror
   enable_ssh_access                = var.enable_eks_ssh_access
+  additional_mapped_roles          = var.additional_mapped_roles
 }
