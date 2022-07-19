@@ -79,7 +79,7 @@ resource "aws_iam_policy" "github_runners" {
      "Resource": ["arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/github-runners-${var.cluster_name}"]
    },
    {
-      "Sid": "VisualEditor1",
+      "Sid": "AssumeGithubRunnerApplicationRole",
         "Effect": "Allow",
         "Action": [
             "sts:AssumeRole"

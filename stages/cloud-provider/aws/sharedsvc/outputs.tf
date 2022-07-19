@@ -60,7 +60,7 @@ output "docker_registry_s3_bucket_name" {
 }
 
 output "github_runners_service_account_arn" {
-  value = module.github-runners-s3.github_runners_service_account_arn
+  value = module.github-runners.github_runners_service_account_arn
 }
 
 output "lead_environments_pipeline_service_account_arn" {

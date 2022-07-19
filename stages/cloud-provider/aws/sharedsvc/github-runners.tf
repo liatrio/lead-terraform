@@ -1,5 +1,5 @@
-module "github-runners-s3" {
-  source = "../../../../modules/environment/aws/github-runners-s3"
+module "github-runners" {
+  source = "../../../../modules/environment/aws/github-runners"
 
   cluster_name                        = var.cluster_name
   service_accounts                    = var.github_runner_service_accounts
