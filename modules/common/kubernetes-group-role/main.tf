@@ -1,28 +1,19 @@
-resource "kubernetes_cluster_role" "cluster_role" {
-  metadata {
-    name = var.role_name
-  }
+module "namespace_creation" {
+  source = "../../../modules/common/namespace"
 
-  dynamic "rule" {
-    for_each = var.rules
-    content {
-      api_groups = rule.value["api_groups"]
-      resources  = rule.value["resources"]
-      verbs      = rule.value["verbs"]
-    }
-  }
+  namespace = var.namespace
 }
 
 resource "kubernetes_role_binding" "role_binding" {
   metadata {
-    name      = "${var.role_name}-binding-${var.namespace}"
-    namespace = var.namespace
+    name      = "${var.role_name}-binding-${module.namespace_creation.name}"
+    namespace = module.namespace_creation.name
   }
 
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "ClusterRole"
-    name      = kubernetes_cluster_role.cluster_role.metadata[0].name
+    name      = var.role_name
   }
 
   subject {

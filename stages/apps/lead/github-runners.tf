@@ -40,22 +40,51 @@ module "github_runners" {
   depends_on = [module.github_runner_controller]
 }
 
-# TODO (Parker question): Does the namespace need to exist for a role-binding that references that namespace?
-module "backstage_namespace" {
-  source = "../../../modules/common/namespace"
+# Create a generic cluster role that the github runners can assume in lead
+resource "kubernetes_cluster_role" "cluster_role" {
+  metadata {
+    name = var.github_runners_cluster_role_name
+  }
 
-  namespace = "backstage"
+  rule {
+    api_groups = [""]
+    resources  = ["secrets", "configmaps", "persistentvolumes", "persistentvolumeclaims", "services"]
+    verbs      = ["*"]
+  }
+
+  rule {
+    api_groups = ["networking.k8s.io", "extensions"]
+    resources  = ["ingresses"]
+    verbs      = ["*"]
+  }
+
+  rule {
+    api_groups = ["apps"]
+    resources  = ["deployments", "replicasets", "statefulsets"]
+    verbs      = ["*"]
+  }
+
+  rule {
+    api_groups = ["batch"]
+    resources  = ["jobs"]
+    verbs      = ["*"]
+  }
+
+  rule {
+    api_groups = ["autoscaling"]
+    resources  = ["horizontalpodautoscalers"]
+    verbs      = ["*"]
+  }
 }
 
-# TODO: Should we be creating the cluster role here and then defining each of the bindings in module calls?
-
-# Calling the module to create a cluster-role and role-binding.
+# Calling the module to create a role-binding.
 # This is created for the sharved-svc runners to have the correct permissions on the lead cluster.
-module "github_runner_backstage_rules" {
+module "github_runner_backstage_binding" {
   source = "../../../modules/common/kubernetes-group-role"
 
+  for_each = toset(var.github_runners_namespaces)
+
   group_name = var.github_runners_group_name
-  namespace  = module.backstage_namespace.name
-  role_name  = var.github_runners_cluster_role_name
-  rules      = var.github_runners_cluster_role_rules
+  namespace  = each.value
+  role_name  = kubernetes_cluster_role.cluster_role.metadata[0].name
 }

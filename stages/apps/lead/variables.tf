@@ -337,13 +337,7 @@ variable "github_runners_cluster_role_name" {
   default = "github-runner-application"
 }
 
-# TODO: Should this have a default?
-# If we had no runners being defined (basically if that feature flag was set to false, but the runners don't have features flags)
-# then we would still have to define a set of rules even though there were no runners being set.
-variable "github_runners_cluster_role_rules" {
-  type = list(object({
-    api_groups = list(string),
-    resources  = list(string),
-    verbs      = list(string)
-  }))
+variable "github_runners_namespaces" {
+  type    = list(string)
+  default = []
 }
