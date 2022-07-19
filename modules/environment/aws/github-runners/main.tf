@@ -47,47 +47,49 @@ resource "aws_iam_policy" "github_runners" {
   policy = <<EOF
 {
   "Version": "2012-10-17",
-  "Statement": [{
-    "Effect": "Allow",
-    "Action": [
-      "s3:ListBucket",
-      "s3:GetBucketVersioning",
-      "s3:CreateBucket"
-    ],
-    "Resource": ["${aws_s3_bucket.github-runner.arn}"]
-  },
-  {
-    "Effect": "Allow",
-    "Action": [
-      "s3:PutObject",
-      "s3:GetObject",
-      "s3:DeleteObject"
-    ],
-    "Resource": ["${aws_s3_bucket.github-runner.arn}/*"]
-  },
-  {
-    "Effect": "Allow",
-    "Action": [
-      "dynamodb:PutItem",
-      "dynamodb:GetItem",
-      "dynamodb:DescribeTable",
-      "dynamodb:DeleteItem",
-      "dynamodb:CreateTable",
-      "dynamodb:TagResource"
-    ],
-    "Resource": ["arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/github-runners-${var.cluster_name}"]
-  },
-  {
-    "Sid": "AssumeGithubRunnerApplicationRole",
-    "Effect": "Allow",
-    "Action": [
-      "sts:AssumeRole"
-    ],
-    "Resource": [
-      "arn:aws:iam::489130170427:role/GithubRunnerApplication",
-      "arn:aws:iam::281127131043:role/GithubRunnerApplication"
-    ]
-  }]
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:ListBucket",
+        "s3:GetBucketVersioning",
+        "s3:CreateBucket"
+      ],
+      "Resource": ["${aws_s3_bucket.github-runner.arn}"]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:PutObject",
+        "s3:GetObject",
+        "s3:DeleteObject"
+      ],
+      "Resource": ["${aws_s3_bucket.github-runner.arn}/*"]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:PutItem",
+        "dynamodb:GetItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:DeleteItem",
+        "dynamodb:CreateTable",
+        "dynamodb:TagResource"
+      ],
+      "Resource": ["arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/github-runners-${var.cluster_name}"]
+    },
+    {
+      "Sid": "AssumeGithubRunnerApplicationRole",
+      "Effect": "Allow",
+      "Action": [
+        "sts:AssumeRole"
+      ],
+      "Resource": [
+        "arn:aws:iam::489130170427:role/GithubRunnerApplication",
+        "arn:aws:iam::281127131043:role/GithubRunnerApplication"
+      ]
+    }
+  ]
 }
 EOF
 }
