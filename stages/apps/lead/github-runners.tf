@@ -79,7 +79,7 @@ resource "kubernetes_cluster_role" "cluster_role" {
 
 # Calling the module to create a role-binding.
 # This is created for the sharved-svc runners to have the correct permissions on the lead cluster.
-module "github_runner_backstage_binding" {
+module "github_runner_binding" {
   source = "../../../modules/common/kubernetes-group-role"
 
   for_each = toset(var.github_runners_namespaces)
