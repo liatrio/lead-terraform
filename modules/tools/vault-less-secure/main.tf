@@ -62,7 +62,7 @@ resource "helm_release" "vault" {
       vault_service_account_arn     = var.vault_service_account_arn
       vault_credentials_secret_name = local.vault_secret_name
       ingress_class                 = var.ingress_class
-      vault_config                  = indent(6, templatefile("${path.module}/vault-config.hcl.tpl", {
+      vault_config = indent(6, templatefile("${path.module}/vault-config.hcl.tpl", {
         region              = var.region
         dynamodb_table_name = var.vault_dynamodb_table_name
         kms_key_id          = var.vault_kms_key_id
