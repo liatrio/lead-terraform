@@ -11,6 +11,7 @@ module "vault" {
   vault_hostname            = local.lead_vault_hostname
   vault_service_account_arn = var.vault_service_account_arn
   vault_kms_key_id          = var.vault_kms_key_id
+  ingress_class             = module.toolchain_ingress.toolchain_ingress_class
 }
 
 resource "kubernetes_service_account" "vault_token_reviewer" {
