@@ -53,7 +53,7 @@ resource "helm_release" "vault" {
   name       = "vault"
   namespace  = var.namespace
   repository = "https://helm.releases.hashicorp.com"
-  version    = "0.14.0"
+  version    = "0.20.1"
   wait       = true
 
   values = [
@@ -61,7 +61,8 @@ resource "helm_release" "vault" {
       vault_hostname                = var.vault_hostname
       vault_service_account_arn     = var.vault_service_account_arn
       vault_credentials_secret_name = local.vault_secret_name
-      vault_config = indent(6, templatefile("${path.module}/vault-config.hcl.tpl", {
+      ingress_class                 = var.ingress_class
+      vault_config                  = indent(6, templatefile("${path.module}/vault-config.hcl.tpl", {
         region              = var.region
         dynamodb_table_name = var.vault_dynamodb_table_name
         kms_key_id          = var.vault_kms_key_id
