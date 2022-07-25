@@ -92,6 +92,7 @@ jobs:
           --force-all-dirs
 
       - name: Upload SARIF file
+        if: always()
         uses: github/codeql-action/upload-sarif@v1
         with:
           sarif-file: ./tfsec.sarif
