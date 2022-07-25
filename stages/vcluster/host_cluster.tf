@@ -100,7 +100,8 @@ data "kubernetes_secret" "vcluster_kubeconfig" {
 # it's strange to do what is essentially two separate checks to ensure the cluster is up and reachable, but only doing one
 # of the two checks didn't have a 100% success rate when running this locally. using both checks seems to work every time.
 module "wait_for_vcluster" {
-  source = "matti/resource/shell"
+  source  = "matti/resource/shell"
+  version = "1.5.0"
 
   command = <<EOF
 until nslookup ${var.vcluster_apiserver_host} &>/dev/null; do
