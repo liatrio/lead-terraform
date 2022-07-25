@@ -75,15 +75,6 @@ jobs:
       - name: Terraform Format
         run: terraform fmt -check --recursive
 
-      - name: Setup Go environment
-        uses: actions/setup-go@v3.2.1
-        with:
-          go-version: '^v1.18.0'
-          cache: true
-
-      - name: Install tfsec
-        run: go install github.com/aquasecurity/tfsec/cmd/tfsec@v1.26.3
-
       - name: Run tfsec with sarif upload
         uses: aquasecurity/tfsec-sarif-action@v0.1.3
         with: 
@@ -97,12 +88,10 @@ jobs:
         with:
           sarif_file: tfsec.sarif
 
-      # TODO: incorporate tflint
-
-      # - name: Run tflint with reviewdog
-      #   uses: reviewdog/action-tflint@v1.13.0
-      #   if: ${{ always() }}
-      #   with:
-      #     github_token: ${{ secrets.github_token }}
-      #     fail_on_error: "true"
-      #     filter_mode: "nofilter"
+      - name: Run tflint with reviewdog
+        uses: reviewdog/action-tflint@v1.13.0
+        if: ${{ always() }}
+        with:
+          github_token: ${{ secrets.github_token }}
+          fail_on_error: "true"
+          filter_mode: "nofilter"
