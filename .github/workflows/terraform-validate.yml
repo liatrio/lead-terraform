@@ -79,18 +79,17 @@ jobs:
         uses: actions/setup-go@v3.2.1
         with:
           go-version: '^v1.18.0'
+          cache: true
 
       - name: Install tfsec
         run: go install github.com/aquasecurity/tfsec/cmd/tfsec@v1.26.3
 
-      - name: Run tfsec on each folder
-        run: |
-          tfsec \
-          -e general-secrets-sensitive-in-variable,general-secrets-sensitive-in-local,general-secrets-sensitive-in-attribute \
-          --format=sarif \
-          --out=tfsec.sarif \
-          --force-all-dirs \
-          --soft-fail
+      - name: Run tfsec with sarif upload
+        uses: aquasecurity/tfsec-sarif-action@v0.1.3
+        with: 
+          sarif_file: tfsec.sarif
+          full_repo_scan: true
+          tfsec_args: "-e general-secrets-sensitive-in-variable,general-secrets-sensitive-in-local,general-secrets-sensitive-in-attribute"
 
       - name: Upload SARIF file
         if: always()
