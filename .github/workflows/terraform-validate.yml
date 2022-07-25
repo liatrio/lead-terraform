@@ -60,6 +60,15 @@ jobs:
           terraform init -backend=false
           terraform validate
 
+      - name: Run tflint with reviewdog
+        uses: reviewdog/action-tflint@v1.13.0
+        if: always()
+        with:
+          working_directory: ${{ matrix.validate }}
+          github_token: ${{ secrets.github_token }}
+          fail_on_error: "true"
+          filter_mode: "nofilter"
+
   tfsec:
     name: "TFSec and Terraform Format"
     runs-on: ubuntu-latest
@@ -86,25 +95,3 @@ jobs:
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: tfsec.sarif
-
-  tflint:
-    name: "TFLint"
-    runs-on: ubuntu-latest
-    needs: discover_stages
-    strategy:
-        # ↓ create dynamic matrix from the json
-        matrix:
-          validate: ${{ fromJson(needs.discover_stages.outputs.matrix) }}
-        fail-fast: false
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Run tflint with reviewdog
-        uses: reviewdog/action-tflint@v1.13.0
-        if: ${{ always() }}
-        with:
-          working_directory: ${{ matrix.validate }}
-          github_token: ${{ secrets.github_token }}
-          fail_on_error: "true"
-          filter_mode: "nofilter"
