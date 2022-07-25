@@ -53,7 +53,6 @@ data "aws_iam_policy_document" "cluster_autoscaler" {
       "ec2:DescribeLaunchTemplateVersions"
     ]
 
-    #tfsec:ignore:aws-iam-no-policy-wildcards
     resources = [
       "*"
     ]
