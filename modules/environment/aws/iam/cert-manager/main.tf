@@ -26,7 +26,6 @@ resource "aws_iam_role" "cert_manager_service_account" {
 EOF
 }
 
-#tfsec:ignore:aws-iam-no-policy-wildcards
 resource "aws_iam_role_policy" "cert_manager" {
   name = "${var.cluster}-cert-manager"
   role = aws_iam_role.cert_manager_service_account.name
