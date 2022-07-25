@@ -61,13 +61,14 @@ jobs:
           terraform validate
 
       - name: Run tflint with reviewdog
-        uses: reviewdog/action-tflint@v1.13.0
+        uses: reviewdog/action-tflint@v1.17.0
         if: always()
         with:
           working_directory: ${{ matrix.validate }}
           github_token: ${{ secrets.github_token }}
           fail_on_error: "true"
           filter_mode: "nofilter"
+          reporter: github-pr-review
 
   tfsec:
     name: "TFSec and Terraform Format"
