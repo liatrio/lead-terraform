@@ -75,7 +75,10 @@ jobs:
       - name: Terraform Format
         run: terraform fmt -check --recursive
 
-      # TODO: need to setup go?
+      - name: Setup Go environment
+        uses: actions/setup-go@v3.2.1
+        with:
+          go-version: '^v1.18.0'
 
       - name: Install tfsec
         run: go install github.com/aquasecurity/tfsec/cmd/tfsec@v1.26.3
