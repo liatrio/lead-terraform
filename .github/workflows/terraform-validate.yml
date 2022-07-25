@@ -66,6 +66,12 @@ jobs:
     defaults:
       run:
         shell: bash
+    needs: discover_stages
+    strategy:
+        # ↓ create dynamic matrix from the json
+        matrix:
+          validate: ${{ fromJson(needs.discover_stages.outputs.matrix) }}
+        fail-fast: false
 
     steps:
 
@@ -83,6 +89,7 @@ jobs:
         uses: reviewdog/action-tfsec@v1.11.0
         if: ${{ always() }}
         with:
+          working_directory: ${{ matrix.validate }}
           github_token: ${{ secrets.github_token }}
           tfsec_version: "v1.26.3"
           fail_on_error: "true"
