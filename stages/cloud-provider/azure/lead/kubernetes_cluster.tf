@@ -1,6 +1,3 @@
-#tfsec:ignore:azure-container-use-rbac-permissions
-#tfsec:ignore:azure-container-logging
-#tfsec:ignore:azure-container-limit-authorized-ips
 resource "azurerm_kubernetes_cluster" "main" {
   name                = var.cluster_name
   location            = var.location
