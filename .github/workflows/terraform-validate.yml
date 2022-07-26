@@ -5,40 +5,30 @@ on:
   push:
 
 jobs:
-
   discover_stages:
     name: Discover
     runs-on: ubuntu-latest
     steps:
-
       - name: Checkout
         uses: actions/checkout@v2
 
       # here we create the json, we need the "id:" so we can use it in "outputs" below
       - id: set-matrix
-
-        # find main.tf files in stages folder, trim to path, store as array, remove any empty.
-        run: echo "::set-output name=matrix::$(find stages -name main.tf | sed 's:[^/]*$::' | jq -R -s -c 'split("\n") | map(select(length > 0))')"
-
+        # find tf files in all folders, trim to path, store as array, remove any empty.
+        run: echo "::set-output name=matrix::$(find stages -name *.tf | sed 's:[^/]*$::' | sort -u | jq -R -s -c 'split("\n") | map(select(length > 0))')"
     outputs:
         matrix: ${{ steps.set-matrix.outputs.matrix }}
 
   terraform_validate:
-    name: "Validate"
+    name: Validate
     runs-on: ubuntu-latest
-
     needs: discover_stages
     strategy:
         # ↓ create dynamic matrix from the json
         matrix:
           validate: ${{ fromJson(needs.discover_stages.outputs.matrix) }}
         fail-fast: false
-    defaults:
-      run:
-        shell: bash
-
     steps:
-
       - name: Checkout
         uses: actions/checkout@v2
 
@@ -60,15 +50,33 @@ jobs:
           terraform init -backend=false
           terraform validate
 
+      - name: tfsec
+        uses: aquasecurity/tfsec-sarif-action@v0.1.3
+        with:
+          sarif_file: tfsec.sarif
+          working_directory: ${{ matrix.validate }}
+          tfsec_args: "-e general-secrets-sensitive-in-variable,general-secrets-sensitive-in-local,general-secrets-sensitive-in-attribute"
+
+      - name: Upload SARIF file
+        if: always()
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: tfsec.sarif
+
+      - name: Run tflint with reviewdog
+        uses: reviewdog/action-tflint@v1.17.0
+        if: always()
+        with:
+          working_directory: ${{ matrix.validate }}
+          github_token: ${{ secrets.github_token }}
+          fail_on_error: "true"
+          filter_mode: "nofilter"
+          reporter: github-pr-review
+
   terraform_format:
-    name: "Format"
+    name: Format
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-
     steps:
-
       - name: Checkout
         uses: actions/checkout@v2
 
@@ -77,22 +85,4 @@ jobs:
 
       # Checks that all Terraform configuration files adhere to a canonical format
       - name: Terraform Format
-        run: terraform fmt -check -recursive
-
-      - name: Run tfsec with reviewdog
-        uses: reviewdog/action-tfsec@v1.11.0
-        if: ${{ always() }}
-        with:
-          github_token: ${{ secrets.github_token }}
-          tfsec_version: "v0.63.1"
-          fail_on_error: "true"
-          filter_mode: "nofilter"
-          tfsec_flags: "-e general-secrets-sensitive-in-variable,general-secrets-sensitive-in-local,general-secrets-sensitive-in-attribute"
-
-      - name: Run tflint with reviewdog
-        uses: reviewdog/action-tflint@v1.13.0
-        if: ${{ always() }}
-        with:
-          github_token: ${{ secrets.github_token }}
-          fail_on_error: "true"
-          filter_mode: "nofilter"
+        run: terraform fmt -check --recursive
