@@ -54,7 +54,7 @@ data "aws_iam_policy_document" "cluster_autoscaler" {
     ]
 
     resources = [
-      "*"
+      "${var.cluster_arn}"
     ]
   }
 }
