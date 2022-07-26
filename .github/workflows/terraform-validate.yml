@@ -19,7 +19,7 @@ jobs:
       # here we create the json, we need the "id:" so we can use it in "outputs" below
       - id: set-matrix
         # find tf files in all folders, trim to path, store as array, remove any empty.
-        run: echo "::set-output name=matrix::$(find . -name *.tf | sed 's:[^/]*$::' | sort -u | jq -R -s -c 'split("\n") | map(select(length > 0))')"
+        run: echo "::set-output name=matrix::$(find stages -name *.tf | sed 's:[^/]*$::' | sort -u | jq -R -s -c 'split("\n") | map(select(length > 0))')"
     outputs:
         matrix: ${{ steps.set-matrix.outputs.matrix }}
 
