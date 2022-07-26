@@ -2,6 +2,10 @@ output "cluster_id" {
   value = module.eks.cluster_id
 }
 
+output "cluster_arn" {
+  value = module.eks.cluster_arn
+}
+
 output "aws_iam_openid_connect_provider_arn" {
   value = module.eks.oidc_provider_arn
 }
