@@ -1,3 +1,11 @@
+resource "azurerm_log_analytics_workspace" "aks_log_workspace" {
+  name                = "${var.cluster-name}-log-analytics"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  sku                 = "PerGB2018"
+  retention_in_days   = 30
+}
+
 resource "azurerm_kubernetes_cluster" "main" {
   name                = var.cluster_name
   location            = var.location
@@ -12,6 +20,10 @@ resource "azurerm_kubernetes_cluster" "main" {
 
   identity {
     type = "SystemAssigned"
+  }
+
+  role_based_access_control {
+    enabled = true
   }
 
   addon_profile {
@@ -33,6 +45,7 @@ resource "azurerm_kubernetes_cluster" "main" {
 
     oms_agent {
       enabled = false
+      log_analytics_workspace_id = azurerm_log_analytics_workspace.aks_log_workspace.id
     }
   }
 }
