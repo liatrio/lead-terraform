@@ -1,5 +1,5 @@
-data "aws_caller_identity" "current" {
-}
+data "aws_caller_identity" "current" {}
+data "aws_region" "current" {}
 
 resource "aws_iam_role" "cluster_autoscaler_service_account" {
   name = "${var.cluster}_cluster_autoscaler_service_account"
@@ -53,8 +53,6 @@ data "aws_iam_policy_document" "cluster_autoscaler" {
       "ec2:DescribeLaunchTemplateVersions"
     ]
 
-    resources = [
-      "${var.cluster_arn}"
-    ]
+    resources = formatlist("arn:aws:autoscaling:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:autoScalingGroup:*:autoScalingGroupName/%s", var.cluster_asg_names)
   }
 }

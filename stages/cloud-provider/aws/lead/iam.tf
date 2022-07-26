@@ -24,7 +24,7 @@ module "cluster_autoscaler_iam" {
   source = "../../../../modules/environment/aws/iam/cluster-autoscaler"
 
   cluster                     = var.cluster_name
-  cluster_arn                 = module.eks.cluster_arn
+  cluster_asg_names           = module.eks.cluster_asg_names
   namespace                   = var.system_namespace
   openid_connect_provider_arn = module.eks.aws_iam_openid_connect_provider_arn
   openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider_url
