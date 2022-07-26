@@ -23,6 +23,8 @@ variable "protect_pvc_resources" {
 
 variable "admin_password" {}
 
+variable "db_password" {}
+
 variable "metrics_enabled" {
   default = false
 }

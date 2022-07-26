@@ -10,6 +10,7 @@ module "harbor" {
   ingress_annotations          = local.external_ingress_annotations
   namespace                    = var.toolchain_namespace
   admin_password               = data.vault_generic_secret.harbor.data["admin-password"]
+  db_password                  = data.vault_generic_secret.harbor.data["db-password"]
   k8s_storage_class            = var.k8s_storage_class
   harbor_registry_disk_size    = "200Gi"
   metrics_enabled              = true
