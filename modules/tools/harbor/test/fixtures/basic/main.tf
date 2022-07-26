@@ -27,7 +27,6 @@ module "harbor" {
   admin_password               = var.admin_password
   k8s_storage_class            = "gp2"
   harbor_registry_disk_size    = "5Gi"
-  harbor_chartmuseum_disk_size = "5Gi"
   metrics_enabled              = false
 }
 

@@ -26,7 +26,6 @@ module "harbor" {
   namespace                    = var.namespace
   admin_password               = var.admin_password
   harbor_registry_disk_size    = "10Mi"
-  harbor_chartmuseum_disk_size = "10Mi"
   harbor_database_disk_size    = "10Mi"
   k8s_storage_class            = var.k8s_storage_class
   protect_pvc_resources        = false

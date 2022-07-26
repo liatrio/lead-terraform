@@ -21,9 +21,6 @@ persistence:
     registry:
       existingClaim: harbor-registry
       accessMode: ReadWriteOnce
-    chartmuseum:
-      existingClaim: harbor-chartmuseum
-      accessMode: ReadWriteOnce
     jobservice:
       storageClass: ${storage_class}
       accessMode: ReadWriteOnce

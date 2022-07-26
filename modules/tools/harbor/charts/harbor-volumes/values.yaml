@@ -6,12 +6,6 @@ components:
     initCommands:
       - "mkdir -p /storage/docker && chown -R 10000:10000 /storage"
     protectPvcResource: true
-  chartmuseum:
-    size: 2Gi
-    mountPath: "/chart_storage"
-    initCommands:
-      - "chown -R 10000:10000 /chart_storage"
-    protectPvcResource: true
   database:
     size: 2Gi
     mountPath: "/database"

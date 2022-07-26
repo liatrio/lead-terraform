@@ -20,5 +20,4 @@ module "harbor" {
   admin_password               = data.vault_generic_secret.harbor.data["admin-password"]
   k8s_storage_class            = var.k8s_storage_class
   harbor_registry_disk_size    = "200Gi"
-  harbor_chartmuseum_disk_size = "100Gi"
 }

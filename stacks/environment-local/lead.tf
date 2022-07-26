@@ -36,7 +36,6 @@ module "toolchain" {
   k8s_storage_class       = var.k8s_storage_class
 
   harbor_registry_disk_size    = "200Gi"
-  harbor_chartmuseum_disk_size = "100Gi"
 }
 
 module "sdm" {

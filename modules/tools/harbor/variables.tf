@@ -11,10 +11,6 @@ variable "harbor_registry_disk_size" {
   default = "200Gi"
 }
 
-variable "harbor_chartmuseum_disk_size" {
-  default = "100Gi"
-}
-
 variable "harbor_database_disk_size" {
   default = "10Gi"
 }
