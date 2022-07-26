@@ -19,12 +19,12 @@ jobs:
       # here we create the json, we need the "id:" so we can use it in "outputs" below
       - id: set-matrix
         # find tf files in all folders, trim to path, store as array, remove any empty.
-        run: echo "::set-output name=matrix::$(find . -name *.tf | sed 's:[^/]*$::' | jq -R -s -c 'split("\n") | map(select(length > 0))')"
+        run: echo "::set-output name=matrix::$(find . -name *.tf | sed 's:[^/]*$::' | sort -u | jq -R -s -c 'split("\n") | map(select(length > 0))')"
     outputs:
         matrix: ${{ steps.set-matrix.outputs.matrix }}
 
   terraform_validate:
-    name: "Validate"
+    name: Validate
     runs-on: ubuntu-latest
     needs: discover
     strategy:
@@ -54,7 +54,7 @@ jobs:
           terraform init -backend=false
           terraform validate
 
-      - name: Run tfsec
+      - name: tfsec
         uses: aquasecurity/tfsec-sarif-action@v0.1.3
         with:
           sarif_file: tfsec.sarif
@@ -78,7 +78,7 @@ jobs:
           reporter: github-pr-review
 
   terraform_format:
-    name: "TFSec and Terraform Format"
+    name: Format
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
