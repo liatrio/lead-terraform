@@ -1,5 +1,5 @@
-data "aws_caller_identity" "current" {}
-data "aws_region" "current" {}
+data "aws_caller_identity" "current" {
+}
 
 resource "aws_iam_role" "cluster_autoscaler_service_account" {
   name = "${var.cluster}_cluster_autoscaler_service_account"
