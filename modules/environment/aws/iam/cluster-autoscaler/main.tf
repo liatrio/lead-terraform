@@ -53,6 +53,15 @@ data "aws_iam_policy_document" "cluster_autoscaler" {
       "ec2:DescribeLaunchTemplateVersions"
     ]
 
-    resources = formatlist("arn:aws:autoscaling:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:autoScalingGroup:*:autoScalingGroupName/%s", var.cluster_asg_names)
+    # We ignore the wildcard here so that we can auto-discover auto-scaling groups (ASG)
+    #   There is a minimal iam policy version of the eks autoscaler but in addition to
+    #   the lack of auto-discovery, "it restricts the IAM permissions to the node groups 
+    #   the Cluster Autoscaler is configured to scale."
+    #   Link to docs: https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/cloudprovider/aws/README.md#minimal-iam-permissions-policy
+
+    #tfsec:ignore:aws-iam-no-policy-wildcards
+    resources = [
+      "*"
+    ]
   }
 }
