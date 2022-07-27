@@ -35,7 +35,7 @@ module "toolchain" {
   crd_waiter              = module.infrastructure.crd_waiter
   k8s_storage_class       = var.k8s_storage_class
 
-  harbor_registry_disk_size    = "200Gi"
+  harbor_registry_disk_size = "200Gi"
 }
 
 module "sdm" {
