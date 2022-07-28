@@ -289,8 +289,6 @@ module "eks" {
   }
 }
 
-#tfsec:ignore:aws-s3-specify-public-access-block
-#tfsec:ignore:aws-s3-enable-versioning
 #tfsec:ignore:aws-s3-enable-bucket-encryption
 #tfsec:ignore:aws-s3-enable-bucket-logging
 #---
@@ -335,6 +333,15 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "tfstates_encrypti
       sse_algorithm     = "aws:kms"
     }
   }
+}
+
+# Used to restrict public access and block users from creating policies to enable it
+resource "aws_s3_bucket_public_access_block" "tfstates_block" {
+    bucket = aws_s3_bucket.tfstates.id
+    block_public_acls = true
+    ignore_public_acls   = true
+    restrict_public_buckets = true
+    block_public_policy = true 
 }
 
 resource "aws_eks_addon" "addon" {
