@@ -21,7 +21,7 @@ resource "aws_dynamodb_table" "vault_dynamodb_storage" {
 
   server_side_encryption {
     enabled     = true
-    kms_key_arn = aws_kms_key.dynamo_db_kms.key_id
+    kms_key_arn = aws_kms_key.dynamo_db_kms.arn
   }
 }
 
