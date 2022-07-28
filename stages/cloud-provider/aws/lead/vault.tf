@@ -18,9 +18,9 @@ resource "aws_dynamodb_table" "vault_dynamodb_storage" {
   }
 }
 
-#tfsec:ignore:aws-kms-auto-rotate-keys
 resource "aws_kms_key" "vault_seal_key" {
-  description = "KMS key used by Vault for sealing / unsealing"
+  description         = "KMS key used by Vault for sealing / unsealing"
+  enable_key_rotation = true
 }
 
 resource "aws_iam_role" "vault_service_account" {

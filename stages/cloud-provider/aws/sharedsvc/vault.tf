@@ -18,6 +18,17 @@ resource "aws_dynamodb_table" "vault_dynamodb_storage" {
   }
 }
 
+# We ignore the recommendation to auto-rotate keys out of an abundance of caution,
+# as it is possible that rotating the unseal key could break Vault. Having said that, it
+# appears that it should be possible to use automatic AWS KMS key rotation, as we
+# use the awskms seal[1]. It is currently not possible to test the automatic key
+# rotation mechanism, as keys rotate annually, and manually roating keys functions
+# differently than automatically rotating keys[2]. Consequently, for the time being,
+# we have enabled automatic key rotaion in lead but not shared services.
+
+# 1. https://www.vaultproject.io/docs/configuration/seal/awskms#key-rotation
+# 2. https://docs.aws.amazon.com/kms/latest/developerguide/rotate-keys.html
+
 #tfsec:ignore:aws-kms-auto-rotate-keys
 resource "aws_kms_key" "vault_seal_key" {
   description = "KMS key used by Vault for sealing / unsealing"
