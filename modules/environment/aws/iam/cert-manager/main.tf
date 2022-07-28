@@ -34,10 +34,17 @@ resource "aws_iam_role_policy" "cert_manager" {
     {
       "Version" : "2012-10-17",
       "Statement" : [
+        # Cert-Manager can be limited in the access it has for each hosted zone that it touches,
+        #   but according to the docs[1], "cert-manager needs to be able to add records to 
+        #   Route53 in order to solve the DNS01 challenge."
+        #
+        # 1. https://cert-manager.io/docs/configuration/acme/dns01/route53/#set-up-an-iam-role
+ 
+        #tfsec:ignore:aws-iam-no-policy-wildcards
         {
           "Effect" : "Allow",
           "Action" : "route53:GetChange",
-          "Resource" : "${formatlist("arn:aws:route53:::change/%s", var.hosted_zone_ids)}"
+          "Resource" : "arn:aws:route53:::change/*"
         },
         {
           "Effect" : "Allow",
