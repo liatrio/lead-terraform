@@ -34,9 +34,10 @@ resource "aws_iam_role_policy" "cert_manager" {
     {
       "Version" : "2012-10-17",
       "Statement" : [
-        # Cert-Manager can be limited in the access it has for each hosted zone that it touches,
-        #   but according to the docs[1], "cert-manager needs to be able to add records to 
-        #   Route53 in order to solve the DNS01 challenge."
+        # Cert-Manager can be limited in the access it has for each hosted zone that it touches
+        #   according to the docs[1]. The route53:GetChange action requires a wildcard because
+        #   we won't know the changeID until runtime so we can't include the changeID when
+        #   running the terraform.
         #
         # 1. https://cert-manager.io/docs/configuration/acme/dns01/route53/#set-up-an-iam-role
 
