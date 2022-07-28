@@ -24,7 +24,7 @@ resource "aws_dynamodb_table" "vault_dynamodb_storage" {
 # use the awskms seal[1]. It is currently not possible to test the automatic key
 # rotation mechanism, as keys rotate annually, and manually roating keys functions
 # differently than automatically rotating keys[2]. Consequently, for the time being,
-# we have enabled automatic key rotaion in lead by not shared services.
+# we have enabled automatic key rotaion in lead but not shared services.
 
 # 1. https://www.vaultproject.io/docs/configuration/seal/awskms#key-rotation
 # 2. https://docs.aws.amazon.com/kms/latest/developerguide/rotate-keys.html
