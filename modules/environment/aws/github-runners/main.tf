@@ -1,10 +1,6 @@
 data "aws_caller_identity" "current" {
 }
 
-#tfsec:ignore:aws-s3-enable-versioning
-#tfsec:ignore:aws-s3-enable-bucket-logging
-#tfsec:ignore:aws-s3-specify-public-access-block
-#tfsec:ignore:aws-s3-enable-bucket-encryption
 resource "aws_s3_bucket" "github-runner" {
   bucket = "github-runners-${data.aws_caller_identity.current.account_id}-${var.cluster_name}.liatr.io"
   tags = {
@@ -12,6 +8,23 @@ resource "aws_s3_bucket" "github-runner" {
     ManagedBy = "Terraform https://github.com/liatrio/lead-terraform"
     Cluster   = var.cluster_name
   }
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        kms_master_key_id = aws_kms_key.example.arn
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
+}
+
+# Used to restrict public access and block users from creating policies to enable it
+resource "aws_s3_bucket_public_access_block" "github-runner_block" {
+  bucket                  = aws_s3_bucket.github-runner.id
+  block_public_acls       = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+  block_public_policy     = true
 }
 
 

@@ -22,12 +22,18 @@ data "aws_subnets" "eks_workers" {
   }
 }
 
-#tfsec:ignore:aws-s3-specify-public-access-block
-#tfsec:ignore:aws-s3-enable-versioning
-#tfsec:ignore:aws-s3-enable-bucket-encryption
-#tfsec:ignore:aws-s3-enable-bucket-logging
 resource "aws_s3_bucket" "code_services_bucket" {
   bucket = "code-services-${var.account_id}-${var.cluster}"
+
+  #Enables encryption using customer managed keys
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        kms_master_key_id = aws_kms_key.example.arn
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
 }
 
 resource "aws_s3_bucket_versioning" "code_services_versioning" {
@@ -35,6 +41,22 @@ resource "aws_s3_bucket_versioning" "code_services_versioning" {
   versioning_configuration {
     status = "Enabled"
   }
+}
+
+resource "aws_s3_bucket_logging" "tfstates_logging" {
+  bucket = aws_s3_bucket.code_services_bucket.id
+
+  target_bucket = "code-services-${var.account_id}-${var.cluster}"
+  target_prefix = "CodeServicesLogs/"
+}
+
+# Used to restrict public access and block users from creating policies to enable it
+resource "aws_s3_bucket_public_access_block" "code_services_block" {
+  bucket                  = aws_s3_bucket.code_services_bucket.id
+  block_public_acls       = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+  block_public_policy     = true
 }
 
 resource "aws_iam_role" "codebuild_role" {
