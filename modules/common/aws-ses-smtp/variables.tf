@@ -13,3 +13,6 @@ variable "reply_address" {
   default = "*"
 }
 
+variable "resource_arn" {
+  type = string
+}

@@ -26,34 +26,35 @@ resource "aws_iam_role" "cert_manager_service_account" {
 EOF
 }
 
-#tfsec:ignore:aws-iam-no-policy-wildcards
 resource "aws_iam_role_policy" "cert_manager" {
   name = "${var.cluster}-cert-manager"
   role = aws_iam_role.cert_manager_service_account.name
 
-  policy = <<EOF
-{
- "Version": "2012-10-17",
- "Statement": [
+  policy = jsonencode(
     {
-        "Effect": "Allow",
-        "Action": "route53:GetChange",
-        "Resource": "arn:aws:route53:::change/*"
-    },
-    {
-        "Effect": "Allow",
-        "Action":  [
-          "route53:ChangeResourceRecordSets",
-          "route53:ListResourceRecordSets"
-        ],
-        "Resource": "arn:aws:route53:::hostedzone/*"
-    },
-    {
-        "Effect": "Allow",
-        "Action": "route53:ListHostedZonesByName",
-        "Resource": "*"
-    }
- ]
-}
-EOF
+      "Version" : "2012-10-17",
+      "Statement" : [
+        # Cert-Manager can be limited in the access it has for each hosted zone that it touches
+        #   according to the docs[1]. The route53:GetChange action requires a wildcard because
+        #   we won't know the changeID until runtime so we can't include the changeID when
+        #   running the terraform.
+        #
+        # 1. https://cert-manager.io/docs/configuration/acme/dns01/route53/#set-up-an-iam-role
+
+        #tfsec:ignore:aws-iam-no-policy-wildcards
+        {
+          "Effect" : "Allow",
+          "Action" : "route53:GetChange",
+          "Resource" : "arn:aws:route53:::change/*"
+        },
+        {
+          "Effect" : "Allow",
+          "Action" : [
+            "route53:ChangeResourceRecordSets",
+            "route53:ListResourceRecordSets"
+          ],
+          "Resource" : "${formatlist("arn:aws:route53:::hostedzone/%s", var.hosted_zone_ids)}"
+        }
+      ]
+  })
 }

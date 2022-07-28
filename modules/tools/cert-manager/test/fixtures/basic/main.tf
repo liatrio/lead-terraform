@@ -25,9 +25,9 @@ variable "kubeconfig_path" {
 module "iam" {
   source = "../../../../../environment/aws/iam/cert-manager"
 
-  namespace = var.namespace
-  cluster   = var.cluster
-
+  namespace                   = var.namespace
+  cluster                     = var.cluster
+  hosted_zone_ids             = [data.aws_route53_zone.zone.zone_id]
   openid_connect_provider_arn = var.oidc_provider_arn
   openid_connect_provider_url = var.oidc_provider_url
 }

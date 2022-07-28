@@ -2,6 +2,14 @@ output "cluster_id" {
   value = module.eks.cluster_id
 }
 
+output "cluster_arn" {
+  value = module.eks.cluster_arn
+}
+
+output "cluster_asg_names" {
+  value = module.eks.eks_managed_node_groups_autoscaling_group_names
+}
+
 output "aws_iam_openid_connect_provider_arn" {
   value = module.eks.oidc_provider_arn
 }

@@ -27,7 +27,6 @@ EOF
   permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/Developer"
 }
 
-#tfsec:ignore:aws-iam-no-policy-wildcards
 resource "aws_iam_role_policy" "velero" {
   name = "${var.cluster}-velero"
   role = aws_iam_role.velero_service_account.name
