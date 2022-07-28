@@ -3,7 +3,7 @@ module "cert_manager_iam" {
 
   cluster                     = var.cluster_name
   namespace                   = var.system_namespace
-  hosted_zone_id              = aws_route53_zone.cluster_zone.zone_id
+  hosted_zone_ids             = [aws_route53_zone.cluster_zone.zone_id]
   openid_connect_provider_arn = module.eks.aws_iam_openid_connect_provider_arn
   openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider_url
 }
