@@ -37,7 +37,7 @@ resource "aws_iam_role_policy" "cert_manager" {
     {
         "Effect": "Allow",
         "Action": "route53:GetChange",
-        "Resource": "arn:aws:route53:::change/*"
+        "Resource": "formatlist(arn:aws:route53:::change/${var.hosted_zone_id}"
     },
     {
         "Effect": "Allow",
@@ -45,7 +45,7 @@ resource "aws_iam_role_policy" "cert_manager" {
           "route53:ChangeResourceRecordSets",
           "route53:ListResourceRecordSets"
         ],
-        "Resource": "arn:aws:route53:::hostedzone/*"
+        "Resource": "arn:aws:route53:::hostedzone/${var.hosted_zone_id}"
     }
  ]
 }

@@ -37,6 +37,7 @@ module "cert_manager_iam" {
 
   cluster                     = module.eks.cluster_id
   namespace                   = var.system_namespace
+  hosted_zone_id              = data.aws_route53_zone.services_liatr_io.zone_id
   openid_connect_provider_arn = module.eks.aws_iam_openid_connect_provider_arn
   openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider_url
 }
