@@ -39,7 +39,7 @@ resource "aws_iam_role_policy" "cert_manager" {
         #   Route53 in order to solve the DNS01 challenge."
         #
         # 1. https://cert-manager.io/docs/configuration/acme/dns01/route53/#set-up-an-iam-role
- 
+
         #tfsec:ignore:aws-iam-no-policy-wildcards
         {
           "Effect" : "Allow",
