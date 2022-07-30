@@ -1,6 +1,7 @@
 data "aws_caller_identity" "current" {
 }
 
+#tfsec:ignore:aws-s3-enable-versioning
 resource "aws_s3_bucket" "github-runner" {
   bucket = "github-runners-${data.aws_caller_identity.current.account_id}-${var.cluster_name}.liatr.io"
   tags = {
@@ -11,11 +12,23 @@ resource "aws_s3_bucket" "github-runner" {
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
-        kms_master_key_id = aws_kms_key.example.arn
+        kms_master_key_id = aws_kms_key.github_runner_key.arn
         sse_algorithm     = "aws:kms"
       }
     }
   }
+}
+
+resource "aws_kms_key" "github_runner_key" {
+  description             = "This key is used to encrypt bucket objects"
+  deletion_window_in_days = 10
+}
+
+resource "aws_s3_bucket_logging" "github_runner_logging" {
+  bucket = aws_s3_bucket.github-runner.id
+
+  target_bucket = "github-runners-${data.aws_caller_identity.current.account_id}-${var.cluster_name}.liatr.io"
+  target_prefix = "GitHubRunnerLogs/"
 }
 
 # Used to restrict public access and block users from creating policies to enable it
