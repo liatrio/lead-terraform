@@ -17,7 +17,7 @@ resource "aws_s3_bucket" "docker_registry" {
 resource "aws_kms_key" "docker_registry_key" {
   description             = "This key is used to encrypt bucket objects"
   deletion_window_in_days = 10
-  enable_key_rotation = true
+  enable_key_rotation     = true
 }
 
 # Used to restrict public access and block users from creating policies to enable it
