@@ -22,6 +22,7 @@ resource "aws_s3_bucket" "github-runner" {
 resource "aws_kms_key" "github_runner_key" {
   description             = "This key is used to encrypt bucket objects"
   deletion_window_in_days = 10
+  enable_key_rotation = true
 }
 
 resource "aws_s3_bucket_logging" "github_runner_logging" {
