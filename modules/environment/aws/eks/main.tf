@@ -318,7 +318,7 @@ resource "aws_s3_bucket_versioning" "tfstates_versioning" {
 resource "aws_s3_bucket_logging" "tfstates_logging" {
   bucket = aws_s3_bucket.tfstates.id
 
-  target_bucket = "lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${var.cluster}.liatr.io"
+  target_bucket = "s3-logging-${var.account_id}-${var.cluster}"
   target_prefix = "TFStateLogs/"
 }
 

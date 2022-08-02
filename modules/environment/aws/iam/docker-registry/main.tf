@@ -1,6 +1,3 @@
-#tfsec:ignore:aws-s3-enable-bucket-logging
-#tfsec:ignore:aws-s3-specify-public-access-block
-#tfsec:ignore:aws-s3-enable-bucket-encryption
 #tfsec:ignore:aws-s3-enable-versioning
 resource "aws_s3_bucket" "docker_registry" {
   bucket = "docker-registry-storage-${var.cluster}"
@@ -18,6 +15,13 @@ resource "aws_kms_key" "docker_registry_key" {
   description             = "This key is used to encrypt bucket objects"
   deletion_window_in_days = 10
   enable_key_rotation     = true
+}
+
+resource "aws_s3_bucket_logging" "docker_registry_logging" {
+  bucket = aws_s3_bucket.docker_registry.id
+
+  target_bucket = "s3-logging-${var.account_id}-${var.cluster}"
+  target_prefix = "GitHubRunnerLogs/"
 }
 
 # Used to restrict public access and block users from creating policies to enable it

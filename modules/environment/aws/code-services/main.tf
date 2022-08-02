@@ -53,7 +53,7 @@ resource "aws_s3_bucket_versioning" "code_services_versioning" {
 resource "aws_s3_bucket_logging" "code_services_logging" {
   bucket = aws_s3_bucket.code_services_bucket.id
 
-  target_bucket = "code-services-${var.account_id}-${var.cluster}"
+  target_bucket = "s3-logging-${var.account_id}-${var.cluster}"
   target_prefix = "CodeServicesLogs/"
 }
 

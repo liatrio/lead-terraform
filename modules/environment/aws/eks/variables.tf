@@ -105,3 +105,5 @@ variable "shared_svc_subnet" {
 variable "enable_ssh_access" {
   default = false
 }
+
+variable "account_id" {}
