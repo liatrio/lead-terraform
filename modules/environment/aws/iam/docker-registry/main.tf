@@ -1,3 +1,7 @@
+module "s3-logging" {
+  source = "../s3-logging"
+}
+
 #tfsec:ignore:aws-s3-enable-versioning
 resource "aws_s3_bucket" "docker_registry" {
   bucket = "docker-registry-storage-${var.cluster}"
@@ -23,7 +27,7 @@ resource "aws_kms_key" "docker_registry_key" {
 resource "aws_s3_bucket_logging" "docker_registry_logging" {
   bucket = aws_s3_bucket.docker_registry.id
 
-  target_bucket = "s3-logging-${var.account_id}-${var.cluster}"
+  target_bucket = module.s3-logging.s3_logging_bucket_name
   target_prefix = "GitHubRunnerLogs/"
 }
 

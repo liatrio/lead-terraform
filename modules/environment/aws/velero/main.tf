@@ -1,3 +1,7 @@
+module "s3-logging" {
+  source = "../s3-logging"
+}
+
 #tfsec:ignore:aws-s3-enable-versioning
 resource "aws_s3_bucket" "velero" {
   bucket = "velero-${var.account_id}-${var.cluster_name}"
@@ -26,7 +30,7 @@ resource "aws_kms_key" "velero_key" {
 resource "aws_s3_bucket_logging" "velero_logging" {
   bucket = aws_s3_bucket.velero.id
 
-  target_bucket = "s3-logging-${var.account_id}-${var.cluster_name}"
+  target_bucket = module.s3-logging.s3_logging_bucket_name
   target_prefix = "VeleroLogs/"
 }
 

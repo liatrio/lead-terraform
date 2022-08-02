@@ -1,6 +1,10 @@
 data "aws_caller_identity" "current" {
 }
 
+module "s3-logging" {
+  source = "../s3-logging"
+}
+
 #tfsec:ignore:aws-s3-enable-versioning
 resource "aws_s3_bucket" "github_runner" {
   bucket = "github-runners-${data.aws_caller_identity.current.account_id}-${var.cluster_name}.liatr.io"
@@ -31,7 +35,7 @@ resource "aws_kms_key" "github_runner_key" {
 resource "aws_s3_bucket_logging" "github_runner_logging" {
   bucket = aws_s3_bucket.github_runner.id
 
-  target_bucket = "s3-logging-${var.account_id}-${var.cluster_name}"
+  target_bucket = module.s3-logging.s3_logging_bucket_name
   target_prefix = "GitHubRunnerLogs/"
 }
 

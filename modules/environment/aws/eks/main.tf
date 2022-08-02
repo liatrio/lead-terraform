@@ -143,7 +143,6 @@ module "eks" {
 
   cluster_name    = var.cluster
   cluster_version = var.cluster_version
-  account_id      = var.account_id
   subnet_ids      = sort(data.aws_subnets.eks_masters.ids)
   vpc_id          = data.aws_vpc.lead_vpc.id
 
@@ -334,7 +333,7 @@ resource "aws_s3_bucket_versioning" "tfstates_versioning" {
 resource "aws_s3_bucket_logging" "tfstates_logging" {
   bucket = aws_s3_bucket.tfstates.id
 
-  target_bucket =  module.s3-logging.s3-s3_logging_bucket_name //"s3-logging-${var.account_id}-${var.cluster}"
+  target_bucket = module.s3-logging.s3_logging_bucket_name
   target_prefix = "TFStateLogs/"
 }
 

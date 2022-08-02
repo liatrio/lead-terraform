@@ -22,6 +22,10 @@ data "aws_subnets" "eks_workers" {
   }
 }
 
+module "s3-logging" {
+  source = "../s3-logging"
+}
+
 resource "aws_s3_bucket" "code_services_bucket" {
   bucket = "code-services-${var.account_id}-${var.cluster}"
 }
@@ -54,7 +58,7 @@ resource "aws_s3_bucket_versioning" "code_services_bucket_versioning" {
 resource "aws_s3_bucket_logging" "code_services_bucket_logging" {
   bucket = aws_s3_bucket.code_services_bucket.id
 
-  target_bucket = "s3-logging-${var.account_id}-${var.cluster}"
+  target_bucket = module.s3-logging.s3_logging_bucket_name
   target_prefix = "CodeServicesLogs/"
 }
 
