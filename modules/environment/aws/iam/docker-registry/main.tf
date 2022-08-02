@@ -1,12 +1,15 @@
 #tfsec:ignore:aws-s3-enable-versioning
 resource "aws_s3_bucket" "docker_registry" {
   bucket = "docker-registry-storage-${var.cluster}"
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        kms_master_key_id = aws_kms_key.docker_registry_key.arn
-        sse_algorithm     = "aws:kms"
-      }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "docker_registry_encryption" {
+  bucket = aws_s3_bucket.docker_registry.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = aws_kms_key.docker_registry_key.arn
+      sse_algorithm     = "aws:kms"
     }
   }
 }

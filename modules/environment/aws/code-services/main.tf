@@ -24,33 +24,34 @@ data "aws_subnets" "eks_workers" {
 
 resource "aws_s3_bucket" "code_services_bucket" {
   bucket = "code-services-${var.account_id}-${var.cluster}"
+}
 
-  #Enables encryption using customer managed keys
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        kms_master_key_id = aws_kms_key.code_services_key.arn
-        sse_algorithm     = "aws:kms"
-      }
+resource "aws_s3_bucket_server_side_encryption_configuration" "code_services_bucket_encryption" {
+  bucket = aws_s3_bucket.code_services_bucket.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = aws_kms_key.code_services_bucket_key.arn
+      sse_algorithm     = "aws:kms"
     }
   }
 }
 
-resource "aws_kms_key" "code_services_key" {
+resource "aws_kms_key" "code_services_bucket_key" {
   description             = "This key is used to encrypt bucket objects"
   deletion_window_in_days = 10
   enable_key_rotation     = true
 }
 
 
-resource "aws_s3_bucket_versioning" "code_services_versioning" {
+resource "aws_s3_bucket_versioning" "code_services_bucket_versioning" {
   bucket = aws_s3_bucket.code_services_bucket.id
   versioning_configuration {
     status = "Enabled"
   }
 }
 
-resource "aws_s3_bucket_logging" "code_services_logging" {
+resource "aws_s3_bucket_logging" "code_services_bucket_logging" {
   bucket = aws_s3_bucket.code_services_bucket.id
 
   target_bucket = "s3-logging-${var.account_id}-${var.cluster}"

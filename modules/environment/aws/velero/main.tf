@@ -4,12 +4,15 @@ resource "aws_s3_bucket" "velero" {
   lifecycle {
     prevent_destroy = true
   }
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        kms_master_key_id = aws_kms_key.velero_key.arn
-        sse_algorithm     = "aws:kms"
-      }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "velero_encryption" {
+  bucket = aws_s3_bucket.velero.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = aws_kms_key.velero_key.arn
+      sse_algorithm     = "aws:kms"
     }
   }
 }
