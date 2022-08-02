@@ -1,7 +1,3 @@
-module "s3-logging" {
-  source = "../s3-logging"
-}
-
 #tfsec:ignore:aws-s3-enable-versioning
 resource "aws_s3_bucket" "docker_registry" {
   bucket = "docker-registry-storage-${var.cluster}"

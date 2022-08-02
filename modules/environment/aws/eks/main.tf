@@ -289,10 +289,6 @@ module "eks" {
   }
 }
 
-module "s3-logging" {
-  source = "../s3-logging"
-}
-
 #---
 # All these are necessary since defining those blocks within
 # the aws_s3_bucket resource is deprecated. Terraform reccomends
@@ -333,7 +329,7 @@ resource "aws_s3_bucket_versioning" "tfstates_versioning" {
 resource "aws_s3_bucket_logging" "tfstates_logging" {
   bucket = aws_s3_bucket.tfstates.id
 
-  target_bucket = module.s3-logging.s3_logging_bucket_name
+  target_bucket = var.s3-logging-id
   target_prefix = "TFStateLogs/"
 }
 

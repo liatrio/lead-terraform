@@ -106,4 +106,4 @@ variable "enable_ssh_access" {
   default = false
 }
 
-variable "account_id" {}
+variable "s3-logging-id" {}

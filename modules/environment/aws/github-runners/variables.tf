@@ -16,4 +16,4 @@ variable "service_accounts" {
 
 variable "aws_iam_openid_connect_provider_url" {}
 variable "aws_iam_openid_connect_provider_arn" {}
-variable "account_id" {}
+variable "s3-logging-id" {}
