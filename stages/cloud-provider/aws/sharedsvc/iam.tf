@@ -44,5 +44,6 @@ module "cert_manager_iam" {
 module "docker_registry_iam" {
   source = "../../../../modules/environment/aws/iam/docker-registry"
 
-  cluster = module.eks.cluster_id
+  cluster       = module.eks.cluster_id
+  s3-logging-id = var.s3-logging-id
 }

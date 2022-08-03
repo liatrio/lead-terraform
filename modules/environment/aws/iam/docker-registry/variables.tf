@@ -1,2 +1,2 @@
 variable "cluster" {}
-variable "account_id" {}
+variable "s3-logging-id" {}
