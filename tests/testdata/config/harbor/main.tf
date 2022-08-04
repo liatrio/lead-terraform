@@ -27,6 +27,7 @@ module "harbor" {
   source            = "../../../../modules/config/harbor"
   namespace         = var.namespace
   admin_password    = var.admin_password
+  db_password       = var.db_password
   hostname          = var.hostname
   enable_keycloak   = false
   keycloak_hostname = ""
