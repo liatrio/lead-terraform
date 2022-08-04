@@ -37,3 +37,7 @@ output "lead_vault_root_token_kubernetes_secret_name" {
 output "region" {
   value = var.region
 }
+
+output "elasticsearch_namespace_name" {
+  value = module.elasticsearch_namespace.name
+}

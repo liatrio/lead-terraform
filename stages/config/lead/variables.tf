@@ -60,3 +60,6 @@ variable "lead_vault_root_token_kubernetes_secret_name" {
 
 variable "toolchain_namespace" {
 }
+
+variable "elasticsearch_namespace" {
+}
