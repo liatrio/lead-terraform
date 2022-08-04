@@ -329,7 +329,7 @@ resource "aws_s3_bucket_versioning" "tfstates_versioning" {
 resource "aws_s3_bucket_logging" "tfstates_logging" {
   bucket = aws_s3_bucket.tfstates.id
 
-  target_bucket = var.s3-logging-id
+  target_bucket = var.s3_logging_id
   target_prefix = "TFStateLogs/"
 }
 

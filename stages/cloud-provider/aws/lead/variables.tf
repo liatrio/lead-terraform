@@ -132,6 +132,6 @@ variable "enable_vcluster" {
   default = false
 }
 
-variable "s3-logging-id" {
+variable "s3_logging_id" {
   default = "s3 logging id"
 }

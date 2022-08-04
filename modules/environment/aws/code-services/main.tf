@@ -54,7 +54,7 @@ resource "aws_s3_bucket_versioning" "code_services_bucket_versioning" {
 resource "aws_s3_bucket_logging" "code_services_bucket_logging" {
   bucket = aws_s3_bucket.code_services_bucket.id
 
-  target_bucket = var.s3-logging-id
+  target_bucket = var.s3_logging_id
   target_prefix = "CodeServicesLogs/"
 }
 

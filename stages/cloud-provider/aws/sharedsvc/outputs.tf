@@ -75,6 +75,6 @@ output "atlantis_service_account_arn" {
   value = aws_iam_role.atlantis_service_account.arn
 }
 
-output "s3-logging-id" {
+output "s3_logging_id" {
   value = module.s3-logging.s3_logging_bucket_id
 }

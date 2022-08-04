@@ -4,5 +4,5 @@ module "velero" {
 
   cluster_name  = var.cluster_name
   account_id    = data.aws_caller_identity.current.account_id
-  s3-logging-id = var.s3-logging-id
+  s3_logging_id = var.s3_logging_id
 }

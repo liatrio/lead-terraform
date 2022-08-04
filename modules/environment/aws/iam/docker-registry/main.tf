@@ -23,7 +23,7 @@ resource "aws_kms_key" "docker_registry_key" {
 resource "aws_s3_bucket_logging" "docker_registry_logging" {
   bucket = aws_s3_bucket.docker_registry.id
 
-  target_bucket = var.s3-logging-id
+  target_bucket = var.s3_logging_id
   target_prefix = "GitHubRunnerLogs/"
 }
 

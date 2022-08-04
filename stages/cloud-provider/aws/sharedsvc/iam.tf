@@ -45,5 +45,5 @@ module "docker_registry_iam" {
   source = "../../../../modules/environment/aws/iam/docker-registry"
 
   cluster       = module.eks.cluster_id
-  s3-logging-id = var.s3-logging-id
+  s3_logging_id = var.s3_logging_id
 }

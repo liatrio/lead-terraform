@@ -1,2 +1,2 @@
 variable "cluster" {}
-variable "s3-logging-id" {}
+variable "s3_logging_id" {}

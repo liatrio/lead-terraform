@@ -26,7 +26,7 @@ resource "aws_kms_key" "velero_key" {
 resource "aws_s3_bucket_logging" "velero_logging" {
   bucket = aws_s3_bucket.velero.id
 
-  target_bucket = var.s3-logging-id
+  target_bucket = var.s3_logging_id
   target_prefix = "VeleroLogs/"
 }
 

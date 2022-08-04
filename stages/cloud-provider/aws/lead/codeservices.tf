@@ -3,7 +3,7 @@ module "codeservices" {
   source = "../../../../modules/environment/aws/code-services"
 
   cluster                     = var.cluster_name
-  s3-logging-id               = var.s3-logging-id
+  s3_logging_id               = var.s3_logging_id
   region                      = var.region
   account_id                  = data.aws_caller_identity.current.account_id
   toolchain_namespace         = var.toolchain_namespace

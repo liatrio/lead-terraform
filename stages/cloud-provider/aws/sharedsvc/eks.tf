@@ -4,7 +4,7 @@ module "eks" {
   cluster                          = var.cluster_name
   cluster_version                  = var.cluster_version
   cluster_addons                   = var.cluster_addons
-  s3-logging-id                    = var.s3-logging-id
+  s3_logging_id                    = var.s3_logging_id
   key_name                         = var.key_name
   preemptible_instance_types       = var.preemptible_instance_types
   preemptible_asg_min_size         = var.preemptible_asg_min_size

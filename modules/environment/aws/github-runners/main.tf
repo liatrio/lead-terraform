@@ -31,7 +31,7 @@ resource "aws_kms_key" "github_runner_key" {
 resource "aws_s3_bucket_logging" "github_runner_logging" {
   bucket = aws_s3_bucket.github_runner.id
 
-  target_bucket = var.s3-logging-id
+  target_bucket = var.s3_logging_id
   target_prefix = "GitHubRunnerLogs/"
 }
 
