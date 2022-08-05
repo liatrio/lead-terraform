@@ -22,19 +22,49 @@ data "aws_subnets" "eks_workers" {
   }
 }
 
-#tfsec:ignore:aws-s3-specify-public-access-block
-#tfsec:ignore:aws-s3-enable-versioning
-#tfsec:ignore:aws-s3-enable-bucket-encryption
-#tfsec:ignore:aws-s3-enable-bucket-logging
 resource "aws_s3_bucket" "code_services_bucket" {
   bucket = "code-services-${var.account_id}-${var.cluster}"
 }
 
-resource "aws_s3_bucket_versioning" "code_services_versioning" {
+resource "aws_s3_bucket_server_side_encryption_configuration" "code_services_bucket_encryption" {
+  bucket = aws_s3_bucket.code_services_bucket.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = aws_kms_key.code_services_bucket_key.arn
+      sse_algorithm     = "aws:kms"
+    }
+  }
+}
+
+resource "aws_kms_key" "code_services_bucket_key" {
+  description             = "This key is used to encrypt bucket objects"
+  deletion_window_in_days = 10
+  enable_key_rotation     = true
+}
+
+
+resource "aws_s3_bucket_versioning" "code_services_bucket_versioning" {
   bucket = aws_s3_bucket.code_services_bucket.id
   versioning_configuration {
     status = "Enabled"
   }
+}
+
+resource "aws_s3_bucket_logging" "code_services_bucket_logging" {
+  bucket = aws_s3_bucket.code_services_bucket.id
+
+  target_bucket = var.s3_logging_id
+  target_prefix = "CodeServicesLogs/"
+}
+
+# Used to restrict public access and block users from creating policies to enable it
+resource "aws_s3_bucket_public_access_block" "code_services_block" {
+  bucket                  = aws_s3_bucket.code_services_bucket.id
+  block_public_acls       = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+  block_public_policy     = true
 }
 
 resource "aws_iam_role" "codebuild_role" {

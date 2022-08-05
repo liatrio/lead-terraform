@@ -99,3 +99,7 @@ output "vault_kms_key_id" {
 output "velero_service_account_arn" {
   value = var.enable_velero ? module.velero_iam[0].velero_service_account_arn : ""
 }
+
+output "s3_logging_id" {
+  value = module.s3-logging.s3_logging_bucket_id
+}

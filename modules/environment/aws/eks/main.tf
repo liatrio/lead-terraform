@@ -289,10 +289,6 @@ module "eks" {
   }
 }
 
-#tfsec:ignore:aws-s3-specify-public-access-block
-#tfsec:ignore:aws-s3-enable-versioning
-#tfsec:ignore:aws-s3-enable-bucket-encryption
-#tfsec:ignore:aws-s3-enable-bucket-logging
 #---
 # All these are necessary since defining those blocks within
 # the aws_s3_bucket resource is deprecated. Terraform reccomends
@@ -304,6 +300,17 @@ resource "aws_s3_bucket" "tfstates" {
     Name      = "SDM Operator Terraform States"
     ManagedBy = "Terraform"
     Cluster   = var.cluster
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "tfstates_encryption" {
+  bucket = aws_s3_bucket.tfstates.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = aws_kms_key.tfstates_key.arn
+      sse_algorithm     = "aws:kms"
+    }
   }
 }
 
@@ -322,19 +329,23 @@ resource "aws_s3_bucket_versioning" "tfstates_versioning" {
 resource "aws_s3_bucket_logging" "tfstates_logging" {
   bucket = aws_s3_bucket.tfstates.id
 
-  target_bucket = "lead-sdm-operators-${data.aws_caller_identity.current.account_id}-${var.cluster}.liatr.io"
+  target_bucket = var.s3_logging_id
   target_prefix = "TFStateLogs/"
 }
 
-resource "aws_s3_bucket_server_side_encryption_configuration" "tfstates_encryption" {
-  bucket = aws_s3_bucket.tfstates.id
+resource "aws_kms_key" "tfstates_key" {
+  description             = "This key is used to encrypt bucket objects"
+  deletion_window_in_days = 10
+  enable_key_rotation     = true
+}
 
-  rule {
-    apply_server_side_encryption_by_default {
-      kms_master_key_id = "aws/s3"
-      sse_algorithm     = "aws:kms"
-    }
-  }
+# Used to restrict public access and block users from creating policies to enable it
+resource "aws_s3_bucket_public_access_block" "tfstates_block" {
+  bucket                  = aws_s3_bucket.tfstates.id
+  block_public_acls       = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+  block_public_policy     = true
 }
 
 resource "aws_eks_addon" "addon" {

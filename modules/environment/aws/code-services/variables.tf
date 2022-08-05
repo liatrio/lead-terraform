@@ -5,3 +5,4 @@ variable "cluster" {}
 variable "openid_connect_provider_arn" {}
 variable "openid_connect_provider_url" {}
 variable "vpc_name" {}
+variable "s3_logging_id" {}

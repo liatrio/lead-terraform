@@ -113,3 +113,7 @@ variable "github_runners_namespace" {
 variable "docker_registry_mirror" {
   default = ""
 }
+
+variable "s3_logging_id" {
+  default = "s3 logging id"
+}

@@ -3,6 +3,7 @@ variable "cluster_name" {
   default     = "lead"
 }
 
+
 variable "region" {
   default     = "us-east-1"
   description = "AWS Region to use for resource creation and reference"
@@ -15,3 +16,4 @@ variable "service_accounts" {
 
 variable "aws_iam_openid_connect_provider_url" {}
 variable "aws_iam_openid_connect_provider_arn" {}
+variable "s3_logging_id" {}
