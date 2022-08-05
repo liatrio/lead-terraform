@@ -120,6 +120,10 @@ variable "enable_velero" {
   default = false
 }
 
+variable "velero_bucket_name" {
+  default = ""
+}
+
 variable "velero_namespace" {
   default = "velero"
 }
