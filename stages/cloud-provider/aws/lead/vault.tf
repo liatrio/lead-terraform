@@ -60,6 +60,8 @@ EOF
   permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/Developer"
 }
 
+# vault needs access to KMS keys which are not know ahead of time
+#tfsec:ignore:aws-iam-no-policy-wildcards
 resource "aws_iam_role_policy" "vault" {
   name = "${var.cluster_name}-vault"
   role = aws_iam_role.vault_service_account.name
@@ -108,7 +110,7 @@ resource "aws_iam_role_policy" "vault" {
         "kms:DescribeKey"
       ],
       "Effect": "Allow",
-      "Resource": "${aws_kms_key.vault_seal_key.arn}"
+      "Resource": "*"
     }
   ]
 }
