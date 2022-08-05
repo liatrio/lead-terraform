@@ -23,6 +23,7 @@ func TestHarbor_Basic(t *testing.T) {
 
 	namespace := common.CreateNamespace(t)
 	adminPassword, err := random.RandomString(16, random.Base62Chars)
+	dbPassword, err := random.RandomString(16, random.Base62Chars)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -35,6 +36,7 @@ func TestHarbor_Basic(t *testing.T) {
 			"harbor_hostname": fmt.Sprintf("%s.apps.vcluster.lead.%s.liatr.io", namespace, os.Getenv("CURRENT_ACCOUNT")),
 			"kubeconfig_path": k8sOpts.ConfigPath,
 			"admin_password":  adminPassword,
+			"db_password":     dbPassword,
 		}
 	})
 

@@ -5,3 +5,5 @@ variable "namespace" {}
 variable "hostname" {}
 
 variable "admin_password" {}
+
+variable "db_password" {}

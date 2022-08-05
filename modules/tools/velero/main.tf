@@ -8,11 +8,11 @@ module "velero_namespace" {
 }
 
 resource "helm_release" "velero" {
-  repository = "vmware-tanzu"
+  repository = "https://vmware-tanzu.github.io/helm-charts"
   name       = "velero"
-  chart      = "vmware-tanzu/velero"
+  chart      = "velero"
   namespace  = module.velero_namespace.name
-  version    = "2.15.0"
+  version    = "2.30.1"
 
   values = [
     templatefile("${path.module}/velero-values.tpl", {

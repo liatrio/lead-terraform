@@ -68,6 +68,19 @@ resource "aws_iam_role_policy" "velero" {
             "Resource": [
                 "arn:aws:s3:::${var.velero_bucket_name}"
             ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+              "kms:Encrypt",
+              "kms:Decrypt",
+              "kms:ReEncrypt*",
+              "kms:GenerateDataKey*",
+              "kms:DescribeKey"
+            ],
+            "Resource": [
+              "arn:aws:kms:${var.region}:${data.aws_caller_identity.current.account_id}:key/*"
+            ]
         }
     ]
 }

@@ -39,6 +39,7 @@ module "velero_iam" {
   velero_bucket_name          = var.velero_bucket_name
   openid_connect_provider_arn = module.eks.aws_iam_openid_connect_provider_arn
   openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider_url
+  region                      = var.region
 }
 
 # TODO: remove trust policy for operator-slack once it is fully deprecated

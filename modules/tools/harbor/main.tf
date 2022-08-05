@@ -2,11 +2,6 @@ locals {
   harbor_hostname = var.harbor_ingress_hostname
 }
 
-resource "random_string" "harbor_db_password" {
-  length  = 10
-  special = false
-}
-
 resource "random_string" "harbor_secret_key" {
   length  = 16
   special = false
@@ -40,16 +35,6 @@ resource "helm_release" "harbor_volumes" {
 
   set {
     name  = "components.registry.protectPvcResource"
-    value = var.protect_pvc_resources
-  }
-
-  set {
-    name  = "components.chartmuseum.size"
-    value = var.harbor_chartmuseum_disk_size
-  }
-
-  set {
-    name  = "components.chartmuseum.protectPvcResource"
     value = var.protect_pvc_resources
   }
 
@@ -116,7 +101,7 @@ resource "helm_release" "harbor" {
 
   set_sensitive {
     name  = "database.internal.password"
-    value = random_string.harbor_db_password.result
+    value = var.db_password
   }
 
   depends_on = [
