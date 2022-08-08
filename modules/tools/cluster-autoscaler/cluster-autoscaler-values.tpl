@@ -10,6 +10,14 @@ rbac:
     annotations:
       "eks.amazonaws.com/role-arn": ${iam_arn}
 
+resources:
+  requests:
+    memory: 100Mi
+    cpu: 100m
+  limits:
+    memory: 600Mi
+    cpu: 500m
+
 sslCertPath: /etc/ssl/certs/ca-bundle.crt
 
 cloudProvider: aws
@@ -26,11 +34,3 @@ extraArgs:
   balance-similar-node-groups: true
   skip-nodes-with-local-storage: false
   scale-down-enabled: ${scale_down_enabled}
-
-resources:
-  requests:
-    memory: 100Mi
-    cpu: 100m
-  limits:
-    memory: 600Mi
-    cpu: 500m
