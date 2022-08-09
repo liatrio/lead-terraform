@@ -211,15 +211,12 @@ module "eks" {
 
   cluster_endpoint_private_access = true
   cluster_endpoint_public_access  = var.enable_public_endpoint
-  cluster_enabled_log_types       = ["api", "controllerManager", "scheduler"]
-
+  cluster_enabled_log_types       = ["api", "authenticator", "audit", "scheduler", "controllerManager"]
 
   cluster_encryption_config = [{
     provider_key_arn = aws_kms_key.eks_encryption_kms.arn
     resources        = ["secrets"]
   }]
-
-  enabled_cluster_log_types = ["api", "authenticator", "audit", "scheduler", "controllerManager"]
 
   tags = {
     "Cluster" = var.cluster
