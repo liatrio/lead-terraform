@@ -14,6 +14,11 @@ resource "azurerm_kubernetes_cluster" "main" {
   # No access avaliable. Should be updated to include VPN access
   api_server_authorized_ip_ranges = ["0.0.0.0/0"]
 
+  network_profile {
+    network_policy = "calico"
+    network_plugin = "kubenet"
+  }
+
   default_node_pool {
     name       = var.pool_name
     node_count = var.node_count

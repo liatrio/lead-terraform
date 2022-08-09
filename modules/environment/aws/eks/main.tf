@@ -84,6 +84,11 @@ data "aws_subnets" "eks_workers" {
   }
 }
 
+resource "aws_kms_key" "eks_encryption_kms" {
+  description         = "Used to encrypt EKS secrets"
+  enable_key_rotation = true
+}
+
 #tfsec:ignore:aws-vpc-add-description-to-security-group
 resource "aws_security_group" "worker" {
   name_prefix = "${var.cluster}-worker"
@@ -211,7 +216,12 @@ module "eks" {
 
   cluster_endpoint_private_access = true
   cluster_endpoint_public_access  = var.enable_public_endpoint
-  cluster_enabled_log_types       = ["api", "controllerManager", "scheduler"]
+  cluster_enabled_log_types       = ["api", "authenticator", "audit", "scheduler", "controllerManager"]
+
+  cluster_encryption_config = [{
+    provider_key_arn = aws_kms_key.eks_encryption_kms.arn
+    resources        = ["secrets"]
+  }]
 
   tags = {
     "Cluster" = var.cluster
@@ -237,6 +247,10 @@ module "eks" {
     cluster_version               = var.cluster_version
     disk_size                     = var.root_volume_size
     iam_role_permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/Developer"
+
+    metadata_options = {
+      http_tokens = "required"
+    }
   }
 
   eks_managed_node_groups = {
@@ -364,3 +378,4 @@ resource "aws_iam_role_policy_attachment" "eks_worker_ssm_policy_attachment" {
   role       = each.value.iam_role_name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
+
