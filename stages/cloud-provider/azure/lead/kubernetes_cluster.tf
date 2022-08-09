@@ -13,6 +13,10 @@ resource "azurerm_kubernetes_cluster" "main" {
   dns_prefix          = "${var.prefix}-k8s"
   # No access avaliable. Should be updated to include VPN access
   api_server_authorized_ip_ranges = ["0.0.0.0/0"]
+  
+   network_profile {
+      network_policy = "azure"
+      }
 
   default_node_pool {
     name       = var.pool_name

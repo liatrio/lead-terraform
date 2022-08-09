@@ -25,6 +25,11 @@ resource "aws_dynamodb_table" "vault_dynamodb_storage" {
   }
 }
 
+resource "aws_kms_key" "eks_encryption_kms" {
+  description         = "Used to encrypt EKS secrets"
+  enable_key_rotation = true
+}
+
 resource "aws_kms_key" "dynamo_db_kms" {
   enable_key_rotation = true
 }
