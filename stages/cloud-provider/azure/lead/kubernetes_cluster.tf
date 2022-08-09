@@ -15,7 +15,8 @@ resource "azurerm_kubernetes_cluster" "main" {
   api_server_authorized_ip_ranges = ["0.0.0.0/0"]
 
   network_profile {
-    network_policy = "azure"
+    network_policy = "calico"
+    network_plugin = "none"
   }
 
   default_node_pool {
