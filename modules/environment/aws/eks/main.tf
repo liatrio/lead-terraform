@@ -84,6 +84,11 @@ data "aws_subnets" "eks_workers" {
   }
 }
 
+resource "aws_kms_key" "eks_encryption_kms" {
+  description         = "Used to encrypt EKS secrets"
+  enable_key_rotation = true
+}
+
 #tfsec:ignore:aws-vpc-add-description-to-security-group
 resource "aws_security_group" "worker" {
   name_prefix = "${var.cluster}-worker"
@@ -372,3 +377,4 @@ resource "aws_iam_role_policy_attachment" "eks_worker_ssm_policy_attachment" {
   role       = each.value.iam_role_name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
+
