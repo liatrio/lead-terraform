@@ -177,7 +177,7 @@ module "eks" {
       source_node_security_group = true
     }
   }
-  
+
   # Extend node-to-node security group rules
   node_security_group_additional_rules = {
     ingress_self_all = {
@@ -247,9 +247,10 @@ module "eks" {
     cluster_version               = var.cluster_version
     disk_size                     = var.root_volume_size
     iam_role_permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/Developer"
+
     metadata_options = {
-        http_tokens                 = "required"
-      }
+      http_tokens = "required"
+    }
   }
 
   eks_managed_node_groups = {
