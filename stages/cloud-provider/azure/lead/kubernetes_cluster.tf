@@ -16,7 +16,7 @@ resource "azurerm_kubernetes_cluster" "main" {
 
   network_profile {
     network_policy = "calico"
-    network_plugin = "none"
+    network_plugin = "kubenet"
   }
 
   default_node_pool {
