@@ -331,7 +331,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "tfstates_encrypti
 resource "aws_s3_bucket_acl" "tfstates_acl" {
   bucket = aws_s3_bucket.tfstates.id
   acl    = "log-delivery-write"
-}
+} 
 
 resource "aws_s3_bucket_versioning" "tfstates_versioning" {
   bucket = aws_s3_bucket.tfstates.id
