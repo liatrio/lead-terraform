@@ -2,7 +2,7 @@ replicaCount: 2
 
 image:
   repository: k8s.gcr.io/autoscaling/cluster-autoscaler
-  tag: v1.19.0
+  tag: v1.20.0
 
 rbac:
   create: true
