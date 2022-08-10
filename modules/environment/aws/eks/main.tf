@@ -89,32 +89,34 @@ resource "aws_kms_key" "eks_encryption_kms" {
   enable_key_rotation = true
 }
 
-#tfsec:ignore:aws-vpc-add-description-to-security-group
 resource "aws_security_group" "worker" {
   name_prefix = "${var.cluster}-worker"
   vpc_id      = data.aws_vpc.lead_vpc.id
+  description = "worker based security groups"
 
   ingress {
-    from_port = 22
-    to_port   = 22
-    protocol  = "tcp"
+    description = "Allow SSH access"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
 
     cidr_blocks = concat([data.aws_vpc.lead_vpc.cidr_block], var.enable_ssh_access ? [var.internal_vpn_subnet] : [])
   }
   ingress {
-    from_port = 443
-    to_port   = 443
-    protocol  = "tcp"
+    description = "Allow HTTPS access"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
 
     security_groups = [aws_security_group.elb.id]
   }
 }
 
 #tfsec:ignore:aws-vpc-no-public-ingress-sg
-#tfsec:ignore:aws-vpc-add-description-to-security-group
 resource "aws_security_group" "elb" {
   name_prefix = "${var.cluster}-ingress-elb"
   vpc_id      = data.aws_vpc.lead_vpc.id
+  description = "Allow HTTPS access"
 
   tags = {
     Name    = "${var.cluster}-ingress-elb"
@@ -123,18 +125,20 @@ resource "aws_security_group" "elb" {
   }
 
   ingress {
-    from_port = 80
-    to_port   = 80
-    protocol  = "tcp"
+    description = "Allow HTTP access"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
 
     cidr_blocks = [
       "0.0.0.0/0",
     ]
   }
   ingress {
-    from_port = 443
-    to_port   = 443
-    protocol  = "tcp"
+    description = "Allow HTTPS access"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
 
     cidr_blocks = [
       "0.0.0.0/0",
