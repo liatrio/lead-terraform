@@ -77,3 +77,42 @@ resource "helm_release" "elasticsearch_curator" {
     helm_release.elasticsearch
   ]
 }
+
+resource "kubernetes_manifest" "schedule_velero_elasticsearch_daily_backup" {
+  count = var.enable_velero ? 1 : 0
+  manifest = {
+    "apiVersion" = "velero.io/v1"
+    "kind"       = "Schedule"
+    "metadata" = {
+      "name"      = "elasticsearch-daily-backup"
+      "namespace" = "velero"
+    }
+    "spec" = {
+      "schedule" = "0 1 * * *"
+      "template" = {
+        "includedNamespaces" = [
+          "elasticsearch",
+        ]
+        "includedResources" = [
+          "*",
+        ]
+        "labelSelector" = {
+          "matchLabels" = {
+            "chart"   = "elasticsearch"
+            "release" = "elasticsearch"
+          }
+        }
+        "snapshotVolumes" = true
+        "storageLocation" = "default"
+        "ttl"             = "72h0m0s"
+        "volumeSnapshotLocations" = [
+          "aws-s3",
+        ]
+      }
+    }
+  }
+  depends_on = [
+    helm_release.elasticsearch,
+    var.velero_status
+  ]
+}

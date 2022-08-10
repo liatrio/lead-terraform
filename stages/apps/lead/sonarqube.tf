@@ -12,6 +12,8 @@ module "sonarqube" {
   namespace         = var.toolchain_namespace
   ingress_enabled   = true
   ingress_hostname  = "sonarqube.toolchain.${var.cluster_name}.${var.root_zone_name}"
+  enable_velero     = var.enable_velero
+  velero_status     = try(module.velero[0].velero_status, true)
   ingress_annotations = {
     "kubernetes.io/ingress.class" : "toolchain-nginx"
     "ingress.kubernetes.io/ssl-redirect" : "true"

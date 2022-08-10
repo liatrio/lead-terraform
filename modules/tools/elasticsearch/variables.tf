@@ -12,3 +12,9 @@ variable "replicas" {
 variable "disk_size" {
   default = "15Gi"
 }
+
+variable "enable_velero" {
+  default = false
+}
+
+variable "velero_status" {}

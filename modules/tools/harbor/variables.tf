@@ -28,3 +28,9 @@ variable "db_password" {}
 variable "metrics_enabled" {
   default = false
 }
+
+variable "enable_velero" {
+  default = false
+}
+
+variable "velero_status" {}

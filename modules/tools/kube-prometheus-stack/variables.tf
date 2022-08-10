@@ -19,3 +19,9 @@ variable "alertmanager_ingress_annotations" {
 variable "grafana_ingress_annotations" {
   type = map(string)
 }
+
+variable "enable_velero" {
+  default = false
+}
+
+variable "velero_status" {}

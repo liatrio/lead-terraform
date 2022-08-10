@@ -14,4 +14,6 @@ module "harbor" {
   k8s_storage_class         = var.k8s_storage_class
   harbor_registry_disk_size = "200Gi"
   metrics_enabled           = true
+  enable_velero             = var.enable_velero
+  velero_status             = try(module.velero[0].velero_status, true)
 }
