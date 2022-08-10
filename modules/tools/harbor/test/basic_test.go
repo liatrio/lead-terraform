@@ -24,6 +24,9 @@ func TestHarbor_Basic(t *testing.T) {
 	namespace := common.CreateNamespace(t)
 	adminPassword, err := random.RandomString(16, random.Base62Chars)
 	dbPassword, err := random.RandomString(16, random.Base62Chars)
+	enableVelero := false
+	veleroStatus := "deployed"
+
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -37,6 +40,8 @@ func TestHarbor_Basic(t *testing.T) {
 			"kubeconfig_path": k8sOpts.ConfigPath,
 			"admin_password":  adminPassword,
 			"db_password":     dbPassword,
+			"enable_velero":   enableVelero,
+			"velero_status":   veleroStatus,
 		}
 	})
 
