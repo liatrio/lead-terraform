@@ -5,6 +5,15 @@ terraform {
 
 provider "aws" {
   region = var.region
+
+  default_tags {
+    tags = {
+      Org       = "liatrio",
+      Team      = "flywheel",
+      Repo      = "github.com/liatrio/lead-terraform",
+      ManagedBy = "terraform"
+    }
+  }
 }
 
 data "aws_caller_identity" "current" {}
