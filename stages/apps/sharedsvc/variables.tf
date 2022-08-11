@@ -93,4 +93,18 @@ variable "k8s_storage_class" {
 
 variable "atlantis_service_account_arn" {}
 
+variable "cluster_name" {}
+
 variable "enable_velero" {}
+
+variable "velero_namespace" {
+  default = "velero"
+}
+
+variable "velero_bucket_name" {
+  default = ""
+}
+
+variable "velero_service_account_arn" {
+  default = ""
+}
