@@ -92,3 +92,5 @@ variable "k8s_storage_class" {
 }
 
 variable "atlantis_service_account_arn" {}
+
+variable "enable_velero" {}
