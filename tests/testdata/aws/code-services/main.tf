@@ -17,9 +17,9 @@ provider "aws" {
 
   default_tags {
     tags = {
-      Org       = "liatrio",
-      Team      = "flywheel",
-      Repo      = "github.com/liatrio/lead-terraform",
+      Org       = "liatrio"
+      Team      = "flywheel"
+      Repo      = "github.com/liatrio/lead-terraform"
       ManagedBy = "terraform"
     }
   }
