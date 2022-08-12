@@ -12,12 +12,12 @@ provider "aws" {
 
   skip_metadata_api_check = true
 
-    default_tags {
+  default_tags {
     tags = {
-    Org = "liatrio"
-    Team =  "flywheel"
-    Repo = "github.com/liatrio/lead-terraform"
-    ManagedBy = "terraform"
+      Org       = "liatrio"
+      Team      = "flywheel"
+      Repo      = "github.com/liatrio/lead-terraform"
+      ManagedBy = "terraform"
     }
   }
 
