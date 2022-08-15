@@ -360,16 +360,17 @@ resource "aws_iam_role_policy_attachment" "event_mapper_role_policy_attachment" 
   role       = aws_iam_role.event_mapper_role.name
 }
 
-#tfsec:ignore:aws-vpc-no-public-egress-sg
+#tfsec:ignore:aws-vpc-no-public-egress-sgr
 resource "aws_security_group" "codebuild_security_group" {
   name        = "codebuild-egress"
   vpc_id      = data.aws_vpc.lead_vpc.id
   description = "Allow outbound traffic"
 
   egress {
-    from_port = 0
-    protocol  = "-1"
-    to_port   = 0
+    description = "Allow outbound traffic"
+    from_port   = 0
+    protocol    = "-1"
+    to_port     = 0
     cidr_blocks = [
       "0.0.0.0/0"
     ]
