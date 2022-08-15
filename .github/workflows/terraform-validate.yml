@@ -47,8 +47,15 @@ jobs:
             exit 1
           fi
 
-          terraform init -backend=false
+          terraform init -backend=false && terraform plan -out=plan.out && terraform show -json plan.out > plan.out.json
           terraform validate
+
+      - name: terraform-compliance
+        uses: terraform-compliance/github_action@main
+        with:
+          plan: plan.out.json
+          features: ssh://git@github.com/terraform-compliance/user-friendly-features.git
+
 
       - name: tfsec
         uses: aquasecurity/tfsec-sarif-action@v0.1.3
