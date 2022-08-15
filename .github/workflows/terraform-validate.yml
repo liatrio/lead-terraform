@@ -47,13 +47,15 @@ jobs:
             exit 1
           fi
 
-          terraform init -backend=false && terraform plan -out=plan.out && terraform show -json plan.out > plan.out.json
+          terraform init -backend=false
+          terraform plan -out=plan.out && terraform show -json plan.out > plan.out.json
           terraform validate
-
+       
       - name: terraform-compliance
         uses: terraform-compliance/github_action@main
         with:
-          plan: ${{ matrix.validate }}/plan.out.json
+          plan: plan.out.json
+          working_directory: ${{ matrix.validate }}
           features: ssh://git@github.com/terraform-compliance/user-friendly-features.git
 
 
