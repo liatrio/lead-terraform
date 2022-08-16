@@ -52,7 +52,7 @@ jobs:
           fi
 
           terraform init
-          terraform plan -out=plan.out && terraform show -json plan.out.json > plan.out.json
+          terraform plan -out=plan.out && terraform show -json plan.out > plan.out.json
           terraform validate
        
       - name: terraform-compliance
