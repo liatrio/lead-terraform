@@ -40,8 +40,6 @@ func TestHarbor_Basic(t *testing.T) {
 			"kubeconfig_path": k8sOpts.ConfigPath,
 			"admin_password":  adminPassword,
 			"db_password":     dbPassword,
-			"enable_velero":   enableVelero,
-			"velero_status":   veleroStatus,
 		}
 	})
 

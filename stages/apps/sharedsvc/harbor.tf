@@ -21,6 +21,4 @@ module "harbor" {
   db_password               = data.vault_generic_secret.harbor.data["db_password"]
   k8s_storage_class         = var.k8s_storage_class
   harbor_registry_disk_size = "200Gi"
-  enable_velero             = var.enable_velero
-  velero_status             = try(module.velero[0].velero_status, true)
 }

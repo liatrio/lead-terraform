@@ -336,3 +336,7 @@ variable "github_runners_namespaces" {
   type    = list(string)
   default = []
 }
+
+variable "enable_velero_schedules" {
+  default = true
+}

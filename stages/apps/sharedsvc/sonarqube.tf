@@ -27,7 +27,5 @@ module "sonarqube" {
   keycloak_issuer_uri    = local.keycloak_issuer_uri
   keycloak_client_id     = local.sonar_keycloak_client_id
   keycloak_client_secret = data.vault_generic_secret.sonarqube.data["keycloak_client_secret"]
-  enable_velero          = var.enable_velero
-  velero_status          = try(module.velero[0].velero_status, true)
 }
 

@@ -21,8 +21,6 @@ module "kube_prometheus_stack" {
   prometheus_slack_channel         = var.prometheus_slack_channel
   grafana_ingress_annotations      = local.external_ingress_annotations
   alertmanager_ingress_annotations = local.internal_ingress_annotations
-  enable_velero                    = var.enable_velero
-  velero_status                    = try(module.velero[0].velero_status, true)
 }
 
 module "dashboard" {

@@ -14,8 +14,6 @@ module "elasticsearch" {
   namespace      = module.elasticsearch_namespace.name
   root_zone_name = var.root_zone_name
   disk_size      = "50Gi"
-  enable_velero  = var.enable_velero
-  velero_status  = try(module.velero[0].velero_status, true)
 
   depends_on = [
     module.cert_manager

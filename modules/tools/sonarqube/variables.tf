@@ -48,9 +48,3 @@ variable "keycloak_client_secret" {
   sensitive = true
   default   = ""
 }
-
-variable "enable_velero" {
-  default = false
-}
-
-variable "velero_status" {}
