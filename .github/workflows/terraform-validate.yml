@@ -52,7 +52,7 @@ jobs:
           fi
 
           terraform init -backend=false
-          terraform plan -out=plan.out && terraform show -json plan.out > plan.out.json
+          terraform plan -out=plan.out && terraform show -json plan.out > plan.out
           terraform validate
        
       - name: terraform-compliance
@@ -61,8 +61,8 @@ jobs:
           FOLDER: ${{ matrix.validate }}
         run: |
           cd $FOLDER
-          terraform-compliance -p plan.out.json -f git:ssh://git@github.com/terraform-compliance/user-friendly-features.git
-          rm plan.out.json
+          terraform-compliance -p plan.out -f git:ssh://git@github.com/terraform-compliance/user-friendly-features.git
+          rm plan.out
 
       # - name: terraform-compliance
       #   uses: terraform-compliance/github_action@main
