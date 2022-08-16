@@ -35,6 +35,10 @@ jobs:
       - name: Setup
         uses: hashicorp/setup-terraform@v1
 
+      - name: Terraform Compliamce
+        uses: terraform-compliance/github_action@main
+
+
       # Checks that all Terraform configuration is syntactically valid and internally consistent, regardless of any provided variables or existing state.
       - name: Validate
         env:
@@ -52,11 +56,20 @@ jobs:
           terraform validate
        
       - name: terraform-compliance
-        uses: terraform-compliance/github_action@main
-        with:
-          plan: plan.out.json
-          working_directory: ${{ matrix.validate }}
-          features: ssh://git@github.com/terraform-compliance/user-friendly-features.git
+        id: terraform-compliance from remote repo
+        env:
+          FOLDER: ${{ matrix.validate }}
+        run: |
+          cd $FOLDER
+          terraform-compliance -p plan.out.json -f git:ssh://git@github.com/terraform-compliance/user-friendly-features.git
+          rm plan.out.json
+
+      # - name: terraform-compliance
+      #   uses: terraform-compliance/github_action@main
+      #   with:
+      #     plan: plan.out.json
+      #     working_directory: ${{ matrix.validate }}
+      #     features: ssh://git@github.com/terraform-compliance/user-friendly-features.git
 
 
       - name: tfsec
