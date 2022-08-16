@@ -56,7 +56,7 @@ jobs:
           terraform validate
        
       - name: terraform-compliance
-        id: terraform-compliance from remote repo
+        id: tc
         env:
           FOLDER: ${{ matrix.validate }}
         run: |
