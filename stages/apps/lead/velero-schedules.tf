@@ -7,7 +7,7 @@ module "velero-schedules" {
       name = try(module.harbor[0].release_name, "")
       interval = "0 1 * * *"
       namespaces = ["toolchain"]
-      matchLabels = {
+      labels = {
         app     = "harbor"
         release = "harbor"
       }

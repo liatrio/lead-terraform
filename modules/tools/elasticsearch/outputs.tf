@@ -38,3 +38,7 @@ output "elasticsearch_certificates_secret_name" {
     helm_release.elasticsearch
   ]
 }
+
+output "helm_release_name" {
+  value = helm_release.elasticsearch.name
+}

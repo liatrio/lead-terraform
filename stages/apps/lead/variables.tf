@@ -338,5 +338,5 @@ variable "github_runners_namespaces" {
 }
 
 variable "enable_velero_schedules" {
-  default = true
+  default = false
 }

@@ -3,3 +3,4 @@ variable "region" {}
 variable "cluster_name" {}
 variable "namespace" {}
 variable "velero_service_account_arn" {}
+variable "schedules" {}
