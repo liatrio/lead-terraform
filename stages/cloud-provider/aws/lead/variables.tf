@@ -135,7 +135,3 @@ variable "enable_eks_ssh_access" {
 variable "enable_vcluster" {
   default = false
 }
-
-variable "s3_logging_id" {
-  default = "s3 logging id"
-}
