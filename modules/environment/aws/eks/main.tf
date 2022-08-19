@@ -111,8 +111,7 @@ resource "aws_security_group" "worker" {
     security_groups = [aws_security_group.elb.id]
   }
 }
-
-#tfsec:ignore:aws-vpc-no-public-ingress-sg
+#tfsec:ignore:aws-vpc-no-public-ingress-sgr
 resource "aws_security_group" "elb" {
   name_prefix = "${var.cluster}-ingress-elb"
   vpc_id      = data.aws_vpc.lead_vpc.id
@@ -134,6 +133,7 @@ resource "aws_security_group" "elb" {
       "0.0.0.0/0",
     ]
   }
+
   ingress {
     description = "Allow HTTPS access"
     from_port   = 443
