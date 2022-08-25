@@ -11,6 +11,16 @@ provider "aws" {
   region = var.region
 
   skip_metadata_api_check = true
+
+  default_tags {
+    tags = {
+      Org       = "liatrio"
+      Team      = "flywheel"
+      Repo      = "github.com/liatrio/lead-terraform"
+      ManagedBy = "terraform"
+    }
+  }
+
 }
 
 provider "helm" {

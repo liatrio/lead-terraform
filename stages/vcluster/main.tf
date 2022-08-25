@@ -4,6 +4,15 @@ terraform {
 
 provider "aws" {
   region = var.aws_region
+
+  default_tags {
+    tags = {
+      Org       = "liatrio"
+      Team      = "flywheel"
+      Repo      = "github.com/liatrio/lead-terraform"
+      ManagedBy = "terraform"
+    }
+  }
 }
 
 data "aws_eks_cluster" "cluster" {

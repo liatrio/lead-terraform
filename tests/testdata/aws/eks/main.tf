@@ -14,6 +14,15 @@ provider "aws" {
   assume_role {
     role_arn = var.aws_assume_role_arn
   }
+
+  default_tags {
+    tags = {
+      Org       = "liatrio"
+      Team      = "flywheel"
+      Repo      = "github.com/liatrio/lead-terraform"
+      ManagedBy = "terraform"
+    }
+  }
 }
 
 data "aws_eks_cluster" "cluster" {
