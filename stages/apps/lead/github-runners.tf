@@ -85,6 +85,6 @@ module "github_runner_binding" {
   for_each = toset(var.github_runners_namespaces)
 
   group_name = var.github_runners_group_name
-  namespace  = each.key   
+  namespace  = each.key
   role_name  = kubernetes_cluster_role.cluster_role.metadata[0].name
 }
