@@ -362,9 +362,9 @@ resource "aws_iam_role_policy_attachment" "event_mapper_role_policy_attachment" 
 
 #tfsec:ignore:aws-vpc-no-public-egress-sgr
 resource "aws_security_group" "codebuild_security_group" {
-  name        = "codebuild-egress"
-  vpc_id      = data.aws_vpc.lead_vpc.id
-  description = "Allow outbound traffic"
+  name   = "codebuild-egress"
+  vpc_id = data.aws_vpc.lead_vpc.id
+  # description = "Allow outbound traffic"
 
   egress {
     description = "Allow outbound traffic"
