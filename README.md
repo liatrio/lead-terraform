@@ -1,4 +1,4 @@
-bump
+bump bump
 # Overview
 This repository contains the Terraform automation to manage LEAD environments.
 
