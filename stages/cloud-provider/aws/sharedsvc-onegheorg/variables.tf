@@ -2,7 +2,7 @@ variable "region" {
   default = "us-east-1"
 }
 variable "onegheorg_pipeline_roles" {
-  type = list(string)
+  type    = list(string)
   default = []
 }
 

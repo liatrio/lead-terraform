@@ -102,11 +102,6 @@ variable "lead_terraform_pipeline_roles" {
   default = []
 }
 
-variable "onegheorg_pipeline_roles" {
-  type = list(string)
-  default = []
-}
-
 variable "atlantis_namespace" {
   default = "atlantis"
 }
