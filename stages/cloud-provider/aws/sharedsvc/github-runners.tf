@@ -7,6 +7,7 @@ module "github-runners-s3" {
   aws_iam_openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider_url
 }
 
+
 module "lead_environments_pipeline_iam" {
   source = "../../../../modules/environment/aws/iam/github-runner-iam"
 
@@ -27,4 +28,15 @@ module "lead_terraform_pipeline_iam" {
   aws_iam_openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider_url
   namespace                           = var.github_runners_namespace
   roles                               = var.lead_terraform_pipeline_roles
+}
+
+module "onegheorg_pipeline_iam" {
+  source = "../../../../modules/environment/aws/iam/github-runner-iam"
+
+  name                                = "liatrio-lead-terraform-pipeline"
+  service_account_name                = "liatrio-lead-terraform-runners"
+  aws_iam_openid_connect_provider_arn = module.eks.aws_iam_openid_connect_provider_arn
+  aws_iam_openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider_url
+  namespace                           = var.github_runners_namespace
+  roles                               = var.onegheorg_pipeline_roles
 }
