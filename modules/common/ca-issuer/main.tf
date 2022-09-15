@@ -6,7 +6,6 @@ resource "tls_private_key" "ca" {
 
 resource "tls_self_signed_cert" "ca" {
   count           = var.enabled ? 1 : 0
-  key_algorithm   = tls_private_key.ca[count.index].algorithm
   private_key_pem = tls_private_key.ca[count.index].private_key_pem
 
   is_ca_certificate = true
