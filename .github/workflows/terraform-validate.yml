@@ -72,6 +72,7 @@ jobs:
           fail_on_error: "true"
           filter_mode: "nofilter"
           reporter: github-pr-review
+          tflint_version: v0.39.3
 
   terraform_format:
     name: Format
