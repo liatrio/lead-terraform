@@ -20,6 +20,9 @@ module "elasticsearch" {
   ]
 }
 
+### We are not currently deploying kibana or fluent bit into shared service
+### Leaving these modules here in case we want to enable them in the future
+#
 # module "kibana" {
 #   source = "../../../modules/tools/kibana"
 
