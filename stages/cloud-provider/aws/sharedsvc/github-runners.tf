@@ -29,3 +29,18 @@ module "lead_terraform_pipeline_iam" {
   namespace                           = var.github_runners_namespace
   roles                               = var.lead_terraform_pipeline_roles
 }
+
+module "lead_terraform_github_runner_iam" {
+  source = "../../../../modules/environment/aws/iam/github-runner-iam"
+
+  name                                = "liatrio-aws-terraform-runners"
+  service_account_name                = "liatrio-aws-terraform-runners"
+  aws_iam_openid_connect_provider_arn = module.eks.aws_iam_openid_connect_provider_arn
+  aws_iam_openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider_url
+  namespace                           = var.github_runners_namespace
+  roles                               = [
+    "arn:aws:iam::489130170427:role/Developer", // prod
+    "arn:aws:iam::281127131043:role/Developer", // non-prod
+    "arn:aws:iam::774051255656:role/Developer", // sandbox
+  ]
+}
