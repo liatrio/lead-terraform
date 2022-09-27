@@ -38,7 +38,7 @@ module "lead_terraform_github_runner_iam" {
   aws_iam_openid_connect_provider_arn = module.eks.aws_iam_openid_connect_provider_arn
   aws_iam_openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider_url
   namespace                           = var.github_runners_namespace
-  roles                               = [
+  roles = [
     "arn:aws:iam::489130170427:role/Developer", // prod
     "arn:aws:iam::281127131043:role/Developer", // non-prod
     "arn:aws:iam::774051255656:role/Developer", // sandbox
