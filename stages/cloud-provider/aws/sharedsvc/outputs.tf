@@ -71,6 +71,10 @@ output "lead_terraform_pipeline_service_account_arn" {
   value = module.lead_terraform_pipeline_iam.role_arn
 }
 
+output "aws_terraform_github_iam_role_arn" {
+  value = module.lead_terraform_github_runner_iam.role_arn
+}
+
 output "atlantis_service_account_arn" {
   value = aws_iam_role.atlantis_service_account.arn
 }
