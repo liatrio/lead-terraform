@@ -6,10 +6,10 @@ module "eks" {
   cluster_addons                   = var.cluster_addons
   s3_logging_id                    = module.s3-logging.s3_logging_bucket_id
   key_name                         = var.key_name
-  preemptible_instance_types       = var.preemptible_instance_types
-  preemptible_asg_min_size         = var.preemptible_asg_min_size
-  preemptible_asg_max_size         = var.preemptible_asg_max_size
-  preemptible_asg_desired_capacity = var.preemptible_asg_desired_capacity
+  spot_instance_types       = var.spot_instance_types
+  spot_asg_min_size         = var.spot_asg_min_size
+  spot_asg_max_size         = var.spot_asg_max_size
+  spot_asg_desired_capacity = var.spot_asg_desired_capacity
   essential_instance_type          = var.essential_instance_type
   essential_asg_max_size           = var.essential_asg_max_size
   essential_asg_min_size           = var.essential_asg_min_size

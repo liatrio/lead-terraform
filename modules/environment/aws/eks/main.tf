@@ -232,12 +232,12 @@ module "eks" {
   }
 
   eks_managed_node_group_defaults = {
-    # the values below are the defaults for preemptible nodes, which will only be overridden by the essential node group
+    # the values below are the defaults for spot nodes, which will only be overridden by the essential node group
     capacity_type  = "SPOT"
-    desired_size   = var.preemptible_asg_desired_capacity
-    min_size       = var.preemptible_asg_min_size
-    max_size       = var.preemptible_asg_max_size
-    instance_types = var.preemptible_instance_types
+    desired_size   = var.spot_asg_desired_capacity
+    min_size       = var.spot_asg_min_size
+    max_size       = var.spot_asg_max_size
+    instance_types = var.spot_instance_types
 
     update_config = {
       max_unavailable_percentage = 50
@@ -280,24 +280,24 @@ module "eks" {
       max_size       = var.essential_asg_max_size
       instance_types = [var.essential_instance_type]
     }
-    "preemptible0" = {
-      name            = "${var.cluster}-preemptible0"
+    "spot0" = {
+      name            = "${var.cluster}-spot0"
       use_name_prefix = true
       subnet_ids      = [sort(data.aws_subnets.eks_workers.ids)[0]]
       labels = {
         "node.liatr.io/lifecycle" = "preemptible"
       }
     }
-    "preemptible1" = {
-      name            = "${var.cluster}-preemptible1"
+    "spot1" = {
+      name            = "${var.cluster}-spot1"
       use_name_prefix = true
       subnet_ids      = [sort(data.aws_subnets.eks_workers.ids)[1]]
       labels = {
         "node.liatr.io/lifecycle" = "preemptible"
       }
     }
-    "preemptible2" = {
-      name            = "${var.cluster}-preemptible2"
+    "spot2" = {
+      name            = "${var.cluster}-spot2"
       use_name_prefix = true
       subnet_ids      = [sort(data.aws_subnets.eks_workers.ids)[2]]
       labels = {

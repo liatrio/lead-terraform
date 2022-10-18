@@ -16,15 +16,15 @@ variable "key_name" {
   default = ""
 }
 
-variable "preemptible_instance_types" {
+variable "spot_instance_types" {
   type = list(any)
 }
 
-variable "preemptible_asg_min_size" {}
+variable "spot_asg_min_size" {}
 
-variable "preemptible_asg_desired_capacity" {}
+variable "spot_asg_desired_capacity" {}
 
-variable "preemptible_asg_max_size" {}
+variable "spot_asg_max_size" {}
 
 variable "essential_instance_type" {}
 
