@@ -46,7 +46,7 @@ resource "aws_kms_key" "vault_seal_key" {
 }
 
 resource "aws_iam_user" "vault" {
-  name = "vault"
+  name = "vault-${var.cluster_name}"
 }
 
 resource "aws_iam_user_policy" "vault" {
