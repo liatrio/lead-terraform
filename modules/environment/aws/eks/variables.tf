@@ -74,7 +74,6 @@ variable "additional_mapped_roles" {
 }
 
 variable "cluster_version" {
-  default = "1.14"
 }
 
 variable "cluster_addons" {

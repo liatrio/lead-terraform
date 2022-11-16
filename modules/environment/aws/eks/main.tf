@@ -252,9 +252,6 @@ module "eks" {
     disk_size                     = var.root_volume_size
     iam_role_permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/Developer"
 
-    metadata_options = {
-      http_tokens = "required"
-    }
   }
 
   eks_managed_node_groups = {
