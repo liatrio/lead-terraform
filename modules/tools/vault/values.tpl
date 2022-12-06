@@ -6,11 +6,9 @@ server:
     tag: ${vault_version}
   service:
     enabled: true
-    type: LoadBalancer
+    type: NodePort
     port: 443
-    annotations: |
-      "service.beta.kubernetes.io/aws-load-balancer-internal": "true"
-      "external-dns.alpha.kubernetes.io/hostname": "${vault_hostname}"
+    annotations: {}
   dataStorage:
     enabled: false # we will use dynamodb backend for storage, not a local PVC
   auditStorage:
