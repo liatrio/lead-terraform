@@ -18,7 +18,7 @@ module "internal_services_cluster_issuer" {
   provider_dns_type = "route53"
 
   route53_dns_region      = var.region
-  route53_dns_hosted_zone = data.aws_route53_zone.public_internal_services_liatr_io.zone_id
+  route53_dns_hosted_zone = aws_route53_zone.public_internal_services_liatr_io.zone_id
 
   depends_on = [
     module.cert_manager
@@ -37,7 +37,7 @@ module "external_services_cluster_issuer" {
   provider_dns_type = "route53"
 
   route53_dns_region      = var.region
-  route53_dns_hosted_zone = data.aws_route53_zone.public_services_liatr_io.zone_id
+  route53_dns_hosted_zone = aws_route53_zone.public_services_liatr_io.zone_id
 
   depends_on = [
     module.cert_manager
@@ -56,7 +56,7 @@ module "internal_services_staging_cluster_issuer" {
   provider_dns_type = "route53"
 
   route53_dns_region      = var.region
-  route53_dns_hosted_zone = data.aws_route53_zone.public_internal_services_liatr_io.zone_id
+  route53_dns_hosted_zone = aws_route53_zone.public_internal_services_liatr_io.zone_id
 
   depends_on = [
     module.cert_manager
