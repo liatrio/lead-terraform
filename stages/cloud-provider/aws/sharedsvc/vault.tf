@@ -15,19 +15,8 @@ resource "aws_dynamodb_table" "vault_dynamodb_storage" {
     type = "S"
   }
 
-  point_in_time_recovery {
-    enabled = true
-  }
-
-  server_side_encryption {
-    enabled     = true
-    kms_key_arn = aws_kms_key.dynamo_db_kms.arn
-  }
 }
 
-resource "aws_kms_key" "dynamo_db_kms" {
-  enable_key_rotation = true
-}
 
 # We ignore the recommendation to auto-rotate keys out of an abundance of caution,
 # as it is possible that rotating the unseal key could break Vault. Having said that, it
