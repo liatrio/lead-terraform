@@ -115,6 +115,5 @@ variable "docker_registry_mirror" {
 }
 
 variable "s3_logging_prevent_destroy" {
-  type = bool
   default = true
 }
