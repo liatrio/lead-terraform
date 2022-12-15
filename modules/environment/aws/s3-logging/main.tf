@@ -3,7 +3,7 @@
 resource "aws_s3_bucket" "s3_logging" {
   bucket = "s3-logging-${var.account_id}-${var.cluster_name}"
   lifecycle {
-    prevent_destroy = var.s3_logging_prevent_destroy
+    prevent_destroy = var.s3_logging_prevent_destroy ? true : false
   }
 }
 
