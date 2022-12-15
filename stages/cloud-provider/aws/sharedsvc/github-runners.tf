@@ -11,8 +11,8 @@ module "github-runners" {
 module "lead_environments_pipeline_iam" {
   source = "../../../../modules/environment/aws/iam/github-runner-iam"
 
-  name                                = "liatrio-lead-environments-pipeline"
-  service_account_name                = "liatrio-lead-environments-runners"
+  name                                = "${var.cluster_name}-liatrio-lead-environments-pipeline"
+  service_account_name                = "${var.cluster_name}-liatrio-lead-environments-runners"
   aws_iam_openid_connect_provider_arn = module.eks.aws_iam_openid_connect_provider_arn
   aws_iam_openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider_url
   namespace                           = var.github_runners_namespace
@@ -22,8 +22,8 @@ module "lead_environments_pipeline_iam" {
 module "lead_terraform_pipeline_iam" {
   source = "../../../../modules/environment/aws/iam/github-runner-iam"
 
-  name                                = "liatrio-lead-terraform-pipeline"
-  service_account_name                = "liatrio-lead-terraform-runners"
+  name                                = "${var.cluster_name}-liatrio-lead-terraform-pipeline"
+  service_account_name                = "${var.cluster_name}-liatrio-lead-terraform-runners"
   aws_iam_openid_connect_provider_arn = module.eks.aws_iam_openid_connect_provider_arn
   aws_iam_openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider_url
   namespace                           = var.github_runners_namespace
@@ -33,8 +33,8 @@ module "lead_terraform_pipeline_iam" {
 module "lead_terraform_github_runner_iam" {
   source = "../../../../modules/environment/aws/iam/github-runner-iam"
 
-  name                                = "liatrio-aws-terraform-runners"
-  service_account_name                = "liatrio-aws-terraform-runners"
+  name                                = "${var.cluster_name}-liatrio-aws-terraform-runners"
+  service_account_name                = "${var.cluster_name}-liatrio-aws-terraform-runners"
   aws_iam_openid_connect_provider_arn = module.eks.aws_iam_openid_connect_provider_arn
   aws_iam_openid_connect_provider_url = module.eks.aws_iam_openid_connect_provider_url
   namespace                           = var.github_runners_namespace
