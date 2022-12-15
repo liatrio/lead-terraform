@@ -1,18 +1,9 @@
 #tfsec:ignore:aws-s3-enable-bucket-logging
 #tfsec:ignore:aws-s3-enable-versioning
 resource "aws_s3_bucket" "s3_logging" {
-  count  = var.s3_logging_prevent_destroy ? 1 : 0
   bucket = "s3-logging-${var.account_id}-${var.cluster_name}"
   lifecycle {
-    prevent_destroy = true
-  }
-}
-
-resource "aws_s3_bucket" "s3_logging" {
-  count  = var.s3_logging_prevent_destroy ? 0 : 1
-  bucket = "s3-logging-${var.account_id}-${var.cluster_name}"
-  lifecycle {
-    prevent_destroy = false
+    prevent_destroy = var.s3_logging_prevent_destroy ? true : false
   }
 }
 
