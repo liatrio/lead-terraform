@@ -39,7 +39,7 @@ server:
       eks.amazonaws.com/role-arn: "${vault_iam_role_arn}"
   extraEnvironmentVars:
     VAULT_LOG_LEVEL: debug
-    AWS_ROLE_SESSION_NAME: vault
+    AWS_ROLE_SESSION_NAME: VaultOIDC-shared-svc
 
 ui:
   enabled: true
