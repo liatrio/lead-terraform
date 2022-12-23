@@ -24,4 +24,4 @@ seal "awskms" {
   kms_key_id = "${kms_key_id}"
 }
 
-log_level = "Debug"
+
