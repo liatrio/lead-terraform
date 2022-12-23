@@ -25,7 +25,7 @@ server:
     enabled: true
     config: |
       ${vault_config}
-    log_level = "Debug"
+
   resources:
     requests:
       cpu: 50m
