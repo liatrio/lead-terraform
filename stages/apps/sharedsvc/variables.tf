@@ -40,6 +40,8 @@ variable "vault_dynamodb_table_name" {}
 
 variable "vault_kms_key_id" {}
 
+variable "vault_iam_role_arn" {}
+
 variable "cluster_autoscaler_service_account_arn" {}
 variable "external_dns_service_account_arn" {}
 variable "external_dns_public_service_account_arn" {}

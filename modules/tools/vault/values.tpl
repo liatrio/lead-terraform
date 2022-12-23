@@ -32,6 +32,10 @@ server:
     limits:
       cpu: 500m
       memory: 128Mi
+  serviceAccount:
+    create: true
+    annotations: |
+      eks.amazonaws.com/role-arn: "${vault_iam_role_arn}"
 
 ui:
   enabled: true

@@ -31,6 +31,10 @@ output "vault_kms_key_id" {
   value = aws_kms_key.vault_seal_key.id
 }
 
+output "vault_iam_role_arn" {
+  value = module.github-runners.github_runners_service_account_arn
+}
+
 output "cluster_autoscaler_service_account_arn" {
   value = module.cluster_autoscaler_iam.cluster_autoscaler_service_account_arn
 }

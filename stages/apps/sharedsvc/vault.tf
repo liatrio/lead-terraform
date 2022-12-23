@@ -3,8 +3,8 @@ locals {
 }
 
 module "vault_namespace" {
-  source    = "../../../modules/common/namespace"
-  namespace = "vault"
+  source      = "../../../modules/common/namespace"
+  namespace   = "vault"
   annotations = {
     name    = "vault"
     cluster = var.eks_cluster_id
@@ -23,4 +23,5 @@ module "vault" {
   vault_aws_access_key_id     = var.vault_aws_access_key_id
   vault_aws_secret_access_key = var.vault_aws_secret_access_key
   vault_kms_key_id            = var.vault_kms_key_id
+  vault_iam_role_arn          = var.vault_iam_role_arn
 }
