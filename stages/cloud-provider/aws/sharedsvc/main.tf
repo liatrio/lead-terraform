@@ -44,6 +44,9 @@ data "aws_vpc" "shared_svc" {
 
 resource "aws_route53_zone" "private_internal_services_liatr_io" {
   name         = "${var.internal_cluster_domain}."
+  vpc {
+    vpc_id = data.aws_vpc.shared_svc.id
+  }
 }
 
 resource "aws_route53_zone" "public_internal_services_liatr_io" {
