@@ -7,7 +7,7 @@ terraform {
     }
     sonarqube = {
       source  = "jdamata/sonarqube"
-      version = "0.0.7"
+      version = "0.15.5"
     }
     harbor = {
       source  = "BESTSELLER/harbor"
