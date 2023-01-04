@@ -3,7 +3,7 @@ resource "helm_release" "metrics" {
   namespace  = var.namespace
   repository = "https://charts.bitnami.com/bitnami"
   chart      = "metrics-server"
-  version    = "5.11.9"
+  version    = "6.0.5"
   timeout    = 600
   wait       = true
 
