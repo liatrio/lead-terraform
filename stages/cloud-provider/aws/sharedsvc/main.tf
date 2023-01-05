@@ -71,7 +71,7 @@ resource "aws_route53_zone_association" "internal_vpn" {
   vpc_id  = data.aws_vpc.internal_vpn_vpc.id
 }
 
-resource "aws_route53_zone_association" "internal_shared_svc" {
-  zone_id = aws_route53_zone.private_internal_services_liatr_io.zone_id
-  vpc_id = data.aws_vpc.shared_svc.id
-}
+#resource "aws_route53_zone_association" "internal_shared_svc" {
+#  zone_id = aws_route53_zone.private_internal_services_liatr_io.zone_id
+#  vpc_id = data.aws_vpc.shared_svc.id
+#}
