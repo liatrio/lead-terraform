@@ -80,6 +80,14 @@ resource "aws_route53_zone" "public_internal_services_liatr_io" {
 
 resource "aws_route53_zone" "services_liatr_io" {
   name = "${var.cluster_domain}."
+
+  tags = {
+    Environment = "sharedsvc"
+    Client      = "liatrio"
+    Project     = "Network Infrastructure"
+    Owner       = "parker"
+    Provisioner = "terraform:liatrio/aws-terraform"
+  }
 }
 
 resource "aws_route53_record" "services_liatr_io_ns" {
