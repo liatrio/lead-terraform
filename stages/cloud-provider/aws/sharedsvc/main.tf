@@ -12,10 +12,6 @@ provider "aws" {
       Team      = "flywheel"
       Repo      = "github.com/liatrio/lead-terraform"
       ManagedBy = "terraform"
-      Environment = "sharedsvc"
-      Project     = "Network Infrastructure"
-      Client      = "liatrio"
-      Provisioner = "terraform:liatrio/aws-terraform"
     }
   }
 
